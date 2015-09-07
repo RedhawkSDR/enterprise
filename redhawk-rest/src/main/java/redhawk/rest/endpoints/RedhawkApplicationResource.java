@@ -1,0 +1,102 @@
+package redhawk.rest.endpoints;
+
+import redhawk.driver.exceptions.ApplicationCreationException;
+import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.rest.exceptions.ResourceNotFound;
+import redhawk.rest.model.ApplicationContainer;
+import redhawk.rest.model.FetchMode;
+import redhawk.rest.model.FullProperty;
+import redhawk.rest.model.WaveformInfo;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.util.logging.Logger;
+
+@Path("/{nameserver}/domains/{domain}/applications")
+public class RedhawkApplicationResource extends RedhawkBaseResource {
+
+    private static Logger logger = Logger.getLogger(RedhawkApplicationResource.class.getName());
+
+    @PathParam("nameserver")
+    private String nameServer;
+
+    @PathParam("domain")
+    private String domainName;
+
+    @GET
+    @Path("/")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getApplications(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws ResourceNotFound, Exception {
+        return Response.ok(
+                new ApplicationContainer(redhawkManager.getAll(nameServer,
+                        "application", domainName, fetchMode))).build();
+    }
+
+    @GET
+    @Path("/{applicationId}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getApplication(@PathParam("applicationId") String applicationId)
+            throws ResourceNotFound, Exception {
+        return Response.ok(
+                redhawkManager.get(nameServer, "application", domainName + "/"
+                        + applicationId)).build();
+    }
+
+    @DELETE
+    @Path("/{applicationId}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response releaseApplication(@PathParam("applicationId") String applicationId)
+            throws ResourceNotFound, Exception {
+        redhawkManager
+                .releaseApplication(nameServer, domainName, applicationId);
+        return Response.ok().build();
+    }
+
+    @PUT
+    @Path("/{instanceName}")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response launchApplication(
+            @PathParam("instanceName") String instanceName, WaveformInfo info)
+            throws ResourceNotFoundException, ApplicationCreationException {
+        redhawkManager.createApplication(nameServer, domainName, instanceName,
+                info);
+        return Response.ok().build();
+    }
+
+    @GET
+    @Path("/{applicationId}/properties")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getApplicationProperties(
+            @PathParam("applicationId") String applicationId) throws ResourceNotFound,
+            ResourceNotFoundException, Exception {
+        return Response.ok(
+                redhawkManager.getProperties(nameServer, "application",
+                        domainName + "/" + applicationId)).build();
+    }
+
+    @GET
+    @Path("/{applicationId}/properties/{propId}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response getApplicationProperties(
+            @PathParam("applicationId") String applicationId,
+            @PathParam("propId") String propertyId) throws ResourceNotFound,
+            Exception {
+        return Response.ok(
+                redhawkManager.getProperty(propertyId, nameServer,
+                        "application", domainName + "/" + applicationId))
+                .build();
+    }
+
+    @PUT
+    @Path("/{applicationId}/properties/{propId}")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    public Response setApplicationProperty(
+            @PathParam("applicationId") String applicationId, @PathParam("propId") String propertyId, FullProperty property)
+            throws Exception {
+        redhawkManager.setProperty(property, nameServer, "application", domainName + "/" + applicationId);
+        return Response.ok().build();
+    }
+}

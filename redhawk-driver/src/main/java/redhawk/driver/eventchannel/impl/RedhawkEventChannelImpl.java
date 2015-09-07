@@ -1,0 +1,139 @@
+package redhawk.driver.eventchannel.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import org.omg.CORBA.Any;
+import org.omg.CORBA.ORB;
+import org.omg.CORBA.ORBPackage.InvalidName;
+import org.omg.CosEventChannelAdmin.TypeError;
+import org.omg.CosEventComm.Disconnected;
+import org.omg.CosEventComm.PushConsumer;
+import org.omg.CosEventComm.PushConsumerPOATie;
+import org.omg.PortableServer.POA;
+import org.omg.PortableServer.POAHelper;
+import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
+
+import CF.DataType;
+import CF.EventChannelManager;
+import CF.PropertiesHelper;
+import CF.EventChannelManagerPackage.ChannelDoesNotExist;
+import CF.EventChannelManagerPackage.EventChannelReg;
+import CF.EventChannelManagerPackage.EventRegistration;
+import CF.EventChannelManagerPackage.InvalidChannelName;
+import CF.EventChannelManagerPackage.OperationFailed;
+import CF.EventChannelManagerPackage.OperationNotAllowed;
+import CF.EventChannelManagerPackage.RegistrationAlreadyExists;
+import CF.EventChannelManagerPackage.RegistrationDoesNotExist;
+import CF.EventChannelManagerPackage.ServiceUnavailable;
+import redhawk.driver.eventchannel.RedhawkEventChannel;
+import redhawk.driver.eventchannel.listeners.EventChannelListener;
+import redhawk.driver.exceptions.EventChannelException;
+
+public class RedhawkEventChannelImpl implements RedhawkEventChannel {
+
+	private String eventChannelName;
+	private ORB orb;
+	private EventChannelManager eventChannelManager;
+	private EventChannelReg registration;
+	
+	public RedhawkEventChannelImpl(EventChannelManager eventChannelManager, String eventChannelName, ORB orb) {
+		this.eventChannelName = eventChannelName;
+		this.orb = orb;
+		this.eventChannelManager = eventChannelManager;
+	}
+	
+	
+	public String getName() {
+		return eventChannelName;
+	}
+	
+	public <T> void subscribe(EventChannelListener<T> listener) throws EventChannelException {
+    	try {
+    		POA rootPOA = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
+    		rootPOA.the_POAManager().activate();
+    		PushConsumerPOATie tie = new PushConsumerPOATie(listener);
+    		PushConsumer pipeline = tie._this(orb);
+    		register();
+    		registration.channel.for_consumers().obtain_push_supplier().connect_push_consumer(pipeline);
+    	} catch(InvalidName | AdapterInactive | TypeError e){
+    		throw new EventChannelException("A CORBA Exception has occured:", e);
+    	} catch (org.omg.CosEventChannelAdmin.AlreadyConnected e) {
+			throw new EventChannelException("Already Connected to the event Channel:", e);
+		}
+    }
+	
+	private void register() throws EventChannelException {
+		if(registration == null) {
+	        UUID subscriptionId = UUID.randomUUID();
+	        EventRegistration er = new EventRegistration(eventChannelName, subscriptionId.toString());
+	        try {
+				registration = eventChannelManager.registerResource(er);
+			} catch (InvalidChannelName | RegistrationAlreadyExists | OperationFailed | OperationNotAllowed | ServiceUnavailable e) {
+				throw new EventChannelException("A CORBA Exception has occured:", e);
+			}
+		}
+	}
+	
+	
+	public void publish(String messageId, Map<String, java.lang.Object> message) throws EventChannelException {
+
+		register();
+		
+		 List<CF.DataType> headers = new ArrayList<CF.DataType>();
+         for (String key : message.keySet()) {
+        	 Any prop;
+        	 if(message.get(key) != null && message.get(key) instanceof Any){
+        		 prop = (Any) message.get(key);  
+        	 } else {
+        		 String value = message.get(key) + "";
+        		 prop = ORB.init().create_any();
+        		 prop.insert_string(value);
+        	 }
+        	 
+        	 CF.DataType dataType = new DataType();
+        	 dataType.id = key;
+        	 dataType.value = prop;
+             headers.add(dataType);
+         }
+		
+         Any messageHeaders = ORB.init().create_any();
+         PropertiesHelper.insert(messageHeaders, headers.toArray(new CF.DataType[headers.size()]));
+         
+         DataType headerDataType = new DataType("message", messageHeaders);
+         CF.DataType[] redhawkMessage = new DataType[1];
+         redhawkMessage[0] = headerDataType;
+         
+         Any messageToSend = ORB.init().create_any();
+         PropertiesHelper.insert(messageToSend, redhawkMessage);
+
+         CF.DataType[] messageEncaps = new DataType[1];
+         DataType messageWrapper = new DataType(messageId, messageToSend);
+         messageEncaps[0] = messageWrapper;
+         Any messageWrapperToSend = ORB.init().create_any();
+         PropertiesHelper.insert(messageWrapperToSend, messageEncaps);		
+		
+		try {
+			registration.channel.for_suppliers().obtain_push_consumer().push(messageWrapperToSend);
+		} catch (Disconnected e) {
+			e.printStackTrace();
+		}
+        
+	}
+
+		
+	public void unsubscribe() throws EventChannelException {
+		try {
+			eventChannelManager.unregister(registration.reg);
+		} catch (ChannelDoesNotExist e) {
+			throw new EventChannelException("Event Channel Does not exist:", e);
+		} catch (RegistrationDoesNotExist e) {
+			throw new EventChannelException("Event Channel Registration Does Not Exist:", e);
+		} catch (ServiceUnavailable e) {
+			throw new EventChannelException("CORBA Exception:", e);
+		}
+	}
+	
+}

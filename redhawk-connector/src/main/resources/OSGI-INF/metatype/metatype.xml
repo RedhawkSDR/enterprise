@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one
+ or more contributor license agreements.  See the NOTICE file
+ distributed with this work for additional information
+ regarding copyright ownership.  The ASF licenses this file
+ to you under the Apache License, Version 2.0 (the
+ "License"); you may not use this file except in compliance
+ with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing,
+ software distributed under the License is distributed on an
+ "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ KIND, either express or implied.  See the License for the
+ specific language governing permissions and limitations
+ under the License.
+-->
+
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.0.0">
+   
+  <OCD description="REDHAWK Connector" name="REDHAWK Connector" id="redhawk.datasource.factory">
+    <AD name="Connection Name"  id="connectionName" required="true" type="String" description="Unique name for identifying this connection from other REDHAWK Domain connections"/>
+    <AD name="Server Name"  id="host" required="true" type="String" default="localhost" description="Hostname or IP Address of the REDHAWK Naming Service where Domain Managers are registered"/>
+    <AD name="Port"  id="port" required="true" type="Long" default="2809" description="Port where the Naming Service is listening"/>
+    <AD name="Domain Name"  id="domainManager" required="false" type="String" default="REDHAWK_DEV" description="Optional name of the REDHAWK Domain Manager (as found in the CORBA Naming Service). If none is specified, you won't be connected to a Domain Manager by default."/>
+    <AD name="Device Manager Name"  id="deviceManagerName" required="false" type="String" description="The name of the Device Manager to register with REDHAWK. If none is specified, you don't get a Device Manager." />
+    <AD name="Device Manager File System Root"  id="deviceManagerFileSystemRoot" required="false" type="String" description="The filesystem root of the Device Manager. Defaults to ${redbus.base}, the REDBUS home directory." />
+  </OCD>
+  
+  <Designate pid="redhawk.datasource.factory" factoryPid="redhawk.datasource.factory" >
+      <Object ocdref="redhawk.datasource.factory"/>
+  </Designate>
+  
+</metatype:MetaData>
+

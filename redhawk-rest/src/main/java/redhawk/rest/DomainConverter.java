@@ -1,0 +1,490 @@
+package redhawk.rest;
+
+import redhawk.driver.application.RedhawkApplication;
+import redhawk.driver.component.RedhawkComponent;
+import redhawk.driver.device.RedhawkDevice;
+import redhawk.driver.devicemanager.RedhawkDeviceManager;
+import redhawk.driver.domain.RedhawkDomainManager;
+import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.driver.port.RedhawkPort;
+import redhawk.driver.properties.*;
+import redhawk.driver.xml.model.sca.prf.Properties;
+import redhawk.driver.xml.model.sca.prf.*;
+import redhawk.rest.model.*;
+
+import java.io.IOException;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
+public class DomainConverter {
+
+    private static Logger logger = Logger.getLogger(DomainConverter.class.getName());
+
+    protected Domain convertDomain(RedhawkDomainManager domainManager) {
+        return convertDomain(domainManager, FetchMode.EAGER);
+    }
+
+    protected Domain convertDomain(RedhawkDomainManager domainManager, FetchMode fetchMode) {
+        Domain domain = new Domain();
+        domain.setIdentifier(domainManager.getIdentifier());
+        domain.setName(domainManager.getName());
+
+        if (fetchMode.equals(FetchMode.EAGER)) {
+
+            try {
+                domain.setProperties(convertProperties(domainManager.getProperties(), domainManager.getPropertyConfiguration()));
+            } catch (ResourceNotFoundException e) {
+                domain.setProperties(new ArrayList<>());
+            }
+
+            domain.setEventChannels(convertEventChannels(domainManager));
+
+            domain.setDeviceManagers(domainManager
+                    .getDeviceManagers()
+                    .parallelStream()
+                    .map(this::convertDeviceManager)
+                    .collect(Collectors.toList()));
+
+            domain.setApplications(domainManager
+                    .getApplications()
+                    .parallelStream()
+                    .map(this::convertApplication)
+                    .collect(Collectors.toList()));
+        }
+        return domain;
+    }
+
+    protected List<Property> convertProperties(Map<String, RedhawkProperty> props, Properties propertyConfiguration) {
+        List<Property> properties = new ArrayList<Property>();
+        Map<String, RedhawkProperty> propertyClone = new HashMap<>();
+        propertyClone.putAll(props);
+
+        if (propertyConfiguration != null) {
+            List<Object> stuff = propertyConfiguration.getSimplesAndSimplesequencesAndTests();
+            for (Object o : stuff) {
+                switch (o.getClass().getSimpleName()) {
+                    case "Simple": {
+                        Simple simp = (Simple) o;
+                        RedhawkProperty rhProp = props.get(simp.getId());
+                        if (propertyClone.get(simp.getId()) != null) {
+                            propertyClone.remove(simp.getId());
+                        }
+                        Property prop = convertSimple(simp.getId(), (RedhawkSimple) rhProp, simp);
+                        properties.add(prop);
+                        break;
+                    }
+                    case "SimpleSequence": {
+                        SimpleSequence simp = (SimpleSequence) o;
+                        RedhawkProperty rhProp = props.get(simp.getId());
+                        if (propertyClone.get(simp.getId()) != null) {
+                            propertyClone.remove(simp.getId());
+                        }
+                        Property prop = convertSimpleSequence(simp.getId(), (RedhawkSimpleSequence) rhProp, simp);
+                        properties.add(prop);
+                        break;
+                    }
+                    case "Struct": {
+                        Struct struct = (Struct) o;
+                        RedhawkProperty rhProp = props.get(struct.getId());
+                        if (propertyClone.get(struct.getId()) != null) {
+                            propertyClone.remove(struct.getId());
+                        }
+                        Property prop = convertStruct(struct.getId(), (RedhawkStruct) rhProp, struct);
+                        properties.add(prop);
+                        break;
+                    }
+                    case "StructSequence": {
+                        StructSequence structSequence = (StructSequence) o;
+                        RedhawkProperty rhProp = props.get(structSequence.getId());
+                        if (propertyClone.get(structSequence.getId()) != null) {
+                            propertyClone.remove(structSequence.getId());
+                        }
+                        Property prop = convertStructSequence(structSequence.getId(), (RedhawkStructSequence) rhProp, structSequence);
+                        properties.add(prop);
+                        break;
+                    }
+                }
+            }
+        }
+
+        return properties;
+    }
+
+
+    private Property convertStruct(String id, RedhawkStruct rhProp, Struct original) {
+        StructRep destination = new StructRep();
+        destination.setType("struct");
+        destination.setDescription(original.getDescription());
+        destination.setId(original.getId());
+        destination.setMode(original.getMode());
+        destination.setName(original.getName());
+
+        List<Property> attributes = new ArrayList<>();
+
+
+        for (Object o : original.getSimplesAndSimplesequences()) {
+            switch (o.getClass().getSimpleName()) {
+                case "Simple": {
+                    Simple simple = (Simple) o;
+                    SimpleRep s = convertSimple(simple.getId(), null, simple);
+                    if (rhProp != null && rhProp.size() > 0) {
+                        Object obj = rhProp.get(simple.getId());
+                        if (obj != null) {
+                            s.setValue(obj + "");
+                            s.setDataType(obj.getClass().getName());
+                        }
+                    }
+
+                    attributes.add(s);
+                    break;
+                }
+                case "SimpleSequence": {
+                    SimpleSequence simple = (SimpleSequence) o;
+                    SimpleSequenceRep s = convertSimpleSequence(simple.getId(), null, simple);
+                    if (rhProp != null && rhProp.size() > 0) {
+                        Object obj = rhProp.get(simple.getId());
+                        if (obj != null) {
+                            s.setValues(Arrays.asList(obj));
+                            s.setDataType(obj.getClass().getName());
+                        }
+                    }
+
+                    attributes.add(s);
+                    break;
+                }
+            }
+        }
+
+        destination.setAttributes(attributes);
+        return destination;
+    }
+
+    private SimpleRep convertSimple(String propertyId, RedhawkSimple redhawkProperty, Simple original) {
+        SimpleRep destination = new SimpleRep();
+        destination.setType("simple");
+        destination.setAction(original.getAction());
+        destination.setCommandline(original.getCommandline());
+        destination.setComplex(original.getComplex());
+        destination.setDescription(original.getDescription());
+        destination.setEnumerations(original.getEnumerations());
+        destination.setId(original.getId());
+        destination.setMode(original.getMode());
+        destination.setName(original.getName());
+        destination.setOptional(original.getOptional());
+        destination.setRange(original.getRange());
+        destination.setPropertyValueType(original.getType());
+        destination.setUnits(original.getUnits());
+        destination.setValue(original.getValue());
+
+        if (redhawkProperty != null && redhawkProperty.getValue() != null) {
+            destination.setId(propertyId);
+            destination.setDataType(redhawkProperty.getValue().getClass().getName());
+            destination.setValue(redhawkProperty.getValue() + "");
+        }
+
+        return destination;
+    }
+
+    private SimpleSequenceRep convertSimpleSequence(String propertyId, RedhawkSimpleSequence redhawkProperty, SimpleSequence original) {
+        SimpleSequenceRep destination = new SimpleSequenceRep();
+        destination.setType("simplesequence");
+        destination.setDescription(original.getDescription());
+        destination.setRange(original.getRange());
+        destination.setPropertyValueType(original.getType());
+        destination.setUnits(original.getUnits());
+        destination.setAction(original.getAction());
+        destination.setId(original.getId());
+        destination.setMode(original.getMode());
+        destination.setName(original.getName());
+        destination.setOptional(original.getOptional());
+        destination.setComplex(original.getComplex());
+        destination.setId(propertyId);
+
+        if (redhawkProperty != null && redhawkProperty.getValues() != null && redhawkProperty.getValues().size()>0) {
+            destination.setValues(redhawkProperty.getValues());
+            destination.setDataType(redhawkProperty.getValues().get(0).getClass().getName());
+        } else if(original.getValues()!=null){
+        	//Need to check for null can't just assume values are there...
+            Values values = original.getValues();
+            List<Object> objects = values.getValues().stream().map(s -> {
+                return (Object) s;
+            }).collect(Collectors.toList());
+            destination.setValues(objects);
+        }
+
+        return destination;
+    }
+
+
+    private StructSequenceRep convertStructSequence(String propertyId, RedhawkStructSequence redhawkProperty, StructSequence original) {
+        StructSequenceRep destination = new StructSequenceRep();
+        destination.setType("structsequence");
+        destination.setDescription(original.getDescription());
+        destination.setId(original.getId());
+        destination.setMode(original.getMode());
+        destination.setName(original.getName());
+        destination.setId(propertyId);
+
+        List<Property> structs = new ArrayList<>();
+
+        if (redhawkProperty != null && redhawkProperty.getStructs() != null) {
+            for (RedhawkStruct struct : redhawkProperty.getStructs()) {
+                Property s = convertStruct(original.getStruct().getId(), struct, original.getStruct());
+                structs.add(s);
+            }
+            destination.setStructs(structs);
+        }
+
+        return destination;
+    }
+
+
+    public Object convertAll(String type, List<Object> list, FetchMode fetchMode) {
+        switch (type) {
+            case "domain": {
+                return list.parallelStream()
+                        .map(obj -> convertDomain((RedhawkDomainManager) obj, fetchMode))
+                        .collect(Collectors.toList());
+            }
+            case "application": {
+                return list.parallelStream()
+                        .map(obj -> convertApplication((RedhawkApplication) obj, fetchMode))
+                        .collect(Collectors.toList());
+            }
+            case "component": {
+                return list.stream()
+                        .map(obj -> convertComponent((RedhawkComponent) obj, fetchMode))
+                        .collect(Collectors.toList());
+            }
+            case "port": {
+                return list.stream()
+                        .map(obj -> convertPort((RedhawkPort) obj))
+                        .collect(Collectors.toList());
+            }
+            case "devicemanager": {
+                return list.stream()
+                        .map(obj -> convertDeviceManager((RedhawkDeviceManager) obj, fetchMode))
+                        .collect(Collectors.toList());
+            }
+            case "device": {
+                return list.stream()
+                        .map(obj -> convertDevice((RedhawkDevice) obj, fetchMode))
+                        .collect(Collectors.toList());
+            }
+            case "softwarecomponent": {
+                return list;
+            }
+            case "waveform": {
+                return list;
+            }
+        }
+
+        return null;
+    }
+
+    private Application convertApplication(RedhawkApplication obj) {
+        return convertApplication(obj, FetchMode.EAGER);
+    }
+
+    private Application convertApplication(RedhawkApplication obj, FetchMode fetchMode) {
+        Application app = new Application();
+        app.setIdentifier(obj.getIdentifier());
+        app.setName(obj.getName());
+        app.setStarted(obj.isStarted());
+
+        if (fetchMode.equals(FetchMode.EAGER)) {
+            app.setProperties(convertProperties(obj.getProperties(), null));
+
+            try {
+                app.setExternalPorts(obj.getExternalPorts().stream()
+                        .map(this::convertPort)
+                        .collect(Collectors.toList()));
+            } catch (IOException e) {
+                logger.log(Level.WARNING, e.getMessage(), e);
+            }
+
+            app.setComponents(obj.getComponents().parallelStream()
+                    .map(this::convertComponent)
+                    .collect(Collectors.toList()));
+        }
+        return app;
+    }
+
+    private Component convertComponent(RedhawkComponent obj) {
+        return convertComponent(obj, FetchMode.EAGER);
+
+    }
+
+    private Component convertComponent(RedhawkComponent obj, FetchMode fetchMode) {
+        Component comp = new Component();
+        comp.setName(obj.getName());
+        comp.setStarted(obj.started());
+
+        if (fetchMode.equals(FetchMode.EAGER)) {
+            try {
+                comp.setProperties(convertProperties(obj.getProperties(), obj.getPropertyConfiguration()));
+            } catch (ResourceNotFoundException e) {
+                logger.log(Level.WARNING, "Could not find prf file for component:" + obj.getName(), e);
+                comp.setProperties(new ArrayList<>());
+            }
+
+            try {
+                comp.setSoftwareComponent(obj.getSoftwareComponent());
+            } catch (ResourceNotFoundException e) {
+                logger.log(Level.WARNING, "Could not find scd file for component:" + obj.getName(), e);
+            }
+
+            try {
+                comp.setPorts(obj.getPorts().parallelStream()
+                        .map(this::convertPort)
+                        .collect(Collectors.toList()));
+            } catch (ResourceNotFoundException e) {
+                logger.log(Level.WARNING, "Could not find scd file for component:" + obj.getName(), e);
+            }
+        }
+        return comp;
+    }
+
+    private DeviceManager convertDeviceManager(RedhawkDeviceManager obj) {
+        return convertDeviceManager(obj, FetchMode.EAGER);
+    }
+
+    private DeviceManager convertDeviceManager(RedhawkDeviceManager obj, FetchMode fetchMode) {
+        DeviceManager mgr = new DeviceManager();
+        mgr.setIdentifier(obj.getUniqueIdentifier());
+        mgr.setLabel(obj.getName());
+
+        if (fetchMode.equals(FetchMode.EAGER)) {
+            mgr.setProperties(convertProperties(obj.getProperties(), null));
+
+            mgr.setDevices(obj.getDevices().parallelStream()
+                    .map(this::convertDevice)
+                    .collect(Collectors.toList()));
+
+            mgr.setServices(obj.getServices().stream()
+                    .map(s -> {
+                        Service service = new Service();
+                        service.setName(s.getServiceName());
+                        return service;
+                    }).collect(Collectors.toList()));
+        }
+        return mgr;
+    }
+
+    private Device convertDevice(RedhawkDevice obj) {
+        return convertDevice(obj, FetchMode.EAGER);
+    }
+
+    private Device convertDevice(RedhawkDevice obj, FetchMode fetchMode) {
+        Device device = new Device();
+        device.setIdentifier(obj.getIdentifier());
+        device.setLabel(obj.getName());
+        device.setStarted(obj.started());
+
+        if (fetchMode.equals(FetchMode.EAGER)) {
+            try {
+                device.setProperties(convertProperties(obj.getProperties(), obj.getPropertyConfiguration()));
+            } catch (ResourceNotFoundException e) {
+                logger.log(Level.WARNING, "Could not find prf file for device: " + obj.getName(), e);
+                device.setProperties(new ArrayList<Property>());
+            }
+        }
+
+        return device;
+    }
+
+    private Port convertPort(RedhawkPort obj) {
+        Port p = new Port();
+        p.setName(obj.getName());
+        p.setRepId(obj.getRepId());
+        p.setType(obj.getType());
+        return p;
+    }
+
+    private List<String> convertEventChannels(RedhawkDomainManager domainManager) {
+        try {
+            return domainManager.getEventChannelManager().getEventChannels().stream().map(e -> e.getName()).collect(Collectors.toList());
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "Could not get Event Channels: ", e);
+            return new ArrayList<String>();
+        }
+    }
+
+    public Object convert(String type, Object object) throws ResourceNotFoundException, IOException {
+        switch (type) {
+            case "domain":
+                return convertDomain((RedhawkDomainManager) object);
+            case "application":
+                return convertApplication((RedhawkApplication) object);
+            case "component":
+                return convertComponent((RedhawkComponent) object);
+            case "port":
+                return convertPort((RedhawkPort) object);
+            case "devicemanager":
+                return convertDeviceManager((RedhawkDeviceManager) object);
+            case "device":
+                return convertDevice((RedhawkDevice) object);
+            case "softwarecomponent":
+                return object;
+        }
+
+        return null;
+    }
+
+    public Object findPropertyInformationFromPrfFile(String id, Properties prop) {
+        List<Object> objectList = prop.getSimplesAndSimplesequencesAndTests();
+
+        for (Object obj : objectList) {
+            switch (obj.getClass().getSimpleName()) {
+                case "Simple":
+                    if (obj instanceof Simple) {
+                        Simple simple = (Simple) obj;
+                        if (simple.getId().equals(id)) {
+                            logger.fine("Matched on this propertyId " + id);
+                            return simple;
+                        }
+                    }
+                    break;
+                case "SimpleSequence":
+                    if (obj instanceof SimpleSequence) {
+                        SimpleSequence simpleSequence = (SimpleSequence) obj;
+
+                        if (simpleSequence.getId().equals(id)) {
+                            logger.fine("Matched on this propertyId " + id);
+                            return simpleSequence;
+                        }
+                    }
+                    break;
+                case "Struct":
+                    if (obj instanceof Struct) {
+                        Struct struct = (Struct) obj;
+
+                        if (struct.getId().equals(id)) {
+                            logger.fine("Matched on this propertyId " + id);
+                            return struct;
+                        }
+                    }
+                    break;
+                case "StructSequence":
+                    if (obj instanceof StructSequence) {
+                        StructSequence structSequence = (StructSequence) obj;
+
+                        if (structSequence.getId().equals(id)) {
+                            logger.fine("Matched on this propertyId " + id);
+                            return structSequence;
+                        }
+                    }
+                    break;
+                default:
+                    logger.severe("Undefined " + obj.getClass().getSimpleName() + " Property Id: " + id);
+                    break;
+            }
+        }
+
+        logger.info("****Didn't find this property Id: " + id);
+        return null;
+    }
+
+}

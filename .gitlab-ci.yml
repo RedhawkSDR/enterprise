@@ -1,0 +1,9 @@
+#GitLab CI File for REDHAWK Integration Asset
+#Tutuorial on using GitLab CI: https://docs.gitlab.com/ce/ci/quick_start/README.html 
+#Docs on format of CI file: https://docs.gitlab.com/ce/ci/yaml/README.html
+build:
+  image: redbusci/maven:3-jdk-8
+  script:
+    - mvn clean install
+  only:
+    - karaf-redbus-redhawk

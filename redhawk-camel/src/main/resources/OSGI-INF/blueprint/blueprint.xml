@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    
+    <reference-list id="redhawkConnectionList" interface="redhawk.driver.Redhawk" member-type="service-reference" availability="optional">
+        <reference-listener ref="redhawkComponentManager" bind-method="bind" unbind-method="unbind" />
+    </reference-list>
+    
+    <bean id="redhawkComponentManager" class="redbus.core.orchestration.components.redhawk.RedhawkComponentManager">
+        <property name="redhawkConnectionList" ref="redhawkConnectionList" />
+        <property name="bundleContext" ref="blueprintBundleContext" />
+    </bean>
+    
+</blueprint>

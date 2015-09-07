@@ -1,0 +1,192 @@
+package redhawk.driver.application.impl;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
+import CF.Application;
+import CF.ApplicationHelper;
+import CF.LifeCyclePackage.ReleaseError;
+import CF.ResourcePackage.StartError;
+import CF.ResourcePackage.StopError;
+import redhawk.driver.RedhawkUtils;
+import redhawk.driver.application.RedhawkApplication;
+import redhawk.driver.base.impl.QueryableResourceImpl;
+import redhawk.driver.component.RedhawkComponent;
+import redhawk.driver.component.impl.RedhawkComponentImpl;
+import redhawk.driver.domain.RedhawkDomainManager;
+import redhawk.driver.exceptions.ApplicationReleaseException;
+import redhawk.driver.exceptions.ApplicationStartException;
+import redhawk.driver.exceptions.ApplicationStopException;
+import redhawk.driver.exceptions.ConnectionException;
+import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.driver.port.RedhawkPort;
+import redhawk.driver.xml.model.sca.sad.Externalports;
+import redhawk.driver.xml.model.sca.sad.Port;
+import redhawk.driver.xml.model.sca.sad.Softwareassembly;
+
+public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> implements RedhawkApplication {
+
+	private static Logger logger = Logger.getLogger(RedhawkApplicationImpl.class.getName());
+
+	private RedhawkDomainManager domainManager;
+    private String identifier;
+    
+    public RedhawkApplicationImpl(RedhawkDomainManager domainManager, String applicationIor, String identifier) {
+    	super(applicationIor, domainManager.getDriver().getOrb());
+        this.domainManager = domainManager;
+        this.identifier = identifier;
+    }
+
+	@Override
+	protected Application locateCorbaObject() throws ResourceNotFoundException {
+		logger.log(Level.FINE,"LOCATING CORBA OBJECT");
+		String newIor = ((RedhawkApplicationImpl) domainManager.getApplicationByIdentifier(identifier)).getIor();
+		return ApplicationHelper.narrow(getOrb().string_to_object(newIor));
+	}    
+    
+    public boolean isStarted() {
+    	return getCorbaObject().started();
+    }
+	
+    public List<RedhawkComponent> getComponents() {
+        return Arrays.stream(getCorbaObj().registeredComponents()).map(c -> new RedhawkComponentImpl(this, c)).collect(Collectors.toList());
+    }
+    
+    public Map<String, RedhawkComponent> components() {
+    	return getComponents().stream().collect(Collectors.toMap(e -> e.getName(), Function.identity()));
+    }
+    
+	@Override
+	public List<RedhawkComponent> getComponentsByName(String name) {
+		return getComponents().stream().filter(c -> {
+			return c.getName().toLowerCase().matches(name.toLowerCase());
+		}).collect(Collectors.toList());
+	}
+
+    public void release() throws ApplicationReleaseException {
+    	try {
+			getCorbaObject().releaseObject();
+		} catch (ReleaseError | ConnectionException e) {
+			throw new ApplicationReleaseException(e);
+		}
+    }
+    
+    public RedhawkComponent getComponentByName(String componentName) throws MultipleResourceException, ResourceNotFoundException {
+		List<RedhawkComponent> components = getComponentsByName(componentName);
+    	
+		if(components.size() > 1){
+			throw new MultipleResourceException("More that one component found with the name of: " + componentName+ " use getComponentsByName instead");
+		} else if(components.size() == 1){
+			return components.get(0);
+		} else {
+			throw new ResourceNotFoundException("Could not find the component with the name of: " + componentName);
+		}
+    }
+    
+    public Application getCorbaObj(){
+        return getCorbaObject();
+    }
+    
+    public String getName(){
+        return getCorbaObject().name();
+    }
+    
+    public String getIdentifier(){
+        return getCorbaObject().identifier();
+    }
+    
+    public RedhawkDomainManager getRedhawkDomainManager(){
+        return domainManager;
+    }
+    
+	public Softwareassembly getAssembly() throws IOException {
+       	try {
+			return RedhawkUtils.unMarshalSadFile(new ByteArrayInputStream(domainManager.getFileManager().getFile(getCorbaObject().profile())));
+		} catch (ConnectionException | IOException e) {
+			throw new IOException(e);
+		}
+	}
+
+	@Override
+	public RedhawkPort getExternalPort(String name) throws ResourceNotFoundException, IOException {
+		for(Port port : getAssembly().getExternalports().getPorts()){
+			if(port.getExternalname().matches(name)){
+				String portName = port.getUsesidentifier() != null ? port.getUsesidentifier() : port.getProvidesidentifier(); 
+				String compName = port.getComponentinstantiationref().getRefid();
+				try {
+					return getComponentByName(compName).getPort(portName);
+				} catch (MultipleResourceException e) {
+				} catch (Exception e) {
+				}
+			}
+		}
+
+		throw new ResourceNotFoundException("Could not find the external port specified by: " + name);
+	}
+
+	@Override
+	public List<RedhawkPort> getExternalPorts() throws IOException {
+		List<RedhawkPort> externalPorts = new ArrayList<RedhawkPort>();
+		Externalports extPorts = getAssembly().getExternalports();
+		
+		if(extPorts != null){
+			for(Port port : extPorts.getPorts()){
+				String portName = port.getUsesidentifier() != null ? port.getUsesidentifier() : port.getProvidesidentifier(); 
+				String compName = port.getComponentinstantiationref().getRefid();
+				try {
+					RedhawkPort rhPort = getComponentByName(compName + ".*").getPort(portName);
+					externalPorts.add(rhPort);
+				} catch (MultipleResourceException e) {
+				} catch (Exception e) {
+				}
+			}
+		}
+		
+		return externalPorts;
+	}
+
+	@Override
+	public void start() throws ApplicationStartException {
+		if(!isStarted()){
+			try {
+				getCorbaObject().start();
+			} catch (StartError | ConnectionException e) {
+				throw new ApplicationStartException(e);
+			}
+		}
+	}
+
+	@Override
+	public void stop() throws ApplicationStopException {
+		if(isStarted()){
+			try {
+				getCorbaObject().stop();
+			} catch (StopError | ConnectionException e) {
+				throw new ApplicationStopException(e);
+			}
+		}
+	}
+
+    @Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("RedhawkApplicationImpl [name=").append(getName()).append(", identifier=").append(getIdentifier()).append("]");
+		return builder.toString();
+	}
+
+	@Override
+	public Class<?> getHelperClass() {
+		return ApplicationHelper.class;
+	}
+
+
+}

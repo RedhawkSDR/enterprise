@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<features name="redhawk-integration-features-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0">
+	<repository>mvn:org.apache.karaf.features/standard/${karaf.version}/xml/features</repository>
+	<repository>mvn:org.apache.cxf.karaf/apache-cxf/${cxf.version}/xml/features</repository>
+	<repository>mvn:org.apache.camel.karaf/apache-camel/${camel.version}/xml/features</repository>
+	<feature name="redhawk-integration-driver" version="${project.version}">
+		<bundle>mvn:redhawk/redhawk-driver/${project.version}</bundle>
+	</feature>
+	
+	<feature name="redhawk-integration-connector" version="${project.version}">
+		<!-- This may or may not be necessary but if you'd like to enter a config from the webconsole this is a must -->	
+		<feature version="${karaf.version}">webconsole</feature>
+		<feature>redhawk-integration-driver</feature>
+		<bundle>mvn:redhawk/redhawk-connector/${project.version}</bundle>
+	</feature>
+	
+	<feature name="redhawk-integration-rest" version="${project.version}">
+		<feature version="${project.version}">redhawk-integration-connector</feature>
+		<feature version="${cxf.version}">cxf-core</feature>
+		<feature version="${cxf.version}">cxf-jaxrs</feature>	
+		<bundle>mvn:commons-lang/commons-lang/${commons.lang.version}</bundle>
+		<bundle>mvn:redhawk/redhawk-rest/${project.version}</bundle>		
+	</feature>
+	
+	<feature name="redhawk-integration-websocket" version="${project.version}">
+		<feature version="${project.version}">redhawk-integration-connector</feature>
+		<bundle>wrap:mvn:com.google.code.gson/gson/${gson.version}</bundle>
+		<!--
+		<bundle>mvn:commons-collections/commons-collections/${commons.collection.version}</bundle>
+		<bundle>mvn:commons-beanutils/commons-beanutils/${beanutils.version}</bundle>
+		-->
+		<!-- End of commons-osgi feature -->
+		<bundle>mvn:redhawk/redhawk-websocket/${project.version}</bundle>
+	</feature>
+	
+	<feature name="redhawk-integration-camel" version="${project.version}">
+		<feature version="${project.version}">redhawk-integration-connector</feature>
+		<feature version="${camel.version}">camel-core</feature>
+		<feature version="${camel.version}">camel-blueprint</feature>
+		<bundle>mvn:commons-lang/commons-lang/${commons.lang.version}</bundle>
+		<bundle>mvn:redbus.core.orchestration.components/camel-redhawk/${project.version}</bundle>	
+	</feature>
+	
+	<feature name="redhawk-integration-all" version="${project.version}">
+		<feature>redhawk-integration-driver</feature>
+		<feature>redhawk-integration-connector</feature>
+		<feature>redhawk-integration-rest</feature>
+		<feature>redhawk-integration-websocket</feature>
+		<feature>redhawk-integration-camel</feature>				
+	</feature>
+</features>

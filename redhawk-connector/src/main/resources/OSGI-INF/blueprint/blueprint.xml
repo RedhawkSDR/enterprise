@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
+	xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+	xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd 
+						http://cxf.apache.org/blueprint/jaxrs http://cxf.apache.org/schemas/blueprint/jaxrs.xsd
+						http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd">
+	<service id="dataSourceFactory" ref="dataSourceFactoryBean" interface="org.osgi.service.cm.ManagedServiceFactory">
+		<service-properties>
+			<entry key="service.pid" value="redhawk.datasource.factory" />
+		</service-properties>
+	</service>
+
+	<bean id="dataSourceFactoryBean" class="redhawk.connector.RedhawkConnector" destroy-method="shutdown">
+		<property name="bundleContext" ref="blueprintBundleContext" />
+	</bean>
+
+</blueprint>

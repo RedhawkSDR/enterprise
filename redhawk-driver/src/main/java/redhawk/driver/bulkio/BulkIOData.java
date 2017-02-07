@@ -57,7 +57,7 @@ public class BulkIOData<T> implements dataCharOperations, dataFloatOperations, d
 						Object[] obj = (Object[]) dataQueue.take();
 						genericPushPacket((Object) obj[0], (PrecisionUTCTime) obj[1], (Boolean) obj[2], (String) obj[3]);
 					} catch (InterruptedException e) {
-						logger.log(Level.SEVERE, "Interrupted exception on processing thread in BulkIoData", e);
+						logger.log(Level.FINE, "Interrupted exception on processing thread in BulkIoData", e);
 					} catch (Exception e){
 						logger.log(Level.SEVERE, "Exception caught", e);
 					}
@@ -87,7 +87,7 @@ public class BulkIOData<T> implements dataCharOperations, dataFloatOperations, d
 						}					
 						
 					} catch (InterruptedException e) {
-						logger.log(Level.SEVERE, "Interrupted exception on processing thread in BulkIoData", e);
+						logger.log(Level.FINE, "Interrupted exception on processing thread in BulkIoData", e);
 					} catch (Exception e){
 						logger.log(Level.SEVERE, "Exception caught", e);
 					}
@@ -110,6 +110,8 @@ public class BulkIOData<T> implements dataCharOperations, dataFloatOperations, d
     
     public void disconnect(){
     	processData = false;
+    	sriProcessingThread.interrupt();
+    	dataProcessingThread.interrupt();
     }
     
 	@Override
@@ -233,6 +235,9 @@ public class BulkIOData<T> implements dataCharOperations, dataFloatOperations, d
             }
         } catch (Throwable t) {
             logger.severe("THROWABLE CAUGHT : " + t.getMessage());
+            if(t instanceof InterruptedException){
+            	throw t;
+            }
         }    
         
         if(endOfStream){

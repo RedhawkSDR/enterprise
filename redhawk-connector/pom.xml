@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>redhawk</groupId>
 		<artifactId>redhawk-integration</artifactId>
-		<version>2.0.1.U2-SNAPSHOT</version>
+		<version>2.0.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>redhawk-connector</artifactId>
 	<packaging>bundle</packaging>

@@ -260,6 +260,10 @@ public class RedhawkPortImpl implements RedhawkPort {
 	    		logger.fine("PROB with: " + dataType.poaTieClass);
 	    	} catch(Throwable t){
 	    		logger.fine("PROB with: " + dataType.poaTieClass);
+	    	}finally{
+	    		if(!foundValidPort){
+	    			dataConnection.disconnect();
+	    		}
 	    	}
         }
         

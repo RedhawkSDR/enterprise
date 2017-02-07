@@ -63,6 +63,43 @@
 					</bootFeatures>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>rpm-maven-plugin</artifactId>
+				<extensions>true</extensions>
+				<executions>
+					<execution>
+						<id>genrate-rpm</id>
+						<goals>
+							<goal>rpm</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<licence/>
+					<distribution/> 
+					<icon/>
+					<group>REDHAWK Integration</group>
+					<prefix>${redhawk.user.home}</prefix>
+					<mappings>
+						<mapping>
+							<directory>${redhawk.user.home}</directory>
+							<username>root</username>
+							<groupname>root</groupname>
+							<filemode>755</filemode>
+							<sources>
+								<source>
+									<location>${project.build.directory}/${artifactId}-${version}.tar.gz</location>
+								</source>
+							</sources>
+						</mapping>
+					</mappings>
+					<preinstallScriptlet/>
+					<postinstallScriplet/>
+					<preremoveScriptlet/>
+					<postremoveScriptlet/>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>

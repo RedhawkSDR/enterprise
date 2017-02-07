@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>redhawk</groupId>
 		<artifactId>redhawk-integration</artifactId>
-		<version>2.0.1.U2-SNAPSHOT</version>
+		<version>2.0.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>redhawk-feature</artifactId>
 	<packaging>feature</packaging>
@@ -27,11 +27,11 @@
 	<build>
 		<plugins>
 			<plugin>
-        		<groupId>org.apache.karaf.tooling</groupId>
-        		<artifactId>karaf-maven-plugin</artifactId>
-        		<version>4.0.7</version><!-- TODO: Move this whole def up to parent pom -->
-        		<extensions>true</extensions>
-        	</plugin>
+				<groupId>org.apache.karaf.tooling</groupId>
+				<artifactId>karaf-maven-plugin</artifactId>
+				<version>4.0.7</version><!-- TODO: Move this whole def up to parent pom -->
+				<extensions>true</extensions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>

@@ -26,6 +26,7 @@
 		<karaf.version>4.0.8</karaf.version>
 		<karaf.maven.plugin.version>4.0.7</karaf.maven.plugin.version>
 		<redhawk.user.home>/usr/local/redhawk</redhawk.user.home>
+		<runtime.dir>enterprise-integration</runtime.dir>
 	</properties>
 
 	<scm>
@@ -196,6 +197,9 @@
 			</plugin>
 		</plugins>
 	</build>
+	<!--
+	TODO: Figure out best way to handle distribution management. I think 
+	the settings.xml should be setup in the docker image.
 	<distributionManagement>
 		<repository>
 			<name>releases</name>
@@ -208,4 +212,5 @@
 			<url>${distributionManagement.snapshotRepository.url}</url>
 		</snapshotRepository>
 	</distributionManagement>
+	-->
 </project>

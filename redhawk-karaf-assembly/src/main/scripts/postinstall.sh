@@ -12,11 +12,19 @@ fi
 
 if [[ -z "${RPM_INSTALL_PREFIX}" ]]
 then
-    HOME=${redbus.user.home}
+    HOME=${redhawk.user.home}
 else
     HOME=${RPM_INSTALL_PREFIX}
 fi
 
+echo "Untaring REDHAWK Enterprise Karaf Distribution" 
+cd ${HOME}
+%{__tar} -zxphf ${artifactId}-${version}.tar.gz --same-owner
+%{__mv} ${artifactId}-${version} ${runtime.dir}
+
+#Update Permissions 
+%{__chown} -R root:redhawk ${runtime.dir}
+%{__chmod} -R 775 ${runtime.dir}
+
 #Post Install Instructions 
-%{__tar} -C ${HOME} -zxphf ${artifactId}-${version}.tar.gz --same-owner
 %{__rm} -f ${artifactId}-${version}.tar.gz

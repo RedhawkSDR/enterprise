@@ -43,7 +43,7 @@
 			<version>${project.version}</version>
 			<classifier>features</classifier>
 			<type>xml</type>
-			<scope>runtime</scope>			
+			<scope>runtime</scope>
 		</dependency>
 	</dependencies>
 	<build>
@@ -64,8 +64,49 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.codehaus.groovy.maven</groupId>
+				<artifactId>gmaven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>choose-target-repository</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>execute</goal>
+						</goals>
+						<configuration>
+							<source>
+								project.properties.rpmFriendlyVersion =
+								project.version.replaceAll("-",".");
+							</source>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resources-scripts</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/scripts</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/scripts</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>rpm-maven-plugin</artifactId>
+				<version>2.1.5</version>
 				<extensions>true</extensions>
 				<executions>
 					<execution>
@@ -76,17 +117,18 @@
 					</execution>
 				</executions>
 				<configuration>
-					<licence/>
-					<distribution/> 
-					<icon/>
+					<licence />
+					<distribution />
+					<icon />
 					<group>REDHAWK Integration</group>
 					<prefix>${redhawk.user.home}</prefix>
+					<versionProperty>rpmFriendlyVersion</versionProperty>
 					<mappings>
 						<mapping>
 							<directory>${redhawk.user.home}</directory>
 							<username>root</username>
-							<groupname>root</groupname>
-							<filemode>755</filemode>
+							<groupname>redhawk</groupname>
+							<filemode>775</filemode>
 							<sources>
 								<source>
 									<location>${project.build.directory}/${artifactId}-${version}.tar.gz</location>
@@ -94,10 +136,20 @@
 							</sources>
 						</mapping>
 					</mappings>
-					<preinstallScriptlet/>
-					<postinstallScriplet/>
-					<preremoveScriptlet/>
-					<postremoveScriptlet/>
+					<preinstallScriptlet>
+						<script>echo "Installing REDHAWK Java Integration Asssets"</script>
+					</preinstallScriptlet>
+					<postinstallScriptlet>
+						<scriptFile>${project.build.directory}/scripts/postinstall.sh</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</postinstallScriptlet>
+					<preremoveScriptlet>
+						<scriptFile>${project.build.directory}/scripts/preremove.sh</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</preremoveScriptlet>
+					<postremoveScriptlet>
+						<script>echo "Uninalled REDHAWK Java Integration Assets"</script>
+					</postremoveScriptlet>
 				</configuration>
 			</plugin>
 		</plugins>

@@ -9,7 +9,7 @@
 
 To install into karaf base run the following commands
 
-	feature:repo-add mvn:redhawk/redhawk-feature/2.0.1.U2-SNAPSHOT/xml/features
+	feature:repo-add mvn:redhawk/redhawk-feature/${project.version}/xml/features
 	feature:install redbus-redhawk-driver
 
 #### Sample Usage with Groovy Shell Script ####

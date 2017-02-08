@@ -49,7 +49,7 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-
+//TODO: Should be able to get this from the JDK
 public class IndentingXMLStreamWriter extends DelegatingXMLStreamWriter {
     public IndentingXMLStreamWriter(XMLStreamWriter writer) {
 		super(writer);

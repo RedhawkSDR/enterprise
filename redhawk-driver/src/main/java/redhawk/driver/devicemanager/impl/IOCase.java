@@ -38,6 +38,7 @@ import java.io.Serializable;
  * @version $Id: IOCase.java 606345 2007-12-21 23:43:01Z ggregory $
  * @since Commons IO 1.3
  */
+//TODO: Find another library to accomplish this....
 public final class IOCase implements Serializable {
 
     /**

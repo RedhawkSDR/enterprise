@@ -14,7 +14,6 @@ import org.apache.commons.logging.LogFactory;
 
 import redbus.core.orchestration.components.redhawk.filemanager.RedhawkFileContainer;
 import redbus.core.orchestration.components.redhawk.filemanager.RedhawkFileOperations;
-import CF.File;
 
 public class RedhawkMarkerFileExclusiveReadLockStrategy implements GenericFileExclusiveReadLockStrategy<RedhawkFileContainer>{
 

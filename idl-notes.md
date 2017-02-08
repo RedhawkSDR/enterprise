@@ -31,4 +31,9 @@ The IDL's for generating the 4 jars that Redhawk Integration currently uses are 
 * BULKIO: https://github.com/RedhawkSDR/core-framework/tree/develop-2.0/bulkioInterfaces/idl/ossie/BULKIO
 * FRONTENDINTERFACES: https://github.com/RedhawkSDR/core-framework/tree/develop-2.0/frontendInterfaces/idl/redhawk/FRONTEND
 * cfinterfaces: https://github.com/RedhawkSDR/core-framework/tree/develop-2.0/redhawk/src/idl/ossie/CF
-* ossie:  
+* ossie: 
+
+Certain files likely need to be removed before this is released: 
+
+./redhawk-driver/src/main/java/redhawk/driver/devicemanager/impl/IOCase.java
+./redhawk-driver/src/main/java/redhawk/driver/xml/IndentingXMLStreamWriter.java 

@@ -1,23 +1,20 @@
 # REDHAWK Driver #
 ***
 
-# Base Karaf Usage #
+## Sample Usage with Groovy Shell Script ##
 ***
+	
+One way to test the REDHAWK Driver is from groovy console. To install groovy console on your machine. Follow the directory [here](http://groovy-lang.org/install.html). 
 
-### Redhawk Driver ### 
+Once thats 
+
+## Base Karaf Usage ##
 ***
-
-To install into karaf base run the following commands
 
 	feature:repo-add mvn:redhawk/redhawk-feature/${project.version}/xml/features
 	feature:install redbus-redhawk-driver
 
-#### Sample Usage with Groovy Shell Script ####
 
-Install groovy shell feature into karaf:
-
-	feature:repo-add mvn:redbus.services.shell/groovy/1.0.3-SNAPSHOT/xml/features
-	feature:install 
 	
 Then you can run the following commands to test the driver: 
 

@@ -210,7 +210,6 @@
 	<!--
 	TODO: Figure out best way to handle distribution management. I think 
 	the settings.xml should be setup in the docker image.
-	-->
 	<distributionManagement>
 		<repository>
 			<name>releases</name>
@@ -223,4 +222,5 @@
 			<url>${distributionManagement.snapshotRepository.url}</url>
 		</snapshotRepository>
 	</distributionManagement>
+	-->	
 </project>

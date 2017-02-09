@@ -11,6 +11,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<redhawk.version>2.0.4</redhawk.version>		
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
@@ -140,6 +141,15 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<id>CFDependencies</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<modules>
+				<module>cf-dependencies</module>
+			</modules>
+		</profile>
 	</profiles>
 	<build>
 		<pluginManagement>
@@ -200,6 +210,7 @@
 	<!--
 	TODO: Figure out best way to handle distribution management. I think 
 	the settings.xml should be setup in the docker image.
+	-->
 	<distributionManagement>
 		<repository>
 			<name>releases</name>
@@ -212,5 +223,4 @@
 			<url>${distributionManagement.snapshotRepository.url}</url>
 		</snapshotRepository>
 	</distributionManagement>
-	-->
 </project>

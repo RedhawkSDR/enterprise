@@ -4,4 +4,5 @@
 build:
   image: redbusci/maven:3-jdk-8
   script:
-    - mvn clean install
+  	- mvn -PCFDependencies clean install
+    - mvn deploy

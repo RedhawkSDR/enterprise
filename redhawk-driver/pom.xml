@@ -14,7 +14,6 @@
 
 	<properties>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
-		<redhawk.version>2.0.0</redhawk.version>
 	</properties>
 
 	<scm>

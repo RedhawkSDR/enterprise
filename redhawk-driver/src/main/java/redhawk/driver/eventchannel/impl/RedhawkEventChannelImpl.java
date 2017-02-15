@@ -27,13 +27,16 @@ import java.util.UUID;
 import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
-import org.omg.CosEventChannelAdmin.TypeError;
 import org.omg.CosEventComm.Disconnected;
 import org.omg.CosEventComm.PushConsumer;
 import org.omg.CosEventComm.PushConsumerPOATie;
+import org.omg.CosEventChannelAdmin.AlreadyConnected;
+import org.omg.CosEventChannelAdmin.TypeError;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
 import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import CF.DataType;
 import CF.EventChannelManager;
@@ -52,7 +55,8 @@ import redhawk.driver.eventchannel.listeners.EventChannelListener;
 import redhawk.driver.exceptions.EventChannelException;
 
 public class RedhawkEventChannelImpl implements RedhawkEventChannel {
-
+	private Logger log = LoggerFactory.getLogger(RedhawkEventChannelImpl.class);
+	
 	private String eventChannelName;
 	private ORB orb;
 	private EventChannelManager eventChannelManager;
@@ -79,9 +83,9 @@ public class RedhawkEventChannelImpl implements RedhawkEventChannel {
     		registration.channel.for_consumers().obtain_push_supplier().connect_push_consumer(pipeline);
     	} catch(InvalidName | AdapterInactive | TypeError e){
     		throw new EventChannelException("A CORBA Exception has occured:", e);
-    	} catch (org.omg.CosEventChannelAdmin.AlreadyConnected e) {
-			throw new EventChannelException("Already Connected to the event Channel:", e);
-		}
+    	} catch (AlreadyConnected e) {
+    		throw new EventChannelException("Already Connected to the event Channel:", e); 		
+		} 
     }
 	
 	private void register() throws EventChannelException {

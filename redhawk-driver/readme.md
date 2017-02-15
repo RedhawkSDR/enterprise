@@ -1,12 +1,9 @@
 # REDHAWK Driver #
 ***
 
-## Sample Usage with Groovy Shell Script ##
+## Sample Usage with Java Shell ##
 ***
-	
-One way to test the REDHAWK Driver is from groovy console. To install groovy console on your machine. Follow the directory [here](http://groovy-lang.org/install.html). 
 
-Once thats 
 
 ## Base Karaf Usage ##
 ***

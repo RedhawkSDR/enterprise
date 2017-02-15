@@ -13,6 +13,8 @@
 	<description>Java library for integrating with REDHAWK</description>
 
 	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>	
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 
@@ -73,15 +75,11 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<!-- <Bundle-Activator>redhawk.osgi.Activator</Bundle-Activator> -->
-						<!-- TODO: Should these imports really be optional redhawk-websocket 
-							is not functional without redbus.commons -->
 						<Import-Package>
 							com.sun.corba.se.impl.encoding;resolution:=optional,
 							org.ietf.jgss;resolution:=optional,
 							javax.rmi.*;resolution:=optional,
 							!redhawk.*,
-							!org.omg.*,
 							!BULKIO.*,
 							!CF.*,
 							!ExtendedCF.*,
@@ -89,10 +87,11 @@
 							!FRONTEND,
 							!PortTypes,
 							!StandardEvent,
-							!org.jacorb.*,
 							!org.hamcrest.*,
 							!org.ossie.*,
 							!omnijni.*,
+							!org.omg.CosEventChannelAdmin.*,
+							!org.omg.CosEventComm.*,
 							!org.apache.log4j.*,
 							!org.apache.commons.lang,
 							!javax.swing.*
@@ -100,19 +99,20 @@
 						</Import-Package>
 						<DynamicImport-Package>*</DynamicImport-Package>
 						<Export-Package>
-							CF.*;version=1.10.0,
-							ExtendedEvent.*;version=1.10.0,
-							org.ossie.*;version=1.10.0,
-							omnijni.*;version=1.10.0,
-							ExtendedCF.*;version=1.10.0,
-							FRONTEND.*;version=1.10.0,
-							BULKIO.*;version=1.10.0,
-							StandardEvent.*;version=1.10.0,
-							PortTypes.*;version=1.10.0,
-							org.omg.*;orb-impl=jacorb,
-							org.jacorb.*;version=3.4.0,*
-							redhawk.*;version=${Bundle-Version}
+							CF.*;version=${redhawk.version},
+							ExtendedEvent.*;version=${redhawk.version},
+							org.ossie.*;version=${redhawk.version},
+							omnijni.*;version=${redhawk.version},
+							org.omg.CosEventChannelAdmin.*;version=${redhawk.version},
+							org.omg.CosEventComm.*;version=${redhawk.version},
+							ExtendedCF.*;version=${redhawk.version},
+							FRONTEND.*;version=${redhawk.version},
+							BULKIO.*;version=${redhawk.version},
+							StandardEvent.*;version=${redhawk.version},
+							PortTypes.*;version=${redhawk.version},
+							redhawk.*;version=${Bundle-Version},
 						</Export-Package>
+						<Embed-Dependency>cfinterfaces;inline=true,bulkiointerfaces;inline=true;ossie;inline=true;frontendinterfaces;inline=true</Embed-Dependency>
 						<_nodefaultversion>true</_nodefaultversion>
 					</instructions>
 				</configuration>
@@ -137,23 +137,6 @@
 						<include>**/*Test.groovy</include>
 					</includes>
 				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>3.0.0</version>
-				<executions>
-					<execution>
-						<id>copy-dependencies</id>
-						<phase>package</phase>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<excludeArtifactIds>xml-apis</excludeArtifactIds>
-						</configuration>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
@@ -350,8 +333,24 @@
 	</profiles>
 	<dependencies>
 		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.6.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.6.4</version>
+		</dependency>
+		<dependency>
 			<groupId>org.jacorb</groupId>
 			<artifactId>jacorb</artifactId>
+			<version>3.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jacorb</groupId>
+			<artifactId>jacorb-omgapi</artifactId>
 			<version>3.8</version>
 		</dependency>
 		<dependency>
@@ -367,7 +366,8 @@
 		<dependency>
 			<groupId>redhawk</groupId>
 			<artifactId>ossie</artifactId>
-			<version>${redhawk.version}</version>
+			<!--<version>${redhawk.version}</version>-->
+			<version>2.0.5-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>redhawk</groupId>

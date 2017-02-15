@@ -26,9 +26,9 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.jacorb.orb.TypeCode;
 import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
+import org.omg.CORBA.TypeCode;
 import org.ossie.properties.AnyUtils;
 
 import CF.DataType;
@@ -100,13 +100,16 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
     
     
     private RedhawkProperty getAndCast(DataType property){
-        Object propertyValue = AnyUtils.convertAny(property.value);
-        if(propertyValue instanceof Any[]){
+    	ClassLoader cl = Thread.currentThread().getContextClassLoader();
+		Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
+    	Object propertyValue = AnyUtils.convertAny(property.value);
+		Thread.currentThread().setContextClassLoader(cl);
+    	if(propertyValue instanceof Any[]){
             return new RedhawkStructSequence(getOrb(), getIor(), property.id, (Any[]) propertyValue);
         } else if(propertyValue instanceof DataType[]) {
             return new RedhawkStruct(getOrb(), getIor(), property.id, (DataType[]) propertyValue, null);
         } else if(propertyValue instanceof Object[]){
-            return new RedhawkSimpleSequence(getOrb(), getIor(),  property.id, (Object[]) propertyValue, TypeCode.originalType(property.value.type()));
+            return new RedhawkSimpleSequence(getOrb(), getIor(),  property.id, (Object[]) propertyValue, property.value.type());
         } else {
             return new RedhawkSimple(getOrb(), getIor(),  property.id, propertyValue);
         }

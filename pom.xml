@@ -15,7 +15,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
-		<redhawk.version>2.0.0</redhawk.version>
+		<redhawk.version>2.0.4</redhawk.version>
 		<jetty.version>9.2.19.v20160908</jetty.version>
 		<osgi.version>5.0.0</osgi.version>
 		<camel.version>2.17.5</camel.version>
@@ -44,7 +44,7 @@
 		<module>redhawk-websocket</module>
 		<module>redhawk-camel</module>
 		<module>redhawk-feature</module>
-		<module>redhawk-karaf-assembly</module>
+		<module>redhawk-integration-dist</module>
 	</modules>
 	<dependencyManagement>
 		<dependencies>

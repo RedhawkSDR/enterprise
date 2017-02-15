@@ -106,23 +106,29 @@ public class RedhawkDriver implements Redhawk {
         //Jacorb Properties. Should probably add something so that people can provide
         //additional or different jacorb.properties than the defaults
         //See this guide for more properties: http://www.jacorb.org/releases/3.8/ProgrammingGuide.pdf
-        connectionProperties.put("com.sun.CORBA.transport.ORBUseNIOSelectToWait", "false");
-    	connectionProperties.put("org.omg.CORBA.ORBSingletonClass", "org.jacorb.orb.ORBSingleton");
-    	connectionProperties.put("org.omg.PortableInterceptor.ORBInitializerClass.standard_init", "org.jacorb.orb.standardInterceptors.IORInterceptorInitializer");
-    	connectionProperties.put("jacorb.config.dir", System.getProperty("jacorb.config.dir",""));
-    	connectionProperties.put("jacorb.retries", 1);   //jacorb.retries: Number of retries if connection cannot directly be established.
+        //connectionProperties.put("com.sun.CORBA.transport.ORBUseNIOSelectToWait", "false");
+    	//connectionProperties.put("org.omg.CORBA.ORBSingletonClass", "org.jacorb.orb.ORBSingleton");
+    	//connectionProperties.put("org.omg.PortableInterceptor.ORBInitializerClass.standard_init", "org.jacorb.orb.standardInterceptors.IORInterceptorInitializer");
+    	//connectionProperties.put("jacorb.config.dir", System.getProperty("jacorb.config.dir",""));
+    	//connectionProperties.put("jacorb.retries", 1);   //jacorb.retries: Number of retries if connection cannot directly be established.
         connectionProperties.put(CORBA_NAME_SERVICE, "corbaname::" + hostName + ":" + port);
         
-        System.setProperty("org.omg.CORBA.ORBClass", "org.jacorb.orb.ORB");
-        
+        //System.setProperty("org.omg.CORBA.ORBClass", "org.jacorb.orb.ORB");
+        //System.getProperty("jacorb.classloaderpolicy", "forname");
         //TODO: Ask John what this does????
-        if(System.getProperty("redbus.base") != null){
+        //if(System.getProperty("redbus.base") != null){
         	//ClassLoader policy for Jacorb to use options are tccl/forname
         	//tccl: 'JacORB will use the thread context class loader to resolve classes and resources'
         	//forname: 'JacORB will use the defining class loader'
-        	System.setProperty("jacorb.classloaderpolicy", "forname");
-        }
-    }    
+        //System.setProperty("jacorb.classloaderpolicy", "forname");
+        //}
+    }
+    
+    public RedhawkDriver(String hostName, int port, Properties properties){
+    	connectionProperties = properties;
+    	this.hostName = hostName; 
+    	this.port = port;
+    }
     
     @Override
 	public String toString() {
@@ -136,7 +142,19 @@ public class RedhawkDriver implements Redhawk {
 			ClassLoader cl = Thread.currentThread().getContextClassLoader();
 			Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
 			logger.log(Level.FINE, "Initializing the Object Request Broker");
-	        orb = (ORB) ORB.init((String[])null, connectionProperties);
+			String[] args = new String[2];
+			//-ORBInitRef
+			//NameService=corbaname::127.0.0.1:2809
+
+			args[0] = "-ORBInitRef";
+			args[1] = "NameService=corbaname::"+hostName+":"+port;
+			logger.info("Connecting with the following args");
+			for(String arg : args){
+				logger.info("Args: "+arg);
+			}
+			
+			logger.info("Connection with these properties "+connectionProperties);
+			orb = (ORB) ORB.init(args, connectionProperties);
 	        Thread.currentThread().setContextClassLoader(cl);
 		}
     }

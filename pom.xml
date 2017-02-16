@@ -27,7 +27,6 @@
 		<karaf.version>4.0.8</karaf.version>
 		<karaf.maven.plugin.version>4.0.7</karaf.maven.plugin.version>
 		<redhawk.user.home>/usr/local/redhawk</redhawk.user.home>
-		<runtime.dir>enterprise-integration</runtime.dir>
 	</properties>
 
 	<scm>

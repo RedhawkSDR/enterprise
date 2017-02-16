@@ -86,7 +86,7 @@ public class Packet<T> implements Serializable {
 	public double ydelta = 0.0;
 	
 	/**
-	 * Unique streams cna be deliverd over the same Port, where each stream is identified 
+	 * Unique streams can be delivered over the same Port, where each stream is identified 
 	 * by a unique String.
 	 */
 	public short yunits = 0;

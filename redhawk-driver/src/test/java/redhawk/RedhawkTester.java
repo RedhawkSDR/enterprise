@@ -86,7 +86,7 @@ public class RedhawkTester {
         
 //        RedhawkDomainManager manager = redhawk.connect();
 //        
-//        RedhawkApplication application = manager.getApplicationByName(".*mission_manager.*");
+//        RedhawkApplication application = manager.getApplicationByName(".*manager.*");
 //        
 //        
 //        

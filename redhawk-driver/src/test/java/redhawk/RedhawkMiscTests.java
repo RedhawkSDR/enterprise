@@ -37,6 +37,7 @@ import redhawk.driver.port.RedhawkPort;
 public class RedhawkMiscTests extends RedhawkBaseTest {
 	private String domainName = "REDHAWK_DEV";
 	
+	private String applicationName = "";
 	@Test
 	public void getDomainManagers() throws Exception {
 		System.out.println("Domains:");
@@ -54,7 +55,7 @@ public class RedhawkMiscTests extends RedhawkBaseTest {
 	public void getComponents() throws Exception {
 		RedhawkDomainManager d = driver.getDomain(domainName);
 		RedhawkApplication p = d
-				.getApplicationByName("primalfusion2_mission_manager");
+				.getApplicationByName(applicationName);
 		System.out.println("Components:");
 		for (RedhawkComponent c : p.getComponents())
 			System.out.println("\t" + c);
@@ -65,7 +66,7 @@ public class RedhawkMiscTests extends RedhawkBaseTest {
 		System.out.println("Component Ports:");
 		RedhawkDomainManager d = driver.getDomain(domainName);
 		RedhawkApplication p = d
-				.getApplicationByName("primalfusion2_mission_manager");
+				.getApplicationByName(applicationName);
 		RedhawkComponent c = p.getComponentByName("MWPB_Tasker.*");
 		for (RedhawkPort port : c.getPorts())
 			System.out.println("\t" + port);
@@ -75,7 +76,7 @@ public class RedhawkMiscTests extends RedhawkBaseTest {
 	public void getExternalPorts() throws Exception {
 		RedhawkDomainManager d = driver.getDomain(domainName);
 		RedhawkApplication p = d
-				.getApplicationByName("primalfusion2_mission_manager");
+				.getApplicationByName(applicationName);
 		System.out.println("ExternalPorts:");
 		for (RedhawkPort port : p.getExternalPorts())
 			System.out.println("\t" + port);
@@ -169,7 +170,7 @@ public class RedhawkMiscTests extends RedhawkBaseTest {
 	public void getComponentPortByName() throws Exception {
 		System.out.println("Component Port (byName): ");
 		RedhawkDomainManager d = driver.getDomain(domainName);
-		RedhawkApplication ap = d.getApplicationByName("primalfusion2_mission_manager");
+		RedhawkApplication ap = d.getApplicationByName(applicationName);
 		RedhawkComponent c = ap.getComponentByName("MWPB_Tasker.*");
 		RedhawkPort p = c.getPort("DomainManager_out");
 		System.out.println("\t" + p);

@@ -63,16 +63,16 @@ public class RedhawkDriverTest extends RedhawkTestBase {
 
 	@Test
 	public void testConstructorThree() {
-		Redhawk redhawk = new RedhawkDriver("192.168.1.1", 3333);
-		assertEquals(redhawk.getHostName(), "192.168.1.1");
+		Redhawk redhawk = new RedhawkDriver("127.0.0.1", 3333);
+		assertEquals(redhawk.getHostName(), "127.0.0.1");
 		assertEquals(redhawk.getPort(), 3333);
 	}
 	
 	@Test
 	public void testConstructorThreeWithOSGI() {
 		System.setProperty("redbus.base","testValue");
-		Redhawk redhawk = new RedhawkDriver("192.168.1.1", 3333);
-		assertEquals(redhawk.getHostName(), "192.168.1.1");
+		Redhawk redhawk = new RedhawkDriver("127.0.0.1", 3333);
+		assertEquals(redhawk.getHostName(), "127.0.0.1");
 		assertEquals(redhawk.getPort(), 3333);
 		assertEquals(System.getProperty("jacorb.classloaderpolicy"), "forname");
 	}

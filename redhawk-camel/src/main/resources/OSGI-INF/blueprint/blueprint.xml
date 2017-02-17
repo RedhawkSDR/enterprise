@@ -5,7 +5,7 @@
         <reference-listener ref="redhawkComponentManager" bind-method="bind" unbind-method="unbind" />
     </reference-list>
     
-    <bean id="redhawkComponentManager" class="redbus.core.orchestration.components.redhawk.RedhawkComponentManager">
+    <bean id="redhawkComponentManager" class="redhawk.camel.components.RedhawkComponentManager">
         <property name="redhawkConnectionList" ref="redhawkConnectionList" />
         <property name="bundleContext" ref="blueprintBundleContext" />
     </bean>

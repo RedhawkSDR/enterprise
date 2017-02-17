@@ -19,6 +19,6 @@ fi
 
 echo "Stopping KARAF if it's still running" 
 cd ${HOME}
-./${runtime.dir}/bin/stop
+./${runtime.dir}/karaf-${karaf.version}/bin/stop
 
 %{__rm} -rf ${runtime.dir}

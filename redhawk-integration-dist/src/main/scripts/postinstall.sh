@@ -17,14 +17,13 @@ else
     HOME=${RPM_INSTALL_PREFIX}
 fi
 
-echo "Untaring REDHAWK Enterprise Karaf Distribution" 
+echo "Untaring ${project.name}" 
 cd ${HOME}
-%{__tar} -zxphf ${artifactId}-${version}.tar.gz --same-owner
-%{__mv} ${artifactId}-${version} ${runtime.dir}
+%{__tar} -zxphf ${runtime.dir}.tar.gz --same-owner
 
 #Update Permissions 
 %{__chown} -R root:redhawk ${runtime.dir}
 %{__chmod} -R 775 ${runtime.dir}
 
 #Post Install Instructions 
-%{__rm} -f ${artifactId}-${version}.tar.gz
+%{__rm} -f ${runtime.dir}.tar.gz

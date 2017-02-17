@@ -1,1 +1,1 @@
-class=redbus.core.orchestration.components.redhawk.RedhawkComponent
+class=redhawk.camel.components.RedhawkComponent

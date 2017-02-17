@@ -111,7 +111,8 @@ public class RedhawkDriver implements Redhawk {
     	//connectionProperties.put("org.omg.PortableInterceptor.ORBInitializerClass.standard_init", "org.jacorb.orb.standardInterceptors.IORInterceptorInitializer");
     	//connectionProperties.put("jacorb.config.dir", System.getProperty("jacorb.config.dir",""));
     	//connectionProperties.put("jacorb.retries", 1);   //jacorb.retries: Number of retries if connection cannot directly be established.
-        connectionProperties.put(CORBA_NAME_SERVICE, "corbaname::" + hostName + ":" + port);
+        //connectionProperties.put(CORBA_NAME_SERVICE, "corbaname::" + hostName + ":" + port);
+        connectionProperties.put(System.getProperty("com.sun.CORBA.transport.ORBUseNIOSelectWait", "false");
         
         //System.setProperty("org.omg.CORBA.ORBClass", "org.jacorb.orb.ORB");
         //System.getProperty("jacorb.classloaderpolicy", "forname");

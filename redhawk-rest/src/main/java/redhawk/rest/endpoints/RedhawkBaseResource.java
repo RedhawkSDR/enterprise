@@ -27,13 +27,11 @@ import redhawk.rest.RedhawkManager;
 
 public class RedhawkBaseResource {
 	public RedhawkManager redhawkManager;
-
 	
 	@OPTIONS
 	public Response getOptions() {
 		return addCors(Response.ok()).build();
 	}
-	
 	
 	protected ResponseBuilder addCors(ResponseBuilder responseBuilder) {
 		responseBuilder.header("Access-Control-Allow-Origin", "*");

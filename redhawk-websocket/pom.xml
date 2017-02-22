@@ -222,37 +222,30 @@
 			<version>${powermock.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+  			<groupId>org.apache.cxf</groupId>
+  			<artifactId>cxf-rt-rs-client</artifactId>
+			<version>${cxf.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>redhawk</groupId>
+			<artifactId>cfinterfaces</artifactId>
+			<version>${redhawk.version}</version>
+			<scope>test</scope>			
+		</dependency>
+		<dependency>
+			<groupId>redhawk</groupId>
+			<artifactId>bulkiointerfaces</artifactId>
+			<version>${redhawk.version}</version>
+			<scope>test</scope>		
+		</dependency>
+		<dependency>
+			<groupId>redhawk</groupId>
+			<artifactId>ossie</artifactId>
+			<!--<version>${redhawk.version}</version>-->
+			<version>2.0.5-SNAPSHOT</version>
+			<scope>test</scope>		
+		</dependency>
 	</dependencies>
-	<profiles>
-		<profile>
-			<id>system</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-failsafe-plugin</artifactId>
-						<configuration>
-							<!--<skipTests>${skipSystemTests}</skipTests> -->
-							<includes>
-								<include>**/*ST.*</include>
-							</includes>
-							<!-- <excludes> <exclude>**/*Test.*</exclude> </excludes> -->
-						</configuration>
-						<executions>
-							<execution>
-								<id>integration-test</id>
-								<goals>
-									<goal>integration-test</goal>
-									<goal>verify</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 </project>

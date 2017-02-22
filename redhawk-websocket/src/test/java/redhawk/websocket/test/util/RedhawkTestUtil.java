@@ -32,10 +32,10 @@ public class RedhawkTestUtil {
 	public static String sampleWebSocketPortEndpoint(String portName){
 		String ip = System.getProperty("redhawk.host", "localhost");
 		Integer port = Integer.parseInt(System.getProperty("redhawk.port", ""+2809));
-		String redbusIp = System.getProperty("redbus.host", "localhost");
+		String karafIp = System.getProperty("karaf.host", "localhost");
 		Integer jettyPort = Integer.valueOf(System.getProperty("jetty.port", "8781"));
 		
-		String wsEndpoint = "ws://"+redbusIp+":"+jettyPort+"/redhawk/"
+		String wsEndpoint = "ws://"+karafIp+":"+jettyPort+"/redhawk/"
 				+ ip
 				+ ":"+port+"/domains/REDHAWK_DEV/applications/Websocket.*/components/SigGen.*/ports/"+portName;
 		
@@ -45,10 +45,10 @@ public class RedhawkTestUtil {
 	public static String sampleWebSocketEventChannel(String eventType){
 		String ip = System.getProperty("redhawk.host", "localhost");
 		Integer port = Integer.parseInt(System.getProperty("redhawk.port", ""+2809));
-		String redbusIp = System.getProperty("redbus.host", "localhost");
+		String karafIp = System.getProperty("karaf.host", "localhost");
 		Integer jettyPort = Integer.valueOf(System.getProperty("jetty.port", "8781"));
 		
-		String wsEndpoint = "ws://"+redbusIp+":"+jettyPort+"/redhawk/"
+		String wsEndpoint = "ws://"+karafIp+":"+jettyPort+"/redhawk/"
 				+ ip
 				+ ":"+port+"/domains/REDHAWK_DEV/eventchannels/ODM_Channel?messageType="+eventType;
 		
@@ -64,22 +64,11 @@ public class RedhawkTestUtil {
 		Redhawk redhawk = new RedhawkDriver(ip, 2809);
 		Integer majorVersion = getRHMajorVersion(); 
 		RedhawkApplication application; 
-		if (majorVersion >= 2) {
-			waveForm = new File(
-					"src/test/resources/waveform/2.0.0/wf-integration-test.sad.xml");
-			try {
-				application = redhawk.getDomain("REDHAWK_DEV").createApplication("WebsocketTest", waveForm);
-			} catch (Exception ex) {
-				application = redhawk.getDomain("REDHAWK_DEV").createApplication("WebsocketTest", "/waveforms/wf-integration-test/wf-integration-test.sad.xml");
-			}
-		} else {
-			waveForm = new File(
-					"src/test/resources/waveform/1.10/websocket-integration-test.sad.xml");
-			try {
-				application = redhawk.getDomain("REDHAWK_DEV").createApplication("WebsocketTest",waveForm);
-			} catch (Exception ex) {
-				application = redhawk.getDomain("REDHAWK_DEV").createApplication("WebsocketTest","/waveforms/websocket-integration-test/websocket-integration-test.sad.xml");
-			}
+		waveForm = new File("src/test/resources/waveform/wf-integration-test.sad.xml");
+		try {
+			application = redhawk.getDomain("REDHAWK_DEV").createApplication("WebsocketTest", waveForm);
+		} catch (Exception ex) {
+			application = redhawk.getDomain("REDHAWK_DEV").createApplication("WebsocketTest", "/waveforms/wf-integration-test/wf-integration-test.sad.xml");
 		}
 		
 		if(start)
@@ -117,7 +106,7 @@ public class RedhawkTestUtil {
 		return majorVersion;
 	}
 	
-	public static Boolean redbusIsRunning(){
+	public static Boolean karafIsRunning(){
     	Boolean running = false; 
 		try {
     	    String line;
@@ -125,7 +114,7 @@ public class RedhawkTestUtil {
     	    BufferedReader input =
     	            new BufferedReader(new InputStreamReader(p.getInputStream()));
     	    while ((line = input.readLine()) != null) {
-    	        if(line.contains("redbus.base"))
+    	        if(line.contains("karaf.base"))
     	        	running = true; 
     	    }
     	    input.close();

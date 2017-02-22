@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-package redhawk.websocket.system;
+package redhawk.websocket.integration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -35,6 +35,7 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -43,8 +44,9 @@ import redhawk.driver.application.RedhawkApplication;
 import redhawk.websocket.test.util.RedhawkTestUtil;
 import redhawk.websocket.test.util.RedhawkWebSocketTestUtil;
 
-public class WebsocketProcessorST {
-    private static Log logger = LogFactory.getLog(WebsocketProcessorST.class);
+@Ignore
+public class WebsocketProcessorIT {
+    private static Log logger = LogFactory.getLog(WebsocketProcessorIT.class);
 
 	private static RedhawkApplication application;
 
@@ -62,8 +64,9 @@ public class WebsocketProcessorST {
 	@BeforeClass
 	public static void setup() throws Exception{
 		assertTrue("REDHAWK_DEV must exist to run this System test. Pass in param -DskipSystemTests=true to skip this test.", RedhawkTestUtil.redhawkDevExists());
-		assertTrue("REDBUS must be running to run this System test because it deploys a sample Processor bundle for management. Pass in param -DskipSystemTests=true to skip this test.",
-				RedhawkTestUtil.redbusIsRunning());
+		//TODO: This could be done with paxexam....
+		assertTrue("KARAF must be running to run this System test because it deploys a sample Processor bundle for management. Pass in param -DskipSystemTests=true to skip this test.",
+				RedhawkTestUtil.karafIsRunning());
 		application = RedhawkTestUtil.launchApplication(false); 
 		
 		//Connects to running REDBUS because it needs to hit find Processors
@@ -78,11 +81,8 @@ public class WebsocketProcessorST {
 		System.setProperty("jetty.port", "8181");
 		String endpoint; 
 		WebSocketClient client = new WebSocketClient();
-		if(RedhawkTestUtil.getRHMajorVersion()>=2){
-			endpoint = RedhawkTestUtil.sampleWebSocketPortEndpoint("dataFloat_out.json");
-		}else{
-			endpoint = RedhawkTestUtil.sampleWebSocketPortEndpoint("out.json");
-		}
+		endpoint = RedhawkTestUtil.sampleWebSocketPortEndpoint("dataFloat_out.json");
+
 		System.out.println("Endpoint: "+endpoint);
 		RedhawkWebSocketTestUtil socket = new RedhawkWebSocketTestUtil(5);
 		try {

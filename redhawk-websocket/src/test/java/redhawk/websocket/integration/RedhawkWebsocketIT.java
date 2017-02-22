@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-package redhawk.websocket.system;
+package redhawk.websocket.integration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -34,6 +34,7 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.gson.Gson;
@@ -45,8 +46,8 @@ import redhawk.websocket.test.util.JettySupport;
 import redhawk.websocket.test.util.RedhawkTestUtil;
 import redhawk.websocket.test.util.RedhawkWebSocketTestUtil;
 
-public class RedhawkWebsocketST {
-    private static Log logger = LogFactory.getLog(RedhawkWebsocketST.class);
+public class RedhawkWebsocketIT {
+    private static Log logger = LogFactory.getLog(RedhawkWebsocketIT.class);
 
 	private static RedhawkApplication application;
 
@@ -66,12 +67,7 @@ public class RedhawkWebsocketST {
 	@Test
 	public void testWebsocketOnJsonPort() throws Exception {
 		Pattern pattern = Pattern.compile(jsonRegex);
-		String endpoint; 
-		if(RedhawkTestUtil.getRHMajorVersion()>=2){
-			endpoint = RedhawkTestUtil.sampleWebSocketPortEndpoint("dataFloat_out.json");
-		}else{
-			endpoint = RedhawkTestUtil.sampleWebSocketPortEndpoint("out.json");
-		}
+		String endpoint = RedhawkTestUtil.sampleWebSocketPortEndpoint("dataFloat_out.json");
 		RedhawkWebSocketTestUtil socket = new RedhawkWebSocketTestUtil(3);
 
 		this.performSocketConnection(endpoint, socket);
@@ -97,12 +93,8 @@ public class RedhawkWebsocketST {
 	@Test
 	public void testWebsocketOnBinaryPort() throws Exception {
 		String endpoint; 
+		endpoint = RedhawkTestUtil.sampleWebSocketPortEndpoint("dataFloat_out");
 		
-		if(RedhawkTestUtil.getRHMajorVersion()>=2){
-			endpoint = RedhawkTestUtil.sampleWebSocketPortEndpoint("dataFloat_out");
-		}else{
-			endpoint = RedhawkTestUtil.sampleWebSocketPortEndpoint("out");
-		}
 		RedhawkWebSocketTestUtil socket = new RedhawkWebSocketTestUtil(3);
 
 		this.performSocketConnection(endpoint, socket);
@@ -125,7 +117,9 @@ public class RedhawkWebsocketST {
 		assertEquals("Should have received 2 binary messages.", 2, binaryMessageCount);
 	}
 
+	//TODO: Write a waveform that takes pushes out events to a port....
 	@Test
+	@Ignore
 	public void testWebsocketEventChannel() throws Exception {
 		URI uri = URI.create(RedhawkTestUtil
 				.sampleWebSocketEventChannel("standardEvent"));
@@ -141,7 +135,7 @@ public class RedhawkWebsocketST {
 				application.release();
 				application = RedhawkTestUtil.launchApplication(true);
 				while (socket.getMessageCount() < socket.getMessagesToKeep()) {
-					logger.info("hello world");
+					logger.info("Message Count: "+socket.getMessageCount()+" Messages to Keep: "+socket.getMessagesToKeep());
 				}
 				// client.stop();
 			} finally {
@@ -199,7 +193,7 @@ public class RedhawkWebsocketST {
 				// Attempt Connect
 				Future<Session> fut = client.connect(socket, uri);
 				while (socket.getMessageCount() < socket.getMessagesToKeep()) {
-					logger.info("hello world");
+					logger.info("Message Count: "+socket.getMessageCount()+" Messages to Keep: "+socket.getMessagesToKeep());
 				}
 
 				// client.stop();

@@ -30,10 +30,9 @@
 						<configuration>
 							<groupId>redhawk</groupId>
 							<artifactId>ossie</artifactId>
-							<!--<version>${redhawk.version}</version>-->
-							<version>2.0.5-SNAPSHOT</version>
+							<version>${redhawk.version}</version>
 							<packaging>jar</packaging>
-							<file>lib/ossie-steve.jar</file>
+							<file>lib/ossie.jar</file>
 						</configuration>
 					</execution>
 					<execution>

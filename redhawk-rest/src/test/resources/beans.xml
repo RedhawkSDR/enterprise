@@ -21,6 +21,11 @@
      <jaxrs:server id="testRest" address="/redhawk">
         <jaxrs:serviceBeans>
 			<ref component-id="redhawkDomainResource" />            
+			<ref component-id="redhawkApplicationResource" />
+			<ref component-id="redhawkDeviceManagerResource" />
+			<ref component-id="redhawkDeviceResource" />
+			<ref component-id="redhawkWaveformResource" />	
+			<ref component-id="redhawkSoftwareComponentResource" />											        
         </jaxrs:serviceBeans>
 		<jaxrs:extensionMappings>
 			<entry key="json" value="application/json" />
@@ -34,6 +39,26 @@
     <bean id="redhawkManagerBean" class="redhawk.rest.RedhawkManager"/>
 
    	<bean id="redhawkDomainResource" class="redhawk.rest.endpoints.RedhawkDomainResource">
+		<property name="redhawkManager" ref="redhawkManagerBean" />
+	</bean>
+	
+	<bean id="redhawkDeviceManagerResource" class="redhawk.rest.endpoints.RedhawkDeviceManagerResource">
+		<property name="redhawkManager" ref="redhawkManagerBean" />
+	</bean>
+	
+	<bean id="redhawkDeviceResource" class="redhawk.rest.endpoints.RedhawkDeviceResource">
+		<property name="redhawkManager" ref="redhawkManagerBean" />
+	</bean>
+	
+	<bean id="redhawkApplicationResource" class="redhawk.rest.endpoints.RedhawkApplicationResource">
+		<property name="redhawkManager" ref="redhawkManagerBean" />
+	</bean>	
+	
+		<bean id="redhawkWaveformResource" class="redhawk.rest.endpoints.RedhawkWaveformResource">
+		<property name="redhawkManager" ref="redhawkManagerBean" />
+	</bean>
+	
+	<bean id="redhawkSoftwareComponentResource" class="redhawk.rest.endpoints.RedhawkSoftwareComponentResource">
 		<property name="redhawkManager" ref="redhawkManagerBean" />
 	</bean>
 </blueprint>

@@ -2,40 +2,14 @@ package redhawk.rest.endpoints;
 
 import static org.junit.Assert.assertEquals;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.webapp.WebAppContext;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class RedhawkDomainResourceTestIT {
+public class RedhawkDomainResourceIT extends RedhawkResourceTestBase{
 	//TODO: Check message body
-
-	private static Server server;
-	
-	private static Client client; 
-	
-	private String baseUri = "http://localhost:8080/redhawk/";
-	
-	private String domainName = "REDHAWK_DEV";
-	
-	@BeforeClass
-	public static void setup() throws Exception{
-		server = new Server(8080);
-		WebAppContext webapp = new WebAppContext();
-		webapp.setResourceBase("src/test/resources/webapp");
-		server.setHandler(webapp);
-		System.out.println("Starting embedded Jetty");
-		server.start();
-
-		client = ClientBuilder.newBuilder().newClient();
-	}
 	
 	@Test
 	public void testGetDomains() throws InterruptedException{
@@ -62,11 +36,5 @@ public class RedhawkDomainResourceTestIT {
 		
 		//TODO: Dynamically get all the property Id's that are available and make
 		//sure you can retrieve each
-	}
-	
-	@AfterClass
-	public static void tearDown() throws Exception{
-		System.out.println("Stopping embedded Jetty");
-		server.stop();
 	}
 }

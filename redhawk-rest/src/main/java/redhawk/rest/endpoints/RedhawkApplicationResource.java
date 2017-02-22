@@ -98,7 +98,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     @GET
     @Path("/{applicationId}/properties/{propId}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response getApplicationProperties(
+    public Response getApplicationProperty(
             @PathParam("applicationId") String applicationId,
             @PathParam("propId") String propertyId) throws ResourceNotFound,
             Exception {

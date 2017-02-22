@@ -22,6 +22,8 @@
         <jaxrs:serviceBeans>
 			<ref component-id="redhawkDomainResource" />            
 			<ref component-id="redhawkApplicationResource" />
+			<ref component-id="redhawkComponentResource" />
+			<ref component-id="redhawkPortsResource" />			
 			<ref component-id="redhawkDeviceManagerResource" />
 			<ref component-id="redhawkDeviceResource" />
 			<ref component-id="redhawkWaveformResource" />	
@@ -52,7 +54,15 @@
 	
 	<bean id="redhawkApplicationResource" class="redhawk.rest.endpoints.RedhawkApplicationResource">
 		<property name="redhawkManager" ref="redhawkManagerBean" />
-	</bean>	
+	</bean>
+	
+		<bean id="redhawkComponentResource" class="redhawk.rest.endpoints.RedhawkComponentResource">
+		<property name="redhawkManager" ref="redhawkManagerBean" />
+	</bean>		
+
+	<bean id="redhawkPortsResource" class="redhawk.rest.endpoints.RedhawkPortsResource">
+		<property name="redhawkManager" ref="redhawkManagerBean" />
+	</bean>		
 	
 		<bean id="redhawkWaveformResource" class="redhawk.rest.endpoints.RedhawkWaveformResource">
 		<property name="redhawkManager" ref="redhawkManagerBean" />

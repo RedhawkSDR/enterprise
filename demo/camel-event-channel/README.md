@@ -15,6 +15,11 @@ Once you've launched the SpitToChannel Waveform and ensure that it's been starte
 
     eventviewer REDHAWK_DEV EventsSpat
     
+If you'd like the example to publish events to a ActiveMQ as well you'll need to install ActiveMQ on your machine or any machine your machine has access too. For more details on ActiveMQ checkout the following links:
+
+* Download ActiveMQ from here: http://activemq.apache.org/download.html 
+
+* Follow Getting Started here: http://activemq.apache.org/version-5-getting-started.html
 
 ### Example Output
 
@@ -29,3 +34,31 @@ Once you've launched the SpitToChannel Waveform and ensure that it's been starte
 
 
 ### Instructions
+***
+
+* Start KARAF 'rhjt/apache-karaf-4.0.8/bin/start'
+* Add a configuration for REDHAWK by dropping the 'redhawk.datasource.factory-localRH.cfg' file into the etc directory of your karaf install.
+* Add the camel route to the deploy directory of karaf
+* Start the SpitToChannel waveform
+* At this point you'll see logs of the messages being sent to the event channel in your karaf log
+
+	2017-02-23 14:35:19,417 | INFO  | eadpool; w: Idle | eventTest                        | 31 - org.apache.camel.camel-core - 2.17.5 | Exchange[ExchangePattern: InOnly, BodyType: java.util.HashMap, Body: {bar=1.6, foo=foo-beff745f-6ab1-4d75-b5e3-a29a0c4e9a3d}]
+	2017-02-23 14:35:20,548 | INFO  | eadpool; w: Idle | eventTest                        | 31 - org.apache.camel.camel-core - 2.17.5 | Exchange[ExchangePattern: InOnly, BodyType: java.util.HashMap, Body: {bar=1.6, foo=foo-fcda80f5-3b6b-46fb-8ada-80859ff7fcef}]
+	2017-02-23 14:35:21,678 | INFO  | eadpool; w: Idle | eventTest                        | 31 - org.apache.camel.camel-core - 2.17.5 | Exchange[ExchangePattern: InOnly, BodyType: java.util.HashMap, Body: {bar=1.6, foo=foo-0dc62388-5dee-43b5-8c1b-7bfa91f2bc39}]
+	2017-02-23 14:35:22,808 | INFO  | eadpool; w: Idle | eventTest                        | 31 - org.apache.camel.camel-core - 2.17.5 | Exchange[ExchangePattern: InOnly, BodyType: java.util.HashMap, Body: {bar=1.6, foo=foo-090be096-49ba-4943-ae65-3a4ae1438398}]
+	2017-02-23 14:35:23,938 | INFO  | eadpool; w: Idle | eventTest                        | 31 - org.apache.camel.camel-core - 2.17.5 | Exchange[ExchangePattern: InOnly, BodyType: java.util.HashMap, Body: {bar=1.6, foo=foo-0dcc5772-0759-4122-ba11-fc7fe10c697f}]
+	
+**ActiveMQ Integration**
+* Login to your karaf console and run the following commands:
+
+	feature:repo-add mvn:org.apache.activemq/activemq-karaf/5.14.3/xml/features
+	feature:install activemq-camel
+	
+* Now that ActiveMQ available to be used as a Camel Component uncomment the sections relevant to ActiveMQ in your route. Once your save the file the Camel Context will be redeployed automatically with your changes. 
+* You can go to your ActiveMQ Admin console to confirm messages are being sent to the topic. 
+
+	
+
+
+		
+

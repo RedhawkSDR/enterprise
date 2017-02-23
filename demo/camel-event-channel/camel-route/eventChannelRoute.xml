@@ -1,11 +1,31 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+	<!--
+	ActiveMQ Bean Instantiation
+	<bean id="activemq" class="org.apache.activemq.camel.component.ActiveMQComponent">
+    	<property name="brokerURL" value="tcp://localhost:61616" />
+    </bean>
+    -->
     <camelContext xmlns="http://camel.apache.org/schema/blueprint">
-        <route>
+        <route id="eventChannelRoute">
         	<from uri="localRH:event-channel?eventChannelName=EventsSpat&amp;dataTypeName=messages" />
         	<to uri="log:eventTest" />
-        	<!-- 
-        		Rest of this Route requires ActiveMQ
-        	 -->
+        	<to uri="direct:activemq?failIfNoConsumers=false" />
         </route>
+        
+        <!-- 
+        	Below routes send data to activemq topic and 
+        	retrieve it and log it.  
+         -->
+        <!--
+        <route id="sendDataToActivemqTopic">
+        	<from uri="direct:activemq" />
+            <to uri="activemq:topic:eventChannelTopic" />
+        </route>
+   		
+   		<route id="retrieveDataFromActivemqTopic">
+   			<from uri="activemq:topic:eventChannelTopic" />
+   			<to uri="log:eventsFromActiveMQ" />
+   		</route>
+   		-->
     </camelContext>
 </blueprint>

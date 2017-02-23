@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties PUBLIC "-//JTRS//DTD SCA V2.2.2 PRF//EN" "properties.dtd">
+<properties>
+  <struct id="properties" mode="readwrite">
+    <simple id="foo" type="string"/>
+    <simple id="bar" type="float"/>
+    <configurationkind kindtype="property"/>
+  </struct>
+  <simplesequence id="simpSeq" mode="readwrite" type="string">
+    <values>
+      <value>hello</value>
+      <value>there</value>
+      <value>bill</value>
+      <value>bobaggins</value>
+    </values>
+    <kind kindtype="property"/>
+    <action type="external"/>
+  </simplesequence>
+</properties>

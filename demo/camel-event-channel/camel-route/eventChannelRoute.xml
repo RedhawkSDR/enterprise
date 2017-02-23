@@ -1,0 +1,11 @@
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+    <camelContext xmlns="http://camel.apache.org/schema/blueprint">
+        <route>
+        	<from uri="localRH:event-channel?eventChannelName=EventsSpat&amp;dataTypeName=messages" />
+        	<to uri="log:eventTest" />
+        	<!-- 
+        		Rest of this Route requires ActiveMQ
+        	 -->
+        </route>
+    </camelContext>
+</blueprint>

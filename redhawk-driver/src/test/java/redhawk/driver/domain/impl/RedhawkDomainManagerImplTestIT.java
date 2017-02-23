@@ -55,7 +55,7 @@ public class RedhawkDomainManagerImplTestIT {
 	public void testRedhawkDomainManagerCreateApplicationWithString() throws ResourceNotFoundException, CORBAException, ApplicationCreationException, MultipleResourceException{
 		String waveformFileName = impl.getFileManager().getWaveformFileNames().get(0);
 		String applicationName = "MyApplication";
-		
+		System.out.println("WaveformFileName "+waveformFileName);
 		assertEquals("Should be no applications", true, impl.getApplications().isEmpty());
 		assertNotNull(null, impl.createApplication(applicationName, waveformFileName));
 		assertEquals("Now there should be applications in the domain.", false, impl.getApplications().isEmpty());

@@ -110,7 +110,8 @@ public class RedhawkManager {
                 }
             }
 
-            RedhawkApplication application = redhawk.getDomain(domainName).createApplication(info.getSadLocation(), instanceName);
+            logger.info("Trying to create this application: "+instanceName+" sadLocation: "+info.getSadLocation());
+            RedhawkApplication application = redhawk.getDomain(domainName).createApplication(instanceName, info.getSadLocation());
             try {
                 application.start();
             } catch (ApplicationStartException e) {
@@ -146,7 +147,14 @@ public class RedhawkManager {
                 }
             }
 
-            RedhawkApplication application = redhawk.getDomain(domainName).getApplicationByIdentifier(appId);
+            RedhawkApplication application;
+            try{
+            	application = redhawk.getDomain(domainName).getApplicationByIdentifier(appId);
+            }catch(ResourceNotFoundException ex){
+            	logger.debug("Unable to application by Identifier: "+appId+" trying by Name");
+            	application = redhawk.getDomain(domainName).getApplicationByName(appId);
+            }
+         
             if (application == null) {
                 throw new ResourceNotFoundException("Could not find application with an Identifier of: " + appId);
             }

@@ -94,7 +94,7 @@ public class RedhawkWebsocketIT {
 	public void testWebsocketOnBinaryPort() throws Exception {
 		String endpoint; 
 		endpoint = RedhawkTestUtil.sampleWebSocketPortEndpoint("dataFloat_out");
-		
+		System.out.println("Endpoint: "+endpoint);
 		RedhawkWebSocketTestUtil socket = new RedhawkWebSocketTestUtil(3);
 
 		this.performSocketConnection(endpoint, socket);

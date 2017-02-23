@@ -94,7 +94,7 @@ public class RedhawkWebSocketCreator implements WebSocketCreator {
 
     @Override
     public Object createWebSocket(ServletUpgradeRequest req, ServletUpgradeResponse resp) {
-    	logger.fine("Attempting to Connect to the web socket");
+    	logger.info("Attempting to Connect to the web socket");
 
         if (!this.manageRequestPath(req.getRequestPath(), req.getQueryString())) {
             logger.warning("Path is not valid: " + path);
@@ -103,7 +103,7 @@ public class RedhawkWebSocketCreator implements WebSocketCreator {
 
         Redhawk redhawkConnection = null;
 
-        logger.fine("NameServer: " + nameServer + " DomainName: " + domainName);
+        logger.info("NameServer: " + nameServer + " DomainName: " + domainName);
 
         boolean newDriverInstance = false;
         

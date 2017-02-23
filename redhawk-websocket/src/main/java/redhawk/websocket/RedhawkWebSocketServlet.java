@@ -50,6 +50,7 @@ public class RedhawkWebSocketServlet extends WebSocketServlet {
 
 	@Override
 	public void configure(WebSocketServletFactory webSocketServletFactory) {
+		logger.info("Creating WebSocket...");
 		webSocketServletFactory.setCreator(new RedhawkWebSocketCreator(redhawkDriverServices, webSocketProcessorServices, webSocketProcessors, redhawkDrivers));
 	}
 
@@ -92,12 +93,14 @@ public class RedhawkWebSocketServlet extends WebSocketServlet {
 	}
 
 	public void bindRedhawk(ServiceReference<Redhawk> reference) {
-		
+		logger.info("References is: "+reference);
+		logger.info("Context is "+context);
 		String connectionName = (String) reference.getProperty("connectionName");
 
-		if (connectionName != null) {
+		/*if (connectionName != null) {
 			redhawkDrivers.put(connectionName, context.getService(reference));
 		}
+		*/
 	}
 
 	public void unbindRedhawk(ServiceReference<Redhawk> reference) {
@@ -113,6 +116,7 @@ public class RedhawkWebSocketServlet extends WebSocketServlet {
 	}
 
 	public BundleContext getContext() {
+		logger.info("Called getContext()");
 		return context;
 	}
 

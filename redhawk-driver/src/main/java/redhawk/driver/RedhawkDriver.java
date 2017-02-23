@@ -159,7 +159,6 @@ public class RedhawkDriver implements Redhawk {
 	        Thread.currentThread().setContextClassLoader(cl);
 		}
     }
-    
 	
 	public Map<String, RedhawkDomainManager> getDomains() throws CORBAException {
    		try {

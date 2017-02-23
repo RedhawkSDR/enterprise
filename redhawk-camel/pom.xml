@@ -7,7 +7,6 @@
 		<artifactId>redhawk-integration</artifactId>
 		<version>2.0.4-SNAPSHOT</version>
 	</parent>
-    <groupId>redbus.core.orchestration.components</groupId>
     <artifactId>camel-redhawk</artifactId>
     <packaging>bundle</packaging>
 

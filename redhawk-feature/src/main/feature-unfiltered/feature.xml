@@ -38,7 +38,7 @@
 		<feature version="${camel.version}">camel-core</feature>
 		<feature version="${camel.version}">camel-blueprint</feature>
 		<bundle>mvn:commons-lang/commons-lang/${commons.lang.version}</bundle>
-		<bundle>mvn:redbus.core.orchestration.components/camel-redhawk/${project.version}</bundle>	
+		<bundle>mvn:redhawk/camel-redhawk/${project.version}</bundle>	
 	</feature>
 	
 	<feature name="redhawk-integration-all" version="${project.version}">

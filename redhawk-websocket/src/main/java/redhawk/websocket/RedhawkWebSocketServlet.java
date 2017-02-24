@@ -47,16 +47,15 @@ public class RedhawkWebSocketServlet extends WebSocketServlet {
 	
 	private List<WebSocketProcessor> webSocketProcessorServices;
 	private Map<String, WebSocketProcessor> webSocketProcessors = new ConcurrentHashMap<String, WebSocketProcessor>();
-
+	
+	// nameserver/domains/domainId/devicemanagers/devicemanager/devices/device/ports/port
+	// nameserver/domains/domainId/applications/application/components/component/ports/port
+	// nameserver/domains/domainId/eventchannels/eventChannelName
 	@Override
 	public void configure(WebSocketServletFactory webSocketServletFactory) {
 		logger.info("Creating WebSocket...");
 		webSocketServletFactory.setCreator(new RedhawkWebSocketCreator(redhawkDriverServices, webSocketProcessorServices, webSocketProcessors, redhawkDrivers));
 	}
-
-	// nameserver/domains/domainId/devicemanagers/devicemanager/devices/device/ports/port
-	// nameserver/domains/domainId/applications/application/components/component/ports/port
-	// nameserver/domains/domainId/eventchannels/eventChannelName
 
 	public List<ServiceReference<Redhawk>> getRedhawkDriverServices() {
 		return redhawkDriverServices;
@@ -96,11 +95,14 @@ public class RedhawkWebSocketServlet extends WebSocketServlet {
 		logger.info("References is: "+reference);
 		logger.info("Context is "+context);
 		String connectionName = (String) reference.getProperty("connectionName");
-
-		/*if (connectionName != null) {
-			redhawkDrivers.put(connectionName, context.getService(reference));
+		
+		if(context!=null){
+			if (connectionName != null) {
+				redhawkDrivers.put(connectionName, context.getService(reference));
+			}			
+		}else{
+			logger.log(Level.SEVERE, "UMMMMM WHY is context null");
 		}
-		*/
 	}
 
 	public void unbindRedhawk(ServiceReference<Redhawk> reference) {
@@ -121,6 +123,7 @@ public class RedhawkWebSocketServlet extends WebSocketServlet {
 	}
 
 	public void setContext(BundleContext context) {
+		logger.info("Called setContext()");
 		this.context = context;
 	}
 }

@@ -6,7 +6,7 @@
 						http://cxf.apache.org/blueprint/jaxrs http://cxf.apache.org/schemas/blueprint/jaxrs.xsd
 						http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd">
 
-    <reference-list id="webSocketProcessorServicesList" interface="redhawk.websocket.WebSocketProcessor" member-type="service-object" availability="optional">
+	<reference-list id="webSocketProcessorServicesList" interface="redhawk.websocket.WebSocketProcessor" member-type="service-object" availability="optional">
 	    <reference-listener ref="redhawkWebSocketServlet" bind-method="bindProcessor" unbind-method="unbindProcessor" />
     </reference-list>
     
@@ -25,5 +25,4 @@
                  <entry key="alias" value="/redhawk" />
          </service-properties>
     </service>
-
 </blueprint>

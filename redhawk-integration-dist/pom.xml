@@ -76,6 +76,7 @@
 					</startupFeatures>
 					<bootFeatures>
 						<feature>standard</feature>
+						<feature>war</feature>
 						<feature>redhawk-integration-all</feature>
 					</bootFeatures>
 					<workDirectory>${project.build.directory}/${runtime.dir}/karaf-${karaf.version}</workDirectory>

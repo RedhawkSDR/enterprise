@@ -30,6 +30,9 @@ import redhawk.rest.model.WaveformInfo;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
+
 import java.util.logging.Logger;
 
 @Path("/{nameserver}/domains/{domain}/applications")

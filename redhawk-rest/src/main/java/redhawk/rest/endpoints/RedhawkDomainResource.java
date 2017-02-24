@@ -25,10 +25,14 @@ import redhawk.rest.model.*;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
+
 import java.util.List;
 import java.util.logging.Logger;
 
 @Path("/{nameserver}/domains")
+@CrossOriginResourceSharing(allowAllOrigins = true)
 public class RedhawkDomainResource extends RedhawkBaseResource {
 
     private static Logger logger = Logger.getLogger(RedhawkDomainResource.class.getName());

@@ -22,7 +22,12 @@
 			<entry key="xml" value="application/xml" />
 		</jaxrs:extensionMappings>
 		<jaxrs:providers>
+			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider" />			
+			<bean class="com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider" />
 			<bean class="redhawk.rest.exceptions.ResourceNotFoundExceptionMapper" />
+			<bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter" >
+				<!--<property name="allowOrigins" value="#{systemProperties['origins'] != null ? systemProperties['origins'].split(',') : null}"> </property>--> 
+			</bean>		
 		</jaxrs:providers>
 	</jaxrs:server>
 

@@ -6,18 +6,19 @@ var waveformsURL = baseURI+"/waveforms.json"
 var launchedWaveformsURL = baseURI+"/applications.json"
 var launchWaveformURL = baseURI+"/applications"
 var componentsURL, portsURL;
-var availableWaveForms, launchedWFJson, componentJson, portsJson;
+var componentJson, portsJson;
 var firstMessage = true
 var launchData = {
 		waveformName : ''
 }
+var sandbox;
 
 //Functions
 function initializeAvailableWaveformsList(){
 	axios.get(waveformsURL)
 	.then(function(response){
-		availableWaveForms = response.data.domains
-		console.log(availableWaveForms)
+		var availableWaveForms = response.data.domains
+		//console.log(availableWaveForms)
 		availableWF.options = availableWaveForms
 	})
 	.catch(function(error){
@@ -26,12 +27,13 @@ function initializeAvailableWaveformsList(){
 }
 
 function initializeLaunchedWaveformsList(){
+	var launchedWFJson; 
 	axios.get(launchedWaveformsURL)
 	.then(function(response){
 		//TODO: Clean way to handle just one.
-		launchedWFJson = response.data.applications
+		var launchedWFJson = response.data.applications
 		console.log(launchedWFJson)
-		launchedWaveforms.options = launchedWFJson
+		launchedWaveforms.options = launchedWFJson		
 	})
 	.catch(function(error){
 		console.log(error)
@@ -44,7 +46,7 @@ function getComponentsForWaveform(){
 	axios.get(componentsURL)
 	.then(function(response){
 		componentJson = response.data.components
-		console.log(componentJson)
+		//console.log(componentJson)
 		rhComponents.options = componentJson
 	})
 	.catch(function(error){
@@ -58,7 +60,7 @@ function getComponentPorts(){
 	axios.get(portsURL)
 	.then(function(response){
 		portsJson = response.data.ports
-		console.log(portsJson)
+		//console.log(portsJson)
 		rhPorts.options = portsJson
 	})
 	.catch(function(error){
@@ -73,7 +75,10 @@ function launchWaveform(waveformName, sadLocation){
 	appToLaunch.name = waveformName
 	console.log(JSON.stringify(appToLaunch))
 	myPut = axios.create({
-		headers: {'Content-Type': 'application/json'}
+		headers: {
+			'Content-Type': 'application/json',
+			'mimeType':'text/html'	
+			}
 	})
 	myPut.put(launchWaveformURL+"/"+waveformName, JSON.stringify(appToLaunch))
 	.then(function(response){
@@ -82,6 +87,17 @@ function launchWaveform(waveformName, sadLocation){
 	.catch(function(error){
 		console.log(error)
 	})
+}
+
+function releaseWaveform(waveformName){
+	axios.delete(launchWaveformURL+"/"+waveformName)
+	.then(function(response){
+		console.log(response)
+	})
+	.catch(function(error){
+		console.log(error)
+	})
+	
 }
 //End Functions
 
@@ -92,6 +108,19 @@ Vue.component('launch-modal',{
 		return launchData
 	},
 	methods: {
+		updateLaunchedWaveforms: function(){
+			var launchedWFJson; 
+			axios.get(launchedWaveformsURL)
+			.then(function(response){
+				//TODO: Clean way to handle just one.
+				launchedWFJson = response.data.applications
+				console.log(launchedWFJson)
+				launchedWaveforms.options = launchedWFJson		
+			})
+			.catch(function(error){
+				console.log(error)
+			})
+		},
 		cancel: function(){
 			this.$emit('close')
 		},
@@ -99,9 +128,10 @@ Vue.component('launch-modal',{
 			console.log("Launch Waveform "+this.waveformName)
 			launchWaveform(this.waveformName, availableWF.selected)
 			
-			//Need to updated Launched Waveforms
-			initializeLaunchedWaveformsList()
-			
+			console.log("Launched Waveform")
+			this.updateLaunchedWaveforms()
+			console.log("Finished Initialization")
+
 			//Emit a close event on exit
 			this.$emit('close')
 		}
@@ -118,6 +148,11 @@ Vue.component('waveform-control-modal', {
 			this.$emit('close')
 		},
 		release: function(){
+			console.log(launchedWaveforms.selected.name)
+			releaseWaveform(launchedWaveforms.selected[0].name)
+			
+			initializeLaunchedWaveformsList()
+			console.log("Waveforms List Should be up to date: ")
 			this.$emit('close')
 		}
 	}
@@ -138,23 +173,18 @@ var availableWF = new Vue({
 	data: {
 		selected: null,
 		options: [ ],
-		showLaunchModal: false
+		showLaunchModal: false,
 	},
 	created : function(){
 		initializeAvailableWaveformsList()
 	},
-	methods: {
-		launch: function(){
-			console.log("Launching Waveform")
-			var appToLaunch = new Object()
-			appToLaunch.id = 'anId'
-			appToLaunch.sadLocation = this.selected
-			appToLaunch.name = 'aName'
-			console.log(JSON.stringify(appToLaunch))
-			myPut = axios.create({
-				headers: {'Content-Type': 'application/json'}
-			})
-			myPut.put(launchWaveformURL+"/test", JSON.stringify(appToLaunch))
+	computed: {
+		disabled : function(){
+			if(this.selected==null){
+				return true
+			}else{
+				return false;
+			}
 		}
 	}
 })

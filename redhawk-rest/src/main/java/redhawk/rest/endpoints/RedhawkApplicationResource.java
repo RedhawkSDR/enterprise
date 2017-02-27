@@ -36,6 +36,7 @@ import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
 import java.util.logging.Logger;
 
 @Path("/{nameserver}/domains/{domain}/applications")
+@CrossOriginResourceSharing(allowAllOrigins = true)//TODO: Make this a system property
 public class RedhawkApplicationResource extends RedhawkBaseResource {
 
     private static Logger logger = Logger.getLogger(RedhawkApplicationResource.class.getName());
@@ -84,7 +85,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
             throws ResourceNotFoundException, ApplicationCreationException {
         redhawkManager.createApplication(nameServer, domainName, instanceName,
                 info);
-        return Response.ok().build();
+        return Response.ok("Success").build();
     }
 
     @GET

@@ -52,7 +52,7 @@
 			<option v-for="option in options" v-bind:value="option.sadLocation">
 				{{ option.name }}</option>
 		</select>
-		<button v-on:click="showLaunchModal = true">Launch</button>
+		<button v-on:click="showLaunchModal = true" :disabled="disabled">Launch</button>
 		<launch-modal v-if="showLaunchModal" @close="showLaunchModal = false">
 		</launch-modal>
 	</div>

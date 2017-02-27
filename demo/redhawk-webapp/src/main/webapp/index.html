@@ -21,6 +21,30 @@
 		</select>
 		<button v-on:click="launch">Launch</button>
 	</div>
+	<div id="launchedWaveforms">
+		<h2>Launched Waveforms</h2>
+		<select v-model="selected" multiple>
+			<option v-on:click="fillComponents()" v-for="option in options" v-bind:value="option">
+				{{ option.name }}
+			</option>
+		</select>
+	</div>
+	<div id="components">
+		<h2>Components</h2>
+		<select v-model="selected" multiple>
+			<option v-on:click="fillPorts()" v-for="option in options">
+				{{ option.name }}
+			</option>
+		</select>
+	</div>
+	<div id="ports">
+		<h2>Ports</h2>
+		<select v-model="selected" multiple>
+			<option v-for="option in options">
+				{{ option.name }}
+			</option>
+		</select>
+	</div>
 </body>
 <script src="js/app.js"></script>
 </html>

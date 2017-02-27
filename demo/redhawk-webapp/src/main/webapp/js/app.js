@@ -3,16 +3,57 @@
 var plot = new sigplot.Plot(document.getElementById('signalplot'), {});
 var baseURI = "http://127.0.0.1:8181/cxf/redhawk/localhost:2809/domains/REDHAWK_DEV"
 var waveformsURL = baseURI+"/waveforms.json"
-var launchWaveformURL = baseURI+"/applications"
-var temp;
+var launchedWaveformsURL = baseURI+"/applications.json"
+var componentsURL, portsURL;
+var availableWaveForms, launchedWFJson, componentJson, portsJson;
 
 //Functions
 function initializeAvailableWaveformsList(){
 	axios.get(waveformsURL)
 	.then(function(response){
-		temp = response.data.waveforms.waveforms
-		console.log(temp)
-		availableWF.options = temp
+		availableWaveForms = response.data.waveforms.waveforms
+		console.log(availableWaveForms)
+		availableWF.options = availableWaveForms
+	})
+	.catch(function(error){
+		console.log(error)
+	})
+}
+
+function initializeLaunchedWaveformsList(){
+	axios.get(launchedWaveformsURL)
+	.then(function(response){
+		launchedWFJson = response.data.applications.application
+		console.log(launchedWFJson)
+		launchedWaveforms.options = launchedWFJson
+	})
+	.catch(function(error){
+		console.log(error)
+	})
+}
+
+function getComponentsForWaveform(){
+	componentsURL = baseURI+"/applications/"+launchedWaveforms.selected[0].name+"/components.json"
+	console.log(componentsURL)
+	axios.get(componentsURL)
+	.then(function(response){
+		componentJson = response.data.components.component
+		console.log(componentJson)
+		rhComponents.options = componentJson
+	})
+	.catch(function(error){
+		console.log(error)
+	})	
+}
+
+function getComponentPorts(){
+	portsURL = baseURI+"/applications/"+launchedWaveforms.selected[0].name+"/components/"+rhComponents.selected[0]+"/ports.json"
+	console.log(portsURL)
+	axios.get(portsURL)
+	.then(function(response){
+		portsJson = response.data.ports.port
+		console.log(portsJson)
+		rhPorts.options = portsJson
 	})
 	.catch(function(error){
 		console.log(error)
@@ -64,7 +105,45 @@ var availableWF = new Vue({
 		  */
 })
 
+var launchedWaveforms = new Vue({
+	el : '#launchedWaveforms',
+	data: {
+		selected: [],
+		options: []
+	},
+	created: function(){
+		initializeLaunchedWaveformsList()
+	},
+	methods : {
+		fillComponents: function(){
+			console.log("Hello Click")
+			getComponentsForWaveform()
+			//Resert ports
+			rhPorts.options = []
+		}
+	}
+})
 
+var rhComponents = new Vue({
+	el: '#components',
+	data: {
+		selected: [],
+		options: []
+	},
+	methods : {
+		fillPorts: function(){
+			getComponentPorts();
+		}
+	}
+})
+
+var rhPorts = new Vue({
+	el: '#ports',
+	data: {
+		selected: [],
+		options: []
+	}
+})
 
 displayData = function(){
 	console.log("Hitting button")

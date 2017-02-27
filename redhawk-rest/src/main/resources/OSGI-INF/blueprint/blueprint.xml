@@ -2,10 +2,19 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
 	xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
+	xmlns:cxfcore="http://cxf.apache.org/blueprint/core"
 	xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd 
 						http://cxf.apache.org/blueprint/jaxrs http://cxf.apache.org/schemas/blueprint/jaxrs.xsd
 						http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd">
-						
+	
+	
+	<!-- skip json provider flag required to ensure JacksonJsonProvider will be only available option for JSON serialization -->
+	<cxfcore:bus id="redhawk-integration-bus">
+		<cxfcore:properties>
+			<entry key="skip.default.json.provider.registration" value="true"/>
+		</cxfcore:properties>
+	</cxfcore:bus>
+			
 	<jaxrs:server id="rsServer" address="/redhawk">
 		<jaxrs:serviceBeans>
 			<ref component-id="redhawkDomainResource" />
@@ -16,21 +25,22 @@
 			<ref component-id="redhawkDeviceResource" />
 			<ref component-id="redhawkWaveformResource" />
 			<ref component-id="redhawkSoftwareComponentResource" />
+			<ref component-id="testApplicationResource" />
 		</jaxrs:serviceBeans>
 		<jaxrs:extensionMappings>
 			<entry key="json" value="application/json" />
 			<entry key="xml" value="application/xml" />
 		</jaxrs:extensionMappings>
 		<jaxrs:providers>
-			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider" />			
 			<bean class="com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider" />
+			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />						
+			<bean class="redhawk.rest.providers.WaveformInfoProvider" />
 			<bean class="redhawk.rest.exceptions.ResourceNotFoundExceptionMapper" />
 			<bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter" >
 				<!--<property name="allowOrigins" value="#{systemProperties['origins'] != null ? systemProperties['origins'].split(',') : null}"> </property>--> 
 			</bean>		
 		</jaxrs:providers>
 	</jaxrs:server>
-
 
 	<reference-list id="redhawkServicesList" interface="redhawk.driver.Redhawk" member-type="service-reference" availability="optional">
 		<reference-listener ref="redhawkManagerBean" bind-method="bindRedhawk" unbind-method="unbindRedhawk" />
@@ -40,7 +50,11 @@
 		<property name="redhawkDriverServices" ref="redhawkServicesList" />
 		<property name="context" ref="blueprintBundleContext" />
 	</bean>
-
+	
+	<bean id="testApplicationResource" class="redhawk.rest.endpoints.TestResource">
+		<property name="redhawkManager" ref="redhawkManagerBean" />
+	</bean>
+	
 	<bean id="redhawkDomainResource" class="redhawk.rest.endpoints.RedhawkDomainResource">
 		<property name="redhawkManager" ref="redhawkManagerBean" />
 	</bean>

@@ -62,4 +62,22 @@ public class RedhawkApplicationResourceIT extends RedhawkApplicationResourceTest
 		r = client.delete();
 		assertEquals(200, r.getStatus());
 	}
+	
+	@Test
+	public void testLaunchAndReleaseApplicationJSON(){
+		String applicationName = "restLaunchedApp";
+		WebClient client = WebClient.create(baseUri+"localhost:2809/domains/"+domainName+"/applications/"+applicationName);
+		
+		WaveformInfo info = new WaveformInfo();
+		info.setSadLocation("/waveforms/rh/basic_components_demo/basic_components_demo.sad.xml");
+		info.setId(UUID.randomUUID().toString());
+		info.setName(applicationName);
+		
+		client.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON);
+		Response r = client.put(info);
+		assertEquals(200, r.getStatus());
+		
+		r = client.delete();
+		assertEquals(200, r.getStatus());
+	}
 }

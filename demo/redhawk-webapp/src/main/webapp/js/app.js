@@ -4,14 +4,19 @@ var plot = new sigplot.Plot(document.getElementById('signalplot'), {});
 var baseURI = "http://127.0.0.1:8181/cxf/redhawk/localhost:2809/domains/REDHAWK_DEV"
 var waveformsURL = baseURI+"/waveforms.json"
 var launchedWaveformsURL = baseURI+"/applications.json"
+var launchWaveformURL = baseURI+"/applications"
 var componentsURL, portsURL;
 var availableWaveForms, launchedWFJson, componentJson, portsJson;
+var firstMessage = true
+var launchData = {
+		waveformName : ''
+}
 
 //Functions
 function initializeAvailableWaveformsList(){
 	axios.get(waveformsURL)
 	.then(function(response){
-		availableWaveForms = response.data.waveforms.waveforms
+		availableWaveForms = response.data.domains
 		console.log(availableWaveForms)
 		availableWF.options = availableWaveForms
 	})
@@ -23,7 +28,8 @@ function initializeAvailableWaveformsList(){
 function initializeLaunchedWaveformsList(){
 	axios.get(launchedWaveformsURL)
 	.then(function(response){
-		launchedWFJson = response.data.applications.application
+		//TODO: Clean way to handle just one.
+		launchedWFJson = response.data.applications
 		console.log(launchedWFJson)
 		launchedWaveforms.options = launchedWFJson
 	})
@@ -37,7 +43,7 @@ function getComponentsForWaveform(){
 	console.log(componentsURL)
 	axios.get(componentsURL)
 	.then(function(response){
-		componentJson = response.data.components.component
+		componentJson = response.data.components
 		console.log(componentJson)
 		rhComponents.options = componentJson
 	})
@@ -51,7 +57,7 @@ function getComponentPorts(){
 	console.log(portsURL)
 	axios.get(portsURL)
 	.then(function(response){
-		portsJson = response.data.ports.port
+		portsJson = response.data.ports
 		console.log(portsJson)
 		rhPorts.options = portsJson
 	})
@@ -60,7 +66,63 @@ function getComponentPorts(){
 	})
 }
 
-var firstMessage = true
+function launchWaveform(waveformName, sadLocation){
+	var appToLaunch = new Object()
+	appToLaunch.id = waveformName 
+	appToLaunch.sadLocation = sadLocation
+	appToLaunch.name = waveformName
+	console.log(JSON.stringify(appToLaunch))
+	myPut = axios.create({
+		headers: {'Content-Type': 'application/json'}
+	})
+	myPut.put(launchWaveformURL+"/"+waveformName, JSON.stringify(appToLaunch))
+	.then(function(response){
+		console.log(response)
+	})
+	.catch(function(error){
+		console.log(error)
+	})
+}
+//End Functions
+
+//Define Components
+Vue.component('launch-modal',{
+	template: '#launch-modal-template',
+	data : function(){
+		return launchData
+	},
+	methods: {
+		cancel: function(){
+			this.$emit('close')
+		},
+		finish: function(){
+			console.log("Launch Waveform "+this.waveformName)
+			launchWaveform(this.waveformName, availableWF.selected)
+			
+			//Need to updated Launched Waveforms
+			initializeLaunchedWaveformsList()
+			
+			//Emit a close event on exit
+			this.$emit('close')
+		}
+	}
+})
+
+Vue.component('waveform-control-modal', {
+	template: '#waveform-control-modal-template',
+	methods: {
+		start: function(){
+			this.$emit('close')
+		},
+		stop: function(){
+			this.$emit('close')
+		},
+		release: function(){
+			this.$emit('close')
+		}
+	}
+})
+//End Components 
 
 var pl = plot.overlay_array(null, {
     size: 1000,
@@ -75,7 +137,8 @@ var availableWF = new Vue({
 	el : '#availableWaveforms',
 	data: {
 		selected: null,
-		options: [ ]
+		options: [ ],
+		showLaunchModal: false
 	},
 	created : function(){
 		initializeAvailableWaveformsList()
@@ -94,22 +157,14 @@ var availableWF = new Vue({
 			myPut.put(launchWaveformURL+"/test", JSON.stringify(appToLaunch))
 		}
 	}
-	/*data: {
-		selected: null,
-		options: [
-		          { name: 'One', value: 'A' },
-		          { name: 'Two', value: 'B' },
-		          { name: 'Three', value: 'C' }
-		          ]
-		  }
-		  */
 })
 
 var launchedWaveforms = new Vue({
 	el : '#launchedWaveforms',
 	data: {
 		selected: [],
-		options: []
+		options: [],
+		showWaveformController: false
 	},
 	created: function(){
 		initializeLaunchedWaveformsList()
@@ -120,6 +175,10 @@ var launchedWaveforms = new Vue({
 			getComponentsForWaveform()
 			//Resert ports
 			rhPorts.options = []
+		},
+		controlWaveform: function(){
+			console.log("Double Click")
+			this.showWaveformContoller = true
 		}
 	}
 })

@@ -7,11 +7,44 @@
 <script src="lib/sigplot-debug.js"></script>
 <script src="lib/sigplot.plugins-debug.js"></script>
 <link href="css/redhawkwebapp.css" rel="stylesheet">
+<script type="text-x-template" id="launch-modal-template">
+	<transition name="launch-modal">
+	<div class="modal-mask">
+		<div class="modal-wrapper">
+			<div class="modal-container">
+				<div id="launchWaveformName">
+					Waveform Name: <input v-model="waveformName" placeholder="Enter Waveform Name">
+				</div>
+				<div>
+					<button v-on:click="cancel">Cancel</button>
+					<button v-on:click="finish">Finish</button>
+				</div>
+			</div>
+		</div>	
+	</div>	
+	</transition>
+</script>
+<script type="text-x-template" id="waveform-control-modal-template">
+	<transition name="waveform-control-modal">
+		<div class="modal-mask">
+			<div class="modal-wrapper">
+				<div class="modal-container">
+					<div>
+						<button v-on:click="start">Start</button>
+						<button v-on:click="stop">Stop</button>
+						<button v-on:click="release">Release</button>
+					</div>
+				</div>
+			</div>
+		</div>	
+	</transition>
+</script>
 <meta charset="UTF-8">
 <title>REDHAWK Example WebApp</title>
 </head>
 <body>
-	<div id="signalplot"></div>
+	<div id="signalplot">
+	</div>
 	<div id="availableWaveforms">
 		<!--<input id="launch" type="button" value="launch" onclick="displayData()" />-->
 		<span>Available Waveforms:</span>
@@ -19,15 +52,19 @@
 			<option v-for="option in options" v-bind:value="option.sadLocation">
 				{{ option.name }}</option>
 		</select>
-		<button v-on:click="launch">Launch</button>
+		<button v-on:click="showLaunchModal = true">Launch</button>
+		<launch-modal v-if="showLaunchModal" @close="showLaunchModal = false">
+		</launch-modal>
 	</div>
 	<div id="launchedWaveforms">
 		<h2>Launched Waveforms</h2>
 		<select v-model="selected" multiple>
-			<option v-on:click="fillComponents()" v-for="option in options" v-bind:value="option">
+			<option v-on:click="fillComponents()" v-on:dblclick="showWaveformController = true" v-for="option in options" v-bind:value="option">
 				{{ option.name }}
 			</option>
 		</select>
+		<waveform-control-modal v-if="showWaveformController" @close="showWaveformController = false">
+		</waveform-control-modal>
 	</div>
 	<div id="components">
 		<h2>Components</h2>

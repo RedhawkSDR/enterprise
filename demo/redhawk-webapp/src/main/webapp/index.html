@@ -74,7 +74,7 @@
 					{{ option.name }}
 				</option>
 			</select>
-			<waveform-control-modal v-if="showWaveformController" @close="showWaveformController = false">
+			<waveform-control-modal v-if="showWaveformController" @close="showWaveformController = false" @update="makeUpdates()">
 			</waveform-control-modal>
 		</div>
 		<div class="waveform-data" id="components">

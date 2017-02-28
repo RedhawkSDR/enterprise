@@ -96,6 +96,17 @@ function launchWaveform(waveformName, sadLocation){
 	.catch(function(error){
 		console.log(error)
 	})
+	
+	/*axios.put(launchWaveformURL+"/"+waveformName, JSON.stringify(appToLaunch),{
+		'Content-Type': 'application/json'
+	})
+	.then(function(response){
+		console.log(response)
+	})
+	.catch(function(error){
+		console.log(response)
+	})
+	*/
 }
 
 function releaseWaveform(waveformName){
@@ -167,7 +178,7 @@ Vue.component('waveform-control-modal', {
 			releaseWaveform(launchedWaveforms.selected[0].name)
 			
 			console.log("Waveforms List Should be up to date: ")
-			this.$emit('close')
+			this.$emit('update')
 		},
 		cancel: function(){
 			this.$emit('close')
@@ -233,6 +244,16 @@ var launchedWaveforms = new Vue({
 		controlWaveform: function(){
 			console.log("Double Click")
 			this.showWaveformContoller = true
+		},
+		makeUpdates(){
+			//Reset Components and Ports
+			rhComponents.options = []
+			rhPorts.options = []
+			
+			//Reset Launched Waveforms
+			initializeLaunchedWaveformsList()
+			
+			this.showWaveformController = false
 		}
 	}
 })

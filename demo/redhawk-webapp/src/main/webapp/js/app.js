@@ -1,4 +1,3 @@
-//Create plot
 //Constants 
 var plot = new sigplot.Plot(document.getElementById('signalplot'), {});
 var baseURI = "http://127.0.0.1:8181/cxf/redhawk/localhost:2809/domains/REDHAWK_DEV"
@@ -9,9 +8,19 @@ var componentsURL, portsURL;
 var componentJson, portsJson;
 var firstMessage = true
 var launchData = {
-		waveformName : ''
+		waveformName : null
 }
 var sandbox;
+
+var pl = plot.overlay_array(null, {
+            size: 1000,
+            xdelta: 12500,
+            xunits: 3,
+            yunits: 26,
+            xmax: 10000000,
+            xstart: 1.5374980926513672E8
+        });
+
 
 //Functions
 function initializeAvailableWaveformsList(){
@@ -126,7 +135,7 @@ Vue.component('launch-modal',{
 		},
 		finish: function(){
 			console.log("Launch Waveform "+this.waveformName)
-			launchWaveform(this.waveformName, availableWF.selected)
+			launchWaveform(this.waveformName, availableWF.selected.sadLocation)
 			
 			console.log("Launched Waveform")
 			this.updateLaunchedWaveforms()
@@ -134,6 +143,17 @@ Vue.component('launch-modal',{
 
 			//Emit a close event on exit
 			this.$emit('close')
+		}
+	},
+	computed: {
+		identifier: function(){
+			return availableWF.selected.id
+		},
+		name: function(){
+			return availableWF.selected.name
+		},
+		sadLocation: function(){
+			return availableWF.selected.sadLocation
 		}
 	}
 })
@@ -153,6 +173,9 @@ Vue.component('waveform-control-modal', {
 			
 			initializeLaunchedWaveformsList()
 			console.log("Waveforms List Should be up to date: ")
+			this.$emit('close')
+		},
+		cancel: function(){
 			this.$emit('close')
 		}
 	}
@@ -231,6 +254,28 @@ var rhPorts = new Vue({
 	data: {
 		selected: [],
 		options: []
+	},
+	methods: {
+		graphData: function(){
+			console.log("Graph Data Plz")
+			var wsURL = "ws://localhost:8181/redhawk/localhost:2809/domains/REDHAWK_DEV/applications/"+launchedWaveforms.selected[0].name+"/components/"+rhComponents.selected[0]+"/ports/"+rhPorts.selected[0]
+			console.log(wsURL)
+			var ws = new WebSocket(wsURL)
+
+			ws.binaryType = "arraybuffer";
+
+			ws.onopen = function(evt) {
+	    			console.log("Connected.");
+			};
+
+			ws.onclose = function() {
+				console.log("Shutdown.");
+			};
+
+			ws.onmessage = function(evt) {	
+	       	 		plot.reload(pl, evt.data);			
+			};
+		}
 	}
 })
 

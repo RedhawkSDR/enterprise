@@ -27,3 +27,45 @@
   transition: all .3s ease;
   font-family: Helvetica, Arial, sans-serif;
 }
+
+.launch-modal-container {
+	width: 600px;
+	background-color: #fff;
+	margin: 0px auto;
+}
+
+.control-modal-container {
+	width: 400px;
+	background-color: #fff;
+	margin: 0px auto;
+}
+
+.launch-buttons {
+	text-align: center;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+
+.control-buttons{
+	text-align: center;
+	margin: 20px 20px;
+}
+
+.waveform-info {
+	margin: 10px 20px;	
+}
+
+.header {
+	background-color: red;
+	font-color: black;
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+.waveform-data-container: {
+	float:left
+}
+
+.waveform-data: {
+	float: left;
+}

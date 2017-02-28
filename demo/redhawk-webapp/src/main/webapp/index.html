@@ -11,11 +11,17 @@
 	<transition name="launch-modal">
 	<div class="modal-mask">
 		<div class="modal-wrapper">
-			<div class="modal-container">
-				<div id="launchWaveformName">
-					Waveform Name: <input v-model="waveformName" placeholder="Enter Waveform Name">
+			<div class="launch-modal-container">
+				<div class="header">
+					<b>Launch Waveform</b>
 				</div>
-				<div>
+				<div class="waveform-info">
+					<span><b>id:</b> {{ identifier }}</span><br>
+					<span><b>name:</b> {{ name }} </span><br>
+					<span><b>sadLocation:</b> {{ sadLocation }} </span><br>
+					<span><b>Waveform Name:</b> <input v-model="waveformName" placeholder="Enter Waveform Name"></span>				
+				</div>
+				<div class="launch-buttons">
 					<button v-on:click="cancel">Cancel</button>
 					<button v-on:click="finish">Finish</button>
 				</div>
@@ -28,11 +34,15 @@
 	<transition name="waveform-control-modal">
 		<div class="modal-mask">
 			<div class="modal-wrapper">
-				<div class="modal-container">
-					<div>
+				<div class="control-modal-container">
+					<div class="header">
+						<b>Control Waveform</b>
+					</div>
+					<div class="control-buttons">
 						<button v-on:click="start">Start</button>
 						<button v-on:click="stop">Stop</button>
 						<button v-on:click="release">Release</button>
+						<button v-on:click="cancel">Cancel</button>
 					</div>
 				</div>
 			</div>
@@ -49,38 +59,40 @@
 		<!--<input id="launch" type="button" value="launch" onclick="displayData()" />-->
 		<span>Available Waveforms:</span>
 		 <select v-model="selected">
-			<option v-for="option in options" v-bind:value="option.sadLocation">
+			<option v-for="option in options" v-bind:value="option">
 				{{ option.name }}</option>
 		</select>
 		<button v-on:click="showLaunchModal = true" :disabled="disabled">Launch</button>
 		<launch-modal v-if="showLaunchModal" @close="showLaunchModal = false">
 		</launch-modal>
 	</div>
-	<div id="launchedWaveforms">
-		<h2>Launched Waveforms</h2>
-		<select v-model="selected" multiple>
-			<option v-on:click="fillComponents()" v-on:dblclick="showWaveformController = true" v-for="option in options" v-bind:value="option">
+	<div class="waveform-data-container">
+		<div class="waveform-data" id="launchedWaveforms">
+			<h2>Launched Waveforms</h2>
+			<select v-model="selected" multiple>
+				<option v-on:click="fillComponents()" v-on:dblclick="showWaveformController = true" v-for="option in options" v-bind:value="option">
+					{{ option.name }}
+				</option>
+			</select>
+			<waveform-control-modal v-if="showWaveformController" @close="showWaveformController = false">
+			</waveform-control-modal>
+		</div>
+		<div class="waveform-data" id="components">
+			<h2>Components</h2>
+			<select v-model="selected" multiple>
+				<option v-on:click="fillPorts()" v-for="option in options">
 				{{ option.name }}
-			</option>
-		</select>
-		<waveform-control-modal v-if="showWaveformController" @close="showWaveformController = false">
-		</waveform-control-modal>
-	</div>
-	<div id="components">
-		<h2>Components</h2>
-		<select v-model="selected" multiple>
-			<option v-on:click="fillPorts()" v-for="option in options">
+				</option>
+			</select>
+		</div>
+		<div class="waveform-data" id="ports">
+			<h2>Ports</h2>
+			<select v-on:dblclick="graphData()" v-model="selected" multiple>
+				<option v-for="option in options">
 				{{ option.name }}
-			</option>
-		</select>
-	</div>
-	<div id="ports">
-		<h2>Ports</h2>
-		<select v-model="selected" multiple>
-			<option v-for="option in options">
-				{{ option.name }}
-			</option>
-		</select>
+				</option>
+			</select>
+		</div>
 	</div>
 </body>
 <script src="js/app.js"></script>

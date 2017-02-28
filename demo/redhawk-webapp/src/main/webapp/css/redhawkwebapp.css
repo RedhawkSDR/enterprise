@@ -1,4 +1,17 @@
-#signalplot { height: 400px; width: 600px; }
+#signalplot { 
+	height: 400px; 
+	width: 600px; 
+	margin: 0 auto;
+}
+
+#listenUp {
+	text-align: center;
+	margin: 10px 10px;
+}
+
+#availableWaveforms {
+	text-align: center;
+}
 
 .modal-mask {
   position: fixed;
@@ -62,10 +75,18 @@
 	margin-bottom: 10px;
 }
 
-.waveform-data-container: {
-	float:left
+.waveform-data-container {
+	margin: 0 auto;
+	text-align: center;
 }
 
-.waveform-data: {
+.waveform-data-container > div {
+	display: inline-block;
+	margin: 10px 10px;
+}
+
+.waveform-data {
 	float: left;
+	margin: 10px 10px;
+	text-align: center;
 }

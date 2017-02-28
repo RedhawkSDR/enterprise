@@ -6,6 +6,7 @@
 <script src="lib/bluefile-debug.js"></script>
 <script src="lib/sigplot-debug.js"></script>
 <script src="lib/sigplot.plugins-debug.js"></script>
+<script src="lib/audio.js"></script>
 <link href="css/redhawkwebapp.css" rel="stylesheet">
 <script type="text-x-template" id="launch-modal-template">
 	<transition name="launch-modal">
@@ -53,31 +54,36 @@
 <title>REDHAWK Example WebApp</title>
 </head>
 <body>
-	<div id="signalplot">
+	<div class="sigPlotContainer">
+		<div id="signalplot">
+		</div>
+		<div id="listenUp">
+			<button v-on:click="listenToAudio" :disabled="true">{{ listen }}</button>
+		</div>		
 	</div>
 	<div id="availableWaveforms">
 		<!--<input id="launch" type="button" value="launch" onclick="displayData()" />-->
-		<span>Available Waveforms:</span>
+		<span><b>Available Waveforms:</b></span>
 		 <select v-model="selected">
 			<option v-for="option in options" v-bind:value="option">
 				{{ option.name }}</option>
 		</select>
 		<button v-on:click="showLaunchModal = true" :disabled="disabled">Launch</button>
-		<launch-modal v-if="showLaunchModal" @close="showLaunchModal = false" @update="makeUpdates">
+		<launch-modal v-if="showLaunchModal" @close="showLaunchModal = false">
 		</launch-modal>
 	</div>
 	<div class="waveform-data-container">
-		<div class="waveform-data" id="launchedWaveforms">
+		<div id="launchedWaveforms">
 			<h2>Launched Waveforms</h2>
 			<select v-model="selected" multiple>
 				<option v-on:click="fillComponents()" v-on:dblclick="showWaveformController = true" v-for="option in options" v-bind:value="option">
 					{{ option.name }}
 				</option>
 			</select>
-			<waveform-control-modal v-if="showWaveformController" @close="showWaveformController = false" @update="makeUpdates()">
+			<waveform-control-modal v-if="showWaveformController" @close="showWaveformController = false">
 			</waveform-control-modal>
 		</div>
-		<div class="waveform-data" id="components">
+		<div id="components">
 			<h2>Components</h2>
 			<select v-model="selected" multiple="false">
 				<option v-on:click="fillPorts()" v-for="option in options">
@@ -85,7 +91,7 @@
 				</option>
 			</select>
 		</div>
-		<div class="waveform-data" id="ports">
+		<div id="ports">
 			<h2>Ports</h2>
 			<select v-on:dblclick="graphData()" v-model="selected" multiple>
 				<option v-for="option in options">

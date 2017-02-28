@@ -1,5 +1,11 @@
 //Constants 
-var plot = new sigplot.Plot(document.getElementById('signalplot'), {});
+var plot = new sigplot.Plot(document.getElementById('signalplot'), {
+    autol: 5,
+    cmod: "L2",
+    autohide_panbars: true,
+    nogrid: true,
+});
+
 var baseURI = "http://127.0.0.1:8181/cxf/redhawk/localhost:2809/domains/REDHAWK_DEV"
 var waveformsURL = baseURI+"/waveforms.json"
 var launchedWaveformsURL = baseURI+"/applications.json"
@@ -10,17 +16,33 @@ var firstMessage = true
 var launchData = {
 		waveformName : null
 }
-var sandbox;
+//SigPlot Related variables
+var xdelta, ydelta, xstart, ystart, xunits, ydelta, yunits;
+
+//WebSocket Related variables
+var sigplotWS, audioWS, wsURL;
+var audioService = new AudioService()
+
 
 var pl = plot.overlay_array(null, {
             size: 1000,
-            xdelta: 12500,
-            xunits: 3,
-            yunits: 26,
-            xmax: 10000000,
-            xstart: 1.5374980926513672E8
+            xdelta: xdelta,
+            xunits: xunits,
+            yunits: yunits,
+            ydelta: ydelta,
+            xstart: xstart
         });
 
+/*
+var pl = plot.overlay_array(null, {
+    size: 1000,
+    xdelta: 12500,
+    xunits: 3,
+    yunits: 26,
+    xmax: 10000000,
+    xstart: 1.5374980926513672E8
+});
+*/
 
 //Functions
 function initializeAvailableWaveformsList(){
@@ -77,6 +99,10 @@ function getComponentPorts(){
 	})
 }
 
+/*
+ * This launches a waveform and updates the 
+ * list of waveforms available
+ */
 function launchWaveform(waveformName, sadLocation){
 	var appToLaunch = new Object()
 	appToLaunch.id = waveformName 
@@ -92,27 +118,26 @@ function launchWaveform(waveformName, sadLocation){
 	myPut.put(launchWaveformURL+"/"+waveformName, JSON.stringify(appToLaunch))
 	.then(function(response){
 		console.log(response)
+		
+		//Once you launch this I need to update the Launched Waveforms
+		initializeLaunchedWaveformsList()
 	})
 	.catch(function(error){
 		console.log(error)
 	})
-	
-	/*axios.put(launchWaveformURL+"/"+waveformName, JSON.stringify(appToLaunch),{
-		'Content-Type': 'application/json'
-	})
-	.then(function(response){
-		console.log(response)
-	})
-	.catch(function(error){
-		console.log(response)
-	})
-	*/
 }
 
+/*
+ * This releases a waveform and updates the list of waveforms that are
+ * availabel
+ */
 function releaseWaveform(waveformName){
 	axios.delete(launchWaveformURL+"/"+waveformName)
 	.then(function(response){
 		console.log(response)
+		
+		//Once you launch this I need to update the Launched Waveforms
+		initializeLaunchedWaveformsList()
 	})
 	.catch(function(error){
 		console.log(error)
@@ -148,7 +173,7 @@ Vue.component('launch-modal',{
 			console.log("Launch Waveform "+this.waveformName)
 			launchWaveform(this.waveformName, availableWF.selected.sadLocation)
 			//Emit a close event on exit
-			this.$emit('update')
+			this.$emit('close')
 		}
 	},
 	computed: {
@@ -178,7 +203,12 @@ Vue.component('waveform-control-modal', {
 			releaseWaveform(launchedWaveforms.selected[0].name)
 			
 			console.log("Waveforms List Should be up to date: ")
-			this.$emit('update')
+			
+			//Reset Components and Ports
+			rhComponents.options = []
+			rhPorts.options = []
+			
+			this.$emit('close')
 		},
 		cancel: function(){
 			this.$emit('close')
@@ -196,6 +226,42 @@ var pl = plot.overlay_array(null, {
     xstart: 1.5374980926513672E8
 });
 
+var listenUp = new Vue({
+	el: '#listenUp',
+	data: {
+		listen: "Listen"
+	},
+	methods: {
+		listenToAudio: function(){
+			if(this.listen == "Listen"){
+				this.listen = "Mute"
+				audioWS = new WebSocket(wsURL)
+				
+				audioWS.onopen = function(evt){
+					console.log("Audio Socket Connected")
+				}
+				
+				audioWS.onclose = function(){
+					console.log("Shutdown Audio")
+				}
+				
+				audioWS.onmessage = function(evt){
+					if(typeof evt.data !== "string"){
+						audioService.playAudio(evt.data)
+					}else{
+                        var sri = JSON.parse(evt.data);
+                        audioService.setSampleRate(Math.round(1 / sri.xdelta));						
+					}
+				}
+			}else{
+				this.listen = "Listen"
+				audioService.stopAudio();
+				audioWS.close();
+			}
+		}
+	}
+})
+
 var availableWF = new Vue({
 	el : '#availableWaveforms',
 	data: {
@@ -205,13 +271,6 @@ var availableWF = new Vue({
 	},
 	created : function(){
 		initializeAvailableWaveformsList()
-	},
-	methods: {
-		makeUpdates: function(){
-			this.showLaunchModal = false
-			console.log("Now Make Updates")
-			initializeLaunchedWaveformsList()		
-		}
 	},
 	computed: {
 		disabled : function(){
@@ -244,16 +303,6 @@ var launchedWaveforms = new Vue({
 		controlWaveform: function(){
 			console.log("Double Click")
 			this.showWaveformContoller = true
-		},
-		makeUpdates(){
-			//Reset Components and Ports
-			rhComponents.options = []
-			rhPorts.options = []
-			
-			//Reset Launched Waveforms
-			initializeLaunchedWaveformsList()
-			
-			this.showWaveformController = false
 		}
 	}
 })
@@ -280,64 +329,43 @@ var rhPorts = new Vue({
 	methods: {
 		graphData: function(){
 			console.log("Graph Data Plz")
-			var wsURL = "ws://localhost:8181/redhawk/localhost:2809/domains/REDHAWK_DEV/applications/"+launchedWaveforms.selected[0].name+"/components/"+rhComponents.selected[0]+"/ports/"+rhPorts.selected[0]
+			if(sigplotWS!=null){
+				console.log("Closing old websocket")
+				sigplotWS.close()
+			}
+			
+			wsURL = "ws://localhost:8181/redhawk/localhost:2809/domains/REDHAWK_DEV/applications/"+launchedWaveforms.selected[0].name+"/components/"+rhComponents.selected[0]+"/ports/"+rhPorts.selected[0]
 			console.log(wsURL)
-			var ws = new WebSocket(wsURL)
+			sigplotWS = new WebSocket(wsURL)
 
-			ws.binaryType = "arraybuffer";
+			sigplotWS.binaryType = "arraybuffer";
 
-			ws.onopen = function(evt) {
+			sigplotWS.onopen = function(evt) {
 	    			console.log("Connected.");
 			};
 
-			ws.onclose = function() {
+			sigplotWS.onclose = function() {
 				console.log("Shutdown.");
 			};
 
-			ws.onmessage = function(evt) {	
+			sigplotWS.onmessage = function(evt) {	
 				if(typeof evt.data !== "string"){
 	       	 			plot.reload(pl, evt.data);				
+				}else{
+					console.log("NEW SRI")
+					/*
+					 * {"endOfStream":false,"streamId":"SigGen Stream","hversion":1,"xstart":0.0,"xdelta":2.0E-4,"xunits":1,"subsize":0,"ystart":0.0,"ydelta":0.0,
+					 * "yunits":0,"mode":0,"blocking":false,"keywords":{},"tcmode":1,"tcstatus":1,"tfsec":0.7909940000000002,"toff":0.0,"twsec":1.488296658E9}
+					 */
+					var sri = JSON.parse(evt.data);
+					xdelta = sri.xdelta
+					ydelta = sri.ydelta
+					xstart = sri.xstart
+					ystart = sri.ystart
+					xunits = sri.xunits
+					yunits = sri.yunits
 				}
 			};
 		}
 	}
 })
-
-displayData = function(){
-	console.log("Hitting button")
-	var ws = new WebSocket("ws://localhost:8181/redhawk/localhost:2809/domains/REDHAWK_DEV/applications/wf-integration-test.*/components/SigGen.*/ports/dataFloat_out")
-	
-	ws.binaryType = "arraybuffer";
-
-	ws.onopen = function(evt) {
-	    console.log("Connected.");
-	};
-
-	ws.onclose = function() {
-	    console.log("Shutdown.");
-	};
-
-	ws.onmessage = function(evt) {
-		if(firstMessage){
-	    	console.log("Received first message")
-	    	var json = JSON.parse(evt.data)
-	    	console.log(json)
-	    	console.log(json['xdelta'])
-	    	firstMessage = false
-	    	console.log(plot)
-	    	var overlaySettings = new Object()
-	    	overlaySettings.size = 1000
-	    	overlaySettings.xdelta = json.xdelta
-	    	overlaySettings.xunits = json.xunits
-	    	overlaySettings.yunits = json.yunits
-	    	overlaySettings.xmax = 10000000
-	    	overlaySettings.xstart = json.xstart
-	    	console.log(overlaySettings)
-	    	//TODO: Why doesn't this work
-	    	//pl = plot.overlay_array(null, overlaySettings);
-	    }else{
-	    	console.log("Received follow on messages")
-	        plot.reload(pl, evt.data);
-	    }
-	};
-}

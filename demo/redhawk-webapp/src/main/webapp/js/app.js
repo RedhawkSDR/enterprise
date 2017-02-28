@@ -41,7 +41,7 @@ function initializeLaunchedWaveformsList(){
 	.then(function(response){
 		//TODO: Clean way to handle just one.
 		var launchedWFJson = response.data.applications
-		console.log(launchedWFJson)
+		console.log("Calling Initialized Waveform "+launchedWFJson)
 		launchedWaveforms.options = launchedWFJson		
 	})
 	.catch(function(error){
@@ -136,13 +136,8 @@ Vue.component('launch-modal',{
 		finish: function(){
 			console.log("Launch Waveform "+this.waveformName)
 			launchWaveform(this.waveformName, availableWF.selected.sadLocation)
-			
-			console.log("Launched Waveform")
-			this.updateLaunchedWaveforms()
-			console.log("Finished Initialization")
-
 			//Emit a close event on exit
-			this.$emit('close')
+			this.$emit('update')
 		}
 	},
 	computed: {
@@ -171,7 +166,6 @@ Vue.component('waveform-control-modal', {
 			console.log(launchedWaveforms.selected.name)
 			releaseWaveform(launchedWaveforms.selected[0].name)
 			
-			initializeLaunchedWaveformsList()
 			console.log("Waveforms List Should be up to date: ")
 			this.$emit('close')
 		},
@@ -200,6 +194,13 @@ var availableWF = new Vue({
 	},
 	created : function(){
 		initializeAvailableWaveformsList()
+	},
+	methods: {
+		makeUpdates: function(){
+			this.showLaunchModal = false
+			console.log("Now Make Updates")
+			initializeLaunchedWaveformsList()		
+		}
 	},
 	computed: {
 		disabled : function(){
@@ -273,7 +274,9 @@ var rhPorts = new Vue({
 			};
 
 			ws.onmessage = function(evt) {	
-	       	 		plot.reload(pl, evt.data);			
+				if(typeof evt.data !== "string"){
+	       	 			plot.reload(pl, evt.data);				
+				}
 			};
 		}
 	}

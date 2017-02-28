@@ -63,7 +63,7 @@
 				{{ option.name }}</option>
 		</select>
 		<button v-on:click="showLaunchModal = true" :disabled="disabled">Launch</button>
-		<launch-modal v-if="showLaunchModal" @close="showLaunchModal = false">
+		<launch-modal v-if="showLaunchModal" @close="showLaunchModal = false" @update="makeUpdates">
 		</launch-modal>
 	</div>
 	<div class="waveform-data-container">
@@ -79,7 +79,7 @@
 		</div>
 		<div class="waveform-data" id="components">
 			<h2>Components</h2>
-			<select v-model="selected" multiple>
+			<select v-model="selected" multiple="false">
 				<option v-on:click="fillPorts()" v-for="option in options">
 				{{ option.name }}
 				</option>

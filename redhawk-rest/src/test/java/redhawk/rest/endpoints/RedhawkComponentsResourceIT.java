@@ -45,4 +45,9 @@ public class RedhawkComponentsResourceIT extends RedhawkApplicationResourceTestB
 			}
 		}
 	}
+	
+	@Test
+	public void testSetComponentSimpleProperty(){
+		
+	}
 }

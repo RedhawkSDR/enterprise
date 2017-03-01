@@ -50,10 +50,24 @@
 		</div>	
 	</transition>
 </script>
+<script type="text/x-template" id="property-template">
+	<div v-if="property.type=='simple'">
+		{{property.id}}<input v-model="property.value"></input><button v-on:click="updateProperty">update</button>
+	</div>
+	<div v-else-if="property.type=='struct'">
+		{{property.id}}</input><button v-on:click="view" :disabled="true">view</button>	
+	</div>
+	<div v-else>
+		{{ property.id }}<input v-model="property.value"></input><button v-on:click="updateProperty">update</button>
+	</div>
+</script>
 <meta charset="UTF-8">
 <title>REDHAWK Example WebApp</title>
 </head>
 <body>
+	<div id="domainConfig">
+		<span>Name Server:<input v-model="nameServer"></input>Domain Name:<input v-model="domainName"></input><button v-on:click="connect">Connect</button></span>
+	</div>
 	<div class="sigPlotContainer">
 		<div id="signalplot">
 		</div>
@@ -99,6 +113,14 @@
 				</option>
 			</select>
 		</div>
+	</div>
+	<div id="component-properties">
+		<h2>Component Property Editor {{ componentSelected }}</h2>
+		<property-component
+			v-for="property in properties"
+			v-bind:property="property"
+			>
+		</property-component>
 	</div>
 </body>
 <script src="js/app.js"></script>

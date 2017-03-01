@@ -9,7 +9,20 @@
 	margin: 10px 10px;
 }
 
+#propertyLabel {
+	width: 100px;
+}
+
 #availableWaveforms {
+	text-align: center;
+}
+
+#domainConfig {
+	text-align: center;
+	margin: 10px 10px;
+}
+
+#component-properties {
 	text-align: center;
 }
 

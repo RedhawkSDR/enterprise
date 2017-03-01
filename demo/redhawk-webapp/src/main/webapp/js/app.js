@@ -215,6 +215,36 @@ Vue.component('waveform-control-modal', {
 		}
 	}
 })
+
+Vue.component('property-component',{
+	template: '#property-template',
+	methods:{
+		updateProperty: function(){
+			console.log("Update this prop: "+this.property.id+" with value "+this.property.value)
+			var propertyUpdateURL = baseURI+"/applications/"+launchedWaveforms.selected[0].name+"/components/"+rhComponents.selected[0]+"/properties/"+this.property.id
+			
+			/*
+			 * Run the put with the updated property
+			 */
+			myPut = axios.create({
+				headers: {
+					'Content-Type': 'application/json'
+					}
+			})
+			myPut.put(propertyUpdateURL, JSON.stringify(this.property))
+			.then(function(response){
+				console.log(response)
+			})
+			.catch(function(error){
+				console.log(error)
+			})
+		},
+		view: function(){
+			console.log("View Struct")
+		}
+	},
+	props: ['property']
+})
 //End Components 
 
 var pl = plot.overlay_array(null, {
@@ -225,6 +255,31 @@ var pl = plot.overlay_array(null, {
     xmax: 10000000,
     xstart: 1.5374980926513672E8
 });
+
+var componentProperties = new Vue({
+	el: '#component-properties',
+	data: {
+		properties: [],
+		componentSelected: ''
+	}
+})
+
+var domainSetup = new Vue({
+	el: '#domainConfig',
+	data: {
+		domainName: "REDHAWK_DEV",
+		nameServer: "127.0.0.1:2809"
+	},
+	methods: {
+		connect: function(){
+			//Initialize Available Waveform List
+			initializeAvailableWaveformsList()
+
+			//Initialize Launched Waveform List
+			initializeLaunchedWaveformsList()
+		}
+	}
+})
 
 var listenUp = new Vue({
 	el: '#listenUp',
@@ -269,9 +324,6 @@ var availableWF = new Vue({
 		options: [ ],
 		showLaunchModal: false,
 	},
-	created : function(){
-		initializeAvailableWaveformsList()
-	},
 	computed: {
 		disabled : function(){
 			if(this.selected==null){
@@ -289,9 +341,6 @@ var launchedWaveforms = new Vue({
 		selected: [],
 		options: [],
 		showWaveformController: false
-	},
-	created: function(){
-		initializeLaunchedWaveformsList()
 	},
 	methods : {
 		fillComponents: function(){
@@ -316,6 +365,17 @@ var rhComponents = new Vue({
 	methods : {
 		fillPorts: function(){
 			getComponentPorts();
+			var propertiesURL = baseURI+"/applications/"+launchedWaveforms.selected[0].name+"/components/"+this.selected[0]+"/properties.json"
+			componentProperties.componentSelected = this.selected[0]
+			axios.get(propertiesURL)
+			.then(function(response){
+				console.log(response.data)
+				componentProperties.properties = response.data.properties
+			})
+			.catch(function(response){
+				console.log(response)
+			})
+			
 		}
 	}
 })

@@ -142,9 +142,10 @@
 			</modules>
 		</profile>
 		<profile>
+			<!-- TODO: Find a better solution  -->
 			<id>default</id>
 			<activation>
-				<activeByDefault>${main.build}</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 			<modules>
 				<module>redhawk-driver</module>

@@ -6,10 +6,7 @@ var plot = new sigplot.Plot(document.getElementById('signalplot'), {
     nogrid: true,
 });
 
-var baseURI = "http://127.0.0.1:8181/cxf/redhawk/localhost:2809/domains/REDHAWK_DEV"
-var waveformsURL = baseURI+"/waveforms.json"
-var launchedWaveformsURL = baseURI+"/applications.json"
-var launchWaveformURL = baseURI+"/applications"
+var baseURI, waveformsURL, launchedWaveformsURL
 var componentsURL, portsURL;
 var componentJson, portsJson;
 var firstMessage = true
@@ -272,6 +269,14 @@ var domainSetup = new Vue({
 	},
 	methods: {
 		connect: function(){
+			//Set the baseURI
+			//Example: "http://127.0.0.1:8181/cxf/redhawk/localhost:2809/domains/REDHAWK_DEV"
+			baseURI = "http://127.0.0.1:8181/cxf/redhawk/"+this.nameServer+"/domains/"+this.domainName
+			waveformsURL = baseURI+"/waveforms.json"
+			launchedWaveformsURL = baseURI+"/applications.json"
+			launchWaveformURL = baseURI+"/applications"			
+			
+			console.log("BaseURI: "+baseURI)
 			//Initialize Available Waveform List
 			initializeAvailableWaveformsList()
 
@@ -394,7 +399,7 @@ var rhPorts = new Vue({
 				sigplotWS.close()
 			}
 			
-			wsURL = "ws://localhost:8181/redhawk/localhost:2809/domains/REDHAWK_DEV/applications/"+launchedWaveforms.selected[0].name+"/components/"+rhComponents.selected[0]+"/ports/"+rhPorts.selected[0]
+			wsURL = "ws://localhost:8181/redhawk/"+domainSetup.nameServer+"/domains/"+domainSetup.domainName+"/applications/"+launchedWaveforms.selected[0].name+"/components/"+rhComponents.selected[0]+"/ports/"+rhPorts.selected[0]
 			console.log(wsURL)
 			sigplotWS = new WebSocket(wsURL)
 

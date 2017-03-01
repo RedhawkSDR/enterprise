@@ -141,6 +141,17 @@ function releaseWaveform(waveformName){
 	})
 	
 }
+
+function controlWaveform(waveformName, control){
+	axios.post(launchWaveformURL+"/"+waveformName, control)
+	.then(function(response){
+		console.log(response)
+	})
+	.catch(function(error){
+		console.log(error)
+	})
+}
+
 //End Functions
 
 //Define Components
@@ -190,9 +201,15 @@ Vue.component('waveform-control-modal', {
 	template: '#waveform-control-modal-template',
 	methods: {
 		start: function(){
+			console.log("Start waveform")
+			controlWaveform(this.name, "start")
+			
 			this.$emit('close')
 		},
 		stop: function(){
+			console.log("Stopping waveform")
+			
+			controlWaveform(this.name, "stop")
 			this.$emit('close')
 		},
 		release: function(){
@@ -209,6 +226,17 @@ Vue.component('waveform-control-modal', {
 		},
 		cancel: function(){
 			this.$emit('close')
+		}
+	},
+	computed: {
+		identifier: function(){
+			return launchedWaveforms.selected[0].identifier
+		},
+		name: function(){
+			return launchedWaveforms.selected[0].name
+		},
+		started: function(){
+			return launchedWaveforms.selected[0].started
 		}
 	}
 })

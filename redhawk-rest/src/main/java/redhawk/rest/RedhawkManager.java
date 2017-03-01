@@ -129,6 +129,50 @@ public class RedhawkManager {
             }
         }
     }
+    
+    //TODO: Release/Create/Contol have a lot of similar code make this simpler 
+    public void controlApplication(String nameServer, String domainName, String appId, String control) throws Exception {
+        Redhawk redhawk = null;
+        boolean createdNewInstance = false;
+
+        try {
+            if (redhawkDrivers.get(nameServer) != null) {
+                redhawk = redhawkDrivers.get(nameServer);
+            } else {
+                if (nameServer.contains(":")) {
+                    String[] hostAndPort = nameServer.split(":");
+                    redhawk = new RedhawkDriver(hostAndPort[0], Integer.parseInt(hostAndPort[1]));
+                    createdNewInstance = true;
+                } else {
+                    throw new ResourceNotFoundException("You did not specify a valid host and port to the REDHAWK name server. An example of a valid url is: localhost:2809");
+                }
+            }
+
+            RedhawkApplication application;
+            try{
+            	application = redhawk.getDomain(domainName).getApplicationByIdentifier(appId);
+            }catch(ResourceNotFoundException ex){
+            	logger.debug("Unable to application by Identifier: "+appId+" trying by Name");
+            	application = redhawk.getDomain(domainName).getApplicationByName(appId);
+            }
+         
+            if (application == null) {
+                throw new ResourceNotFoundException("Could not find application with an Identifier of: " + appId);
+            }
+
+            if(control.equalsIgnoreCase("stop")){
+            	application.stop();
+            }else if(control.equalsIgnoreCase("start")){
+            	application.start();
+            }else{
+            	throw new Exception("Unknown control string "+control+" appropriate commands are 'start' or 'stop'");
+            }
+        } finally {
+            if (redhawk != null && createdNewInstance) {
+                redhawk.disconnect();
+            }
+        }
+    }
 
     public void releaseApplication(String nameServer, String domainName, String appId) throws Exception {
         Redhawk redhawk = null;

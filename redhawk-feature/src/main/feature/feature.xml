@@ -17,7 +17,17 @@
 	<feature name="redhawk-integration-rest" version="2.0.4-SNAPSHOT">
 		<feature version="2.0.4-SNAPSHOT">redhawk-integration-connector</feature>
 		<feature version="3.1.9">cxf-core</feature>
-		<feature version="3.1.9">cxf-jaxrs</feature>	
+		<feature version="3.1.9">cxf-rs-security-cors</feature>
+		<!-- JACKSON -->
+		<bundle>mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-xml/${jackson.version}</bundle>
+		<bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/${jackson.version}</bundle>
+		<bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/${jackson.version}</bundle>
+		<bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
+		<bundle>mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle>
+		<bundle>mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle>
+		<bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
+		<bundle>mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/${jackson.version}</bundle>								
+		<bundle>mvn:com.fasterxml.jackson.module/jackson-jaxrs-xml-provider/${jackson.version}</bundle>										
 		<bundle>mvn:commons-lang/commons-lang/2.6</bundle>
 		<bundle>mvn:redhawk/redhawk-rest/2.0.4-SNAPSHOT</bundle>		
 	</feature>

@@ -78,9 +78,9 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     
     @POST
     @Path("/{applicationId}")
-    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response controlApplication(@PathParam("applicationId") String applicationId, String control) throws Exception{
-    	redhawkManager.controlApplication(control, control, applicationId, control);
+    	redhawkManager.controlApplication(nameServer, domainName, applicationId, control);
     	return Response.ok().build();
     }
 

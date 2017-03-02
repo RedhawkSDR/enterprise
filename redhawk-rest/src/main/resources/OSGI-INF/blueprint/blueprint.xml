@@ -25,7 +25,6 @@
 			<ref component-id="redhawkDeviceResource" />
 			<ref component-id="redhawkWaveformResource" />
 			<ref component-id="redhawkSoftwareComponentResource" />
-			<ref component-id="testApplicationResource" />
 		</jaxrs:serviceBeans>
 		<jaxrs:extensionMappings>
 			<entry key="json" value="application/json" />
@@ -33,8 +32,7 @@
 		</jaxrs:extensionMappings>
 		<jaxrs:providers>
 			<bean class="com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider" />
-			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />						
-			<bean class="redhawk.rest.providers.WaveformInfoProvider" />
+			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider" />						
 			<bean class="redhawk.rest.exceptions.ResourceNotFoundExceptionMapper" />
 			<bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter" >
 				<!--<property name="allowOrigins" value="#{systemProperties['origins'] != null ? systemProperties['origins'].split(',') : null}"> </property>--> 
@@ -49,10 +47,6 @@
 	<bean id="redhawkManagerBean" class="redhawk.rest.RedhawkManager">
 		<property name="redhawkDriverServices" ref="redhawkServicesList" />
 		<property name="context" ref="blueprintBundleContext" />
-	</bean>
-	
-	<bean id="testApplicationResource" class="redhawk.rest.endpoints.TestResource">
-		<property name="redhawkManager" ref="redhawkManagerBean" />
 	</bean>
 	
 	<bean id="redhawkDomainResource" class="redhawk.rest.endpoints.RedhawkDomainResource">

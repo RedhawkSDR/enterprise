@@ -32,7 +32,7 @@
 		</jaxrs:extensionMappings>
 		<jaxrs:providers>
 			<bean class="com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider" />
-			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider" />						
+			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />						
 			<bean class="redhawk.rest.exceptions.ResourceNotFoundExceptionMapper" />
 			<bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter" >
 				<!--<property name="allowOrigins" value="#{systemProperties['origins'] != null ? systemProperties['origins'].split(',') : null}"> </property>--> 

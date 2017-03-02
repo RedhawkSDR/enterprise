@@ -46,7 +46,7 @@ function initializeAvailableWaveformsList(){
 	axios.get(waveformsURL)
 	.then(function(response){
 		var availableWaveForms = response.data.domains
-		//console.log(availableWaveForms)
+		console.log(availableWaveForms)
 		availableWF.options = availableWaveForms
 	})
 	.catch(function(error){
@@ -143,9 +143,21 @@ function releaseWaveform(waveformName){
 }
 
 function controlWaveform(waveformName, control){
-	axios.post(launchWaveformURL+"/"+waveformName, control)
+	console.log("Control: "+control)
+	axios.post(launchWaveformURL+"/"+waveformName, control,{
+		headers:{
+			'Content-Type':'application/json'
+		}
+	})
 	.then(function(response){
 		console.log(response)
+		
+		//TODO: There should be some cleaner way to compute/watch this property
+		if(control == 'stop'){
+			launchedWaveforms.selected[0].started = false
+		}else{
+			launchedWaveforms.selected[0].started = true
+		}
 	})
 	.catch(function(error){
 		console.log(error)
@@ -307,7 +319,7 @@ var domainSetup = new Vue({
 			console.log("BaseURI: "+baseURI)
 			//Initialize Available Waveform List
 			initializeAvailableWaveformsList()
-
+			
 			//Initialize Launched Waveform List
 			initializeLaunchedWaveformsList()
 		}

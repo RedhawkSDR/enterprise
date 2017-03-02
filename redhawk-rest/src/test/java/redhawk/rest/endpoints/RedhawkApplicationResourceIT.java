@@ -63,8 +63,13 @@ public class RedhawkApplicationResourceIT extends RedhawkApplicationResourceTest
 		
 		//Test Stopping a waveform
 		client.type(MediaType.APPLICATION_JSON);
-		Response response = client.post("stop");
-		assertEquals(200, response.getStatus());
+		r = client.post("stop");
+		assertEquals(200, r.getStatus());
+		
+		//Test Starting a waveform
+		client.type(MediaType.APPLICATION_JSON);
+		r = client.post("start");
+		assertEquals(200, r.getStatus());
 		
 		//Test Releasing a waveform 
 		r = client.delete();

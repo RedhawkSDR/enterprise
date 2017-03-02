@@ -22,12 +22,11 @@
 		<bundle>mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-xml/${jackson.version}</bundle>
 		<bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/${jackson.version}</bundle>
 		<bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/${jackson.version}</bundle>
-		<bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
 		<bundle>mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle>
 		<bundle>mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle>
 		<bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
 		<bundle>mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/${jackson.version}</bundle>								
-		<bundle>mvn:com.fasterxml.jackson.module/jackson-jaxrs-xml-provider/${jackson.version}</bundle>										
+		<bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-xml-provider/${jackson.version}</bundle>										
 		<bundle>mvn:commons-lang/commons-lang/${commons.lang.version}</bundle>
 		<bundle>mvn:redhawk/redhawk-rest/${project.version}</bundle>		
 	</feature>

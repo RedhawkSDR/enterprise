@@ -14,33 +14,10 @@
 			<entry key="skip.default.json.provider.registration" value="true"/>
 		</cxfcore:properties>
 	</cxfcore:bus>
-			
-	<jaxrs:server id="rsServer" address="/redhawk">
-		<jaxrs:serviceBeans>
-			<ref component-id="redhawkDomainResource" />
-			<ref component-id="redhawkApplicationResource" />
-			<ref component-id="redhawkComponentResource" />
-			<ref component-id="redhawkPortsResource" />
-			<ref component-id="redhawkDeviceManagerResource" />
-			<ref component-id="redhawkDeviceResource" />
-			<ref component-id="redhawkWaveformResource" />
-			<ref component-id="redhawkSoftwareComponentResource" />
-		</jaxrs:serviceBeans>
-		<jaxrs:extensionMappings>
-			<entry key="json" value="application/json" />
-			<entry key="xml" value="application/xml" />
-		</jaxrs:extensionMappings>
-		<jaxrs:providers>
-			<bean class="com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider" />
-			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />						
-			<bean class="redhawk.rest.exceptions.ResourceNotFoundExceptionMapper" />
-			<bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter" >
-				<!--<property name="allowOrigins" value="#{systemProperties['origins'] != null ? systemProperties['origins'].split(',') : null}"> </property>--> 
-			</bean>		
-		</jaxrs:providers>
-	</jaxrs:server>
-
-	<reference-list id="redhawkServicesList" interface="redhawk.driver.Redhawk" member-type="service-reference" availability="optional">
+	
+	<bean id="multipartProvider" class="org.apache.cxf.jaxrs.provider.MultipartProvider" />
+    
+    <reference-list id="redhawkServicesList" interface="redhawk.driver.Redhawk" member-type="service-reference" availability="optional">
 		<reference-listener ref="redhawkManagerBean" bind-method="bindRedhawk" unbind-method="unbindRedhawk" />
 	</reference-list>
 
@@ -53,6 +30,7 @@
 		<property name="redhawkManager" ref="redhawkManagerBean" />
 	</bean>
 	
+	<!--
 	<bean id="redhawkApplicationResource" class="redhawk.rest.endpoints.RedhawkApplicationResource">
 		<property name="redhawkManager" ref="redhawkManagerBean" />
 	</bean>	
@@ -80,4 +58,43 @@
 	<bean id="redhawkSoftwareComponentResource" class="redhawk.rest.endpoints.RedhawkSoftwareComponentResource">
 		<property name="redhawkManager" ref="redhawkManagerBean" />
 	</bean>
+	-->
+	
+	<bean id="swagger2Feature" class="org.apache.cxf.jaxrs.swagger.Swagger2Feature">
+        <!-- customize some of the properties -->
+        <property name="basePath" value="/cxf/redhawk"/>
+        <property name="usePathBasedConfig" value="true" />
+        <property name="resourcePackage" value="redhawk.rest.endpoints" />              
+    </bean>
+    			
+	<jaxrs:server id="rsServer" address="/redhawk">
+		<jaxrs:serviceBeans>
+			<ref component-id="redhawkDomainResource" />
+			<!--
+			<ref component-id="redhawkApplicationResource" />
+			<ref component-id="redhawkComponentResource" />
+			<ref component-id="redhawkPortsResource" />
+			<ref component-id="redhawkDeviceManagerResource" />
+			<ref component-id="redhawkDeviceResource" />
+			<ref component-id="redhawkWaveformResource" />
+			<ref component-id="redhawkSoftwareComponentResource" />
+			-->
+		</jaxrs:serviceBeans>
+		<jaxrs:extensionMappings>
+			<entry key="json" value="application/json" />
+			<entry key="xml" value="application/xml" />
+		</jaxrs:extensionMappings>
+		<jaxrs:providers>
+            <ref component-id="multipartProvider" />
+			<bean class="com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider" />
+			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />						
+			<bean class="redhawk.rest.exceptions.ResourceNotFoundExceptionMapper" />
+			<bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter" >
+				<!--<property name="allowOrigins" value="#{systemProperties['origins'] != null ? systemProperties['origins'].split(',') : null}"> </property>--> 
+			</bean>		
+		</jaxrs:providers>
+        <jaxrs:features>
+            <ref component-id="swagger2Feature" />
+        </jaxrs:features>		
+	</jaxrs:server>
 </blueprint>

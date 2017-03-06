@@ -15,7 +15,6 @@
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<maven.javadoc.skip>true</maven.javadoc.skip>
 	</properties>
 
 	<scm>
@@ -41,11 +40,13 @@
 			<!-- Having issues building with 1.8 due to JAVADOC errors adding this 
 				for now -->
 			<plugin>
+        		<groupId>org.apache.maven.plugins</groupId>			
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<failOnError>false</failOnError>
-				</configuration>
-			</plugin>
+        		<version>2.10.4</version>	
+        		<configuration>
+        			<failOnError>false</failOnError>
+        		</configuration>
+        	</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
@@ -119,14 +120,6 @@
 						<Embed-Dependency>cfinterfaces;inline=true,bulkiointerfaces;inline=true;ossie;inline=true;frontendinterfaces;inline=true</Embed-Dependency>
 						<_nodefaultversion>true</_nodefaultversion>
 					</instructions>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-					<compilerArgument>-g:source,lines,vars</compilerArgument>
 				</configuration>
 			</plugin>
 		</plugins>

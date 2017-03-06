@@ -70,20 +70,14 @@ public class RedhawkDriverTestIT {
 		this.basicDriverTests(driver);
 	}
 	
-	
-	
-	/*Come back to this 
-	 * @Test
-	public void testGetDominFailures() throws ResourceNotFoundException{
-		driver = new RedhawkDriver(); 
-		
-	}
-	*/
-	
+	/*
+	 * Testing of the public RedhawkDriver methods occurs below
+	 */
 	private void basicDriverTests(RedhawkDriver driver) throws CORBAException, ResourceNotFoundException{
-		//Ensure default port and host are returned correctly
+		//Ensure default port and host and ORB are returned correctly
 		assertEquals(hostName, driver.getHostName());
 		assertEquals(domainPort, driver.getPort());
+		assertNotNull(driver.getOrb());
 		
 		Map<String, RedhawkDomainManager> domainMap = driver.getDomains();
 		
@@ -91,9 +85,13 @@ public class RedhawkDriverTestIT {
 		assertEquals(1, domainMap.size());
 		assertEquals(domainName, domainMap.keySet().iterator().next());
 		
+		//Get a specific domain
 		RedhawkDomainManager domain = driver.getDomain(domainName);
 		assertNotNull(domain);
 		assertEquals(domainName, domain.getName());
+		
+		//Get a specific application
+		
 	}
 	
 	@After

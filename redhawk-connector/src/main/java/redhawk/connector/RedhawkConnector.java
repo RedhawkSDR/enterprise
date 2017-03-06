@@ -128,7 +128,7 @@ public class RedhawkConnector implements ManagedServiceFactory {
 				String deviceManagerFileSystemRoot = (String) properties.get(DEVICE_MANAGER_FS_ROOT_PROPERTY);
 				
 				if (isEmpty(deviceManagerFileSystemRoot)) {
-					deviceManagerFileSystemRoot = System.getProperty("redbus.base");
+					deviceManagerFileSystemRoot = System.getProperty("karaf.base");
 				}
 
 				domMgr.createDeviceManager(deviceManagerName, deviceManagerFileSystemRoot, true);

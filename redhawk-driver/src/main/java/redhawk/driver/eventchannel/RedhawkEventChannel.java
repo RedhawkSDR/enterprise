@@ -25,8 +25,34 @@ import redhawk.driver.eventchannel.listeners.EventChannelListener;
 import redhawk.driver.exceptions.EventChannelException;
 
 public interface RedhawkEventChannel {
+	/**
+	 * @return Returns the name of the Event Channel.
+	 */
 	String getName();
+	
+	/**
+	 * Subscribe to a specific EventChannel 
+	 * @param listener
+	 * 	Listener object handle logic for what to do when receiving an 
+	 * 	event message. 
+	 * @throws EventChannelException
+	 */
 	<T> void subscribe(EventChannelListener<T> listener) throws EventChannelException;
+	
+	/**
+	 * Publish messages to an event channel 
+	 * @param messageId
+	 * 	Message Id for the message. 
+	 * @param message
+	 * 	content of the message.
+	 * @throws EventChannelException
+	 */
 	void publish(String messageId, Map<String, java.lang.Object> message) throws EventChannelException;
+	
+	/**
+	 * Unsubscribe to an event channel. 
+	 * 
+	 * @throws EventChannelException
+	 */
 	void unsubscribe() throws EventChannelException;
 }

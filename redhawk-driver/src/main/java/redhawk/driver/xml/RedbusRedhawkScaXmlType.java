@@ -28,6 +28,9 @@ import redhawk.driver.xml.model.sca.sad.Softwareassembly;
 import redhawk.driver.xml.model.sca.scd.Softwarecomponent;
 import redhawk.driver.xml.model.sca.spd.Softpkg;
 
+/**
+ * Helper class for parsing XSDs from REDHAWK. 
+ */
 public enum RedbusRedhawkScaXmlType {
 	DEVICE_CONFIGURATION(Deviceconfiguration.class, "schemas/dcd.xsd", "dcd.xml", "urn:mil:jpeojtrs:sca:dcd"),
 	DOMAIN_MANAGER_CONFIGURATION(Domainmanagerconfiguration.class, "schemas/dmd.xsd", "dmd.xml", "urn:mil:jpeojtrs:sca:dmd"),

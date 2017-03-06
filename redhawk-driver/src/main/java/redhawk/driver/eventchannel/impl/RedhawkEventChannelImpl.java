@@ -62,6 +62,12 @@ public class RedhawkEventChannelImpl implements RedhawkEventChannel {
 	private EventChannelManager eventChannelManager;
 	private EventChannelReg registration;
 	
+	/**
+	 * 
+	 * @param eventChannelManager
+	 * @param eventChannelName
+	 * @param orb
+	 */
 	public RedhawkEventChannelImpl(EventChannelManager eventChannelManager, String eventChannelName, ORB orb) {
 		this.eventChannelName = eventChannelName;
 		this.orb = orb;

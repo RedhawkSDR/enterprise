@@ -27,9 +27,39 @@ import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 
 public interface RedhawkEventChannelManager {
+	/**
+	 * Create an Event Channel 
+	 * @param channelName
+	 * 	Name for the event channel. 
+	 * @throws EventChannelCreationException
+	 */
 	void createEventChannel(String channelName) throws EventChannelCreationException;
+	
+	/**
+	 * Release an Event Channel. 
+	 * @param channelName
+	 * 	Channel name to release. 
+	 * @throws EventChannelCreationException
+	 */
 	void releaseEventChannel(String channelName) throws EventChannelCreationException;
+	
+	/**
+	 * Retrieve a managed Event Channel. 
+	 * @param eventChannelName
+	 * 	Name of Event Channel to retrieve. 
+	 * @return
+	 * @throws MultipleResourceException
+	 * @throws ResourceNotFoundException
+	 */
 	RedhawkEventChannel getEventChannel(String eventChannelName) throws MultipleResourceException, ResourceNotFoundException;	    
+	
+	/**
+	 * @return list of event channels. 
+	 */
 	List<RedhawkEventChannel> getEventChannels();
+	
+	/**
+	 * @return Map of Event Channels. With 'Event Channel Name' -> 'Redhawk Event Channel'
+	 */
 	Map<String, RedhawkEventChannel> eventChannels();
 }

@@ -33,6 +33,9 @@ import org.ossie.properties.AnyUtils;
 import CF.DataType;
 import CF.PropertiesHelper;
 
+/**
+ * Wrapper class for interacting with Struct Sequences. 
+ */
 public class RedhawkStructSequence extends RedhawkProperty {
 
     private String sequenceId;

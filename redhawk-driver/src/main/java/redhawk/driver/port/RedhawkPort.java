@@ -26,20 +26,67 @@ import redhawk.driver.exceptions.PortException;
 import CF.PortPackage.InvalidPort;
 
 public interface RedhawkPort {
-
+	/**
+	 * Uses port type constant {@value #PORT_TYPE_USES}
+	 */
 	public static final String PORT_TYPE_USES = "uses";
+	
+	/**
+	 * Provides port type constant {@value #PORT_TYPE_PROVIDES}
+	 */
 	public static final String PORT_TYPE_PROVIDES = "provides";
+	
+	/**
+	 * Bidirectional port type constant {@value #PORT_TYPE_BIDIRECTIONAL}
+	 */
 	public static final String PORT_TYPE_BIDIRECTIONAL = "bidirectional";
 	
+	/**
+	 * Put logic for what to do with data coming out of a port in your listener. 
+	 * @param portListener
+	 * 	Object containing logic for what to do when you get data on a port. 
+	 * @throws Exception
+	 */
     public void connect(PortListener<?> portListener) throws Exception;
+    
+    /**
+     * Disconnect from a port. 
+     * @throws InvalidPort
+     * @throws PortException
+     */
     public void disconnect() throws InvalidPort, PortException;
+    
+    /**
+     * Send data to a port. 
+     * @param packet
+     * @throws Exception
+     */
     public <T> void send(Packet<T> packet) throws Exception;
     
+    /**
+     * @return List of port statistics objects. 
+     */
     public List<RedhawkPortStatistics> getPortStatistics();
+    
+    /**
+     * @return Representation Id for a Redhawk Port. 
+
+     */
     public String getRepId();
+   
+    /**
+     * @return port type. 
+     */
     public String getType();
+    
+    /**
+     * @return port name. 
+     */
 	public String getName();
 	
+	/**
+	 * @return CORBA object representing port. 
+	 */
 	public org.omg.CORBA.Object getCorbaObject();
 
 }

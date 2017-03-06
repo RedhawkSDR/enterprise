@@ -24,7 +24,10 @@ import org.omg.CORBA.Any;
 import CF.LogEvent;
 import CF.LogEventHelper;
 
-
+/**
+ * EventLister for LogEvents 
+ *
+ */
 public abstract class LogEventListener extends EventChannelListener<LogEvent> {
 
 	@Override

@@ -22,11 +22,21 @@ package redhawk.driver.properties;
 import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
 
+/**
+ * POJO wrapping interaction with Simple properties. 
+ */
 public class RedhawkSimple extends RedhawkProperty {
 
     private String simpleId;
     private Object value; 
     
+    /**
+     * 
+     * @param orb
+     * @param parentObject
+     * @param simpleId
+     * @param value
+     */
     public RedhawkSimple(ORB orb, String parentObject, String simpleId, Object value){
         this.orb = orb;
         this.parentObject = parentObject;

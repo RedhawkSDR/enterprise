@@ -27,6 +27,10 @@ import org.omg.CORBA.ORB;
 import org.omg.CORBA.TypeCode;
 import org.ossie.properties.AnyUtils;
 
+/**
+ * Wrapper class for interacting with Simple Sequences.  
+ *
+ */
 public class RedhawkSimpleSequence extends RedhawkProperty {
 
     private String simpleSeqId;

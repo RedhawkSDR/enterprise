@@ -29,6 +29,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import BULKIO.PortStatistics;
 
+/**
+ * XML for PortStatistics object. 
+ *
+ */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RedhawkPortStatistics {

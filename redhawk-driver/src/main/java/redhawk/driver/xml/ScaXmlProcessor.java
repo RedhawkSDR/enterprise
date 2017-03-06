@@ -45,6 +45,10 @@ import javax.xml.validation.SchemaFactory;
 
 import org.xml.sax.SAXException;
 
+/**
+ * Provided utility methods for Marshaling and Unmarshaling XML. 
+ *
+ */
 public class ScaXmlProcessor {
 	private static Logger logger = Logger.getLogger(ScaXmlProcessor.class.getName());
 	

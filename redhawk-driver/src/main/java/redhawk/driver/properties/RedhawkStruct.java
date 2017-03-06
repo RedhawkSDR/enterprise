@@ -36,6 +36,10 @@ import org.ossie.properties.AnyUtils;
 import CF.DataType;
 import CF.PropertiesHelper;
 
+/**
+ * 
+ * Wrapper class for interacting with Structs. 
+ */
 public class RedhawkStruct extends RedhawkProperty implements Map<String, Object> {
 	
 	private static Logger logger = Logger.getLogger(RedhawkStruct.class.getName());

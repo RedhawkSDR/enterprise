@@ -29,8 +29,15 @@ import redhawk.driver.bulkio.Packet;
 public abstract class PortListener<TParsedClass> {
 
 	private static Logger logger = Logger.getLogger(PortListener.class.getName());
+	
+	/**
+	 * {@value #maxQueueSize}
+	 */
 	private int maxQueueSize = 8000;
 	
+	/**
+	 * @return Port type related to this PortListener object. 
+	 */
 	public Class getPortType(){
 		Type t = getClass().getGenericSuperclass();
 		logger.info(t.getClass().getName());
@@ -40,11 +47,17 @@ public abstract class PortListener<TParsedClass> {
 	}
 	
 	public abstract void onReceive(Packet<TParsedClass> packet);
-
+	
+	/**
+	 * @return Size of the {@value #maxQueueSize}
+	 */
 	public int getMaxQueueSize() {
 		return maxQueueSize;
 	}
 	
+	/** 
+	 * @param maxQueueSize maximum size of queue for holding packets. 
+	 */
 	public void setMaxQueueSize(int maxQueueSize){
 		this.maxQueueSize = maxQueueSize;
 	}

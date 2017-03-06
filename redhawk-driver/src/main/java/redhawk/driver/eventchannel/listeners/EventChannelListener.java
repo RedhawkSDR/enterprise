@@ -23,12 +23,21 @@ import org.omg.CORBA.Any;
 import org.omg.CosEventComm.Disconnected;
 import org.omg.CosEventComm.PushConsumerOperations;
 
+/**
+ * Helper class for any logic that needs to occur on 
+ * messages on an Event Channel. 
+ *
+ * @param <TParsedClass>
+ */
 public abstract class EventChannelListener<TParsedClass> implements PushConsumerOperations {
 
 	public void disconnect_push_consumer() {
 		//no need to implement according to RH team.
 	}
-
+	
+	/**
+	 * Push data to an Event Channel
+	 */
 	public void push(Any data) throws Disconnected {
 		TParsedClass message = processMessage(data);
 		onMessage(message);

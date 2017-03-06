@@ -42,9 +42,20 @@ import redhawk.driver.properties.RedhawkStructSequence;
 import redhawk.driver.xml.ScaXmlProcessor;
 import redhawk.driver.xml.model.sca.sad.Softwareassembly;
 
+/**
+ * Class for utility methods for doing things with REDHAWK. 
+ */
 public class RedhawkUtils {
-
-	
+	/**
+	 * Pass in an {@link java.io.InputStream} for your Software Assembly Descriptor(SAD) file and get back a POJO 
+	 * for that SAD file. 
+	 * 
+	 * @param inputStream
+	 * 	Inputstream for you SAD file. 
+	 * @return
+	 * The {@link redhawk.driver.xml.model.sca.sad.Softwareassembly} referenced by your inputStream
+	 * @throws IOException
+	 */
 	public static Softwareassembly unMarshalSadFile(InputStream inputStream) throws IOException {
 		try {
 			return ScaXmlProcessor.unmarshal(inputStream, Softwareassembly.class);
@@ -67,6 +78,15 @@ public class RedhawkUtils {
 //		return result;
 //	}
 	
+	/**
+	 * Utility method for comparing {@link BULKIO.StreamSRI}
+	 * 
+	 * @param sri1
+	 * 	A StreamSRI object
+	 * @param sri2
+	 * 	Another StreamSRI object to compare sri1 to.
+	 * @return
+	 */
 	public static boolean compareStreamSRI(StreamSRI sri1, StreamSRI sri2){
 		
 		boolean streamComparison = sri1.streamID.equals(sri2.streamID);
@@ -121,7 +141,14 @@ public class RedhawkUtils {
 		return (streamComparison && sriData && keywordLength && keywordCompare);
 	}
 	
-
+	/**
+	 * Creates an {@link org.omg.CORBA.Any} from the ORB and object passed in.
+	 * @param orb
+	 * 	ORB object to use for creating the Any
+	 * @param objectToCreate
+	 * 	Object for creating the any. 
+	 * @return
+	 */
 	public static Any createAny(ORB orb, Object objectToCreate){
         final Any any = orb.create_any();
         if(objectToCreate instanceof String){
@@ -162,7 +189,13 @@ public class RedhawkUtils {
         return any;
     }
         
-	
+	/**
+	 * Takes an {@link org.omg.CORBA.Any} and creates a Map with the 
+	 * DataTypes id as the key and DataType value as the value. 
+	 * 
+	 * @param any
+	 * @return
+	 */
 	public static Map<String, Object> convertPropertiesAnyToMap(Any any) {
 
 		CF.DataType[] message = PropertiesHelper.extract(any);
@@ -193,7 +226,12 @@ public class RedhawkUtils {
 	
 	
 	
-	
+	/**
+	 * Utility method for creating a PropertyChange message into a Map<String, Object>  
+	 * 
+	 * @param message
+	 * @return
+	 */
 	public static Map<String, Object> convertAny(PropertyChange message){
 
 		Map<String, Object> properties = new HashMap<String, Object>();

@@ -28,16 +28,26 @@ import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 
 public abstract class CorbaBackedObject<TParsedClass> {
-
+	/**
+	 * Interoperable Object Reference 
+	 */
 	private String ior;
+	
 	private ORB orb;
 	private Logger log = Logger.getLogger(CorbaBackedObject.class.getName());
-
+	
 	public CorbaBackedObject(String ior, ORB orb) {
 		this.ior = ior;
 		this.orb = orb;
 	}
 
+	/**
+	 * Uses the given ORB and IOR to retrieve a POJO representing 
+	 * the CORBA object. 
+	 *  
+	 * @return
+	 * @throws ConnectionException
+	 */
 	public TParsedClass getCorbaObject() throws ConnectionException {
 		TParsedClass object = (TParsedClass) orb.string_to_object(ior);
 		try {
@@ -63,19 +73,32 @@ public abstract class CorbaBackedObject<TParsedClass> {
 	}
 
 	protected abstract TParsedClass locateCorbaObject() throws ResourceNotFoundException;
-
+	
+	/**
+	 * @return ior for this {@link CorbaBackedObject}
+	 */
 	public String getIor() {
 		return ior;
 	}
 	
+	/**
+	 * Set Interoperable Object Reference for this {@link CorbaBackedObject}
+	 * @param ior
+	 */
 	public void setIor(String ior){
 		this.ior = ior;
 	}
 
+	/**
+	 * @return Retrieve an {@link ORB} passed into this object. 
+	 */
 	public ORB getOrb() {
 		return orb;
 	}
 
+	/**
+	 * @return
+	 *  Gets the Helper class for this CORBA object. 
+	 */
 	public abstract Class<?> getHelperClass();
-
 }

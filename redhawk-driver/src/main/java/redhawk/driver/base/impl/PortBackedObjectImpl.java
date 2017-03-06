@@ -60,7 +60,7 @@ public abstract class PortBackedObjectImpl<TParsedClass> extends QueryableResour
 		super(ior, orb);
 		this.fileSystem = fileSystem;
 	}
-	
+
     public Map<String, RedhawkPort> ports() throws ResourceNotFoundException {
     	return getPorts().stream().collect(Collectors.toMap(p -> p.getName(), Function.identity()));
     }
@@ -81,7 +81,7 @@ public abstract class PortBackedObjectImpl<TParsedClass> extends QueryableResour
     	}
     	return rhPorts;
     }
-    
+
     public RedhawkPort getPort(String portName) throws ResourceNotFoundException, MultipleResourceException {
         List<RedhawkPort> ports = getPorts().stream().filter(p -> p.getName().matches(portName)).collect(Collectors.toList());
         

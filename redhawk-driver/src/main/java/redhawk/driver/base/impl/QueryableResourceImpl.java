@@ -42,14 +42,27 @@ import redhawk.driver.properties.RedhawkSimpleSequence;
 import redhawk.driver.properties.RedhawkStruct;
 import redhawk.driver.properties.RedhawkStructSequence;
 
+/**
+ * Helper methods for retrieving Properties from CORBA backed REDHAWK objects. 
+ *
+ * @param <TParsedClass>
+ */
 public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObject<TParsedClass> {
-
     private static Logger logger = Logger.getLogger(QueryableResourceImpl.class.getName());
     
+    /**
+     * @param ior
+     * 	Interoparable Object Reference for the Object your trying to get. 
+     * @param orb
+     * 	ORB that is aware of the object you're trying to retrieve. 
+     */
     public QueryableResourceImpl(String ior, ORB orb) {
     	super(ior, orb);
 	}
     
+    /**
+     * @return Properties related to the object.
+     */
     public Map<String, RedhawkProperty> getProperties(){
         Map<String, RedhawkProperty> propMap = new HashMap<String, RedhawkProperty>();
         PropertiesHolder ph = query(null);
@@ -61,6 +74,12 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
         return propMap;
     }
     
+    /**
+     * Retrieve properties by name.
+     *  
+     * @param propertyNames names of the properties you'd like to retrieve. 
+     * @return
+     */
     public <T> T getProperty(String ... propertyNames){
 
         PropertiesHolder ph = query(propertyNames);

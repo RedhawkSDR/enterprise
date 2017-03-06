@@ -24,8 +24,10 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
- * Helper class for interacting with File in a REDHAWK File System. 
- *
+ * Using the FileSystem CORBA object you'll have access directly to the 
+ * root dir for the files in the FileSystem. For example, if the FileSystem
+ * object represents $SDROOT/dom you'll have access to all files in $SDRROOT/dom
+ * from '/' .  
  */
 public interface RedhawkFileSystem {
 	/**

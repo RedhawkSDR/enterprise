@@ -35,12 +35,6 @@ import CF.FileSystemPackage.FileInformationType;
 import CF.FileSystemPackage.FileType;
 import redhawk.driver.base.RedhawkFileSystem;
 
-/**
- * Using the FileSystem CORBA object you'll have access directly to the 
- * root dir for the files in the FileSystem. For example, if the FileSystem
- * object represents $SDROOT/dom you'll have access to all files in $SDRROOT/dom
- * from '/' .  
- */
 public class RedhawkFileSystemImpl implements RedhawkFileSystem {
 
 	private FileSystem fileSystem;

@@ -41,6 +41,11 @@ public class RedhawkComponentImpl extends PortBackedObjectImpl<ComponentType> im
     private RedhawkApplication application;
     private ComponentType component;
     
+    /**
+     * 
+     * @param application {@link RedhawkApplication} that this component belongs to. 
+     * @param component {@link CF.ComponentType} for this component. 
+     */
     public RedhawkComponentImpl(RedhawkApplication application, ComponentType component){
     	super(application.getRedhawkDomainManager().getDriver().getOrb().object_to_string(component.componentObject) , application.getRedhawkDomainManager().getDriver().getOrb(), application.getRedhawkDomainManager().getFileManager());
     	this.application = application;
@@ -65,14 +70,13 @@ public class RedhawkComponentImpl extends PortBackedObjectImpl<ComponentType> im
         return component;
     }
 	
+    /** 
+     * @return Application that holds this component. 
+     */
     public RedhawkApplication getRedhawkApplication(){
         return application;
     }
     
-
-
-
-	
 	@Override
 	public void start() throws ComponentStartException {
 		try {

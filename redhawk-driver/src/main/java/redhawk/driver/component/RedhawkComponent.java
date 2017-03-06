@@ -25,9 +25,31 @@ import redhawk.driver.exceptions.ComponentStartException;
 import redhawk.driver.exceptions.ComponentStopException;
 
 public interface RedhawkComponent extends PortBackedObject {
-    String getName();
+    /**
+     * @return Name of the component. 
+     */
+	String getName();
+	
+	/**
+	 * @return CORBA object representing a REDHAWK Component. 
+	 */
     ComponentType getCorbaObj();
+    
+    /**
+     * Utility method for starting a component. 
+     * @throws ComponentStartException
+     */
     void start() throws ComponentStartException;
+    
+    /**
+     * Utility method for checking if a component is started. 
+     * @return
+     */
     boolean started();
+    
+    /**
+     * Utility method for stopping a component. 
+     * @throws ComponentStopException
+     */
     void stop() throws ComponentStopException;
 }

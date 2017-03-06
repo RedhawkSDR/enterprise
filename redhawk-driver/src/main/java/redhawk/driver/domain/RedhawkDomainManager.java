@@ -48,11 +48,15 @@ import CF.DomainManager;
  */
 public interface RedhawkDomainManager extends QueryableResource {
 	/**
+	 * Returns the name of this {@link RedhawkDomainManager} 
+	 * 
 	 * @return The name of the REDHAWK domain.  This value comes from the name attribute in the DomainManager.dcd.xml file
 	 */
     String getName();
     
     /**
+     * Returns the Identifier for this {@link RedhawkDomainManager} 
+     * 
      * @return The unique identifier of the REDHAWK domain.  The value comes from the id attribute in the DomainManager.dcd.xml file.
      * @throws ConnectionException
      */
@@ -82,6 +86,8 @@ public interface RedhawkDomainManager extends QueryableResource {
     DomainManager getCorbaObj();
    
     /**
+     * Returns the {@link RedhawkFileManager} for this object. 
+     * 
      * @return A POJO representing the {@link CF.FileManager} object. 
      * @throws ConnectionException
      */
@@ -108,6 +114,8 @@ public interface RedhawkDomainManager extends QueryableResource {
     List<RedhawkDeviceManager> getDeviceManagersByName(String name);
 
     /**
+     * Returns the {@link RedhawkDeviceManager} at the specified identifier. 
+     * 
  	 * @param identifier a {@link java.util.regex.Pattern#sum regular expression} specifying the DCE UUID of the Device Manager to get
  	 * @return a device manager with the specified identifier, or <code>null</code> if one could not be found.  If multiple device managers match, then an arbitrary one is returned.
      * @throws ResourceNotFoundException 
@@ -115,6 +123,8 @@ public interface RedhawkDomainManager extends QueryableResource {
     RedhawkDeviceManager getDeviceManagerByIdentifier(String identifier) throws ResourceNotFoundException;
     
     /**
+     * Returns the {@link RedhawkDeviceManager} with the specified name. 
+     * 
      * @param name a {@link java.util.regex.Pattern#sum regular expression} specifying the name of the Device Manager to get
      * @return a device manager with the specified name, or <code>null</code> if one could not be found.
      * @throws MultipleResourceException if multiple device managers match

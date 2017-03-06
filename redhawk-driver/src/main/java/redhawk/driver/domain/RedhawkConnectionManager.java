@@ -19,6 +19,7 @@
  */
 package redhawk.driver.domain;
 
+//TODO: Need to implement this at some point...
 public interface RedhawkConnectionManager {
 
 }

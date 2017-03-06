@@ -28,22 +28,73 @@ import redhawk.driver.xml.model.sca.sad.Softwareassembly;
 import redhawk.driver.xml.model.sca.scd.Softwarecomponent;
 import redhawk.driver.xml.model.sca.spd.Softpkg;
 
-
+/**
+ * Class that enables you to easily interact with the FileSystem 
+ * for a Redhawk Domain. 
+ *
+ */
 public interface RedhawkFileManager extends RedhawkFileSystem {
-
-	
+	/**
+	 * @return A list of the waveform names for the RedhawkFileManager. 
+	 */
 	List<String> getWaveformFileNames();
+	
+	/**
+	 * @return A map of the waveforms with the key being the waveform name and the value being the {@link Softwareassembly} for the waveform. 
+	 */
 	Map<String, Softwareassembly> getWaveforms();
+	
+	/**
+	 * Retrieve the waveform at a specific location
+	 * @param waveformLocation location of the waveform. 
+	 * @return
+	 * 	{@link Softwareassembly} for the waveform location. 
+	 */
 	Softwareassembly getWaveform(String waveformLocation);
 	
+	/**
+	 * Gets all the component file names. 
+	 * @return
+	 * 	component file names. 
+	 */
 	List<String> getComponentFileNames();
+	
+	/**
+	 * Get the Softwarecomponent by component location. 
+	 * 
+	 * @param componentLocation
+	 * 	location of a component. 
+	 * @return
+	 */
 	Softwarecomponent getComponent(String componentLocation);	
+	
+	/**
+	 * @return a {@link java.util.Map} with component name as the key and {@link Softwarecomponent} as the value. 
+	 */
 	Map<String, Softwarecomponent> getComponents();
 	
-	
+	/**
+	 * @return a {@link java.util.Map} with dependency name as the key and {@link Softpkg} as the value.
+	 */
 	Map<String, Softpkg> getSoftwarePackageDependencies();
-	Softpkg getSoftwarePackageDependency(String spdLocation);
-	List<String> getSoftwarePackageDependenyFileNames();
-	FileManager getCorbaObject();
 	
+	/**
+	 * Gets a specific {@link Softpkg}
+	 * @param spdLocation
+	 * 	location of the {@link Softpkg}
+	 * @return
+	 */
+	Softpkg getSoftwarePackageDependency(String spdLocation);
+	
+	/**
+	 * @return
+	 * 	Returns the list of SoftwarePackageDependency File Names. 
+	 */
+	List<String> getSoftwarePackageDependenyFileNames();
+	
+	/** 
+	 * @return
+	 * Returns a {@link CF.FileManager} object.
+	 */
+	FileManager getCorbaObject();
 }

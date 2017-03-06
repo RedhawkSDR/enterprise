@@ -9,5 +9,5 @@ variables:
 build:
   image: redbusci/maven:3-jdk-8
   script:
-    - mvn -P CFDependencies clean install
-    - mvn -P default deploy
+    - mvn -P CFDependencies clean install -B -U
+    - mvn -P default deploy -B -U

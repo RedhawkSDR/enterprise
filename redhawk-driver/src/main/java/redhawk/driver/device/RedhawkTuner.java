@@ -23,6 +23,7 @@ import java.util.Map;
 
 //import redhawk.RedhawkFrontendDevice;
 
+//TODO: Will need to test this to understand before you can document. 
 public interface RedhawkTuner {
 	//public void tune(Map<String, Object> properties);
 	//public void deTune();

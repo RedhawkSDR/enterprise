@@ -47,6 +47,11 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.properties.RedhawkStruct;
 import redhawk.driver.properties.RedhawkStructSequence;
 
+/**
+ * Wraps the CORBA {@link CFDevice} logic so it's easier to interact with 
+ * as a user.  
+ *
+ */
 public class RedhawkDeviceImpl extends PortBackedObjectImpl<Device> implements RedhawkDevice {
 
 	private static Logger logger = Logger.getLogger(RedhawkDeviceImpl.class.getName());

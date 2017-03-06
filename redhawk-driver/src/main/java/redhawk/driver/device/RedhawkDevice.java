@@ -28,12 +28,45 @@ import redhawk.driver.base.PortBackedObject;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 
 public interface RedhawkDevice extends PortBackedObject {
+	/**
+	 * @return CORBA object representing a Device. 
+	 */
 	Device getCorbaObj();
+
+	/**
+	 * @return Device Manager for a device. 
+	 */
 	RedhawkDeviceManager getDeviceManager();
+	
+	/**
+	 * Get the name of a Device. 
+	 * 
+	 * @return
+	 */
 	String getName();
+
+	/**
+	 * Get the identifier for a Device. 
+	 * @return
+	 */
 	String getIdentifier();
+	
+	/**
+	 * Start a device. 
+	 * @throws StartError
+	 */
 	void start() throws StartError;
+	
+	/**
+	 * Checks if a Device is started.  
+	 * @return
+	 */
 	boolean started();
+	
+	/**
+	 * Stop a device. 
+	 * @throws StopError
+	 */
 	void stop() throws StopError;
 
 	/**
@@ -79,6 +112,12 @@ public interface RedhawkDevice extends PortBackedObject {
 	 */
 	void deallocate(String allocationId);
 	
+	/**
+	 * Deallocates a multiple resources on the device.
+	 * @param allocation
+	 * 	{@link java.util.Map} with the allocations you'd like to get rid of. 
+	 */
+	//TODO: Test this method so you can better document. 
 	void deallocate(Map<String, Object> allocation);
 
 	// void deallocate(List<String> allocationIds);	

@@ -24,8 +24,17 @@ import java.util.Map;
 import redhawk.driver.properties.RedhawkProperty;
 
 public interface QueryableResource {
-
+	/**
+	 * Get all the properties for a resource. 
+	 * @return
+	 */
     public Map<String, RedhawkProperty> getProperties();
+    
+    /**
+     * Get specific properties for a resource. 
+     * @param propertyNames
+     * @return
+     */
     public <T> T getProperty(String ... propertyNames);
     
 }

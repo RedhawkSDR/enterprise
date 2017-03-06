@@ -46,6 +46,11 @@ import BULKIO.dataXMLOperations;
 import redhawk.driver.RedhawkUtils;
 import redhawk.driver.port.PortListener;
 
+/**
+ * POJO representing all types that can come out of a BULKIO port. 
+ *
+ * @param <T>
+ */
 public class BulkIOData<T> implements dataCharOperations, dataFloatOperations, dataDoubleOperations, dataFileOperations, dataXMLOperations,
 										dataLongOperations, dataLongLongOperations, dataOctetOperations, dataShortOperations, dataUlongOperations, dataUlongLongOperations, dataUshortOperations {
 
@@ -62,7 +67,12 @@ public class BulkIOData<T> implements dataCharOperations, dataFloatOperations, d
     private Thread sriProcessingThread;
     private boolean processData = true;
     
-    
+    /**
+     * Pass in a {@link PortListener} to handle what happens when data 
+     * is retrieved by this object. 
+     * 
+     * @param portListener
+     */
     public BulkIOData(PortListener<T> portListener){
     	this.portListener = portListener;
     	dataQueue = new LinkedBlockingQueue(portListener.getMaxQueueSize());
@@ -126,23 +136,36 @@ public class BulkIOData<T> implements dataCharOperations, dataFloatOperations, d
     	
     }
     
-    
+    /**
+     * Disconnect from port. 
+     */
     public void disconnect(){
     	processData = false;
     	sriProcessingThread.interrupt();
     	dataProcessingThread.interrupt();
     }
     
+    /**
+     * Get State of the port. 
+     */
+    //TODO: Implement this. 
 	@Override
 	public PortUsageType state() {
 		return null;
 	}
 
+	/**
+	 * Get PortStatistics for the port. 
+	 */
+	//TODO: Implement this. 
 	@Override
 	public PortStatistics statistics() {
 		return null;
 	}
 
+	/**
+	 * Retrieve an array of the activeSRIs for the port. 
+	 */
 	@Override
 	public StreamSRI[] activeSRIs() {
 		synchronized(sriMap){
@@ -150,11 +173,17 @@ public class BulkIOData<T> implements dataCharOperations, dataFloatOperations, d
 		}
 	}
 
+	/**
+	 * Send SRI to the port.
+	 */
 	@Override
 	public void pushSRI(StreamSRI streamSRI) {
 		sriQueue.offer(streamSRI);
 	}
 
+	/**
+	 * Push packets represented by a float array.  
+	 */
 	@Override
 	public void pushPacket(float[] body, PrecisionUTCTime time, boolean endOfStream, String streamId) {
 		if(!dataQueue.offer(new Object[]{body, time, endOfStream, streamId})){
@@ -163,6 +192,9 @@ public class BulkIOData<T> implements dataCharOperations, dataFloatOperations, d
 		}
 	}
 
+	/**
+	 * Push packets represented by char array.
+	 */
 	@Override
 	public void pushPacket(char[] body, PrecisionUTCTime time, boolean endOfStream, String streamId) {
 		if(!dataQueue.offer(new Object[]{body, time, endOfStream, streamId})){
@@ -171,6 +203,9 @@ public class BulkIOData<T> implements dataCharOperations, dataFloatOperations, d
 		}
 	}
 
+	/**
+	 * Push packets represented by a short[] array. 
+	 */
 	@Override
 	public void pushPacket(short[] body, PrecisionUTCTime time, boolean endOfStream, String streamId) {
 		if(!dataQueue.offer(new Object[]{body, time, endOfStream, streamId})){
@@ -179,6 +214,9 @@ public class BulkIOData<T> implements dataCharOperations, dataFloatOperations, d
 		}
 	}
 
+	/**
+	 * Push packaged represented by a byte array. 
+	 */
 	@Override
 	public void pushPacket(byte[] body, PrecisionUTCTime time, boolean endOfStream, String streamId) {
 		if(!dataQueue.offer(new Object[]{body, time, endOfStream, streamId})){
@@ -187,6 +225,9 @@ public class BulkIOData<T> implements dataCharOperations, dataFloatOperations, d
 		}
 	}
 
+	/**
+	 * Push packaged represented by a long array. 
+	 */
 	@Override
 	public void pushPacket(long[] body, PrecisionUTCTime time, boolean endOfStream, String streamId) {
 		if(!dataQueue.offer(new Object[]{body, time, endOfStream, streamId})){
@@ -195,6 +236,9 @@ public class BulkIOData<T> implements dataCharOperations, dataFloatOperations, d
 		}
 	}
 
+	/**
+	 * Push packaged represented by a int array. 
+	 */
 	@Override
 	public void pushPacket(int[] body, PrecisionUTCTime time, boolean endOfStream, String streamId) {
 		if(!dataQueue.offer(new Object[]{body, time, endOfStream, streamId})){
@@ -203,6 +247,9 @@ public class BulkIOData<T> implements dataCharOperations, dataFloatOperations, d
 		}
 	}
 
+	/**
+	 * Push packaged represented by a String. 
+	 */
 	@Override
 	public void pushPacket(String body, PrecisionUTCTime time, boolean endOfStream, String streamId) {
 		if(!dataQueue.offer(new Object[]{body, time, endOfStream, streamId})){
@@ -211,6 +258,9 @@ public class BulkIOData<T> implements dataCharOperations, dataFloatOperations, d
 		}
 	}
 
+	/**
+	 * Push packaged represented by a double array. 
+	 */
 	@Override
 	public void pushPacket(double[] body, PrecisionUTCTime time, boolean endOfStream, String streamId) {
 		if(!dataQueue.offer(new Object[]{body, time, endOfStream, streamId})){
@@ -219,6 +269,9 @@ public class BulkIOData<T> implements dataCharOperations, dataFloatOperations, d
 		}
 	}
 	
+	/**
+	 * Push packaged represented by a String. 
+	 */
 	@Override
 	public void pushPacket(String body, boolean endOfStream, String streamId) {
 		if(!dataQueue.offer(new Object[]{body, new PrecisionUTCTime(), endOfStream, streamId})){

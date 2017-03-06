@@ -46,6 +46,10 @@ import BULKIO.dataUshortPOATie;
 import BULKIO.dataXMLOperations;
 import BULKIO.dataXMLPOATie;
 
+/**
+ * Enum map POA -> Operation class. 
+ *
+ */
 public enum DataTypes {
 
     DATA_CHAR(dataCharPOATie.class.getName(), dataCharOperations.class.getName()),
@@ -65,6 +69,13 @@ public enum DataTypes {
     public String poaTieClass;
     public String operationsClass;
     
+    /**
+     * 
+     * @param poaTieClass
+     * 	String class name of POA class
+     * @param operationsClass
+     * 	String class name of Operation class. 
+     */
     DataTypes(String poaTieClass, String operationsClass){
         this.poaTieClass = poaTieClass;
         this.operationsClass = operationsClass;

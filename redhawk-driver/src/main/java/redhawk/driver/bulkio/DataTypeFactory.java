@@ -85,6 +85,10 @@ public class DataTypeFactory {
 
 	private DataTypes operationsType = null; 
 	
+	/**
+	 * Pass in a CORBA object representing a PORT 
+	 * @param port
+	 */
 	public DataTypeFactory(org.omg.CORBA.Object port){
 		/*
 		 * Figure out which class it is 
@@ -217,6 +221,10 @@ public class DataTypeFactory {
 		return dataSDDSObj;
 	}
 	
+	/**
+	 * Get statistics based on a port. 
+	 * @return
+	 */
 	public PortStatistics getStatistics(){		
 		switch(operationsType){
 		case DATA_CHAR: return dataCharObj.statistics(); 

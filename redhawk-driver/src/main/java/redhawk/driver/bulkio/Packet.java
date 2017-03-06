@@ -40,7 +40,11 @@ import BULKIO.TCM_CPU;
 import BULKIO.TCS_VALID;
 import CF.DataType;
 
-
+/**
+ * POJO representing a Packet. 
+ *
+ * @param <T>
+ */
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Packet<T> implements Serializable {

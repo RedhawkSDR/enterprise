@@ -22,6 +22,10 @@ package redhawk.driver.devicemanager;
 import CF.FileSystem;
 import redhawk.driver.base.RedhawkFileSystem;
 
+/**
+ * POJO wrapping CORBA logic for Redhawk Device Manager. 
+ *
+ */
 public interface RedhawkDeviceManagerFileSystem extends RedhawkFileSystem {
 
 	FileSystem getCorbaObject();	

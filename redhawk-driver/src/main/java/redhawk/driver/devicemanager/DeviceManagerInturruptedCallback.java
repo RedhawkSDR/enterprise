@@ -22,12 +22,42 @@ package redhawk.driver.devicemanager;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
 
 public interface DeviceManagerInturruptedCallback {
-
+	/**
+	 * Logic for what a device manager should do when it reconnects. 
+	 */
 	void deviceManagerReconnected();
+	
+	/**
+	 * Logic for what a device manager should do if disconnected. 
+	 */
 	void deviceManagerDisconnected();
+	
+	/**
+	 * @param message 
+	 * 	Message to output on connection problems. 
+	 */
 	void connectionProblem(String message);
+	
+	/**
+	 * Logic for what do if domain manager connection is lost. 
+	 */
 	void lostDomainManagerConnection();
+	
+	/**
+	 * Logic for what to do when restored connection to Domain Manager. 
+	 */
 	void restoredDomainManagerConnection();
+	
+	/**
+	 * Message to output if Service registration fails. 
+	 * @param message
+	 * 	Message to output
+	 * @param serviceInformation
+	 * 	Service information
+	 * @param serviceInformation2
+	 * @param serviceInformation3
+	 * @param e
+	 */
 	void serviceReregistrationFailed(String message, Object serviceInformation, Class serviceInformation2, Class serviceInformation3, NotFound e);
 	
 }

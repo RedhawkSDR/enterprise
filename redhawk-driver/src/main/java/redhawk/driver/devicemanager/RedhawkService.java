@@ -22,10 +22,24 @@ package redhawk.driver.devicemanager;
 import CF.DeviceManagerPackage.ServiceType;
 
 public interface RedhawkService {
-    ServiceType getCorbaObj();
+    /**
+     * @return CORBA object representing a REDHAWK Service Type. 
+     */
+	ServiceType getCorbaObj();
+	
+	/** 
+	 * @return POJO representing Device Manager for the Service. 
+	 */
     RedhawkDeviceManager getDeviceManager();
     
+    /**
+     * @return Name of the service. 
+     */
     public String getServiceName();
+    
+    /**
+     * @return CORBA object representing a REDHAWK Service.  
+     */
     public Object getServiceObject();
 
 }

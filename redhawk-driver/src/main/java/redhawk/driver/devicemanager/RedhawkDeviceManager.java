@@ -31,23 +31,100 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.exceptions.ServiceRegistrationException;
 
 public interface RedhawkDeviceManager extends QueryableResource {
-
-
+	/**
+	 * @return list of devices for a Redhawk Device Manager. 
+	 */
     List<RedhawkDevice> getDevices();
+    
+    /**
+     * Helper method to retrieve a Redhawk Device by name. 
+     * @param name
+     * 	Name of Redhawk Device. 
+     * @return
+     * @throws ResourceNotFoundException
+     */
     RedhawkDevice getDeviceByName(String name) throws ResourceNotFoundException;
+    
+    /**
+     * Helper method to retrieve a Redhawk Device by identifier. 
+     * @param identifier
+     * 	identifier for REDHAWK Device. 
+     * @return
+     * @throws ResourceNotFoundException
+     */
     RedhawkDevice getDeviceByIdentifier(String identifier) throws ResourceNotFoundException;
+    
+    /**
+     * @return Name of Redhawk Device Manager. 
+     */
     String getName();
+    
+    /** 
+     * @return Unique identifier for the object..
+     */
     String getUniqueIdentifier();
+    
+    /**
+     * @return Domain Manager for this Redhawk Device Manager.
+     */
     RedhawkDomainManager getDomainManager();
+    
+    /**
+     * @return {@link java.util.List} of Service for the Redhawk Device Manager. 
+     */
     List<RedhawkService> getServices();
+    
+    /**
+     * Retrieve a Service by name. 
+     * @param name
+     * 	Name of the Service to retrieve. 
+     * @return
+     * 	A Redhawk Service represented by the name provided. 
+     * @throws MultipleResourceException
+     * @throws ResourceNotFoundException
+     */
     RedhawkService getServiceByName(String name) throws MultipleResourceException, ResourceNotFoundException;
 
+    /**
+     * @return POJO representing the File System of a Device Manager. 
+     */
     RedhawkDeviceManagerFileSystem getFileSystem();
+    
+    /**
+     * @return CORBA object for a DeviceManager. 
+     */
     DeviceManager getCorbaObject();
+    
+    /**
+     * @return POJO representing the File System of a Device Manager. 
+     */
+    //TODO: This and the getFileSystem method may be redundant. 
     RedhawkDeviceManagerFileSystem getDeviceManagerFileSystem();
 
+    /**
+     * Service Name to register. 
+     * @param serviceName
+     * 	Name of Service you'd like to register. 
+     * @param objectToRegister
+     * 	object representing the service. 
+     * @param poaTieClass
+     * 	POA for the Service. 
+     * @param operationsInterface
+     * 	Operations Interface for the service. 
+     * @throws ServiceRegistrationException
+     */
     void registerService(String serviceName, java.lang.Object objectToRegister, Class poaTieClass, Class operationsInterface) throws ServiceRegistrationException;
+    
+    /**
+     * @param serviceName
+     * 	ServiceName to unregister.
+     * @throws MultipleResourceException
+     * @throws ResourceNotFoundException
+     */
     void unregisterService(String serviceName) throws MultipleResourceException, ResourceNotFoundException;
     
+    /**
+     * Shutdown Device Manager. 
+     */
     void shutdown();
 }

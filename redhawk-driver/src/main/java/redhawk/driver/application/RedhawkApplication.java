@@ -34,19 +34,100 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.xml.model.sca.sad.Softwareassembly;
 
+/**
+ * POJO representing a Redhawk Application
+ */
 public interface RedhawkApplication extends QueryableResource {
-    List<RedhawkComponent> getComponents();
+    /**
+     * @return A {@link java.util.List} with {@link RedhawkComponent} objects. 
+     */
+	List<RedhawkComponent> getComponents();
+	
+	/**
+	 * Get a list of components by a Regex
+	 * @param name
+	 * 	Regex for a component name. 
+	 * @return
+	 * 	A {@link java.util.List} with {@link RedhawkComponent} objects.
+	 */
     List<RedhawkComponent> getComponentsByName(String name);
+    
+    /**
+     * Get a specific {@link RedhawkComponent} by name. 
+     * @param name
+     * 	Name of the RedhawkComponent. 
+     * @return
+     * @throws MultipleResourceException
+     * @throws ResourceNotFoundException
+     */
     RedhawkComponent getComponentByName(String name) throws MultipleResourceException, ResourceNotFoundException;
+    
+    /** 
+     * @return Name of the Redhawk Application
+     */
     String getName();
+    
+    /**
+     * 
+     * @return Identifier for the Redhawk Application
+     */
     String getIdentifier();
+    
+    /**
+     * @return The Redhawk Domain Manager that this application is hosted by. 
+     */
     RedhawkDomainManager getRedhawkDomainManager();
+    
+    /** 
+     * @return The CORBA object representing this RedhawkApplication
+     */
     Application getCorbaObj();
+    
+    /**
+     * @return {@link Softwareassembly} for this object. 
+     * @throws IOException
+     */
 	Softwareassembly getAssembly() throws IOException;
+	
+	/**
+	 * Use this method to start your Redhawk Application. 
+	 * 
+	 * @throws ApplicationStartException
+	 */
     void start() throws ApplicationStartException;
+    
+    /**
+     * Use this method to stop your Redhawk Application. 
+     * @throws ApplicationStopException
+     */
     void stop() throws ApplicationStopException;
+    
+    /**
+     * Use this method to release your Redhawk Application
+     * @throws ApplicationReleaseException
+     */
     void release() throws ApplicationReleaseException;
+    
+    /**
+     * Use this method to get a specific ExternalPort for your application. 
+     * @param name
+     * 	Name of the External Port. 
+     * @return
+     * @throws ResourceNotFoundException
+     * @throws IOException
+     */
     RedhawkPort getExternalPort(String name) throws ResourceNotFoundException, IOException;
+    
+    /**
+     * Use this method to get ExternalPorts for your application.  
+     * @return
+     * @throws IOException
+     */
     List<RedhawkPort> getExternalPorts() throws IOException;
+    
+    /**
+     * Utility method to figure out if an application is started or not. 
+     * @return
+     */
     boolean isStarted();
 }

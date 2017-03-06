@@ -23,13 +23,40 @@ import java.util.Map;
 
 import CF.ApplicationFactory;
 
-
+/**
+ * POJO representing a {@link CF.ApplicationFactory} object.  
+ *
+ */
 public interface RedhawkApplicationFactory {
+	/**
+	 * @return Name of the ApplicationFactory. 
+	 */
 	String getName();
+	
+	/**
+	 * @return Identifier for the ApplicationFactory. 
+	 */
 	String getIdentifier();
+	
+	/** 
+	 * @return 
+	 */
 	String getSoftwareProfile();
+	
+	/**
+	 * Get a {@link java.util.Map} representing the applications available for this factory. 
+	 * @return {@link java.util.Map} with application name as the key and {@link RedhawkApplication} as the value. 
+	 */
 	Map<String, RedhawkApplication> getApplicationInstances();
 //	RedhawkApplication createApplication(String instanceName, Map<String, Object> initialConfiguration, List<RedhawkDeviceAssignment> deviceAssignments ) throws ApplicationCreationException;
+	
+	/**
+	 * @return The {@link CF.ApplicationFactory} for this object. 
+	 */
 	ApplicationFactory getCorbaObject();
+	
+	/**
+	 * Release this application factory. 
+	 */
 	void release();
 }

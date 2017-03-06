@@ -31,13 +31,13 @@ import redhawk.driver.xml.model.sca.spd.Softpkg;
 
 public interface PortBackedObject extends QueryableResource {
 	/**
-	 * @return {@link java.util.Map} with port name as the key and {@link RedhawkPort} as the key. 
+	 * @return {@link java.util.Map} with port name as the key and {@link RedhawkPort} as the value. 
 	 * @throws ResourceNotFoundException
 	 */
 	Map<String, RedhawkPort> ports() throws ResourceNotFoundException;
 	
 	/**
-	 * All the ports available for this objects
+	 * All the ports available for this object.
 	 * @return
 	 * @throws ResourceNotFoundException
 	 */
@@ -59,14 +59,14 @@ public interface PortBackedObject extends QueryableResource {
     Softwarecomponent getSoftwareComponent() throws ResourceNotFoundException;
 	
     /**
-     * @return
+     * @return The Software Package for the object. 
      * @throws ResourceNotFoundException
      */
     Softpkg getComponentAssembly() throws ResourceNotFoundException;
     
     /**
      * 
-     * @return
+     * @return Properties related to this object. 
      * @throws ResourceNotFoundException
      */
 	Properties getPropertyConfiguration() throws ResourceNotFoundException;

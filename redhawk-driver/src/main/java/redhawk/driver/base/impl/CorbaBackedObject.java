@@ -75,7 +75,7 @@ public abstract class CorbaBackedObject<TParsedClass> {
 	protected abstract TParsedClass locateCorbaObject() throws ResourceNotFoundException;
 	
 	/**
-	 * @return ior for this {@link CorbaBackedObject}
+	 * @return Interoperable Object Reference for this {@link CorbaBackedObject}
 	 */
 	public String getIor() {
 		return ior;

@@ -52,7 +52,7 @@
         				<goals>
         					<goal>javadoc</goal>
         				</goals>
-        				<phase>install</phase>
+        				<phase>process-resources</phase>
         			</execution>
         		</executions>
         	</plugin>

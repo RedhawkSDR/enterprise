@@ -11,6 +11,6 @@ build:
   script:
     - mvn -P CFDependencies clean install -B -U
     - mvn -P default deploy -B -U
-  artifacts:
-    paths:
-    - redhawk-driver/target/site/apidocs
+#  artifacts:
+#    paths:
+#    - redhawk-driver/target/site/apidocs

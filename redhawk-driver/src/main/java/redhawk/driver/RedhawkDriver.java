@@ -30,7 +30,6 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.mockito.BDDMockito.Then;
 import org.omg.CORBA.BAD_PARAM;
 import org.omg.CORBA.COMM_FAILURE;
 import org.omg.CORBA.ORB;

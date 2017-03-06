@@ -30,6 +30,7 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.mockito.BDDMockito.Then;
 import org.omg.CORBA.BAD_PARAM;
 import org.omg.CORBA.COMM_FAILURE;
 import org.omg.CORBA.ORB;
@@ -59,15 +60,40 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 
 public class RedhawkDriver implements Redhawk {
-
+	
 	private static Logger logger = Logger.getLogger(RedhawkDriver.class.getName());
 	private static final String CORBA_NAME_SERVICE = "ORBInitRef.NameService";
+	
+	/**
+	 * Default host port for REDHAWK Domain {@value #DEFAULT_NAMESERVICE_PORT}
+	 */
 	private static final int DEFAULT_NAMESERVICE_PORT = 2809;
+	
+	/**
+	 * Default host name for REDHAWK Domain {@value #DEFAULT_HOSTNAME}
+	 */
 	private static final String DEFAULT_HOSTNAME = "localhost";
     
+	/**
+	 * Host name for this RedhawkDriver instance. The host name should 
+	 * be the host of your Name Server. 
+	 */
     private String hostName;
+    
+    /**
+     * Host port for this RedahwkDriver instance. The port name should 
+     * be the port your Name Server is using. 
+     */
     private int port;
+    
+    /**
+     * ORB {@link org.omg.CORBA.ORB} for the Redhawk Domain your connected too. 
+     */
     private ORB orb;
+    
+    /**
+     * Connection properties to use when initializing ORB implementation. 
+     */
     private Properties connectionProperties = new Properties();
     
     
@@ -90,14 +116,31 @@ public class RedhawkDriver implements Redhawk {
 		});
     }
     
+    /**
+     * Default contructor makes a RedhawkDriver using DEFAULT_HOSTNAME {@value #DEFAULT_HOSTNAME} and
+     * DEFAULT_NAMESERVICE_PORT {@value #DEFAULT_NAMESERVICE_PORT}.
+     */
     public RedhawkDriver(){
     	this(DEFAULT_HOSTNAME, DEFAULT_NAMESERVICE_PORT);
     }
     
+    /**
+     * Use this contructor to specify the host name for you RedhawkDriver instance to use. 
+     * The default port will still be use {@value #DEFAULT_NAMESERVICE_PORT}
+     * @param hostname
+     */
     public RedhawkDriver(String hostname) {
     	this(hostname, DEFAULT_NAMESERVICE_PORT);
     }
     
+    /**
+     * Specify your own Hostname and port for your REDHAWK Domain. 
+     * 
+     * @param hostName
+     * 	Host Name of your Redhawk Domain
+     * @param port
+     * 	Port for your Redhawk Domain
+     */
     public RedhawkDriver(String hostName, int port){
         this.hostName = hostName;
         this.port = port;
@@ -125,6 +168,17 @@ public class RedhawkDriver implements Redhawk {
         //}
     }
     
+    /**
+     * Specify your own hostname, port, and connection properties for the 
+     * ORB implementation your using. 
+     * 
+     * @param hostName
+     * 	Hostname for your REDHAWK Domain
+     * @param port
+     * 	Host port for your REDHAWK Domain
+     * @param properties
+     * 	Properties for your ORB to use on connection. 
+     */
     public RedhawkDriver(String hostName, int port, Properties properties){
     	connectionProperties = properties;
     	this.hostName = hostName; 

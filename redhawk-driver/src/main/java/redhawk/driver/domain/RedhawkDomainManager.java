@@ -57,8 +57,23 @@ public interface RedhawkDomainManager extends QueryableResource {
      * @throws ConnectionException
      */
     String getIdentifier();
+    
+    /**
+     * Returns the {@link RedhawkDeviceManager} for this object
+     * @return
+     */
     Map<String, RedhawkDeviceManager> deviceManagers();
+    
+    /**
+     * Return the applications available for this object. 
+     * @return
+     */
     Map<String, RedhawkApplication> applications();
+    
+    /**
+     * Returns the devices availble for this object.
+     * @return
+     */
 	Map<String, RedhawkDevice> devices();
     
     /**

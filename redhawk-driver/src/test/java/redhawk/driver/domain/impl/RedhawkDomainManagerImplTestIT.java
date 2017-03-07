@@ -138,6 +138,37 @@ public class RedhawkDomainManagerImplTestIT {
 		assertNotNull(domainManager.deviceManagers());		
 	}
 	
+	//Below will be snippets for docs for RedhawkDomainManager
+	@Test
+	public void testSnippetForCreatingAnApplication() throws MultipleResourceException, ApplicationCreationException, CORBAException, ResourceNotFoundException, ApplicationReleaseException{
+		//START SNIPPET: rhdomainmanagerCreateApplication
+		String applicationName = "myApp";
+		RedhawkDriver driver = new RedhawkDriver(); 
+		RedhawkDomainManager domainManager = driver.getDomain();
+		String waveformLocation = "/waveforms/rh/basic_components_demo/basic_components_demo.sad.xml";
+		
+		//Create an application that already exists in your $SDRROOT
+		RedhawkApplication application = domainManager.createApplication(applicationName, waveformLocation);
+		//END SNIPPET: rhdomainmanagerCreateApplication
+		
+		//START SNIPPET: rhdomainmanager_getapplication
+		//Retrieve applications launched in your domain 
+		List<RedhawkApplication> applications = domainManager.getApplications();
+		
+		//Retrieve a specific application in your domain
+		application = domainManager.getApplicationByName(applicationName);
+		//END SNIPPET: rhdomainmanager_getapplication
+		
+		//START SNIPPET: rhdomainmanager_releaseapplication
+		//Release a specific application in your domain
+		domainManager.getApplicationByName(applicationName).release();
+		
+		//Release all applications in your domain
+		for(RedhawkApplication myApplication : domainManager.getApplications())
+			myApplication.release();
+		//END SNIPPET: rhdomainmanager_releaseapplication
+	}
+	//End of SNIPPETS for RedhawkDomainManager
 	
 	@After
 	public void shutdown() throws ApplicationReleaseException{

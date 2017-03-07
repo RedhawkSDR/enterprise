@@ -16,7 +16,7 @@ Below are code examples for using the RedhawkDriver class.
 ### Get a Redhawk Device
 ***  
 
-<!--MACRO{snippet|id=rhdrivergetdevice|file=src/test/java/redhawk/driver/RedhawkDriverTestIT.java} -->
+<!--MACRO{snippet|id=rhdrivergetDevice|file=src/test/java/redhawk/driver/RedhawkDriverTestIT.java} -->
 
 ### Get a Redhawk Application 
 ***  

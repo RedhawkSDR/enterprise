@@ -108,14 +108,14 @@ public class RedhawkDriverTestIT {
 	
 	@Test
 	public void testGetDevice() throws ResourceNotFoundException, CORBAException, MultipleResourceException{
-		//START SNIPPET: rhdrivergetdevice
+		//START SNIPPET: rhdrivergetDevice
 		driver = new RedhawkDriver();
 		RedhawkDeviceManager devManager = driver.getDomain("REDHAWK_DEV").getDeviceManagers().get(0);
 		RedhawkDevice device = devManager.getDevices().get(0);
 		String pathForDevice = domainName+File.separator+devManager.getName()+File.separator+device.getName();
 		logger.info(pathForDevice);
 		assertNotNull(driver.getDevice(pathForDevice));
-		//END SNIPPET: rhdrivergetdevice
+		//END SNIPPET: rhdrivergetDevice
 	}
 	
 	@Test

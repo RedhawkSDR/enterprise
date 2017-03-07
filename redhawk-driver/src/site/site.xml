@@ -9,6 +9,7 @@
 		<menu name="About Redhawk Driver">
 			<item name="Introduction" href="introduction.html" />
 			<item name="RedhawkDriver Examples" href="redhawkdriver-usage.html" />
+			<item name="RedhawkDomainManager Examples" href="redhawkdomainmanager-usage.html" />		
 		</menu>
 		<menu ref="reports" />
 	</body>

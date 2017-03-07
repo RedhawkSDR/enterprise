@@ -22,6 +22,7 @@ package redhawk.driver;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.io.File;
 import java.util.Map;
 
 import org.junit.After;
@@ -33,6 +34,8 @@ import org.omg.CORBA.ORBPackage.InvalidName;
 
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
+import redhawk.driver.device.RedhawkDevice;
+import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ApplicationReleaseException;
@@ -86,6 +89,23 @@ public class RedhawkDriverTestIT {
 		driver = new RedhawkDriver(hostName, domainPort);
 		
 		this.basicDriverTests(driver);
+	}
+	
+	@Test
+	public void testGetDeviceManager() throws ResourceNotFoundException, CORBAException, MultipleResourceException{
+		driver = new RedhawkDriver();
+		
+		String deviceManagerName = driver.getDomain("REDHAWK_DEV").getDeviceManagers().get(0).getName();
+		assertNotNull(driver.getDeviceManager("REDHAWK_DEV/"+deviceManagerName));
+	}
+	
+	@Test
+	public void testGetDevice() throws ResourceNotFoundException, CORBAException, MultipleResourceException{
+		driver = new RedhawkDriver();
+		RedhawkDeviceManager devManager = driver.getDomain("REDHAWK_DEV").getDeviceManagers().get(0);
+		RedhawkDevice device = devManager.getDevices().get(0);
+		
+		assertNotNull(driver.getDevice(domainName+File.pathSeparator+devManager.getName()+File.pathSeparator+device.getName()));
 	}
 	
 	/*

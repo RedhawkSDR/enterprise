@@ -40,22 +40,22 @@
 			<!-- Having issues building with 1.8 due to JAVADOC errors adding this 
 				for now -->
 			<plugin>
-        		<groupId>org.apache.maven.plugins</groupId>			
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-        		<version>2.10.4</version>	
-        		<configuration>
-        			<failOnError>false</failOnError>
-        		</configuration>
-        		<executions>
-        			<execution>
-        				<id>attach-artifact</id>
-        				<goals>
-        					<goal>javadoc</goal>
-        				</goals>
-        				<phase>process-resources</phase>
-        			</execution>
-        		</executions>
-        	</plugin>
+				<version>2.10.4</version>
+				<configuration>
+					<failOnError>false</failOnError>
+				</configuration>
+				<executions>
+					<execution>
+						<id>attach-artifact</id>
+						<goals>
+							<goal>javadoc</goal>
+						</goals>
+						<phase>process-resources</phase>
+					</execution>
+				</executions>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-site-plugin</artifactId>
@@ -248,6 +248,27 @@
 								</configuration>
 							</execution>
 						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>docs</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-site-plugin</artifactId>
+						<dependencies>
+							<dependency>
+								<groupId>org.apache.maven.doxia</groupId>
+								<artifactId>doxia-module-markdown</artifactId>
+								<version>1.7</version>
+							</dependency>
+						</dependencies>
 					</plugin>
 				</plugins>
 			</build>

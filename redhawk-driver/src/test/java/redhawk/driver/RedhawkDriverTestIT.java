@@ -114,6 +114,25 @@ public class RedhawkDriverTestIT {
 		assertNotNull(driver.getDevice(pathForDevice));
 	}
 	
+	@Test
+	public void testHelperMethods() throws MultipleResourceException, CORBAException{
+		//START SNIPPET: rhdriverhelpers
+		RedhawkDriver driver = new RedhawkDriver(); 
+		
+		//Use these utility methods if you only have one REDHAWK Domain/Redhawk Device Manager/Redhawk Device
+		RedhawkDomainManager domainManager = driver.getDomain();
+		
+		RedhawkDeviceManager deviceManager = driver.getDeviceManager();
+		
+		RedhawkDevice device = driver.getDevice();
+		//END SNIPPET: rhdriverhelpers
+		
+		assertNotNull(domainManager);
+		assertNotNull(deviceManager);
+		assertNotNull(device);
+		driver.disconnect();
+	}
+	
 	/*
 	 * Testing of the public RedhawkDriver methods occurs below
 	 */
@@ -130,27 +149,37 @@ public class RedhawkDriverTestIT {
 		assertEquals(domainName, domainMap.keySet().iterator().next());
 		
 		//Get a specific domain
+		//START SNIPPET: rhdrivergetdomain
 		RedhawkDomainManager domain = driver.getDomain(domainName);
+		//END SNIPPET: rhdrivergetdomain
 		assertNotNull(domain);
 		assertEquals(domainName, domain.getName());
 		
 		//Get a specific application
+		//START SNIPPET: rhdrivergetapplication
 		RedhawkApplication application = driver.getApplication(domainName+"/"+sampleApp);
+		//END SNIPPET: rhdrivergetapplication
 		assertNotNull(application);
 		assertEquals(sampleApp, application.getName());
 		
 		//Get a specific component
+		//START SNIPPET: rhdrivergetcomponent
 		RedhawkComponent component = driver.getComponent(domainName+"/"+sampleApp+"/SigGen_sine.*");
+		//END SNIPPET: rhdrivergetcomponent
 		assertNotNull(component);
 		
 		//Get a specific port
+		//START SNIPPET: rhdrivergetport
 		RedhawkPort port = driver.getPort(domainName+"/"+sampleApp+"/SigGen_sine.*/dataFloat_out");
+		//END SNIPPET: rhdrivergetport
 		assertNotNull(port);		
 	}
 	
 	@After
 	public void shutdown(){
-		driver.disconnect();
+		if(driver!=null)
+			driver.disconnect();
+		
 		//TODO: Ask John why getOrb initializes an Orb??? 
 		//assertEquals(null, driver.getOrb());
 	}

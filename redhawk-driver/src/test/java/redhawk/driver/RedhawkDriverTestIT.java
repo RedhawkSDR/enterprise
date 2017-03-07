@@ -24,6 +24,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -45,6 +46,8 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 
 public class RedhawkDriverTestIT {
+	private Logger logger = Logger.getLogger(RedhawkDriverTestIT.class.getName());
+	
 	private String domainName;
 	
 	private String hostName; 
@@ -96,7 +99,9 @@ public class RedhawkDriverTestIT {
 		driver = new RedhawkDriver();
 		
 		String deviceManagerName = driver.getDomain("REDHAWK_DEV").getDeviceManagers().get(0).getName();
-		assertNotNull(driver.getDeviceManager("REDHAWK_DEV/"+deviceManagerName));
+		String pathForDevManager = "REDHAWK_DEV/"+deviceManagerName;
+		logger.info(pathForDevManager);
+		assertNotNull(driver.getDeviceManager(pathForDevManager));
 	}
 	
 	@Test
@@ -104,8 +109,9 @@ public class RedhawkDriverTestIT {
 		driver = new RedhawkDriver();
 		RedhawkDeviceManager devManager = driver.getDomain("REDHAWK_DEV").getDeviceManagers().get(0);
 		RedhawkDevice device = devManager.getDevices().get(0);
-		
-		assertNotNull(driver.getDevice(domainName+File.pathSeparator+devManager.getName()+File.pathSeparator+device.getName()));
+		String pathForDevice = domainName+File.separator+devManager.getName()+File.separator+device.getName();
+		logger.info(pathForDevice);
+		assertNotNull(driver.getDevice(pathForDevice));
 	}
 	
 	/*

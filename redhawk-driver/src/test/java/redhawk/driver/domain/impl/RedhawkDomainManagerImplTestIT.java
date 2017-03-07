@@ -21,17 +21,25 @@ package redhawk.driver.domain.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import redhawk.driver.RedhawkDriver;
+import redhawk.driver.RedhawkUtils;
 import redhawk.driver.application.RedhawkApplication;
+import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.ApplicationCreationException;
@@ -40,29 +48,32 @@ import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.driver.xml.model.sca.sad.Softwareassembly;
 
 
 public class RedhawkDomainManagerImplTestIT {
-	private RedhawkDomainManager impl;
-		
+	private RedhawkDomainManager domainManager;
+	
+	private RedhawkDriver driver;
+
 	@Before
 	public void setup() throws ResourceNotFoundException, CORBAException{
-		RedhawkDriver driver = new RedhawkDriver(); 
-		impl = driver.getDomain("REDHAWK_DEV");
+		driver = new RedhawkDriver(); 
+		domainManager = driver.getDomain("REDHAWK_DEV");
 	}
 
 	@Test
 	public void testRedhawkDomainManagerCreateApplicationWithString() throws ResourceNotFoundException, CORBAException, ApplicationCreationException, MultipleResourceException{
-		String waveformFileName = impl.getFileManager().getWaveformFileNames().get(0);
+		String waveformFileName = domainManager.getFileManager().getWaveformFileNames().get(0);
 		String applicationName = "MyApplication";
 		System.out.println("WaveformFileName "+waveformFileName);
-		assertEquals("Should be no applications", true, impl.getApplications().isEmpty());
-		assertNotNull(null, impl.createApplication(applicationName, waveformFileName));
-		assertEquals("Now there should be applications in the domain.", false, impl.getApplications().isEmpty());
-		assertEquals("Now there should be 1 application.", 1, impl.getApplications().size());
-		assertNotNull("Unable to get application by name: "+applicationName, impl.getApplicationsByName(applicationName));
-		String applicationIdentifier = impl.getApplications().get(0).getIdentifier();
-		assertNotNull("Unable to get application by identifier "+applicationIdentifier, impl.getApplicationByIdentifier(applicationIdentifier));
+		assertEquals("Should be no applications", true, domainManager.getApplications().isEmpty());
+		assertNotNull(domainManager.createApplication(applicationName, waveformFileName));
+		assertEquals("Now there should be applications in the domain.", false, domainManager.getApplications().isEmpty());
+		assertEquals("Now there should be 1 application.", 1, domainManager.getApplications().size());
+		assertNotNull("Unable to get application by name: "+applicationName, domainManager.getApplicationsByName(applicationName));
+		String applicationIdentifier = domainManager.getApplications().get(0).getIdentifier();
+		assertNotNull("Unable to get application by identifier "+applicationIdentifier, domainManager.getApplicationByIdentifier(applicationIdentifier));
 	}
 	
 	@Test
@@ -70,42 +81,69 @@ public class RedhawkDomainManagerImplTestIT {
 		String waveFormFileLocation = "src/test/resources/waveforms/rh/testWaveform.sad.xml";
 		String applicationName = "MyApplication";
 		
-		assertEquals("Should be no applications", true, impl.getApplications().isEmpty());
-		assertNotNull(null, impl.createApplication(applicationName, new File(waveFormFileLocation)));
-		assertEquals("Now there should be applications in the domain.", false, impl.getApplications().isEmpty());
-		assertEquals("Now there should be 1 application.", 1, impl.getApplications().size());
-		assertNotNull("Unable to get application by name: "+applicationName, impl.getApplicationsByName(applicationName));
-		String applicationIdentifier = impl.getApplications().get(0).getIdentifier();
-		assertNotNull("Unable to get application by identifier "+applicationIdentifier, impl.getApplicationByIdentifier(applicationIdentifier));
+		assertEquals("Should be no applications", true, domainManager.getApplications().isEmpty());
+		assertNotNull(null, domainManager.createApplication(applicationName, new File(waveFormFileLocation)));
+		assertEquals("Now there should be applications in the domain.", false, domainManager.getApplications().isEmpty());
+		assertEquals("Now there should be 1 application.", 1, domainManager.getApplications().size());
+		assertNotNull("Unable to get application by name: "+applicationName, domainManager.getApplicationsByName(applicationName));
+		String applicationIdentifier = domainManager.getApplications().get(0).getIdentifier();
+		assertNotNull("Unable to get application by identifier "+applicationIdentifier, domainManager.getApplicationByIdentifier(applicationIdentifier));
 	
 		//Remove the file so this test can be run again 
-		impl.getFileManager().removeDirectory("/waveforms/testWaveform");
+		domainManager.getFileManager().removeDirectory("/waveforms/testWaveform");
+	}
+	
+	
+	@Test
+	@Ignore("Figure out how to fix this...")
+	public void testCreateApplicationWithSAD() throws FileNotFoundException, IOException, ApplicationCreationException{
+		Softwareassembly assembly = RedhawkUtils.unMarshalSadFile(new FileInputStream("src/test/resources/waveforms/rh/testWaveform.sad.xml"));
+		
+		domainManager.createApplication("myApplication", assembly);
+	}
+	
+	@Test
+	public void testDeviceInteraction() throws MultipleResourceException{
+		List<RedhawkDevice> devices = domainManager.getDevices();
+		assertTrue(devices.size() > 0);
+		Map<String, RedhawkDevice> deviceMap = domainManager.devices();
+		assertTrue(deviceMap.size() > 0);
+		
+		devices = domainManager.getDevicesByName("GPP.*");
+		assertTrue(devices.size() > 0);
+		
+		RedhawkDevice device = domainManager.getDeviceByName("GPP.*");
+		assertTrue(device.getName().startsWith("GPP"));
+		
+		assertNotNull(domainManager.getDeviceByIdentifier(device.getIdentifier()));
 	}
 	
 	@Test
 	public void testRedhawkDomainManagerGetDeviceManagers() throws MultipleResourceException, ResourceNotFoundException{
-		List<RedhawkDeviceManager> deviceManagers = impl.getDeviceManagers();
+		List<RedhawkDeviceManager> deviceManagers = domainManager.getDeviceManagers();
 		
 		assertEquals("Unable to retrieve device manager object", false, deviceManagers.isEmpty());
-		assertEquals("Unable to retrieve device manager by name", true, impl.getDeviceManagerByName(deviceManagers.get(0).getName())!=null);
-		assertEquals("Unable to retrieve device manager by identifier", true, impl.getDeviceManagerByIdentifier(deviceManagers.get(0).getUniqueIdentifier())!=null);		
+		assertEquals("Unable to retrieve device manager by name", true, domainManager.getDeviceManagerByName(deviceManagers.get(0).getName())!=null);
+		assertEquals("Unable to retrieve device manager by identifier", true, domainManager.getDeviceManagerByIdentifier(deviceManagers.get(0).getUniqueIdentifier())!=null);		
 	}
 	
 	@Test
 	public void testOtherMethods() throws ResourceNotFoundException{
-		assertNotNull(impl.getAllocationManager());
-		assertNotNull(impl.getConnectionManager());
-		assertNotNull(impl.getEventChannelManager());
-		assertNotNull(impl.getDomainManagerConfiguration());
-		assertNotNull(impl.getPropertyConfiguration());
-		assertNotNull(impl.getDomainManagerAssembly());
+		assertNotNull(domainManager.getAllocationManager());
+		assertNotNull(domainManager.getConnectionManager());
+		assertNotNull(domainManager.getEventChannelManager());
+		assertNotNull(domainManager.getDomainManagerConfiguration());
+		assertNotNull(domainManager.getPropertyConfiguration());
+		assertNotNull(domainManager.getDomainManagerAssembly());
+		assertNotNull(domainManager.deviceManagers());		
 	}
 	
 	
 	@After
 	public void shutdown() throws ApplicationReleaseException{
-		for(RedhawkApplication application : impl.getApplications()){
+		for(RedhawkApplication application : domainManager.getApplications()){
 			application.release();
 		}
+		driver.disconnect();
 	}
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Redhawk Driver Docs">
+	<skin>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-fluido-skin</artifactId>
+		<version>1.6</version>
+	</skin>
+	<body>
+		<menu name="About Redhawk Driver">
+			<item name="Introduction" href="introduction.html" />
+			<item name="RedhawkDriver Examples" href="redhawkdriver-usage.html" />
+		</menu>
+		<menu ref="reports" />
+	</body>
+</project>

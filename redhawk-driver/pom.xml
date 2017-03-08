@@ -265,7 +265,7 @@
 						<configuration>
 							<asciidoc>
 								<baseDir>${project.basedir}</baseDir>
-								<source-highlighter>coderay</source-highlighter>
+								<sourceDir>src/test/java</sourceDir>
 								<attributes>
 									<source-highlighter>coderay</source-highlighter>
 									<coderay-css>style</coderay-css>

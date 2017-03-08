@@ -86,7 +86,6 @@ public class RedhawkApplicationImplTestIT {
 		}	
 	}
 	
-	//SNIPPETS for docs below
 	@Test
 	public void snippets() throws ApplicationStopException, ApplicationStartException, MultipleResourceException, ResourceNotFoundException, ApplicationReleaseException{
 		//Get all components
@@ -110,7 +109,6 @@ public class RedhawkApplicationImplTestIT {
 		//Release an application
 		application.release();
 	}
-	//END OF SNIPPETS for docs
 	
 	//TODO: Add test for getting externalports
 	

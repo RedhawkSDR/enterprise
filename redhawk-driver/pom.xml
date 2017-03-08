@@ -259,6 +259,59 @@
 			</activation>
 			<build>
 				<plugins>
+					<!-- 
+						Note below is a hack until I figure out how to appropriately do this 
+						w/ adoc. 
+					 -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-resources</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<encoding>UTF-8</encoding>
+									<outputDirectory>${project.basedir}/src/main/asciidoc/examples/snippets</outputDirectory>
+									<resources>
+										<resource>
+											<directory>src/test/java/redhawk/driver</directory>
+											<includes>
+												<include>RedhawkDriverTestIT.java</include>
+											</includes>
+										</resource>
+										<resource>
+											<directory>src/test/java/redhawk/driver/application/impl</directory>
+											<includes>
+												<include>RedhawkApplicationImplTestIT.java</include>
+											</includes>
+										</resource>
+										<resource>
+											<directory>src/test/java/redhawk/driver/domain/impl</directory>
+											<includes>
+												<include>RedhawkDomainManagerImplTestIT.java</include>
+											</includes>
+										</resource>
+										<resource>
+											<directory>src/test/java/redhawk/driver/component/impl</directory>
+											<includes>
+												<include>RedhawkComponentImplTestIT.java</include>
+											</includes>
+										</resource>
+										<resource>
+											<directory>src/test/java/redhawk/driver/eventchannel/impl</directory>
+											<includes>
+												<include>RedhawkEventChannelManagerTestIT.java</include>
+											</includes>
+										</resource>																				
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-site-plugin</artifactId>
@@ -313,7 +366,7 @@
 						<!-- TODO: may move asciidoc stuff to default location -->
 						<configuration>
 							<baseDir>${project.basedir}</baseDir>
-							<sourceDirectory>src/site/asciidoc</sourceDirectory>
+							<sourceDocumentName>index.adoc</sourceDocumentName>
 						</configuration>
 						<executions>
 							<execution>
@@ -328,7 +381,7 @@
 									<backend>html5</backend>
 									<doctype>book</doctype>
 									<attributes>
-										<toc />
+										<toc>left</toc>
 										<linkcss>false</linkcss>
 									</attributes>
 								</configuration>
@@ -340,13 +393,13 @@
 									<goal>process-asciidoc</goal>
 								</goals>
 								<configuration>
-									<outputDirectory>${project.build.directory}/asciidoc/pdf</outputDirectory>								
+									<outputDirectory>${project.build.directory}/asciidoc/pdf</outputDirectory>
 									<backend>pdf</backend>
 									<!-- Since 1.5.0-alpha.9 PDF back-end can use 'rouge' as well as 
 										'coderay' source highlighting -->
 									<sourceHighlighter>coderay</sourceHighlighter>
 									<attributes>
-										<icons/>
+										<icons />
 										<pagenums />
 										<toc />
 										<idprefix />

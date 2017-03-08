@@ -6,7 +6,7 @@
 		<version>1.6</version>
 	</skin>
 	<body>
-		<menu name="About Redhawk Driver">
+		<menu name="Getting Started">
 			<item name="Introduction" href="introduction.html" />		
 		</menu>
 		<menu name="Code Examples">

@@ -51,13 +51,11 @@ public class RedhawkApplicationImplTestIT {
 	@Before
 	public void setup() throws ResourceNotFoundException, ApplicationCreationException, CORBAException, MultipleResourceException{
 		//Create Application
-		//START SNIPPET: rhdomainmanager_createapplication2
 		driver = new RedhawkDriver();
 		
 		driver.getDomain("REDHAWK_DEV").createApplication(applicationName, new File("src/test/resources/waveforms/rh/testWaveform.sad.xml"));
 		
 		application = driver.getApplication("REDHAWK_DEV/"+applicationName);
-		//END SNIPPET: rhdomainmanager_createapplication2
 
 		assertNotNull(application);
 	}
@@ -91,18 +89,14 @@ public class RedhawkApplicationImplTestIT {
 	//SNIPPETS for docs below
 	@Test
 	public void snippets() throws ApplicationStopException, ApplicationStartException, MultipleResourceException, ResourceNotFoundException, ApplicationReleaseException{
-		//START SNIPPET: rhapplication_getcomponents
 		//Get all components
 		List<RedhawkComponent> components = application.getComponents();
 		
 		//Get a specific component
 		String componentName = components.get(0).getName();
 		RedhawkComponent component = application.getComponentByName(componentName);
-		//END SNIPPET: rhapplication_getcomponents
 		
-		//START SNIPPET: rhapplication_lifecycle
 		//Example code for managing an applications lifecyle
-		
 		//Stop an application 
 		application.stop();
 		
@@ -115,7 +109,6 @@ public class RedhawkApplicationImplTestIT {
 		
 		//Release an application
 		application.release();
-		//END SNIPPET: rhapplication_lifecycle
 	}
 	//END OF SNIPPETS for docs
 	

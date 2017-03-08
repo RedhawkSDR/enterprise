@@ -262,11 +262,26 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-site-plugin</artifactId>
+						<configuration>
+							<asciidoc>
+								<baseDir>${project.basedir}</baseDir>
+								<source-highlighter>coderay</source-highlighter>
+								<attributes>
+									<source-highlighter>coderay</source-highlighter>
+									<coderay-css>style</coderay-css>
+								</attributes>
+							</asciidoc>
+						</configuration>
 						<dependencies>
 							<dependency>
 								<groupId>org.apache.maven.doxia</groupId>
 								<artifactId>doxia-module-markdown</artifactId>
 								<version>1.7</version>
+							</dependency>
+							<dependency>
+								<groupId>org.asciidoctor</groupId>
+								<artifactId>asciidoctor-maven-plugin</artifactId>
+								<version>1.5.3</version>
 							</dependency>
 						</dependencies>
 					</plugin>

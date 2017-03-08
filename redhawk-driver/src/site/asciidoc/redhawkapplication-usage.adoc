@@ -2,13 +2,12 @@
 
 Below are code examples for using the RedhawkApplication class. 
 
-////
 === Managing your Applications lifecycle
 
-:sourcedir: src/test/java
+////
 [source,java,indent=0]
 ----
-include::{sourcedir}/redhawk/driver/application/impl/RedhawkApplicationImplTestIT.java[lines=99...111]
+include::src/test/java/redhawk/driver/application/impl/RedhawkApplicationImplTestIT.java[lines=99...111]
 ----
 
 === Interacting with Components from your Application

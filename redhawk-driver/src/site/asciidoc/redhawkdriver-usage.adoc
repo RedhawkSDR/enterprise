@@ -1,4 +1,4 @@
-:sourcedir: src/test/java/redhawk/driver
+:sourcedir: src/test/java
 == RedhawkDriver Code Examples
 
 Below are code examples for using the RedhawkDriver class. 
@@ -7,42 +7,42 @@ Below are code examples for using the RedhawkDriver class.
 
 [source,java,indent=0]
 ----
-include::{sourcedir}/RedhawkDriverTestIT.java[lines=150]
+include::{sourcedir}/redhawk/driver/RedhawkDriverTestIT.java[lines=150]
 ----
 
 === Get a Redhawk Device Manager  
 
 [source,java,indent=0]
 ----
-include::{sourcedir}/RedhawkDriverTestIT.java[lines=99..104]
+include::{sourcedir}/redhawk/driver/RedhawkDriverTestIT.java[lines=99..104]
 ----
 
 === Get a Redhawk Device  
 
 [source,java,indent=0]
 ----
-include::{sourcedir}/RedhawkDriverTestIT.java[lines=109..114]
+include::{sourcedir}/redhawk/driver/RedhawkDriverTestIT.java[lines=109..114]
 ----
 
 === Get a Redhawk Application 
 
 [source,java,indent=0]
 ----
-include::{sourcedir}/RedhawkDriverTestIT.java[lines=155]
+include::{sourcedir}/redhawk/driver/RedhawkDriverTestIT.java[lines=155]
 ----
 
 === Get a Redhawk Component 
 
 [source,java,indent=0]
 ----
-include::{sourcedir}/RedhawkDriverTestIT.java[lines=160]
+include::{sourcedir}/redhawk/driver/RedhawkDriverTestIT.java[lines=160]
 ----
 
 === Get a Redhawk Components Port
 
 [source,java,indent=0]
 ----
-include::{sourcedir}/RedhawkDriverTestIT.java[lines=164]
+include::{sourcedir}/redhawk/driver/RedhawkDriverTestIT.java[lines=164]
 ----
 
 === Helper Utility Examples 
@@ -51,5 +51,5 @@ The RedhawkDriver has helper utilities to allow users to easily get access to th
 
 [source,java,indent=0]
 ----
-include::{sourcedir}/RedhawkDriverTestIT.java[lines=119..126]
+include::{sourcedir}/redhawk/driver/RedhawkDriverTestIT.java[lines=119..126]
 ----

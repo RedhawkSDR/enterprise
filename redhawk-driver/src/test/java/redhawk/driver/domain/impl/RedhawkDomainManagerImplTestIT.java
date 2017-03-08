@@ -159,14 +159,25 @@ public class RedhawkDomainManagerImplTestIT {
 		application = domainManager.getApplicationByName(applicationName);
 		//END SNIPPET: rhdomainmanager_getapplication
 		
-		//START SNIPPET: rhdomainmanager_releaseapplication
-		//Release a specific application in your domain
-		domainManager.getApplicationByName(applicationName).release();
+		//START SNIPPET: rhdomainmanager_getdevice
+		//Retrieve all devices in a domain
+		List<RedhawkDevice> devices = domainManager.getDevices();
 		
-		//Release all applications in your domain
-		for(RedhawkApplication myApplication : domainManager.getApplications())
-			myApplication.release();
-		//END SNIPPET: rhdomainmanager_releaseapplication
+		//Retrieve a group of devices by regez 
+		devices = domainManager.getDevicesByName("GPP.*");
+		
+		//Retrieve a device by name 
+		String deviceName = devices.get(0).getName();
+		RedhawkDevice device = domainManager.getDeviceByName(deviceName);
+		//END SNIPPET: rhdomainmanager_getdevice
+		
+		//START SNIPPET: rhdomainmanager_getdevicemanager
+		//Retrieve all available device managers
+		List<RedhawkDeviceManager> managers = domainManager.getDeviceManagers();
+		
+		//Get a specific device manager 
+		RedhawkDeviceManager devManager = domainManager.getDeviceManagerByName(managers.get(0).getName()); 
+		//END SNIPPET: rhdomainmanager_getdevicemanager
 	}
 	//End of SNIPPETS for RedhawkDomainManager
 	

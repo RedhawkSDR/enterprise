@@ -1,8 +1,0 @@
-Example for retrieving a DeviceManager
-
-:sourcedir: src/test/java
-
-[source,java,indent=0]
-----
-include::{sourcedir}/redhawk/driver/RedhawkDriverTestIT.java[lines=100..105]
-----

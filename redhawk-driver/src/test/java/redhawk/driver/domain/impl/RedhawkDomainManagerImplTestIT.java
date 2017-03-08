@@ -141,7 +141,6 @@ public class RedhawkDomainManagerImplTestIT {
 	//Below will be snippets for docs for RedhawkDomainManager
 	@Test
 	public void testSnippetForCreatingAnApplication() throws MultipleResourceException, ApplicationCreationException, CORBAException, ResourceNotFoundException, ApplicationReleaseException{
-		//START SNIPPET: rhdomainmanagerCreateApplication
 		String applicationName = "myApp";
 		RedhawkDriver driver = new RedhawkDriver(); 
 		RedhawkDomainManager domainManager = driver.getDomain();
@@ -149,17 +148,13 @@ public class RedhawkDomainManagerImplTestIT {
 		
 		//Create an application that already exists in your $SDRROOT
 		RedhawkApplication application = domainManager.createApplication(applicationName, waveformLocation);
-		//END SNIPPET: rhdomainmanagerCreateApplication
 		
-		//START SNIPPET: rhdomainmanager_getapplication
 		//Retrieve applications launched in your domain 
 		List<RedhawkApplication> applications = domainManager.getApplications();
 		
 		//Retrieve a specific application in your domain
 		application = domainManager.getApplicationByName(applicationName);
-		//END SNIPPET: rhdomainmanager_getapplication
 		
-		//START SNIPPET: rhdomainmanager_getdevice
 		//Retrieve all devices in a domain
 		List<RedhawkDevice> devices = domainManager.getDevices();
 		
@@ -169,15 +164,12 @@ public class RedhawkDomainManagerImplTestIT {
 		//Retrieve a device by name 
 		String deviceName = devices.get(0).getName();
 		RedhawkDevice device = domainManager.getDeviceByName(deviceName);
-		//END SNIPPET: rhdomainmanager_getdevice
 		
-		//START SNIPPET: rhdomainmanager_getdevicemanager
 		//Retrieve all available device managers
 		List<RedhawkDeviceManager> managers = domainManager.getDeviceManagers();
 		
 		//Get a specific device manager 
 		RedhawkDeviceManager devManager = domainManager.getDeviceManagerByName(managers.get(0).getName()); 
-		//END SNIPPET: rhdomainmanager_getdevicemanager
 	}
 	//End of SNIPPETS for RedhawkDomainManager
 	

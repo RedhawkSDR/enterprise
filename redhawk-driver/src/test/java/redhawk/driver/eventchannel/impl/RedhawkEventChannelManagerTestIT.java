@@ -66,10 +66,8 @@ public class RedhawkEventChannelManagerTestIT {
 		assertEquals("Should only be 2 channels since I removed mine", 2, eventChannelManager.getEventChannels().size());
 	}
 	
-	//SNIPPET
 	@Test
 	public void snippets() throws MultipleResourceException, CORBAException, EventChannelCreationException, ResourceNotFoundException{
-		//START SNIPPET: rheventchannelmanager_examples
 		RedhawkDriver driver = new RedhawkDriver(); 
 		RedhawkEventChannelManager ecManager = driver.getDomain().getEventChannelManager();
 		
@@ -85,7 +83,5 @@ public class RedhawkEventChannelManagerTestIT {
 		
 		//Release an Event Channel 
 		ecManager.releaseEventChannel(eventChannelName);
-		//END SNIPPET: rheventchannelmanager_examples
 	}
-	//SNIPPET
 }

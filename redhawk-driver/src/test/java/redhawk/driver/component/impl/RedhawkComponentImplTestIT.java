@@ -87,7 +87,6 @@ public class RedhawkComponentImplTestIT {
 	//SNIPPET 
 	@Test
 	public void snippets() throws Exception{
-		//START SNIPPET: rhcomponent_propertymanagement
 		//Get your component
 		RedhawkComponent component = application.getComponentByName("SigGen.*");
 		
@@ -98,9 +97,7 @@ public class RedhawkComponentImplTestIT {
 		String propertyName = "sample_rate";
 		RedhawkSimple simpleProp = (RedhawkSimple) propertiesMap.get(propertyName);
 		simpleProp.setValue(1000);
-		//END SNIPPET: rhcomponent_propertymanagement
 		
-		//START SNIPPET: rhcomponent_lifecycle
 		//Stop a component
 		component.stop();
 		
@@ -110,7 +107,6 @@ public class RedhawkComponentImplTestIT {
 		//Check if a component is started 
 		if(!component.started())
 			component.start();
-		//END SNIPPET: rhcomponent_lifecycle
 	}
 	//SNIPPET
 	

@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-package redhawk.driver.component;
+package redhawk.driver.component.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -25,6 +25,7 @@ import static org.junit.Assert.assertNotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,6 +33,7 @@ import org.junit.Test;
 
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.application.RedhawkApplication;
+import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.CORBAException;
@@ -41,8 +43,10 @@ import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
+import redhawk.driver.properties.RedhawkProperty;
+import redhawk.driver.properties.RedhawkSimple;
 
-public class RedhawkDriverComponentImplTestIT {
+public class RedhawkComponentImplTestIT {
 	private RedhawkDriver driver; 
 	
 	private String applicationName = "myTestApplication"; 
@@ -79,6 +83,36 @@ public class RedhawkDriverComponentImplTestIT {
 			}
 		}
 	}
+	
+	//SNIPPET 
+	@Test
+	public void snippets() throws Exception{
+		//START SNIPPET: rhcomponent_propertymanagement
+		//Get your component
+		RedhawkComponent component = application.getComponentByName("SigGen.*");
+		
+		//Retrieve properties that are avaiable
+		Map<String, RedhawkProperty> propertiesMap = component.getProperties();
+		
+		//Change a specific property 
+		String propertyName = "sample_rate";
+		RedhawkSimple simpleProp = (RedhawkSimple) propertiesMap.get(propertyName);
+		simpleProp.setValue(1000);
+		//END SNIPPET: rhcomponent_propertymanagement
+		
+		//START SNIPPET: rhcomponent_lifecycle
+		//Stop a component
+		component.stop();
+		
+		//Start a component
+		component.start();
+		
+		//Check if a component is started 
+		if(!component.started())
+			component.start();
+		//END SNIPPET: rhcomponent_lifecycle
+	}
+	//SNIPPET
 	
 	@Test
 	public void testAccessToComponentProperties() throws ResourceNotFoundException, MultipleResourceException{

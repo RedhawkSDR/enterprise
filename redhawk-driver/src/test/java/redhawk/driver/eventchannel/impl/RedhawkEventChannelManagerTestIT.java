@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-package redhawk.driver.eventchannel;
+package redhawk.driver.eventchannel.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -29,6 +29,8 @@ import org.junit.Test;
 
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.domain.RedhawkDomainManager;
+import redhawk.driver.eventchannel.RedhawkEventChannel;
+import redhawk.driver.eventchannel.RedhawkEventChannelManager;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.EventChannelCreationException;
 import redhawk.driver.exceptions.MultipleResourceException;
@@ -63,4 +65,27 @@ public class RedhawkEventChannelManagerTestIT {
 		eventChannelManager.releaseEventChannel(eventChannelName);
 		assertEquals("Should only be 2 channels since I removed mine", 2, eventChannelManager.getEventChannels().size());
 	}
+	
+	//SNIPPET
+	@Test
+	public void snippets() throws MultipleResourceException, CORBAException, EventChannelCreationException, ResourceNotFoundException{
+		//START SNIPPET: rheventchannelmanager_examples
+		RedhawkDriver driver = new RedhawkDriver(); 
+		RedhawkEventChannelManager ecManager = driver.getDomain().getEventChannelManager();
+		
+		//Get the event channels in your domain
+		List<RedhawkEventChannel> eventChannels = ecManager.getEventChannels();
+		
+		//Create an Event Channel 
+		String eventChannelName  = "myEventChannel";
+		ecManager.createEventChannel(eventChannelName);
+		
+		//Retrieve an Event Channel 
+		RedhawkEventChannel ec = ecManager.getEventChannel(eventChannelName);
+		
+		//Release an Event Channel 
+		ecManager.releaseEventChannel(eventChannelName);
+		//END SNIPPET: rheventchannelmanager_examples
+	}
+	//SNIPPET
 }

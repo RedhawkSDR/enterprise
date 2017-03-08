@@ -12,6 +12,9 @@
 		<menu name="Code Examples">
 			<item name="RedhawkDriver" href="redhawkdriver-usage.html" />
 			<item name="RedhawkDomainManager" href="redhawkdomainmanager-usage.html" />		
+			<item name="RedhawkApplication" href="redhawkapplication-usage.html" />
+			<item name="RedhawkComponent" href="redhawkcomponent-usage.html" />											
+			<item name="RedhawkEventChannelManager" href="redhawkeventchannelmanager-usage.html" />														
 		</menu>
 		<menu ref="reports" />
 	</body>

@@ -279,7 +279,12 @@
 						<artifactId>maven-project-info-reports-plugin</artifactId>
 						<version>2.9</version>
 						<reportSets>
-							<reportSet></reportSet>
+							<reportSet>
+								<reports>
+									<report>dependency-info</report>
+									<report>summary</report>
+								</reports>
+							</reportSet>
 						</reportSets>
 					</plugin>
 					<plugin>
@@ -301,7 +306,7 @@
 					<!-- TODO: Make this work... -->
 					<plugin>
 						<groupId>org.jacoco</groupId>
-						<artifactId>jacoco-maven-plugin</artifactId>						
+						<artifactId>jacoco-maven-plugin</artifactId>
 						<reportSets>
 							<reportSet>
 								<reports>

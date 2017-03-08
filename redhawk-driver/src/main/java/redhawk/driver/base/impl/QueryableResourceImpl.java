@@ -93,6 +93,9 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
         return null;
     }
     
+    //TODO: Add helper method for setting properties user should just 
+    //be able to pass an object and property name. 
+    
     private PropertiesHolder query(String ... propertyNames){
         PropertiesHolder ph = new PropertiesHolder();
         ph.value = new DataType[]{};

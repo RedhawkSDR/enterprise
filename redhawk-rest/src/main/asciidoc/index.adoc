@@ -1,6 +1,6 @@
 = Redhawk Rest Documentation
 
-include::overview.adoc
-include::paths.adoc
-include::security.adoc
-include::definitions.adoc
+include::overview.adoc[]
+include::paths.adoc[]
+include::security.adoc[]
+include::definitions.adoc[]

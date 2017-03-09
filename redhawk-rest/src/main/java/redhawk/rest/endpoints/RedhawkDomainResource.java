@@ -52,7 +52,8 @@ import redhawk.rest.model.PropertyContainer;
 public class RedhawkDomainResource extends RedhawkBaseResource {
 
     private static Logger logger = Logger.getLogger(RedhawkDomainResource.class.getName());
-
+    
+    @ApiParam(value = "url for your name server")
     @PathParam("nameserver")
     private String nameServer;
 
@@ -73,7 +74,7 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @ApiOperation(
     		value = "REDHAWK Domain that was requested."
     		)
-    public Domain getDomain(@ApiParam(value = "name of REDHAWK Domain")@PathParam("domain") String name) {
+    public Domain getDomain(@ApiParam(value = "name of REDHAWK Domain") @PathParam("domain") String name) {
         try {
             Domain domain = redhawkManager.get(nameServer, "domain", name);
             return domain;

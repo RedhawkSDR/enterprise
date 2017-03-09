@@ -249,12 +249,87 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>2.8.1</version>
 		</dependency>
-		<!-- Doc Dependencies -->
-		<dependency>
-			<groupId>io.github.swagger2markup</groupId>
-			<artifactId>swagger2markup</artifactId>
-			<version>1.3.0</version>
-			<scope>test</scope>
-		</dependency>
+
 	</dependencies>
+	<profiles>
+		<profile>
+			<id>docs</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<!-- Awesome example: https://tech.homeaway.com/development/2016/06/02/generating-swagger-spec.html -->
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-resources</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<encoding>UTF-8</encoding>
+									<outputDirectory>${project.build.directory}/asciidoc</outputDirectory>
+									<resources>
+										<resource>
+											<directory>src/main/asciidoc</directory>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>com.github.kongchen</groupId>
+						<artifactId>swagger-maven-plugin</artifactId>
+						<version>3.1.0</version>
+						<configuration>
+							<apiSources>
+								<apiSource>
+									<locations>redhawk.rest.endpoints</locations>
+									<info>
+										<title>Swagger spec for REDHAWK REST API</title>
+										<version>${project.version}</version>
+									</info>
+									<swaggerDirectory>${project.build.directory}/swagger</swaggerDirectory>
+								</apiSource>
+							</apiSources>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>io.github.swagger2markup</groupId>
+						<artifactId>swagger2markup-maven-plugin</artifactId>
+						<version>1.2.0</version>
+						<configuration>
+							<swaggerInput>${project.build.directory}/swagger/swagger.json</swaggerInput>
+							<outputDir>${project.build.directory}/asciidoc</outputDir>
+							<config>
+								<swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
+							</config>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>convertSwagger2markup</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- Build HTML and PDF example is here: https://github.com/Swagger2Markup/spring-swagger2markup-demo/blob/master/pom.xml -->
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

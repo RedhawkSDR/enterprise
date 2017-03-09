@@ -28,25 +28,37 @@ import redhawk.rest.model.FullProperty;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 import java.util.logging.Logger;
 
 @Path("/{nameserver}/domains/{domain}/applications/{applicationId}/components")
+@Api(value = "/{nameserver}/domains/{domain}/applications/{applicationId}/components")
 public class RedhawkComponentResource extends RedhawkBaseResource {
 
     private static Logger logger = Logger.getLogger(RedhawkComponentResource.class.getName());
-
+    
+    @ApiParam(value = "url for your name server")
     @PathParam("nameserver")
     private String nameServer;
 
+    @ApiParam(value = "name of REDHAWK Domain")
     @PathParam("domain")
     private String domainName;
 
+    @ApiParam(value = "name of Application")
     @PathParam("applicationId")
     private String applicationId;
 
     @GET
     @Path("/")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @ApiOperation(
+    		value="Returns all components for an application."
+    		)    
     public Response getComponents(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws ResourceNotFound, Exception {
         return Response.ok(new ComponentContainer(redhawkManager.getAll(nameServer, "component", domainName + "/" + applicationId, fetchMode))).build();
     }
@@ -54,13 +66,20 @@ public class RedhawkComponentResource extends RedhawkBaseResource {
     @GET
     @Path("/{componentId}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response getComponent(@PathParam("componentId") String componentId) throws ResourceNotFound, Exception {
+    @ApiOperation(
+    		value="Returns a specific component for an application."
+    		)     
+    public Response getComponent(@ApiParam(value = "name of component")
+    	@PathParam("componentId") String componentId) throws ResourceNotFound, Exception {
         return Response.ok(redhawkManager.get(nameServer, "component", domainName + "/" + applicationId + "/" + componentId)).build();
     }
 
     @GET
     @Path("/{componentId}/properties")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @ApiOperation(
+    		value="Returns properties for a specific component"
+    		)    
     public Response getComponentProperties(@PathParam("componentId") String componentId) throws ResourceNotFound, ResourceNotFoundException, Exception {
         return Response.ok(redhawkManager.getProperties(nameServer, "component", domainName + "/" + applicationId + "/" + componentId)).build();
     }
@@ -68,7 +87,11 @@ public class RedhawkComponentResource extends RedhawkBaseResource {
     @GET
     @Path("/{componentId}/properties/{propId}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    public Response getComponentProperty(@PathParam("componentId") String componentId, @PathParam("propId") String propertyId) throws ResourceNotFound, Exception {
+    @ApiOperation(
+    		value="Returns a specific property for a component"
+    		)     
+    public Response getComponentProperty(@ApiParam(value = "name of component") @PathParam("componentId") String componentId, 
+    		@ApiParam(value = "name of property") @PathParam("propId") String propertyId) throws ResourceNotFound, Exception {
         return Response.ok(redhawkManager.getProperty(propertyId, nameServer, "component", domainName + "/" + applicationId + "/" + componentId)).build();
     }
 
@@ -89,6 +112,9 @@ public class RedhawkComponentResource extends RedhawkBaseResource {
     @Path("/{componentId}/properties/{propId}")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @ApiOperation(
+    		value="Set a property on a specific component."
+    		)   
     public Response setComponentProperty(@PathParam("componentId") String componentId, @PathParam("propId") String propertyId, FullProperty property) throws Exception {
         redhawkManager.setProperty(property, nameServer, "component", domainName + "/" + applicationId + "/" + componentId);
         return Response.ok().build();

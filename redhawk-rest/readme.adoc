@@ -1,0 +1,47 @@
+= Redhawk Rest
+
+REST Endpoints for interacting with a REDHAWK Domain. 
+
+== Building 
+
+Run this command from your console:
+
+ mvn clean install 
+
+== Testing 
+
+To run integration tests run the following command: 
+
+ mvn -P localIT clean install 
+ 
+Tests require a local REDHAWK and a domain using the REDHAWK defaults. 
+//TODO: Updates so nameserver and domain are configurable for unit tests. 
+
+== Documentation 
+
+To generate the documentation for this project run the following command:
+
+ mvn -P docs compile
+ 
+This generates documentation for you at this location 'redhawk-rest/target/docs/' . In that location is a pdf and html file with the documentation generated for this project. 
+
+=== Trouble Shooting
+
+If you run into this error building the docs
+
+----
+[ERROR] Failed to execute goal org.asciidoctor:asciidoctor-maven-plugin:1.5.3:process-asciidoc (output-pdf) on project redhawk-rest: Execution output-pdf of goal org.asciidoctor:asciidoctor-maven-plugin:1.5.3:process-asciidoc failed: org.jruby.exceptions.RaiseException: (NotImplementedError) fstat unimplemented unsupported or native support failed to load -> [Help 1]
+----
+
+You'll need to specify the java.io.tmpdir with your maven command. So your command will end up looking like this:
+
+ mvn -P -Djava.io.tmpdir=./ docs compile
+
+////
+To install into karaf base run the following commands:
+
+	feature:repo-add mvn:redhawk/redhawk-feature/2.0.1.U2-SNAPSHOT/xml/features
+	feature:install redbus-redhawk-rest
+	
+This feature installs cxf so that you can access REDHAWK via the web. The root endpoint for cxf is: http://localhost:8181/cxf/ . The root endpoint for REDHAWK rest is http://localhost:8181/cxf/redhawk . You'll need a REDHAWK Domain running to actually use the REST Endpoints. 
+////

@@ -255,7 +255,7 @@
 		<profile>
 			<id>docs</id>
 			<activation>
-				<activeByDefault>true</activeByDefault>
+				<activeByDefault>false</activeByDefault>
 			</activation>
 			<!-- Awesome example: https://tech.homeaway.com/development/2016/06/02/generating-swagger-spec.html -->
 			<build>

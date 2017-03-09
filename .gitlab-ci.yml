@@ -10,7 +10,7 @@ build:
   image: redbusci/maven:3-jdk-8
   script:
     - mvn -P CFDependencies clean install -B -U
-    - mvn -P default deploy -B -U
-#  artifacts:
-#    paths:
-#    - redhawk-driver/target/site/apidocs
+    - mvn -Djava.io.tmpdir=./ -P default,docs clean deploy -B -U
+  artifacts:
+    paths:
+    - redhawk-rest/target/docs/pdf/index.pdf

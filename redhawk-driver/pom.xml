@@ -253,7 +253,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>docs</id>
+			<id>docs-driver</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>

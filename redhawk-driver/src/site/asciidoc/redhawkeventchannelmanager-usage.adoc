@@ -1,0 +1,10 @@
+== RedhawkEventChannelManager Code Examples
+
+Below are code examples for using the RedhawkEventChannelManager class. 
+
+=== Interacting with the EventChannelManager 
+
+[source,java,indent=0]
+----
+include::src/test/java/redhawk/driver/eventchannel/impl/RedhawkEventChannelManagerTestIT.java[lines=71..85]
+----

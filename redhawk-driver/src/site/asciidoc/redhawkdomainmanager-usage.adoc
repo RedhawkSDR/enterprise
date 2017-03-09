@@ -1,0 +1,42 @@
+== RedhawkDomainManager Code Examples 
+
+Below are code examples for using the RedhawkDomainManager class. 
+
+=== Create an Application
+
+Sample code for creating an application from a waveform that's already in your Domain. 
+
+[source,java,indent=0]
+----
+include::src/test/java/redhawk/driver/domain/impl/RedhawkDomainManagerImplTestIT.java[lines=144..150]
+----
+
+Sample code for creating an application from a SAD file on a file system. 
+
+[source,java,indent=0]
+----
+include::src/test/java/redhawk/driver/component/impl/RedhawkComponentImplTestIT.java[lines=61..65]
+----
+
+//<!-- MACRO{snippet|id=rhdomainmanager_createapplication2|file=src/test/java/redhawk/driver/application/impl/RedhawkApplicationImplTestIT.java} -->
+
+=== Retrieve an Application from a REDHAWK Domain
+
+[source,java,indent=0]
+----
+include::src/test/java/redhawk/driver/domain/impl/RedhawkDomainManagerImplTestIT.java[lines=153..156]
+----
+
+=== Retrieve a Device from a REDHAWK Domain
+
+[source,java,indent=0]
+----
+include::src/test/java/redhawk/driver/domain/impl/RedhawkDomainManagerImplTestIT.java[lines=159..166]
+----
+
+=== Retrieve a Device Manager from a REDHAWK Domain
+
+<!-- MACRO{snippet|id=rhdomainmanager_getdevicemanager|file=src/test/java/redhawk/driver/domain/impl/RedhawkDomainManagerImplTestIT.java} -->
+[source,java,indent=0]
+----
+include::src/test/java/redhawk/driver/domain/impl/RedhawkDomainManagerImplTestIT.java[lines=165..172]

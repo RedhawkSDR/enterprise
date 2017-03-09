@@ -379,7 +379,7 @@
 									<outputDirectory>${project.build.directory}/asciidoc/html</outputDirectory>
 									<sourceHighlighter>coderay</sourceHighlighter>
 									<backend>html5</backend>
-									<doctype>book</doctype>
+									<doctype>article</doctype>
 									<attributes>
 										<toc>left</toc>
 										<linkcss>false</linkcss>

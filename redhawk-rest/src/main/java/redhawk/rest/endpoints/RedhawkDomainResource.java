@@ -21,6 +21,7 @@ package redhawk.rest.endpoints;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -34,6 +35,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -42,10 +44,11 @@ import redhawk.rest.model.Domain;
 import redhawk.rest.model.DomainContainer;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.FullProperty;
+import redhawk.rest.model.Property;
 import redhawk.rest.model.PropertyContainer;
 
 @Path("/{nameserver}/domains")
-@Api(value = "/{nameserver}/domains", description = "REST Service for inspecting a REDHAWK Domain")
+@Api(value = "/{nameserver}/domains")
 public class RedhawkDomainResource extends RedhawkBaseResource {
 
     private static Logger logger = Logger.getLogger(RedhawkDomainResource.class.getName());
@@ -57,26 +60,25 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @Path("/")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value = "Return the REDHAWK Domains based on the parameters",
-    		response = DomainContainer.class
+    		value = "Returns all domains at the specified name server"
     		)
-    public Response getDomains(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws ResourceOperationFailed, Exception {
+    public DomainContainer getDomains(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws ResourceOperationFailed, Exception {
         List<Domain> domains = redhawkManager.getAll(nameServer, "domain", null, fetchMode);
-        return Response.ok(new DomainContainer(domains)).build();
+        return new DomainContainer(domains);
     }
 
     @GET
     @Path("/{domain}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, MediaType.TEXT_PLAIN})
     @ApiOperation(
-    		value = "Blah"
+    		value = "REDHAWK Domain that was requested."
     		)
-    public Response getDomain(@PathParam("domain") String name) {
+    public Domain getDomain(@ApiParam(value = "name of REDHAWK Domain")@PathParam("domain") String name) {
         try {
             Domain domain = redhawkManager.get(nameServer, "domain", name);
-            return Response.ok(domain).build();
+            return domain;
         } catch (Exception e) {
-            return Response.status(Response.Status.NOT_FOUND).entity(e.getMessage()).type(MediaType.TEXT_PLAIN).build();
+        	throw new WebApplicationException(e.getMessage(), Response.Status.NOT_FOUND);
         }
     }
 
@@ -84,21 +86,22 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @Path("/{domain}/properties")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value = "Blah"
+    		value = "Properties for requested REDHAWK Domain"
     		)    
-    public Response getDomainProperties(@PathParam("domain") String name) throws Exception {
+    public PropertyContainer getDomainProperties(@ApiParam(value = "name of REDHAWK Domain") @PathParam("domain") String name) throws Exception {
         PropertyContainer props = redhawkManager.getProperties(nameServer, "domain", name);
-        return Response.ok(props).build();
+
+        return props;
     }
 
     @GET
     @Path("/{domain}/properties/{propId}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value = "Blah"
+    		value = "Returns a specific property from the REDHAWK Domain."
     		)    
-    public Response getDomainPropertyById(@PathParam("domain") String name, @PathParam("propId") String id) throws Exception {
-        return Response.ok(redhawkManager.getProperty(id, nameServer, "domain", name)).build();
+    public Property getDomainPropertyById(@ApiParam(value = "name of REDHAWK Domain") @PathParam("domain") String name,@ApiParam(value = "property name/id") @PathParam("propId") String id) throws Exception {
+        return redhawkManager.getProperty(id, nameServer, "domain", name);
     }
 
     @POST
@@ -106,9 +109,9 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value = "Blah"
+    		value = "Set properties on a REDHAWK Domain"
     		)
-    public Response setDomainProperties(@PathParam("domain") String name, List<FullProperty> properties) throws Exception {
+    public Response setDomainProperties(@ApiParam(value = "name of REDHAWK Domain") @PathParam("domain") String name,@ApiParam(value = "List of properties to set.") List<FullProperty> properties) throws Exception {
         redhawkManager.setProperties(properties, nameServer, "domain", name);
         return Response.ok().build();
     }
@@ -119,9 +122,11 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value = "Blah"
+    		value = "Set a specific property on a REDHAWK Domain"
     		)    
-    public Response setDomainProperty(@PathParam("domain") String name, @PathParam("propId") String propertyId, FullProperty property) throws Exception {
+    public Response setDomainProperty(@ApiParam(value = "name of REDHAWK Domain") @PathParam("domain") String name,
+    		@ApiParam(value = "property name/id") @PathParam("propId") String propertyId, 
+    		@ApiParam(value = "Property to set") FullProperty property) throws Exception {
         redhawkManager.setProperty(property, nameServer, "domain", name);
         return Response.ok().build();
     }

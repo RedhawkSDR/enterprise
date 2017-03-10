@@ -24,6 +24,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Logger;
 
 import org.junit.After;
@@ -33,6 +34,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.omg.CORBA.ORBPackage.InvalidName;
 
+import redhawk.RedhawkTestBase;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.device.RedhawkDevice;
@@ -46,7 +48,7 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 
 public class RedhawkDriverTestIT {
-	private Logger logger = Logger.getLogger(RedhawkDriverTestIT.class.getName());
+	private static Logger logger = Logger.getLogger(RedhawkDriverTestIT.class.getName());
 	
 	private String domainName;
 	
@@ -62,7 +64,20 @@ public class RedhawkDriverTestIT {
 	
 	@BeforeClass
 	public static void setupApp() throws ResourceNotFoundException, ApplicationCreationException, CORBAException{
-		rhDriver = new RedhawkDriver("localhost", 2809);
+		logger.info("Jacorb prop is: "+System.getProperty("jacorb"));
+		Boolean jacorbTest = Boolean.parseBoolean(System.getProperty("jacorb", "false"));
+		
+		if(jacorbTest){
+			logger.info("Testing with jacorb");
+			Properties props = new Properties(); 
+			props.put("org.omg.CORBA.ORBClass", "org.jacorb.orb.ORB");
+			props.put("org.omg.CORBA.ORBSingletonClass", "org.jacorb.orb.ORBSingleton");
+			rhDriver = new RedhawkDriver("127.0.0.1", 2809, props);
+		}else{
+			logger.info("Testing with default orb for JDK");			
+			rhDriver = new RedhawkDriver(); 
+		}
+
 		rhDriver.getDomain("REDHAWK_DEV").createApplication(sampleApp, "/waveforms/rh/basic_components_demo/basic_components_demo.sad.xml");
 	}
 	

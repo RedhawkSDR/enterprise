@@ -29,7 +29,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import CF.DomainManager;
-import redhawk.RedhawkTestBase;
+import redhawk.RedhawkTestBaseOrig;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
@@ -42,7 +42,7 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 
 @Ignore("Will not work until REDHAWKTestBase is setup proper. That either means giving it an actual RHDriver object connected to a domain "
 		+ "or mocking everything the right way...")
-public class RedhawkDomainManagerImplTest extends RedhawkTestBase {
+public class RedhawkDomainManagerImplTest extends RedhawkTestBaseOrig {
 
 	private RedhawkDomainManager domainManager;
 	

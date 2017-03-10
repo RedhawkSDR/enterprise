@@ -28,17 +28,17 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
+import redhawk.RedhawkTestBase;
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 
-public class RedhawkFileSystemTestIT {
+public class RedhawkFileSystemTestIT extends RedhawkTestBase{
 	private RedhawkFileSystem fileSystem; 	
 	
 	@Before
 	public void setup() throws ConnectionException, ResourceNotFoundException, CORBAException{
-		RedhawkDriver driver = new RedhawkDriver(); 
 		fileSystem = driver.getDomain("REDHAWK_DEV").getFileManager();
 	}
 	

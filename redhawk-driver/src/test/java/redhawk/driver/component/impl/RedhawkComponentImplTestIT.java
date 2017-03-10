@@ -31,6 +31,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import redhawk.RedhawkTestBase;
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
@@ -46,10 +47,8 @@ import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.properties.RedhawkProperty;
 import redhawk.driver.properties.RedhawkSimple;
 
-public class RedhawkComponentImplTestIT {
-	private RedhawkDriver driver; 
-	
-	private String applicationName = "myTestApplication"; 
+public class RedhawkComponentImplTestIT extends RedhawkTestBase{
+		private String applicationName = "myTestApplication"; 
 	
 	private RedhawkApplication application; 
 	
@@ -57,8 +56,6 @@ public class RedhawkComponentImplTestIT {
 	
 	@Before
 	public void setup() throws ResourceNotFoundException, ApplicationCreationException, CORBAException, MultipleResourceException{
-		//Create Application
-		driver = new RedhawkDriver();
 		driver.getDomain("REDHAWK_DEV").createApplication(applicationName, new File("src/test/resources/waveforms/rh/testWaveform.sad.xml"));
 		application = driver.getApplication("REDHAWK_DEV/"+applicationName);
 		assertNotNull(application);

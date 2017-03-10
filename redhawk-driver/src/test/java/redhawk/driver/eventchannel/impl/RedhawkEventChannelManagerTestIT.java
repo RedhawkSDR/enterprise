@@ -27,6 +27,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
+import redhawk.RedhawkTestBase;
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.eventchannel.RedhawkEventChannel;
@@ -36,14 +37,13 @@ import redhawk.driver.exceptions.EventChannelCreationException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 
-public class RedhawkEventChannelManagerTestIT {
+public class RedhawkEventChannelManagerTestIT extends RedhawkTestBase{
 	private RedhawkDomainManager impl;
 	
 	private RedhawkEventChannelManager eventChannelManager; 
 	
 	@Before
 	public void setup() throws ResourceNotFoundException, CORBAException{
-		RedhawkDriver driver = new RedhawkDriver(); 
 		impl = driver.getDomain("REDHAWK_DEV");
 		eventChannelManager = impl.getEventChannelManager(); 
 	}

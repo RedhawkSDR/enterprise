@@ -30,7 +30,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import CF.Resource;
-import redhawk.RedhawkTestBase;
+import redhawk.RedhawkTestBaseOrig;
 import redhawk.driver.Redhawk;
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.application.RedhawkApplication;
@@ -45,7 +45,7 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 
 @Ignore("Some of this functionality would need to be in a system test. Other parts can be mocked...")
-public class RedhawkDriverTest extends RedhawkTestBase {
+public class RedhawkDriverTest extends RedhawkTestBaseOrig {
 
 	@Test
 	public void testConstructorOne() {

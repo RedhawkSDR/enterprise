@@ -29,6 +29,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -36,6 +37,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import redhawk.RedhawkTestBase;
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.RedhawkUtils;
 import redhawk.driver.application.RedhawkApplication;
@@ -51,14 +53,12 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.xml.model.sca.sad.Softwareassembly;
 
 
-public class RedhawkDomainManagerImplTestIT {
+public class RedhawkDomainManagerImplTestIT extends RedhawkTestBase{
 	private RedhawkDomainManager domainManager;
 	
-	private RedhawkDriver driver;
 
 	@Before
 	public void setup() throws ResourceNotFoundException, CORBAException{
-		driver = new RedhawkDriver(); 
 		domainManager = driver.getDomain("REDHAWK_DEV");
 	}
 

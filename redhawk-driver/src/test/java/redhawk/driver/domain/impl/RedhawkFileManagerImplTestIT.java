@@ -29,6 +29,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
+import redhawk.RedhawkTestBase;
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.domain.RedhawkFileManager;
 import redhawk.driver.exceptions.CORBAException;
@@ -36,14 +37,14 @@ import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.xml.model.sca.sad.Softwareassembly;
 
-public class RedhawkFileManagerImplTestIT {
+public class RedhawkFileManagerImplTestIT extends RedhawkTestBase{
 	private RedhawkFileManager fileManager; 
 	
 	private List<String> defaultRHWaveforms = new ArrayList<>();
 
 	@Before
 	public void setup() throws ConnectionException, ResourceNotFoundException, CORBAException{
-		fileManager = new RedhawkDriver().getDomain("REDHAWK_DEV").getFileManager(); 
+		fileManager = driver.getDomain("REDHAWK_DEV").getFileManager(); 
 		
 		String baseLocation = "/waveforms/rh/";
 		defaultRHWaveforms.add(baseLocation+"basic_components_demo/basic_components_demo.sad.xml");

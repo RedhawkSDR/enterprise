@@ -42,8 +42,6 @@ public class RedhawkPortsResource extends RedhawkBaseResource {
 
     private static Logger logger = Logger.getLogger(RedhawkPortsResource.class.getName());
 
-    private RedhawkManager redhawkManager;
-
     @PathParam("nameserver")
     private String nameServer;
 

@@ -36,11 +36,7 @@ import redhawk.rest.exceptions.ResourceNotFound;
 @Path("/{nameserver}/domains/{domain}/applications/{applicationId}/components/{componentId}/softwarecomponent")
 @Api(value="/{nameserver}/domains/{domain}/applications/{applicationId}/components/{componentId}/softwarecomponent")
 public class RedhawkSoftwareComponentResource extends RedhawkBaseResource{
-
     private static Logger logger = Logger.getLogger(RedhawkSoftwareComponentResource.class.getName());
-
-
-	private RedhawkManager redhawkManager;
 
 	@PathParam("nameserver")
 	private String nameServer;
@@ -65,4 +61,5 @@ public class RedhawkSoftwareComponentResource extends RedhawkBaseResource{
 						"softwarecomponent", domainName + "/" + applicationId
 								+ "/" + componentId)).build();
 	}
+
 }

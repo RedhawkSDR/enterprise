@@ -116,6 +116,15 @@
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
+			<modules>
+				<module>redhawk-driver</module>
+				<module>redhawk-connector</module>
+				<module>redhawk-rest</module>
+				<module>redhawk-websocket</module>
+				<module>redhawk-camel</module>
+				<module>redhawk-feature</module>
+				<module>redhawk-integration-dist</module>
+			</modules>			
 			<build>
 				<plugins>
 					<plugin>

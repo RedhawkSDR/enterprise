@@ -31,6 +31,15 @@
 								<resource>
 									<directory>src/main/asciidoc</directory>
 								</resource>
+								<!-- Take the necessary adoc files from redhawk-driver -->
+								<resource>
+									<directory>${project.parent.basedir}/redhawk-driver/target/asciidoc-workspace</directory>
+									<targetPath>driver</targetPath>
+									<excludes>
+										<exclude>index.adoc</exclude>
+									</excludes>
+								</resource>
+								<!-- Take the necessary adoc files from redhawk-rest -->
 								<resource>
 									<directory>${project.parent.basedir}/redhawk-rest/target/asciidoc</directory>
 									<targetPath>${project.build.directory}/asciidoc-workspace/rest</targetPath>
@@ -86,7 +95,7 @@
 							<outputDirectory>${project.build.directory}/asciidoc/html</outputDirectory>
 							<sourceHighlighter>coderay</sourceHighlighter>
 							<backend>html5</backend>
-							<doctype>article</doctype>
+							<doctype>book</doctype>
 							<attributes>
 								<toc>left</toc>
 								<linkcss>false</linkcss>
@@ -102,6 +111,7 @@
 						<configuration>
 							<outputDirectory>${project.build.directory}/asciidoc/pdf</outputDirectory>
 							<backend>pdf</backend>
+							<doctype>book</doctype>							
 							<!-- Since 1.5.0-alpha.9 PDF back-end can use 'rouge' as well as 'coderay' 
 								source highlighting -->
 							<sourceHighlighter>coderay</sourceHighlighter>

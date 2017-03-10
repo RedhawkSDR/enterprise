@@ -253,7 +253,7 @@
 			</build>
 		</profile>
 		<profile>
-			<id>docs-driver</id>
+			<id>docs</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
@@ -275,43 +275,52 @@
 								</goals>
 								<configuration>
 									<encoding>UTF-8</encoding>
-									<outputDirectory>${project.basedir}/src/main/asciidoc/examples/snippets</outputDirectory>
+									<outputDirectory>${project.build.directory}/asciidoc-workspace</outputDirectory>
 									<resources>
 										<resource>
 											<directory>src/test/java/redhawk/driver</directory>
+											<targetPath>examples/snippets</targetPath>
 											<includes>
 												<include>RedhawkDriverTestIT.java</include>
 											</includes>
 										</resource>
 										<resource>
 											<directory>src/test/java/redhawk/driver/application/impl</directory>
+											<targetPath>examples/snippets</targetPath>											
 											<includes>
 												<include>RedhawkApplicationImplTestIT.java</include>
 											</includes>
 										</resource>
 										<resource>
 											<directory>src/test/java/redhawk/driver/domain/impl</directory>
+											<targetPath>examples/snippets</targetPath>											
 											<includes>
 												<include>RedhawkDomainManagerImplTestIT.java</include>
 											</includes>
 										</resource>
 										<resource>
 											<directory>src/test/java/redhawk/driver/component/impl</directory>
+											<targetPath>examples/snippets</targetPath>											
 											<includes>
 												<include>RedhawkComponentImplTestIT.java</include>
 											</includes>
 										</resource>
 										<resource>
 											<directory>src/test/java/redhawk/driver/eventchannel/impl</directory>
+											<targetPath>examples/snippets</targetPath>
 											<includes>
 												<include>RedhawkEventChannelManagerTestIT.java</include>
 											</includes>
+										</resource>
+										<resource>
+											<directory>src/main/asciidoc</directory>
 										</resource>																				
 									</resources>
 								</configuration>
 							</execution>
 						</executions>
 					</plugin>
+					<!--
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-site-plugin</artifactId>
@@ -338,6 +347,7 @@
 							</dependency>
 						</dependencies>
 					</plugin>
+					-->
 					<plugin>
 						<groupId>org.asciidoctor</groupId>
 						<artifactId>asciidoctor-maven-plugin</artifactId>
@@ -365,7 +375,8 @@
 						</dependencies>
 						<!-- TODO: may move asciidoc stuff to default location -->
 						<configuration>
-							<baseDir>${project.basedir}</baseDir>
+							<!--<baseDir>${project.basedir}</baseDir>-->
+							<sourceDirectory>${project.build.directory}/asciidoc-workspace</sourceDirectory>
 							<sourceDocumentName>index.adoc</sourceDocumentName>
 						</configuration>
 						<executions>
@@ -411,6 +422,7 @@
 					</plugin>
 				</plugins>
 			</build>
+			<!--
 			<reporting>
 				<plugins>
 					<plugin>
@@ -442,14 +454,12 @@
 							</reportSet>
 						</reportSets>
 					</plugin>
-					<!-- TODO: Make this work... -->
 					<plugin>
 						<groupId>org.jacoco</groupId>
 						<artifactId>jacoco-maven-plugin</artifactId>
 						<reportSets>
 							<reportSet>
 								<reports>
-									<!-- select non-aggregate reports -->
 									<report>report</report>
 								</reports>
 							</reportSet>
@@ -457,6 +467,7 @@
 					</plugin>
 				</plugins>
 			</reporting>
+			-->
 		</profile>
 	</profiles>
 	<dependencies>

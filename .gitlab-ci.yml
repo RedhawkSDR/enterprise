@@ -11,7 +11,7 @@ build:
   script:
     - mvn -P CFDependencies clean install -B -U
     - mvn clean deploy -B -U
-    - mvn -P jaxb-generation,docs compile -B -U
+    - mvn -Djava.io.tmpdir=./ -P jaxb-generation,docs compile -B -U
   artifacts:
     paths:
     - redhawk-rest/target/docs/pdf/index.pdf

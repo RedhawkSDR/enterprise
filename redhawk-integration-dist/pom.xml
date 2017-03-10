@@ -17,7 +17,7 @@
 	</description>
 	<url>http://maven.apache.org</url>
 	<properties>
-		<runtime.dir>rhjt</runtime.dir>
+		<runtime.dir>java-tools</runtime.dir>
 		<karaf.home>${redhawk.user.home}/${runtime.dir}/karaf</karaf.home>
 		<jrepl.home>${redhawk.user.home}/${runtime.dir}/shell</jrepl.home>
 		<jacorb.version>3.8</jacorb.version>
@@ -289,6 +289,9 @@
 					<group>REDHAWK Integration</group>
 					<prefix>${redhawk.user.home}</prefix>
 					<versionProperty>rpmFriendlyVersion</versionProperty>
+					<requires>
+						<require>java-1.8.0-openjdk</require>
+					</requires>
 					<mappings>
 						<mapping>
 							<directory>${redhawk.user.home}</directory>

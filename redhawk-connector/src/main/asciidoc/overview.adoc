@@ -1,0 +1,81 @@
+= Redhawk Connector
+
+== Function
+
+When you use the connector to create a Redhawk Connection 4 things happen:
+
+* A Redhawk Driver instance is registed in the OSGi Service Registry
+* A custom Camel Component is configured 
+* A websocket service is available for the connection
+* A REST Endpoint is available for the connection
+
+== Configuration
+
+.Configuration Table
+|===
+
+|Name | Required | Default | Description 
+
+| Connection Name
+| Yes
+| null
+| Unique name for identifying this connection from other REDHAWK connections. 
+
+| Server Name
+| Yes
+| localhost
+| Hostname or IP Address of the Redhawk Naming Service 
+
+| Port
+| Yes
+| 2809
+| Port where the naming service is listening
+
+| Domain Manager Location
+| No
+| null
+| Optional name of the Redhawk Domain Manager(as found in the CORBA Naming Service). 
+
+| Device Manager Name
+| No
+| null
+| The name of the Device Manager to register with Redhawk.
+
+| Device Manager File System
+| No
+| null
+| The filesystem root of the Device manager. 
+
+|===
+
+== Usage
+
+You can create a configuration 2 ways:
+
+* via the console for your Karaf instance
+** open a browser to '/system/console/configMgr' of your running Karaf instance. 
+Note: An example url would be '127.0.0.1:8181/system/console/configMgr'
+
+* via a file
+** Add a configuration for REDHAWK by dropping a file starting with this prefix: 'redhawk.datasource.factory' and append a unique string(i.e myConfig.cfg) file into the etc directory of your karaf install.
+
+Example config file:
+----
+connectionName=localRH
+port=2809
+host=localhost
+domainManager=REDHAWK_DEV
+----
+
+== Using Connection in blueprint
+
+Injecting the Redhawk Driver instance into your application is a matter of placing a couple lines in your blueprint.xml file:
+
+[source,xml]
+----
+<reference id="myRedhawkService" interface="redhawk.Redhawk" filter="(connectionName='insert connection name'"/>)
+
+<bean id="myApplicationBean" class="com.example.MyApplicationBeanImpl">
+	<property name="redhawk" ref="myRedhawkService" />
+</bean>
+----

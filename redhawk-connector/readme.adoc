@@ -1,0 +1,34 @@
+= REDHAWK Connector 
+
+== Documentation
+
+To generate the documentation for this project run the following command:
+
+ mvn -P docs compile
+
+This generates documentation for you at this location 'redhawk-rest/target/docs/' . In that location is a pdf and html file with the documentation generated for this project.
+
+=== Trouble Shooting
+
+If you run into this error building the docs
+
+----
+[ERROR] Failed to execute goal org.asciidoctor:asciidoctor-maven-plugin:1.5.3:process-asciidoc (output-pdf) on project redhawk-rest: Execution output-pdf of goal org.asciidoctor:asciidoctor-maven-plugin:1.5.3:process-asciidoc failed: org.jruby.exceptions.RaiseException: (NotImplementedError) fstat unimplemented unsupported or native support failed to load -> [Help 1]
+----
+
+You'll need to specify the java.io.tmpdir with your maven command. So your command will end up looking like this:
+
+ mvn -P -Djava.io.tmpdir=./ docs compile
+
+
+////
+### Redhawk Connector ###
+***
+
+To install into karaf base run the following commands  
+
+	feature:repo-add mvn:redhawk/redhawk-feature/${project.version}/xml/features
+	feature:install redbus-redhawk-connector
+	
+This feature installs the karaf webconsole as well so you can access the configuration for the connector via the web. To access the connector through the web hit this endpoint http://localhost:8181/system/console/configMgr . You'll be able to see the ManagedServiceFactory you just deployed for Redhawk. 
+////

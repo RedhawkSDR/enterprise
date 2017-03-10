@@ -6,10 +6,9 @@ include::installation.adoc[]
 
 include::gettingstarted.adoc[]
 
-////
-== Redhawk Rest
+// These are coming from the redhawk-rest module. 
+include::rest/overview.adoc[]
 
-include::overview.adoc
-include::paths.adoc
-include::definitions.adoc
-////
+include::rest/paths.adoc[]
+
+include::rest/definitions.adoc[]

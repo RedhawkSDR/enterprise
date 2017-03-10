@@ -110,6 +110,7 @@
 		</dependencies>
 	</dependencyManagement>
 	<profiles>
+		<!-- Profile runs all the integration tests -->
 		<profile>
 			<id>localIT</id>
 			<activation>
@@ -134,6 +135,7 @@
 			</build>
 		</profile>
 		<profile>
+			<!-- Profile builds the Core Framework dependencies necessary for REDHAWK Driver -->
 			<id>CFDependencies</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>

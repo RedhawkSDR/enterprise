@@ -10,7 +10,9 @@ build:
   image: redbusci/maven:3-jdk-8
   script:
     - mvn -P CFDependencies clean install -B -U
-    - mvn -Djava.io.tmpdir=./ -P defaulti,jaxb-generation,docs clean deploy -B -U
+    - mvn clean deploy -B -U
+    - mvn -P jaxb-generation,docs compile -B -U
   artifacts:
     paths:
     - redhawk-rest/target/docs/pdf/index.pdf
+    - docs/target/asciidoc/pdf/index.pdf

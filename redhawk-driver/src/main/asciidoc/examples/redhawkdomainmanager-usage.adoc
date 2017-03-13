@@ -15,7 +15,7 @@ Sample code for creating an application from a SAD file on a file system.
 
 [source,java,indent=0]
 ----
-include::snippets/RedhawkComponentImplTestIT.java[lines=61..65]
+include::snippets/RedhawkComponentImplTestIT.java[lines=59]
 ----
 
 === Retrieve an Application from a REDHAWK Domain

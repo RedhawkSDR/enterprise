@@ -6,12 +6,12 @@ Below are code examples for using the RedhawkComponent class.
 
 [source,java,indent=0]
 ----
-include::snippets/RedhawkComponentImplTestIT.java[lines=102..109]
+include::snippets/RedhawkComponentImplTestIT.java[lines=99..106]
 ----
 
 === Interacting with Component properties on your Component
 
 [source,java,indent=0]
 ----
-include::snippets/RedhawkComponentImplTestIT.java[lines=91.99]
+include::snippets/RedhawkComponentImplTestIT.java[lines=88..96]
 ----

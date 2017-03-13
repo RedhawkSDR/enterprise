@@ -49,6 +49,11 @@
 										<include>definitions.adoc</include>
 									</includes>
 								</resource>
+								<!-- Take the necessary adoc files from redhawk-connector -->
+								<resource>
+									<directory>${project.parent.basedir}/redhawk-connector/src/main/asciidoc</directory>
+									<targetPath>${project.build.directory}/asciidoc-workspace/connector</targetPath>
+								</resource>
 							</resources>
 						</configuration>
 					</execution>

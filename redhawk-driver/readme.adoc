@@ -10,6 +10,13 @@ To run integration tests with Jacorb run the following command:
 mvn clean install -P localIT -Djacorb=true
 ----
 
+== Docs 
+
+To generate the docs for redhawk-driver: 
+
+----
+mvn -Djava.io.tmpdir=./ -P docs generate-resources
+----
 ////
 ## Base Karaf Usage ##
 ***

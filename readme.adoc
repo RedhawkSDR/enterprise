@@ -35,6 +35,19 @@ In order to build the artifacts that encompass Redhawk Java Tools from source. R
 mvn clean install
 ----
 
+== Running Integration Tests
+
+Currently the integration tests are run off a local install of REDHAWK. The domain is run locally and uses the following defaults:
+
+* port: 2809
+* domainName: REDHAWK_DEV
+
+Once you have REDHAWK installed and a domain configured with the defaults listed above. You can run this command to get the integration tests to work:
+
+	mvn -PlocalIT clean install 
+
+This will be made more configurable in the future and will eventually also have an option to run off a docker image of REDHAWK. 
+
 == Build Docs 
 
 Each individual project has it's own readme defining how to build it's docs. If you'd like to build the full user manual. Run this profile: 
@@ -56,16 +69,3 @@ You'll need to specify the java.io.tmpdir with your maven command. So your comma
 ----
 mvn -P -Djava.io.tmpdir=./ -P jaxb-generation,docs compile
 ----
-
-== Running Integration Tests
-
-Currently the integration tests are run off a local install of REDHAWK. The domain is run locally and uses the following defaults:
-
-* port: 2809
-* domainName: REDHAWK_DEV
-
-Once you have REDHAWK installed and a domain configured with the defaults listed above. You can run this command to get the integration tests to work:
-
-	mvn -PlocalIT clean install 
-
-This will be made more configurable in the future and will eventually also have an option to run off a docker image of REDHAWK. 

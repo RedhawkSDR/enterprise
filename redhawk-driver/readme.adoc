@@ -17,6 +17,21 @@ To generate the docs for redhawk-driver:
 ----
 mvn -Djava.io.tmpdir=./ -P docs generate-resources
 ----
+
+=== Trouble Shooting
+
+If you run into this error building the docs
+
+----
+[ERROR] Failed to execute goal org.asciidoctor:asciidoctor-maven-plugin:1.5.3:process-asciidoc (output-pdf) on project redhawk-rest: Execution output-pdf of goal org.asciidoctor:asciidoctor-maven-plugin:1.5.3:process-asciidoc failed: org.jruby.exceptions.RaiseException: (NotImplementedError) fstat unimplemented unsupported or native support failed to load -> [Help 1]
+----
+
+You'll need to specify the java.io.tmpdir with your maven command. So your command will end up looking like this:
+
+----
+mvn -P -Djava.io.tmpdir=./ -P jaxb-generation,docs generate-resources
+----
+
 ////
 ## Base Karaf Usage ##
 ***

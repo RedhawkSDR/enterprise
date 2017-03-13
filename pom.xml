@@ -182,6 +182,7 @@
 			<modules>
 				<module>redhawk-driver</module>
 				<module>redhawk-rest</module>
+				<module>redhawk-connector</module>
 				<module>docs</module>
 			</modules>
 		</profile>

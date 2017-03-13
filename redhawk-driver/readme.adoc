@@ -2,7 +2,13 @@
 
 == Testing
 
-To run integration tests follow instructions in above readme for testing. 
+To run integration tests run the following command: 
+
+----
+mvn clean install -P localIT
+---- 
+
+Note: For more details see root readme file. 
 
 To run integration tests with Jacorb run the following command:
 

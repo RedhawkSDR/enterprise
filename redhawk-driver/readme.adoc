@@ -15,8 +15,24 @@ mvn clean install -P localIT -Djacorb=true
 To generate the docs for redhawk-driver: 
 
 ----
-mvn -Djava.io.tmpdir=./ -P docs generate-resources
+mvn -P docs generate-resources
 ----
+
+This generates documentation for you at this location 'redhawk-rest/target/docs/' . In that location is a pdf and html file with the documentation generated for this project. 
+
+Javadocs are generated as an attached artifact as part of the default build for this asset. If you'd like to only generate javadocs you can do that by running the following command:
+
+----
+mvn javadoc:javadoc
+----
+
+The output of this command will be in: 
+
+----
+${project.build.dir}/site/apidocs/index.html
+----
+
+You can open this up in your browser by simply putting the file url in your browser of choice. 
 
 === Trouble Shooting
 

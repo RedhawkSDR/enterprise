@@ -20,8 +20,9 @@ Tests require a local REDHAWK and a domain using the REDHAWK defaults.
 == Documentation 
 
 To generate the documentation for this project run the following command:
-
- mvn -P docs compile
+----
+mvn -P docs compile
+----
  
 This generates documentation for you at this location 'redhawk-rest/target/docs/' . In that location is a pdf and html file with the documentation generated for this project. 
 
@@ -35,7 +36,9 @@ If you run into this error building the docs
 
 You'll need to specify the java.io.tmpdir with your maven command. So your command will end up looking like this:
 
- mvn -P -Djava.io.tmpdir=./ docs compile
+----
+mvn -P -Djava.io.tmpdir=./ docs compile
+----
 
 ////
 To install into karaf base run the following commands:

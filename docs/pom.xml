@@ -54,6 +54,11 @@
 									<directory>${project.parent.basedir}/redhawk-connector/src/main/asciidoc</directory>
 									<targetPath>${project.build.directory}/asciidoc-workspace/connector</targetPath>
 								</resource>
+								<!-- Take the necessary adoc files from redhawk-websocket -->
+								<resource>
+									<directory>${project.parent.basedir}/redhawk-websocket/src/main/asciidoc</directory>
+									<targetPath>websocket</targetPath>
+								</resource>
 							</resources>
 						</configuration>
 					</execution>

@@ -28,3 +28,6 @@ include::rest/overview.adoc[]
 include::rest/paths.adoc[]
 
 include::rest/definitions.adoc[]
+
+// These are coming from redhawk-websocket module
+include::websocket/overview.adoc[]

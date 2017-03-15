@@ -1,0 +1,12 @@
+#For more info: http://www.jacorb.org/releases/3.8/ProgrammingGuide.pdf 
+
+#If enabled, the ORB’s version number is printed whenever the ORB is initialized
+jacorb.orb.print_version=true
+
+#Log levels:  0 = off, 1 = error, 2 = warning, 3 = info, 4 = debug
+jacorb.log.default.verbosity = info
+
+#Output destination for diagnostic log file.  If not set, diagnostics are sent to standard error.
+#jacorb.logfile = ${karaf.home}/data/log/jacorb.log
+
+ 

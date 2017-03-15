@@ -1,4 +1,4 @@
-= REDHAWK Connector 
+= Redhawk Websocket
 
 == Documentation
 
@@ -23,13 +23,12 @@ mvn -P -Djava.io.tmpdir=./ docs generate-resources
 ----
 
 ////
-### Redhawk Connector ###
-***
+To install into karaf base run the following commands:
 
-To install into karaf base run the following commands  
-
-	feature:repo-add mvn:redhawk/redhawk-feature/${project.version}/xml/features
-	feature:install redbus-redhawk-connector
+	feature:repo-add mvn:redhawk/redhawk-feature/2.0.1.U2-SNAPSHOT/xml/features
+	feature:install redbus-redhawk-websocket
 	
-This feature installs the karaf webconsole as well so you can access the configuration for the connector via the web. To access the connector through the web hit this endpoint http://localhost:8181/system/console/configMgr . You'll be able to see the ManagedServiceFactory you just deployed for Redhawk. 
+This feature install the redhawk websocket into karaf base. 
+
+TODO: Write an example of how to use it 
 ////

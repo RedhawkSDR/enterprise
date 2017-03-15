@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Redhawk WS Test</title>
+</head>
+<body>
+<h1>Redhawk Component Port Data</h1> 
+URL: <input type="text" name="url" size="50"><br>
+<button id="doit" type="button" onclick="toggleIt()">Start</button>
+<button id="clear_component_ports" type="button" onclick="clearComponentPorts()">Clear</button>
+<!--
+<button id="available_processors" type="button" onclick="availableProcessors()">Available Processors</button>
+<button id="add_processor" type="button" onclick="addProcessor()">Add Processor</button>
+<button id="remove_processors" type="button" onclick="removeProcessor()">Remove Processor</button>
+<button id="get_processors" type="button" onclick="getProcessors()">Get Processors</button>
+<button id="clear_processors" type="button" onclick="clearProcessors()">Clear Processors</button>
+-->
+<br/>
+<textarea id="component_ports" rows="10" cols="100">
+</textarea>
+<div>
+<p>Component Port URL: ws://{hostname}:{hostport}/redhawk/{nameserver}:{nameserver port}/domains/{domain name}/applications/{application name}/components/{component name}/ports/{port name}</p>
+<ul>
+<li>Json: end url with .json</li>
+<li>Binary: default output no need to append</li>
+</ul>
+<p>Example: ws://localhost:8181/redhawk/localhost:2809/domains/REDHAWK_DEV/applications/myApplication/components/SigGen.*/ports/dataFloat_out.json</p> 
+</div>
+<div>
+Sample EventChannel ODM URL: ws://localhost:8181/redhawk/localhost:2809/domains/REDHAWK_DEV/eventchannels/ODM_Channel?messageType=propertyChanges
+</div>
+<script type="text/javascript">
+    var ws;
+	
+    document.getElementById("component_ports").value = "";
+    
+    function toggleIt() {
+        var butt = document.getElementById("doit").firstChild;
+        if (butt.data == "Start") {
+           	var input_url = document.getElementsByName("url")[0].value;
+            ws = new WebSocket(input_url)
+           	ws.onopen = function(evt){
+            	addText("connected")
+            }
+            ws.onmessage = function(evt){
+                addText('message received: '+evt.data)
+            }
+            ws.onclose = function(evt){
+            	addText('Connection closed!')
+            }
+            butt.data = "Stop";
+        } else {
+            ws.close();
+            butt.data = "Start";
+        }
+    }
+	
+    function addText(event) {
+    	document.getElementById("component_ports").value += event + '\n'
+    }
+    
+    function clearComponentPorts(){
+    	document.getElementById("component_ports").value = ''
+    }
+    
+    function availableProcessors(){
+    	ws.send('listAvailableProcessors')
+    }
+    
+    function addProcessor(){
+    	ws.send('processors:[{"processorName":"myprocessordecimator", "processorConfiguration":{}}]')    	
+    }
+    
+    function removeProcessor(){
+    	ws.send("removeProcessor:myprocessordecimator")
+    }
+    
+    function getProcessors(){
+    	ws.send("getProcessors")
+    }
+    
+    function clearProcessors(){
+    	ws.send('clearProcessors')
+    }
+</script> 
+</body>
+</html>

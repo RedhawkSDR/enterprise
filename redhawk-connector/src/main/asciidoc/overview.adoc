@@ -1,6 +1,6 @@
 = Redhawk Connector
 
-== Function
+== Overview
 
 When you use the connector to create a Redhawk Connection 4 things happen:
 

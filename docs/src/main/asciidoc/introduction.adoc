@@ -1,6 +1,6 @@
 == Introduction 
 
-Redhawk Java Tools is a suite of software written in Java for interacting with a REDHAWK Domain. The suite includes:
+REDHAWK Java Tools is a suite of software written in Java for interacting with a REDHAWK Domain. The suite includes:
 
 * RedhawkDriver: simplified access to REDHAWK via a standard java interfaces. The goals is to shield all interaction with the underlying CORBA components as well as provide an ease of use for Java developers interacting with a REDHAWK Domain. The driver can be leveraged as a standalone jar.  
 * RedhawkConnector: Implements OSGi's Managed Service Factory interface to allow users to register pre-configured instances of REDHAWK connections into a KARAF container. 

@@ -1,0 +1,26 @@
+= Redhawk Driver Bundle Archetype
+
+Simple Maven Archetype bundle to help create the template for a standalone jar/bundle project that uses the REDHAWK Driver asset. 
+
+== Usage 
+
+To create the archetype ensure that this archetype is registered in your local .m2 by running: 
+
+----
+mvn install
+----
+
+On this project. Once that's done you'll be able to use the archetype by running: 
+
+----
+mvn archetype:generate -DarchetypeGroupId=redhawk -DarchetypeArtifactId=redhawk-driver-bundle-archetype -DarchetypeVersion=1.0.0-SNAPSHOT
+----
+
+After running the command you'll be prompted for the following information:
+
+* groupId
+* artifactId
+* version
+* package
+
+After entering in the necessary information you'll have a template project that already has the REDHAWK Driver dependency setup for you and a simple main method in App.java that utilizes the RedhawkDriver asset. 

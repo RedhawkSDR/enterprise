@@ -2,4 +2,34 @@
 
 The Redhawk Driver asset encompasses several utility interfaces that give users programatic access to REDHAWK via Java. The goal is to hide any CORBA interaction from the programmer and allow users to only have to worry about writing the logic for their application. 
 
+== Getting Started
+
+If using maven you can simply add the following xml to your projects current pom:
+
+[source,xml]
+----
+	<groupId>redhawk</groupId>
+	<artifactId>redhawk-driver</artifactId>
+	<version>${version}</version>
+----
+
+Note: ${version} is version of the driver you'd like to use. 
+
+If familiar with maven and you're starting from scratch you can use the redhawk-driver-bundle-archetype to generate your project structure. Simply run this command:
+
+----
+mvn archetype:generate -DarchetypeGroupId=redhawk -DarchetypeArtifactId=redhawk-driver-bundle-archetype -DarchetypeVersion=1.0.0-SNAPSHOT
+----
+
+After running the command you'll be prompted for the following information:
+
+* groupId
+* artifactId
+* version
+* package
+
+After entering in the necessary information you'll have a template project that already has the REDHAWK Driver dependency setup for you and a simple main method in App.java that utilizes the RedhawkDriver asset. 
+
+If not using maven you can add the .jar file to your projects build path or configure it with your projects build tool as needed. 
+
 Below are code examples for developers getting started with Redhawk Driver. 

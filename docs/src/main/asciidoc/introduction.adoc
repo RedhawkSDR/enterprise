@@ -2,13 +2,13 @@
 
 REDHAWK Java Tools is a suite of software written in Java for interacting with a REDHAWK Domain. The suite includes:
 
-* RedhawkDriver: simplified access to REDHAWK via a standard java interfaces. The goals is to shield all interaction with the underlying CORBA components as well as provide an ease of use for Java developers interacting with a REDHAWK Domain. The driver can be leveraged as a standalone jar.  
-* RedhawkConnector: Implements OSGi's Managed Service Factory interface to allow users to register pre-configured instances of REDHAWK connections into a KARAF container. 
-* Redhawk Rest: Provides REST Service to command and control a REDHAWK Instance.
-* Redhawk Websocket: Provides an HTML5 compliant web socket implementation that enables the ability to stream data froma any Redhawk BulkIO enabled port or Event Channel. 
-* Camel Redhawk: Provides a Camel Component for interacting with a Redhawk Domain. You can connect this component with other Apache Camel components as a data flow solution.
+* Redhawk Driver: Provides simplified access to REDHAWK via standard Java interfaces. The goal is to shield all interaction with the underlying REDHAWK Components as well as provide a simplified API for Java developers interacting with a REDHAWK Domain. The driver can be leveraged as a standalone jar file.  
+* Redhawk Connector: Implements OSGi's Managed Service Factory interface to allow users to register pre-configured instances of REDHAWK connections into a Karaf container. 
+* Redhawk Rest: Provides REST Service to command and control a REDHAWK instance.
+* Redhawk Websocket: Provides an HTML5-compliant Websocket implementation that enables the ability to stream data from any Redhawk BulkIO enabled Port or Event Channel. 
+* Camel Redhawk: Provides a Camel Component for interacting with a REDHAWK Domain. You can connect this Component with other Apache Camel Components as a data flow solution.
 
-The above software is all prepackaged in a custom KARAF distribution to help users easily get started. 
+The suite of software is prepackaged in a custom Karaf distribution to help users easily get started using REDHAWK Java Tools. 
 
 
 

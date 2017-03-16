@@ -5,12 +5,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>redhawk</groupId>
-		<artifactId>redhawk-integration</artifactId>
+		<artifactId>redhawk-java-tools</artifactId>
 		<version>2.0.4-SNAPSHOT</version>
 	</parent>
-	<artifactId>redhawk-integration-dist</artifactId>
+	<artifactId>dist</artifactId>
 	<packaging>karaf-assembly</packaging>
-	<name>REDHAWK :: INTEGRATION :: ASSETS</name>
+	<name>REDHAWK :: JAVA TOOLS :: ASSETS</name>
 	<description>
 	RPM and Tar.gz that contains a KARAF Container preconfigured to work with Redhawk Integration Assets. Included as well
 	are necessary dependencies for Jacord and a shell for interacting with the REDHAWK Driver. 

@@ -6,7 +6,9 @@ REST Endpoints for interacting with a REDHAWK Domain.
 
 Run this command from your console:
 
- mvn clean install 
+----
+mvn clean install 
+----
 
 == Testing 
 
@@ -15,6 +17,12 @@ To run integration tests run the following command:
  mvn -P localIT clean install 
  
 Tests require a local REDHAWK and a domain using the REDHAWK defaults. 
+
+For further testing the following tools may be helpful:
+
+* https://addons.mozilla.org/nn-no/firefox/addon/jsonview/[JSONView]: Puts Json in your browser into pretty print format
+* https://addons.mozilla.org/en-gb/firefox/addon/restclient/[RESTClient]: Is a client to allow users to do HTTP methods besides GET 
+
 //TODO: Updates so nameserver and domain are configurable for unit tests. 
 
 == Documentation 

@@ -1,5 +1,15 @@
 = Redhawk Websocket
 
+== Testing
+
+To run the integration tests for this asset run the following command:
+
+----
+mvn clean install -P localIT
+----
+
+Note: The integration tests require a REDHAWK Domain and running locally with the default port and name. 
+
 == Documentation
 
 To generate the documentation for this project run the following command:

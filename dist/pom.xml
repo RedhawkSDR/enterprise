@@ -38,13 +38,13 @@
 			<type>xml</type>
 			<scope>runtime</scope>
 		</dependency>
-        <dependency>
-            <groupId>org.apache.karaf.features</groupId>
-            <artifactId>spring</artifactId>
-            <classifier>features</classifier>
-            <type>xml</type>
-            <scope>runtime</scope>
-        </dependency>		
+		<dependency>
+			<groupId>org.apache.karaf.features</groupId>
+			<artifactId>spring</artifactId>
+			<classifier>features</classifier>
+			<type>xml</type>
+			<scope>runtime</scope>
+		</dependency>
 		<dependency>
 			<!-- scope is runtime so the feature repo is listed in etc/org.apache.karaf.features.cfg 
 				file, and features will installed into the system directory if specify in 
@@ -276,9 +276,9 @@
 				<extensions>true</extensions>
 				<executions>
 					<execution>
-						<id>genrate-rpm</id>
+						<id>attach-rpm</id>
 						<goals>
-							<goal>rpm</goal>
+							<goal>attached-rpm</goal>
 						</goals>
 					</execution>
 				</executions>

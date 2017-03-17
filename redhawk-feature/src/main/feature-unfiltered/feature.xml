@@ -18,13 +18,15 @@
 		<feature version="${project.version}">redhawk-integration-connector</feature>
 		<feature version="${cxf.version}">cxf-core</feature>
 		<feature version="${cxf.version}">cxf-rs-security-cors</feature>
-		<feature version="${cxf.version}">cxf-jackson</feature>		
+		<feature version="${cxf.version}">cxf-rs-description-swagger2</feature>
+		<!--
+		     <feature version="${cxf.version}">cxf-jackson</feature>		
 		<feature version="${cxf.version}">cxf-rs-description-swagger2</feature>
 		<bundle>mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/${jackson.version}</bundle>		
 		<bundle>mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-xml/${jackson.version}</bundle>
 		<bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-xml-provider/${jackson.version}</bundle>		
+		-->
 		<!-- JACKSON -->
-		<!--
 		<bundle>mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-xml/${jackson.version}</bundle>
 		<bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/${jackson.version}</bundle>
 		<bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/${jackson.version}</bundle>
@@ -33,7 +35,6 @@
 		<bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
 		<bundle>mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/${jackson.version}</bundle>								
 		<bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-xml-provider/${jackson.version}</bundle>										
-		-->
 		<bundle>mvn:commons-lang/commons-lang/${commons.lang.version}</bundle>
 		<bundle>mvn:redhawk/redhawk-rest/${project.version}</bundle>		
 	</feature>

@@ -1,6 +1,9 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-require('./libs/sigplot-minimized.js')
+//require('./libs/bluefile-debug.js')
+//require('./libs/sigplot.plugins-debug.js')
+//require('./libs/sigplot-debug.js')
+
 import Vue from 'vue'
 import App from './App'
 import router from './router'

@@ -13,7 +13,7 @@
 						</md-button>
 					</md-toolbar md-flex="20">
 					<md-list>
-						<md-list-item v-for="config in configurations">
+						<md-list-item v-for="(config, index) in configurations" :key=config.name>
 							{{ config.name }}
 							<md-button class="md-icon-button" @click.native="editDomainConfig">
 								<md-icon>settings</md-icon>
@@ -67,6 +67,8 @@ export default {
 		},
 		viewDomain: function(data){
 			this.showDomain = true
+			console.log("View Domain")
+			EventBus.$emit('updateLaunchedWaveforms')
 		}
 	}
 }

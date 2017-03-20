@@ -63,12 +63,26 @@ export const showWaveformComponents = (state, index) => {
 
 export const showComponentPorts = (state, index) => {
   console.log("Makeing it to show component ports")
-  state.componentName = state.waveformComponents[index].name
+  state.portsComponentName = state.waveformComponents[index].name
   console.log('Component Name: '+state.componentName)
   var myState = state
-  axios.get(state.baseURI+'/applications/'+state.applicationName+'/components/'+state.componentName+'/ports.json')
+  axios.get(state.baseURI+'/applications/'+state.applicationName+'/components/'+state.portsComponentName+'/ports.json')
   .then(function(response){
     myState.componentPorts = response.data.ports
+  })
+  .catch(function(error){
+    console.log("ERROR "+error)
+  })
+}
+
+export const showComponentProperties = (state, index) => {
+  console.log('Time to show some props')
+  var componentName = state.waveformComponents[index].name
+
+  var myState = state
+  axios.get(state.baseURI+'/applications/'+state.applicationName+'/components/'+componentName+'/properties.json')
+  .then(function(response){
+    myState.componentPropertiesToEdit = response.data.properties
   })
   .catch(function(error){
     console.log("ERROR "+error)

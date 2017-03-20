@@ -19,7 +19,7 @@
 				</md-layout>
 			</md-layout>
 			<md-layout>
-				Hola
+				<editcomponentprops></editcomponentprops>
 			</md-layout>
 		</md-layout>
 </template>
@@ -29,6 +29,7 @@ import Sigplot from './Sigplot.vue'
 import Waveforms from './Waveforms.vue'
 import Components from './Components.vue'
 import Ports from './Ports.vue'
+import EditComponentProperties from './EditComponentProperties.vue'
 
 export default {
 	name: 'rhdomainview',
@@ -36,7 +37,8 @@ export default {
 		'signalplot': Sigplot,
 		'rhwaveforms': Waveforms,
 		'waveformcomponents': Components,
-		'componentports': Ports
+		'componentports': Ports,
+		'editcomponentprops': EditComponentProperties
 	},
 	computed: {
 		baseURI() {

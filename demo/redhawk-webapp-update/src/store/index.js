@@ -17,7 +17,8 @@ const state = {
   waveformComponents: [],
   componentPorts: [],
   applicationName: null,
-  componentName: null
+  portsComponentName: null,
+  componentPropertiesToEdit: []
 }
 
 const store = new Vuex.Store({

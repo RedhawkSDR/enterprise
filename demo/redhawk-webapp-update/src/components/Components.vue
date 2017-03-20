@@ -12,7 +12,7 @@
           <md-icon>menu</md-icon>
         </md-button>
         <md-menu-content>
-          <md-menu-item>Edit</md-menu-item>
+          <md-menu-item @click.native="editComponent(index)">Edit</md-menu-item>
           <md-menu-item @click.native="showPorts(index)">Ports</md-menu-item>
         </md-menu-content>
       </md-menu>
@@ -23,12 +23,7 @@
 </template>
 
 <script>
-import {EventBus} from '../event-bus/event-bus.js'
 import axios from 'axios'
-import Component from './component.vue'
-
-var baseURI = "http://127.0.0.1:8181/cxf/redhawk/127.0.0.1:2809/domains/REDHAWK_DEV"
-var applicationURI = baseURI+'/applications'
 
 export default {
   name: 'waveformcomponents',
@@ -37,13 +32,13 @@ export default {
       return this.$store.getters.waveformComponents
     }
   },
-  components:{
-    'rhcomponent' : Component
-  },
   methods: {
     showPorts(index){
       console.log("Show ports for this index "+index)
       this.$store.dispatch('showComponentPorts', index)
+    },
+    editComponent(index){
+      this.$store.dispatch('showComponentProperties', index)
     }
   }
 }

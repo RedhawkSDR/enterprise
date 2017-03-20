@@ -6,3 +6,5 @@ export const editDomainConfigNameServer = ({ commit }, nameServer) => commit('ed
 export const editDomainConfigDomainName = ({ commit }, domainName) => commit('editDomainConfigDomainName', domainName)
 export const updateDomainConfig = ({ commit }) => commit('updateDomainConfig')
 export const viewDomainConfig = ({ commit }, index) => commit('viewDomainConfig', index)
+export const showWaveformComponents = ({ commit }, index) => commit('showWaveformComponents', index)
+export const showComponentPorts = ({ commit }, index) => commit('showComponentPorts', index)

@@ -39,11 +39,38 @@ export const viewDomainConfig = (state, index) => {
 
   //Setting Waveforms based on config
   var myState = state
-  
+
   axios.get(state.baseURI+'/applications.json')
   .then(function(response){
     var launchedWFJson = response.data.applications
     console.log(launchedWFJson)
     myState.waveforms = launchedWFJson
+  })
+}
+
+export const showWaveformComponents = (state, index) => {
+  state.applicationName = state.waveforms[index].name
+
+  var myState = state
+  axios.get(state.baseURI+'/applications/'+state.applicationName+'/components.json')
+  .then(function(response){
+      myState.waveformComponents = response.data.components
+  })
+  .catch(function(error){
+    console.log("ERROR: "+error)
+  })
+}
+
+export const showComponentPorts = (state, index) => {
+  console.log("Makeing it to show component ports")
+  state.componentName = state.waveformComponents[index].name
+  console.log('Component Name: '+state.componentName)
+  var myState = state
+  axios.get(state.baseURI+'/applications/'+state.applicationName+'/components/'+state.componentName+'/ports.json')
+  .then(function(response){
+    myState.componentPorts = response.data.ports
+  })
+  .catch(function(error){
+    console.log("ERROR "+error)
   })
 }

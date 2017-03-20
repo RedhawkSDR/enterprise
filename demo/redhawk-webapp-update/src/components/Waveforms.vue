@@ -6,7 +6,17 @@
     v-for="(waveform, index) in waveforms"
     v-bind:key="waveform"
     v-bind:index="index">
-    <waveform v-bind:index="index" v-bind:waveform="waveform"></waveform>
+    {{waveform.name}}
+    <md-menu md-direction="bottom left">
+      <md-button md-menu-trigger>
+        <md-icon>menu</md-icon>
+      </md-button>
+      <md-menu-content>
+        <md-menu-item>Control</md-menu-item>
+        <md-menu-item @click.native="showComponents(index)">Components</md-menu-item>
+      </md-menu-content>
+    </md-menu>
+    <!--<waveform v-bind:index="index" v-bind:waveform="waveform"></waveform>-->
     <md-divider></md-divider>
   </md-list-item>
 </md-list>
@@ -18,8 +28,6 @@ import Waveform from './waveform.vue'
 import {EventBus} from '../event-bus/event-bus.js'
 import axios from 'axios'
 
-var baseURI = "http://127.0.0.1:8181/cxf/redhawk/127.0.0.1:2809/domains/REDHAWK_DEV"
-
 export default {
   name: 'rhwaveforms',
   computed: {
@@ -30,6 +38,12 @@ export default {
   },
   components: {
     'waveform': Waveform
+  },
+  methods: {
+    showComponents(data){
+      console.log("Showing components for waveforms at index "+data)
+      this.$store.dispatch('showWaveformComponents', data)
+    }
   }
 }
 </script>

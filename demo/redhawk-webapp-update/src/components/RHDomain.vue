@@ -1,8 +1,12 @@
 <template>
 		<md-layout>
+			<!--Should container Domain searching and plot -->
 			<md-layout class="rowHeight">
 				<!--<signalplot></signalplot>-->
 			</md-layout>
+			<!--
+				Waveforms | Components | Ports
+			-->
 			<md-layout  class="rowHeight" md-row md-flex="100">
 				<md-layout md-flex="33">
 					<rhwaveforms></rhwaveforms>

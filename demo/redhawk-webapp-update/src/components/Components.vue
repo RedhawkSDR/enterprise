@@ -2,9 +2,21 @@
 <div>
   <h1>Components</h1>
   <md-list class="md-dense">
-      <md-list-item v-for="component in components">
-        <rhcomponent v-bind:component="component"></rhcomponent>
-        <md-divider></md-divider>
+      <md-list-item
+      v-for="(component, index) in components"
+      v-bind:key="component"
+      v-bind:index="index">
+      {{ component.name}}
+      <md-menu md-direction="bottom left">
+        <md-button md-menu-trigger>
+          <md-icon>menu</md-icon>
+        </md-button>
+        <md-menu-content>
+          <md-menu-item>Edit</md-menu-item>
+          <md-menu-item @click.native="showPorts(index)">Ports</md-menu-item>
+        </md-menu-content>
+      </md-menu>
+      <md-divider></md-divider>
       </md-list-item>
   </md-list>
 </div>
@@ -20,31 +32,19 @@ var applicationURI = baseURI+'/applications'
 
 export default {
   name: 'waveformcomponents',
-  data(){
-    return{
-      components: []
+  computed: {
+    components(){
+      return this.$store.getters.waveformComponents
     }
   },
   components:{
     'rhcomponent' : Component
   },
   methods: {
-    updateComponents(applicationName){
-          var self = this
-          axios.get(applicationURI+'/'+applicationName+'/components.json')
-          .then(function(response){
-              self.components = response.data.components
-          })
-          .catch(function(error){
-            console.log("ERROR: "+error)
-          })
+    showPorts(index){
+      console.log("Show ports for this index "+index)
+      this.$store.dispatch('showComponentPorts', index)
     }
-  },
-  created(){
-    var self = this
-    EventBus.$on("updateWaveformComponents", function(data){
-        self.updateComponents(data.name)
-    });
   }
 }
 </script>

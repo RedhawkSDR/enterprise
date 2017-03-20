@@ -13,7 +13,11 @@ const state = {
   configToEdit: {},
   configToView: {},
   baseURI: null,
-  waveforms: []
+  waveforms: [],
+  waveformComponents: [],
+  componentPorts: [],
+  applicationName: null,
+  componentName: null
 }
 
 const store = new Vuex.Store({

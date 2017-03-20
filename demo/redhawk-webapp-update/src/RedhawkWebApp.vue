@@ -20,7 +20,7 @@
 							{{ config.name }}
 							<md-menu md-direction="bottom left">
 								<md-button md-menu-trigger>
-									<md-icon>more horiz</md-icon>
+									<md-icon>menu</md-icon>
 								</md-button>
 								<md-menu-content>
 									<md-menu-item @click.native="viewDomain(index)">View</md-menu-item>

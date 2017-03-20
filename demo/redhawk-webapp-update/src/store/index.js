@@ -18,7 +18,8 @@ const state = {
   componentPorts: [],
   applicationName: null,
   portsComponentName: null,
-  componentPropertiesToEdit: []
+  componentPropertiesToEdit: [],
+  propComponentName: null
 }
 
 const store = new Vuex.Store({

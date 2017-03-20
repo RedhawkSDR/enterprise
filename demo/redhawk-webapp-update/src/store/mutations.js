@@ -77,10 +77,10 @@ export const showComponentPorts = (state, index) => {
 
 export const showComponentProperties = (state, index) => {
   console.log('Time to show some props')
-  var componentName = state.waveformComponents[index].name
+  state.propComponentName = state.waveformComponents[index].name
 
   var myState = state
-  axios.get(state.baseURI+'/applications/'+state.applicationName+'/components/'+componentName+'/properties.json')
+  axios.get(state.baseURI+'/applications/'+state.applicationName+'/components/'+state.propComponentName+'/properties.json')
   .then(function(response){
     myState.componentPropertiesToEdit = response.data.properties
   })

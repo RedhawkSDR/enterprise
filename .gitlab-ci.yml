@@ -1,17 +1,18 @@
 #GitLab CI File for REDHAWK Integration Asset
 #Tutuorial on using GitLab CI: https://docs.gitlab.com/ce/ci/quick_start/README.html
 #Docs on format of CI file: https://docs.gitlab.com/ce/ci/yaml/README.html
+variables:
+  DOCKER_REGISTRY_URL: ''
 cache:
   key: "$CI_BUILD_REF_NAME"
-  untracked: true
-variables:
-  MAVEN_OPTS: -Dmaven.repo.local=/cache/maven.repository
+  paths:
+    - cache/maven.repository
 build:
-  image: redbusci/maven:3-jdk-8
+  image: ${DOCKER_REGISTRY_URL}/redbus/maven:3-jdk-8
   script:
-    - mvn -P CFDependencies clean install -B -U
-    - mvn clean deploy -B -U
-    - mvn -Djava.io.tmpdir=./ -P jaxb-generation,docs compile -B -U
+    - mvn -P CFDependencies clean install -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository
+    - mvn clean deploy -B -U -Dmaven.repo.local=`cache/maven.repository -Dmaven.repo.local=`pwd`/cache/maven.repository
+    - mvn -Djava.io.tmpdir=./ -P jaxb-generation,docs compile -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository
   artifacts:
     paths:
     - redhawk-rest/target/docs/pdf/index.pdf

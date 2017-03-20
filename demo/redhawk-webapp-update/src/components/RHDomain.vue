@@ -33,6 +33,16 @@ export default {
 		'rhwaveforms': Waveforms,
 		'waveformcomponents': Components,
 		'componentports': Ports
+	},
+	computed: {
+		baseURI() {
+			//TODO: Why doesn't this work....
+			var nameServer = this.$store.configToView.nameServer
+			var domainName = this.$store.configToView.domainName
+			console.log('DomainName: '+domainName)
+			//TODO: Should probably be configurable
+			return "http://127.0.0.1:8181/cxf/redhawk/"+nameServer+"/domains/"+domainName
+		}
 	}
 }
 </script>

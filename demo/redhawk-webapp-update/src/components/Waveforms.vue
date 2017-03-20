@@ -22,32 +22,11 @@ var baseURI = "http://127.0.0.1:8181/cxf/redhawk/127.0.0.1:2809/domains/REDHAWK_
 
 export default {
   name: 'rhwaveforms',
-  data() {
-    return {
-      waveforms: []
+  computed: {
+    waveforms(){
+      console.log('Computing waveforms')
+      return this.$store.getters.waveforms
     }
-  },
-  methods: {
-    setwaveforms(data){
-      this.waveforms = data;
-    }
-  },
-  created(){
-    console.log("Created Waveforms view")
-    var self = this
-    EventBus.$on("updateLaunchedWaveforms", function(data){
-        console.log("Populate waveforms "+JSON.stringify(data))
-    });
-
-
-    //InitialiZING waveforms list
-    var self = this
-    axios.get(baseURI+'/applications.json')
-    .then(function(response){
-      var launchedWFJson = response.data.applications
-      console.log(launchedWFJson)
-      self.setwaveforms(launchedWFJson)
-    })
   },
   components: {
     'waveform': Waveform

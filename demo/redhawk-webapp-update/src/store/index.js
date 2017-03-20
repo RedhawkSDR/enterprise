@@ -10,7 +10,10 @@ const state = {
   domainConfigs : [],
   launchedWaveforms: [],
   domainToEdit: null,
-  configToEdit: {}
+  configToEdit: {},
+  configToView: {},
+  baseURI: null,
+  waveforms: []
 }
 
 const store = new Vuex.Store({

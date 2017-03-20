@@ -5,3 +5,4 @@ export const editDomainConfigName = ({ commit }, name) => commit('editDomainConf
 export const editDomainConfigNameServer = ({ commit }, nameServer) => commit('editDomainConfigNameServer', nameServer)
 export const editDomainConfigDomainName = ({ commit }, domainName) => commit('editDomainConfigDomainName', domainName)
 export const updateDomainConfig = ({ commit }) => commit('updateDomainConfig')
+export const viewDomainConfig = ({ commit }, index) => commit('viewDomainConfig', index)

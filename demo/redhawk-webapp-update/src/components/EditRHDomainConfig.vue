@@ -16,10 +16,6 @@
 				</md-input-container>
 				<div>
 					<md-button class="md-raised md-warn" @click.native="cancel">close</md-button>
-					<!--
-					<md-button class="md-raised md-warn" @click.native="cancel">Cancel</md-button>
-					<md-button class="md-raised md-primary" @click.native="editConfig">Edit</md-button>
-					-->
 				</div>
 			</div>
 		</div>

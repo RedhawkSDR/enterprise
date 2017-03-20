@@ -85,8 +85,8 @@ export default {
 			this.$store.dispatch('deleteDomainConfig', data)
 		},
 		viewDomain: function(data){
+			this.$store.dispatch('viewDomainConfig', data)
 			this.showDomain = true
-			console.log("View Domain")
 			EventBus.$emit('updateLaunchedWaveforms')
 		}
 	}

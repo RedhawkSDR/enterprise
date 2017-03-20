@@ -88,3 +88,25 @@ export const showComponentProperties = (state, index) => {
     console.log("ERROR "+error)
   })
 }
+
+export const updateComponentProperty = (state, property) => {
+  console.log('Update property'+ property)
+  var myState = state
+
+  /*
+  * Run the put with the updated property
+  */
+  var myPut = axios.create({headers: {
+    'Content-Type': 'application/json'
+    }
+  })
+  var url = state.baseURI+'/applications/'+state.applicationName+'/components/'+state.propComponentName+'/properties/'+property.id
+  console.log("URL: "+url)
+  myPut.put(url, JSON.stringify(property))
+  .then(function(response){
+    console.log(response)
+  })
+  .catch(function(error){
+    console.log(error)
+  })
+}

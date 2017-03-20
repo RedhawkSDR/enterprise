@@ -9,3 +9,4 @@ export const viewDomainConfig = ({ commit }, index) => commit('viewDomainConfig'
 export const showWaveformComponents = ({ commit }, index) => commit('showWaveformComponents', index)
 export const showComponentPorts = ({ commit }, index) => commit('showComponentPorts', index)
 export const showComponentProperties = ({ commit }, index) => commit('showComponentProperties', index)
+export const updateComponentProperty = ({ commit }, property) => commit('updateComponentProperty', property)

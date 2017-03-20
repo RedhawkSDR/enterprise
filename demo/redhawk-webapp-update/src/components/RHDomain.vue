@@ -1,7 +1,7 @@
 <template>
 		<md-layout>
 			<md-layout class="rowHeight">
-				<signalplot></signalplot>
+				<!--<signalplot></signalplot>-->
 			</md-layout>
 			<md-layout  class="rowHeight" md-row md-flex="100">
 				<md-layout md-flex="33">

@@ -61,7 +61,7 @@ export const getWaveformsAvailable = (state, index) => {
 }
 
 export const showWaveformComponents = (state, index) => {
-  state.applicationName = state.waveforms[index].name
+  state.applicationName = state.launchedWaveforms[index].name
 
   var myState = state
   axios.get(state.baseURI+'/applications/'+state.applicationName+'/components.json')
@@ -159,23 +159,24 @@ export const controlWaveform = (state, control) => {
 }
 
 export const releaseWaveform = (state, name) => {
+  var myState = state
   axios.delete(state.baseURI+'/applications/'+name)
   .then(function(response){
     console.log(response)
+    //Update State of REST of Application
+    updateLaunchedWaveforms(myState)
+
+    //If Components displayed are from the component released reset component and ports
+    if(state.applicationName==name){
+      console.log('Should reset component and ports')
+      state.componentPorts = []
+      state.waveformComponents = []
+    }else{
+      console.log("Don't delete component/ports state. ")
+    }
   })
   .catch(function(error){
     console.log(error)
-  })
-}
-
-export const updateDomainStateAfterWaveformRelease = (state, name) => {
-  //Retrieve all waveforms. Note may be cleaner to just delete waveform from array
-  var myState = state
-
-  axios.get(state.baseURI+'/applications.json')
-  .then(function(response){
-    var launchedWFJson = response.data.applications
-    myState.waveforms = launchedWFJson
   })
 }
 

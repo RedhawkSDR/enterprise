@@ -51,7 +51,7 @@ export default{
     release(){
       this.$store.dispatch('releaseWaveform', this.name)
 
-      this.$store.dispatch('updateDomainStateAfterWaveformRelease', this.name)
+      //this.$store.dispatch('updateDomainStateAfterWaveformRelease', this.name)
 
       //Need to update app state based on this action.
       this.$store.dispatch('closeWaveformController')

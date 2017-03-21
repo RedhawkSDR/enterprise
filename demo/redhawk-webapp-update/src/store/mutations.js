@@ -125,7 +125,7 @@ export const updateComponentProperty = (state, property) => {
 
 export const showWaveformController = (state, index) => {
   console.log('Show waveform controller')
-  var applicationName = state.waveforms[index].name
+  var applicationName = state.launchedWaveforms[index].name
 
   //Retrieve current waveform state
   var myState = state

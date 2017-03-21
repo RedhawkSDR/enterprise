@@ -7,19 +7,23 @@ import * as mutations from './mutations'
 Vue.use(Vuex)
 
 const state = {
-  domainConfigs : [],
-  launchedWaveforms: [],
-  domainToEdit: null,
-  configToEdit: {},
+  domainConfigs : [], // List of domain configs
+  launchedWaveforms: [], // List of launched waveforms
+  domainToEdit: null, //Domain being edited
+  configToEdit: {}, //Config being editted
   configToView: {},
   baseURI: null,
-  waveforms: [],
+  availableWaveforms: [],
   waveformComponents: [],
   componentPorts: [],
   applicationName: null,
   portsComponentName: null,
   componentPropertiesToEdit: [],
-  propComponentName: null
+  propComponentName: null,
+  showWaveformController: false,
+  waveformToControl: null,
+  showLaunchWaveformModal : false,
+  waveformToLaunch: null
 }
 
 const store = new Vuex.Store({

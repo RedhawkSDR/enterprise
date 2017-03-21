@@ -43,8 +43,20 @@ export const viewDomainConfig = (state, index) => {
   axios.get(state.baseURI+'/applications.json')
   .then(function(response){
     var launchedWFJson = response.data.applications
-    console.log(launchedWFJson)
-    myState.waveforms = launchedWFJson
+    console.log('Waveforms Launched: '+launchedWFJson)
+    myState.launchedWaveforms = launchedWFJson
+  })
+}
+
+//TODO: Merge this with viewDomain config and execute in parralel
+export const getWaveformsAvailable = (state, index) => {
+  //Setting Waveforms based on config
+  var myState = state
+
+  axios.get(state.baseURI+'/waveforms.json')
+  .then(function(response){
+    var availableWaveforms = response.data.domains
+    myState.availableWaveforms = availableWaveforms
   })
 }
 
@@ -103,6 +115,91 @@ export const updateComponentProperty = (state, property) => {
   var url = state.baseURI+'/applications/'+state.applicationName+'/components/'+state.propComponentName+'/properties/'+property.id
   console.log("URL: "+url)
   myPut.put(url, JSON.stringify(property))
+  .then(function(response){
+    console.log(response)
+  })
+  .catch(function(error){
+    console.log(error)
+  })
+}
+
+export const showWaveformController = (state, index) => {
+  console.log('Show waveform controller')
+  var applicationName = state.waveforms[index].name
+
+  //Retrieve current waveform state
+  var myState = state
+  axios.get(state.baseURI+'/applications/'+applicationName+'.json')
+  .then(function(response){
+      myState.waveformToControl = response.data
+      myState.showWaveformController = true
+  })
+  .catch(function(error){
+    console.log("ERROR: "+error)
+  })
+}
+
+export const closeWaveformController = state => {
+  state.showWaveformController = false
+}
+
+export const controlWaveform = (state, control) => {
+  console.log("Control obj: "+control)
+  axios.post(state.baseURI+'/applications/'+control.waveformName, control.action,{
+          headers:{
+                  'Content-Type':'application/json'
+          }
+  })
+  .then(function(response){
+          console.log(response)
+  })
+  .catch(function(error){
+          console.log(error)
+  })
+}
+
+export const releaseWaveform = (state, name) => {
+  axios.delete(state.baseURI+'/applications/'+name)
+  .then(function(response){
+    console.log(response)
+  })
+  .catch(function(error){
+    console.log(error)
+  })
+}
+
+export const updateDomainStateAfterWaveformRelease = (state, name) => {
+  //Retrieve all waveforms. Note may be cleaner to just delete waveform from array
+  var myState = state
+
+  axios.get(state.baseURI+'/applications.json')
+  .then(function(response){
+    var launchedWFJson = response.data.applications
+    myState.waveforms = launchedWFJson
+
+    //Remove
+  })
+}
+
+export const showLaunchWaveformModal = (state, waveform) => {
+  state.waveformToLaunch = waveform
+  state.showLaunchWaveformModal = true
+}
+
+export const closeLaunchWaveformModal = state => {
+  state.showLaunchWaveformModal = false
+}
+
+export const launchWaveform = (state, waveformToLaunch) => {
+  console.log("Waveform To Launch "+JSON.stringify(waveformToLaunch))
+  var launchWaveformURL = state.baseURI+"/applications"
+  var myPut = axios.create({
+    headers: {
+      'Content-Type': 'application/json',
+      'mimeType':'text/html'
+    }
+  })
+  myPut.put(launchWaveformURL+"/"+waveformToLaunch.name, JSON.stringify(waveformToLaunch))
   .then(function(response){
     console.log(response)
   })

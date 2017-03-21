@@ -12,7 +12,7 @@
         <md-icon>menu</md-icon>
       </md-button>
       <md-menu-content>
-        <md-menu-item>Control</md-menu-item>
+        <md-menu-item @click.native="showController(index)">Control</md-menu-item>
         <md-menu-item @click.native="showComponents(index)">Components</md-menu-item>
       </md-menu-content>
     </md-menu>
@@ -33,7 +33,7 @@ export default {
   computed: {
     waveforms(){
       console.log('Computing waveforms')
-      return this.$store.getters.waveforms
+      return this.$store.getters.launchedWaveforms
     }
   },
   components: {
@@ -43,6 +43,10 @@ export default {
     showComponents(data){
       console.log("Showing components for waveforms at index "+data)
       this.$store.dispatch('showWaveformComponents', data)
+    },
+    showController(data){
+      console.log('Show Controller for component at index '+data)
+      this.$store.dispatch('showWaveformController', data)
     }
   }
 }

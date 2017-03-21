@@ -41,6 +41,10 @@
 		</rhdomainconfig>
 		<editdomainconfig v-if="showEditDomainConfig" @close="showEditDomainConfig=false">
 		</editdomainconfig>
+		<waveformcontroller v-if="showWaveformController" @close="showWaveformController=false">
+		</waveformcontroller>
+		<launchwaveform v-if="showLaunchWaveformModal" @close="showLaunchWaveformModal=false">
+		</launchwaveform>
 	</div>
 </template>
 
@@ -48,7 +52,8 @@
 import RHDomainConfig from './components/RHDomainConfig.vue'
 import RHDomain from './components/RHDomain.vue'
 import EditRHDomainConfig from './components/EditRHDomainConfig'
-import {EventBus} from './event-bus/event-bus.js'
+import WaveformController from './components/WaveformController'
+import LaunchWaveformModal from './components/LaunchWaveformModal'
 
 export default {
 	name: 'redhawkwebapp',
@@ -62,12 +67,20 @@ export default {
 	computed: {
 		configurations() {
 			return this.$store.getters.domainConfigs
+		},
+		showWaveformController(){
+			return this.$store.getters.showWaveformController
+		},
+		showLaunchWaveformModal(){
+			return this.$store.getters.showLaunchWaveformModal
 		}
 	},
 	components: {
 		'rhdomainconfig' : RHDomainConfig,
 		'rhdomain': RHDomain,
-		'editdomainconfig' : EditRHDomainConfig
+		'editdomainconfig' : EditRHDomainConfig,
+		'waveformcontroller' : WaveformController,
+		'launchwaveform' : LaunchWaveformModal
 	},
 	methods: {
 		addDomainConfig: function() {
@@ -86,8 +99,8 @@ export default {
 		},
 		viewDomain: function(data){
 			this.$store.dispatch('viewDomainConfig', data)
+			this.$store.dispatch('getWaveformsAvailable', data)
 			this.showDomain = true
-			EventBus.$emit('updateLaunchedWaveforms')
 		}
 	}
 }

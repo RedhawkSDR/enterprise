@@ -19,7 +19,7 @@
 				</md-list>
 			</div>
 			<div>
-				<h1>Plot Goes Here</h1>
+				<plot></plot>
 			</div>
 			<!--<signalplot></signalplot>-->
 		</md-layout>
@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import Sigplot from './Sigplot.vue'
+import Plot from './Plot.vue'
 import Waveforms from './Waveforms.vue'
 import Components from './Components.vue'
 import Ports from './Ports.vue'
@@ -53,7 +53,7 @@ import EditComponentProperties from './EditComponentProperties.vue'
 export default {
 	name: 'rhdomainview',
 	components: {
-		'signalplot': Sigplot,
+		'plot': Plot,
 		'rhwaveforms': Waveforms,
 		'waveformcomponents': Components,
 		'componentports': Ports,

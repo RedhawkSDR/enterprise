@@ -27,3 +27,4 @@ export const updateDomainStateAfterWaveformRelease = ({ commit }, name) => commi
 export const showLaunchWaveformModal = ({ commit }, waveform) => commit('showLaunchWaveformModal', waveform)
 export const closeLaunchWaveformModal = ({ commit }) => commit('closeLaunchWaveformModal')
 export const launchWaveform = ({ commit }, waveformToLaunch) => commit('launchWaveform', waveformToLaunch)
+//export const updateLaunchedWaveforms = ({ commit }) => commit('updateLaunchedWaveforms')

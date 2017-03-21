@@ -176,8 +176,6 @@ export const updateDomainStateAfterWaveformRelease = (state, name) => {
   .then(function(response){
     var launchedWFJson = response.data.applications
     myState.waveforms = launchedWFJson
-
-    //Remove
   })
 }
 
@@ -190,6 +188,19 @@ export const closeLaunchWaveformModal = state => {
   state.showLaunchWaveformModal = false
 }
 
+function updateLaunchedWaveforms(state){
+  console.log("Updating launched waveforms")
+  //Retrieve all waveforms. Note may be cleaner to just delete waveform from array
+  var myState = state
+
+  axios.get(state.baseURI+'/applications.json')
+  .then(function(response){
+    var launchedWFJson = response.data.applications
+    console.log("Updated launchedWaveforms")
+    myState.launchedWaveforms = launchedWFJson
+  })
+}
+
 export const launchWaveform = (state, waveformToLaunch) => {
   console.log("Waveform To Launch "+JSON.stringify(waveformToLaunch))
   var launchWaveformURL = state.baseURI+"/applications"
@@ -199,9 +210,11 @@ export const launchWaveform = (state, waveformToLaunch) => {
       'mimeType':'text/html'
     }
   })
+  var myState = state
   myPut.put(launchWaveformURL+"/"+waveformToLaunch.name, JSON.stringify(waveformToLaunch))
   .then(function(response){
     console.log(response)
+    updateLaunchedWaveforms(myState)
   })
   .catch(function(error){
     console.log(error)

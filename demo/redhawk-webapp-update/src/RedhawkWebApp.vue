@@ -7,8 +7,8 @@
 			<md-layout md-flex="20">
 				<md-layout md-column>
 					<md-toolbar>
-						<h2 class="md-title" style="flex: 1">Domains</h2>
-						<md-button class="md-icon-button" @click.native="addDomainConfig">
+						<h2 class="md-title md-accent" style="flex: 1">Domains</h2>
+						<md-button class="md-icon-button md-accent" @click.native="addDomainConfig">
 							<md-icon>add box</md-icon>
 						</md-button>
 					</md-toolbar md-flex="20">

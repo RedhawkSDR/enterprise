@@ -6,7 +6,8 @@
 </template>
 
 <script>
-//import smoothie from 'smoothie'
+//import smoothis from 'smoothie'
+import sigplot from 'sigplot/sigplot-debug'
 
 //var smoothieChart = new smoothie.SmoothieChart()
 //require('../libs/bluefile-minimized.js')
@@ -32,6 +33,7 @@ export default {
 		//console.log(smoothieChart)
 		console.log(document.getElementById("mycanvas"))
 		console.log(window.Audio)
+		console.log(sigplot)
 		//smoothieChart.streamTo(document.getElementById("mycanvas"));
 		/*SigPlotVue.Plot(document.getElementById('signalplot'), {
 		    autol: 5,

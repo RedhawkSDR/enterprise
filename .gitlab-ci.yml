@@ -8,10 +8,10 @@ cache:
   paths:
     - cache/maven.repository
 build:
-  image: ${DOCKER_REGISTRY_URL}/redbus/maven:3-jdk-8
+  image: ${DOCKER_REGISTRY_URL}redbus/maven:3-jdk-8
   script:
     - mvn -P CFDependencies clean install -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository
-    - mvn clean deploy -B -U -Dmaven.repo.local=`cache/maven.repository -Dmaven.repo.local=`pwd`/cache/maven.repository
+    - mvn clean deploy -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository
     - mvn -Djava.io.tmpdir=./ -P jaxb-generation,docs compile -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository
   artifacts:
     paths:

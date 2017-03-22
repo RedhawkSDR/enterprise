@@ -23,7 +23,11 @@ const state = {
   showWaveformController: false,
   waveformToControl: null,
   showLaunchWaveformModal : false,
-  waveformToLaunch: null
+  waveformToLaunch: null,
+  showDomain: false,
+  myPlot: null,
+  hello: null,
+  wsURL: null
 }
 
 const store = new Vuex.Store({

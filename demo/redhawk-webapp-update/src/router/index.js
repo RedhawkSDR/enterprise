@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Hello from '@/components/Hello'
 import RedhawkWebApp from '@/RedhawkWebApp'
+import Plot from '@/components/Plot'
 
 Vue.use(Router)
 
@@ -11,6 +12,11 @@ export default new Router({
       path: '/vueinfo',
       name: 'Hello',
       component: Hello
+    },
+    {
+      path: '/plot',
+      name: 'plot',
+      component: Plot
     },
     {
     	path: '/',

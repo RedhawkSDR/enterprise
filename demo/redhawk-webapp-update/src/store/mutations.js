@@ -6,6 +6,11 @@ export const addDomainConfig = (state, domainConfig) => {
 }
 
 export const deleteDomainConfig = (state, index) => {
+  var configToDelete = state.domainConfigs[index]
+  if(configToDelete==state.configToView){
+    console.log('Deleting configuration')
+    state.showDomain = false
+  }
   state.domainConfigs.splice(index, 1)
 }
 
@@ -57,11 +62,17 @@ export const getWaveformsAvailable = (state, index) => {
   .then(function(response){
     var availableWaveforms = response.data.domains
     myState.availableWaveforms = availableWaveforms
+    myState.showDomain = true
   })
 }
 
 export const showWaveformComponents = (state, index) => {
   state.applicationName = state.launchedWaveforms[index].name
+
+  //If the application name changes ports show no longer show up
+  if(state.componentPorts!=null){
+    state.componentPorts = []
+  }
 
   var myState = state
   axios.get(state.baseURI+'/applications/'+state.applicationName+'/components.json')
@@ -220,4 +231,13 @@ export const launchWaveform = (state, waveformToLaunch) => {
   .catch(function(error){
     console.log(error)
   })
+}
+
+export const plotPortData = (state, port) => {
+  console.log('Plot port data '+port)
+  var wsURL = 'ws://localhost:8181/redhawk/'+state.configToView.nameServer+'/domains/'+state.configToView.domainName
+  +'/applications/'+state.applicationName+'/components/'+state.portsComponentName+'/ports/'+port.name
+  console.log(wsURL)
+  //Update wsURL
+  state.wsURL = wsURL
 }

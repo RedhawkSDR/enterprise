@@ -4,9 +4,11 @@
     <md-list class="md-dense">
         <md-list-item
         v-for="(port, index) in ports"
-        v-bind:index="index">
+        v-bind:key=port
+        v-bind:index="index"
+        >
           {{port.name}}
-          <md-button @click.native="plot">plot</md-button>
+          <md-button @click.native="plot(port)">plot</md-button>
         </md-list-item>
     </md-list>
   </div>
@@ -23,8 +25,8 @@ export default{
     }
   },
   methods: {
-    plot(){
-      console.log('Plot Me')
+    plot(port){
+      this.$store.dispatch('plotPortData', port)
     }
   }
 }

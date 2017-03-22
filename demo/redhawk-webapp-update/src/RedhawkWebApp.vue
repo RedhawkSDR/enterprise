@@ -61,7 +61,6 @@ export default {
 		return {
 			showAddDomainConfig: false,
 			showEditDomainConfig: false,
-			showDomain: false
 		}
 	},
 	computed: {
@@ -73,6 +72,9 @@ export default {
 		},
 		showLaunchWaveformModal(){
 			return this.$store.getters.showLaunchWaveformModal
+		},
+		showDomain(){
+			return this.$store.getters.showDomain
 		}
 	},
 	components: {
@@ -100,7 +102,6 @@ export default {
 		viewDomain: function(data){
 			this.$store.dispatch('viewDomainConfig', data)
 			this.$store.dispatch('getWaveformsAvailable', data)
-			this.showDomain = true
 		}
 	}
 }

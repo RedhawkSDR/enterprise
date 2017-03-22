@@ -28,3 +28,5 @@ export const showLaunchWaveformModal = ({ commit }, waveform) => commit('showLau
 export const closeLaunchWaveformModal = ({ commit }) => commit('closeLaunchWaveformModal')
 export const launchWaveform = ({ commit }, waveformToLaunch) => commit('launchWaveform', waveformToLaunch)
 //export const updateLaunchedWaveforms = ({ commit }) => commit('updateLaunchedWaveforms')
+
+export const plotPortData = ({ commit }, port) => commit('plotPortData', port)

@@ -57,7 +57,7 @@ export default{
 	},
 	methods: {
 		cancel: function(){
-			this.$emit('close')
+			this.$store.dispatch('closeEditDomainConfig')
 		}
 	}
 }

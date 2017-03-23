@@ -30,3 +30,4 @@ export const launchWaveform = ({ commit }, waveformToLaunch) => commit('launchWa
 //export const updateLaunchedWaveforms = ({ commit }) => commit('updateLaunchedWaveforms')
 
 export const plotPortData = ({ commit }, port) => commit('plotPortData', port)
+export const closeEditDomainConfig = ({ commit }) => commit('closeEditDomainConfig')

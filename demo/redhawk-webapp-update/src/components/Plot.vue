@@ -21,9 +21,7 @@
 });
 */
 //import {SigPlotVue} from '../libs/sigplot-wrapper.js'
-var plot
-var sigplotWS
-
+var plot, pl, sigplotWS
 
 export default {
 	name: 'plot',
@@ -36,7 +34,6 @@ export default {
 			xunits: null,
 			ydelta: null,
 			yunits: null,
-			pl: null
 		}
 	},
 	computed: {
@@ -59,10 +56,11 @@ export default {
 				};
 
 				var self = this
+
 				sigplotWS.onmessage = function(evt) {
 					if(typeof evt.data !== "string"){
 						//console.log('Received Data')
-						plot.reload(self.pl, evt.data);
+						plot.reload(pl, evt.data);
 					}else{
 						console.log("NEW SRI")
 						/*
@@ -77,7 +75,7 @@ export default {
 						self.xunits = sri.xunits
 						self.yunits = sri.yunits
 
-						self.pl = plot.overlay_array(null, {
+						pl = plot.overlay_array({
 							size: 1000,
 							xdelta: self.xdelta,
 							xunits: self.xunits,
@@ -85,9 +83,12 @@ export default {
 							ydelta: self.ydelta,
 							xstart: self.xstart
 						});
+						console.log('Plot')
+						console.log(plot)
+						console.log("Overlay")
+						console.log(pl)
 					}
 				};
-
 
 				console.log('Created WS')
 				console.log(sigplotWS)

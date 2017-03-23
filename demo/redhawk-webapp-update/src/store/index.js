@@ -27,7 +27,8 @@ const state = {
   showDomain: false,
   myPlot: null,
   hello: null,
-  wsURL: null
+  wsURL: null,
+  showEditDomainConfig: false
 }
 
 const store = new Vuex.Store({

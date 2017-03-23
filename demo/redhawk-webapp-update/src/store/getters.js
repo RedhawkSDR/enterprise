@@ -13,3 +13,4 @@ export const showLaunchWaveformModal = state => state.showLaunchWaveformModal
 export const waveformToLaunch = state => state.waveformToLaunch
 export const showDomain = state => state.showDomain
 export const wsURL = state => state.wsURL
+export const showEditDomainConfig = state => state.showEditDomainConfig

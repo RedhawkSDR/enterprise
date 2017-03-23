@@ -18,6 +18,11 @@ export const editDomainConfig = (state, index) => {
   state.domainToEdit = index
   var config = state.domainConfigs[index]
   state.configToEdit = config
+  state.showEditDomainConfig = true
+}
+
+export const closeEditDomainConfig = state => {
+  state.showEditDomainConfig = false
 }
 
 export const editDomainConfigName = (state, name) => {

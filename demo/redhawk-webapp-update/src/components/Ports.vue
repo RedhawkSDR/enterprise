@@ -8,7 +8,7 @@
         v-bind:index="index"
         >
           {{port.name}}
-          <md-button @click.native="plot(port)">plot</md-button>
+          <md-button v-if="port.name.endsWith('out')" @click.native="plot(port)">plot</md-button>
         </md-list-item>
     </md-list>
   </div>

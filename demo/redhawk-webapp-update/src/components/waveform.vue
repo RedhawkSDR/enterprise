@@ -1,7 +1,6 @@
 <template>
 <div v-on:click="fillComponents">
-  <md-ink-ripple />
-{{ rhwaveform.name}}
+  
 </div>
 </template>
 

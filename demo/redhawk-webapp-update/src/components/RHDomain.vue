@@ -1,6 +1,58 @@
 <template>
 	<md-layout>
-		<!--Should container Domain searching and plot -->
+		<md-layout md-flex="25">
+			<md-layout md-column>
+				<!--
+				<md-menu :md-offset-x="190" md-size=5>
+					<md-button md-menu-trigger>Launch Waveforms</md-button>
+					<md-menu-content>
+						<md-menu-item
+						v-for="(waveform,index) in availableWaveforms"
+						v-bind:key="waveform"
+						@click.native="showWaveformLauncher(waveform)"
+						>
+						{{ waveform.name }}
+						</md-menu-item>
+					</md-menu-content>
+				</md-menu>
+				-->
+				<md-toolbar>
+					<h1 class="md-title">{{ domainConfig.name }} :: {{ domainConfig.domainName}}</h1>
+				</md-toolbar>
+				<md-list>
+					<md-list-item>
+						<span>Launch Waveform
+						</span>
+						<md-list-expand>
+							<md-list-item
+							class="md-inset"
+							v-for="(waveform,index) in availableWaveforms"
+							v-bind:key="waveform"
+							@click.native="showWaveformLauncher(waveform)"
+							>
+							{{ waveform.name }}
+							<md-divider></md-divider>
+							</md-list-item>
+						</md-list-expand>
+					</md-list-item>
+				</md-list>
+				<rhwaveforms></rhwaveforms>
+			</md-layout>
+		</md-layout>
+		<md-layout>
+			<md-layout md-column>
+				<md-layout md-align="center" class="rowHeight">
+					<plot></plot>
+				</md-layout>
+				<md-layout md-align="center" class="rowHeight">
+					<waveformcomponents></waveformcomponents>
+					<componentports></componentports>
+				</md-layout>
+			</md-layout>
+		</md-layout>
+	</md-layout>
+<!--
+<md-layout>
 		<md-layout class="rowHeight">
 			<div>
 				<md-list>
@@ -21,11 +73,7 @@
 			<div>
 				<plot></plot>
 			</div>
-			<!--<signalplot></signalplot>-->
 		</md-layout>
-		<!--
-		Waveforms | Components | Ports
-	-->
 	<md-layout  class="rowHeight" md-row md-flex="100">
 		<md-layout md-flex="33">
 			<rhwaveforms></rhwaveforms>
@@ -41,6 +89,7 @@
 		<editcomponentprops></editcomponentprops>
 	</md-layout>
 </md-layout>
+-->
 </template>
 
 <script>
@@ -65,6 +114,12 @@ export default {
 		},
 		availableWaveforms(){
 			return this.$store.getters.availableWaveforms
+		},
+		domainConfig(){
+			return this.$store.getters.configToView
+		},
+		showWaveformComponents(){
+			return this.$store.getters.showWaveformComponents
 		}
 	},
 	methods: {
@@ -72,12 +127,21 @@ export default {
 			console.log("Show Launcher for this wavform "+waveform)
 			this.$store.dispatch('showLaunchWaveformModal', waveform)
 		}
+	},
+	watch: {
+		showWaveformComponents: function(){
+			if(this.showWaveformComponents){
+				console.log('Show Side Nav with Components')
+			}else{
+				console.log('Close Side Name Bar')
+			}
+		}
 	}
 }
 </script>
 
 <style>
 .rowHeight {
-	min-height: 300px;
+	min-height: 430px;
 }
 </style>

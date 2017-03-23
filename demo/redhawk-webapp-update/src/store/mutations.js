@@ -83,6 +83,7 @@ export const showWaveformComponents = (state, index) => {
   axios.get(state.baseURI+'/applications/'+state.applicationName+'/components.json')
   .then(function(response){
       myState.waveformComponents = response.data.components
+      myState.showWaveformComponents = true
   })
   .catch(function(error){
     console.log("ERROR: "+error)
@@ -161,6 +162,7 @@ export const closeWaveformController = state => {
 
 export const controlWaveform = (state, control) => {
   console.log("Control obj: "+control)
+  var myState = state
   axios.post(state.baseURI+'/applications/'+control.waveformName, control.action,{
           headers:{
                   'Content-Type':'application/json'

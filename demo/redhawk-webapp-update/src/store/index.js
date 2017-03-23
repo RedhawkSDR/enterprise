@@ -28,7 +28,8 @@ const state = {
   myPlot: null,
   hello: null,
   wsURL: null,
-  showEditDomainConfig: false
+  showEditDomainConfig: false,
+  showWaveformComponents: false
 }
 
 const store = new Vuex.Store({

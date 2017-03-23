@@ -2,7 +2,9 @@
 <div class="modal-mask">
   <div class="modal-wrapper">
     <div class="launch-modal-container">
-      <md-toolbar>Waveform Launcher</md-toolbar>
+      <md-toolbar>
+        <h1 class="md-title">Waveform Launcher</h1>
+      </md-toolbar>
       <md-input-container>
         <label>Id</label>
         <md-input v-model="id" :disabled="true"></md-input>
@@ -12,7 +14,7 @@
         <md-input v-model="name" :disabled="true"></md-input>
       </md-input-container>
       <md-input-container>
-        <label>Software Assembly Locations</label>
+        <label>Software Assembly Location</label>
         <md-input v-model="sadLocation" :disabled="true"></md-input>
       </md-input-container>
       <md-input-container>

@@ -3,12 +3,21 @@
           <div class="modal-wrapper">
                   <div class="control-modal-container">
                           <md-toolbar>
-                                  <h4 class="md-title md-dense">Control Waveform</h4>
+                                  <h1 class="md-title md-dense">Control Waveform</h1>
                           </md-toolbar>
                           <div class="waveform-info">
-                          <span><b>id:</b> {{ identifier }}</span><br>
-                          <span><b>name:</b> {{ name }} </span><br>
-                          <span><b>started:</b> {{ started }} </span><br>
+                          <md-input-container>
+                            <label>Id</label>
+                            <md-input v-model="identifier" :disabled="true"></md-input>
+                          </md-input-container>
+                          <md-input-container>
+                            <label>Name</label>
+                            <md-input v-model="name" :disabled="true"></md-input>
+                          </md-input-container>
+                          <md-input-container>
+                            <label>Started</label>
+                            <md-input v-model="started" :disabled="true"></md-input>
+                          </md-input-container>
                           </div>
                           <div class="control-buttons">
                                   <md-button @click.native="control('start')" :disabled="started">Start</md-button>

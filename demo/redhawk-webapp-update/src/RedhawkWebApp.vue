@@ -2,18 +2,22 @@
 	<div>
 		<md-toolbar>
 			<h1 class="md-title">REDHAWK Webapp Example</h1>
-			<md-button class="md-icon-button md-accent" @click.native="addDomainConfig">
-				<md-icon>add box</md-icon>
-			</md-button>
 		</md-toolbar>
 		<md-toolbar>
+			<h1 class="md-title">Domains</h1>
+			<md-button class="md-icon-button md-accent" @click.native="addDomainConfig">
+				<md-icon>add</md-icon>
+			</md-button>
 			<domainmenu
 				v-for="(config, index) in configurations"
 				v-bind:config="config"
 				v-bind:index="index"
 			>
-		</domainmenu>
+			</domainmenu>
 		</md-toolbar>
+		<md-layout v-if="showDomain">
+			<rhdomain></rhdomain>
+		</md-layout>
 		<!--
 		<md-layout>
 			<md-layout md-flex="20">
@@ -98,6 +102,9 @@ export default {
 		},
 		showEditDomainConfig(){
 			return this.$store.getters.showEditDomainConfig
+		},
+		availableWaveforms(){
+			return this.$store.getters.availableWaveforms
 		}
 	},
 	components: {
@@ -106,7 +113,7 @@ export default {
 		'editdomainconfig' : EditRHDomainConfig,
 		'waveformcontroller' : WaveformController,
 		'launchwaveform' : LaunchWaveformModal,
-		'domainmenu': DomainMenu
+		'domainmenu': DomainMenu,
 	},
 	methods: {
 		addDomainConfig: function() {
@@ -114,6 +121,10 @@ export default {
 		},
 		addDomainToList: function(data){
 			this.$store.dispatch('addDomainConfig', data)
+		},
+		showWaveformLauncher(waveform){
+			console.log("Show Launcher for this wavform "+waveform)
+			this.$store.dispatch('showLaunchWaveformModal', waveform)
 		}
 	}
 }

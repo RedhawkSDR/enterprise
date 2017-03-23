@@ -16,7 +16,6 @@ export default {
   props: ['config', 'index'],
   methods: {
     editDomainConfig: function(data){
-			console.log("Need to allow editing..."+data)
 			this.$store.dispatch('editDomainConfig', data)
 		},
 		deleteDomainConfig(data){

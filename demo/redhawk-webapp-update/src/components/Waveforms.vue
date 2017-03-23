@@ -1,25 +1,43 @@
 <template>
 <div>
-<h1>Waveforms</h1>
-<md-list class="md-dense">
-  <md-list-item
-    v-for="(waveform, index) in waveforms"
-    v-bind:key="waveform"
-    v-bind:index="index">
-    {{waveform.name}}
-    <md-menu md-direction="bottom left">
-      <md-button md-menu-trigger>
-        <md-icon>menu</md-icon>
-      </md-button>
-      <md-menu-content>
-        <md-menu-item @click.native="showController(index)">Control</md-menu-item>
-        <md-menu-item @click.native="showComponents(index)">Components</md-menu-item>
-      </md-menu-content>
-    </md-menu>
-    <!--<waveform v-bind:index="index" v-bind:waveform="waveform"></waveform>-->
-    <md-divider></md-divider>
+<md-list>
+  <md-list-item>
+    <span>Waveforms</span>
+    <md-list-expand>
+      <md-list-item
+        class="md-inset"
+        v-for="(waveform, index) in waveforms"
+        v-bind:key="waveform"
+        v-bind:index="index"
+        v-bind:waveform="waveform">
+        <!--
+        TODO: Nice To have make play and stop show up next to waveform indicating state
+        <md-button v-if="waveform.started" class="md-icon-button" @click.native="stop(waveform)">
+          <md-icon>stop</md-icon>
+        </md-button>
+        <md-button v-else class="md-icon-button"@click.native="start(waveform)" >
+          <md-icon>play_arrow</md-icon>
+        </md-button>
+        -->
+        <span>{{waveform.name}}</span>
+        <md-menu md-direction="bottom left">
+          <md-button md-menu-trigger>
+            <md-icon>menu</md-icon>
+          </md-button>
+          <md-menu-content>
+            <md-menu-item @click.native="showController(index)">Control</md-menu-item>
+            <md-menu-item @click.native="showComponents(index)">Components</md-menu-item>
+          </md-menu-content>
+        </md-menu>
+        <!--<waveform v-bind:index="index" v-bind:waveform="waveform"></waveform>-->
+        <md-divider></md-divider>
+      </md-list-item>
+    </md-list-expand>
   </md-list-item>
 </md-list>
+<md-sidenav class="md-left" ref="leftSidenav" @open="open('Left')" @close="close('Left')">
+  <h1>Hello World</h1>
+</md-sidenav>
 </div>
 </template>
 
@@ -34,6 +52,9 @@ export default {
     waveforms(){
       console.log('Computing waveforms')
       return this.$store.getters.launchedWaveforms
+    },
+    showWaveformComponents(){
+      return this.$store.getters.showWaveformComponents
     }
   },
   components: {
@@ -48,6 +69,16 @@ export default {
       console.log('Show Controller for component at index '+data)
       this.$store.dispatch('showWaveformController', data)
     }
+  },
+  watch:{
+    showWaveformComponents: function(){
+			if(this.showWaveformComponents){
+				console.log('Show Side Nav with Components')
+        this.$refs.leftSidenav.open();        
+			}else{
+				console.log('Close Side Name Bar')
+			}
+		}
   }
 }
 </script>

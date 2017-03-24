@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Ports</h1>
+    <h1>{{ componentName }} :: Ports</h1>
     <md-list class="md-dense">
         <md-list-item
         v-for="(port, index) in ports"
@@ -22,6 +22,9 @@ export default{
   computed: {
     ports(){
       return this.$store.getters.componentPorts
+    },
+    componentName(){
+      return this.$store.getters.portsComponentName
     }
   },
   methods: {

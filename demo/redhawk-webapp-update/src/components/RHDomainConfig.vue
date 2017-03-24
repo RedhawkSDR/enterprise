@@ -24,8 +24,6 @@
 </template>
 
 <script>
-//import {EventBus} from '../event-bus/event-bus.js'
-
 export default{
 	name: 'rhdomainconfig',
 	props: ['showDomainConfig'],
@@ -45,7 +43,7 @@ export default{
 			configuration.name = this.configurationName
 			configuration.nameServer = this.nameServer
 			configuration.domainName = this.domainName
-			
+
 			this.$emit("domainConfig", configuration)
 			this.$emit("close")
 		}

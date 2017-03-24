@@ -35,15 +35,11 @@
     </md-list-expand>
   </md-list-item>
 </md-list>
-<md-sidenav class="md-left" ref="leftSidenav" @open="open('Left')" @close="close('Left')">
-  <h1>Hello World</h1>
-</md-sidenav>
 </div>
 </template>
 
 <script>
 import Waveform from './waveform.vue'
-import {EventBus} from '../event-bus/event-bus.js'
 import axios from 'axios'
 
 export default {
@@ -69,16 +65,6 @@ export default {
       console.log('Show Controller for component at index '+data)
       this.$store.dispatch('showWaveformController', data)
     }
-  },
-  watch:{
-    showWaveformComponents: function(){
-			if(this.showWaveformComponents){
-				console.log('Show Side Nav with Components')
-        this.$refs.leftSidenav.open();        
-			}else{
-				console.log('Close Side Name Bar')
-			}
-		}
   }
 }
 </script>

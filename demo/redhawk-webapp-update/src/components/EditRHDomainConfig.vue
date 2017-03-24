@@ -23,8 +23,6 @@
 </template>
 
 <script>
-//import {EventBus} from '../event-bus/event-bus.js'
-
 export default{
 	name: 'editdomainconfig',
 	props: ['showEditDomainConfig'],

@@ -4,23 +4,6 @@
 </template>
 
 <script>
-//import smoothis from 'smoothie'
-//import sigplot from 'sigplot/sigplot-debug'
-
-//var smoothieChart = new smoothie.SmoothieChart()
-//require('../libs/bluefile-minimized.js')
-//require('../libs/sigplot.plugins-minimized.js')
-//require('../libs/sigplot-minimized.js')
-
-
-/*var plot = new sigplot.Plot(document.getElementById('signalplot'), {
-    autol: 5,
-    cmod: "L2",
-    autohide_panbars: true,
-    nogrid: true,
-});
-*/
-//import {SigPlotVue} from '../libs/sigplot-wrapper.js'
 var plot, pl, sigplotWS
 
 export default {
@@ -83,15 +66,8 @@ export default {
 							ydelta: self.ydelta,
 							xstart: self.xstart
 						});
-						console.log('Plot')
-						console.log(plot)
-						console.log("Overlay")
-						console.log(pl)
 					}
 				};
-
-				console.log('Created WS')
-				console.log(sigplotWS)
 			}else{
 				console.log('No url so no websocket')
 			}

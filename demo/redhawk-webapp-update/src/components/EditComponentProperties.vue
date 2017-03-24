@@ -1,6 +1,11 @@
 <template>
-<div>
-  <h2>{{ name }}</h2>
+<div class="scrollable">
+  <md-toolbar>
+    <span>{{ name }}</span>
+    <md-button @click.native="close">
+      <md-icon>close</md-icon>
+    </md-button>
+  </md-toolbar>
   <md-list class="md-dense">
     <md-list-item
       v-for="(property, index) in properties"
@@ -40,6 +45,17 @@ export default {
   },
   components:{
     'componentprop': ComponentProperty
+  },
+  methods: {
+    close(){
+      console.log('Close Edit Props')
+      this.$store.dispatch('closeEditPropsConfig')
+    }
   }
 }
 </script>
+<style>
+.scrollable{
+  overflow-y: scroll;
+}
+</style>

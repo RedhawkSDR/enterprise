@@ -1,6 +1,6 @@
 <template>
 <div>
-  <h1>Components</h1>
+  <h1>{{ applicationName }} :: Components</h1>
   <md-list class="md-dense">
       <md-list-item
       v-for="(component, index) in components"
@@ -30,6 +30,9 @@ export default {
   computed: {
     components(){
       return this.$store.getters.waveformComponents
+    },
+    applicationName(){
+      return this.$store.getters.applicationName
     }
   },
   methods: {

@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="spa">
 		<md-toolbar>
 			<h1 class="md-title">REDHAWK Webapp Example</h1>
 		</md-toolbar>
@@ -18,44 +18,6 @@
 		<md-layout v-if="showDomain">
 			<rhdomain></rhdomain>
 		</md-layout>
-		<!--
-		<md-layout>
-			<md-layout md-flex="20">
-				<md-layout md-column>
-					<md-toolbar>
-						<h2 class="md-title md-accent" style="flex: 1">Domains</h2>
-						<md-button class="md-icon-button md-accent" @click.native="addDomainConfig">
-							<md-icon>add box</md-icon>
-						</md-button>
-					</md-toolbar md-flex="20">
-					<md-list>
-						<md-list-item
-							v-for="(config, index) in configurations"
-							:key=config.name
-							v-bind:index="index">
-							{{ config.name }}
-							<md-menu md-direction="bottom left">
-								<md-button md-menu-trigger>
-									<md-icon>menu</md-icon>
-								</md-button>
-								<md-menu-content>
-									<md-menu-item @click.native="viewDomain(index)">View</md-menu-item>
-									<md-menu-item @click.native="editDomainConfig(index)">Edit</md-menu-item>
-									<md-menu-item @click.native="deleteDomainConfig(index)">Delete</md-menu-item>
-									<md-divider></md-divider>
-									<md-menu-item>Launch Wavforms</md-menu-item>
-								</md-menu-content>
-							</md-menu>
-							<md-divider></md-divider>
-						</md-list-item>
-					</md-list>
-				</md-layout>
-			</md-layout>
-			<md-layout v-if="showDomain">
-				<rhdomain></rhdomain>
-			</md-layout>
-		</md-layout>
-		-->
 		<rhdomainconfig v-if="showAddDomainConfig" @close="showAddDomainConfig=false" @domainConfig="addDomainToList">
 		</rhdomainconfig>
 		<editdomainconfig v-if="showEditDomainConfig" @close="showEditDomainConfig=false">
@@ -131,4 +93,7 @@ export default {
 </script>
 
 <style>
+.spa {
+	overflow: hidden;
+}
 </style>

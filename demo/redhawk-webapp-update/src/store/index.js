@@ -11,12 +11,12 @@ const state = {
   launchedWaveforms: [], // List of launched waveforms
   domainToEdit: null, //Domain being edited
   configToEdit: {}, //Config being editted
-  configToView: {},
-  baseURI: null,
-  availableWaveforms: [],
-  waveformComponents: [],
-  componentPorts: [],
-  applicationName: null,
+  configToView: {}, //Which config to views domain
+  baseURI: null, //Base URI for endpoint
+  availableWaveforms: [], //Availables waveforms for a Domain
+  waveformComponents: [], //Components for a selected waveform
+  componentPorts: [], //Compoent Ports
+  applicationName: null, //Name of application you're viewing
   portsComponentName: null,
   componentPropertiesToEdit: [],
   propComponentName: null,
@@ -29,7 +29,8 @@ const state = {
   hello: null,
   wsURL: null,
   showEditDomainConfig: false,
-  showWaveformComponents: false
+  showWaveformComponents: false,
+  showComponentProperties: false
 }
 
 const store = new Vuex.Store({

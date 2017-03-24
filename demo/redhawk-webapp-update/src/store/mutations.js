@@ -107,6 +107,7 @@ export const showComponentPorts = (state, index) => {
 export const showComponentProperties = (state, index) => {
   console.log('Time to show some props')
   state.propComponentName = state.waveformComponents[index].name
+  state.showComponentProperties = true
 
   var myState = state
   axios.get(state.baseURI+'/applications/'+state.applicationName+'/components/'+state.propComponentName+'/properties.json')
@@ -247,4 +248,8 @@ export const plotPortData = (state, port) => {
   console.log(wsURL)
   //Update wsURL
   state.wsURL = wsURL
+}
+
+export const closeEditPropsConfig = state =>{
+  state.showComponentProperties = false
 }

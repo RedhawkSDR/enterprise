@@ -19,11 +19,13 @@ export default {
 			this.$store.dispatch('editDomainConfig', data)
 		},
 		deleteDomainConfig(data){
+      this.$store.dispatch('resetDomain')
 			this.$store.dispatch('deleteDomainConfig', data)
 		},
 		viewDomain: function(data){
+      this.$store.dispatch('resetDomain')
 			this.$store.dispatch('viewDomainConfig', data)
-			this.$store.dispatch('getWaveformsAvailable', data)
+      this.$store.dispatch('getWaveformsAvailable', data)
 		}
   }
 }

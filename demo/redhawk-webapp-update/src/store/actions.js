@@ -32,3 +32,7 @@ export const launchWaveform = ({ commit }, waveformToLaunch) => commit('launchWa
 export const plotPortData = ({ commit }, port) => commit('plotPortData', port)
 export const closeEditDomainConfig = ({ commit }) => commit('closeEditDomainConfig')
 export const closeEditPropsConfig = ({ commit }) => commit('closeEditPropsConfig')
+
+//Reset initial state
+export const resetDomain = ({ commit }) => commit('resetDomain')
+export const resetWaveformDisplay = ({ commit }) => commit('resetWaveformDisplay')

@@ -19,3 +19,4 @@ export const showWaveformComponents = state => state.showWaveformComponents
 export const applicationName = state => state.applicationName
 export const portsComponentName = state => state.portsComponentName
 export const showComponentProperties = state => state.showComponentProperties
+export const portToDisplayName = state => state.portToDisplayName

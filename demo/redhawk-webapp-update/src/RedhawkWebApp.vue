@@ -42,11 +42,6 @@ export default {
 	data(){
 		return {
 			showAddDomainConfig: false,
-			test: [
-				{
-					name: 'Marcus'
-				}
-			]
 		}
 	},
 	computed: {

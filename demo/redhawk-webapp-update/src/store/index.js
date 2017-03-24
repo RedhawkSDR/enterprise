@@ -18,6 +18,7 @@ const state = {
   componentPorts: [], //Compoent Ports
   applicationName: null, //Name of application you're viewing
   portsComponentName: null,
+  portToDisplayName: null,
   componentPropertiesToEdit: [],
   propComponentName: null,
   showWaveformController: false,
@@ -25,8 +26,6 @@ const state = {
   showLaunchWaveformModal : false,
   waveformToLaunch: null,
   showDomain: false,
-  myPlot: null,
-  hello: null,
   wsURL: null,
   showEditDomainConfig: false,
   showWaveformComponents: false,

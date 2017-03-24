@@ -59,6 +59,7 @@ export default {
   methods: {
     showComponents(data){
       console.log("Showing components for waveforms at index "+data)
+      this.$store.dispatch('resetWaveformDisplay')
       this.$store.dispatch('showWaveformComponents', data)
     },
     showController(data){

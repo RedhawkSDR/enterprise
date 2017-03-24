@@ -1,10 +1,14 @@
 <template>
-<div id="plot">
+<div>
+	<h1 v-if="portName!=null">{{ portsComponentName }}::{{ portName }}</h1>
+	<div id="plot">
+	</div>
 </div>
 </template>
 
 <script>
-var plot, pl, sigplotWS
+var plot, pl;
+var sigplotWS = null
 
 export default {
 	name: 'plot',
@@ -22,12 +26,29 @@ export default {
 	computed: {
 		wsURL(){
 			return this.$store.getters.wsURL
+		},
+		portsComponentName(){
+			return this.$store.getters.portsComponentName
+		},
+		portName(){
+			return this.$store.getters.portToDisplayName
 		}
 	},
 	watch: {
 		wsURL: function(){
 			if(this.wsURL!=null){
 				console.log('Do Websocket stuff')
+				if(sigplotWS!=null){
+						//Close open websocket
+						sigplotWS.close()
+						plot = new sigplot.Plot(document.getElementById('plot'), {
+								autol: 5,
+								cmode: "L2",
+								autohide_panbars: true,
+								nogrid: true,
+						})
+				}
+
 				sigplotWS = new WebSocket(this.wsURL)
 				sigplotWS.binaryType = 'arraybuffer'
 				sigplotWS.onopen = function(evt) {
@@ -42,10 +63,8 @@ export default {
 
 				sigplotWS.onmessage = function(evt) {
 					if(typeof evt.data !== "string"){
-						//console.log('Received Data')
 						plot.reload(pl, evt.data);
 					}else{
-						console.log("NEW SRI")
 						/*
 						* {"endOfStream":false,"streamId":"SigGen Stream","hversion":1,"xstart":0.0,"xdelta":2.0E-4,"xunits":1,"subsize":0,"ystart":0.0,"ydelta":0.0,
 						* "yunits":0,"mode":0,"blocking":false,"keywords":{},"tcmode":1,"tcstatus":1,"tfsec":0.7909940000000002,"toff":0.0,"twsec":1.488296658E9}
@@ -58,7 +77,7 @@ export default {
 						self.xunits = sri.xunits
 						self.yunits = sri.yunits
 
-						pl = plot.overlay_array({
+						pl = plot.overlay_array(null, {
 							size: 1000,
 							xdelta: self.xdelta,
 							xunits: self.xunits,
@@ -70,6 +89,14 @@ export default {
 				};
 			}else{
 				console.log('No url so no websocket')
+
+				//Reset plot to initial state.
+				plot = new sigplot.Plot(document.getElementById('plot'), {
+						autol: 5,
+						cmode: "L2",
+						autohide_panbars: true,
+						nogrid: true,
+				})
 			}
 		}
 	},
@@ -81,21 +108,10 @@ export default {
     //console.log(vm)
     plot = new sigplot.Plot(divToPass, {
         autol: 5,
-        cmod: "L2",
+        cmode: "L2",
         autohide_panbars: true,
         nogrid: true,
     })
-
-		this.$store.hello = "World"
-		//console.log(smoothieChart)
-		//smoothieChart.streamTo(document.getElementById("mycanvas"));
-		/*SigPlotVue.Plot(document.getElementById('signalplot'), {
-		    autol: 5,
-		    cmod: "L2",
-		    autohide_panbars: true,
-		    nogrid: true,
-		});
-		*/
 	}
 }
 </script>

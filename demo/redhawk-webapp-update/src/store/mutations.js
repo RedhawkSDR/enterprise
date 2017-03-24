@@ -248,8 +248,39 @@ export const plotPortData = (state, port) => {
   console.log(wsURL)
   //Update wsURL
   state.wsURL = wsURL
+  state.portToDisplayName = port.name
 }
 
 export const closeEditPropsConfig = state =>{
   state.showComponentProperties = false
+}
+
+export const resetDomain = state => {
+  state.launchedWaveforms = []
+  state.availableWaveforms = []
+  state.waveformComponents = []
+  state.componentPorts = []
+  state.applicationName = null
+  state.portsComponentName = null
+  state.componentPropertiesToEdit = []
+  state.propComponentName = null
+  state.showWaveformController = null
+  state.waveformToControl = null
+  state.waveformToLaunch = null
+  state.showDomain = false
+  state.wsURL = null
+  state.showWaveformComponents = false
+  state.showComponentProperties = false
+  state.configToView = {}
+  state.portToDisplayName = null
+}
+
+export const resetWaveformDisplay = state => {
+  state.waveformComponents = []
+  state.componentPorts = []
+  state.portsComponentName = null
+  state.portToDisplayName = null
+  state.showWaveformComponents = false
+  state.showComponentProperties = false
+  state.wsURL = null
 }

@@ -1,6 +1,6 @@
 <template>
 <div>
-	<h1 v-if="portName!=null">{{ portsComponentName }}::{{ portName }}</h1>
+	<h1 v-if="portName!=null">{{ componentName }}::{{ portName }}</h1>
 	<div id="plot">
 	</div>
 </div>
@@ -21,14 +21,12 @@ export default {
 			xunits: null,
 			ydelta: null,
 			yunits: null,
+			componentName: null
 		}
 	},
 	computed: {
 		wsURL(){
 			return this.$store.getters.wsURL
-		},
-		portsComponentName(){
-			return this.$store.getters.portsComponentName
 		},
 		portName(){
 			return this.$store.getters.portToDisplayName
@@ -37,6 +35,7 @@ export default {
 	watch: {
 		wsURL: function(){
 			if(this.wsURL!=null){
+				this.componentName = this.$store.state.portsComponentName//TODO:This is not intuitive clean up logic
 				console.log('Do Websocket stuff')
 				if(sigplotWS!=null){
 						//Close open websocket
@@ -78,7 +77,6 @@ export default {
 						self.yunits = sri.yunits
 
 						pl = plot.overlay_array(null, {
-							size: 1000,
 							xdelta: self.xdelta,
 							xunits: self.xunits,
 							yunits: self.yunits,

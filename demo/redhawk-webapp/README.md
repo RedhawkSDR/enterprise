@@ -1,4 +1,4 @@
-# redhawk-webapp-update
+# redhawk-webapp
 
 > REDHAWK Webapp example project
 

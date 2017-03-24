@@ -23,9 +23,12 @@
 					</md-list-item>
 				</md-list>
 				<rhwaveforms></rhwaveforms>
+				<!--
+				TODO: Add ability to allocate a device restfully
 				<md-list-item>
 					<span>Device Managers</span>
 				</md-list-item>
+				-->
 			</md-layout>
 		</md-layout>
 		<md-layout>

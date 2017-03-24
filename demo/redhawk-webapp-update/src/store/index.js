@@ -29,7 +29,8 @@ const state = {
   wsURL: null,
   showEditDomainConfig: false,
   showWaveformComponents: false,
-  showComponentProperties: false
+  showComponentProperties: false,
+  propertyUpdate: 0
 }
 
 const store = new Vuex.Store({

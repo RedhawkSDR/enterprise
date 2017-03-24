@@ -135,6 +135,7 @@ export const updateComponentProperty = (state, property) => {
   myPut.put(url, JSON.stringify(property))
   .then(function(response){
     console.log(response)
+    myState.propertyUpdate++
   })
   .catch(function(error){
     console.log(error)

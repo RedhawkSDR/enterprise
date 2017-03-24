@@ -30,10 +30,15 @@ export default {
 		},
 		portName(){
 			return this.$store.getters.portToDisplayName
+		},
+		propertyUpdate(){
+			return this.$store.getters.propertyUpdate
 		}
 	},
 	watch: {
-		wsURL: function(){
+		propertyUpdate: function(){
+			//A property has been updated if plotting is occuring refresh plot
+			console.log('Property was updated')
 			if(this.wsURL!=null){
 				this.componentName = this.$store.state.portsComponentName//TODO:This is not intuitive clean up logic
 				console.log('Do Websocket stuff')
@@ -43,6 +48,7 @@ export default {
 						plot = new sigplot.Plot(document.getElementById('plot'), {
 								autol: 5,
 								cmode: "L2",
+								format: 'SF',
 								autohide_panbars: true,
 								nogrid: true,
 						})
@@ -81,7 +87,66 @@ export default {
 							xunits: self.xunits,
 							yunits: self.yunits,
 							ydelta: self.ydelta,
-							xstart: self.xstart
+							xstart: self.xstart,
+							format: 'SF',
+							cmode: 'L2'
+						});
+					}
+				}
+			}
+		},
+		wsURL: function(){
+			if(this.wsURL!=null){
+				this.componentName = this.$store.state.portsComponentName//TODO:This is not intuitive clean up logic
+				console.log('Do Websocket stuff')
+				if(sigplotWS!=null){
+						//Close open websocket
+						sigplotWS.close()
+						plot = new sigplot.Plot(document.getElementById('plot'), {
+								autol: 5,
+								cmode: "L2",
+								format: 'SF',
+								autohide_panbars: true,
+								nogrid: true,
+						})
+				}
+
+				sigplotWS = new WebSocket(this.wsURL)
+				sigplotWS.binaryType = 'arraybuffer'
+				sigplotWS.onopen = function(evt) {
+					console.log("Connected.");
+				};
+
+				sigplotWS.onclose = function() {
+					console.log("Shutdown.");
+				};
+
+				var self = this
+
+				sigplotWS.onmessage = function(evt) {
+					if(typeof evt.data !== "string"){
+						plot.reload(pl, evt.data);
+					}else{
+						/*
+						* {"endOfStream":false,"streamId":"SigGen Stream","hversion":1,"xstart":0.0,"xdelta":2.0E-4,"xunits":1,"subsize":0,"ystart":0.0,"ydelta":0.0,
+						* "yunits":0,"mode":0,"blocking":false,"keywords":{},"tcmode":1,"tcstatus":1,"tfsec":0.7909940000000002,"toff":0.0,"twsec":1.488296658E9}
+						*/
+						var sri = JSON.parse(evt.data);
+						self.xdelta = sri.xdelta
+						self.ydelta = sri.ydelta
+						self.xstart = sri.xstart
+						self.ystart = sri.ystart
+						self.xunits = sri.xunits
+						self.yunits = sri.yunits
+
+						pl = plot.overlay_array(null, {
+							xdelta: self.xdelta,
+							xunits: self.xunits,
+							yunits: self.yunits,
+							ydelta: self.ydelta,
+							xstart: self.xstart,
+							format: 'SF',
+							cmode: 'L2'
 						});
 					}
 				};
@@ -92,6 +157,7 @@ export default {
 				plot = new sigplot.Plot(document.getElementById('plot'), {
 						autol: 5,
 						cmode: "L2",
+						format: 'SF',
 						autohide_panbars: true,
 						nogrid: true,
 				})

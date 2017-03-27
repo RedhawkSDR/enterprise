@@ -8,7 +8,7 @@
 		<artifactId>redhawk-java-tools</artifactId>
 		<version>2.0.4-SNAPSHOT</version>
 	</parent>
-	<artifactId>dist</artifactId>
+	<artifactId>redhawk-java-tools-dist</artifactId>
 	<packaging>karaf-assembly</packaging>
 	<name>REDHAWK :: JAVA TOOLS :: ASSETS</name>
 	<description>
@@ -286,7 +286,7 @@
 					<licence />
 					<distribution />
 					<icon />
-					<group>REDHAWK Integration</group>
+					<group>REDHAWK Java Tools</group>
 					<prefix>${redhawk.user.home}</prefix>
 					<versionProperty>rpmFriendlyVersion</versionProperty>
 					<requires>

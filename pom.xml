@@ -29,6 +29,7 @@
 		<!--<jackson.version>2.6.6</jackson.version>-->
 		<karaf.maven.plugin.version>4.0.7</karaf.maven.plugin.version>
 		<redhawk.user.home>/usr/local/redhawk</redhawk.user.home>
+		<rpm.group.name>REDHAWK Java Tools</rpm.group.name>
 		<!-- Default distribution Management properties so build works on all machines -->
 		<distributionManagement.repository.id>Releases</distributionManagement.repository.id>
 		<distributionManagement.repository.url>${project.basedir}/repo/releases</distributionManagement.repository.url>
@@ -171,6 +172,7 @@
 				<module>redhawk-websocket</module>
 				<module>redhawk-camel</module>
 				<module>redhawk-feature</module>
+				<module>demo</module>
 				<module>dist</module>
 			</modules>
 		</profile>

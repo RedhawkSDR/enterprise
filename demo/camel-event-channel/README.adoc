@@ -1,4 +1,4 @@
-== Camel REDHAWK Example
+== Camel REDHAWK Demo
 
 This example application shows how you can use Camel REDHAWK component to subscribe to an Event Channel and publish that data to a JMS Topic. 
 

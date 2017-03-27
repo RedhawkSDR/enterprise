@@ -32,11 +32,17 @@
 					<licence />
 					<distribution />
 					<icon />
-					<group>REDHAWK Integration Demos</group>
+					<group>REDHAWK Java Tools</group>
+					<requires>
+						<require>redhawk-java-tools-dist</require>
+					</requires>
+					<defaultUsername>root</defaultUsername>
+					<defaultGroupname>redhawk</defaultGroupname>
+					<defaultFilemode>775</defaultFilemode>
 					<!--<prefix>${demo.directory}</prefix> -->
 					<mappings>
 						<mapping>
-							<directory>${demo.directory}/camel-event-channel</directory>
+							<directory>${demo.directory}/camel-event-channel</directory>							
 							<sources>
 								<source>
 									<location>${project.parent.basedir}/camel-event-channel/src/main/resources</location>

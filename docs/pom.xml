@@ -8,6 +8,9 @@
 	</parent>
 	<artifactId>redhawk-java-tools-docs</artifactId>
 	<packaging>bundle</packaging>
+	<properties>
+		<docs.directory>/usr/local/redhawk/java-tools/docs</docs.directory>
+	</properties>
 	<build>
 		<resources>
 			<resource>
@@ -168,6 +171,52 @@
 						<Import-Package>javax.servlet.http,javax.servlet,org.eclipse.jetty.servlets,*</Import-Package>
 						<_removeheaders>Built-By,Ignore-Package,Private-Package,Embed-Dependency</_removeheaders>
 					</instructions>
+				</configuration>
+			</plugin>
+			<!-- RPM to install docs -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>rpm-maven-plugin</artifactId>
+				<version>2.1.5</version>
+				<extensions>true</extensions>
+				<executions>
+					<execution>
+						<id>attached-rpm</id>
+						<goals>
+							<goal>attached-rpm</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<licence />
+					<distribution />
+					<icon />
+					<group>REDHAWK Java Tools</group>
+					<requires>
+						<require>redhawk-java-tools-dist</require>
+					</requires>
+					<defaultUsername>root</defaultUsername>
+					<defaultGroupname>redhawk</defaultGroupname>
+					<defaultFilemode>775</defaultFilemode>					
+					<!--<prefix>${demo.directory}</prefix> -->
+					<mappings>
+						<mapping>
+							<directory>${docs.directory}</directory>
+							<sources>
+								<source>
+									<location>${project.build.directory}/asciidoc/pdf/index.pdf</location>
+								</source>
+							</sources>
+						</mapping>
+						<mapping>
+							<directory>/usr/local/redhawk/java-tools/karaf-${karaf.version}/deploy</directory>
+							<sources>
+								<source>
+									<location>${project.build.directory}/${project.artifactId}-${project.version}.jar</location>
+								</source>
+							</sources>
+						</mapping>
+					</mappings>
 				</configuration>
 			</plugin>					
 		</plugins>

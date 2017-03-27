@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<features name="redhawk-camel-example-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0">
+	<repository>mvn:org.apache.activemq/activemq-karaf/${activemq.version}/xml/features</repository>
+	
+	<feature name="redhawk-camel-eventchannel-example" version="${project.version}">
+		<feature>activemq-camel</feature>
+		<config name="redhawk.datasource.factory-loaclRH">
+			connectionName = localRH
+			port = 2809
+			host = localhost
+			domainManager = REDHAWK_DEV
+		</config>
+	</feature>
+</features>

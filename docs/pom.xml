@@ -65,6 +65,21 @@
 									<directory>${project.parent.basedir}/redhawk-websocket/src/main/asciidoc</directory>
 									<targetPath>websocket</targetPath>
 								</resource>
+								<!-- Take the necessary adoc files from the demo projects -->
+								<resource>
+									<directory>${project.parent.basedir}/demo/camel-event-channel</directory>
+									<targetPath>demo</targetPath>
+									<includes>
+										<include>README.adoc</include>
+									</includes>
+								</resource>
+								<resource>
+									<directory>${project.parent.basedir}/demo/redhawk-webapp</directory>
+									<targetPath>demo</targetPath>
+									<includes>
+										<include>redhawk-demo-webapp.adoc</include>
+									</includes>
+								</resource>
 							</resources>
 						</configuration>
 					</execution>

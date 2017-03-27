@@ -1,10 +1,8 @@
-## Camel REDHAWK Example
-***
+== Camel REDHAWK Example
 
 This example application shows how you can use Camel REDHAWK component to subscribe to an Event Channel and publish that data to a JMS Topic. 
 
-### Set Up
-***
+=== Set Up
 
 In order to run this demo you need to setup the example component that will publish data to a REDHAWK Event Channel and the Waveform to run that component must be launched. Each of the project described below can be imported into REDHAWK using the 'REDHAWK Import Wizard' provided by the IDE. 
 
@@ -21,7 +19,7 @@ If you'd like the example to publish events to a ActiveMQ as well you'll need to
 
 * Follow Getting Started here: http://activemq.apache.org/version-5-getting-started.html
 
-### Example Output
+=== Example Output
 
 	eventviewer REDHAWK_DEV EventsSpat
 	Receiving events. Press 'enter' key to exit
@@ -33,8 +31,7 @@ If you'd like the example to publish events to a ActiveMQ as well you'll need to
 	[{'id': 'properties', 'value': [{'id': 'foo', 'value': 'foo-a5ecffae-39dc-43a9-80ee-f3902dcd0929'}, {'id': 'bar', 'value': 1.6000000238418579}]}]
 
 
-### Instructions
-***
+=== Instructions
 
 * Start KARAF 'rhjt/apache-karaf-4.0.8/bin/start'
 * Add a configuration for REDHAWK by dropping the 'redhawk.datasource.factory-localRH.cfg' file into the etc directory of your karaf install.
@@ -42,13 +39,16 @@ If you'd like the example to publish events to a ActiveMQ as well you'll need to
 * Start the SpitToChannel waveform
 * At this point you'll see logs of the messages being sent to the event channel in your karaf log
 
+[source]
 	2017-02-23 14:35:19,417 | INFO  | eadpool; w: Idle | eventTest                        | 31 - org.apache.camel.camel-core - 2.17.5 | Exchange[ExchangePattern: InOnly, BodyType: java.util.HashMap, Body: {bar=1.6, foo=foo-beff745f-6ab1-4d75-b5e3-a29a0c4e9a3d}]
 	2017-02-23 14:35:20,548 | INFO  | eadpool; w: Idle | eventTest                        | 31 - org.apache.camel.camel-core - 2.17.5 | Exchange[ExchangePattern: InOnly, BodyType: java.util.HashMap, Body: {bar=1.6, foo=foo-fcda80f5-3b6b-46fb-8ada-80859ff7fcef}]
 	2017-02-23 14:35:21,678 | INFO  | eadpool; w: Idle | eventTest                        | 31 - org.apache.camel.camel-core - 2.17.5 | Exchange[ExchangePattern: InOnly, BodyType: java.util.HashMap, Body: {bar=1.6, foo=foo-0dc62388-5dee-43b5-8c1b-7bfa91f2bc39}]
 	2017-02-23 14:35:22,808 | INFO  | eadpool; w: Idle | eventTest                        | 31 - org.apache.camel.camel-core - 2.17.5 | Exchange[ExchangePattern: InOnly, BodyType: java.util.HashMap, Body: {bar=1.6, foo=foo-090be096-49ba-4943-ae65-3a4ae1438398}]
 	2017-02-23 14:35:23,938 | INFO  | eadpool; w: Idle | eventTest                        | 31 - org.apache.camel.camel-core - 2.17.5 | Exchange[ExchangePattern: InOnly, BodyType: java.util.HashMap, Body: {bar=1.6, foo=foo-0dcc5772-0759-4122-ba11-fc7fe10c697f}]
+[source]
 	
-**ActiveMQ Integration**
+=== ActiveMQ Integration
+
 * Login to your karaf console and run the following commands:
 
 	feature:repo-add mvn:org.apache.activemq/activemq-karaf/5.14.3/xml/features
@@ -56,8 +56,6 @@ If you'd like the example to publish events to a ActiveMQ as well you'll need to
 	
 * Now that ActiveMQ available to be used as a Camel Component uncomment the sections relevant to ActiveMQ in your route. Once your save the file the Camel Context will be redeployed automatically with your changes. 
 * You can go to your ActiveMQ Admin console to confirm messages are being sent to the topic. 
-
-	
 
 
 		

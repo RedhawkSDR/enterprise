@@ -1,0 +1,23 @@
+== REDHAWK Demo Webapp
+
+This is an example web application that allows user to interact with a REDHAWK domain via the web. The web application uses REDHAWK REST, REDHAWK Websocket and REDHAWK Driver. The jetty running in the KARAF Container serves as your web server. 
+
+=== Instructions
+
+To use this application just copy the redhawk-demo-webapp.jar file into the $karaf.base/etc directory. By putting this file in that directory you're deploying the web application into KARAF. Once it's deployed you'll be able to login to the karaf container and see the path of the webapp via this command:
+
+	web:list
+	
+
+Example output:
+
+
+	karaf@root()> web:list
+	ID  | State       | Web-State   | Level | Web-ContextPath | Name
+	------------------------------------------------------------------------------------------------------
+	158 | Active      | Deployed    | 80    | /redhawkwebdemo | REDHAWK :: DEMO :: WEBAPP (2.0.4.SNAPSHOT)
+
+
+You can now view the web application by going to http://{hostname}:8181/redhawkwebdemo . 
+
+Once you've opened the web application you can click on the '+' button to add a Domain. Enter the information and then click 'view' button on the Domain you added. At this point you'll have access to command and control you're configured domain from the web. 

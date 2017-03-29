@@ -21,3 +21,5 @@ export const portsComponentName = state => state.portsComponentName
 export const showComponentProperties = state => state.showComponentProperties
 export const portToDisplayName = state => state.portToDisplayName
 export const propertyUpdate = state => state.propertyUpdate
+export const redhawkRESTRoot = state => state.redhawkRESTRoot
+export const showEditRESTModal = state => state.showEditRESTModal

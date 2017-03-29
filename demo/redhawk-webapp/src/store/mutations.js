@@ -45,7 +45,7 @@ export const updateDomainConfig = state => {
 export const viewDomainConfig = (state, index) => {
   var config = state.domainConfigs[index]
   state.configToView = config
-  state.baseURI = "http://127.0.0.1:8181/cxf/redhawk/"+config.nameServer+"/domains/"+config.domainName
+  state.baseURI = state.redhawkRESTRoot+config.nameServer+"/domains/"+config.domainName
 
   //Setting Waveforms based on config
   var myState = state
@@ -55,6 +55,10 @@ export const viewDomainConfig = (state, index) => {
     var launchedWFJson = response.data.applications
     console.log('Waveforms Launched: '+launchedWFJson)
     myState.launchedWaveforms = launchedWFJson
+  })
+  .catch(function(error){
+    console.log("Unable to connect to domain")
+    alert("Unable to connect to domain.")
   })
 }
 

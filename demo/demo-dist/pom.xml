@@ -39,7 +39,6 @@
 					<defaultUsername>root</defaultUsername>
 					<defaultGroupname>redhawk</defaultGroupname>
 					<defaultFilemode>775</defaultFilemode>
-					<!--<prefix>${demo.directory}</prefix> -->
 					<mappings>
 						<mapping>
 							<directory>${demo.directory}/camel-event-channel</directory>							

@@ -30,7 +30,9 @@ const state = {
   showEditDomainConfig: false,
   showWaveformComponents: false,
   showComponentProperties: false,
-  propertyUpdate: 0
+  propertyUpdate: 0,
+  redhawkRESTRoot: 'http://127.0.0.1:8181/cxf/redhawk/',
+  showEditRESTModal: false
 }
 
 const store = new Vuex.Store({

@@ -186,6 +186,7 @@
 				<module>redhawk-connector</module>
 				<module>redhawk-rest</module>
 				<module>redhawk-websocket</module>				
+				<module>demo</module>
 				<module>docs</module>
 			</modules>
 		</profile>

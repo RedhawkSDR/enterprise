@@ -1,6 +1,17 @@
 <template>
 	<div class="spa">
 		<md-toolbar>
+			<md-menu md-align-trigger>
+				<md-button md-menu-trigger class="md-icon-button">
+					<md-icon>
+						menu
+					</md-icon>
+				</md-button>
+				<md-menu-content>
+					<md-menu-item @click.native="about">About</md-menu-item>
+					<md-menu-item @click.native="editREST">Configure REST</md-menu-item>
+				</md-menu-content>
+			</md-menu>
 			<h1 class="md-title">REDHAWK Webapp Example</h1>
 		</md-toolbar>
 		<md-toolbar>
@@ -26,6 +37,8 @@
 		</waveformcontroller>
 		<launchwaveform v-if="showLaunchWaveformModal" @close="showLaunchWaveformModal=false">
 		</launchwaveform>
+		<editrest v-if="showEditRESTModal">
+		</editrest>
 	</div>
 </template>
 
@@ -36,6 +49,7 @@ import EditRHDomainConfig from './components/EditRHDomainConfig'
 import WaveformController from './components/WaveformController'
 import LaunchWaveformModal from './components/LaunchWaveformModal'
 import DomainMenu from './components/DomainMenu.vue'
+import EditREST from './components/EditRestConfig.vue'
 
 export default {
 	name: 'redhawkwebapp',
@@ -60,6 +74,9 @@ export default {
 		showEditDomainConfig(){
 			return this.$store.getters.showEditDomainConfig
 		},
+		showEditRESTModal(){
+			return this.$store.getters.showEditRESTModal
+		},
 		availableWaveforms(){
 			return this.$store.getters.availableWaveforms
 		}
@@ -71,6 +88,7 @@ export default {
 		'waveformcontroller' : WaveformController,
 		'launchwaveform' : LaunchWaveformModal,
 		'domainmenu': DomainMenu,
+		'editrest' : EditREST
 	},
 	methods: {
 		addDomainConfig: function() {
@@ -82,6 +100,13 @@ export default {
 		showWaveformLauncher(waveform){
 			console.log("Show Launcher for this wavform "+waveform)
 			this.$store.dispatch('showLaunchWaveformModal', waveform)
+		},
+		about(){
+			console.log("Go to about")
+			this.$router.push('about')
+		},
+		editREST(){
+			this.$store.state.showEditRESTModal = true
 		}
 	}
 }

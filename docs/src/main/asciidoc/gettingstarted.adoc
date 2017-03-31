@@ -1,46 +1,54 @@
 == Getting Started
 
-Once installed you'll see these directories:
+After installing REDHAWK Java Tools, the following directories are displayed.
 
-* karaf-<version>: Directory contains a custom distribution of KARAF prepackeged with all Redhawk Java Tool assets. 
-* shell: Programatic access to Redhawk driver via the shell. 
-* jacorb-deps: All dependencies you'll need to configure REDHAWK Driver to use jacord instead of the default ORB provided by the java.
+* `karaf-<version>`: Directory contains a custom distribution of Karaf prepackaged with all REDHAWK Java Tool assets. 
+* `shell`: Programatic access to Redhawk driver via the shell. 
+* `jacorb-deps`: All dependencies needed to configure REDHAWK Driver to use JacORB instead of the default ORB provided by Java.
 
 === Working with the Shell
 
-The shell provides an easy way to get started with using the REDHAWK Driver without an IDE or other development tools. To use the shell do the following:
+The shell provides a convenient method to use the REDHAWK Driver without an IDE or other development tools. To start the REDHAWK Driver shell environment:
 
-* Run the jrepl script:
+. Run the jrepl script:
++
 ----
  ./jrepl
 ----
-* Once in the console you can get all the necessary imports for Redhawk Driver via 
- :eval driver-imports
-* You're now up and running and have programmatic access all the classes in Redhawk Driver. 
+In the console, you have access to the necessary imports for REDHAWK Driver via 
+ `:eval driver-imports`. You also have access to all the classes in REDHAWK Driver. 
 
 ==== Example Commands
 
-Create an Application: 
+* To create an Application: 
 
  driver = new RedhawkDriver(); 
  application = driver.getDomain("REDHAWK_DEV").createApplication("MyFirstApplication", "/waveforms/rh/FM_mono_demo/FM_mono_demo.sad.xml")
 	
-Start an Application: 
+* To start an Application: 
 
  application.start();
 
-Release an Application:
+* To release an Application:
 	
  application.release();
 
-More example commands can be found in the Redhawk Driver Code Examples section. 
+More example commands can be found in the REDHAWK Driver Code Examples section. 
 
 === Working with Karaf
 
-To start karaf run the start script in the bin directory for karaf:
+. To start Karaf, in the bin directory for Karaf, run the start script:
++
+----
  ./start
+----
 
-To access the karaf console run the client script in the bin directory for karaf:
+. To access the Karaf console, in the bin directory for Karaf, run the client script:
++
+----
  ./client
+----
 
-Once logged in you can run the command 'list' to see the REDHAWK Assets that have been preinstalled for you. Each asset has it's own documentation see the section on the asset you're interested in for how to interact with it. For more details on Karaf see the https://karaf.apache.org/manual/latest/[Apache Karaf documentation]. At this point you're up and running and can begin using the tools provided to interact with Redhawk or write you own applications that leverage these tools to interact with REDHAWK. Happy coding!
+. Once logged in, run the command 'list' to display the REDHAWK Assets that have been preinstalled. Each asset includes documentation. Refer to the appropriate section in the online documentation for information about interacting with tje assest. For more details on Karaf, refer to  https://karaf.apache.org/manual/latest/[Apache Karaf documentation]. 
+
+. Begin using the Java Tools provided to interact with REDHAWK or write your own applications that leverage these tools to interact with REDHAWK.

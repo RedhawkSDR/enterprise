@@ -1,4 +1,4 @@
-= Redhawk Java Tools User Guide
+= REDHAWK Java Tools User Guide
 
 include::introduction.adoc[]
 

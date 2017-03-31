@@ -1,26 +1,37 @@
-== Installation
+== Installing REDHAWK Java Tools
 
-=== Install via Tarball
+=== Installing via Tarball
 
-* Untar the tarball in the directory of your choosing: 
+. Navigate to the directory where you want to install REDHAWK Java Tools, and untar the tarball:
++
 ----
 tar xzf java-tools.tar.gz
 ----
-* Set the JAVA_HOME environment variable if not already set in your .bashrc/.bash_profile by adding the following:
++
+
+. If not already set in your `.bashrc/.bash_profile`, set the `JAVA_HOME` environment variable by adding the following
++
 ----
 JAVA_HOME=[path to java 8]
 export JAVA_HOME
 ----
-* source your .bashrc/.bash_profile:
++
+
+. Source your .bashrc/.bash_profile:
++
 ----
 . ~/.bashrc or ~/.bash_profile
 ----
 
-=== Install via RPM
 
-* Run this command to install the rpm:
+=== Installing via RPM
+
+. Run this command to install the RPM:
++
 ----
  rpm -i java-tools-<version>-noach.rpm
 ----
-* The rpm by default is installed into '/usr/local/redhawk' 
-* The rpm will install jre-1.8 for you if you decided to resolve the dependency during install. Add a JAVA_HOME environment variable for KARAF to run properly.
++
+--
+By default, the RPM  is installed in `/usr/local/redhawk`.
+If you decided to resolve the dependency during install, the RPM installs jre-1.8 for you. Add a `JAVA_HOME` environment variable for Karaf to run properly.

@@ -317,7 +317,7 @@ public class DomainConverter {
             app.setProperties(convertProperties(obj.getProperties(), null));
 
             try {
-                app.setExternalPorts(obj.getExternalPorts().stream()
+                app.setExternalPorts(obj.getPorts().stream()
                         .map(this::convertPort)
                         .collect(Collectors.toList()));
             } catch (IOException e) {

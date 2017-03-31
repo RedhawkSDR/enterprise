@@ -116,14 +116,14 @@ public interface RedhawkApplication extends QueryableResource {
      * @throws ResourceNotFoundException
      * @throws IOException
      */
-    RedhawkPort getExternalPort(String name) throws ResourceNotFoundException, IOException;
+    RedhawkPort getPort(String name) throws ResourceNotFoundException, IOException;
     
     /**
      * Use this method to get ExternalPorts for your application.  
      * @return
      * @throws IOException
      */
-    List<RedhawkPort> getExternalPorts() throws IOException;
+    List<RedhawkPort> getPorts() throws IOException;
     
     /**
      * Utility method to figure out if an application is started or not. 

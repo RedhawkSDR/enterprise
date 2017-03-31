@@ -136,7 +136,7 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 	}
 
 	@Override
-	public RedhawkPort getExternalPort(String name) throws ResourceNotFoundException, IOException {
+	public RedhawkPort getPort(String name) throws ResourceNotFoundException, IOException {
 		for(Port port : getAssembly().getExternalports().getPorts()){
 			if(port.getExternalname().matches(name)){
 				String portName = port.getUsesidentifier() != null ? port.getUsesidentifier() : port.getProvidesidentifier(); 
@@ -153,7 +153,7 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 	}
 
 	@Override
-	public List<RedhawkPort> getExternalPorts() throws IOException {
+	public List<RedhawkPort> getPorts() throws IOException {
 		List<RedhawkPort> externalPorts = new ArrayList<RedhawkPort>();
 		Externalports extPorts = getAssembly().getExternalports();
 		

@@ -180,7 +180,12 @@ public class RedhawkDeviceImpl extends PortBackedObjectImpl<Device> implements R
 	
 	String getAllocId(RedhawkStruct s) {
 		//return (String) s.toMap().get("FRONTEND::tuner_status::allocation_id");
-		return getAllocIds(s).get(0);
+		List<String> allocIds = getAllocIds(s);
+		
+		if(allocIds.isEmpty()){
+			return null;
+		}
+		return allocIds.get(0);
 	}
 
 	List<String> getAllocIds(RedhawkStruct s) {
@@ -243,7 +248,8 @@ public class RedhawkDeviceImpl extends PortBackedObjectImpl<Device> implements R
 		
 		List<Map<String, Object>> tuners = new ArrayList<Map<String,Object>>();
 		for(RedhawkStruct s : getStatus()){
-			if(!getAllocId(s).isEmpty()){
+			String allocId = getAllocId(s);
+			if(allocId!=null && !allocId.isEmpty()){
 				tuners.add(s.toMap());
 			}
 		}

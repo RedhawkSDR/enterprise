@@ -308,6 +308,13 @@
 											</includes>
 										</resource>
 										<resource>
+											<directory>src/test/java/redhawk/driver/device/impl</directory>
+											<targetPath>examples/snippets</targetPath>
+											<includes>
+												<include>RedhawkDeviceImplTestIT.java</include>
+											</includes>
+										</resource>										
+										<resource>
 											<directory>src/main/asciidoc</directory>
 										</resource>																				
 									</resources>

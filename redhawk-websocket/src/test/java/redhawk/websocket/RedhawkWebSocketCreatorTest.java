@@ -86,7 +86,7 @@ public class RedhawkWebSocketCreatorTest {
 		Mockito.when(redhawk.getDomain("aDomain")).thenReturn(rhDomainManager);
 //		Mockito.when(redhawk.getAlias()).thenReturn("anAlias");
 		Mockito.when(rhDomainManager.getApplicationByName("applicationName")).thenReturn(rhApplication);
-		Mockito.when(rhApplication.getExternalPort("aExternalPort")).thenReturn(rhPort);
+		Mockito.when(rhApplication.getPort("aExternalPort")).thenReturn(rhPort);
 		Mockito.when(rhApplication.getComponentByName("componentName")).thenReturn(rhComponent);
 		Mockito.when(rhComponent.getPort("aPort")).thenReturn(rhPort);
 		//Mockito.when(rhDomainManager.getEventChannelManager().eventChannels().keySet()).thenReturn(eventChannels);

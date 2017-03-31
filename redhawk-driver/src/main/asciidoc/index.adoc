@@ -10,4 +10,6 @@ include::examples/redhawkapplication-usage.adoc[]
 
 include::examples/redhawkcomponent-usage.adoc[]
 
+include::examples/redhawkdevice-usage.adoc[]
+
 include::examples/redhawkeventchannelmanager-usage.adoc[]

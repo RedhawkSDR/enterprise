@@ -85,7 +85,7 @@ public class RedhawkTestBaseOrig {
 		//TODO: No such method exists...
 		//Mockito.when(redhawk.getAlias()).thenReturn("anAlias");
 		Mockito.when(rhDomainManager.getApplicationByName("applicationName")).thenReturn(rhApplication);
-		Mockito.when(rhApplication.getExternalPort("aExternalPort")).thenReturn(rhPort);
+		Mockito.when(rhApplication.getPort("aExternalPort")).thenReturn(rhPort);
 		Mockito.when(rhApplication.getComponentByName("componentName")).thenReturn(rhComponent);
 		Mockito.when(rhComponent.getPort("aPort")).thenReturn(rhPort);
 		//TODO: Figure out a way to mock this...

@@ -127,7 +127,7 @@ public class RedhawkWebSocketCreator implements WebSocketCreator {
                     if (pathArray[5].equals("components")) {
                         port = app.getComponentByName(pathArray[6]).getPort(pathArray[8]);
                     } else if (pathArray[5].equals("ports")) {                        
-                        port = app.getExternalPort(pathArray[6]);
+                        port = app.getPort(pathArray[6]);
                     }
                     return new RedhawkBulkIoWebSocket(newDriverInstance, redhawkConnection, port, binary, alwaysSendSri, webSocketProcessors, path);
                 case "eventchannels":

@@ -78,7 +78,7 @@ public class RedhawkMiscTests extends RedhawkBaseTest {
 		RedhawkApplication p = d
 				.getApplicationByName(applicationName);
 		System.out.println("ExternalPorts:");
-		for (RedhawkPort port : p.getExternalPorts())
+		for (RedhawkPort port : p.getPorts())
 			System.out.println("\t" + port);
 	}
 

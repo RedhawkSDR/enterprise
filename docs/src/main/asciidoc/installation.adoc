@@ -32,6 +32,6 @@ export JAVA_HOME
  rpm -i java-tools-<version>-noach.rpm
 ----
 +
---
+
 By default, the RPM  is installed in `/usr/local/redhawk`.
 If you decided to resolve the dependency during install, the RPM installs jre-1.8 for you. Add a `JAVA_HOME` environment variable for Karaf to run properly.

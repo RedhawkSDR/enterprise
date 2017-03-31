@@ -232,19 +232,19 @@
 			<groupId>redhawk</groupId>
 			<artifactId>cfinterfaces</artifactId>
 			<version>${redhawk.version}</version>
-			<scope>test</scope>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>redhawk</groupId>
 			<artifactId>bulkiointerfaces</artifactId>
 			<version>${redhawk.version}</version>
-			<scope>test</scope>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>redhawk</groupId>
 			<artifactId>ossie</artifactId>
 			<version>${redhawk.version}</version>
-			<scope>test</scope>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 	<profiles>

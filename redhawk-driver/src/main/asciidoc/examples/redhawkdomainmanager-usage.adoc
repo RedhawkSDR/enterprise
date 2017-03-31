@@ -38,3 +38,5 @@ include::snippets/RedhawkDomainManagerImplTestIT.java[lines=159..166]
 ----
 include::snippets/RedhawkDomainManagerImplTestIT.java[lines=165..172]
 ----
+
+<<<

@@ -16,3 +16,4 @@ include::snippets/RedhawkApplicationImplTestIT.java[lines=100..110]
 include::snippets/RedhawkApplicationImplTestIT.java[lines=92..96]
 ----
 
+<<<

@@ -1,0 +1,14 @@
+== RedhawkDevice 
+
+Below are code examples for using the RedhawkDevice class. 
+
+=== Allocate and Deallocate a Device
+
+Sample code for allocating and deallocating a frontend device. 
+
+[source,java,indent=0]
+----
+include::snippets/RedhawkDeviceImplTestIT.java[lines=28..61,71..74]
+----
+
+<<<

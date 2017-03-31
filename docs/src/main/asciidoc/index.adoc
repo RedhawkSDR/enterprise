@@ -33,7 +33,7 @@ include::rest/definitions.adoc[]
 include::websocket/overview.adoc[]
 
 //Demo instructions 
-include::demo-introduction.adoc[] //Probably don't need this blurb and can go straight into demos
+include::demo-introduction.adoc[] 
 
 include::demo/redhawk-demo-webapp.adoc[]
 

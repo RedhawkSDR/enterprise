@@ -78,6 +78,10 @@ import CF.PropertyEmitterPackage.AlreadyInitialized;
 import CF.PropertySetPackage.InvalidConfiguration;
 import CF.PropertySetPackage.PartialConfiguration;
 
+/**
+ * Java object representing a CF.DeviceManager
+ * @author default
+ */
 public class DeviceManagerTemplate implements DeviceManager {
 
 	private FileSystem fileSys;
@@ -113,6 +117,9 @@ public class DeviceManagerTemplate implements DeviceManager {
 	    internalCreate();
 	}
 	
+	/*
+	 * Initializes CF.FileSystem with a Template DCD File.
+	 */
 	private void initializeFileSystem() {
 		try {
 	        DcdFile dcdFile = new DcdFile(domainName, deviceManagerName);
@@ -132,7 +139,6 @@ public class DeviceManagerTemplate implements DeviceManager {
 			e.printStackTrace();
 		}
 	}
-	
 	
 	private void internalCreate() throws Exception {
 		Object objRef = orb.resolve_initial_references("NameService");

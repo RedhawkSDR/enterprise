@@ -7,6 +7,7 @@
 		<version>2.0.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>redhawk-java-tools-docs</artifactId>
+	<name>REDHAWK :: JAVA TOOLS :: DOCUMENTATION</name>
 	<packaging>bundle</packaging>
 	<properties>
 		<docs.directory>/usr/local/redhawk/java-tools/docs</docs.directory>

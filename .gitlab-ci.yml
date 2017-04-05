@@ -15,5 +15,5 @@ build:
     - mvn -Djava.io.tmpdir=./ -P jaxb-generation,docs compile -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository
   artifacts:
     paths:
-    - redhawk-rest/target/docs/pdf/index.pdf
-    - docs/target/asciidoc/pdf/index.pdf
+    - docs/target/asciidoc/html/index.html #Website for REDHAWK Java Tools User Manual
+    - docs/target/asciidoc/pdf/index.pdf #PDF for REDHAWK Java Tools User Manual

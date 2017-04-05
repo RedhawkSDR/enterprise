@@ -532,6 +532,7 @@ public class RedhawkDomainManagerImpl extends
 
 	@Override
 	public DomainManager getCorbaObj() {
+		DomainManager mgr;
 		return super.getCorbaObject();
 	}
 

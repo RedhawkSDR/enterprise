@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE softwareassembly PUBLIC "-//JTRS//DTD SCA V2.2.2 SAD//EN" "softwareassembly.dtd">
+<softwareassembly id="DCE:0ae8f638-7ca4-47da-a014-1c4d7c56950a" name="MPWaveform">
+  <componentfiles>
+    <componentfile id="MessageProducer_e33e4008-646e-41ac-9929-e6d4027ad7c2" type="SPD">
+      <localfile name="/components/MessageProducer/MessageProducer.spd.xml"/>
+    </componentfile>
+  </componentfiles>
+  <partitioning>
+    <componentplacement>
+      <componentfileref refid="MessageProducer_e33e4008-646e-41ac-9929-e6d4027ad7c2"/>
+      <componentinstantiation id="MessageProducer_1" startorder="0">
+        <usagename>MessageProducer_1</usagename>
+        <findcomponent>
+          <namingservice name="MessageProducer_1"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
+  </partitioning>
+  <assemblycontroller>
+    <componentinstantiationref refid="MessageProducer_1"/>
+  </assemblycontroller>
+  <connections>
+    <connectinterface id="connection_1">
+      <usesport>
+        <usesidentifier>message_out</usesidentifier>
+        <componentinstantiationref refid="MessageProducer_1"/>
+      </usesport>
+      <componentsupportedinterface>
+        <supportedidentifier>IDL:ExtendedEvent/MessageEvent:1.0</supportedidentifier>
+        <findby>
+          <domainfinder name="MyChannel" type="eventchannel"/>
+        </findby>
+      </componentsupportedinterface>
+    </connectinterface>
+  </connections>
+</softwareassembly>

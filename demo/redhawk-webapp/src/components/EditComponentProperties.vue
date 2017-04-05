@@ -1,12 +1,19 @@
 <template>
-<div class="scrollable">
+  <!--
   <md-toolbar>
     <span>{{ name }}</span>
     <md-button @click.native="close">
       <md-icon>close</md-icon>
     </md-button>
   </md-toolbar>
+-->
   <md-list class="md-dense">
+    <md-subheader>
+      <md-button @click.native="close" class="md-icon-button">
+        <md-icon>close</md-icon>
+      </md-button>
+      {{ name }}
+    </md-subheader>
     <md-list-item
       v-for="(property, index) in properties"
       :key="property"
@@ -26,7 +33,6 @@
   >
   </componentprop>
   -->
-</div>
 </template>
 
 <script>

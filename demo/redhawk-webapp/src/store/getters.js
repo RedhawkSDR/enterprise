@@ -23,3 +23,7 @@ export const portToDisplayName = state => state.portToDisplayName
 export const propertyUpdate = state => state.propertyUpdate
 export const redhawkRESTRoot = state => state.redhawkRESTRoot
 export const showEditRESTModal = state => state.showEditRESTModal
+export const showApplication = state => state.showApplication
+export const devicemanagers = state => state.devicemanagers
+export const showDeviceManager = state => state.showDeviceManager
+export const deviceManager = state => state.deviceManager

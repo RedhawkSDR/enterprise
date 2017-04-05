@@ -32,7 +32,11 @@ const state = {
   showComponentProperties: false,
   propertyUpdate: 0,
   redhawkRESTRoot: 'http://127.0.0.1:8181/cxf/redhawk/',
-  showEditRESTModal: false
+  showEditRESTModal: false,
+  showApplication: false,
+  showDeviceManager: false,
+  devicemanagers: [],
+  deviceManager: null //Device Manager to show
 }
 
 const store = new Vuex.Store({

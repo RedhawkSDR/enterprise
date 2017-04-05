@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1>{{ componentName }} :: Ports</h1>
     <md-list class="md-dense">
+        <md-subheader>{{ componentName }} :: Ports</md-subheader>
         <md-list-item
         v-for="(port, index) in ports"
         v-bind:key=port

@@ -60,6 +60,18 @@ export const viewDomainConfig = (state, index) => {
     console.log("Unable to connect to domain")
     alert("Unable to connect to domain.")
   })
+
+  //Setting the devicemanagers based on config
+  axios.get(state.baseURI+'/devicemanagers.json')
+  .then(function(response){
+    //TODO: Would like to Domain info in this object
+    console.log("Querying Devicemanagers")
+    var devicemanagers = new Object();
+    myState.devicemanagers = response.data.deviceManagers
+  })
+  .catch(function(error){
+    alert("Unable to find device managers")
+  })
 }
 
 //TODO: Merge this with viewDomain config and execute in parralel
@@ -288,4 +300,29 @@ export const resetWaveformDisplay = state => {
   state.showWaveformComponents = false
   state.showComponentProperties = false
   state.wsURL = null
+}
+
+export const showApplication = (state, show) => {
+  console.log('Show application '+show)
+  state.showApplication = show
+}
+
+export const showDeviceManager = (state, show) => {
+  var myState = state
+
+  if(show.show){
+    var deviceManagerName = state.devicemanagers[show.index].label
+    var deviceManagerURL = state.baseURI+'/devicemanagers/'+deviceManagerName+'.json'
+        
+    axios.get(deviceManagerURL)
+    .then(function(response){
+        myState.deviceManager = response.data
+        myState.showDeviceManager = true
+    })
+    .catch(function(error){
+      console.log("ERROR: "+error)
+    })
+  }else{
+      myState.showDeviceManager = false
+  }
 }

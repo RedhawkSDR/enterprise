@@ -166,21 +166,23 @@ public class RedhawkFileSystemImpl implements RedhawkFileSystem {
 		
         return bos.toByteArray();
 	}
-
 	
-	  public void writeFile(InputStream inputStream, String destFile) throws IOException {
+	public void writeFile(InputStream inputStream, String destFile) throws IOException {
 		  
 	      CF.File file;
 	      try {
 	    	  
+	    	  //Check to see if File is already on disk 
 	    	  if(fileSystem.exists(destFile)){
 	    		  throw new IOException("Destination File: " + destFile + " already Exists");
 	    	  }
 	    	  
+	    	  //Check to see if parent directory already exists
 	    	  if(!fileSystem.exists(destFile.substring(0, destFile.lastIndexOf(java.io.File.separator)))) {
 	    		  fileSystem.mkdir(destFile.substring(0, destFile.lastIndexOf(java.io.File.separator)));
 	    	  }
 	    	  
+	    	  //Create a CF.File
 	          file = fileSystem.create(destFile);
 	      } catch (InvalidFileName e1) {
 	          throw new IOException("Unable to create new file. InvalidFileName: " + e1);
@@ -188,6 +190,9 @@ public class RedhawkFileSystemImpl implements RedhawkFileSystem {
 	          throw new IOException("Unable to create new file. FileException: " + e1);
 	      }
 
+	      /*
+	       * Write to CF.File
+	       */
 	      try {
 	          int size = (int) inputStream.available();
 	          byte[] buffer = new byte[size];

@@ -120,6 +120,7 @@ public class RedhawkDeviceImpl extends PortBackedObjectImpl<Device> implements R
 
 	@Override
 	public void deallocate(String type, Map<String, Object> allocation) {
+		Device d;
 		try {
 			DataType[] outer = new DataType[1];
 			outer[0] = new DataType(type, RedhawkUtils.createAny(getOrb(), allocation));

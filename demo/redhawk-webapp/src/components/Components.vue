@@ -1,7 +1,7 @@
 <template>
 <div>
-  <h1>{{ applicationName }} :: Components</h1>
   <md-list class="md-dense">
+      <md-subheader>{{ applicationName }} :: Components</md-subheader>
       <md-list-item
       v-for="(component, index) in components"
       v-bind:key="component"

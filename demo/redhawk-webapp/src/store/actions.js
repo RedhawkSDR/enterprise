@@ -36,3 +36,6 @@ export const closeEditPropsConfig = ({ commit }) => commit('closeEditPropsConfig
 //Reset initial state
 export const resetDomain = ({ commit }) => commit('resetDomain')
 export const resetWaveformDisplay = ({ commit }) => commit('resetWaveformDisplay')
+
+export const showApplication = ({ commit }, show) => commit('showApplication', show)
+export const showDeviceManager = ({ commit }, show) => commit('showDeviceManager', show)

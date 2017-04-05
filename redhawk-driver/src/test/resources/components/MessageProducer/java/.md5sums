@@ -1,0 +1,6 @@
+8bfcd22353c3a57fee561ad86ee2a56b  reconf
+4f5286131f5769e71056220775a53c5b  configure.ac
+d63952b67f2442b2cab9742e1f99235c  startJava.sh
+83bf3dab33850e3818b122b845e6a636  src/MessageProducer/java/MessageProducer_base.java
+e07731142f6af3b433c761b214e9b823  src/MessageProducer/java/MessageProducer.java
+fa60939a26ead0f457f5e6c775f60a37  Makefile.am

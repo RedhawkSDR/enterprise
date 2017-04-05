@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE softpkg PUBLIC "-//JTRS//DTD SCA V2.2.2 SPD//EN" "softpkg.dtd">
+<softpkg id="DCE:168c54dd-683d-42d9-a08b-ee2239872322" name="MessageProducer" type="2.1.0">
+  <title></title>
+  <author>
+    <name>null</name>
+  </author>
+  <propertyfile type="PRF">
+    <localfile name="MessageProducer.prf.xml"/>
+  </propertyfile>
+  <descriptor>
+    <localfile name="MessageProducer.scd.xml"/>
+  </descriptor>
+  <implementation id="java">
+    <description>The implementation contains descriptive information about the template for a software resource.</description>
+    <code type="Executable">
+      <localfile name="java"/>
+      <entrypoint>java/startJava.sh</entrypoint>
+    </code>
+    <compiler name="/usr/bin/javac" version="1.8"/>
+    <programminglanguage name="Java"/>
+    <humanlanguage name="EN"/>
+    <runtime name="/usr/bin/java" version="1.8"/>
+    <os name="Linux"/>
+  </implementation>
+</softpkg>

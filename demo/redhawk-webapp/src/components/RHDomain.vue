@@ -7,7 +7,7 @@
 				</md-toolbar>
 				<md-list>
 					<md-list-item>
-						<span>Launch Waveform
+						<span>Waveforms
 						</span>
 						<md-list-expand>
 							<md-list-item
@@ -22,7 +22,8 @@
 						</md-list-expand>
 					</md-list-item>
 				</md-list>
-				<rhwaveforms></rhwaveforms>
+				<rhapplications></rhapplications>
+				<rhdevicemanagers></rhdevicemanagers>
 				<!--
 				TODO: Add ability to allocate a device restfully
 				<md-list-item>
@@ -31,11 +32,13 @@
 				-->
 			</md-layout>
 		</md-layout>
+		<redhawkapplication v-if="showApplication"></redhawkapplication>
+		<rhdevicemanager v-if="showDeviceManager"></rhdevicemanager>
+		<!--
 		<md-layout>
 			<md-layout md-flex md-column>
 				<md-layout md-align="center" class="rowHeight">
 					<plot></plot>
-					<!--<smoothieplot></smoothieplot>-->
 				</md-layout>
 				<md-layout md-align="center" class="rowHeight">
 					<md-layout>
@@ -50,26 +53,31 @@
 				<editcomponentprops></editcomponentprops>
 			</md-layout>
 		</md-layout>
+		-->
 	</md-layout>
 </template>
 
 <script>
 import Plot from './Plot.vue'
-import Waveforms from './Waveforms.vue'
+import RHApplications from './RHApplications.vue'
 import Components from './Components.vue'
 import Ports from './Ports.vue'
 import EditComponentProperties from './EditComponentProperties.vue'
-import SmoothiePlot from './SmoothiePlot.vue'
+import RHApplication from './RHApplicationView.vue'
+import RHDeviceManagers from './RHDeviceManagers.vue'
+import RHDeviceManagerView from './RHDeviceManagerView.vue'
 
 export default {
 	name: 'rhdomainview',
 	components: {
 		'plot': Plot,
-		'rhwaveforms': Waveforms,
-		'waveformcomponents': Components,
-		'componentports': Ports,
-		'editcomponentprops': EditComponentProperties,
-		'smoothieplot' : SmoothiePlot
+		'rhapplications': RHApplications,
+		'waveformcomponents' : Components,
+		'componentports' : Ports,
+		'editcomponentprops' : EditComponentProperties,
+		'redhawkapplication' : RHApplication,
+		'rhdevicemanagers' : RHDeviceManagers,
+		'rhdevicemanager' : RHDeviceManagerView
 	},
 	computed: {
 		baseURI() {
@@ -83,6 +91,12 @@ export default {
 		},
 		showComponentProperties(){
 			return this.$store.getters.showComponentProperties
+		},
+		showApplication(){
+			return this.$store.getters.showApplication
+		},
+		showDeviceManager(){
+			return this.$store.getters.showDeviceManager
 		}
 	},
 	methods: {

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties PUBLIC "-//JTRS//DTD SCA V2.2.2 PRF//EN" "properties.dtd">
+<properties>
+  <struct id="myMessage" mode="readwrite">
+    <description>My message that I'm outputting</description>
+    <simple id="text" type="string"/>
+    <simple id="timestamp" mode="readwrite" type="longlong">
+      <kind kindtype="property"/>
+      <action type="external"/>
+    </simple>
+    <configurationkind kindtype="message"/>
+  </struct>
+</properties>

@@ -21,8 +21,7 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
  * 
  * Test relies on the SimulatorNode in src/test/resources being available from the DeviceManager on your domain. 
  */
-@Ignore("Works need to make dynamic so it can run create it's own devicemanager")
-public class RedhawkDeviceImplTestIT extends RedhawkTestBase {
+public class RedhawkDeviceImplTestMT extends RedhawkTestBase {
 	@Test
 	public void test() throws MultipleResourceException, CORBAException, ResourceNotFoundException {
 		//Get Device Manager

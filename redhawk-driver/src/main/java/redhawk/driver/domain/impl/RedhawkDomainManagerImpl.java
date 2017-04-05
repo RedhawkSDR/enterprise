@@ -83,6 +83,7 @@ import CF.ApplicationFactoryPackage.CreateApplicationError;
 import CF.ApplicationFactoryPackage.CreateApplicationInsufficientCapacityError;
 import CF.ApplicationFactoryPackage.CreateApplicationRequestError;
 import CF.ApplicationFactoryPackage.InvalidInitConfiguration;
+import CF.DomainManagerPackage.ApplicationInstallationError;
 
 public class RedhawkDomainManagerImpl extends
 		QueryableResourceImpl<DomainManager> implements RedhawkDomainManager {
@@ -470,7 +471,7 @@ public class RedhawkDomainManagerImpl extends
 			return appToReturn;
 		} catch (CreateApplicationError | CreateApplicationRequestError
 				| CreateApplicationInsufficientCapacityError
-				| InvalidInitConfiguration | InvalidProfile | InvalidFileName e) {
+				| InvalidInitConfiguration | InvalidProfile | InvalidFileName | ApplicationInstallationError e) {
 			throw new ApplicationCreationException(e);
 		}
 	}

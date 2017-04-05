@@ -79,7 +79,6 @@
 					</execution>
 					<!-- 
 						Add source jars too
-					 -->
 					 <execution>
 					 	<id>bulkiointerfaces-source</id>
 					 	<goals>
@@ -94,7 +93,8 @@
 							<classifier>source</classifier>
 							<file>lib/BULKIOInterfaces.src.jar</file>
 						</configuration>
-					 </execution>								
+					 </execution>
+					-->								
 				</executions>
 			</plugin>
 		</plugins>

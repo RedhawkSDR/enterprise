@@ -11,8 +11,8 @@ build:
   image: ${DOCKER_REGISTRY_URL}redbus/maven:3-jdk-8
   script:
     - mvn -P CFDependencies clean install -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository
-    - mvn clean deploy -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository
-    - mvn -Djava.io.tmpdir=./ -P jaxb-generation,docs compile -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository
+    - mvn -Djava.io.tmpdir=./ deploy -P docs,jaxb-generation,default -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository
+    #- mvn -Djava.io.tmpdir=./ -P jaxb-generation,docs compile -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository
   artifacts:
     paths:
     - docs/target/asciidoc/html/index.html #Website for REDHAWK Java Tools User Manual

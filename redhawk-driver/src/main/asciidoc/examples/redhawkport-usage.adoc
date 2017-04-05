@@ -1,0 +1,10 @@
+== RedhawkPort Code Examples
+
+Below are code examples for using the RedhawkPort interface.
+
+=== Consuming Messages from a REDHAWK Port
+
+[source,java,indent=0]
+----
+include::snippets/MessageConsumerPortTestIT.java[lines=75..100]
+----

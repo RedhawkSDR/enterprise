@@ -311,7 +311,14 @@
 											<directory>src/test/java/redhawk/driver/device/impl</directory>
 											<targetPath>examples/snippets</targetPath>
 											<includes>
-												<include>RedhawkDeviceImplTestIT.java</include>
+												<include>RedhawkDeviceImplTestMT.java</include>
+											</includes>
+										</resource>
+										<resource>
+											<directory>src/test/java/redhawk/driver/port/impl</directory>
+											<targetPath>examples/snippets</targetPath>
+											<includes>
+												<include>MessageConsumerPortTestIT.java</include>
 											</includes>
 										</resource>										
 										<resource>

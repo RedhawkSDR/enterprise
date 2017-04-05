@@ -51,7 +51,7 @@ If you run into this error building the docs
 You'll need to specify the java.io.tmpdir with your maven command. So your command will end up looking like this:
 
 ----
-mvn -P -Djava.io.tmpdir=./ -P jaxb-generation,docs generate-resources
+mvn -Djava.io.tmpdir=./ -P jaxb-generation,docs generate-resources
 ----
 
 ////

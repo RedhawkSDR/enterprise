@@ -89,9 +89,7 @@ public class MessageConsumerPortTestIT extends RedhawkTestBase{
 		try {
 			messageConsumerPort.connectPort(msgConsumerPort._this(), "test-message-processing");
 			
-			//msgConsumerPort.registerMessage("myMessage_struct", statusEventHandler);						
-			Thread.sleep(5000l);
-			
+			Thread.sleep(5000l);			
 			assertTrue(msgHandler.getMessageCount()>0);
 		} catch (InvalidPort e) {
 			// TODO Auto-generated catch block

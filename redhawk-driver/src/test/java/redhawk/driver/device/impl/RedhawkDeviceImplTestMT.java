@@ -2,17 +2,24 @@ package redhawk.driver.device.impl;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.junit.Ignore;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import redhawk.RedhawkTestBase;
-import redhawk.driver.device.impl.RedhawkDeviceImpl;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
+import redhawk.driver.domain.RedhawkFileManager;
 import redhawk.driver.exceptions.CORBAException;
+import redhawk.driver.exceptions.ConnectionException;
+import redhawk.driver.exceptions.EventChannelCreationException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 
@@ -20,10 +27,43 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
  * This is currently a manual test until I figure out how to automatically launch a node from the REDHAWK Driver. 
  * 
  * Test relies on the SimulatorNode in src/test/resources being available from the DeviceManager on your domain. 
+ *TODO: Make this work with mvn clean install -P localIT
  */
 public class RedhawkDeviceImplTestMT extends RedhawkTestBase {
+	private File nodeDir;
+	
+	Process devMgrProcess; 
+	
+	@Before
+	public void setup() throws IOException, InterruptedException, ConnectionException, MultipleResourceException, CORBAException{
+		/*
+		 * Node Structure
+		 * |nodes
+		 * |-NodeName/
+		 * |-dcd.xml
+		 */
+		//Write the Node to your SDR
+		/*
+		 * Place Dcd in it's proper directory 
+		 */
+		/*
+		 * Place Dcd in it's proper directory 
+		 */
+		File file = new File("src/test/resources/node/SimulatorNode");
+		
+		nodeDir = new File(deviceManagerHome+"/nodes/SimulatorNode");
+		
+		/*
+		 * Copy Nodes directory over  
+		 */
+		FileUtils.copyDirectory(file, nodeDir, FileFilterUtils.suffixFileFilter(".dcd.xml"));	
+	
+		
+		devMgrProcess = proxy.launchDeviceManager("/var/redhawk/sdr/dev/nodes/SimulatorNode/DeviceManager.dcd.xml");
+	}
+	
 	@Test
-	public void test() throws MultipleResourceException, CORBAException, ResourceNotFoundException {
+	public void testAllocate() throws MultipleResourceException, CORBAException, ResourceNotFoundException {
 		//Get Device Manager
 		RedhawkDeviceManager deviceManager = driver.getDomain().getDeviceManagerByName("SimulatorNode");
 		
@@ -47,6 +87,9 @@ public class RedhawkDeviceImplTestMT extends RedhawkTestBase {
 		 * FRONTEND::tuner_status::allocation_id_csv=default:55d211b1-c35c-44a8-837c-96a7470089f0, 
 		 * FRONTEND::tuner_status::tuner_type=RX_DIGITIZER
 		 * }
+		 * 
+		 * params from IDE:
+		 * 
 		*/
 		String allocId = "myTestAllocationId";
 		newAlloc.put("FRONTEND::tuner_allocation::allocation_id", allocId);
@@ -76,5 +119,13 @@ public class RedhawkDeviceImplTestMT extends RedhawkTestBase {
 		
 		//Should now be no unused tuners
 		assertEquals(false, device.getUnusedTuners().isEmpty());
+	}
+	
+	@After
+	public void cleanup() throws IOException, MultipleResourceException, EventChannelCreationException, CORBAException{
+		//Remove directory for node
+		FileUtils.deleteDirectory(nodeDir);
+
+		devMgrProcess.destroy();		
 	}
 }

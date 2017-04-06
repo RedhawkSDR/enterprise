@@ -24,35 +24,47 @@ import static org.junit.Assert.assertEquals;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import redhawk.RedhawkTestBase;
-import redhawk.driver.RedhawkDriver;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 
 public class RedhawkFileSystemTestIT extends RedhawkTestBase{
-	private RedhawkFileSystem fileSystem; 	
+	private RedhawkFileSystem domainFileSystem; 
+	
+	private RedhawkFileSystem deviceManagerFileSystem;
 	
 	@Before
 	public void setup() throws ConnectionException, ResourceNotFoundException, CORBAException{
-		fileSystem = driver.getDomain("REDHAWK_DEV").getFileManager();
+		domainFileSystem = driver.getDomain("REDHAWK_DEV").getFileManager();
+		deviceManagerFileSystem = driver.getDomain("REDHAWK_DEV").getDeviceManagers().get(0).getDeviceManagerFileSystem();
 	}
 	
 	@Test
 	public void testFileSystemInteration() throws FileNotFoundException, IOException{
-		assertEquals("There should be waveforms in $SDRROOT/dom/waveforms", false, fileSystem.findFilesInDirectory("/waveforms", ".*").isEmpty());	
-		assertEquals("There should be directories in $SDRROOT", false, fileSystem.findDirectories(".*").isEmpty());	
+		assertEquals("There should be waveforms in $SDRROOT/dom/waveforms", false, domainFileSystem.findFilesInDirectory("/waveforms", ".*").isEmpty());	
+		assertEquals("There should be directories in $SDRROOT", false, domainFileSystem.findDirectories(".*").isEmpty());	
 		
 		
 		//Write a waveform File to the waveforms directory
-		fileSystem.writeFile(new FileInputStream("src/test/resources/waveforms/rh/testWaveform.sad.xml"), "/waveforms/testWaveform/testWaveform.sad.xml");
-		assertEquals("Waveform file should now exist", true, fileSystem.getFile("/waveforms/testWaveform/testWaveform.sad.xml")!=null);
+		domainFileSystem.writeFile(new FileInputStream("src/test/resources/waveforms/rh/testWaveform.sad.xml"), "/waveforms/testWaveform/testWaveform.sad.xml");
+		assertEquals("Waveform file should now exist", true, domainFileSystem.getFile("/waveforms/testWaveform/testWaveform.sad.xml")!=null);
 		
 		//Clean up after yourself
-		fileSystem.removeDirectory("/waveforms/testWaveform");
+		domainFileSystem.removeDirectory("/waveforms/testWaveform");
+	}
+	
+	@Test
+	public void testDeviceManagerFileSystem(){
+		List<String> directories = domainFileSystem.findDirectories("/nodes");
+	
+		for(String directory : directories){
+			System.out.println(directory);
+		}
 	}
 }

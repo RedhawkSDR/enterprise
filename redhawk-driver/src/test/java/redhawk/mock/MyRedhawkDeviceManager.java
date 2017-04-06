@@ -1,24 +1,6 @@
-/*
- * This file is protected by Copyright. Please refer to the COPYRIGHT file
- * distributed with this source distribution.
- *
- * This file is part of REDHAWK __REDHAWK_PROJECT__.
- *
- * REDHAWK __REDHAWK_PROJECT__ is free software: you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by the
- * Free Software Foundation, either version 3 of the License, or (at your
- * option) any later version.
- *
- * REDHAWK __REDHAWK_PROJECT__ is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
- * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
- * for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see http://www.gnu.org/licenses/.
- */
-package redhawk.driver.devicemanager.impl;
+package redhawk.mock;
 
+import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -30,16 +12,13 @@ import java.util.logging.Logger;
 import org.omg.CORBA.Context;
 import org.omg.CORBA.ContextList;
 import org.omg.CORBA.ExceptionList;
-import org.omg.CORBA.InterfaceDef;
 import org.omg.CORBA.NVList;
 import org.omg.CORBA.NamedValue;
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.Object;
 import org.omg.CORBA.Policy;
-import org.omg.CORBA.PolicyListHolder;
 import org.omg.CORBA.Request;
 import org.omg.CORBA.SetOverrideType;
-import org.omg.CORBA.TRANSIENT;
 import org.omg.CosNaming.NameComponent;
 import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
@@ -56,7 +35,6 @@ import org.omg.PortableServer.POAPackage.WrongPolicy;
 import CF.DataType;
 import CF.Device;
 import CF.DeviceManager;
-import CF.DeviceManagerHelper;
 import CF.DeviceManagerPOATie;
 import CF.DomainManager;
 import CF.File;
@@ -77,12 +55,11 @@ import CF.PortSupplierPackage.UnknownPort;
 import CF.PropertyEmitterPackage.AlreadyInitialized;
 import CF.PropertySetPackage.InvalidConfiguration;
 import CF.PropertySetPackage.PartialConfiguration;
+import redhawk.driver.devicemanager.impl.DeviceManagerTemplate;
+import redhawk.driver.devicemanager.impl.StandardFileSystemOperations;
 
-/**
- * Java object representing a CF.DeviceManager
- * @author default
- */
-public class DeviceManagerTemplate implements DeviceManager {
+public class MyRedhawkDeviceManager implements DeviceManager{
+
 
 	private FileSystem fileSys;
 	
@@ -106,37 +83,26 @@ public class DeviceManagerTemplate implements DeviceManager {
 	private String fileSystemRoot;
 	private DeviceManager corbaDeviceManager;
 	
-	/**
-	 * Creates a template DeviceManager Object representation
-	 * 
-	 * @param domainName
-	 * 	Domain Name for template dcd file
-	 * @param domainManager
-	 * @param orb
-	 * @param deviceManagerName
-	 * 	DeviceManager Name for template dcd file 
-	 * @param fileSystemRoot
-	 * @throws Exception
-	 */
-	public DeviceManagerTemplate(String domainName, DomainManager domainManager, ORB orb, String deviceManagerName, String fileSystemRoot) throws Exception {
+	public MyRedhawkDeviceManager(java.io.File dcdFile, String domainName, String deviceManagerName, DomainManager domainManager, ORB orb, String fileSystemRoot) throws Exception {
 	    this.domainManager = domainManager;
-	    this.deviceManagerName = deviceManagerName;
 	    this.orb = orb;
 	    this.fileSystemRoot = fileSystemRoot;
+	    //Still not convinced I should need these values
+	    this.deviceManagerName = deviceManagerName;
 	    this.domainName = domainName;
-	    this.identifier = domainName+":"+deviceManagerName;
-	    initializeFileSystem();
+	    this.identifier = domainName+":"+deviceManagerName;	    
+	    //Should be able to get rid of these all this info is in objects that are being passed in. 
+	    initializeFileSystem(dcdFile);
 	    internalCreate();
 	}
 	
 	/*
 	 * Initializes CF.FileSystem with a Template DCD File.
 	 */
-	private void initializeFileSystem() {
+	private void initializeFileSystem(java.io.File dcdFile) {
 		try {
-	        DcdFile dcdFile = new DcdFile(domainName, deviceManagerName);
-	        dcdFile.setIdentifier(identifier);
-	        rbFileTie = new FilePOATie(dcdFile);
+			MyDcDFile dcdFileRep = new MyDcDFile(dcdFile);
+	        rbFileTie = new FilePOATie(dcdFileRep);
 	        actualFile = rbFileTie._this(orb);
 	        POA rootPOA = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
 	        rootPOA.the_POAManager().activate();
@@ -148,6 +114,9 @@ public class DeviceManagerTemplate implements DeviceManager {
 		} catch(org.omg.CORBA.ORBPackage.InvalidName e){
 			logger.log(Level.SEVERE, "Could Not Initialize Device Manager File System: " ,e);
 		} catch (AdapterInactive e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -162,13 +131,21 @@ public class DeviceManagerTemplate implements DeviceManager {
         setCorbaDeviceManager(deviceManager);
         setDeviceManagerTie(deviceManagerTie);
         String name = domainName+"/"+label();
-       
         name = name.replaceAll("\\.", "\\\\.");
-        logger.info("Name to lookup "+name);        
+        name = "REDHAWK_DEV/SimulatorNode";
         final NameComponent[] deviceMgrName = ncRef.to_name(name);
         
         try {
-        	ncRef.rebind(deviceMgrName, deviceManager);
+    		for(DeviceManager mgr : domainManager.deviceManagers()){
+    			System.out.println(mgr.identifier());
+    			System.out.println(mgr);
+    		}
+    		System.out.println(deviceManager);
+    		System.out.println(deviceManager.label());
+    		ncRef.rebind(deviceMgrName, deviceManager);    		
+    		domainManager.registerDeviceManager(deviceManager);
+    		/*
+    		ncRef.rebind(deviceMgrName, deviceManager);
         	boolean found = false;
         	for(DeviceManager devMgr : domainManager.deviceManagers()){
         		if(devMgr.label().equalsIgnoreCase(deviceManager.label())){
@@ -179,9 +156,10 @@ public class DeviceManagerTemplate implements DeviceManager {
         	if(!found){
         		domainManager.registerDeviceManager(deviceManager);
         	}
-        	
+        	*/
         } catch(Exception e){
-        	
+        	e.printStackTrace();
+        	/*
         	try {
 	        	DeviceManager d = DeviceManagerHelper.narrow(ncRef.resolve_str(name));
 	        	d.identifier();
@@ -192,6 +170,7 @@ public class DeviceManagerTemplate implements DeviceManager {
         	}
         	
         	domainManager.registerDeviceManager(deviceManager);
+        	*/
         }
         
 	}
@@ -519,8 +498,6 @@ public class DeviceManagerTemplate implements DeviceManager {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
 
 
 }

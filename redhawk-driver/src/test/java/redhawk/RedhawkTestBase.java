@@ -20,6 +20,12 @@ public class RedhawkTestBase {
 	
 	public static RedhawkDriver driver; 
 	
+	public static NodeBooterProxy proxy;
+	
+	public static String sdrRoot = "/var/redhawk/sdr";
+	
+	public static String deviceManagerHome = sdrRoot+"/dev";
+	
 	@BeforeClass
 	public static void setupB4Class(){
 		logger.info("Jacorb prop is: "+System.getProperty("jacorb"));
@@ -35,6 +41,9 @@ public class RedhawkTestBase {
 			logger.info("Testing with default orb for JDK");			
 			driver = new RedhawkDriver(); 
 		}
+		
+		//Create proxy utility 
+		proxy = new NodeBooterProxy();
 	}
 	
 	@AfterClass

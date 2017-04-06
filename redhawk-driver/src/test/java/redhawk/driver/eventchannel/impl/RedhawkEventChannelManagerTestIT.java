@@ -60,10 +60,11 @@ public class RedhawkEventChannelManagerTestIT extends RedhawkTestBase{
 	@Test
 	public void testEventChannelManagement() throws EventChannelCreationException, MultipleResourceException, ResourceNotFoundException{
 		String eventChannelName = "MyEventChannel";
+		Integer initialChannelCount = eventChannelManager.getEventChannels().size();
 		eventChannelManager.createEventChannel(eventChannelName);
 		assertNotNull(eventChannelManager.getEventChannel(eventChannelName));
 		eventChannelManager.releaseEventChannel(eventChannelName);
-		assertEquals("Should only be 2 channels since I removed mine", 2, eventChannelManager.getEventChannels().size());
+		assertEquals("Should only be "+initialChannelCount+" channels since I removed mine", initialChannelCount, new Integer(eventChannelManager.getEventChannels().size()));
 	}
 	
 	@Test

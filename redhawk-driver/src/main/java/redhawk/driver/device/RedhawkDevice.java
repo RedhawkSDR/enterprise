@@ -22,10 +22,12 @@ package redhawk.driver.device;
 import java.util.Map;
 
 import CF.Device;
+import CF.LifeCyclePackage.ReleaseError;
 import CF.ResourcePackage.StartError;
 import CF.ResourcePackage.StopError;
 import redhawk.driver.base.PortBackedObject;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
+import redhawk.driver.exceptions.ConnectionException;
 
 public interface RedhawkDevice extends PortBackedObject {
 	/**
@@ -68,6 +70,13 @@ public interface RedhawkDevice extends PortBackedObject {
 	 * @throws StopError
 	 */
 	void stop() throws StopError;
+	
+	/**
+	 * Release a device
+	 * @throws ConnectionException 
+	 * @throws ReleaseError 
+	 */
+	void release() throws ReleaseError, ConnectionException;
 
 	/**
 	 * Allocates a single resources on the device
@@ -119,8 +128,4 @@ public interface RedhawkDevice extends PortBackedObject {
 	 */
 	//TODO: Test this method so you can better document. 
 	void deallocate(Map<String, Object> allocation);
-
-	// void deallocate(List<String> allocationIds);	
-	
-	
 }

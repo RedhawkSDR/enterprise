@@ -24,6 +24,7 @@ import redhawk.rest.exceptions.ResourceNotFound;
 import redhawk.rest.model.DeviceContainer;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.FullProperty;
+import redhawk.rest.model.TunerMode;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -33,6 +34,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @Path("/{nameserver}/domains/{domain}/devicemanagers/{devmanager}/devices")
@@ -69,7 +71,46 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     public Response getDevice(@PathParam("deviceId") String deviceId) throws ResourceNotFound, Exception {
         return Response.ok(redhawkManager.get(nameServer, "device", domainName + "/" + devManagerName + "/" + deviceId)).build();
     }
+    
+    @POST
+    @Path("/{deviceId}/allocate")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Consumes({MediaType.APPLICATION_JSON})    
+    @ApiOperation(
+    		value="Allocates a specific device"
+    		)
+    public Response allocateDevice(@PathParam("deviceId") String deviceId, Map<String, Object> allocation) throws Exception{
+    	redhawkManager.allocateDevice(nameServer, domainName+"/"+devManagerName+"/"+deviceId, allocation);
+    	//TODO: Probably should return the successful tuner::status object
+    	return Response.ok().build();
+    }
+    
+    @POST
+    @Path("/{deviceId}/deallocate")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Consumes({MediaType.APPLICATION_JSON})    
+    @ApiOperation(
+    		value="Deallocates a specific device"
+    		)
+    public Response deallocateDevice(@PathParam("deviceId") String deviceId, String allocationId) throws Exception{
+    	redhawkManager.deallocateDevice(nameServer, domainName+"/"+devManagerName+"/"+deviceId, allocationId);
+    	//TODO: Probably should return the successful tuner::status object
+    	return Response.ok().build();
+    }
+    
+    @GET
+    @Path("/{deviceId}/tuners/{tunerMode}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @ApiOperation(
+    		value="Returns a specific device for a device manager."
+    		)
+    public Response tuners(@PathParam("deviceId") String deviceId, @PathParam("tunerMode") String tunerMode) throws Exception{
+    	List<Map<String, Object>> tunerStatus = redhawkManager.getTuners(nameServer, domainName+"/"+devManagerName+"/"+deviceId, TunerMode.valueOf(tunerMode));
 
+    	logger.info("Status is "+tunerStatus);
+    	return Response.ok(tunerStatus).build();
+    }
+    
     @GET
     @Path("/{deviceId}/properties")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})

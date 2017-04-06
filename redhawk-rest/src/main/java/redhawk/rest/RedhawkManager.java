@@ -19,10 +19,18 @@
  */
 package redhawk.rest;
 
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 
 import redhawk.driver.Redhawk;
@@ -31,22 +39,31 @@ import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.base.QueryableResource;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.device.RedhawkDevice;
+import redhawk.driver.device.impl.RedhawkDeviceImpl;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.domain.RedhawkDomainManager;
-import redhawk.driver.exceptions.*;
+import redhawk.driver.exceptions.ApplicationCreationException;
+import redhawk.driver.exceptions.ApplicationStartException;
+import redhawk.driver.exceptions.CORBAException;
+import redhawk.driver.exceptions.ConnectionException;
+import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.port.RedhawkPortStatistics;
-import redhawk.driver.properties.*;
+import redhawk.driver.properties.RedhawkProperty;
+import redhawk.driver.properties.RedhawkSimple;
+import redhawk.driver.properties.RedhawkSimpleSequence;
+import redhawk.driver.properties.RedhawkStruct;
+import redhawk.driver.properties.RedhawkStructSequence;
 import redhawk.driver.xml.model.sca.prf.Properties;
 import redhawk.driver.xml.model.sca.sad.Softwareassembly;
-import redhawk.rest.model.*;
-
-import java.math.BigInteger;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
+import redhawk.rest.model.FetchMode;
+import redhawk.rest.model.FullProperty;
+import redhawk.rest.model.PortStatisticsContainer;
+import redhawk.rest.model.Property;
+import redhawk.rest.model.PropertyContainer;
+import redhawk.rest.model.TunerMode;
+import redhawk.rest.model.WaveformInfo;
 
 
 public class RedhawkManager {
@@ -211,7 +228,148 @@ public class RedhawkManager {
             }
         }
     }
+    
+    public void shutdownDeviceManager(String nameServer, String deviceManagerLocation) throws Exception{
+    	//TODO: Refactor to clean this code up 
+        Redhawk redhawk = null;
+        boolean createdNewInstance = false;
 
+        try {
+            if (redhawkDrivers.get(nameServer) != null) {
+                redhawk = redhawkDrivers.get(nameServer);
+            } else {
+                if (nameServer.contains(":")) {
+                    String[] hostAndPort = nameServer.split(":");
+                    redhawk = new RedhawkDriver(hostAndPort[0], Integer.parseInt(hostAndPort[1]));
+                    createdNewInstance = true;
+                } else {
+                    throw new ResourceNotFoundException("You did not specify a valid host and port to the REDHAWK name server. An example of a valid url is: localhost:2809");
+                }
+            }
+
+            RedhawkDeviceManager deviceManager;
+            try{
+            	redhawk.getDeviceManager(deviceManagerLocation).shutdown();
+            }catch(ResourceNotFoundException | MultipleResourceException | CORBAException ex){
+            	logger.debug("Issue retrieving DeviceManager at this location: "+deviceManagerLocation);
+            	throw new Exception("Unable to access DeviceManager", ex);
+            }
+        } finally {
+            if (redhawk != null && createdNewInstance) {
+                redhawk.disconnect();
+            }
+        }    	
+    }
+    
+    public void allocateDevice(String nameServer, String deviceLocation, Map<String, Object> allocation) throws Exception{
+    	//TODO: Refactor to clean this code up 
+        Redhawk redhawk = null;
+        boolean createdNewInstance = false;
+
+        try {
+            if (redhawkDrivers.get(nameServer) != null) {
+                redhawk = redhawkDrivers.get(nameServer);
+            } else {
+                if (nameServer.contains(":")) {
+                    String[] hostAndPort = nameServer.split(":");
+                    redhawk = new RedhawkDriver(hostAndPort[0], Integer.parseInt(hostAndPort[1]));
+                    createdNewInstance = true;
+                } else {
+                    throw new ResourceNotFoundException("You did not specify a valid host and port to the REDHAWK name server. An example of a valid url is: localhost:2809");
+                }
+            }
+
+            RedhawkDeviceManager deviceManager;
+            try{
+            	logger.info("Allocation is "+allocation);
+            	RedhawkDevice device = redhawk.getDevice(deviceLocation);
+            	
+            	device.allocate(allocation);
+            }catch(ResourceNotFoundException | MultipleResourceException | CORBAException ex){
+            	logger.debug("Issue allocating Device at this location: "+deviceLocation);
+            	throw new Exception("Unable allocate Device", ex);
+            }
+        } finally {
+            if (redhawk != null && createdNewInstance) {
+                redhawk.disconnect();
+            }
+        }     	
+    }
+    
+    public void deallocateDevice(String nameServer, String deviceLocation, String allocationId) throws Exception{
+    	//TODO: Refactor to clean this code up 
+        Redhawk redhawk = null;
+        boolean createdNewInstance = false;
+
+        try {
+            if (redhawkDrivers.get(nameServer) != null) {
+                redhawk = redhawkDrivers.get(nameServer);
+            } else {
+                if (nameServer.contains(":")) {
+                    String[] hostAndPort = nameServer.split(":");
+                    redhawk = new RedhawkDriver(hostAndPort[0], Integer.parseInt(hostAndPort[1]));
+                    createdNewInstance = true;
+                } else {
+                    throw new ResourceNotFoundException("You did not specify a valid host and port to the REDHAWK name server. An example of a valid url is: localhost:2809");
+                }
+            }
+
+            try{
+            	RedhawkDevice device = redhawk.getDevice(deviceLocation);
+            	
+            	device.deallocate(allocationId);
+            }catch(ResourceNotFoundException | MultipleResourceException | CORBAException ex){
+            	logger.debug("Issue allocating Device at this location: "+deviceLocation);
+            	throw new Exception("Unable allocate Device", ex);
+            }
+        } finally {
+            if (redhawk != null && createdNewInstance) {
+                redhawk.disconnect();
+            }
+        }     	
+    }
+    
+    public List<Map<String, Object>> getTuners(String nameServer, String deviceLocation, TunerMode mode) throws Exception{
+    	//TODO: Refactor to clean this code up 
+        Redhawk redhawk = null;
+        boolean createdNewInstance = false;
+
+        try {
+            if (redhawkDrivers.get(nameServer) != null) {
+                redhawk = redhawkDrivers.get(nameServer);
+            } else {
+                if (nameServer.contains(":")) {
+                    String[] hostAndPort = nameServer.split(":");
+                    redhawk = new RedhawkDriver(hostAndPort[0], Integer.parseInt(hostAndPort[1]));
+                    createdNewInstance = true;
+                } else {
+                    throw new ResourceNotFoundException("You did not specify a valid host and port to the REDHAWK name server. An example of a valid url is: localhost:2809");
+                }
+            }
+
+            try{
+            	RedhawkDeviceImpl device = (RedhawkDeviceImpl) redhawk.getDevice(deviceLocation);
+            
+            	switch(mode){
+            	case ALL:
+            		return device.getAllTuners();
+            	case UNUSED:
+            		return device.getUnusedTuners();
+            	case USED:
+            		return device.getUsedTuners();
+            	default:
+            		return new ArrayList<>();
+            	}            	
+            }catch(ResourceNotFoundException | MultipleResourceException | CORBAException ex){
+            	logger.debug("Issue allocating Device at this location: "+deviceLocation);
+            	throw new Exception("Unable allocate Device", ex);
+            }
+        } finally {
+            if (redhawk != null && createdNewInstance) {
+                redhawk.disconnect();
+            }
+        }
+    }
 
     public Map<String, Softwareassembly> getWaveforms(String nameServer, String domainName) throws Exception {
         Redhawk redhawk = null;

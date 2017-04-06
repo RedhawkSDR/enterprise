@@ -36,6 +36,7 @@ import CF.DeviceHelper;
 import CF.DevicePackage.InsufficientCapacity;
 import CF.DevicePackage.InvalidCapacity;
 import CF.DevicePackage.InvalidState;
+import CF.LifeCyclePackage.ReleaseError;
 import CF.ResourcePackage.StartError;
 import CF.ResourcePackage.StopError;
 import redhawk.driver.RedhawkUtils;
@@ -103,6 +104,11 @@ public class RedhawkDeviceImpl extends PortBackedObjectImpl<Device> implements R
     public void stop() throws StopError {
     	getCorbaObject().stop();
     }
+
+	@Override
+	public void release() throws ReleaseError, ConnectionException {
+		getCorbaObject().releaseObject();
+	}
 
 	@Override
 	public String toString() {
@@ -188,7 +194,14 @@ public class RedhawkDeviceImpl extends PortBackedObjectImpl<Device> implements R
 		}
 		return allocIds.get(0);
 	}
-
+	
+	/**
+	 * Checks the structs allocation_id_csv property to see if the 
+	 * Device is allocated or not.
+	 * 
+	 * @param s
+	 * @return
+	 */
 	List<String> getAllocIds(RedhawkStruct s) {
 		String allocIdCsv = (String) s.toMap().get("FRONTEND::tuner_status::allocation_id_csv");
 		if (allocIdCsv == null)

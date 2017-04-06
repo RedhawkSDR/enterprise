@@ -48,6 +48,7 @@ mvn -P jaxb-generation,docs compile
 To build the docs and demos you can run the following command: 
 
 ----
+mvn -Djava.io.tmpdir=./ deploy -P docs,jaxb-generation,default
 ----
 
 == Running Integration Tests

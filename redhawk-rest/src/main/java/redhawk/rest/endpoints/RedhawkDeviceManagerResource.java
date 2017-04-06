@@ -67,8 +67,20 @@ public class RedhawkDeviceManagerResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="Returns a specific device manager for a domain."
     		)    
-    public Response getDeviceManagers(@PathParam("devMgrId") String deviceManagerId) throws ResourceNotFound, Exception {
+    public Response getDeviceManager(@PathParam("devMgrId") String deviceManagerId) throws ResourceNotFound, Exception {
         return Response.ok(redhawkManager.get(nameServer, "devicemanager", domainName + "/" + deviceManagerId)).build();
+    }
+    
+    @DELETE
+    @Path("/{devMgrId}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @ApiOperation(
+    		value="Deletes a specific device manager from a domain."
+    		)    
+    public Response shutDownDeviceManager(@PathParam("devMgrId") String deviceManagerId) throws ResourceNotFound, Exception {
+        redhawkManager.shutdownDeviceManager(nameServer, domainName+"/"+deviceManagerId);
+        
+        return Response.ok().build();
     }
 
     @GET

@@ -101,6 +101,15 @@ public class RedhawkUtilsTestIT {
 		}
 	}
 	
+	@Test
+	public void testCreateAnyWithMap(){
+		Map<String, Object> props = new HashMap<>();
+		props.put("String", "Hola");
+		props.put("Double", 10.0);
+		
+		RedhawkUtils.createAny(redhawk.getOrb(), props);
+	}
+	
 	
 	@Test
 	public void testCompareStreamSRI() {

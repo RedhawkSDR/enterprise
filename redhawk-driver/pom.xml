@@ -254,10 +254,8 @@
 			</activation>
 			<build>
 				<plugins>
-					<!-- 
-						Note below is a hack until I figure out how to appropriately do this 
-						w/ adoc. 
-					 -->
+					<!-- Note below is a hack until I figure out how to appropriately do 
+						this w/ adoc. -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-resources-plugin</artifactId>
@@ -281,21 +279,21 @@
 										</resource>
 										<resource>
 											<directory>src/test/java/redhawk/driver/application/impl</directory>
-											<targetPath>examples/snippets</targetPath>											
+											<targetPath>examples/snippets</targetPath>
 											<includes>
 												<include>RedhawkApplicationImplTestIT.java</include>
 											</includes>
 										</resource>
 										<resource>
 											<directory>src/test/java/redhawk/driver/domain/impl</directory>
-											<targetPath>examples/snippets</targetPath>											
+											<targetPath>examples/snippets</targetPath>
 											<includes>
 												<include>RedhawkDomainManagerImplTestIT.java</include>
 											</includes>
 										</resource>
 										<resource>
 											<directory>src/test/java/redhawk/driver/component/impl</directory>
-											<targetPath>examples/snippets</targetPath>											
+											<targetPath>examples/snippets</targetPath>
 											<includes>
 												<include>RedhawkComponentImplTestIT.java</include>
 											</includes>
@@ -320,43 +318,22 @@
 											<includes>
 												<include>MessageConsumerPortTestIT.java</include>
 											</includes>
-										</resource>										
+										</resource>
 										<resource>
 											<directory>src/main/asciidoc</directory>
-										</resource>																				
+										</resource>
 									</resources>
 								</configuration>
 							</execution>
 						</executions>
 					</plugin>
-					<!--
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-site-plugin</artifactId>
-						<configuration>
-							<asciidoc>
-								<baseDir>${project.basedir}</baseDir>
-								<sourceDir>src/test/java</sourceDir>
-								<attributes>
-									<source-highlighter>coderay</source-highlighter>
-									<coderay-css>style</coderay-css>
-								</attributes>
-							</asciidoc>
-						</configuration>
-						<dependencies>
-							<dependency>
-								<groupId>org.apache.maven.doxia</groupId>
-								<artifactId>doxia-module-markdown</artifactId>
-								<version>1.7</version>
-							</dependency>
-							<dependency>
-								<groupId>org.asciidoctor</groupId>
-								<artifactId>asciidoctor-maven-plugin</artifactId>
-								<version>1.5.3</version>
-							</dependency>
-						</dependencies>
-					</plugin>
-					-->
+					<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-site-plugin</artifactId> 
+						<configuration> <asciidoc> <baseDir>${project.basedir}</baseDir> <sourceDir>src/test/java</sourceDir> 
+						<attributes> <source-highlighter>coderay</source-highlighter> <coderay-css>style</coderay-css> 
+						</attributes> </asciidoc> </configuration> <dependencies> <dependency> <groupId>org.apache.maven.doxia</groupId> 
+						<artifactId>doxia-module-markdown</artifactId> <version>1.7</version> </dependency> 
+						<dependency> <groupId>org.asciidoctor</groupId> <artifactId>asciidoctor-maven-plugin</artifactId> 
+						<version>1.5.3</version> </dependency> </dependencies> </plugin> -->
 					<plugin>
 						<groupId>org.asciidoctor</groupId>
 						<artifactId>asciidoctor-maven-plugin</artifactId>
@@ -384,7 +361,7 @@
 						</dependencies>
 						<!-- TODO: may move asciidoc stuff to default location -->
 						<configuration>
-							<!--<baseDir>${project.basedir}</baseDir>-->
+							<!--<baseDir>${project.basedir}</baseDir> -->
 							<sourceDirectory>${project.build.directory}/asciidoc-workspace</sourceDirectory>
 							<sourceDocumentName>index.adoc</sourceDocumentName>
 						</configuration>
@@ -431,52 +408,16 @@
 					</plugin>
 				</plugins>
 			</build>
-			<!--
-			<reporting>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-project-info-reports-plugin</artifactId>
-						<version>2.9</version>
-						<reportSets>
-							<reportSet>
-								<reports>
-									<report>dependency-info</report>
-									<report>summary</report>
-								</reports>
-							</reportSet>
-						</reportSets>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-javadoc-plugin</artifactId>
-						<version>2.10.4</version>
-						<configuration>
-							<failOnError>false</failOnError>
-						</configuration>
-						<reportSets>
-							<reportSet>
-								<id>default</id>
-								<reports>
-									<report>javadoc</report>
-								</reports>
-							</reportSet>
-						</reportSets>
-					</plugin>
-					<plugin>
-						<groupId>org.jacoco</groupId>
-						<artifactId>jacoco-maven-plugin</artifactId>
-						<reportSets>
-							<reportSet>
-								<reports>
-									<report>report</report>
-								</reports>
-							</reportSet>
-						</reportSets>
-					</plugin>
-				</plugins>
-			</reporting>
-			-->
+			<!-- <reporting> <plugins> <plugin> <groupId>org.apache.maven.plugins</groupId> 
+				<artifactId>maven-project-info-reports-plugin</artifactId> <version>2.9</version> 
+				<reportSets> <reportSet> <reports> <report>dependency-info</report> <report>summary</report> 
+				</reports> </reportSet> </reportSets> </plugin> <plugin> <groupId>org.apache.maven.plugins</groupId> 
+				<artifactId>maven-javadoc-plugin</artifactId> <version>2.10.4</version> <configuration> 
+				<failOnError>false</failOnError> </configuration> <reportSets> <reportSet> 
+				<id>default</id> <reports> <report>javadoc</report> </reports> </reportSet> 
+				</reportSets> </plugin> <plugin> <groupId>org.jacoco</groupId> <artifactId>jacoco-maven-plugin</artifactId> 
+				<reportSets> <reportSet> <reports> <report>report</report> </reports> </reportSet> 
+				</reportSets> </plugin> </plugins> </reporting> -->
 		</profile>
 		<profile>
 			<id>jacorb-tests</id>
@@ -487,16 +428,16 @@
 				<plugins>
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
-        				<artifactId>maven-antrun-plugin</artifactId>
-        				<version>1.8</version>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.8</version>
 						<executions>
 							<execution>
 								<id>jacorb</id>
 								<phase>generate-resources</phase>
 								<configuration>
 									<target>
-                						<property name="runtime_classpath" refid="maven.runtime.classpath"/>									
-										<echo message="Maven classpath: ${runtime_classpath}"/> 
+										<property name="runtime_classpath" refid="maven.runtime.classpath" />
+										<echo message="Maven classpath: ${runtime_classpath}" />
 									</target>
 								</configuration>
 								<goals>
@@ -520,7 +461,7 @@
 			<groupId>org.jacorb</groupId>
 			<artifactId>jacorb-omgapi</artifactId>
 			<version>3.8</version>
-		</dependency>		
+		</dependency>
 		<!-- End Jacorb Deps -->
 		<dependency>
 			<groupId>org.slf4j</groupId>

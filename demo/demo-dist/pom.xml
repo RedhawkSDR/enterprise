@@ -12,6 +12,7 @@
 	<description>Distribution for REDHAWK Enterprise Integration Demo</description>
 	<properties>
 		<demo.directory>${runtime.basedir}/demos</demo.directory>
+		<release>1</release>
 	</properties>
 	<build>
 		<plugins>
@@ -29,19 +30,18 @@
 					</execution>
 				</executions>
 				<configuration>
-					<licence />
-					<distribution />
-					<icon />
+					<license>LGPLv3</license>
+					<release>${release}</release>
 					<group>REDHAWK Enterprise Integration</group>
 					<requires>
 						<require>redhawk-enterprise-integration-dist</require>
 					</requires>
 					<defaultUsername>root</defaultUsername>
 					<defaultGroupname>redhawk</defaultGroupname>
-					<defaultFilemode>775</defaultFilemode>
+					<defaultFilemode>755</defaultFilemode>
 					<mappings>
 						<mapping>
-							<directory>${demo.directory}/camel-event-channel</directory>							
+							<directory>${demo.directory}/camel-event-channel</directory>
 							<sources>
 								<source>
 									<location>${project.parent.basedir}/camel-event-channel/src/main/resources</location>
@@ -114,14 +114,14 @@
 								<artifactId>asciidoctorj-pdf</artifactId>
 								<version>1.5.0-alpha.11</version>
 							</dependency>
-							<!-- Comment this section to use the default jruby artifact provided 
+							<!-- Comment this section to use the default jruby artifact provided
 								by the plugin -->
 							<dependency>
 								<groupId>org.jruby</groupId>
 								<artifactId>jruby-complete</artifactId>
 								<version>1.7.21</version>
 							</dependency>
-							<!-- Comment this section to use the default AsciidoctorJ artifact 
+							<!-- Comment this section to use the default AsciidoctorJ artifact
 								provided by the plugin -->
 							<dependency>
 								<groupId>org.asciidoctor</groupId>
@@ -162,7 +162,7 @@
 									<outputDirectory>${project.build.directory}/asciidoc/pdf</outputDirectory>
 									<backend>pdf</backend>
 									<doctype>book</doctype>
-									<!-- Since 1.5.0-alpha.9 PDF back-end can use 'rouge' as well as 
+									<!-- Since 1.5.0-alpha.9 PDF back-end can use 'rouge' as well as
 										'coderay' source highlighting -->
 									<sourceHighlighter>coderay</sourceHighlighter>
 									<attributes>

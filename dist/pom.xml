@@ -13,18 +13,19 @@
 	<name>REDHAWK :: ENTERPRISE INTEGRATION :: ASSETS</name>
 	<description>
 	RPM and Tar.gz that contains a KARAF Container preconfigured to work with Redhawk Integration Assets. Included as well
-	are necessary dependencies for Jacord and a shell for interacting with the REDHAWK Driver. 
+	are necessary dependencies for Jacord and a shell for interacting with the REDHAWK Driver.
 	</description>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<karaf.home>${runtime.basedir}/karaf</karaf.home>
 		<jrepl.home>${runtime.basedir}/shell</jrepl.home>
 		<jacorb.version>3.8</jacorb.version>
+		<release>1</release>
 	</properties>
 	<dependencies>
 		<dependency>
-			<!-- scope is compile so all features (there is only one) are installed 
-				into startup.properties and the feature repo itself is not added in etc/org.apache.karaf.features.cfg 
+			<!-- scope is compile so all features (there is only one) are installed
+				into startup.properties and the feature repo itself is not added in etc/org.apache.karaf.features.cfg
 				file -->
 			<groupId>org.apache.karaf.features</groupId>
 			<artifactId>framework</artifactId>
@@ -45,8 +46,8 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<!-- scope is runtime so the feature repo is listed in etc/org.apache.karaf.features.cfg 
-				file, and features will installed into the system directory if specify in 
+			<!-- scope is runtime so the feature repo is listed in etc/org.apache.karaf.features.cfg
+				file, and features will installed into the system directory if specify in
 				the plugin configuration -->
 			<groupId>org.apache.karaf.features</groupId>
 			<artifactId>standard</artifactId>
@@ -231,25 +232,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.groovy.maven</groupId>
-				<artifactId>gmaven-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>choose-target-repository</id>
-						<phase>initialize</phase>
-						<goals>
-							<goal>execute</goal>
-						</goals>
-						<configuration>
-							<source>
-								project.properties.rpmFriendlyVersion =
-								project.version.replaceAll("-",".");
-							</source>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
 					<execution>
@@ -282,12 +264,10 @@
 					</execution>
 				</executions>
 				<configuration>
-					<licence />
-					<distribution />
-					<icon />
 					<group>REDHAWK Enterprise Integration</group>
+					<license>LGPLv3</license>
+					<release>${release}</release>
 					<prefix>${redhawk.user.home}</prefix>
-					<versionProperty>rpmFriendlyVersion</versionProperty>
 					<requires>
 						<require>java-1.8.0-openjdk</require>
 					</requires>
@@ -296,28 +276,18 @@
 							<directory>${redhawk.user.home}</directory>
 							<username>root</username>
 							<groupname>redhawk</groupname>
-							<filemode>775</filemode>
+							<filemode>755</filemode>
 							<sources>
 								<source>
-									<location>${project.build.directory}/${runtime.dir}.tar.gz</location>
+									<location>${project.build.directory}/${runtime.dir}</location>
 								</source>
 							</sources>
 						</mapping>
 					</mappings>
-					<preinstallScriptlet>
-						<script>echo "Installing REDHAWK Enterprise Integration"</script>
-					</preinstallScriptlet>
-					<postinstallScriptlet>
-						<scriptFile>${project.build.directory}/scripts/postinstall.sh</scriptFile>
-						<fileEncoding>utf-8</fileEncoding>
-					</postinstallScriptlet>
 					<preremoveScriptlet>
 						<scriptFile>${project.build.directory}/scripts/preremove.sh</scriptFile>
 						<fileEncoding>utf-8</fileEncoding>
 					</preremoveScriptlet>
-					<postremoveScriptlet>
-						<script>echo "Uninstalled REDHAWK Enterprise Integration"</script>
-					</postremoveScriptlet>
 				</configuration>
 			</plugin>
 		</plugins>

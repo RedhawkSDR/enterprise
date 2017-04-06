@@ -12,7 +12,7 @@
 	<name>CORE FRAMEWORK DEPS</name>
 	<description>
 		REDHAWK Driver Dependencies need to be in local repository or external nexus for
-		this entire build to work.  
+		this entire build to work.
 	</description>
 	<build>
 		<plugins>
@@ -77,7 +77,7 @@
 							<file>lib/FRONTENDInterfaces.jar</file>
 						</configuration>
 					</execution>
-					<!-- 
+					<!--
 						Add source jars too
 					 <execution>
 					 	<id>bulkiointerfaces-source</id>
@@ -94,7 +94,7 @@
 							<file>lib/BULKIOInterfaces.src.jar</file>
 						</configuration>
 					 </execution>
-					-->								
+					-->
 				</executions>
 			</plugin>
 		</plugins>

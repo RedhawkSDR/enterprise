@@ -11,6 +11,7 @@
 	<packaging>bundle</packaging>
 	<properties>
 		<docs.directory>${runtime.basedir}/docs</docs.directory>
+		<release>1</release>
 	</properties>
 	<build>
 		<resources>
@@ -18,11 +19,11 @@
 				<directory>${project.build.directory}/asciidoc/html</directory>
 				<filtering>false</filtering>
 			</resource>
-		</resources>	
+		</resources>
 		<plugins>
-			<!-- Using resources plugin to get everything in the propery directory 
-				structure to build one user manual. This will also rely on projects ahead 
-				of it that need to generate resources to atleast have gone through compile 
+			<!-- Using resources plugin to get everything in the propery directory
+				structure to build one user manual. This will also rely on projects ahead
+				of it that need to generate resources to atleast have gone through compile
 				phase. -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -104,14 +105,14 @@
 						<artifactId>asciidoctorj-pdf</artifactId>
 						<version>1.5.0-alpha.11</version>
 					</dependency>
-					<!-- Comment this section to use the default jruby artifact provided 
+					<!-- Comment this section to use the default jruby artifact provided
 						by the plugin -->
 					<dependency>
 						<groupId>org.jruby</groupId>
 						<artifactId>jruby-complete</artifactId>
 						<version>1.7.21</version>
 					</dependency>
-					<!-- Comment this section to use the default AsciidoctorJ artifact provided 
+					<!-- Comment this section to use the default AsciidoctorJ artifact provided
 						by the plugin -->
 					<dependency>
 						<groupId>org.asciidoctor</groupId>
@@ -151,8 +152,8 @@
 						<configuration>
 							<outputDirectory>${project.build.directory}/asciidoc/pdf</outputDirectory>
 							<backend>pdf</backend>
-							<doctype>book</doctype>							
-							<!-- Since 1.5.0-alpha.9 PDF back-end can use 'rouge' as well as 'coderay' 
+							<doctype>book</doctype>
+							<!-- Since 1.5.0-alpha.9 PDF back-end can use 'rouge' as well as 'coderay'
 								source highlighting -->
 							<sourceHighlighter>coderay</sourceHighlighter>
 							<attributes>
@@ -195,17 +196,15 @@
 					</execution>
 				</executions>
 				<configuration>
-					<licence />
-					<distribution />
-					<icon />
+					<license>LGPLv3</license>
 					<group>REDHAWK Enterprise Integration</group>
+					<release>${release}</release>
 					<requires>
 						<require>redhawk-enterprise-integration-dist</require>
 					</requires>
 					<defaultUsername>root</defaultUsername>
 					<defaultGroupname>redhawk</defaultGroupname>
-					<defaultFilemode>775</defaultFilemode>					
-					<!--<prefix>${demo.directory}</prefix> -->
+					<defaultFilemode>755</defaultFilemode>
 					<mappings>
 						<mapping>
 							<directory>${docs.directory}</directory>
@@ -225,7 +224,7 @@
 						</mapping>
 					</mappings>
 				</configuration>
-			</plugin>					
+			</plugin>
 		</plugins>
 	</build>
 </project>

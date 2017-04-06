@@ -556,6 +556,11 @@ public class RedhawkManager {
                 return (List<T>) redhawk.getApplication(Arrays.stream(location).collect(Collectors.joining("/"))).getComponents();
             case "port":
                 return (List<T>) redhawk.getComponent(Arrays.stream(location).collect(Collectors.joining("/"))).getPorts();
+            case "deviceport":
+            	//TODO: Figure out why streams not working on deviceLocation
+                //return (List<T>) redhawk.getDevice(Arrays.stream(location).collect(Collectors.joining("/"))).getPorts();
+            	RedhawkDevice device = redhawk.getDevice(location[0]);
+            	return (List<T>) device.getPorts();
             case "device":
                 return (List<T>) redhawk.getDeviceManager(Arrays.stream(location).collect(Collectors.joining("/"))).getDevices();
             //case "softwarecomponent": return (List<T>) redhawk.getComponent(Arrays.stream(location).collect(Collectors.joining("/"))).getSoftwareComponent();

@@ -282,6 +282,11 @@ public class DomainConverter {
                         .map(obj -> convertPort((RedhawkPort) obj))
                         .collect(Collectors.toList());
             }
+            case "deviceport": {
+                return list.stream()
+                        .map(obj -> convertPort((RedhawkPort) obj))
+                        .collect(Collectors.toList());
+            }
             case "devicemanager": {
                 return list.stream()
                         .map(obj -> convertDeviceManager((RedhawkDeviceManager) obj, fetchMode))

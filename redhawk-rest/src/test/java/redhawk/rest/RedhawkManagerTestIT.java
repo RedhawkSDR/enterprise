@@ -20,6 +20,7 @@
 package redhawk.rest;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -37,7 +38,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
+import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.rest.model.FetchMode;
+import redhawk.rest.model.Port;
 import redhawk.rest.model.TunerMode;
 import redhawk.rest.util.NodeBooterProxy;
 
@@ -158,6 +161,21 @@ public class RedhawkManagerTestIT {
 		assertEquals("Should be 0 used tuner ", 0, usedTuners.size());
 	
 		manager.shutdownDeviceManager("localhost:2809", "REDHAWK_DEV/SimulatorNode");
+	}
+	
+	@Test
+	public void testGetDevicePorts(){
+		try {
+			List<Port> ports = manager.getAll("localhost:2809", "deviceport", "REDHAWK_DEV/SimulatorNode/FmRdsSimulator.*", FetchMode.LAZY);
+			System.out.println(ports);
+			assertNotNull(ports);
+		} catch (ResourceNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@AfterClass

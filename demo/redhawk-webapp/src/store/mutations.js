@@ -92,7 +92,7 @@ export const showWaveformComponents = (state, index) => {
 
   //TODO: Refactor to not care about applicationName just have vuex track the waveform
   state.application = state.launchedWaveforms[index]
-  
+
   //If the application name changes ports show no longer show up
   if(state.componentPorts!=null){
     state.componentPorts = []
@@ -328,4 +328,9 @@ export const showDeviceManager = (state, show) => {
   }else{
       myState.showDeviceManager = false
   }
+}
+
+export const showDevicePorts = (state, show) => {
+  var myState = state
+
 }

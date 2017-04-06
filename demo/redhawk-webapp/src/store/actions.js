@@ -39,3 +39,5 @@ export const resetWaveformDisplay = ({ commit }) => commit('resetWaveformDisplay
 
 export const showApplication = ({ commit }, show) => commit('showApplication', show)
 export const showDeviceManager = ({ commit }, show) => commit('showDeviceManager', show)
+
+export const showDevicePorts = ({ commit }, show) => commit('showDevicePorts', show)

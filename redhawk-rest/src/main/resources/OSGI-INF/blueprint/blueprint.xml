@@ -38,7 +38,11 @@
 
 	<bean id="redhawkPortsResource" class="redhawk.rest.endpoints.RedhawkPortsResource">
 		<property name="redhawkManager" ref="redhawkManagerBean" />
-	</bean>	
+	</bean>
+	
+	<bean id="redhawkDevicePortsResource" class="redhawk.rest.endpoints.RedhawkDevicePortsResource">
+		<property name="redhawkManager" ref="redhawkManagerBean" />
+	</bean>		
 
 	<bean id="redhawkDeviceManagerResource" class="redhawk.rest.endpoints.RedhawkDeviceManagerResource">
 		<property name="redhawkManager" ref="redhawkManagerBean" />
@@ -55,7 +59,7 @@
 	<bean id="redhawkSoftwareComponentResource" class="redhawk.rest.endpoints.RedhawkSoftwareComponentResource">
 		<property name="redhawkManager" ref="redhawkManagerBean" />
 	</bean>
-    			
+	    			
 	<jaxrs:server id="rsServer" address="/redhawk">
 		<jaxrs:serviceBeans>
 			<ref component-id="redhawkDomainResource" />
@@ -66,6 +70,7 @@
 			<ref component-id="redhawkDeviceResource" />
 			<ref component-id="redhawkWaveformResource" />
 			<ref component-id="redhawkSoftwareComponentResource" />
+			<ref component-id="redhawkDevicePortsResource" />
 		</jaxrs:serviceBeans>
 		<jaxrs:extensionMappings>
 			<entry key="json" value="application/json" />

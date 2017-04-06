@@ -17,6 +17,7 @@ const state = {
   waveformComponents: [], //Components for a selected waveform
   componentPorts: [], //Compoent Ports
   applicationName: null, //Name of application you're viewing
+  application: null,
   portsComponentName: null,
   portToDisplayName: null,
   componentPropertiesToEdit: [],

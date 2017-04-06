@@ -90,6 +90,9 @@ export const getWaveformsAvailable = (state, index) => {
 export const showWaveformComponents = (state, index) => {
   state.applicationName = state.launchedWaveforms[index].name
 
+  //TODO: Refactor to not care about applicationName just have vuex track the waveform
+  state.application = state.launchedWaveforms[index]
+  
   //If the application name changes ports show no longer show up
   if(state.componentPorts!=null){
     state.componentPorts = []
@@ -313,7 +316,7 @@ export const showDeviceManager = (state, show) => {
   if(show.show){
     var deviceManagerName = state.devicemanagers[show.index].label
     var deviceManagerURL = state.baseURI+'/devicemanagers/'+deviceManagerName+'.json'
-        
+
     axios.get(deviceManagerURL)
     .then(function(response){
         myState.deviceManager = response.data

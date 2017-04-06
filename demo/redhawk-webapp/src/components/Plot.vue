@@ -60,7 +60,7 @@ function plotTimeData(wsURL){
 				format: 'SF',
 				cmode: 'L2',
 				xdelta: sri.xdelta,
-				xunits: sri.xunits				
+				xunits: sri.xunits
 			})
 		}
 	}
@@ -158,14 +158,14 @@ export default {
 			console.log('Property was updated')
 			if(this.wsURL!=null){
 				this.componentName = this.$store.state.portsComponentName//TODO:This is not intuitive clean up logic
-				plotData()
+				this.plotData()
 			}
 		},
 		wsURL: function(){
 			if(this.wsURL!=null){
 				this.componentName = this.$store.state.portsComponentName//TODO:This is not intuitive clean up logic
 				console.log('Do Websocket stuff')
-				plotData()
+				this.plotData()
 			}else{
 				console.log('No url so no websocket')
 

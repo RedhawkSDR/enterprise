@@ -1,10 +1,10 @@
 = REDHAWK Websocket
 
-== Overview
+=== Overview
 
 Provides an HTML5 compliant web socket implementation that enables the ability to stream data froma any Redhawk BulkIO enabled port or Event Channel. 
 
-== Connecting to the REDHAWK Websocket
+=== Connecting to the REDHAWK Websocket
 
 The WebSocket servlet resides at the following url ws://{hostname}:8181/redhawk. 
 
@@ -32,7 +32,7 @@ To connect to an event channel you would use this syntax: 'eventchannels/{eventC
 ws://localhost:8181/redhawk/localRH/domains/REDHAWK_DEV/eventchannels/ODM_Channel
 ----
 
-== Code Example 
+=== Code Example 
 
 A complete javascript example to connect to a REDHAWK WebSocket looks like:
 

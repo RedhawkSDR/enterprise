@@ -1,4 +1,4 @@
-== Introduction 
+= Introduction 
 
 REDHAWK Java Tools is a suite of software written in Java for interacting with a REDHAWK Domain. The suite includes:
 

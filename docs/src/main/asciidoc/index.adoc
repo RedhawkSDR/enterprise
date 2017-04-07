@@ -8,9 +8,7 @@ include::gettingstarted.adoc[]
 
 //These are coming from Redhawk Driver
 
-//= REDHAWK Driver
 
-//:leveloffset: 1
 :leveloffset: +1
 
 include::driver/introduction.adoc[]
@@ -25,19 +23,16 @@ include::driver/examples/redhawkcomponent-usage.adoc[]
 
 include::driver/examples/redhawkeventchannelmanager-usage.adoc[]
 
-//:leveloffset: 1
-
-//= REDHAWK Connector
 
 //These are coming coming from Redhawk Connector Module
 
-//:leveloffset: 1
+
 
 include::connector/overview.adoc[]
 
 // These are coming from the redhawk-rest module. 
 
-//= REDHAWK Rest
+
 
 include::rest/overview.adoc[]
 
@@ -45,11 +40,10 @@ include::rest/paths.adoc[]
 
 include::rest/definitions.adoc[]
 
-//= REDHAWK Websocket
+
 
 // These are coming from redhawk-websocket module
 
-//:leveloffset: 1
 
 include::websocket/overview.adoc[]
 

@@ -1,6 +1,6 @@
 = REDHAWK Connector
 
-=== Overview
+== Overview
 
 When you use the connector to create a Redhawk Connection 4 things happen:
 
@@ -9,7 +9,7 @@ When you use the connector to create a Redhawk Connection 4 things happen:
 * A websocket service is available for the connection
 * A REST Endpoint is available for the connection
 
-=== Configuration
+== Configuration
 
 .Configuration Table
 |===
@@ -48,7 +48,7 @@ When you use the connector to create a Redhawk Connection 4 things happen:
 
 |===
 
-=== Usage
+== Usage
 
 You can create a configuration 2 ways:
 
@@ -67,7 +67,7 @@ host=localhost
 domainManager=REDHAWK_DEV
 ----
 
-=== Using Connection in blueprint
+== Using Connection in blueprint
 
 Injecting the Redhawk Driver instance into your application is a matter of placing a couple lines in your blueprint.xml file:
 

@@ -1,15 +1,15 @@
-=== RedhawkApplication Code Examples
+== RedhawkApplication Code Examples
 
 Below are code examples for using the RedhawkApplication class. 
 
-==== Managing your Applications lifecycle
+=== Managing your Applications lifecycle
 
 [source,java,indent=0]
 ----
 include::snippets/RedhawkApplicationImplTestIT.java[lines=100..110]
 ----
 
-==== Interacting with Components from your Application
+=== Interacting with Components from your Application
 
 [source,java,indent=0]
 ----

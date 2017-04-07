@@ -11,4 +11,4 @@ Sample code for allocating and deallocating a frontend device.
 include::snippets/RedhawkDeviceImplTestMT.java[lines=28..61,71..74]
 ----
 
-<<<
+

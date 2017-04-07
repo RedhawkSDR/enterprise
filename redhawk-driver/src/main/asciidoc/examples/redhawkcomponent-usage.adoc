@@ -1,15 +1,15 @@
-=== RedhawkComponent Code Examples
+== RedhawkComponent Code Examples
 
 Below are code examples for using the RedhawkComponent class. 
 
-==== Managing your Components lifecycle
+=== Managing your Components lifecycle
 
 [source,java,indent=0]
 ----
 include::snippets/RedhawkComponentImplTestIT.java[lines=99..106]
 ----
 
-==== Interacting with Component properties on your Component
+=== Interacting with Component properties on your Component
 
 [source,java,indent=0]
 ----

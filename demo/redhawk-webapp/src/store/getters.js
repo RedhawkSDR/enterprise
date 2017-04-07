@@ -28,3 +28,6 @@ export const devicemanagers = state => state.devicemanagers
 export const showDeviceManager = state => state.showDeviceManager
 export const deviceManager = state => state.deviceManager
 export const application = state => state.application
+export const devicePorts = state => state.devicePorts
+export const showTuners = state => state.showTuners
+export const tuners = state => state.tuners

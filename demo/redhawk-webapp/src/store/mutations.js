@@ -332,5 +332,57 @@ export const showDeviceManager = (state, show) => {
 
 export const showDevicePorts = (state, show) => {
   var myState = state
+  var myShow = show
 
+  if(show.show){
+    var devicePortsURL = state.baseURI+'/devicemanagers/'+state.deviceManager.label+'/devices/'+show.device.label+'/ports.json'
+
+    axios.get(devicePortsURL)
+    .then(function(response){
+      console.log("Do I have access to this")
+      var devPorts = new Object()
+      devPorts.ports = response.data.ports
+      devPorts.device = myShow.device
+      myState.devicePorts = devPorts
+    })
+    .catch(function(error){
+      console.log("ERROR: "+error)
+    })
+  }else{
+    console.log("Do stuff")
+  }
+}
+
+export const showDeviceTuners = (state, show) => {
+  var myState = state
+  var tuners = new Object()
+
+  if(show.show){
+    myState.tuners.device = show.device
+
+    var deviceUsedTuners = state.baseURI+'/devicemanagers/'+state.deviceManager.label+'/devices/'+show.device.label+'/tuners/USED'
+    var deviceUnusedTuners = state.baseURI+'/devicemanagers/'+state.deviceManager.label+'/devices/'+show.device.label+'/tuners/UNUSED'
+
+    //TODO: Run these in parrallel
+    axios.get(deviceUsedTuners)
+    .then(function(response){
+      console.log("Do I have access to this")
+      myState.tuners.usedTuners = response.data
+    })
+    .catch(function(error){
+      console.log("ERROR: "+error)
+    })
+
+    axios.get(deviceUnusedTuners)
+    .then(function(response){
+      console.log("Do I have access to this")
+      myState.tuners.unusedTuners = response.data
+    })
+    .catch(function(error){
+      console.log("ERROR: "+error)
+    })
+    myState.showTuners = true
+  }else{
+    myState.showTuners = false
+  }
 }

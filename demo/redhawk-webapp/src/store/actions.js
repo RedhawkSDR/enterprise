@@ -41,3 +41,4 @@ export const showApplication = ({ commit }, show) => commit('showApplication', s
 export const showDeviceManager = ({ commit }, show) => commit('showDeviceManager', show)
 
 export const showDevicePorts = ({ commit }, show) => commit('showDevicePorts', show)
+export const showTuners = ({ commit }, show) => commit('showDeviceTuners', show)

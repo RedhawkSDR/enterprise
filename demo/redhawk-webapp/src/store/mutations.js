@@ -263,9 +263,10 @@ export const launchWaveform = (state, waveformToLaunch) => {
 
 export const plotPortData = (state, port) => {
   console.log('Plot port data '+port)
-  var wsURL = 'ws://localhost:8181/redhawk/'+state.configToView.nameServer+'/domains/'+state.configToView.domainName
+  var url = new URL(state.baseURI)
+  var wsURL = 'ws://'+url.hostname+':8181/redhawk/'+state.configToView.nameServer+'/domains/'+state.configToView.domainName
   +'/applications/'+state.applicationName+'/components/'+state.portsComponentName+'/ports/'+port.name
-  console.log(wsURL)
+
   //Update wsURL
   state.wsURL = wsURL
   state.portToDisplayName = port.name
@@ -353,6 +354,34 @@ export const showDevicePorts = (state, show) => {
   }
 }
 
+function getUsedTuners(state, deviceLabel){
+  var myState = state
+  var deviceUsedTuners = state.baseURI+'/devicemanagers/'+state.deviceManager.label+'/devices/'+deviceLabel+'/tuners/USED'
+
+  axios.get(deviceUsedTuners)
+  .then(function(response){
+    console.log("Do I have access to this")
+    myState.tuners.usedTuners = response.data
+  })
+  .catch(function(error){
+    console.log("ERROR: "+error)
+  })
+}
+
+function getUnusedTuners(state, deviceLabel){
+  var myState = state
+  var deviceUnusedTuners = state.baseURI+'/devicemanagers/'+state.deviceManager.label+'/devices/'+deviceLabel+'/tuners/UNUSED'
+
+  axios.get(deviceUnusedTuners)
+  .then(function(response){
+    console.log("Do I have access to this")
+    myState.tuners.unusedTuners = response.data
+  })
+  .catch(function(error){
+    console.log("ERROR: "+error)
+  })
+}
+
 export const showDeviceTuners = (state, show) => {
   var myState = state
   var tuners = new Object()
@@ -360,29 +389,74 @@ export const showDeviceTuners = (state, show) => {
   if(show.show){
     myState.tuners.device = show.device
 
-    var deviceUsedTuners = state.baseURI+'/devicemanagers/'+state.deviceManager.label+'/devices/'+show.device.label+'/tuners/USED'
-    var deviceUnusedTuners = state.baseURI+'/devicemanagers/'+state.deviceManager.label+'/devices/'+show.device.label+'/tuners/UNUSED'
-
-    //TODO: Run these in parrallel
-    axios.get(deviceUsedTuners)
-    .then(function(response){
-      console.log("Do I have access to this")
-      myState.tuners.usedTuners = response.data
-    })
-    .catch(function(error){
-      console.log("ERROR: "+error)
-    })
-
-    axios.get(deviceUnusedTuners)
-    .then(function(response){
-      console.log("Do I have access to this")
-      myState.tuners.unusedTuners = response.data
-    })
-    .catch(function(error){
-      console.log("ERROR: "+error)
-    })
-    myState.showTuners = true
+    axios.all([getUnusedTuners(myState, show.device.label), getUsedTuners(myState, show.device.label)])
+    .then(axios.spread(function(acct, perms){
+      console.log("Ran both requests")
+      myState.showTuners = true
+    }));
   }else{
     myState.showTuners = false
   }
+}
+
+export const deallocate = (state, deallocate) => {
+  console.log("Well now what is it: "+ deallocate)
+  var deallocateURL = state.baseURI+'/devicemanagers/'+state.deviceManager.label+'/devices/'+deallocate.deviceLabel+'/deallocate'
+  var myState = state
+  axios.post(deallocateURL, deallocate.allocationId,{
+          headers:{
+                  'Content-Type':'application/json'
+          }
+  })
+  .then(function(response){
+    //After dellocation see if you can update device tuners being showTuners
+    axios.all([getUnusedTuners(myState, deallocate.deviceLabel), getUsedTuners(myState, deallocate.deviceLabel)])
+    .then(axios.spread(function(acct, perms){
+      console.log("Updated...")
+    }));
+  })
+  .catch(function(error){
+          console.log(error)
+  })
+}
+
+export const showAllocationModal = (state, show) =>  {
+  state.showAllocationModal = show
+}
+
+export const allocate = (state, allocate) => {
+  var allocateURL = state.baseURI+'/devicemanagers/'+state.deviceManager.label+'/devices/'+state.tuners.device.label+'/allocate'
+  var myState = state
+  var deviceLabel = state.tuners.device.label
+
+  var actualAllocation = new Object()
+  actualAllocation["FRONTEND::tuner_allocation::allocation_id"] = allocate.id
+  actualAllocation["FRONTEND::tuner_allocation::tuner_type"] = allocate.tunerType
+  actualAllocation["FRONTEND::tuner_allocation::center_frequency"] = allocate.centerFrequency * 1000000
+  actualAllocation["FRONTEND::tuner_allocation::sample_rate"] = allocate.samplerate * 1000
+  actualAllocation["FRONTEND::tuner_allocation::bandwidth_tolerance"] = allocate.bandwidthTolerance
+  actualAllocation["FRONTEND::tuner_allocation::sample_rate_tolerance"] = allocate.sampleRateTolerance
+
+  console.log(actualAllocation)
+  console.log("Allocation URL: "+allocateURL)
+
+  axios.post(allocateURL, actualAllocation,{
+          headers:{
+                  'Content-Type':'application/json'
+          }
+  })
+  .then(function(response){
+    //After dellocation see if you can update device tuners being showTuners
+    axios.all([getUnusedTuners(myState, deviceLabel), getUsedTuners(myState, deviceLabel)])
+    .then(axios.spread(function(acct, perms){
+      console.log("Updated...")
+    }));
+  })
+  .catch(function(error){
+          console.log(error)
+  })
+}
+
+export const updateRedhawkRESTRoot = (state, updateURL) => {
+  state.redhawkRESTRoot = updateURL
 }

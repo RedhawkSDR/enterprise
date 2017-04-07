@@ -44,7 +44,7 @@ export default{
       var obj = new Object()
       obj.device = this.device
       obj.show = true
-      this.$store.dispatch("showTuners", obj)
+      this.$store.dispatch("showDeviceTuners", obj)
     },
     showPorts(){
       var obj = new Object();

@@ -19,23 +19,31 @@
  */
 package redhawk.rest.endpoints;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.rest.exceptions.ResourceNotFound;
 import redhawk.rest.model.DeviceContainer;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.FullProperty;
 import redhawk.rest.model.TunerMode;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
 
 @Path("/{nameserver}/domains/{domain}/devicemanagers/{devmanager}/devices")
 @Api(value="/{nameserver}/domains/{domain}/devicemanagers/{devmanager}/devices")
@@ -80,7 +88,8 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     		value="Allocates a specific device"
     		)
     public Response allocateDevice(@PathParam("deviceId") String deviceId, Map<String, Object> allocation) throws Exception{
-    	redhawkManager.allocateDevice(nameServer, domainName+"/"+devManagerName+"/"+deviceId, allocation);
+    	//TODO: Look into where the appropriate place to fix this is. 
+    	redhawkManager.allocateDevice(nameServer, domainName+"/"+devManagerName+"/"+deviceId, this.allocationHelper(allocation));
     	//TODO: Probably should return the successful tuner::status object
     	return Response.ok().build();
     }
@@ -153,5 +162,21 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     public Response setDeviceProperty(@PathParam("deviceId") String deviceId, @PathParam("propId") String propertyId, FullProperty property) throws Exception {
         redhawkManager.setProperty(property, nameServer, "device", domainName + "/" + devManagerName + "/" + deviceId);
         return Response.ok().build();
+    }
+    
+    public Map<String, Object> allocationHelper(Map<String, Object> obj){
+    	Map<String, Object> allocations = new HashMap<>();
+    	for(Map.Entry<String, Object> entry : obj.entrySet()){
+    		if(entry.getValue() instanceof String){
+    			allocations.put(entry.getKey(), entry.getValue());
+    		}else if(entry.getValue() instanceof Integer){
+    			allocations.put(entry.getKey(), Double.parseDouble(entry.getValue().toString()));
+    		}else{
+    			//TODO: Ummm clean this up
+    			allocations.put(entry.getKey(), entry.getValue());
+    		}
+    	}
+    	
+    	return allocations;
     }
 }

@@ -13,6 +13,7 @@
   <md-list>
     <tuner v-for="(tuner, index) in unusedTuners"
       v-bind:tuner="tuner"
+      v-bind:deviceLabel="device.label"
       >
     </tuner>
   </md-list>
@@ -23,9 +24,10 @@
     <tuner
       v-for="(tuner, index) in usedTuners"
       v-bind:tuner="tuner"
+      v-bind:deviceLabel="device.label"
       >
     </tuner>
-  </md-list>  
+  </md-list>
   <!--
   <md-list>
     <tuner
@@ -59,7 +61,7 @@ export default{
     close(){
       var t = new Object();
       t.show = false
-      this.$store.dispatch("showTuners", t)
+      this.$store.dispatch("showDeviceTuners", t)
     }
   },
   components: {

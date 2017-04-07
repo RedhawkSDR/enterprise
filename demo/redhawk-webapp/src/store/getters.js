@@ -31,3 +31,4 @@ export const application = state => state.application
 export const devicePorts = state => state.devicePorts
 export const showTuners = state => state.showTuners
 export const tuners = state => state.tuners
+export const showAllocationModal = state => state.showAllocationModal

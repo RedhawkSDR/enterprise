@@ -21,6 +21,7 @@
   <md-layout md-flex='25' v-if="showTuners">
     <tuners></tuners>
   </md-layout>
+  <allocationModal v-if="showAllocationModal"></allocationModal>
 </md-layout>
 </template>
 
@@ -29,6 +30,7 @@ import Plot from './Plot.vue'
 import Devices from './RHDevices.vue'
 import DevicePorts from './RHDevicePorts.vue'
 import Tuners from './Tuners.vue'
+import AllocationModal from './AllocationModal.vue'
 
 export default{
   name: 'rhdevicemanager',
@@ -36,7 +38,8 @@ export default{
     'plot' : Plot,
     'devices' : Devices,
     'deviceports' : DevicePorts,
-    'tuners' : Tuners
+    'tuners' : Tuners,
+    'allocationModal' : AllocationModal
   },
   computed: {
     deviceManager(){
@@ -56,6 +59,9 @@ export default{
       }else{
         return false
       }
+    },
+    showAllocationModal(){
+      return this.$store.getters.showAllocationModal
     }
   }
 }

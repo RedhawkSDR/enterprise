@@ -1,6 +1,7 @@
 <template>
     <md-list class="md-dense">
-        <md-subheader> {{ device.label }} : Ports</md-subheader>
+        <!--<md-subheader> {{ device.label }} : Ports</md-subheader> TODO: Make this work -->
+        <md-subheader> Ports</md-subheader> 
         <md-list-item
         v-for="(port, index) in ports"
         v-bind:key=port

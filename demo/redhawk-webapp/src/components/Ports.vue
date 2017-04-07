@@ -27,7 +27,10 @@ export default{
   },
   methods: {
     plot(port){
-      this.$store.dispatch('plotPortData', port)
+      var obj = new Object()
+      obj.portType = "component"
+      obj.port = this.port
+      this.$store.dispatch('plotPortData', obj)
     }
   }
 }

@@ -40,7 +40,8 @@ const state = {
   deviceManager: {}, //Device Manager to show
   devicePorts : {},
   tuners : {},
-  showTuners: false
+  showTuners: false,
+  showAllocationModal : false
 }
 
 const store = new Vuex.Store({

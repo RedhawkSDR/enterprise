@@ -41,4 +41,10 @@ export const showApplication = ({ commit }, show) => commit('showApplication', s
 export const showDeviceManager = ({ commit }, show) => commit('showDeviceManager', show)
 
 export const showDevicePorts = ({ commit }, show) => commit('showDevicePorts', show)
-export const showTuners = ({ commit }, show) => commit('showDeviceTuners', show)
+export const showDeviceTuners = ({ commit }, show) => commit('showDeviceTuners', show)
+
+export const deallocate = ({ commit }, deallocate) => commit('deallocate', deallocate)
+export const showAllocationModal = ({ commit }, show) => commit('showAllocationModal', show)
+export const allocate = ({ commit }, allocate) => commit('allocate', allocate)
+
+export const updateRedhawkRESTRoot = ({ commit }, updateURL ) => commit('updateRedhawkRESTRoot', updateURL)

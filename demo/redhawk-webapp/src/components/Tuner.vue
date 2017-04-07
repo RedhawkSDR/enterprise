@@ -20,6 +20,6 @@
 <script>
 export default{
   name: 'tuner',
-  props: ['tuner']
+  props: ['tuner', 'type']
 }
 </script>

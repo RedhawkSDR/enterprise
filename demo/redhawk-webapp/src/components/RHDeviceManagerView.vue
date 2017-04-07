@@ -1,6 +1,6 @@
 <template>
-  <md-layout>
-  <md-layout md-flex='75' md-column>
+<md-layout>
+  <md-layout md-flex md-column>
     <md-toolbar class="md-warn">
       <h1 class="md-title">DeviceManager: {{ deviceManager.label }}</h1>
     </md-toolbar>

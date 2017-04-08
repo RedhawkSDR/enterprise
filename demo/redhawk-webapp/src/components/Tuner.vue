@@ -40,6 +40,7 @@ export default{
 
       console.log(obj)
       this.$store.dispatch("deallocate", obj)
+      //this.$store.dispatch("updateTuners", this.deviceLabel)
     }
   }
 }

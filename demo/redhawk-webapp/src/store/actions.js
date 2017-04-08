@@ -42,6 +42,8 @@ export const showDeviceManager = ({ commit }, show) => commit('showDeviceManager
 
 export const showDevicePorts = ({ commit }, show) => commit('showDevicePorts', show)
 export const showDeviceTuners = ({ commit }, show) => commit('showDeviceTuners', show)
+export const showDeviceProperties = ({ commit }, show) => commit('showDeviceProperties', show)
+export const updateTuners = ({ commit }, deviceLabel) => commit('updateTuners', deviceLabel)
 
 export const deallocate = ({ commit }, deallocate) => commit('deallocate', deallocate)
 export const showAllocationModal = ({ commit }, show) => commit('showAllocationModal', show)

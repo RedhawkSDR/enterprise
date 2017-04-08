@@ -50,6 +50,16 @@ export const viewDomainConfig = (state, index) => {
   //Setting Waveforms based on config
   var myState = state
 
+  axios.get(state.baseURI+'/waveforms.json')
+  .then(function(response){
+    var availableWaveforms = response.data.domains
+    myState.availableWaveforms = availableWaveforms
+  })
+  .catch(function(error){
+    console.log("Unable to get available waveforms")
+    alert("Unable to get waveforms available")
+  })
+
   axios.get(state.baseURI+'/applications.json')
   .then(function(response){
     var launchedWFJson = response.data.applications
@@ -72,6 +82,8 @@ export const viewDomainConfig = (state, index) => {
   .catch(function(error){
     alert("Unable to find device managers")
   })
+
+  state.showDomain = true
 }
 
 //TODO: Merge this with viewDomain config and execute in parralel
@@ -83,7 +95,6 @@ export const getWaveformsAvailable = (state, index) => {
   .then(function(response){
     var availableWaveforms = response.data.domains
     myState.availableWaveforms = availableWaveforms
-    myState.showDomain = true
   })
 }
 
@@ -264,12 +275,23 @@ export const launchWaveform = (state, waveformToLaunch) => {
 export const plotPortData = (state, port) => {
   console.log('Plot port data '+port)
   var url = new URL(state.baseURI)
-  var wsURL = 'ws://'+url.hostname+':8181/redhawk/'+state.configToView.nameServer+'/domains/'+state.configToView.domainName
-  +'/applications/'+state.applicationName+'/components/'+state.portsComponentName+'/ports/'+port.name
 
-  //Update wsURL
-  state.wsURL = wsURL
-  state.portToDisplayName = port.name
+  console.log(port)
+  if(port.portType=='component'){
+    var wsURL = 'ws://'+url.hostname+':8181/redhawk/'+state.configToView.nameServer+'/domains/'+state.configToView.domainName
+    +'/applications/'+state.applicationName+'/components/'+state.portsComponentName+'/ports/'+port.port.name
+
+    //Update wsURL
+    state.wsURL = wsURL
+    state.portToDisplayName = port.port.name
+  }else{
+    console.log("Display Device port data")
+    var wsURL = 'ws://'+url.hostname+':8181/redhawk/'+state.configToView.nameServer+'/domains/'+state.configToView.domainName
+    +'/devicemanagers/'+state.deviceManager.label+'/devices/'+port.device.label+'/ports/'+port.port.name
+
+    state.wsURL = wsURL
+    state.portToDisplayName = port.port.name
+  }
 }
 
 export const closeEditPropsConfig = state =>{
@@ -304,6 +326,7 @@ export const resetWaveformDisplay = state => {
   state.showWaveformComponents = false
   state.showComponentProperties = false
   state.wsURL = null
+  state.showApplication = false
 }
 
 export const showApplication = (state, show) => {
@@ -313,6 +336,10 @@ export const showApplication = (state, show) => {
 
 export const showDeviceManager = (state, show) => {
   var myState = state
+
+  //TODO: Think about this a little bit more
+  state.showTuners = false
+  state.showDeviceProperties = false
 
   if(show.show){
     var deviceManagerName = state.devicemanagers[show.index].label
@@ -380,6 +407,11 @@ function getUnusedTuners(state, deviceLabel){
   .catch(function(error){
     console.log("ERROR: "+error)
   })
+}
+
+export const updateTuners = (state, deviceLabel) => {
+  getUsedTuners(state, deviceLabel)
+  getUnusedTuners(state, deviceLabel)
 }
 
 export const showDeviceTuners = (state, show) => {
@@ -459,4 +491,13 @@ export const allocate = (state, allocate) => {
 
 export const updateRedhawkRESTRoot = (state, updateURL) => {
   state.redhawkRESTRoot = updateURL
+}
+
+export const showDeviceProperties = (state, show) => {
+  if(show.show){
+    state.deviceForPropView = show.device
+    state.showDeviceProperties = show.show
+  }else{
+    state.showDeviceProperties = show.show
+  }
 }

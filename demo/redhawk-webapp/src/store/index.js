@@ -41,7 +41,9 @@ const state = {
   devicePorts : {},
   tuners : {},
   showTuners: false,
-  showAllocationModal : false
+  showAllocationModal : false,
+  deviceForPropView : {},
+  showDeviceProperties: false
 }
 
 const store = new Vuex.Store({

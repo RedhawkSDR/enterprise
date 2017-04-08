@@ -4,16 +4,10 @@
       <md-toolbar class="md-warn">
         <h1 class="md-title">Application: {{ application.name }}</h1>
       </md-toolbar>
+      <plot></plot>
       <md-layout md-align="center" class="rowHeight">
-        <plot></plot>
-      </md-layout>
-      <md-layout md-align="center" class="rowHeight">
-        <md-layout>
-          <waveformcomponents></waveformcomponents>
-        </md-layout>
-        <md-layout>
-          <componentports></componentports>
-        </md-layout>
+        <waveformcomponents></waveformcomponents>
+        <componentports></componentports>
       </md-layout>
     </md-layout>
     <md-layout md-flex='25' v-if="showComponentProperties">

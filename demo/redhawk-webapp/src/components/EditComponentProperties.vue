@@ -1,12 +1,4 @@
 <template>
-  <!--
-  <md-toolbar>
-    <span>{{ name }}</span>
-    <md-button @click.native="close">
-      <md-icon>close</md-icon>
-    </md-button>
-  </md-toolbar>
--->
   <md-list class="md-dense">
     <md-subheader>
       <md-button @click.native="close" class="md-icon-button">
@@ -14,15 +6,14 @@
       </md-button>
       {{ name }}
     </md-subheader>
-    <md-list-item
+    <componentprop
       v-for="(property, index) in properties"
       :key="property"
       v-bind:propVal="property.val"
       v-bind:index="index"
+      :property="property"
       >
-      <!--UGH This is ugly figure out below-->
-      <componentprop v-bind:property="property"></componentprop>
-    </md-list-item>
+    </componentprop>
   </md-list>
   <!--TODO: Figure out why this is giving me a hard time....
   Probably has something to do with this: https://github.com/vuejs/vue/issues/820

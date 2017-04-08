@@ -21,6 +21,7 @@
   <md-layout md-flex='25' v-if="showTuners">
     <tuners></tuners>
   </md-layout>
+  <deviceprops></deviceprops>
   <allocationModal v-if="showAllocationModal"></allocationModal>
 </md-layout>
 </template>
@@ -31,6 +32,7 @@ import Devices from './RHDevices.vue'
 import DevicePorts from './RHDevicePorts.vue'
 import Tuners from './Tuners.vue'
 import AllocationModal from './AllocationModal.vue'
+import DeviceProperties from './DeviceProperties.vue'
 
 export default{
   name: 'rhdevicemanager',
@@ -39,7 +41,8 @@ export default{
     'devices' : Devices,
     'deviceports' : DevicePorts,
     'tuners' : Tuners,
-    'allocationModal' : AllocationModal
+    'allocationModal' : AllocationModal,
+    'deviceprops' : DeviceProperties
   },
   computed: {
     deviceManager(){

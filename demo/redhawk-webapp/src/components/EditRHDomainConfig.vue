@@ -2,6 +2,9 @@
 	<div class="modal-mask">
 		<div class="modal-wrapper">
 			<div class="modal-container">
+				<md-toolbar>
+	        <h1 class="md-title">Domain Config</h1>
+	      </md-toolbar>
 				<md-input-container>
 					<label>Configuration Name</label>
 					<md-input v-model="configurationName"></md-input>

@@ -1,9 +1,5 @@
 <template id="property-template">
-  <!--
-  <div v-if="property.type=='simple'">
-          {{property.id}}<input v-model="property.value"></input><button v-on:click="updateProperty">update</button>
-  </div>
--->
+<md-list-item>
   <md-input-container v-if="property.type=='simple'">
     <label>{{ property.id }}</label>
     <md-input v-model="property.value"></md-input>
@@ -15,6 +11,8 @@
     <md-input v-model="property.value"></md-input>
     <md-button :disabled="true">Update</md-button>
   </md-input-container>
+  <md-tooltip md-direction="left" md-delay="500">{{ property.description }}</md-tooltip>  
+</md-list-item>
 </template>
 
 <script>

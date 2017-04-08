@@ -1,7 +1,7 @@
 <template>
     <md-list class="md-dense">
         <!--<md-subheader> {{ device.label }} : Ports</md-subheader> TODO: Make this work -->
-        <md-subheader> Ports</md-subheader> 
+        <md-subheader> Ports</md-subheader>
         <md-list-item
         v-for="(port, index) in ports"
         v-bind:key=port
@@ -22,6 +22,16 @@ export default{
     },
     ports(){
       return this.$store.getters.devicePorts.ports
+    }
+  },
+  methods: {
+    plot(port){
+      //TODO: Shouldn't need two port vue files look into merging(Function Components?)
+      var obj = new Object()
+      obj.portType = 'device'
+      obj.port = port
+      obj.device = this.device
+      this.$store.dispatch('plotPortData', obj)
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-<div>
+<md-layout>
   <md-list class="md-dense">
       <md-subheader>{{ applicationName }} :: Components</md-subheader>
       <md-list-item
@@ -19,7 +19,7 @@
       <md-divider></md-divider>
       </md-list-item>
   </md-list>
-</div>
+</md-layout>
 </template>
 
 <script>

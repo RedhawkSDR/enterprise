@@ -1,5 +1,5 @@
 <template>
-  <div>
+<md-layout>
     <md-list class="md-dense">
         <md-subheader>{{ componentName }} :: Ports</md-subheader>
         <md-list-item
@@ -11,7 +11,7 @@
           <md-button v-if="port.name.endsWith('out')" @click.native="plot(port)">plot</md-button>
         </md-list-item>
     </md-list>
-  </div>
+</md-layout>
 </template>
 
 <script>
@@ -28,8 +28,8 @@ export default{
   methods: {
     plot(port){
       var obj = new Object()
-      obj.portType = "component"
-      obj.port = this.port
+      obj.portType = 'component'
+      obj.port = port
       this.$store.dispatch('plotPortData', obj)
     }
   }

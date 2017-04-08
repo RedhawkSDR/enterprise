@@ -1,21 +1,18 @@
 <template>
-<div>
-	<h1 v-if="portName!=null">{{ componentName }}::{{ portName }}</h1>
+<md-layout md-align="center">
+	<div>
 	<div id="plot">
 	</div>
-	<md-input-container>
-    <label for="plotType">Plot Type</label>
-    <md-select name="plotType" id="plotType" v-model="plotType">
-      <md-option value="time">Time</md-option>
-      <md-option value="raster">Raster</md-option>
-    </md-select>
-  </md-input-container>
-	<!--
-	<md-button>
-		Update Plot
-	</md-button>
-	-->
-</div>
+	<h1 v-if="portName!=null">{{ componentName }}::{{ portName }}</h1>
+	<md-input-container id="plotOptions">
+		<label for="plotType">Plot Type</label>
+		<md-select name="plotType" id="plotType" v-model="plotType">
+			<md-option value="time">Time</md-option>
+			<md-option value="raster">Raster</md-option>
+		</md-select>
+	</md-input-container>
+	</div>
+</md-layout>
 </template>
 
 <script>
@@ -202,4 +199,7 @@ export default {
 
 <style>
 #plot { height: 400px; width: 600px; }
+#plotOptions {
+	width: 200px;
+}
 </style>

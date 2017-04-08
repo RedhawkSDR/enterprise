@@ -66,6 +66,11 @@ export default{
     },
     allocate(){
       this.$store.dispatch('allocate', this.allocation)
+
+      //Need to force nextTick may be a cleaner way
+      this.$nextTick(function(){
+        console.log("Hello World")
+      })
       this.$store.dispatch('showAllocationModal', false)
     }
   },

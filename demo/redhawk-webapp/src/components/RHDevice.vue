@@ -51,6 +51,12 @@ export default{
       obj.device = this.device
       obj.show = true
       this.$store.dispatch("showDevicePorts", obj)
+    },
+    showProperties(){
+      var obj = new Object();
+      obj.device = this.device
+      obj.show = true
+      this.$store.dispatch("showDeviceProperties", obj)
     }
   }
 }

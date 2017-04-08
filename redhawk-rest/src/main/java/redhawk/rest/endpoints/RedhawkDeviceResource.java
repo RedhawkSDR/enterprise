@@ -89,7 +89,7 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     		)
     public Response allocateDevice(@PathParam("deviceId") String deviceId, Map<String, Object> allocation) throws Exception{
     	//TODO: Look into where the appropriate place to fix this is. 
-    	redhawkManager.allocateDevice(nameServer, domainName+"/"+devManagerName+"/"+deviceId, this.allocationHelper(allocation));
+    	redhawkManager.allocateDevice(nameServer, domainName+"/"+devManagerName+"/"+deviceId, allocation);
     	//TODO: Probably should return the successful tuner::status object
     	return Response.ok().build();
     }
@@ -162,21 +162,5 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     public Response setDeviceProperty(@PathParam("deviceId") String deviceId, @PathParam("propId") String propertyId, FullProperty property) throws Exception {
         redhawkManager.setProperty(property, nameServer, "device", domainName + "/" + devManagerName + "/" + deviceId);
         return Response.ok().build();
-    }
-    
-    public Map<String, Object> allocationHelper(Map<String, Object> obj){
-    	Map<String, Object> allocations = new HashMap<>();
-    	for(Map.Entry<String, Object> entry : obj.entrySet()){
-    		if(entry.getValue() instanceof String){
-    			allocations.put(entry.getKey(), entry.getValue());
-    		}else if(entry.getValue() instanceof Integer){
-    			allocations.put(entry.getKey(), Double.parseDouble(entry.getValue().toString()));
-    		}else{
-    			//TODO: Ummm clean this up
-    			allocations.put(entry.getKey(), entry.getValue());
-    		}
-    	}
-    	
-    	return allocations;
     }
 }

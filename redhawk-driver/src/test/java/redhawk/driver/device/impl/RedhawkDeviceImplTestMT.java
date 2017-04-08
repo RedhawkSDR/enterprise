@@ -153,10 +153,10 @@ public class RedhawkDeviceImplTestMT extends RedhawkTestBase {
 		String allocId = "myTestAllocationId";
 		newAlloc.put("FRONTEND::tuner_allocation::allocation_id", allocId);
 		newAlloc.put("FRONTEND::tuner_allocation::tuner_type", "RX_DIGITIZER");
-		newAlloc.put("FRONTEND::tuner_allocation::center_frequency", 101100000.0);//101.1e6
-		newAlloc.put("FRONTEND::tuner_allocation::sample_rate", 256000.0);//256e3
-		newAlloc.put("FRONTEND::tuner_allocation::bandwidth_tolerance", 20.0);
-		newAlloc.put("FRONTEND::tuner_allocation::sample_rate_tolerance", 20.0);
+		newAlloc.put("FRONTEND::tuner_allocation::center_frequency", 101100000);//101.1e6
+		newAlloc.put("FRONTEND::tuner_allocation::sample_rate", 256000);//256e3
+		newAlloc.put("FRONTEND::tuner_allocation::bandwidth_tolerance", 20);
+		newAlloc.put("FRONTEND::tuner_allocation::sample_rate_tolerance", 20);
 		
 		//Allocate Device
 		device.allocate(newAlloc);

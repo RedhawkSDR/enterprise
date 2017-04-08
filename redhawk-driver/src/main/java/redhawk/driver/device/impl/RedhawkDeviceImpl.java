@@ -144,10 +144,29 @@ public class RedhawkDeviceImpl extends PortBackedObjectImpl<Device> implements R
 	public boolean allocate(String type, Map<String, Object> allocation) {
 		try {
 			DataType[] outer = new DataType[1];
+			
 			outer[0] = new DataType(type, RedhawkUtils.createAny(getOrb(), allocation));
 			return getCorbaObject().allocateCapacity(outer);
 		} catch (InvalidCapacity e) {
-			e.printStackTrace();
+			logger.warning("Unable to allocate with provided data "+e.getMessage());
+			logger.info("Going to switch all incoming integers to doubles and try again");
+			//Try switching allocation to use Doubles 
+			Map<String, Object> newAlloc = new HashMap<>();
+			for(Map.Entry<String, Object> entry : allocation.entrySet()){
+				if(entry.getValue() instanceof Integer){
+					newAlloc.put(entry.getKey(), Double.parseDouble(entry.getValue().toString()));
+				}else{
+					newAlloc.put(entry.getKey(), entry.getValue());
+				}
+			}
+			DataType[] outer = new DataType[1];
+
+			outer[0] = new DataType(type, RedhawkUtils.createAny(getOrb(), newAlloc));
+			try {
+				return getCorbaObject().allocateCapacity(outer);
+			} catch (InvalidCapacity | InvalidState | InsufficientCapacity | ConnectionException e1) {
+				e1.printStackTrace();
+			}
 		} catch (InvalidState e) {
 			e.printStackTrace();
 		} catch (InsufficientCapacity e) {

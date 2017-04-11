@@ -63,7 +63,6 @@
 				<configuration>
 					<instructions>
 						<Web-ContextPath>/redhawkwebdemo</Web-ContextPath>
-						<Import-Package>javax.servlet.http,javax.servlet,org.eclipse.jetty.servlets,*</Import-Package>
 						<_removeheaders>Built-By,Ignore-Package,Private-Package,Embed-Dependency</_removeheaders>
 					</instructions>
 				</configuration>

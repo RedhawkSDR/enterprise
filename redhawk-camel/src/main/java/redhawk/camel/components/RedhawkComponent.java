@@ -97,7 +97,7 @@ public class RedhawkComponent extends DefaultComponent {
 	        String host = configParams[1];
 	        String port = configParams[2];
 	        String domain = configParams[3];
-	        domain = normalizeDomainName(domain);
+	        this.domainName = normalizeDomainName(domain);
 	        redhawkDriver = new RedhawkDriver(host, Integer.parseInt(port));
 	        newRedhawkDriverInstance = true;
         } else {

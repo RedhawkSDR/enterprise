@@ -108,7 +108,8 @@ public class RedhawkComponent extends DefaultComponent {
 			        }
 			    }
 			} else {
-				throw new IllegalArgumentException("Invalid URI Syntax:");
+				//TODO: Figure out what was trying to be accomplished here other than 
+				//throw new IllegalArgumentException("Invalid URI Syntax:");
 			}           	
         }
         

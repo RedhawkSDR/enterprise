@@ -97,10 +97,22 @@ public final class RedhawkFileProcessStrategyFactory {
         }
     }
 
+    /**
+     * Defines the rename strategy for the GenericFileProcess Strategy your using. This is 
+     * what makes the .camel directory. 
+     * 
+     * @param context
+     * @return
+     */
     private static GenericFileExpressionRenamer<RedhawkFileContainer> getDefaultCommitRenamer(CamelContext context) {
         // use context to lookup language to let it be loose coupled
         Language language = context.resolveLanguage("file");
-        Expression expression = language.createExpression("${file:parent}/.camel/${file:onlyname}");
+        
+        //Expression expression = language.createExpression("${file:parent}/.camel/${file:onlyname}");
+        /*
+         * Create a .camel directory for the file at it's current root. 
+         */
+        Expression expression = language.createExpression(".camel/${file:onlyname}");
         return new GenericFileExpressionRenamer<RedhawkFileContainer>(expression);
     }
 

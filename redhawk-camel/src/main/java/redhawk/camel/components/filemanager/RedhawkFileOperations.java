@@ -78,7 +78,7 @@ public class RedhawkFileOperations implements GenericFileOperations<RedhawkFileC
         
         try{
             if(fileManager.exists(name)){
-            	logger.info("Removing lock file!!!");
+            	logger.debug("Removing lock file!!!");
                 fileManager.remove(name);
                 return true;
             } else {
@@ -95,11 +95,12 @@ public class RedhawkFileOperations implements GenericFileOperations<RedhawkFileC
         
         from = RedhawkFileUtil.hasLeadingSeparator(from) ? from : "/"+from;
         to = RedhawkFileUtil.hasLeadingSeparator(to) ? to : "/"+to;
-        
+        logger.debug("From: "+from+" To: "+to);
         try {
             if(fileManager.exists(from)){
                 try {
                     String toDirectory = to.substring(0,to.lastIndexOf("/"));
+                    logger.debug("Inside of rename making this dir: "+toDirectory);
                     fileManager.mkdir(toDirectory);
                     fileManager.move(from, to);
                     return true;
@@ -217,12 +218,13 @@ public class RedhawkFileOperations implements GenericFileOperations<RedhawkFileC
     public boolean buildDirectory(String directory, boolean absolute) throws GenericFileOperationFailedException {
         ObjectHelper.notNull(endpoint, "endpoint");
 
-        logger.info("DIRECTORY NAME: " + endpoint.getDirectoryName());
+        logger.debug("DIRECTORY NAME: " + directory);
         
         // always create endpoint defined directory
         if (endpoint.isAutoCreate() && !existsFile(endpoint.getDirectoryName())) {
             logger.trace("Building starting directory: {}" + endpoint.getDirectoryName());
             try {
+            	logger.debug("Makings directory "+endpoint.getDirectoryName());
                 fileManager.mkdir(endpoint.getDirectoryName());
             } catch (InvalidFileName e) {
                 throw new GenericFileOperationFailedException("Unable to create directory: " + endpoint.getDirectoryName()+". InvalidFileName: " + e);
@@ -261,15 +263,18 @@ public class RedhawkFileOperations implements GenericFileOperations<RedhawkFileC
 
         // We need to make sure that this is thread-safe and only one thread tries to create the path directory at the same time.
         synchronized (this) {
-            if (isDirectory(directory) && existsFile(directory)) {
+        	//BUG IS HERE!!!!
+            logger.debug("Making it down here for this dir "+directory);
+        	if (isDirectory(directory)) {
                 // the directory already exists
                 return true;
             } else {
+            	logger.info("Making it doewn into here for "+directory);
                 if (logger.isTraceEnabled()) {
-                    logger.trace("Building directory: {} "+ endpoint.getDirectoryName());
+                    logger.trace("Building directory: {} "+ directory);
                 }
                 try {
-                    fileManager.mkdir(directory);
+                	fileManager.mkdir(directory);
                 } catch (InvalidFileName e) {
                     throw new GenericFileOperationFailedException("InvalidFileName: ", e);
                 } catch (FileException e) {
@@ -324,7 +329,7 @@ public class RedhawkFileOperations implements GenericFileOperations<RedhawkFileC
                         files.add(new RedhawkFileContainer(path+type.name, fileManager, false));
                         file.close();
                     } catch(FileException fe){
-                        logger.info("Skipping:" + path+type.name + " because it can not be opened in read/write mode. This is necessary to move the file to the move directory. Please check the file permissions or enable the noop property.");
+                        logger.error("Skipping:" + path+type.name + " because it can not be opened in read/write mode. This is necessary to move the file to the move directory. Please check the file permissions or enable the noop property.");
                     }
                 }
             }
@@ -598,7 +603,7 @@ public class RedhawkFileOperations implements GenericFileOperations<RedhawkFileC
     public boolean createNewFile(String lockFileName) {
         File file = null;
         try {
-        	logger.info("Creating a dumb lock file "+lockFileName);
+        	logger.debug("Creating a lock lock file "+lockFileName);
             file = fileManager.create(lockFileName);
             return true;
         } catch (InvalidFileName e) {

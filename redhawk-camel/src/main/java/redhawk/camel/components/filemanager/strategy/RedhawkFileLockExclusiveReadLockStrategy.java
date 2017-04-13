@@ -131,7 +131,7 @@ public class RedhawkFileLockExclusiveReadLockStrategy extends RedhawkMarkerFileE
                                          GenericFile<RedhawkFileContainer> file, Exchange exchange) throws Exception {
 
         // must call super
-        super.releaseExclusiveReadLock(operations, file, exchange);
+        super.doReleaseExclusiveReadLock(operations, file, exchange);
 
 //        if (lock != null) {
 //            Channel channel = lock.channel();

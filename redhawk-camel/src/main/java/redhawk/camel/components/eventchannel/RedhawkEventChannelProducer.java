@@ -75,11 +75,11 @@ public class RedhawkEventChannelProducer extends DefaultProducer {
 		if (rhObject != null && rhObject instanceof Any) {
 			Map<String, Object> message = inMessage.getHeaders();
 			message.put("body", rhObject);
-			eventChannel.publish("redbus_message_in", message);
+			eventChannel.publish(endpoint.getMessageId(), message);
 		} else {
 			Map<String, Object> message = inMessage.getHeaders();
 			message.put("body", inMessage.getBody());
-			eventChannel.publish("redbus_message_in", message);
+			eventChannel.publish(endpoint.getMessageId(), message);
 		}
 	}
 

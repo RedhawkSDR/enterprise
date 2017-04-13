@@ -36,7 +36,9 @@ public class RedhawkEventChannelEndpoint extends DefaultEndpoint {
 
     private String eventChannelName;
     private String dataTypeName;
-    private boolean convertAnysToMaps = true;
+    private String messageId;
+
+	private boolean convertAnysToMaps = true;
     
     
     private RedhawkEventChannelConsumer consumer;
@@ -112,6 +114,14 @@ public class RedhawkEventChannelEndpoint extends DefaultEndpoint {
     public void setDataTypeName(String dataTypeName) {
         this.dataTypeName = dataTypeName;
     }
+    
+    public String getMessageId() {
+		return messageId;
+	}
+
+	public void setMessageId(String messageId) {
+		this.messageId = messageId;
+	}
 
 	public boolean isConvertAnysToMaps() {
 		return convertAnysToMaps;

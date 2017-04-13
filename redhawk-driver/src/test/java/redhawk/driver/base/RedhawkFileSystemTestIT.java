@@ -20,7 +20,9 @@
 package redhawk.driver.base;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -60,8 +62,21 @@ public class RedhawkFileSystemTestIT extends RedhawkTestBase{
 	}
 	
 	@Test
+	public void testFileSystemInteractionData() throws FileNotFoundException, IOException{
+		File dataDir = new File("src/test/resources/data");
+		for(File data : dataDir.listFiles()){
+			domainFileSystem.writeFile(new FileInputStream(data), "/data/"+data.getName());
+		}
+		
+		assertEquals("Should now be two files in the directory", 2, domainFileSystem.findFilesInDirectory("data", ".*").size());
+		domainFileSystem.removeDirectory("/data");
+		
+		assertTrue("Should now be zero files in the directory", domainFileSystem.findFilesInDirectory("data", ".*").isEmpty());
+	}
+	
+	@Test
 	public void testDeviceManagerFileSystem(){
-		List<String> directories = domainFileSystem.findDirectories("/nodes");
+		List<String> directories = deviceManagerFileSystem.findDirectories("/nodes");
 	
 		for(String directory : directories){
 			System.out.println(directory);

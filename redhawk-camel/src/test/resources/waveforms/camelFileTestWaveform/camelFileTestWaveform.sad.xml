@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE softwareassembly PUBLIC "-//JTRS//DTD SCA V2.2.2 SAD//EN" "softwareassembly.dtd">
+<softwareassembly id="DCE:13db7134-55a3-4cb4-a1dd-1ae262db8148" name="camelFileTestWaveform">
+  <componentfiles>
+    <componentfile id="FileReader_635a2880-998b-4fb6-ab75-60d071450d76" type="SPD">
+      <localfile name="/components/rh/FileReader/FileReader.spd.xml"/>
+    </componentfile>
+    <componentfile id="TuneFilterDecimate_bebe3b6f-a3fc-4adc-be74-2f1869a8de77" type="SPD">
+      <localfile name="/components/rh/TuneFilterDecimate/TuneFilterDecimate.spd.xml"/>
+    </componentfile>
+    <componentfile id="FileWriter_5bc9e5ae-91bf-4cb9-b274-cacbdfb53696" type="SPD">
+      <localfile name="/components/rh/FileWriter/FileWriter.spd.xml"/>
+    </componentfile>
+  </componentfiles>
+  <partitioning>
+    <componentplacement>
+      <componentfileref refid="FileReader_635a2880-998b-4fb6-ab75-60d071450d76"/>
+      <componentinstantiation id="FileReader_1" startorder="0">
+        <usagename>FileReader_1</usagename>
+        <componentproperties>
+          <simpleref refid="sample_rate" value="250Ksps"/>
+          <simpleref refid="file_format" value="COMPLEX_FLOAT"/>
+          <simpleref refid="playback_state" value="STOP"/>
+        </componentproperties>
+        <findcomponent>
+          <namingservice name="FileReader_1"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
+    <componentplacement>
+      <componentfileref refid="TuneFilterDecimate_bebe3b6f-a3fc-4adc-be74-2f1869a8de77"/>
+      <componentinstantiation id="TuneFilterDecimate_1" startorder="1">
+        <usagename>TuneFilterDecimate_1</usagename>
+        <componentproperties>
+          <simpleref refid="TuneMode" value="IF"/>
+        </componentproperties>
+        <findcomponent>
+          <namingservice name="TuneFilterDecimate_1"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
+    <componentplacement>
+      <componentfileref refid="FileWriter_5bc9e5ae-91bf-4cb9-b274-cacbdfb53696"/>
+      <componentinstantiation id="FileWriter_2" startorder="2">
+        <usagename>FileWriter_2</usagename>
+        <componentproperties>
+          <simpleref refid="destination_uri" value="sca:///data-out/%STREAMID%.%TIMESTAMP%.%MODE%.%SR%.%DT%"/>
+        </componentproperties>
+        <findcomponent>
+          <namingservice name="FileWriter_2"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
+  </partitioning>
+  <assemblycontroller>
+    <componentinstantiationref refid="FileReader_1"/>
+  </assemblycontroller>
+  <connections>
+    <connectinterface id="connection_1">
+      <usesport>
+        <usesidentifier>dataFloat_out</usesidentifier>
+        <componentinstantiationref refid="FileReader_1"/>
+      </usesport>
+      <providesport>
+        <providesidentifier>dataFloat_in</providesidentifier>
+        <componentinstantiationref refid="TuneFilterDecimate_1"/>
+      </providesport>
+    </connectinterface>
+    <connectinterface id="connection_3">
+      <usesport>
+        <usesidentifier>dataFloat_out</usesidentifier>
+        <componentinstantiationref refid="TuneFilterDecimate_1"/>
+      </usesport>
+      <providesport>
+        <providesidentifier>dataFloat_in</providesidentifier>
+        <componentinstantiationref refid="FileWriter_2"/>
+      </providesport>
+    </connectinterface>
+  </connections>
+</softwareassembly>

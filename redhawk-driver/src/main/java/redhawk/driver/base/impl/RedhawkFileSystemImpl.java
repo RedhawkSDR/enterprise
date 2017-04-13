@@ -25,6 +25,8 @@ import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import CF.File;
 import CF.FileException;
@@ -36,6 +38,7 @@ import CF.FileSystemPackage.FileType;
 import redhawk.driver.base.RedhawkFileSystem;
 
 public class RedhawkFileSystemImpl implements RedhawkFileSystem {
+	private Logger logger = Logger.getLogger(RedhawkFileSystemImpl.class.getName());
 
 	private FileSystem fileSystem;
 	
@@ -209,8 +212,12 @@ public class RedhawkFileSystemImpl implements RedhawkFileSystem {
 	          throw new IOException("Java IOException:", e);
 	      } catch (CF.FilePackage.IOException e) {
 	          throw new IOException("REDHAWK IOException:", e);
-		} finally {
-	          try {
+	      } catch (Exception e){
+	    	  logger.log(Level.WARNING, "File to large will try to write out file in chunks");
+	    	  //Try to chunk the file
+	    	  this.writeFileInChunks(inputStream, file);
+	      }finally {
+	    	  try {
 	        	  inputStream.close();
 	              file.close();
 	          } catch (FileException e) {
@@ -218,5 +225,26 @@ public class RedhawkFileSystemImpl implements RedhawkFileSystem {
 	          }
 	      }
 	  }
+	
+	private void writeFileInChunks(InputStream stream, CF.File file) throws IOException{
+		byte[] buffer = new byte[1024];
+    	int total = 0; 
+    	int nRead = 0; 
+    	try {
+			while((nRead = stream.read(buffer)) != -1){
+				if(nRead<1024){
+					byte[] smallerBuffer = new byte[nRead];
+					System.arraycopy(buffer, 0, smallerBuffer, 0, nRead);
+					file.write(smallerBuffer);
+				}else{
+					file.write(buffer);        			
+				}
+				total+=nRead;
+			}
+		} catch (CF.FilePackage.IOException | IOException e) {
+			logger.log(Level.SEVERE, "Failed to write file in chunks after trying to write out full file");
+			throw new IOException("CORBA Exception writing data ", e);
+		}
+	}
 	
 }

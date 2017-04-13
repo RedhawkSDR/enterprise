@@ -14,7 +14,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import redhawk.RedhawkTestBase;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.domain.RedhawkFileManager;
 import redhawk.driver.exceptions.CORBAException;
@@ -22,6 +21,7 @@ import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.EventChannelCreationException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.testutils.RedhawkTestBase;
 
 /*
  * This is currently a manual test until I figure out how to automatically launch a node from the REDHAWK Driver. 

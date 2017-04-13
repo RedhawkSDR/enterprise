@@ -358,6 +358,10 @@ public class RedhawkFileProducer extends GenericFileProducer<RedhawkFileContaine
 
     
     
+    /**
+     * Sets up the fileManager Resource for CF.FileSystem 
+     * access. 
+     */
     @Override
     protected void doStart() throws Exception {
         

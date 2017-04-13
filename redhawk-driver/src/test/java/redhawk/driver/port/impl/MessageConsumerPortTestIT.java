@@ -29,7 +29,6 @@ import org.ossie.properties.StructDef;
 
 import CF.PortPackage.InvalidPort;
 import CF.PortPackage.OccupiedPort;
-import redhawk.RedhawkTestBase;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.base.RedhawkFileSystem;
 import redhawk.driver.exceptions.ApplicationCreationException;
@@ -40,6 +39,7 @@ import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
+import redhawk.testutils.RedhawkTestBase;
 
 public class MessageConsumerPortTestIT extends RedhawkTestBase{	
 	private RedhawkFileSystem rhFS;

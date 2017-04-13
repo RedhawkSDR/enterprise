@@ -37,7 +37,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import redhawk.RedhawkTestBase;
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.RedhawkUtils;
 import redhawk.driver.application.RedhawkApplication;
@@ -51,6 +50,7 @@ import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.xml.model.sca.sad.Softwareassembly;
+import redhawk.testutils.RedhawkTestBase;
 
 
 public class RedhawkDomainManagerImplTestIT extends RedhawkTestBase{

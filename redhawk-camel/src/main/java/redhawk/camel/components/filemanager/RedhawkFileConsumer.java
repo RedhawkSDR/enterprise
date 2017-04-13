@@ -28,27 +28,44 @@ import org.apache.camel.component.file.GenericFile;
 import org.apache.camel.component.file.GenericFileConsumer;
 import org.apache.camel.component.file.GenericFileOperationFailedException;
 
-import redhawk.camel.components.RedhawkComponent;
-import redhawk.camel.components.endpoints.RedhawkFileEndpoint;
 import CF.DeviceManager;
 import CF.DomainManager;
 import CF.File;
 import CF.FileException;
 import CF.FileSystem;
 import CF.InvalidFileName;
+import redhawk.camel.components.RedhawkComponent;
+import redhawk.camel.components.endpoints.RedhawkFileEndpoint;
 
+/**
+ * Extension of GenericFileConsumer giving you FileConsumer capabilities on a
+ * CF.FileSyste
+ *
+ */
 public class RedhawkFileConsumer extends GenericFileConsumer<RedhawkFileContainer>{
 
     private String endpointPath;
     
     private RedhawkFileOperations operations;
     private RedhawkFileEndpoint endpoint; 
+    //private Set<String> extendedAttributes;
+
     
     public RedhawkFileConsumer(RedhawkFileEndpoint endpoint, Processor processor, final RedhawkFileOperations operations) {
         super(endpoint, processor, operations);
         this.operations = operations;
         this.endpoint = endpoint;
         this.endpointPath = endpoint.getConfiguration().getDirectory();
+        
+        /*
+         * if (endpoint.getExtendedAttributes() != null) {
+            this.extendedAttributes = new HashSet<>();
+
+            for (String attribute : endpoint.getExtendedAttributes().split(",")) {
+                extendedAttributes.add(attribute);
+            }
+        }
+        */
     }
 
     
@@ -82,7 +99,7 @@ public class RedhawkFileConsumer extends GenericFileConsumer<RedhawkFileContaine
         // auto create starting directory if needed
         if (!operations.existsFile(endpointPath) && !operations.isDirectory(endpointPath)) {
             if (endpoint.isAutoCreate()) {
-                log.trace("Creating non existing starting directory: {}", endpointPath);
+                log.info("Creating non existing starting directory: {}", endpointPath);
                 boolean absolute = endpoint.isAbsolute(endpointPath);
                 boolean created = operations.buildDirectory(endpointPath, absolute);
                 if (!created) {
@@ -105,83 +122,118 @@ public class RedhawkFileConsumer extends GenericFileConsumer<RedhawkFileContaine
 
     protected boolean pollDirectory(String directoryName, List<GenericFile<RedhawkFileContainer>> fileList, int depth) {
         
-            log.trace("pollDirectory from fileName: "+ directoryName);
-        
-//            if(endpoint.getRedhawkIntegration().getRedhawkConnection().isStarted()){
-            
-                depth++;
-        
-                if (!operations.existsFile(directoryName) || !operations.isDirectory(directoryName)){
-                    log.warn("Cannot poll as directory does not exists or its not a directory: "+directoryName);
-                    if (getEndpoint().isDirectoryMustExist()) {
-                        throw new GenericFileOperationFailedException("Directory does not exist: " + directoryName);
-                    }
-                    return true;
-                }
-        
-                log.trace("Polling directory: "+directoryName);
-                
-                
-                
-                List<RedhawkFileContainer> files = operations.listFiles(directoryName);
-                if (files.size() == 0) {
-                    // no files in this directory to poll
-                    log.trace("No files found in directory: "+directoryName);
-                    return true;
-                } else {
-                    // we found some files
-                    if (log.isTraceEnabled()) {
-                        log.trace("Found "+files.size()+" in directory: "+directoryName);
-                    }
-                }
-        
-                for (RedhawkFileContainer file : files) {
-                    // check if we can continue polling in files
-                    if (!canPollMoreFiles(fileList)) {
-                        return false;
-                    }
-        
-                    // trace log as Windows/Unix can have different views what the file is?
-                    if (log.isTraceEnabled()) {
-                        log.trace("Found file: {} [isAbsolute: {}, isDirectory: {}, isFile: {}, isHidden: {}]",
-                                new Object[]{file, true, operations.isDirectory(file.getFilePath()) , !operations.isDirectory(file.getFilePath()), false});
-                    }
-        
-                    
-                    
-                    if (operations.isDirectory(file.getFilePath())) {
-                        if (endpoint.isRecursive() && depth < endpoint.getMaxDepth()) {
-                            // recursive scan and add the sub files and folders
-                            String subDirectory = file.getFilePath();
-                            boolean canPollMore = pollDirectory(subDirectory, fileList, depth);
-                            if (!canPollMore) {
-                                return false;
+		log.trace("pollDirectory from fileName: " + directoryName);
+
+		depth++;
+
+		/*
+		 * Check to see if valid directory...
+		 */
+		if (!operations.isDirectory(directoryName)) {
+			log.warn("Cannot poll as directory does not exists or its not a directory: " + directoryName);
+			if (getEndpoint().isDirectoryMustExist()) {
+				throw new GenericFileOperationFailedException("Directory does not exist: " + directoryName);
+			}
+			return true;
+		}
+
+		log.trace("Polling directory: " + directoryName);
+
+		List<RedhawkFileContainer> files = operations.listFiles(directoryName);
+		if (files.size() == 0) {
+			// no files in this directory to poll
+			log.trace("No files found in directory: " + directoryName);
+			return true;
+		} else {
+			// we found some files
+			if (log.isTraceEnabled()) {
+				log.trace("Found " + files.size() + " in directory: " + directoryName);
+			}
+		}
+
+		for (RedhawkFileContainer file : files) {
+			// check if we can continue polling in files
+			if (!canPollMoreFiles(fileList)) {
+				return false;
+			}
+
+			// trace log as Windows/Unix can have different views what the file
+			// is?
+			if (log.isTraceEnabled()) {
+				log.trace("Found file: {} [isAbsolute: {}, isDirectory: {}, isFile: {}, isHidden: {}]",
+						new Object[] { file, true, operations.isDirectory(file.getFilePath()),
+								!operations.isDirectory(file.getFilePath()), false });
+			}
+			
+			if (operations.isDirectory(file.getFilePath())) {
+				if (endpoint.isRecursive() && depth < endpoint.getMaxDepth()) {
+					// recursive scan and add the sub files and folders
+					String subDirectory = file.getFilePath();
+					boolean canPollMore = pollDirectory(subDirectory, fileList, depth);
+					if (!canPollMore) {
+						return false;
+					}
+				}
+			} else {
+				// creates a generic file
+
+				// Windows can report false to a file on a share so regard it
+				// always as a file (if its not a directory)
+				List<RedhawkFileContainer> rhFiles = new ArrayList<RedhawkFileContainer>();
+				
+				GenericFile<RedhawkFileContainer> gf = asGenericFile(endpointPath, file, getEndpoint().getCharset());
+
+				if (isValidFile(gf, false, rhFiles) && depth >= endpoint.getMinDepth()) {
+					log.trace("Adding valid file: {} "+file.getFilePath(), file);
+                    // matched file so add
+                    /*
+                     * if (extendedAttributes != null) {
+                        Path path = file.toPath();
+                        Map<String, Object> allAttributes = new HashMap<>();
+                        for (String attribute : extendedAttributes) {
+                            try {
+                                String prefix = null;
+                                if (attribute.endsWith(":*")) {
+                                    prefix = attribute.substring(0, attribute.length() - 1);
+                                } else if (attribute.equals("*")) {
+                                    prefix = "basic:";
+                                }
+
+                                if (ObjectHelper.isNotEmpty(prefix)) {
+                                    Map<String, Object> attributes = Files.readAttributes(path, attribute);
+                                    if (attributes != null) {
+                                        for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+                                            allAttributes.put(prefix + entry.getKey(), entry.getValue());
+                                        }
+                                    }
+                                } else if (!attribute.contains(":")) {
+                                    allAttributes.put("basic:" + attribute, Files.getAttribute(path, attribute));
+                                } else {
+                                    allAttributes.put(attribute, Files.getAttribute(path, attribute));
+                                }
+                            } catch (IOException e) {
+                                if (log.isDebugEnabled()) {
+                                    log.debug("Unable to read attribute {} on file {}", attribute, file, e);
+                                }
                             }
                         }
-                    } else {
-                        // creates a generic file
-                        
-                        GenericFile<RedhawkFileContainer> gf = asGenericFile(endpointPath, file, getEndpoint().getCharset());
-                        // Windows can report false to a file on a share so regard it always as a file (if its not a directory)
-                        List<RedhawkFileContainer> rhFiles = new ArrayList<RedhawkFileContainer>();
-                        if (isValidFile(gf, false, rhFiles) && depth >= endpoint.getMinDepth()) {
-//                            if (isInProgress(gf)) {
-//                                log.error("Skipping as file is already in progress: {}", gf.getFileName());
-//                            } else {
-                                log.error("Adding valid file: {}", file);
-                                // matched file so add
-                                fileList.add(gf);
-//                            }
-                        }
+
+                        gf.setExtendedAttributes(allAttributes);
                     }
-                }
-        
-                return true;
-//            } else {
-//                log.warn("Not connected to redhawk... Cannot poll directory");
-//                return true;
-//            }
-    }
+                    */
+					// if (isInProgress(gf)) {
+					// log.error("Skipping as file is already in progress: {}",
+					// gf.getFileName());
+					// } else {
+					// matched file so add
+					fileList.add(gf);
+					// }
+				}
+			}
+		}
+
+		return true;
+	}
 
     /**
      * Creates a new GenericFile<File> based on the given file.

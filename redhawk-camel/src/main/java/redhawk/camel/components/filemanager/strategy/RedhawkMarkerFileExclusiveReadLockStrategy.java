@@ -19,6 +19,7 @@
  */
 package redhawk.camel.components.filemanager.strategy;
 
+import java.io.File;
 import java.util.List;
 
 import org.apache.camel.Exchange;
@@ -46,21 +47,36 @@ public class RedhawkMarkerFileExclusiveReadLockStrategy implements GenericFileEx
 
     public boolean acquireExclusiveReadLock(GenericFileOperations<RedhawkFileContainer> operations, GenericFile<RedhawkFileContainer> file, Exchange exchange) throws Exception {
         String lockFileName = getLockFileName(file);
-        LOG.trace("Locking the file: "+file.getFileName()+" using the lock file name: "+lockFileName);
+        LOG.info("Locking the file: "+file.getFileName()+" using the lock file name: "+lockFileName);
 
         // create a plain file as marker filer for locking (do not use FileLock)
         boolean acquired = ((RedhawkFileOperations)operations).createNewFile(lockFileName);
 
         return acquired;
     }
+    
+    @Override
+    public void releaseExclusiveReadLockOnAbort(GenericFileOperations<RedhawkFileContainer> operations, GenericFile<RedhawkFileContainer> file, Exchange exchange) throws Exception {
+        doReleaseExclusiveReadLock(operations, file, exchange);
+    }
 
-    public void releaseExclusiveReadLock(GenericFileOperations<RedhawkFileContainer> operations, GenericFile<RedhawkFileContainer> file, Exchange exchange) throws Exception {
+    @Override
+    public void releaseExclusiveReadLockOnRollback(GenericFileOperations<RedhawkFileContainer> operations, GenericFile<RedhawkFileContainer> file, Exchange exchange) throws Exception {
+        doReleaseExclusiveReadLock(operations, file, exchange);
+    }
+
+    @Override
+    public void releaseExclusiveReadLockOnCommit(GenericFileOperations<RedhawkFileContainer> operations, GenericFile<RedhawkFileContainer> file, Exchange exchange) throws Exception {
+        doReleaseExclusiveReadLock(operations, file, exchange);
+    }
+
+    protected void doReleaseExclusiveReadLock(GenericFileOperations<RedhawkFileContainer> operations, GenericFile<RedhawkFileContainer> file, Exchange exchange) throws Exception {
         String lockFileName = getLockFileName(file);
 
-        LOG.trace("Unlocking file: "+ lockFileName);
+        LOG.info("Unlocking file: "+ lockFileName);
         
         boolean deleted = operations.deleteFile(lockFileName);
-        LOG.trace("Lock file: "+lockFileName+" was deleted: "+deleted);
+        LOG.info("Lock file: "+lockFileName+" was deleted: "+deleted);
     }
 
     public void setTimeout(long timeout) {
@@ -106,33 +122,6 @@ public class RedhawkMarkerFileExclusiveReadLockStrategy implements GenericFileEx
 	@Override
 	public void setMarkerFiler(boolean markerFile) {
 		// noop - we don't use a marker file
-	}
-
-	@Override
-	public void releaseExclusiveReadLockOnAbort(
-			GenericFileOperations<RedhawkFileContainer> arg0,
-			GenericFile<RedhawkFileContainer> arg1, Exchange arg2)
-			throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void releaseExclusiveReadLockOnCommit(
-			GenericFileOperations<RedhawkFileContainer> arg0,
-			GenericFile<RedhawkFileContainer> arg1, Exchange arg2)
-			throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void releaseExclusiveReadLockOnRollback(
-			GenericFileOperations<RedhawkFileContainer> arg0,
-			GenericFile<RedhawkFileContainer> arg1, Exchange arg2)
-			throws Exception {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

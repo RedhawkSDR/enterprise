@@ -20,6 +20,7 @@
 package redhawk.camel.components.filemanager;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.InputStream;
@@ -27,6 +28,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +45,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.ossie.properties.AnyUtils;
 
-import redhawk.camel.components.endpoints.RedhawkFileEndpoint;
 import CF.DataType;
 import CF.File;
 import CF.FileException;
@@ -51,7 +52,12 @@ import CF.FileSystem;
 import CF.InvalidFileName;
 import CF.FilePackage.IOException;
 import CF.FileSystemPackage.FileInformationType;
+import redhawk.camel.components.endpoints.RedhawkFileEndpoint;
 
+/**
+ * Implementation of GenericFileOperations interfaces for CF.FileSystem
+ *
+ */
 public class RedhawkFileOperations implements GenericFileOperations<RedhawkFileContainer>{
 
     private static final transient Log logger = LogFactory.getLog(RedhawkFileOperations.class);
@@ -72,6 +78,7 @@ public class RedhawkFileOperations implements GenericFileOperations<RedhawkFileC
         
         try{
             if(fileManager.exists(name)){
+            	logger.info("Removing lock file!!!");
                 fileManager.remove(name);
                 return true;
             } else {
@@ -174,9 +181,13 @@ public class RedhawkFileOperations implements GenericFileOperations<RedhawkFileC
         
         char firstChar = filePath.charAt(0);
 
-        if(firstChar != '/'){
+        /*
+         * Shouldn't be necessary since we're already starting 
+         * at dom
+         * if(firstChar != '/'){
            filePath = "/"+filePath;
         }
+        */
         
         boolean exists = false;
         
@@ -454,15 +465,28 @@ public class RedhawkFileOperations implements GenericFileOperations<RedhawkFileC
         
         FileReader reader = null;
         try {
-                reader = new FileReader(source);
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                
-                int b;
-                while( (b = reader.read()) != -1){
-                    bos.write(b);    
-                }
-                
-                target.write(bos.toByteArray());
+        	/*
+        	 * Write files out to 1024 chunks to make sure you're 
+        	 * not writing files out too big. 
+        	 * 
+        	 *TODO: Use a Java lib for this...
+        	 */
+        	FileInputStream inputStream = new FileInputStream(source);
+        	Long fileSize = source.length();
+        	byte[] buffer = new byte[1024];
+        	int total = 0; 
+        	int nRead = 0; 
+        	while((nRead = inputStream.read(buffer)) != -1){
+        		if(nRead<1024){
+        			byte[] smallerBuffer = new byte[nRead];
+        			System.arraycopy(buffer, 0, smallerBuffer, 0, nRead);
+        			target.write(smallerBuffer);
+        		}else{
+            		target.write(buffer);        			
+        		}
+        		total+=nRead;
+        	}
+        	logger.debug("Chunks wrote "+total);
         } catch (FileNotFoundException e) {
             throw new GenericFileOperationFailedException("FileNotFoundException:", e);
         } catch (java.io.IOException e) {
@@ -574,6 +598,7 @@ public class RedhawkFileOperations implements GenericFileOperations<RedhawkFileC
     public boolean createNewFile(String lockFileName) {
         File file = null;
         try {
+        	logger.info("Creating a dumb lock file "+lockFileName);
             file = fileManager.create(lockFileName);
             return true;
         } catch (InvalidFileName e) {

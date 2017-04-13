@@ -6,9 +6,9 @@ import java.io.IOException;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import redhawk.RedhawkTestBase;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.testutils.RedhawkTestBase;
 
 @Ignore("Launch a deviceManager programmatically")
 public class MyDeviceManagerTestIT extends RedhawkTestBase{

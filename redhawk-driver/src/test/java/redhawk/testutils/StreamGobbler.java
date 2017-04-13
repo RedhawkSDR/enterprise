@@ -1,4 +1,4 @@
-package redhawk;
+package redhawk.testutils;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

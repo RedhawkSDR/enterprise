@@ -1,4 +1,4 @@
-package redhawk;
+package redhawk.testutils;
 
 import java.io.IOException;
 import java.util.concurrent.Executors;

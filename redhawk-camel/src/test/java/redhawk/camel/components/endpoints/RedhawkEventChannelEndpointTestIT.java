@@ -1,5 +1,8 @@
 package redhawk.camel.components.endpoints;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -9,7 +12,22 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
+import org.junit.After;
+import org.junit.AfterClass;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
+
+import redhawk.driver.RedhawkDriver;
+import redhawk.driver.application.RedhawkApplication;
+import redhawk.driver.base.RedhawkFileSystem;
+import redhawk.driver.exceptions.ApplicationCreationException;
+import redhawk.driver.exceptions.ApplicationReleaseException;
+import redhawk.driver.exceptions.ApplicationStartException;
+import redhawk.driver.exceptions.CORBAException;
+import redhawk.driver.exceptions.ConnectionException;
+import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.testutils.RedhawkTestUtils;
 
 public class RedhawkEventChannelEndpointTestIT extends CamelTestSupport{
     @EndpointInject(uri = "mock:result")
@@ -27,15 +45,29 @@ public class RedhawkEventChannelEndpointTestIT extends CamelTestSupport{
     @Produce(uri = "direct:start")
     protected ProducerTemplate template;
     
-    /*@Override
-    protected CamelContext createCamelContext() throws Exception {
-    	CamelContext context = new DefaultCamelContext();
-
-		RedhawkComponent component = new RedhawkComponent();
-		//context.addComponent("redhawk", component);
+	private static RedhawkDriver driver; 
+	
+	private static RedhawkFileSystem rhFS;
+	
+	private static RedhawkApplication rhApplication;
+	
+	@BeforeClass
+	public static void setup() throws ConnectionException, MultipleResourceException, CORBAException, FileNotFoundException, IOException, ApplicationCreationException, ApplicationStartException{
+		driver = new RedhawkDriver();
 		
-		return context;
-    }*/
+		rhFS = driver.getDomain().getFileManager();
+
+		/*
+		 * Deploy EventSpitter Component 
+		 */
+		RedhawkTestUtils.writeJavaComponentToCF("../demo/camel-event-channel/src/main/resources/EventSpitter", rhFS);
+	
+		
+		//Deploy application
+		rhApplication = driver.getDomain().createApplication("spitToChannel", new File("../demo/camel-event-channel/src/main/resources/SpitToChannel/SpitToChannel.sad.xml"));
+		rhApplication.start();
+	
+	}
     
     /*
      * Waveform sends out data every 10 seconds 
@@ -82,4 +114,17 @@ public class RedhawkEventChannelEndpointTestIT extends CamelTestSupport{
             }
         };
     }
+    
+	@AfterClass
+	public static void cleanup() throws IOException, ApplicationReleaseException{
+		if(rhApplication!=null)
+			rhApplication.release();
+		
+		rhFS.removeDirectory("/waveforms/SpitToChannel");
+		rhFS.removeDirectory("/components/EventSpitter");
+		
+		if(driver!=null){
+			driver.disconnect();
+		}
+	}
 }

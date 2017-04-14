@@ -9,6 +9,7 @@ import org.junit.BeforeClass;
 
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.application.RedhawkApplication;
+import redhawk.driver.domain.RedhawkFileManager;
 import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
@@ -66,8 +67,10 @@ public class RedhawkTestBase {
 		//Always make sure you delete waveforms you create
 		//TODO: Clean up this logic
 		try {
-			driver.getDomain("REDHAWK_DEV").getFileManager().removeDirectory("/waveforms/testWaveform");
-		} catch (ConnectionException | ResourceNotFoundException | IOException | CORBAException e) {
+			RedhawkFileManager manager = driver.getDomain().getFileManager();
+			if(!manager.findDirectories("/waveforms/testWaveform").isEmpty())
+				manager.removeDirectory("/waveforms/testWaveform");
+		} catch (ConnectionException | IOException | CORBAException e) {
 			logger.info("Unable to delete wavemform likely cause it doesn't exist.");
 		}
 	}

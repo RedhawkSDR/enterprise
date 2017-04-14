@@ -1,15 +1,29 @@
 package redhawk.camel.components.endpoints;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import redhawk.driver.RedhawkDriver;
+import redhawk.driver.application.RedhawkApplication;
+import redhawk.driver.base.RedhawkFileSystem;
+import redhawk.driver.exceptions.ApplicationCreationException;
+import redhawk.driver.exceptions.ApplicationReleaseException;
+import redhawk.driver.exceptions.ApplicationStartException;
+import redhawk.driver.exceptions.CORBAException;
+import redhawk.driver.exceptions.ConnectionException;
+import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.testutils.RedhawkTestUtils;
 
-public class RedhawkDataEndpointTestIT extends CamelTestSupport{
+public class RedhawkDataEndpointTestIT extends CamelTestSupport { 
 	private final String waveformName = "myDemo";
 	
 	private final String componentName = "DataConverter_1.*";
@@ -31,6 +45,8 @@ public class RedhawkDataEndpointTestIT extends CamelTestSupport{
 	private final String dataShortUri = baseUri+"dataShort_out&portType=short";
 
 	private final String dataOctetUri = baseUri+"dataOctet_out&portType=octet";
+	
+	private RedhawkDriver drier; 
 
 	@EndpointInject(uri = "mock:floatResult")
     protected MockEndpoint floatResultEndpoint;
@@ -54,7 +70,7 @@ public class RedhawkDataEndpointTestIT extends CamelTestSupport{
 	protected RedhawkDataEndpoint shortDataEndpoint;
 	
 	@EndpointInject(uri = dataOctetUri)
-	protected RedhawkDataEndpoint octetDataEndpoint;	
+	protected RedhawkDataEndpoint octetDataEndpoint;
 	
 	@Test
 	public void testPortToCamel() throws InterruptedException{

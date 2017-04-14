@@ -32,7 +32,6 @@ import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -42,7 +41,7 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.Port;
 import redhawk.rest.model.TunerMode;
-import redhawk.rest.util.NodeBooterProxy;
+import redhawk.testutils.NodeBooterProxy;
 
 public class RedhawkManagerTestIT {
 	private static RedhawkManager manager; 

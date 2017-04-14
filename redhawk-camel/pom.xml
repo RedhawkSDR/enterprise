@@ -161,7 +161,7 @@
 			<artifactId>redhawk-driver</artifactId>
 			<type>test-jar</type>
 			<version>${project.version}</version>
-			<scope>test</scope>
+			<scope>compile</scope>
 		</dependency>					
 	</dependencies>
 </project>

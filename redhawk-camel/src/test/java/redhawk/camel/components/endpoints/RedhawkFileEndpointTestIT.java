@@ -26,6 +26,13 @@ import redhawk.driver.properties.RedhawkProperty;
 import redhawk.driver.properties.RedhawkSimple;
 
 //TODO: Clean this up!!!!!
+/**
+ * Test uses Apache Camel to send noaa.dat and noaa.dat.info files into the
+ * CF.FileSystem . Once there the waveform processes the data and outputs the processed 
+ * data using file writer.
+ *
+ * Camel File Component -> RH Waveform -> RH FileSyste -> RH Camel Component
+ */
 public class RedhawkFileEndpointTestIT extends CamelTestSupport{
 	private static Logger logger = Logger.getLogger(RedhawkFileEndpointTestIT.class);
 	

@@ -66,7 +66,6 @@ public class RedhawkEventChannelEndpointTestIT extends CamelTestSupport{
 		//Deploy application
 		rhApplication = driver.getDomain().createApplication("spitToChannel", new File("../demo/camel-event-channel/src/main/resources/SpitToChannel/SpitToChannel.sad.xml"));
 		rhApplication.start();
-	
 	}
     
     /*
@@ -82,6 +81,9 @@ public class RedhawkEventChannelEndpointTestIT extends CamelTestSupport{
     	resultEndpoint.assertIsSatisfied();
     }
     
+    /*
+     * Test sending data directly to an event channel
+     */
     @Test
     public void testEventProducerChannel() throws InterruptedException{
     	Map<String, Object> bo = new HashMap<>();

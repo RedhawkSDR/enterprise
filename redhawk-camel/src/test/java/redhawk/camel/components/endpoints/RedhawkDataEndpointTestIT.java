@@ -8,8 +8,8 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import redhawk.driver.RedhawkDriver;
@@ -21,10 +21,9 @@ import redhawk.driver.exceptions.ApplicationStartException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
-import redhawk.testutils.RedhawkTestUtils;
 
 public class RedhawkDataEndpointTestIT extends CamelTestSupport { 
-	private final String waveformName = "myDemo";
+	private static final String waveformName = "myDemo";
 	
 	private final String componentName = "DataConverter_1.*";
 	
@@ -46,8 +45,6 @@ public class RedhawkDataEndpointTestIT extends CamelTestSupport {
 
 	private final String dataOctetUri = baseUri+"dataOctet_out&portType=octet";
 	
-	private RedhawkDriver drier; 
-
 	@EndpointInject(uri = "mock:floatResult")
     protected MockEndpoint floatResultEndpoint;
 	
@@ -71,6 +68,23 @@ public class RedhawkDataEndpointTestIT extends CamelTestSupport {
 	
 	@EndpointInject(uri = dataOctetUri)
 	protected RedhawkDataEndpoint octetDataEndpoint;
+	
+	private static RedhawkDriver driver; 
+
+	private static RedhawkApplication rhApplication;
+	
+	private static RedhawkFileSystem rhFS;
+
+	@BeforeClass
+	public static void setup() throws ConnectionException, MultipleResourceException, CORBAException, FileNotFoundException, IOException, ApplicationCreationException, ApplicationStartException{
+		driver = new RedhawkDriver();
+		
+		rhFS = driver.getDomain().getFileManager();
+
+		//Deploy application
+		rhApplication = driver.getDomain().createApplication(waveformName, new File("src/test/resources/waveforms/demoWaveform/demoWaveform.sad.xml"));
+		rhApplication.start();
+	}
 	
 	@Test
 	public void testPortToCamel() throws InterruptedException{
@@ -127,4 +141,16 @@ public class RedhawkDataEndpointTestIT extends CamelTestSupport {
             }
         };
     }
+    
+	@AfterClass
+	public static void cleanup() throws IOException, ApplicationReleaseException{
+		if(rhApplication!=null)
+			rhApplication.release();
+		
+		rhFS.removeDirectory("/waveforms/demoWaveform");
+		
+		if(driver!=null){
+			driver.disconnect();
+		}
+	}
 }

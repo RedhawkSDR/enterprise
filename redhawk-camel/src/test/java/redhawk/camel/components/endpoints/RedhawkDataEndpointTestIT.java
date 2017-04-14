@@ -4,7 +4,10 @@ import org.apache.camel.EndpointInject;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
+import org.junit.Before;
 import org.junit.Test;
+
+import redhawk.driver.RedhawkDriver;
 
 public class RedhawkDataEndpointTestIT extends CamelTestSupport{
 	private final String waveformName = "myDemo";
@@ -51,8 +54,7 @@ public class RedhawkDataEndpointTestIT extends CamelTestSupport{
 	protected RedhawkDataEndpoint shortDataEndpoint;
 	
 	@EndpointInject(uri = dataOctetUri)
-	protected RedhawkDataEndpoint octetDataEndpoint;
-	
+	protected RedhawkDataEndpoint octetDataEndpoint;	
 	
 	@Test
 	public void testPortToCamel() throws InterruptedException{

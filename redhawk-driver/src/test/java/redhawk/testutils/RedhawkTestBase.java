@@ -15,6 +15,14 @@ import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 
+/**
+ * Base test class giving you access to a RedhawkDriver that you 
+ * can configure using to use jacorb by setting the system property
+ * -Djacorb=true
+ * 
+ * A NodeBooterProxy is also available from this class giving you access to running 
+ * nodeBooter commands from your test class. 
+ */
 public class RedhawkTestBase {
 	public static Logger logger = Logger.getLogger(RedhawkTestBase.class.getName());
 	

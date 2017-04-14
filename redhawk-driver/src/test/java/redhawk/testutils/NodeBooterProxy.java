@@ -29,10 +29,6 @@ public class NodeBooterProxy {
 		Executors.newSingleThreadExecutor().submit(streamGobller);
 
 		return process;
-		
-		//int exitCode = process.waitFor();
-		
-		//return exitCode;
 	}
 	
 }

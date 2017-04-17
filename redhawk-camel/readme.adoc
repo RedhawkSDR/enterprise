@@ -1,9 +1,14 @@
-### Redhawk Camel ###
+= Redhawk Camel
 
-## Testing 
-***
+== Testing 
 
-	
+To run the integration tests for this asset run the following command: 
+
+----
+mvn clean install -P localIT
+----
+
+== Installation	
 
 To install into karaf base run the following commands: 
 

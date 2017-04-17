@@ -1,6 +1,6 @@
 = REDHAWK Camel Component 
 
-The REDHAWK Camel Component gives users an easy way to integrate REDHAWK Domain functionality in a Camel Context. http://camel.apache.org/[Apache Camel] is a tool for solving any routing(data flow) or mediation problems your system may have. Just by using Apache Camel you get access to 100+ http://camel.apache.org/components.html[Components] to solve your routing/mediation problems. If your system needs to persist data from an Event Channel no need to write more code reuse the components already provided by camel to store you're data in NoSQL/SQL data stores. If your system needs to send data from the REDHAWK Corba File System to a JMS solution for distribution no need to write more code just integrate with one of the Camel Components for JMS. With so many different components available to you the possibilities are endless.
+The REDHAWK Camel Component gives users an easy way to integrate REDHAWK Domain functionality in a Camel Context. http://camel.apache.org/[Apache Camel] is a tool for solving any routing(data flow) or mediation problems your system may have. Just by using Apache Camel you get access to 100+ http://camel.apache.org/components.html[Components] to solve your routing/mediation problems. If your system needs to persist data from an Event Channel no need to write more code reuse the components already provided by camel to store your data in NoSQL/SQL data stores. If your system needs to send data from the REDHAWK Corba File System to a JMS solution for distribution no need to write more code just integrate with one of the Camel Components for JMS. With so many different components available to you the possibilities are endless.
 
 == REDHAWK Data Endpoint
 
@@ -32,11 +32,11 @@ The REDHAWK Data endpoint has the following options for the options
 
 |===
 
-/*
+////
 TODO: Come up with nice example route
 === Sample Route
 
-*/
+////
 
 == REDHAWK File Endpoint
 
@@ -64,11 +64,12 @@ redhawk://file-manager:<nameserver host>:<nameserver port>:<domain name>?directo
 
 === Sample Route
 
-/*
+////
+
 TODO: Come up with nice example route
 === Sample Route
 
-*/
+////
 
 == REDHAWK Event Channel Endpoint
 

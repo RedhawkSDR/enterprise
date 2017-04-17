@@ -62,9 +62,9 @@ redhawk://file-manager:<nameserver host>:<nameserver port>:<domain name>?directo
 
 |===
 
-=== Sample Route
-
 ////
+
+=== Sample Route
 
 TODO: Come up with nice example route
 === Sample Route

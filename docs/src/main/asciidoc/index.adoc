@@ -47,6 +47,8 @@ include::rest/definitions.adoc[]
 
 include::websocket/overview.adoc[]
 
+include::camel/overview.adoc[]
+
 = REDHAWK Demo
 
 //Demo instructions 

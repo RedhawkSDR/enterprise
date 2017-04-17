@@ -16,3 +16,12 @@ To install into karaf base run the following commands:
 	feature:install redbus-redhawk-camel
 	
 This feature install the redhawk camel into karaf base. 
+
+== Documentation 
+
+To generate the documentation for this project run the following command:
+----
+mvn -P docs compile
+----
+ 
+This generates documentation for you at this location 'redhawk-rest/target/docs/' . In that location is a pdf and html file with the documentation generated for this project. 

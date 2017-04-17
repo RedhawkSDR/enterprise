@@ -85,6 +85,10 @@
 										<include>redhawk-demo-webapp.adoc</include>
 									</includes>
 								</resource>
+								<resource>
+									<directory>${project.parent.basedir}/redhawk-camel/src/main/asciidoc</directory>
+									<targetPath>camel</targetPath>
+								</resource>
 							</resources>
 						</configuration>
 					</execution>

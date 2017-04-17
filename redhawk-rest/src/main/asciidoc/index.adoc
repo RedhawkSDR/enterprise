@@ -1,4 +1,4 @@
-= Redhawk Rest Documentation
+= REDHAWK Rest
 
 include::overview.adoc[]
 include::paths.adoc[]

@@ -1,43 +1,43 @@
 == RedhawkDriver Code Examples
 
-Below are code examples for using the RedhawkDriver class. 
+The following code examples explain how to use the RedhawkDriver class. 
 
-=== Get a Redhawk Domain
+=== Get a REDHAWK Domain
 
 [source,java,indent=0]
 ----
 include::snippets/RedhawkDriverTestIT.java[lines=165]
 ----
 
-=== Get a Redhawk Device Manager  
+=== Get a REDHAWK Device Manager  
 
 [source,java,indent=0]
 ----
 include::snippets/RedhawkDriverTestIT.java[lines=114..119]
 ----
 
-=== Get a Redhawk Device  
+=== Get a REDHAWK Device  
 
 [source,java,indent=0]
 ----
 include::snippets/RedhawkDriverTestIT.java[lines=124..129]
 ----
 
-=== Get a Redhawk Application 
+=== Get a REDHAWK Application 
 
 [source,java,indent=0]
 ----
 include::snippets/RedhawkDriverTestIT.java[lines=170]
 ----
 
-=== Get a Redhawk Component 
+=== Get a REDHAWK Component 
 
 [source,java,indent=0]
 ----
 include::snippets/RedhawkDriverTestIT.java[lines=175]
 ----
 
-=== Get a Redhawk Components Port
+=== Get a REDHAWK Component's Port
 
 [source,java,indent=0]
 ----
@@ -46,7 +46,7 @@ include::snippets/RedhawkDriverTestIT.java[lines=179]
 
 === Helper Utility Examples 
 
-The RedhawkDriver has helper utilities to allow users to easily get access to their REDHAWK Domain/REDHAWK Device Managers/Redhawk Devices. These helper methods only work if theirs only one Redhawk Domain/Redhawk Device Manager/Redhawk Device avaiable. If more than one use the methods above to get those resources. 
+The RedhawkDriver includes helper utilities to enable users to easily access their REDHAWK Domain/REDHAWK Device Managers/REDHAWK Devices. These helper methods only work if there is only one REDHAWK Domain/REDHAWK Device Manager/REDHAWK Device available. If more than one REDHAWK Domain/REDHAWK Device Manager/REDHAWK Device exists, use the methods provided in <<Get a REDHAWK Domain>>, <<Get a REDHAWK Device Manager>>, or <<Get a REDHAWK Device>> to access those resources. 
 
 [source,java,indent=0]
 ----

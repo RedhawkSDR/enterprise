@@ -305,7 +305,7 @@
                 					<schemes>http,https</schemes>									
 									<host>127.0.0.1</host>
 									<info>
-										<title>Swagger spec for REDHAWK REST API</title>
+										<title>REDHAWK REST</title>
 										<version>${project.version}</version>
 									</info>
 									<swaggerDirectory>${project.build.directory}/swagger</swaggerDirectory>

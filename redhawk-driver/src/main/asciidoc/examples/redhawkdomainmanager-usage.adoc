@@ -1,17 +1,17 @@
-== RedhawkDomainManager Code Examples 
+== REDHAWKDomainManager Code Examples 
 
-Below are code examples for using the RedhawkDomainManager class. 
+The following code examples explain how to use the RedhawkDomainManager class. 
 
 === Create an Application
 
-Sample code for creating an application from a waveform that's already in your Domain. 
+Sample code for creating an Application from a Waveform that is already in your Domain. 
 
 [source,java,indent=0]
 ----
 include::snippets/RedhawkDomainManagerImplTestIT.java[lines=144..150]
 ----
 
-Sample code for creating an application from a SAD file on a file system. 
+Sample code for creating an Application from a SAD file on a file system. 
 
 [source,java,indent=0]
 ----

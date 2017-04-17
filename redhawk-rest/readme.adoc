@@ -1,4 +1,4 @@
-= Redhawk Rest
+= Redhawk REST
 
 REST Endpoints for interacting with a REDHAWK Domain. 
 

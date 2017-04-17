@@ -6,7 +6,7 @@ include::installation.adoc[]
 
 include::gettingstarted.adoc[]
 
-//These are coming from Redhawk Driver
+//These are coming from REDHAWK Driver
 
 
 :leveloffset: +1

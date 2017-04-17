@@ -1,0 +1,91 @@
+= REDHAWK Camel Component 
+
+The REDHAWK Camel Component gives users an easy way to integrate standard REDHAWK actions in a Camel Context. Apache Camel has 100+ Components available to it's users so there are numerous data flow problems you can solve for you system using this component. For example, you can send data from your Event Channel straight to a NoSql or SQL database. You could pick up data written out to your Corba File System and send it else via JMS. You caou
+
+* REDHAWK Data Endpoint : Enables direct interaction between a REDHAWK Component ports and your Apache Camel Context. 
+* REDHAWK File Endpoint : Enables direct interaction between a REDHAWK Corba FileSystem and your Apache Camel Context. 
+* REDHAWK Event Channel Endpoint: Enables direct interaction between a REDHAWK Event Channel and your Apache Camel Context.  
+
+== REDHAWK Data Endpoint
+
+=== URI Format 
+
+----
+redhawk://data:<nameserver host>:<nameserver port>:<domain name>?waveformName=<waveform name>&componentName=<component name>&portName=<port name>&portType=<port type>
+----
+
+=== Endpoint Options
+
+The REDHAWK Data endpoint has the following options for the options
+
+|===
+
+|Name | Default Value | Description
+
+| bufferSize
+| 2000
+| Size of buffer for holding queued packets waiting to get processed. 
+
+| decimateTo
+| -1
+| Sample size to take from the packets
+
+|===
+
+/*
+TODO: Come up with nice example route
+=== Sample Route
+
+*/
+
+== REDHAWK File Endpoint
+
+=== URI Format
+
+----
+redhawk://file-manager:<nameserver host>:<nameserver port>:<domain name>?directory=<directory on FS>
+----
+
+|===
+
+| Name | Default Value | Description
+
+| fileManagerType
+| domain
+| Where the Root of Corba FileSystem is. If 'domain' then root with be $SDROOT/dom . If 'dev' then root will be root of the device manager you set. 
+
+| deviceManagerName
+| n/a
+| The name of the device manager. Only used if the fileManagerType is 'device'
+
+|===
+
+=== Sample Route
+
+/*
+TODO: Come up with nice example route
+=== Sample Route
+
+*/
+
+== REDHAWK Event Channel Endpoint
+
+=== URI Format
+
+----
+redhawk://event-channel:<nameserver host>:<nameserver port>:<domain name>?eventChannelName=<event channel name>&dataTypeName=<type of message>
+----
+
+|===
+
+| Name | Default Value | Description
+
+| eventChannelName
+| n/a
+| The name of the event channel to use
+
+| dataTypeName
+| n/a
+| Type of message to listen for. Options are messages, properties, logEvent, propertyChanges
+
+|===

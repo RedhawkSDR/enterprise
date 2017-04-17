@@ -25,7 +25,6 @@ import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.properties.RedhawkProperty;
 import redhawk.driver.properties.RedhawkSimple;
 
-//TODO: Clean this up!!!!!
 /**
  * Test uses Apache Camel to send noaa.dat and noaa.dat.info files into the
  * CF.FileSystem . Once there the waveform processes the data and outputs the processed 
@@ -36,7 +35,6 @@ import redhawk.driver.properties.RedhawkSimple;
 public class RedhawkFileEndpointTestIT extends CamelTestSupport{
 	private static Logger logger = Logger.getLogger(RedhawkFileEndpointTestIT.class);
 	
-	//TODO: Use base test class to do this.
 	private static RedhawkDriver driver; 
 	
 	private static RedhawkFileManager fileManager;
@@ -66,7 +64,7 @@ public class RedhawkFileEndpointTestIT extends CamelTestSupport{
 		fileManager = driver.getDomain().getFileManager();
 		
 		List<String> dataDir = fileManager.findDirectories("data");
-		//assertTrue(dataDir.isEmpty());
+		assertTrue(dataDir.isEmpty());
 	}
 	
 	class ProcessData implements Callable{

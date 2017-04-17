@@ -32,7 +32,6 @@ import org.apache.camel.component.file.GenericFileExist;
 import org.apache.camel.component.file.GenericFileProcessStrategy;
 import org.apache.camel.processor.idempotent.MemoryIdempotentRepository;
 import org.apache.camel.util.ObjectHelper;
-import org.apache.log4j.Logger;
 
 import CF.File;
 import CF.FileException;
@@ -46,9 +45,7 @@ import redhawk.camel.components.filemanager.RedhawkFileProducer;
 import redhawk.camel.components.filemanager.RedhawkFileUtil;
 import redhawk.camel.components.filemanager.strategy.RedhawkFileProcessStrategyFactory;
 
-public class RedhawkFileEndpoint extends GenericFileEndpoint<RedhawkFileContainer>{
-	private Logger logger = Logger.getLogger(RedhawkFileEndpoint.class);
-	
+public class RedhawkFileEndpoint extends GenericFileEndpoint<RedhawkFileContainer>{	
     private RedhawkFileOperations operations = new RedhawkFileOperations(this);
     private boolean copyAndDeleteOnRenameFail = true;
     private String directoryName;

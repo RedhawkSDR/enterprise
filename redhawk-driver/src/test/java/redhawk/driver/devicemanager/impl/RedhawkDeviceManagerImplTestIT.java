@@ -2,10 +2,10 @@ package redhawk.driver.devicemanager.impl;
 
 import org.junit.Test;
 
+import redhawk.RedhawkTestBase;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
-import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkDeviceManagerImplTestIT extends RedhawkTestBase{
 	@Test

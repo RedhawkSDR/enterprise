@@ -21,6 +21,9 @@
 		<tag>HEAD</tag>
 	</scm>
 
+	<properties>
+		<maven.test.skip>false</maven.test.skip>
+	</properties>
 	<build>
 		<resources>
 			<resource>
@@ -99,7 +102,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin>		
 		</plugins>
 	</build>
 
@@ -161,7 +164,7 @@
 			<artifactId>redhawk-driver</artifactId>
 			<type>test-jar</type>
 			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>					
+			<scope>test</scope>
+		</dependency>						
 	</dependencies>
 </project>

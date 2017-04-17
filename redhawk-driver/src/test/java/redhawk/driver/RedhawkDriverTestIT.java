@@ -34,6 +34,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.omg.CORBA.ORBPackage.InvalidName;
 
+import redhawk.RedhawkTestBase;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.device.RedhawkDevice;
@@ -45,7 +46,6 @@ import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
-import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkDriverTestIT {
 	private static Logger logger = Logger.getLogger(RedhawkDriverTestIT.class.getName());

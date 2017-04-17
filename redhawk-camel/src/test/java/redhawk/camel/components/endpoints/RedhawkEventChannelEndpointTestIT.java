@@ -12,9 +12,7 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -97,11 +95,7 @@ public class RedhawkEventChannelEndpointTestIT extends CamelTestSupport{
     	
     	pResultEndpoint.assertIsSatisfied();
     }
-    
-    
-    
-    //TODO: Add tests for sending data to an EventChannel 
-    
+        
     @Override
     protected RouteBuilder createRouteBuilder() {
         return new RouteBuilder() {

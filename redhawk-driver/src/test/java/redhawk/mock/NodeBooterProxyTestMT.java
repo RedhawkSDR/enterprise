@@ -10,12 +10,12 @@ import org.junit.Test;
 
 import com.google.common.io.Files;
 
+import redhawk.RedhawkTestBase;
 import redhawk.driver.domain.RedhawkFileManager;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.testutils.NodeBooterProxy;
-import redhawk.testutils.RedhawkTestBase;
 
 public class NodeBooterProxyTestMT extends RedhawkTestBase{
 	private String sdrRoot = "/var/redhawk/sdr";

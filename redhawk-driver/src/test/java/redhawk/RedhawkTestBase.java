@@ -1,4 +1,4 @@
-package redhawk.testutils;
+package redhawk;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -14,7 +14,7 @@ import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
-import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.testutils.NodeBooterProxy;
 
 /**
  * Base test class giving you access to a RedhawkDriver that you 

@@ -127,17 +127,20 @@
 				</configuration>
 			</plugin>
 			<plugin>
-        		<groupId>org.apache.maven.plugins</groupId>
-        		<artifactId>maven-jar-plugin</artifactId>
-        		<version>3.0.2</version>				
-				<configuration>
-					<testClassesDirectory>src/test/java/redhawk/testutils</testClassesDirectory>
-				</configuration>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.0.2</version>
 				<executions>
 					<execution>
+						<phase>package</phase>
 						<goals>
 							<goal>test-jar</goal>
 						</goals>
+						<configuration>
+							<includes>
+         						<include>**/testutils/**</include>
+        					</includes>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

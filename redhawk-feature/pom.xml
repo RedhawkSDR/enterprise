@@ -4,25 +4,18 @@
 
 	<parent>
 		<groupId>redhawk</groupId>
-		<artifactId>redhawk-java-tools</artifactId>
+		<artifactId>redhawk-enterprise-integration</artifactId>
 		<version>2.0.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>redhawk-feature</artifactId>
 	<packaging>feature</packaging>
-	<name>REDHAWK :: Feature</name>
-	<description>Feature for installing REDBUS assets for REDHAWK into KARAF</description>
+	<name>REDHAWK :: KARAF :: Feature</name>
+	<description>Feature for installing REDHAWK assets into KARAF</description>
 
 	<properties>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
 		<redhawk.version>2.0.0</redhawk.version>
 	</properties>
-
-	<scm>
-		<connection>scm:git:git@git.vsi-corp.com:redbus/redhawk-driver.git</connection>
-		<developerConnection>scm:git:git@git.vsi-corp.com:redbus/redhawk-driver.git</developerConnection>
-		<url>http://git.vsi-corp.com/redbus/redhawk-driver</url>
-		<tag>HEAD</tag>
-	</scm>
 
 	<build>
 		<plugins>

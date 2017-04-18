@@ -4,12 +4,12 @@
 
 	<parent>
 		<groupId>redhawk</groupId>
-		<artifactId>redhawk-java-tools</artifactId>
+		<artifactId>redhawk-enterprise-integration</artifactId>
 		<version>2.0.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>redhawk-connector</artifactId>
 	<packaging>bundle</packaging>
-	<name>REDHAWK :: Connector</name>
+	<name>REDHAWK :: OSGi Connector</name>
 	<description>Java library for configuring connections to REDHAWK</description>
 
 	<properties>

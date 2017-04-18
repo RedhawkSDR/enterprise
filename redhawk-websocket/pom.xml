@@ -4,13 +4,15 @@
 
 	<parent>
 		<groupId>redhawk</groupId>
-		<artifactId>redhawk-java-tools</artifactId>
+		<artifactId>redhawk-enterprise-integration</artifactId>
 		<version>2.0.4-SNAPSHOT</version>
 	</parent>
 	<artifactId>redhawk-websocket</artifactId>
 	<packaging>bundle</packaging>
 	<name>REDHAWK :: Websocket</name>
-	<description>Java library for integrating with REDHAWK using Websockets</description>
+	<description>
+		Implementation of Jetty Websocket API for point to point communication with a REDHAWK Application ports, Device ports or Event Channels
+	</description>
 
 	<properties>
 		<powermock.version>1.6.4</powermock.version>

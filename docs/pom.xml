@@ -198,7 +198,7 @@
 					<licence />
 					<distribution />
 					<icon />
-					<group>REDHAWK Java Tools</group>
+					<group>REDHAWK Enterprise Integration</group>
 					<requires>
 						<require>redhawk-java-tools-dist</require>
 					</requires>

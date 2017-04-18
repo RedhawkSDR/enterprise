@@ -26,6 +26,8 @@
 		<jackson.version>2.8.3</jackson.version>
 		<karaf.maven.plugin.version>4.0.7</karaf.maven.plugin.version>
 		<redhawk.user.home>/usr/local/redhawk</redhawk.user.home>
+		<runtime.dir>redhawk-enterprise-integration</runtime.dir>
+		<runtime.basedir>${redhawk.user.home}/${runtime.dir}</runtime.basedir>
 		<rpm.group.name>REDHAWK Enterprise Integration</rpm.group.name>
 		<!-- Default distribution Management properties so build works on all machines -->
 		<distributionManagement.repository.id>Releases</distributionManagement.repository.id>
@@ -118,8 +120,6 @@
 				<module>redhawk-rest</module>
 				<module>redhawk-websocket</module>
 				<module>redhawk-camel</module>
-				<module>redhawk-feature</module>
-				<module>dist</module>
 			</modules>
 			<build>
 				<plugins>
@@ -161,7 +161,7 @@
 				<module>redhawk-rest</module>
 				<module>redhawk-websocket</module>
 				<module>redhawk-camel</module>
-				<module>redhawk-feature</module>
+				<module>feature</module>
 				<module>demo</module>
 				<module>dist</module>
 			</modules>

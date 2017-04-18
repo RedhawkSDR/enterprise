@@ -14,34 +14,40 @@ Using the REDAHWK Connector to create a Redhawk Connection results in the follow
 .Configuration Table
 |===
 
-|*Name* | *Required* | *Default* | *Description*
+|*Name* | *Key* | *Required* | *Default* | *Description*
 
 | Connection Name
+| connectionName
 | Yes
 | null
 | Unique name used to identify this connection. 
 
 | Server Name
+| host
 | Yes
 | localhost
 | Hostname or IP Address of the CORBA Naming Service.
 
 | Port
+| port
 | Yes
 | 2809
 | Port where the CORBA naming service is listening.
 
 | Domain Manager Location
+| domainManager
 | No
 | null
 | Optional name of the REDHAWK Domain Manager(as found in the CORBA Naming Service). 
 
 | Device Manager Name
+| deviceManagerName
 | No
 | null
 | The name of the Device Manager to register with REDHAWK.
 
 | Device Manager File System
+| deviceManagerFileSystemRoot
 | No
 | null
 | The filesystem root of the Device Manager. 

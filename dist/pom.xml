@@ -17,9 +17,8 @@
 	</description>
 	<url>http://maven.apache.org</url>
 	<properties>
-		<runtime.dir>java-tools</runtime.dir>
-		<karaf.home>${redhawk.user.home}/${runtime.dir}/karaf</karaf.home>
-		<jrepl.home>${redhawk.user.home}/${runtime.dir}/shell</jrepl.home>
+		<karaf.home>${runtime.basedir}/karaf</karaf.home>
+		<jrepl.home>${runtime.basedir}/shell</jrepl.home>
 		<jacorb.version>3.8</jacorb.version>
 	</properties>
 	<dependencies>
@@ -55,8 +54,8 @@
 			<type>xml</type>
 		</dependency>
 		<dependency>
-			<groupId>redhawk</groupId>
-			<artifactId>redhawk-feature</artifactId>
+			<groupId>redhawk.karaf</groupId>
+			<artifactId>redhawk-enterprise-integration</artifactId>
 			<version>${project.version}</version>
 			<classifier>features</classifier>
 			<type>xml</type>
@@ -77,7 +76,7 @@
 					<bootFeatures>
 						<feature>standard</feature>
 						<feature>war</feature>
-						<feature>redhawk-integration-all</feature>
+						<feature>redhawk-enterprise-integration-all</feature>
 					</bootFeatures>
 					<workDirectory>${project.build.directory}/${runtime.dir}/karaf-${karaf.version}</workDirectory>
 					<archiveTarGz>false</archiveTarGz>
@@ -286,7 +285,7 @@
 					<licence />
 					<distribution />
 					<icon />
-					<group>REDHAWK Java Tools</group>
+					<group>REDHAWK Enterprise Integration</group>
 					<prefix>${redhawk.user.home}</prefix>
 					<versionProperty>rpmFriendlyVersion</versionProperty>
 					<requires>
@@ -306,7 +305,7 @@
 						</mapping>
 					</mappings>
 					<preinstallScriptlet>
-						<script>echo "Installing REDHAWK Java Tools"</script>
+						<script>echo "Installing REDHAWK Enterprise Integration"</script>
 					</preinstallScriptlet>
 					<postinstallScriptlet>
 						<scriptFile>${project.build.directory}/scripts/postinstall.sh</scriptFile>
@@ -317,7 +316,7 @@
 						<fileEncoding>utf-8</fileEncoding>
 					</preremoveScriptlet>
 					<postremoveScriptlet>
-						<script>echo "Uninstalled REDHAWK Java Tools"</script>
+						<script>echo "Uninstalled REDHAWK Enterprise Integration"</script>
 					</postremoveScriptlet>
 				</configuration>
 			</plugin>

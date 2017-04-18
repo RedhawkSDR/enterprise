@@ -1,6 +1,6 @@
 == RedhawkEventChannelManager Code Examples
 
-The following code examples explain how to use the RedhawkEventChannelManager class. 
+The following code examples explain how to use the `RedhawkEventChannelManager` class. 
 
 === Interacting with the EventChannelManager 
 

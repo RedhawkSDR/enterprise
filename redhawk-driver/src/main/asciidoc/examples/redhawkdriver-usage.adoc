@@ -1,6 +1,6 @@
 == RedhawkDriver Code Examples
 
-The following code examples explain how to use the RedhawkDriver class. 
+The following code examples explain how to use the `RedhawkDriver` class. 
 
 === Get a REDHAWK Domain
 

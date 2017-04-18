@@ -1,6 +1,6 @@
 == REDHAWKDomainManager Code Examples 
 
-The following code examples explain how to use the RedhawkDomainManager class. 
+The following code examples explain how to use the `RedhawkDomainManager` class. 
 
 === Create an Application
 

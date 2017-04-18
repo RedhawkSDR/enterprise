@@ -6,7 +6,7 @@ REDHAWK Java Tools is a suite of software written in Java for interacting with a
 * <<REDHAWK Connector>>: Implements OSGi's Managed Service Factory interface to allow users to register pre-configured instances of REDHAWK connections into a Karaf container. 
 * <<REDHAWK REST>>: Provides REST Service to command and control a REDHAWK instance.
 * <<REDHAWK Websocket>>: Provides an HTML5-compliant Websocket implementation that enables the ability to stream data from any REDHAWK BulkIO-enabled Port or Event Channel. 
-* <<Camel REDHAWK>>: Provides a Camel Component for interacting with a REDHAWK Domain. This Component can be connected with other Apache Camel Components as a data flow solution.
+* <<REDHAWK Camel Component>>: Provides a Camel Component for interacting with a REDHAWK Domain. This Component can be connected with other Apache Camel Components as a data flow solution.
 
 The suite of software is prepackaged in a custom Karaf distribution to help users easily get started using REDHAWK Java Tools. 
 

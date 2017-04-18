@@ -9,7 +9,7 @@ tar xzf java-tools.tar.gz
 ----
 +
 
-. If not already set in your `.bashrc/.bash_profile`, set the `JAVA_HOME` environment variable by adding the following
+. If not already set in your `.bashrc/.bash_profile`, set the `JAVA_HOME` environment variable by adding the following:
 +
 ----
 JAVA_HOME=[path to java 8]
@@ -17,7 +17,7 @@ export JAVA_HOME
 ----
 +
 
-. Source your .bashrc/.bash_profile:
+. Source your `.bashrc/.bash_profile`:
 +
 ----
 . ~/.bashrc or ~/.bash_profile

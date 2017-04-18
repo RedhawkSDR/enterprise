@@ -1,0 +1,54 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>redhawk</groupId>
+		<artifactId>redhawk-enterprise-integration</artifactId>
+		<version>2.0.4-SNAPSHOT</version>
+	</parent>
+	<groupId>redhawk.karaf</groupId>
+	<artifactId>redhawk-enterprise-integration</artifactId>
+	<packaging>feature</packaging>
+	<name>REDHAWK :: KARAF :: Feature</name>
+	<description>Feature for installing REDHAWK assets into KARAF</description>
+
+	<properties>
+		<maven.javadoc.skip>true</maven.javadoc.skip>
+		<redhawk.version>2.0.0</redhawk.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.karaf.tooling</groupId>
+				<artifactId>karaf-maven-plugin</artifactId>
+				<version>4.0.7</version><!-- TODO: Move this whole def up to parent pom -->
+				<extensions>true</extensions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<encoding>UTF-8</encoding>
+							<outputDirectory>${project.basedir}/src/main/feature</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/feature-unfiltered</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

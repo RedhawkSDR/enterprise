@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<features name="${artifactId}-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0">
+	<repository>mvn:org.apache.karaf.features/standard/${karaf.version}/xml/features</repository>
+	<repository>mvn:org.apache.cxf.karaf/apache-cxf/${cxf.version}/xml/features</repository>
+	<repository>mvn:org.apache.camel.karaf/apache-camel/${camel.version}/xml/features</repository>
+	<feature name="${artifactId}-driver" version="${project.version}">
+		<bundle>mvn:redhawk/redhawk-driver/${project.version}</bundle>
+	</feature>
+	
+	<feature name="${artifactId}-connector" version="${project.version}">
+		<!-- This may or may not be necessary but if you'd like to enter a config from the webconsole this is a must -->	
+		<feature version="${karaf.version}">webconsole</feature>
+		<feature>${artifactId}-driver</feature>
+		<bundle>mvn:redhawk/redhawk-connector/${project.version}</bundle>
+	</feature>
+	
+	<feature name="${artifactId}-rest" version="${project.version}">
+		<feature version="${project.version}">${artifactId}-connector</feature>
+		<feature version="${cxf.version}">cxf-core</feature>
+		<feature version="${cxf.version}">cxf-rs-security-cors</feature>
+		<feature version="${cxf.version}">cxf-rs-description-swagger2</feature>
+		<!-- JACKSON -->
+		<bundle>mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-xml/${jackson.version}</bundle>
+		<bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/${jackson.version}</bundle>
+		<bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/${jackson.version}</bundle>
+		<bundle>mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle>
+		<bundle>mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle>
+		<bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
+		<bundle>mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/${jackson.version}</bundle>								
+		<bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-xml-provider/${jackson.version}</bundle>										
+		<!-- End of Jackson Deps -->
+		<bundle>mvn:commons-lang/commons-lang/${commons.lang.version}</bundle>
+		<bundle>mvn:redhawk/redhawk-rest/${project.version}</bundle>		
+	</feature>
+	
+	<feature name="${artifactId}-websocket" version="${project.version}">
+		<feature version="${project.version}">${artifactId}-connector</feature>
+		<bundle>wrap:mvn:com.google.code.gson/gson/${gson.version}</bundle>
+		<!--
+		<bundle>mvn:commons-collections/commons-collections/${commons.collection.version}</bundle>
+		<bundle>mvn:commons-beanutils/commons-beanutils/${beanutils.version}</bundle>
+		-->
+		<!-- End of commons-osgi feature -->
+		<bundle>mvn:redhawk/redhawk-websocket/${project.version}</bundle>
+	</feature>
+	
+	<feature name="${artifactId}-camel" version="${project.version}">
+		<feature version="${project.version}">${artifactId}-connector</feature>
+		<feature version="${camel.version}">camel-core</feature>
+		<feature version="${camel.version}">camel-blueprint</feature>
+		<bundle>mvn:commons-lang/commons-lang/${commons.lang.version}</bundle>
+		<bundle>mvn:redhawk/camel-redhawk/${project.version}</bundle>	
+	</feature>
+	
+	<feature name="${artifactId}-all" version="${project.version}">
+		<feature>${artifactId}-driver</feature>
+		<feature>${artifactId}-connector</feature>
+		<feature>${artifactId}-rest</feature>
+		<feature>${artifactId}-websocket</feature>
+		<feature>${artifactId}-camel</feature>				
+	</feature>
+</features>

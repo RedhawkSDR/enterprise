@@ -18,21 +18,21 @@ Sample code for creating an Application from a SAD file on a file system.
 include::snippets/RedhawkComponentImplTestIT.java[lines=59]
 ----
 
-=== Retrieve an Application from a REDHAWK Domain
+=== Get an Application from a REDHAWK Domain
 
 [source,java,indent=0]
 ----
 include::snippets/RedhawkDomainManagerImplTestIT.java[lines=153..156]
 ----
 
-=== Retrieve a Device from a REDHAWK Domain
+=== Get a Device from a REDHAWK Domain
 
 [source,java,indent=0]
 ----
 include::snippets/RedhawkDomainManagerImplTestIT.java[lines=159..166]
 ----
 
-=== Retrieve a Device Manager from a REDHAWK Domain
+=== Get a Device Manager from a REDHAWK Domain
 
 [source,java,indent=0]
 ----

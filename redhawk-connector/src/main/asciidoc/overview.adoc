@@ -2,14 +2,14 @@
 
 == Overview
 
-When you use the connector to create a Redhawk Connection 4 things happen:
+Using the REDAHWK Connector to create a Redhawk Connection results in the following:
 
-* A Redhawk Driver instance is registed in the OSGi Service Registry
-* A custom Camel Component is configured 
-* A websocket service is available for the connection
-* A REST Endpoint is available for the connection
+* A REDHAWK Driver instance is registered in the OSGi Service Registry.
+* A custom Camel Component is configured.
+* A Websocket service is available for the connection.
+* A REST Endpoint is available for the connection.
 
-== Configuration
+== Configuring REDHAWK Connector
 
 .Configuration Table
 |===
@@ -19,45 +19,45 @@ When you use the connector to create a Redhawk Connection 4 things happen:
 | Connection Name
 | Yes
 | null
-| Unique name for identifying this connection from other REDHAWK connections. 
+| Unique name used to identify this connection. 
 
 | Server Name
 | Yes
 | localhost
-| Hostname or IP Address of the Redhawk Naming Service 
+| Hostname or IP Address of the CORBA Naming Service.
 
 | Port
 | Yes
 | 2809
-| Port where the naming service is listening
+| Port where the CORBA naming service is listening.
 
 | Domain Manager Location
 | No
 | null
-| Optional name of the Redhawk Domain Manager(as found in the CORBA Naming Service). 
+| Optional name of the REDHAWK Domain Manager(as found in the CORBA Naming Service). 
 
 | Device Manager Name
 | No
 | null
-| The name of the Device Manager to register with Redhawk.
+| The name of the Device Manager to register with REDHAWK.
 
 | Device Manager File System
 | No
 | null
-| The filesystem root of the Device manager. 
+| The filesystem root of the Device Manager. 
 
 |===
 
-== Usage
+== Creating a REDHAWK Connector Configuration
 
-You can create a configuration 2 ways:
+To create a REDHAWK Connector configuration through the console for your Karaf instance: 
 
-* via the console for your Karaf instance
-** open a browser to '/system/console/configMgr' of your running Karaf instance. 
-Note: An example url would be '127.0.0.1:8181/system/console/configMgr'
+* Open a browser to '/system/console/configMgr' of your running Karaf instance. 
+Note: For example, '127.0.0.1:8181/system/console/configMgr'.
 
-* via a file
-** Add a configuration for REDHAWK by dropping a file starting with this prefix: 'redhawk.datasource.factory' and append a unique string(i.e myConfig.cfg) file into the etc directory of your karaf install.
+To create a REDHAWK Connector configuration using a file:
+
+* Add a configuration for REDHAWK by dropping a file beginning with this prefix: 'redhawk.datasource.factory' and append a unique string (i.e., myConfig.cfg) file into the etc directory of your Karaf install.
 
 Example config file:
 ----
@@ -69,7 +69,7 @@ domainManager=REDHAWK_DEV
 
 == Using Connection in blueprint
 
-Injecting the Redhawk Driver instance into your application is a matter of placing a couple lines in your blueprint.xml file:
+To inject the Redhawk Driver instance into your application, add the following lines in your blueprint.xml file:
 
 [source,xml]
 ----

@@ -14,15 +14,8 @@
 
 	<properties>
 		<maven.javadoc.skip>true</maven.javadoc.skip>
-		<redhawk.version>2.0.0</redhawk.version>
 	</properties>
 
-	<scm>
-		<connection>scm:git:git@git.vsi-corp.com:redbus/redhawk-driver.git</connection>
-		<developerConnection>scm:git:git@git.vsi-corp.com:redbus/redhawk-driver.git</developerConnection>
-		<url>http://git.vsi-corp.com/redbus/redhawk-driver</url>
-		<tag>HEAD</tag>
-	</scm>
 	<dependencies>
 		<dependency>
 			<groupId>redhawk</groupId>

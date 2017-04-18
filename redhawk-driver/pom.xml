@@ -17,13 +17,6 @@
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
 
-	<scm>
-		<connection>scm:git:git@git.vsi-corp.com:redbus/redhawk-driver.git</connection>
-		<developerConnection>scm:git:git@git.vsi-corp.com:redbus/redhawk-driver.git</developerConnection>
-		<url>http://git.vsi-corp.com/redbus/redhawk-driver</url>
-		<tag>HEAD</tag>
-	</scm>
-
 	<build>
 		<resources>
 			<resource>

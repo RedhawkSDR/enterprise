@@ -13,14 +13,7 @@
 
 	<name>REDHAWK :: Camel Component</name>
 	<description>REDHAWK camel component</description>
-
-	<scm>
-		<connection>scm:git:git@git.vsi-corp.com/redbus/camel-redhawk.git</connection>
-		<developerConnection>scm:git:git@git.vsi-corp.com:redbus/camel-redhawk.git</developerConnection>
-		<url>http://git.vsi-corp.com/redbus/camel-redhawk</url>
-		<tag>HEAD</tag>
-	</scm>
-
+	
 	<properties>
 		<maven.test.skip>false</maven.test.skip>
 	</properties>

@@ -80,7 +80,6 @@ import CF.PropertySetPackage.PartialConfiguration;
 
 /**
  * Java object representing a CF.DeviceManager
- * @author default
  */
 public class DeviceManagerTemplate implements DeviceManager {
 

@@ -33,9 +33,6 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<configuration>
 					<useReleaseProfile>false</useReleaseProfile>
-					<scmCommentPrefix>Cutting Release for redhawk-websocket version:
-						${project.version}
-					</scmCommentPrefix>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -156,7 +153,6 @@
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
-			<version>3.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.geronimo.specs</groupId>

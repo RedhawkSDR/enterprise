@@ -2,39 +2,44 @@
 
 === Overview
 
-Provides an HTML5 compliant web socket implementation that enables the ability to stream data froma any Redhawk BulkIO enabled port or Event Channel. 
+Provides an HTML5-compliant Websocket implementation that enables the ability to stream data from any REDHAWK BulkIO-enabled Port or Event Channel. 
 
 === Connecting to the REDHAWK Websocket
 
-The WebSocket servlet resides at the following url ws://{hostname}:8181/redhawk. 
+The Websocket servlet resides at `ws://{hostname}:8181/redhawk`. 
 
-In order to connect to a specific REDHAWK you must provide the hostname/address along with the port of the REDHAWK Name Server.
+. To connect to a specific REDHAWK installation, provide the hostname/address along with the Port of the REDHAWK Name Server.
 
++
 ----
 ws://localhost:8181/redhawk/localhost:2809
 ----
++
 
-If you are using the REDHAWK connector you can replace the address and port with the connection name you specified when you created the connection: 
-
+. If you are using the REDHAWK Connector, you can replace the address and Port with the connection name you specified when you created the connection.
++
 ----
 ws://localhost:8181/redhawk/redhawk-connect-name
 ----
++
 
-To connect to a component port you would use this syntax 'application/{applicationName}/components/{componentName}/ports/{portName} . The applicationName, componentName and portName variables all support matching on reqular expressions. A complete component port url looks like this: 
-
+. To connect to a Component Port, use this syntax: `application/{applicationName}/components/{componentName}/ports/{portName}`. The `applicationName`, `componentName` and `portName` variables all support matching on regular expressions. The following example is a complete Component Port url: 
++
 ----
 ws://localhost:8181/redhawk/localRH/domains/REDHAWK_DEV/applications/myApplication/components/SigGen.*/ports/dataFloat_out.json
 ----
++
 
-To connect to an event channel you would use this syntax: 'eventchannels/{eventChannelName}' . A complete url example for an event channel looks like this: 
-
+. To connect to an event channel, use this syntax: `eventchannels/{eventChannelName}`. The following example is a complete url for an event channel: 
++
 ----
 ws://localhost:8181/redhawk/localRH/domains/REDHAWK_DEV/eventchannels/ODM_Channel
 ----
 
+
 === Code Example 
 
-A complete javascript example to connect to a REDHAWK WebSocket looks like:
+The following example is a complete javascript example to connect to a REDHAWK Websocket:
 
 [source,javascript]
 ----

@@ -1,4 +1,4 @@
-= REDHAWK Java Tools User Guide
+= REDHAWK Enterprise Integration User Guide
 
 include::introduction.adoc[]
 

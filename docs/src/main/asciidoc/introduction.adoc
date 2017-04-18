@@ -1,6 +1,6 @@
 == Introduction 
 
-REDHAWK Java Tools is a suite of software written in Java for interacting with a REDHAWK Domain. The suite includes:
+REDHAWK Enterprise Integration is a suite of software written in Java for interacting with a REDHAWK Domain. The suite includes:
 
 * <<REDHAWK Driver>>: Provides simplified access to REDHAWK via standard Java interfaces. The goal is to shield all interaction with the underlying REDHAWK Components as well as provide a simplified API for Java developers interacting with a REDHAWK Domain. The driver can be leveraged as a standalone Java ARchive (JAR) file.  
 * <<REDHAWK Connector>>: Implements OSGi's Managed Service Factory interface to allow users to register pre-configured instances of REDHAWK connections into a Karaf container. 

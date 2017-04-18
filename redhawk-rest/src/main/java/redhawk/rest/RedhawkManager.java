@@ -611,8 +611,8 @@ public class RedhawkManager {
             }
             case "simplesequence": {
                 RedhawkSimpleSequence simpSeq = resource.getProperty(prop.getId());
-                simpSeq.clearAllValues();
-                simpSeq.addValues(prop.getValues().toArray());
+                simpSeq.clearAllValues();   
+                simpSeq.addValues(convertSimpleSequenceValues(prop.getValues(), prop.getDataType()));
                 break;
             }
             case "struct": {
@@ -623,10 +623,10 @@ public class RedhawkManager {
                         try {
                             values.put(p.getId(), convertSimple(p.getDataType(), p.getValue()));
                         } catch (Exception e) {
-                            e.printStackTrace();
+                        	logger.error(String.format("Exception converting %s to %s: ",p.getValue(), prop.getDataType()), e);
                         }
                     } else if (p.getType().equals("simplesequence")) {
-                        values.put(p.getId(), prop.getValues().toArray());
+                    	values.put(p.getId(), convertSimpleSequenceValues(p.getValues(), p.getDataType()));
                     }
                 });
                 struct.setValues(values);
@@ -643,7 +643,7 @@ public class RedhawkManager {
                             if (v.getType().equals("simple")) {
                                 values.put(v.getId(), convertSimple(v.getDataType(), v.getValue()));
                             } else if (v.getType().equals("simplesequence")) {
-                                values.put(v.getId(), prop.getValues().toArray());
+                                values.put(v.getId(), convertSimpleSequenceValues(v.getValues(), v.getDataType()));
                             }
                         } catch (Exception e) {
                             logger.error("EXCEPTION IN INTERNAL SET PROPERTY: ", e);
@@ -696,6 +696,29 @@ public class RedhawkManager {
 
     public void setRedhawkDriverServices(List<ServiceReference<Redhawk>> redhawkDriverServices) {
         this.redhawkDriverServices = redhawkDriverServices;
+    }
+    
+    /**
+     * 
+     * @param oldValues values that may be converted
+	     * @param dataType oldValues should be converted to this type
+     * @return
+     */
+    private Object[] convertSimpleSequenceValues(List<Object> oldValues, String dataType) {
+    	List<Object> newValues = oldValues.stream().map(objA -> {
+        	if(objA instanceof String) {
+        		Object objB = null;
+				try {
+					objB = convertSimple(dataType, (String)objA);
+				} catch (Exception e) {
+					logger.error(String.format("Exception converting %s to %s: ",objA, dataType), e);
+				}
+				return objB;
+        	} else {
+        		return objA;
+        	}
+        }).collect(Collectors.toList());
+    	return newValues.toArray();
     }
 
 }

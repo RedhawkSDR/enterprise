@@ -2,7 +2,7 @@
 
 === Installing via Tarball
 
-. Navigate to the directory where you want to install REDHAWK Java Tools, and untar the tarball:
+. Navigate to the directory where you want to install REDHAWK Enterprise Integration, and untar the tarball:
 +
 ----
 tar xzf java-tools.tar.gz

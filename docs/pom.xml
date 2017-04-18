@@ -156,6 +156,8 @@
 								source highlighting -->
 							<sourceHighlighter>coderay</sourceHighlighter>
 							<attributes>
+							 	<pdf-stylesdir>${project.basedir}/src/theme</pdf-stylesdir>
+								<pdf-style>custom</pdf-style>
 								<icons />
 								<pagenums />
 								<toc />

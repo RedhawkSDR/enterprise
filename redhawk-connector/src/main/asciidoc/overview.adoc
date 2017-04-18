@@ -14,7 +14,7 @@ Using the REDAHWK Connector to create a Redhawk Connection results in the follow
 .Configuration Table
 |===
 
-|Name | Required | Default | Description 
+|*Name* | *Required* | *Default* | *Description*
 
 | Connection Name
 | Yes

@@ -59,7 +59,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     @Path("/")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Returns all applications for a domain."
+    		value="Returns all Applications for a Domain"
     		)
     public ApplicationContainer getApplications(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws ResourceNotFound, Exception {
         return new ApplicationContainer(redhawkManager.getAll(nameServer,
@@ -70,7 +70,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     @Path("/{applicationId}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Returns a specific applications for a domain."
+    		value="Returns a Specific Application for a Domain"
     		)
     public Response getApplication(@PathParam("applicationId") String applicationId)
             throws ResourceNotFound, Exception {
@@ -83,7 +83,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     @Path("/{applicationId}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Release an application from a domain."
+    		value="Release an Application from a Domain"
     		)
     public Response releaseApplication(@ApiParam(value = "id for application") @PathParam("applicationId") String applicationId)
             throws ResourceNotFound, Exception {
@@ -96,7 +96,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     @Path("/{applicationId}")
     @Consumes(MediaType.APPLICATION_JSON)
     @ApiOperation(
-    		value="Stop/Start a running application"
+    		value="Stop/Start a Running Application"
     		)
     public Response controlApplication(@ApiParam(value = "id for application") @PathParam("applicationId") String applicationId, String control) throws Exception{
     	redhawkManager.controlApplication(nameServer, domainName, applicationId, control);
@@ -108,7 +108,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Launch an application."
+    		value="Launch an Application"
     		)
     public Response launchApplication(@ApiParam(value = "name for application")
             @PathParam("instanceName") String instanceName, WaveformInfo info)
@@ -122,7 +122,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     @Path("/{applicationId}/properties")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Properties for a specific application"
+    		value="Properties for a Specific Application"
     		)    
     public PropertyContainer getApplicationProperties(@ApiParam(value = "id for application")
             @PathParam("applicationId") String applicationId) throws ResourceNotFound,
@@ -135,7 +135,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     @Path("/{applicationId}/properties/{propId}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Returns a specific application property"
+    		value="Returns a Specific Application Property"
     		)    
     public Property getApplicationProperty(
     		@ApiParam(value = "id/name for application") @PathParam("applicationId") String applicationId,
@@ -150,7 +150,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Set an application property."
+    		value="Set an Application Property"
     		)    
     public Response setApplicationProperty(
     		@ApiParam(value = "id for application") @PathParam("applicationId") String applicationId, 

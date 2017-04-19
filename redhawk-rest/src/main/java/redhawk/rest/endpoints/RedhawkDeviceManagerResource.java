@@ -55,7 +55,7 @@ public class RedhawkDeviceManagerResource extends RedhawkBaseResource {
     @Path("/")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Returns all device managers for a domain."
+    		value="Returns all Device Managers for a Domain"
     		)
     public Response getDeviceManagers(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws ResourceNotFound, Exception {
         return Response.ok(new DeviceManagerContainer(redhawkManager.getAll(nameServer, "devicemanager", domainName, fetchMode))).build();
@@ -65,7 +65,7 @@ public class RedhawkDeviceManagerResource extends RedhawkBaseResource {
     @Path("/{devMgrId}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Returns a specific device manager for a domain."
+    		value="Returns a Specific Device Manager for a Domain."
     		)    
     public Response getDeviceManager(@PathParam("devMgrId") String deviceManagerId) throws ResourceNotFound, Exception {
         return Response.ok(redhawkManager.get(nameServer, "devicemanager", domainName + "/" + deviceManagerId)).build();
@@ -75,7 +75,7 @@ public class RedhawkDeviceManagerResource extends RedhawkBaseResource {
     @Path("/{devMgrId}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Deletes a specific device manager from a domain."
+    		value="Deletes a Specific Device Manager from a Domain"
     		)    
     public Response shutDownDeviceManager(@PathParam("devMgrId") String deviceManagerId) throws ResourceNotFound, Exception {
         redhawkManager.shutdownDeviceManager(nameServer, domainName+"/"+deviceManagerId);
@@ -87,7 +87,7 @@ public class RedhawkDeviceManagerResource extends RedhawkBaseResource {
     @Path("/{devMgrId}/properties")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Returns properties for a device manager."
+    		value="Returns Properties for a Device Manager"
     		)    
     public Response getDeviceManagerProperties(@PathParam("devMgrId") String deviceManagerId) throws ResourceNotFound, ResourceNotFoundException, Exception {
         return Response.ok(redhawkManager.getProperties(nameServer, "devicemanager", domainName + "/" + deviceManagerId)).build();
@@ -97,7 +97,7 @@ public class RedhawkDeviceManagerResource extends RedhawkBaseResource {
     @Path("/{devMgrId}/properties/{propId}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Returns a specific property for a device manager."
+    		value="Returns a Specific Property for a Device Manager"
     		) 
     public Response getDeviceManagerProperty(@PathParam("devMgrId") String deviceManagerId, @PathParam("propId") String propertyId) throws ResourceNotFound, Exception {
         return Response.ok(redhawkManager.getProperty(propertyId, nameServer, "devicemanager", domainName + "/" + deviceManagerId)).build();
@@ -108,7 +108,7 @@ public class RedhawkDeviceManagerResource extends RedhawkBaseResource {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Set a properties for a device manager"
+    		value="Set a Property for a Device Manager"
     		) 
     public Response setDeviceManagerProperties(@PathParam("devMgrId") String deviceManagerId, List<FullProperty> properties) throws Exception {
         redhawkManager.setProperties(properties, nameServer, "devicemanager", domainName + "/" + deviceManagerId);
@@ -120,7 +120,7 @@ public class RedhawkDeviceManagerResource extends RedhawkBaseResource {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Set a property for a device manager"
+    		value="Set a Property for a Device Manager"
     		)     
     public Response setDeviceManagerProperty(@PathParam("devMgrId") String deviceManagerId, @PathParam("propId") String propertyId, FullProperty property) throws Exception {
         redhawkManager.setProperty(property, nameServer, "devicemanager", domainName + "/" + deviceManagerId);

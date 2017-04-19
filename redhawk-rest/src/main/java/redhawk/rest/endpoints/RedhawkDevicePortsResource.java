@@ -55,7 +55,7 @@ public class RedhawkDevicePortsResource extends RedhawkBaseResource{
     @Path("/")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Returns all ports for a device"
+    		value="Returns all Ports for a Device"
     		)
     public Response getPorts() throws ResourceNotFound, Exception {
         return Response.ok(new PortContainer(redhawkManager.getAll(nameServer, "deviceport", domainName + "/" + devManagerName + "/" + deviceId, FetchMode.EAGER))).build();
@@ -65,7 +65,7 @@ public class RedhawkDevicePortsResource extends RedhawkBaseResource{
     @Path("/{portId}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Returns a specific port for a device"
+    		value="Returns a Specific Port for a Device"
     		)
     public Response getPort(@PathParam("portId") String portName) throws ResourceNotFound, Exception {
         return Response.ok(redhawkManager.get(nameServer, "deviceport", domainName + "/" + devManagerName + "/" + deviceId + "/" + portName)).build();
@@ -75,7 +75,7 @@ public class RedhawkDevicePortsResource extends RedhawkBaseResource{
     @Path("/{portId}/statistics")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Returns port statistics for a device"
+    		value="Returns Port Statistics for a Device"
     		)
     public Response getPortStatistics(@PathParam("portId") String portName) throws Exception {
         return Response.ok(redhawkManager.getRhPortStatistics(nameServer, "deviceport", domainName + "/" + devManagerName + "/" + deviceId + "/" + portName)).build();

@@ -56,7 +56,7 @@ public class RedhawkWaveformResource extends RedhawkBaseResource {
 	@Path("/")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @ApiOperation(
-    		value="Returns waveforms available in domain."
+    		value="Returns Waveforms Available in Domain"
     		)	
 	public Response getApplications() throws ResourceNotFound, Exception {
 		Map<String, Softwareassembly> applications = redhawkManager.getWaveforms(nameServer, domainName);
@@ -78,7 +78,7 @@ public class RedhawkWaveformResource extends RedhawkBaseResource {
 	@Path("/{waveformId}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @ApiOperation(
-    		value="Returns a specific waveform in a domain."
+    		value="Returns a Specific Waveform in a Domain"
     		)		
 	public Response getApplications(@PathParam("waveformId") String waveformId) throws ResourceNotFound, Exception {
 		Map<String, Softwareassembly> applications = redhawkManager.getWaveforms(nameServer, domainName);

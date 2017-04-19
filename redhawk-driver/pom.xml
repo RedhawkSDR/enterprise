@@ -119,6 +119,7 @@
 					</instructions>
 				</configuration>
 			</plugin>
+			<!-- Guide for producing this: https://cleantestcode.wordpress.com/2014/04/13/reusable-test-utility-code-and-maven/ -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>

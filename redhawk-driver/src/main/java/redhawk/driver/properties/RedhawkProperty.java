@@ -23,13 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.Logger;
 import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.TCKind;
-import org.omg.CORBA.TypeCode;
-import org.omg.CORBA.TypeCodePackage.BadKind;
 import org.ossie.properties.AnyUtils;
 
 import CF.DataType;
@@ -40,7 +37,7 @@ import CF.PropertySetPackage.InvalidConfiguration;
 import CF.PropertySetPackage.PartialConfiguration;
 
 public class RedhawkProperty {
-	private static Log logger = LogFactory.getLog(RedhawkProperty.class);
+	private static Logger logger = Logger.getLogger(RedhawkProperty.class);
 
 	protected String parentObject;
 	protected ORB orb;

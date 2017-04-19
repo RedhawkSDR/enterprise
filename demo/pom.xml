@@ -8,7 +8,7 @@
 	</parent>
 	<artifactId>redhawk-demo-parent</artifactId>
 	<packaging>pom</packaging>
-	<name>REDHAWK :: JAVA :: DEMO</name>
+	<name>REDHAWK :: ENTERPRISE INTEGRATION :: DEMO</name>
 	<modules>
 		<module>camel-event-channel</module>
 		<module>redhawk-webapp</module>

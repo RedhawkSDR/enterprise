@@ -6,12 +6,12 @@
 		<artifactId>redhawk-demo-parent</artifactId>
 		<version>2.0.4-SNAPSHOT</version>
 	</parent>
-	<artifactId>redhawk-demo-dist</artifactId>
+	<artifactId>redhawk-enterprise-integration-demo-dist</artifactId>
 	<packaging>rpm</packaging>
-	<name>REDHAWK :: DEMO :: DIST</name>
-	<description>Distribution for REDHAWK JAVA Demo</description>
+	<name>REDHAWK :: ENTERPRISE INTEGRATION :: DEMO DIST</name>
+	<description>Distribution for REDHAWK Enterprise Integration Demo</description>
 	<properties>
-		<demo.directory>/usr/local/redhawk/java-tools/demos</demo.directory>
+		<demo.directory>${runtime.basedir}/demos</demo.directory>
 	</properties>
 	<build>
 		<plugins>
@@ -32,9 +32,9 @@
 					<licence />
 					<distribution />
 					<icon />
-					<group>REDHAWK Java Tools</group>
+					<group>REDHAWK Enterprise Integration</group>
 					<requires>
-						<require>redhawk-java-tools-dist</require>
+						<require>redhawk-enterprise-integration-dist</require>
 					</requires>
 					<defaultUsername>root</defaultUsername>
 					<defaultGroupname>redhawk</defaultGroupname>

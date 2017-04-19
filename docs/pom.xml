@@ -10,7 +10,7 @@
 	<name>REDHAWK :: ENTERPRISE INTEGRATION :: DOCUMENTATION</name>
 	<packaging>bundle</packaging>
 	<properties>
-		<docs.directory>/usr/local/redhawk/java-tools/docs</docs.directory>
+		<docs.directory>${runtime.basedir}/docs</docs.directory>
 	</properties>
 	<build>
 		<resources>
@@ -200,7 +200,7 @@
 					<icon />
 					<group>REDHAWK Enterprise Integration</group>
 					<requires>
-						<require>redhawk-java-tools-dist</require>
+						<require>redhawk-enterprise-integration-dist</require>
 					</requires>
 					<defaultUsername>root</defaultUsername>
 					<defaultGroupname>redhawk</defaultGroupname>
@@ -216,7 +216,7 @@
 							</sources>
 						</mapping>
 						<mapping>
-							<directory>/usr/local/redhawk/java-tools/karaf-${karaf.version}/deploy</directory>
+							<directory>${runtime.basedir}/karaf-${karaf.version}/deploy</directory>
 							<sources>
 								<source>
 									<location>${project.build.directory}/${project.artifactId}-${project.version}.jar</location>

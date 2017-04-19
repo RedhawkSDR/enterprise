@@ -74,7 +74,7 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @ApiOperation(
     		value = "REDHAWK Domain that was Requested"
     		)
-    public Domain getDomain(@ApiParam(value = "name of REDHAWK Domain") @PathParam("domain") String name) {
+    public Domain getDomain(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name) {
         try {
             Domain domain = redhawkManager.get(nameServer, "domain", name);
             return domain;
@@ -89,7 +89,7 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @ApiOperation(
     		value = "Properties for Requested REDHAWK Domain"
     		)    
-    public PropertyContainer getDomainProperties(@ApiParam(value = "name of REDHAWK Domain") @PathParam("domain") String name) throws Exception {
+    public PropertyContainer getDomainProperties(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name) throws Exception {
         PropertyContainer props = redhawkManager.getProperties(nameServer, "domain", name);
 
         return props;
@@ -101,7 +101,7 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @ApiOperation(
     		value = "Returns a Specific Property from the REDHAWK Domain"
     		)    
-    public Property getDomainPropertyById(@ApiParam(value = "name of REDHAWK Domain") @PathParam("domain") String name,@ApiParam(value = "property name/id") @PathParam("propId") String id) throws Exception {
+    public Property getDomainPropertyById(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name,@ApiParam(value = "property name/id") @PathParam("propId") String id) throws Exception {
         return redhawkManager.getProperty(id, nameServer, "domain", name);
     }
 
@@ -112,7 +112,7 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @ApiOperation(
     		value = "Set Properties on a REDHAWK Domain"
     		)
-    public Response setDomainProperties(@ApiParam(value = "name of REDHAWK Domain") @PathParam("domain") String name,@ApiParam(value = "List of properties to set.") List<FullProperty> properties) throws Exception {
+    public Response setDomainProperties(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name,@ApiParam(value = "List of properties to set.") List<FullProperty> properties) throws Exception {
         redhawkManager.setProperties(properties, nameServer, "domain", name);
         return Response.ok().build();
     }
@@ -125,7 +125,7 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @ApiOperation(
     		value = "Set a Specific Property on a REDHAWK Domain"
     		)    
-    public Response setDomainProperty(@ApiParam(value = "name of REDHAWK Domain") @PathParam("domain") String name,
+    public Response setDomainProperty(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name,
     		@ApiParam(value = "property name/id") @PathParam("propId") String propertyId, 
     		@ApiParam(value = "Property to set") FullProperty property) throws Exception {
         redhawkManager.setProperty(property, nameServer, "domain", name);

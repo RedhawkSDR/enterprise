@@ -47,7 +47,7 @@ public class RedhawkDeviceManagerResource extends RedhawkBaseResource {
     @PathParam("nameserver")
     private String nameServer;
 
-    @ApiParam(value = "name of REDHAWK Domain")
+    @ApiParam(value = "Name of REDHAWK Domain")
     @PathParam("domain")
     private String domainName;
 
@@ -127,3 +127,4 @@ public class RedhawkDeviceManagerResource extends RedhawkBaseResource {
         return Response.ok().build();
     }
 }
+

@@ -51,7 +51,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     @PathParam("nameserver")
     private String nameServer;
 
-    @ApiParam(value = "name of REDHAWK Domain")
+    @ApiParam(value = "Name of REDHAWK Domain")
     @PathParam("domain")
     private String domainName;
 
@@ -63,7 +63,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     		)
     public ApplicationContainer getApplications(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws ResourceNotFound, Exception {
         return new ApplicationContainer(redhawkManager.getAll(nameServer,
-                        "application", domainName, fetchMode));
+                        "Application", domainName, fetchMode));
     }
 
     @GET
@@ -75,7 +75,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     public Response getApplication(@PathParam("applicationId") String applicationId)
             throws ResourceNotFound, Exception {
         return Response.ok(
-                redhawkManager.get(nameServer, "application", domainName + "/"
+                redhawkManager.get(nameServer, "Application", domainName + "/"
                         + applicationId)).build();
     }
 
@@ -85,7 +85,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="Release an Application from a Domain"
     		)
-    public Response releaseApplication(@ApiParam(value = "id for application") @PathParam("applicationId") String applicationId)
+    public Response releaseApplication(@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId)
             throws ResourceNotFound, Exception {
         redhawkManager
                 .releaseApplication(nameServer, domainName, applicationId);
@@ -98,7 +98,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="Stop/Start a Running Application"
     		)
-    public Response controlApplication(@ApiParam(value = "id for application") @PathParam("applicationId") String applicationId, String control) throws Exception{
+    public Response controlApplication(@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId, String control) throws Exception{
     	redhawkManager.controlApplication(nameServer, domainName, applicationId, control);
     	return Response.ok().build();
     }
@@ -110,7 +110,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="Launch an Application"
     		)
-    public Response launchApplication(@ApiParam(value = "name for application")
+    public Response launchApplication(@ApiParam(value = "Name for Application")
             @PathParam("instanceName") String instanceName, WaveformInfo info)
             throws ResourceNotFoundException, ApplicationCreationException {
         redhawkManager.createApplication(nameServer, domainName, instanceName,
@@ -124,10 +124,10 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="Properties for a Specific Application"
     		)    
-    public PropertyContainer getApplicationProperties(@ApiParam(value = "id for application")
+    public PropertyContainer getApplicationProperties(@ApiParam(value = "ID for Application")
             @PathParam("applicationId") String applicationId) throws ResourceNotFound,
             ResourceNotFoundException, Exception {
-        return redhawkManager.getProperties(nameServer, "application",
+        return redhawkManager.getProperties(nameServer, "Application",
                         domainName + "/" + applicationId);
     }
 
@@ -138,11 +138,11 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     		value="Returns a Specific Application Property"
     		)    
     public Property getApplicationProperty(
-    		@ApiParam(value = "id/name for application") @PathParam("applicationId") String applicationId,
-    		@ApiParam(value = "id/name for property") @PathParam("propId") String propertyId) throws ResourceNotFound,
+    		@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId,
+    		@ApiParam(value = "ID/Name for Property") @PathParam("propId") String propertyId) throws ResourceNotFound,
             Exception {
         return redhawkManager.getProperty(propertyId, nameServer,
-                        "application", domainName + "/" + applicationId);
+                        "Application", domainName + "/" + applicationId);
     }
 
     @PUT
@@ -153,10 +153,10 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     		value="Set an Application Property"
     		)    
     public Response setApplicationProperty(
-    		@ApiParam(value = "id for application") @PathParam("applicationId") String applicationId, 
-    		@ApiParam(value = "id/name for property") @PathParam("propId") String propertyId, FullProperty property)
+    		@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId, 
+    		@ApiParam(value = "ID/Name for Property") @PathParam("propId") String propertyId, FullProperty property)
             throws Exception {
-        redhawkManager.setProperty(property, nameServer, "application", domainName + "/" + applicationId);
+        redhawkManager.setProperty(property, nameServer, "Application", domainName + "/" + applicationId);
         return Response.ok().build();
     }
 }

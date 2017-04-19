@@ -1,23 +1,31 @@
 == Camel REDHAWK Demo
 
-This example application shows how you can use Camel REDHAWK component to subscribe to an Event Channel and publish that data to a JMS Topic. 
+This example Application illustrates how to use a Camel REDHAWK Component to subscribe to an Event Channel and publish that data to a JMS Topic. 
 
 === Set Up
 
-In order to run this demo you need to setup the example component that will publish data to a REDHAWK Event Channel and the Waveform to run that component must be launched. Each of the project described below can be imported into REDHAWK using the 'REDHAWK Import Wizard' provided by the IDE. 
+. To run this demo, setup the example Component that will publish data to a REDHAWK Event Channel.
+. Launch the Waveform to run the Component. 
+. Import each of the following projects into REDHAWK using the REDHAWK Import Wizard in the IDE. 
+
++
 
 * EventSpitter: Sends out a struct every second. 
-* SpitToChannel: Uses the EventSpitter component to send data to an EventChannel called EventsSpat
+* SpitToChannel: Uses the EventSpitter Component to send data to the Event Channel, EventsSpat.
 
-Once you've launched the SpitToChannel Waveform and ensure that it's been started. You can run the following command to see the event messages from your component:
++
+
+. After launching the SpitToChannel Waveform, ensure it is started by running the following command to see the event messages from your Component:
 
     eventviewer REDHAWK_DEV EventsSpat
     
-If you'd like the example to publish events to a ActiveMQ as well you'll need to install ActiveMQ on your machine or any machine your machine has access too. For more details on ActiveMQ checkout the following links:
++
 
-* Download ActiveMQ from here: http://activemq.apache.org/download.html 
+. To publish events to a ActiveMQ, install ActiveMQ on your machine or any machine to which your machine has access. For more information about ActiveMQ, refer to the following links:
 
-* Follow Getting Started here: http://activemq.apache.org/version-5-getting-started.html
+* To download ActiveMQ: http://activemq.apache.org/download.html 
+
+* For Getting Started information: http://activemq.apache.org/version-5-getting-started.html
 
 === Example Output
 
@@ -33,11 +41,17 @@ If you'd like the example to publish events to a ActiveMQ as well you'll need to
 
 === Instructions
 
-* Start KARAF 'rhjt/apache-karaf-4.0.8/bin/start'
-* Add a configuration for REDHAWK by dropping the 'redhawk.datasource.factory-localRH.cfg' file into the etc directory of your karaf install.
-* Add the camel route to the deploy directory of karaf
-* Start the SpitToChannel waveform
-* At this point you'll see logs of the messages being sent to the event channel in your karaf log
+. Start Karaf by entering this command:
+
+	rhjt/apache-karaf-4.0.8/bin/start
+
+. Add a configuration for REDHAWK by moving `redhawk.datasource.factory-localRH.cfg` into the `etc` directory of your Karaf install.
+. Add the Camel route to the `deploy` directory of Karaf.
+. Start the SpitToChannel Waveform.
+
++
+
+The Karaf log displays the messages being sent to the Event Channel.
 
 [source]
 	2017-02-23 14:35:19,417 | INFO  | eadpool; w: Idle | eventTest                        | 31 - org.apache.camel.camel-core - 2.17.5 | Exchange[ExchangePattern: InOnly, BodyType: java.util.HashMap, Body: {bar=1.6, foo=foo-beff745f-6ab1-4d75-b5e3-a29a0c4e9a3d}]
@@ -49,13 +63,24 @@ If you'd like the example to publish events to a ActiveMQ as well you'll need to
 	
 === ActiveMQ Integration
 
-* Login to your karaf console and run the following commands:
+. Login to your Karaf console and run the following commands:
 
 	feature:repo-add mvn:org.apache.activemq/activemq-karaf/5.14.3/xml/features
 	feature:install activemq-camel
+
++
 	
-* Now that ActiveMQ available to be used as a Camel Component uncomment the sections relevant to ActiveMQ in your route. Once your save the file the Camel Context will be redeployed automatically with your changes. 
-* You can go to your ActiveMQ Admin console to confirm messages are being sent to the topic. 
+ActiveMQ is available to use as a Camel Component.
+
+. Uncomment the sections relevant to ActiveMQ in your route.
+
++
+
+After saving the file, the Camel Context will be redeployed automatically with your changes.
+
++
+
+. To confirm messages are being sent to the topic, look at your ActiveMQ Admin console. 
 
 
 		

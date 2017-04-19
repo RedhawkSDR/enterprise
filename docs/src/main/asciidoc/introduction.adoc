@@ -8,7 +8,7 @@ REDHAWK Enterprise Integration is a suite of software written in Java for intera
 * <<REDHAWK Websocket>>: Provides an HTML5-compliant Websocket implementation that enables the ability to stream data from any REDHAWK BulkIO-enabled Port or Event Channel. 
 * <<REDHAWK Camel Component>>: Provides a Camel Component for interacting with a REDHAWK Domain. This Component can be connected with other Apache Camel Components as a data flow solution.
 
-The suite of software is prepackaged in a custom Karaf distribution to help users easily get started using REDHAWK Java Tools. 
+The suite of software is prepackaged in a custom Karaf distribution to help users easily get started using REDHAWK Enterprise Integration. 
 
 
 

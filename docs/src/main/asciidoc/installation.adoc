@@ -1,4 +1,4 @@
-== Installing REDHAWK Java Tools
+== Installing REDHAWK Enterprise Integration
 
 === Installing via Tarball
 

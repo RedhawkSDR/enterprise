@@ -62,11 +62,7 @@ public class RedhawkComponentsResourceIT extends RedhawkApplicationResourceTestB
 				response = target.request().accept(MediaType.APPLICATION_XML).get();
 				assertEquals(200, response.getStatus());
 			}
+			
 		}
-	}
-	
-	@Test
-	public void testSetComponentSimpleProperty(){
-		
 	}
 }

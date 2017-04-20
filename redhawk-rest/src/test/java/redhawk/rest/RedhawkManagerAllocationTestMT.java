@@ -43,7 +43,7 @@ import redhawk.rest.model.Port;
 import redhawk.rest.model.TunerMode;
 import redhawk.testutils.NodeBooterProxy;
 
-public class RedhawkManagerTestIT {
+public class RedhawkManagerAllocationTestMT {
 	private static RedhawkManager manager; 
 	
 	private static String sdrRoot = "/var/redhawk/sdr";

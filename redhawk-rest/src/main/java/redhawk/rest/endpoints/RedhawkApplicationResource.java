@@ -19,6 +19,24 @@
  */
 package redhawk.rest.endpoints;
 
+import java.util.logging.Logger;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.rest.exceptions.ResourceNotFound;
@@ -28,18 +46,6 @@ import redhawk.rest.model.FullProperty;
 import redhawk.rest.model.Property;
 import redhawk.rest.model.PropertyContainer;
 import redhawk.rest.model.WaveformInfo;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import org.apache.cxf.rs.security.cors.CrossOriginResourceSharing;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-
-import java.util.logging.Logger;
 
 @Path("/{nameserver}/domains/{domain}/applications")
 @Api(value="/{nameserver}/domains/{domain}/applications")
@@ -54,6 +60,12 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     @ApiParam(value = "Name of REDHAWK Domain")
     @PathParam("domain")
     private String domainName;
+    
+    @GET
+    @Path("test")
+    public Response blah(){
+    	return Response.ok("HELLO WORLD").build();
+    }
 
     @GET
     @Path("/")
@@ -62,8 +74,9 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     		value="Returns all Applications for a Domain"
     		)
     public ApplicationContainer getApplications(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws ResourceNotFound, Exception {
-        return new ApplicationContainer(redhawkManager.getAll(nameServer,
-                        "Application", domainName, fetchMode));
+        logger.info("Making it here for the get");
+    	return new ApplicationContainer(redhawkManager.getAll(nameServer,
+                        "application", domainName, fetchMode));
     }
 
     @GET
@@ -75,7 +88,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     public Response getApplication(@PathParam("applicationId") String applicationId)
             throws ResourceNotFound, Exception {
         return Response.ok(
-                redhawkManager.get(nameServer, "Application", domainName + "/"
+                redhawkManager.get(nameServer, "application", domainName + "/"
                         + applicationId)).build();
     }
 
@@ -127,7 +140,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     public PropertyContainer getApplicationProperties(@ApiParam(value = "ID for Application")
             @PathParam("applicationId") String applicationId) throws ResourceNotFound,
             ResourceNotFoundException, Exception {
-        return redhawkManager.getProperties(nameServer, "Application",
+        return redhawkManager.getProperties(nameServer, "application",
                         domainName + "/" + applicationId);
     }
 
@@ -142,7 +155,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     		@ApiParam(value = "ID/Name for Property") @PathParam("propId") String propertyId) throws ResourceNotFound,
             Exception {
         return redhawkManager.getProperty(propertyId, nameServer,
-                        "Application", domainName + "/" + applicationId);
+                        "application", domainName + "/" + applicationId);
     }
 
     @PUT
@@ -156,7 +169,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     		@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId, 
     		@ApiParam(value = "ID/Name for Property") @PathParam("propId") String propertyId, FullProperty property)
             throws Exception {
-        redhawkManager.setProperty(property, nameServer, "Application", domainName + "/" + applicationId);
+        redhawkManager.setProperty(property, nameServer, "application", domainName + "/" + applicationId);
         return Response.ok().build();
     }
 }

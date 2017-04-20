@@ -101,7 +101,7 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @ApiOperation(
     		value = "Returns a Specific Property from the REDHAWK Domain"
     		)    
-    public Property getDomainPropertyById(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name,@ApiParam(value = "property name/id") @PathParam("propId") String id) throws Exception {
+    public Property getDomainPropertyById(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name,@ApiParam(value = "Property name/ID") @PathParam("propId") String id) throws Exception {
         return redhawkManager.getProperty(id, nameServer, "domain", name);
     }
 
@@ -112,7 +112,8 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @ApiOperation(
     		value = "Set Properties on a REDHAWK Domain"
     		)
-    public Response setDomainProperties(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name,@ApiParam(value = "List of properties to set.") List<FullProperty> properties) throws Exception {
+
+    public Response setDomainProperties(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name,@ApiParam(value = "List of Properties to set") List<FullProperty> properties) throws Exception {
         redhawkManager.setProperties(properties, nameServer, "domain", name);
         return Response.ok().build();
     }
@@ -126,7 +127,7 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     		value = "Set a Specific Property on a REDHAWK Domain"
     		)    
     public Response setDomainProperty(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name,
-    		@ApiParam(value = "property name/id") @PathParam("propId") String propertyId, 
+    		@ApiParam(value = "Property name/ID") @PathParam("propId") String propertyId, 
     		@ApiParam(value = "Property to set") FullProperty property) throws Exception {
         redhawkManager.setProperty(property, nameServer, "domain", name);
         return Response.ok().build();

@@ -69,11 +69,14 @@ public class RedhawkEventChannelEndpointTestIT extends CamelTestSupport{
 	private static RedhawkApplication rhApplication;
 	
 	@BeforeClass
-	public static void setup() throws ConnectionException, MultipleResourceException, CORBAException, FileNotFoundException, IOException, ApplicationCreationException, ApplicationStartException{
+	public static void setup() throws ConnectionException, MultipleResourceException, CORBAException, FileNotFoundException, IOException, ApplicationCreationException, ApplicationStartException, InterruptedException{
 		driver = new RedhawkDriver();
 		
 		rhFS = driver.getDomain().getFileManager();
 
+		//Run build.sh so component can have necessary files
+		RedhawkTestUtils.runCommand("../demo/camel-event-channel/src/main/resources/EventSpitter", "build.sh");
+		
 		/*
 		 * Deploy EventSpitter Component 
 		 */
@@ -131,7 +134,7 @@ public class RedhawkEventChannelEndpointTestIT extends CamelTestSupport{
     }
     
 	@AfterClass
-	public static void cleanup() throws IOException, ApplicationReleaseException{
+	public static void cleanup() throws IOException, ApplicationReleaseException, InterruptedException{
 		if(rhApplication!=null)
 			rhApplication.release();
 		
@@ -141,5 +144,10 @@ public class RedhawkEventChannelEndpointTestIT extends CamelTestSupport{
 		if(driver!=null){
 			driver.disconnect();
 		}
+		
+		/*
+		 * Clean up component dir
+		 */
+		RedhawkTestUtils.runCommand("../demo/camel-event-channel/src/main/resources/EventSpitter", "make distclean");
 	}
 }

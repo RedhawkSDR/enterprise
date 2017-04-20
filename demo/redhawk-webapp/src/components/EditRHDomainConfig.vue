@@ -1,7 +1,7 @@
 <template>
 	<div class="modal-mask">
 		<div class="modal-wrapper">
-			<div class="modal-container">
+			<div class="config-container">
 				<md-toolbar>
 	        <h1 class="md-title">Domain Config</h1>
 	      </md-toolbar>
@@ -17,7 +17,7 @@
 					<label>Domain Name</label>
 					<md-input v-model="domainName"></md-input>
 				</md-input-container>
-				<div>
+				<div style="text-align: center">
 					<md-button class="md-raised md-warn" @click.native="cancel">close</md-button>
 				</div>
 			</div>
@@ -65,33 +65,12 @@ export default{
 </script>
 
 <style>
-	.modal-mask {
-	position: fixed;
-	z-index: 9998;
-	top: 0;
-	left: 0;
-	width:
-	100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, .5);
-	display: table;
-	transition: opacity .3s ease;
-	}
-
-	.modal-wrapper {
-	display: table-cell;
-	vertical-align: middle;
-	}
-
-	.modal-container {
-	width: 300px;
-	margin: 0px
-	auto;
-	padding: 20px 30px;
-	background-color: #fff;
-	border-radius: 2px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
-	transition: all .3s ease;
-	font-family: Helvetica, Arial, sans-serif;
-	}
+.config-container {
+  width: 400px;
+  margin: 0px auto;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+  transition: all .3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
 </style>

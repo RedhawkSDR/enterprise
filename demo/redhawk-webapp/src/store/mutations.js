@@ -465,7 +465,7 @@ export const allocate = (state, allocate) => {
   actualAllocation["FRONTEND::tuner_allocation::allocation_id"] = allocate.id
   actualAllocation["FRONTEND::tuner_allocation::tuner_type"] = allocate.tunerType
   actualAllocation["FRONTEND::tuner_allocation::center_frequency"] = allocate.centerFrequency * 1000000
-  actualAllocation["FRONTEND::tuner_allocation::sample_rate"] = allocate.samplerate * 1000
+  actualAllocation["FRONTEND::tuner_allocation::sample_rate"] = allocate.samplerate * 1000000
   actualAllocation["FRONTEND::tuner_allocation::bandwidth_tolerance"] = allocate.bandwidthTolerance
   actualAllocation["FRONTEND::tuner_allocation::sample_rate_tolerance"] = allocate.sampleRateTolerance
 

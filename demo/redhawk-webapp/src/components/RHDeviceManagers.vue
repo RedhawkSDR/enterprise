@@ -15,7 +15,7 @@
             <md-icon>menu</md-icon>
           </md-button>
           <md-menu-content>
-            <md-menu-item>Shutdown</md-menu-item>
+            <md-menu-item :disabled="true">Shutdown</md-menu-item> <!-- TODO: Implement -->
             <md-menu-item @click.native="showDeviceManager(index)">View</md-menu-item>
           </md-menu-content>
         </md-menu>

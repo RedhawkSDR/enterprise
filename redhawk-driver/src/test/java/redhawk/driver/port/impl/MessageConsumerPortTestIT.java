@@ -64,7 +64,7 @@ public class MessageConsumerPortTestIT extends RedhawkTestBase{
 	private RedhawkApplication rhApplication;
 	
 	@Before
-	public void setup() throws ConnectionException, MultipleResourceException, CORBAException, FileNotFoundException, IOException, ApplicationCreationException, ApplicationStartException{
+	public void setup() throws ConnectionException, MultipleResourceException, CORBAException, FileNotFoundException, IOException, ApplicationCreationException, ApplicationStartException, InterruptedException{
 		//TODO: Make this a helper method
 		//Use FileSystem to create the appropriate directory structure for your components. 
 		/*
@@ -79,6 +79,9 @@ public class MessageConsumerPortTestIT extends RedhawkTestBase{
 		 */
 		rhFS = driver.getDomain().getFileManager();
 		
+		//Run build.sh so component can have necessary files
+		RedhawkTestUtils.runCommand("src/test/resources/components/MessageProducer/", "build.sh");
+
 		//Deploy example component
 		RedhawkTestUtils.writeJavaComponentToCF("src/test/resources/components/MessageProducer", rhFS);	
 		
@@ -152,12 +155,17 @@ public class MessageConsumerPortTestIT extends RedhawkTestBase{
 	*/
 	
 	@After
-	public void cleanup() throws IOException, ApplicationReleaseException{
+	public void cleanup() throws IOException, ApplicationReleaseException, InterruptedException{
 		if(rhApplication!=null)
 			rhApplication.release();
 		
 		rhFS.removeDirectory("/waveforms/MPWaveform");
 		rhFS.removeDirectory("/components/MessageProducer");
+		
+		/*
+		 * Clean up component dir
+		 */
+		RedhawkTestUtils.runCommand("src/test/resources/components/MessageProducer/java", "make distclean");
 	}
 	
 	public class InMsgHandler implements MessageListener<myMessage_struct> {

@@ -21,6 +21,7 @@ package redhawk;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
@@ -30,6 +31,8 @@ import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.testutils.NodeBooterProxy;
+import redhawk.testutils.RedhawkTestUtils;
+import redhawk.testutils.StreamGobbler;
 
 public class NodeBooterProxyTestMT extends RedhawkTestBase{
 	private String sdrRoot = "/var/redhawk/sdr";
@@ -65,5 +68,25 @@ public class NodeBooterProxyTestMT extends RedhawkTestBase{
 		process.destroy();
 		
 		FileUtils.deleteDirectory(nodeDir);
+	}
+	
+	@Test
+	public void testBuildSh() throws IOException, InterruptedException{
+		//Run the component before deploying it
+		//Process p = RedhawkTestUtils.runBuildSh("src/test/resources/components/MessageProducer/", "build.sh");
+		
+		String workingDirectory = "src/test/resources/components/MessageProducer/";
+		
+		ProcessBuilder builder = new ProcessBuilder();
+		builder.directory(new File(workingDirectory));
+		builder.command("sh", "-c", "build.sh");
+		
+		Process process = builder.start();
+		StreamGobbler streamGobller = new StreamGobbler(process.getInputStream(), System.out::println);
+
+		Executors.newSingleThreadExecutor().submit(streamGobller);
+		
+		process.waitFor();
+
 	}
 }

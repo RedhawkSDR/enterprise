@@ -25,7 +25,7 @@ import java.io.InputStreamReader;
 import java.util.function.Consumer;
 
 /*
- * Soure is coming from this blog: 
+ * Source is coming from this blog: 
  * 	http://www.baeldung.com/run-shell-command-in-java
  */
 public class StreamGobbler implements Runnable{

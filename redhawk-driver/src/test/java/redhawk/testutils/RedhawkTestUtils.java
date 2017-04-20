@@ -24,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.io.FileUtils;
 
@@ -72,10 +73,32 @@ public class RedhawkTestUtils {
 		for(File file : moreFiles){
 			String destFile = "/components/"+file.getAbsolutePath().substring(file.getAbsolutePath().indexOf(rootPath));
 			
-			//Ignore build.sh 
+			//Ignorbue build.sh 
 			if(!destFile.endsWith("build.sh")){
 				rhFS.writeFile(new FileInputStream(file), destFile);
 			}
 		}
+	}
+	
+	/**
+	 * Run a generic command from a specific working directory. 
+	 * 
+	 * @param workingDirectory
+	 * @param shellName
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	public static void runCommand(String workingDirectory, String shellName) throws IOException, InterruptedException{
+		ProcessBuilder builder = new ProcessBuilder();
+		builder.directory(new File(workingDirectory));
+		builder.command("sh", "-c", shellName);
+		
+		Process process = builder.start();
+		
+		StreamGobbler streamGobller = new StreamGobbler(process.getInputStream(), System.out::println);
+		
+		Executors.newSingleThreadExecutor().submit(streamGobller);
+		
+		process.waitFor();
 	}
 }

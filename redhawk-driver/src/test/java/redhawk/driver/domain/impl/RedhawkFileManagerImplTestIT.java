@@ -30,7 +30,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import redhawk.RedhawkTestBase;
-import redhawk.driver.RedhawkDriver;
 import redhawk.driver.domain.RedhawkFileManager;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
@@ -52,7 +51,7 @@ public class RedhawkFileManagerImplTestIT extends RedhawkTestBase{
 		defaultRHWaveforms.add(baseLocation+"FM_RBDS_demo/FM_RBDS_demo.sad.xml");
 		defaultRHWaveforms.add(baseLocation+"short_file_to_float_file/short_file_to_float_file.sad.xml");
 		defaultRHWaveforms.add(baseLocation+"socket_loopback_demo/socket_loopback_demo.sad.xml");		
-		defaultRHWaveforms.add(baseLocation+"vita49_loopback_demo/vita49_loopback_demo.sad.xml");			
+		//defaultRHWaveforms.add(baseLocation+"vita49_loopback_demo/vita49_loopback_demo.sad.xml");			
 	}
 	
 	@Test

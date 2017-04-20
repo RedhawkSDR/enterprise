@@ -12,12 +12,11 @@ build:
   script:
     - mvn -P CFDependencies clean install -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository
     - mvn -Djava.io.tmpdir=./ deploy -P docs,jaxb-generation,default -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository
-    #- mvn -Djava.io.tmpdir=./ -P jaxb-generation,docs compile -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository
   artifacts:
     paths:
     - docs/target/asciidoc/html/index.html #Website for REDHAWK Java Tools User Manual
     - docs/target/asciidoc/pdf/index.pdf #PDF for REDHAWK Java Tools User Manual
-    - docs/target/rpm/redhawk-java-tools-docs/RPMS/noarch/*.rpm #RPM for installing REDHAWK Java Tools Docs in KARAF
-    - dist/target/java-tools.tar.gz #Tar of full distribution
-    - dist/target/rpm/redhawk-java-tools-dist/RPMS/noarch/*.rpm #RPM for distribution
-    - demo/demo-dist/target/rpm/redhawk-demo-dist/RPMS/noarch/*.rpm #RPM for deploying demos
+    - docs/target/rpm/redhawk-enterprise-integration-docs/RPMS/noarch/*.rpm #RPM for installing REDHAWK Java Tools Docs in KARAF
+    - dist/target/redhawk-enterprise-integration-dist.tar.gz #Tar of full distribution
+    - dist/target/rpm/redhawk-enterprise-integration-dist/RPMS/noarch/*.rpm #RPM for distribution
+    - demo/demo-dist/target/rpm/redhawk-enterprise-integration-demo-dist/RPMS/noarch/*.rpm #RPM for deploying demos

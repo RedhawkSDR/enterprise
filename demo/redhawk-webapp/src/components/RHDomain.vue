@@ -7,7 +7,7 @@
 				</md-toolbar>
 				<md-list>
 					<md-list-item>
-						<span>Waveforms
+						<span>Waveforms [ {{ numberOfWaveforms }} ]
 						</span>
 						<md-list-expand>
 							<md-list-item
@@ -24,36 +24,10 @@
 				</md-list>
 				<rhapplications></rhapplications>
 				<rhdevicemanagers></rhdevicemanagers>
-				<!--
-				TODO: Add ability to allocate a device restfully
-				<md-list-item>
-					<span>Device Managers</span>
-				</md-list-item>
-				-->
 			</md-layout>
 		</md-layout>
 		<redhawkapplication v-if="showApplication"></redhawkapplication>
 		<rhdevicemanager v-if="showDeviceManager"></rhdevicemanager>
-		<!--
-		<md-layout>
-			<md-layout md-flex md-column>
-				<md-layout md-align="center" class="rowHeight">
-					<plot></plot>
-				</md-layout>
-				<md-layout md-align="center" class="rowHeight">
-					<md-layout>
-						<waveformcomponents></waveformcomponents>
-					</md-layout>
-					<md-layout>
-						<componentports></componentports>
-					</md-layout>
-				</md-layout>
-			</md-layout>
-			<md-layout md-flex='25' v-if="showComponentProperties">
-				<editcomponentprops></editcomponentprops>
-			</md-layout>
-		</md-layout>
-		-->
 	</md-layout>
 </template>
 
@@ -85,6 +59,9 @@ export default {
 		},
 		availableWaveforms(){
 			return this.$store.getters.availableWaveforms
+		},
+		numberOfWaveforms(){
+			return this.availableWaveforms.length
 		},
 		domainConfig(){
 			return this.$store.getters.configToView

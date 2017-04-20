@@ -1,7 +1,7 @@
 <template>
 <md-list>
   <md-list-item>
-    <span>Device Managers</span>
+    <span>Device Managers [ {{ deviceManagerCount }} ]</span>
     <md-list-expand>
       <md-list-item
         class="md-inset"
@@ -32,6 +32,9 @@ export default {
   computed: {
     devicemanagers(){
       return this.$store.getters.devicemanagers
+    },
+    deviceManagerCount(){
+      return this.devicemanagers.length
     }
   },
   methods: {

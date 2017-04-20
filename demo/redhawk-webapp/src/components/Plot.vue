@@ -8,7 +8,7 @@
 		<label for="plotType">Plot Type</label>
 		<md-select name="plotType" id="plotType" v-model="plotType">
 			<md-option value="time">Time</md-option>
-			<md-option value="raster">Raster</md-option>
+			<!--<md-option value="raster">Raster</md-option> TODO: Make Raster work-->
 		</md-select>
 	</md-input-container>
 	</div>

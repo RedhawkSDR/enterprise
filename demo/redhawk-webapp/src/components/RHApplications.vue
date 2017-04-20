@@ -1,7 +1,7 @@
 <template>
 <md-list>
   <md-list-item>
-    <span>Applications</span>
+    <span>Applications [ {{ applicationCount}} ]</span>
     <md-list-expand>
       <md-list-item
         class="md-inset"
@@ -44,8 +44,13 @@ export default {
   name: 'rhwaveforms',
   computed: {
     waveforms(){
+      /*TODO: Clean up variable name should be applications
+      */
       console.log('Computing waveforms')
       return this.$store.getters.launchedWaveforms
+    },
+    applicationCount(){
+      return this.waveforms.length
     },
     showWaveformComponents(){
       return this.$store.getters.showWaveformComponents
@@ -63,7 +68,7 @@ export default {
       //Make sure device manager is no longer being shown
       var showDevManager = new Object()
       showDevManager.show = false
-      this.$store.dispatch('showDeviceManager', showDevManager) 
+      this.$store.dispatch('showDeviceManager', showDevManager)
       this.$store.dispatch('showApplication', true)
     },
     showController(data){

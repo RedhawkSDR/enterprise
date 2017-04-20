@@ -1,7 +1,7 @@
 <template>
   <div class="modal-mask">
     <div class="modal-wrapper">
-      <div class="modal-container">
+      <div class="rest-container">
         <md-toolbar>
           <h1 class="md-title">REST Resource Config</h1>
         </md-toolbar>
@@ -10,7 +10,7 @@
           <label>REDHAWK REST Root</label>
           <md-input v-model="redhawkRESTRoot"></md-input>
         </md-input-container>
-        <div>
+        <div style="text-align: center">
           <md-button class="md-raised md-warn" @click.native="cancel">close</md-button>
         </div>
       </div>
@@ -41,7 +41,7 @@ export default{
 
 
 <style>
-.modal-container {
+.rest-container {
   width: 400px;
   margin: 0px auto;
   background-color: #fff;

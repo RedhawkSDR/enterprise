@@ -1,5 +1,5 @@
 <template>
-	<div class="spa">
+	<div>
 		<md-toolbar>
 			<md-menu md-align-trigger>
 				<md-button md-menu-trigger class="md-icon-button">
@@ -113,7 +113,4 @@ export default {
 </script>
 
 <style>
-.spa {
-	overflow: hidden;
-}
 </style>

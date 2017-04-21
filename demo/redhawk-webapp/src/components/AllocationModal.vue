@@ -33,7 +33,7 @@
         <label>Sample Rate Tolerance</label>
         <md-input v-model="allocation.sampleRateTolerance"></md-input>
       </md-input-container>
-      <div>
+      <div style="text-align: center">
         <md-button class="md-raised md-warn" @click.native="cancel">Cancel</md-button>
         <!--<md-button class="md-raised md-primary" @click.native="allocate" :disabled="disableAllocate">Allocate</md-button>TODO: Make this work-->
         <md-button class="md-raised md-primary" @click.native="allocate">Allocate</md-button>
@@ -67,10 +67,6 @@ export default{
     allocate(){
       this.$store.dispatch('allocate', this.allocation)
 
-      //Need to force nextTick may be a cleaner way
-      this.$nextTick(function(){
-        console.log("Hello World")
-      })
       this.$store.dispatch('showAllocationModal', false)
     }
   },

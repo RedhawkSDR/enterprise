@@ -28,16 +28,6 @@
       >
     </tuner>
   </md-list>
-  <!--
-  <md-list>
-    <tuner
-      v-for="(tuner, index) in unusedTuners"
-      v-bind:tuner="tuner"
-      >
-    </tuner>
-  </md-list>
-
-  -->
 </md-list>
 </template>
 

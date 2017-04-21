@@ -409,9 +409,16 @@ function getUnusedTuners(state, deviceLabel){
   })
 }
 
-export const updateTuners = (state, deviceLabel) => {
-  getUsedTuners(state, deviceLabel)
-  getUnusedTuners(state, deviceLabel)
+function fdGetUsedTuners(state, deviceLabel){
+  var deviceUsedTuners = state.baseURI+'/devicemanagers/'+state.deviceManager.label+'/devices/'+deviceLabel+'/tuners/USED'
+
+  return axios.get(deviceUsedTuners)
+}
+
+function fdGetUnusedTuners(state, deviceLabel){
+  var deviceUnusedTuners = state.baseURI+'/devicemanagers/'+state.deviceManager.label+'/devices/'+deviceLabel+'/tuners/UNUSED'
+
+  return axios.get(deviceUnusedTuners)
 }
 
 export const showDeviceTuners = (state, show) => {
@@ -421,9 +428,11 @@ export const showDeviceTuners = (state, show) => {
   if(show.show){
     myState.tuners.device = show.device
 
-    axios.all([getUnusedTuners(myState, show.device.label), getUsedTuners(myState, show.device.label)])
-    .then(axios.spread(function(acct, perms){
+    axios.all([fdGetUnusedTuners(myState, show.device.label), fdGetUsedTuners(myState, show.device.label)])
+    .then(axios.spread(function(unused, used){
       console.log("Ran both requests")
+      myState.tuners.unusedTuners = unused.data
+      myState.tuners.usedTuners = used.data
       myState.showTuners = true
     }));
   }else{
@@ -442,9 +451,13 @@ export const deallocate = (state, deallocate) => {
   })
   .then(function(response){
     //After dellocation see if you can update device tuners being showTuners
-    axios.all([getUnusedTuners(myState, deallocate.deviceLabel), getUsedTuners(myState, deallocate.deviceLabel)])
-    .then(axios.spread(function(acct, perms){
-      console.log("Updated...")
+    axios.all([fdGetUnusedTuners(myState, deallocate.deviceLabel), fdGetUsedTuners(myState, deallocate.deviceLabel)])
+    .then(axios.spread(function(unused, used){
+      console.log("Updated on deallocate...")
+      console.log(unused)
+      console.log(used)
+      myState.tuners.unusedTuners = unused.data
+      myState.tuners.usedTuners = used.data
     }));
   })
   .catch(function(error){
@@ -479,9 +492,13 @@ export const allocate = (state, allocate) => {
   })
   .then(function(response){
     //After dellocation see if you can update device tuners being showTuners
-    axios.all([getUnusedTuners(myState, deviceLabel), getUsedTuners(myState, deviceLabel)])
-    .then(axios.spread(function(acct, perms){
-      console.log("Updated...")
+    axios.all([fdGetUnusedTuners(myState, deviceLabel), fdGetUsedTuners(myState, deviceLabel)])
+    .then(axios.spread(function(unused, used){
+      console.log("Updated on allocate...")
+      console.log(unused)
+      console.log(used)
+      myState.tuners.unusedTuners = unused.data
+      myState.tuners.usedTuners = used.data
     }));
   })
   .catch(function(error){

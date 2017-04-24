@@ -30,5 +30,5 @@ deploy:
   dependencies: []
   script:
   - if [ -n "$jenkins_url" ]; then
-      curl --insecure -X POST $jenkins_url/job/$jenkins_job/build --user $jenkins_user:$jenkins_api_token;
+      curl --insecure -X POST $jenkins_url/job/$jenkins_job/buildWithParameters?pipeline_id=$CI_PIPELINE_ID --user $jenkins_user:$jenkins_api_token;
     fi

@@ -46,7 +46,7 @@ build-release:
 #Trigger a Jenkins job to aggregate artifacts there
 deploy:
   variables:
-    jenkins_job: $redhawk_version/REDHAWK-enterprise-$CI_COMMIT_REF_NAME
+    jenkins_job: $redhawk_version/job/REDHAWK-enterprise-$CI_COMMIT_REF_NAME
   image: centos:7
   stage: deploy
   dependencies: []

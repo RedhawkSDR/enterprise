@@ -1,17 +1,20 @@
 #GitLab CI File for REDHAWK Integration Asset
 #Tutuorial on using GitLab CI: https://docs.gitlab.com/ce/ci/quick_start/README.html
 #Docs on format of CI file: https://docs.gitlab.com/ce/ci/yaml/README.html
+variables:
+  redhawk_version: '2.0.6'
 cache:
   key: "$CI_COMMIT_REF_NAME"
   paths:
     - cache/maven.repository
-build:
+.common: &common
   image: ${DOCKER_REGISTRY_URL}redbus/maven:3-jdk-8
-  script:
+  before_script:
     - mvn -P CFDependencies clean install -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository
-    - mvn -Djava.io.tmpdir=./ deploy -P docs,jaxb-generation,default -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository -Drelease=0.$CI_PIPELINE_ID
+  after_script:
     - mkdir -p output
-    - cp -r docs/target/asciidoc output/ #Docs artifacts
+    - cp docs/target/asciidoc/html/index.html output/index.html #Docs artifacts
+    - cp docs/target/asciidoc/pdf/index.pdf output/REDHAWK_Enterprise_v$redhawk_version.pdf
     - cp docs/target/rpm/redhawk-enterprise-integration-docs/RPMS/noarch/*.rpm output/ #RPM for installing REDHAWK Java Tools Docs in KARAF
     - cp dist/target/redhawk-enterprise-integration.tar.gz output/ #Tar of full distribution
     - cp dist/target/rpm/redhawk-enterprise-integration-dist/RPMS/noarch/*.rpm output/ #RPM for distribution
@@ -20,11 +23,30 @@ build:
   artifacts:
     name: $CI_JOB_NAME
     paths:
+      - output/index.html
+      - output/*.pdf
       - output.tar.gz
     expire_in: 3 days
 
+build:
+  <<: *common
+  script:
+    - mvn -Djava.io.tmpdir=./ deploy -P docs,jaxb-generation,default -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository -Drelease=0.$CI_PIPELINE_ID
+  only:
+    - branches
+
+build-release:
+  variables:
+  <<: *common
+  script:
+    - mvn -Djava.io.tmpdir=./ deploy -P docs,jaxb-generation,default -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository
+  only:
+    - tags
+
 #Trigger a Jenkins job to aggregate artifacts there
 deploy:
+  variables:
+    jenkins_job: $redhawk_version/REDHAWK-enterprise-$CI_COMMIT_REF_NAME
   image: centos:7
   stage: deploy
   dependencies: []

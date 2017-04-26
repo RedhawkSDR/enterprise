@@ -11,6 +11,18 @@
 
 ////
 
+This repository provides a suite of assets for interacting with REDHAWK from a JRE. Below are the main assets and a brief description: 
+
+* link:redhawk-driver/readme.adoc[REDHAWK Driver]: Provides simplified access to REDHAWK via standard Java interfaces. This Asset shields all interaction with the underlying REDHAWK Components and provides a simplified API for Java developers interacting with a REDHAWK Domain. The REDHAWK Driver can be leveraged as a standalone Java Archive (JAR) file.
+
+* link:redhawk-connector/readme.adoc[REDHAWK OSGi Connecto]r: Implements OSGi’s Managed Service Factory interface to allow users to register pre-configured instances of REDHAWK connections into a Karaf container.
+
+* link:redhawk-rest/readme.adoc[REDHAWK REST]: Provides a REST Service to command and control a REDHAWK instance.
+
+* link:redhawk-websocket/readme.adoc[REDHAWK WebSocket]: Provides an HTML5-compliant WebSocket implementation that enables the ability to stream data from any REDHAWK BulkIO-enabled Port or Event Channel.
+
+* link:redhawk-camel/readme.adoc[Camel REDHAWK]: Provides a Camel Component for interacting with a REDHAWK Domain. This Component can be connected with other Apache Camel Components as a data flow solution.
+
 == Building From Source 
 
 
@@ -78,3 +90,7 @@ You'll need to specify the java.io.tmpdir with your maven command. So your comma
 ----
 mvn -P -Djava.io.tmpdir=./ -P jaxb-generation,docs compile
 ----
+
+== Copyright 
+
+This work is protected by Copyright. Please refer to the link:COPYRIGHT[COPYRIGHT File] for more details.

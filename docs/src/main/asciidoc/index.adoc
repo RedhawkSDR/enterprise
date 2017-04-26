@@ -1,13 +1,11 @@
 = REDHAWK Enterprise Integration User Guide
-
 {project-version}
-
 {timestamp}
+ifndef::imagesdir[:imagesdir: images]
 
 //:docinfo: docinfo  
 
-//image::RedHawk_Logo.png[]
-
+//image::RedHawk_Logo.png[scaledwidth=30%]
 
 include::introduction.adoc[]
 

@@ -12,6 +12,8 @@
 	<properties>
 		<docs.directory>${runtime.basedir}/docs</docs.directory>
 		<release>1</release>
+		<timestamp>${maven.build.timestamp}</timestamp>
+		<maven.build.timestamp.format>MM-dd-yyyy</maven.build.timestamp.format>
 	</properties>
 	<build>
 		<resources>
@@ -124,7 +126,11 @@
 				<configuration>
 					<sourceDirectory>${project.build.directory}/asciidoc-workspace</sourceDirectory>
 					<sourceDocumentName>index.adoc</sourceDocumentName>
-				</configuration>
+				        <attributes>
+				            <project-version>${project.version}</project-version>
+					    <timestamp>${timestamp}</timestamp>
+				        </attributes>    
+                                </configuration>
 				<executions>
 					<execution>
 						<id>output-html</id>
@@ -159,6 +165,7 @@
 							<attributes>
 							 	<pdf-stylesdir>${project.basedir}/src/theme</pdf-stylesdir>
 								<pdf-style>custom</pdf-style>
+								<imagesdir>${project.basedir}/src/main/asciidoc/images</imagesdir>
 								<icons />
 								<pagenums />
 								<toc />

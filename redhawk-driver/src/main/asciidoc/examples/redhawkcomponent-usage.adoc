@@ -1,4 +1,4 @@
-== RedhawkComponent Code Examples
+== `RedhawkComponent` Code Examples
 
 The following code examples explain how to use the `RedhawkComponent` class. 
 

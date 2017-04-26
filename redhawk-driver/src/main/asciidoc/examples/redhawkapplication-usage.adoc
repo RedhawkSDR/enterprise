@@ -1,4 +1,4 @@
-== RedhawkApplication Code Examples
+== `RedhawkApplication` Code Examples
 
 The following code examples explain how to use the `RedhawkApplication` class. 
 

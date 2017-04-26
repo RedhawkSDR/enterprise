@@ -28,6 +28,12 @@ include::driver/examples/redhawkapplication-usage.adoc[]
 
 include::driver/examples/redhawkcomponent-usage.adoc[]
 
+include::driver/examples/redhawkport-usage.adoc[]
+
+include::driver/examples/redhawkdevice-usage.adoc[]
+
+device-usage
+
 include::driver/examples/redhawkeventchannelmanager-usage.adoc[]
 
 

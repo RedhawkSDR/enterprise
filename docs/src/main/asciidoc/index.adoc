@@ -1,10 +1,13 @@
 = REDHAWK Enterprise Integration User Guide
-//:docinfo: docinfo  
-
-\\image::RedHawk_Logo.png[]
 
 {project-version}
+
 {timestamp}
+
+//:docinfo: docinfo  
+
+//image::RedHawk_Logo.png[]
+
 
 include::introduction.adoc[]
 

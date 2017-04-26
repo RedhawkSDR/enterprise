@@ -273,7 +273,7 @@
 					</requires>
 					<mappings>
 						<mapping>
-							<directory>${redhawk.user.home}</directory>
+							<directory>${runtime.basedir}</directory>
 							<username>root</username>
 							<groupname>redhawk</groupname>
 							<filemode>755</filemode>

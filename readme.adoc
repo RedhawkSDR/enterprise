@@ -1,4 +1,4 @@
-= Redhawk Integration
+= Redhawk Enterprise Integration
 
 ////
 * [Redhawk Driver](redhawk-driver/readme.md): Library that enables Java developer to interact with REDHAWK. Provides the ability to command & control your REDHAWK instance programatically.  
@@ -14,7 +14,7 @@
 == Building From Source 
 
 
-The REHDAWK Integration assets depends on some dependencies that Core Framework builds:
+The REHDAWK Enterprise Integration assets depends on some dependencies that Core Framework builds:
 
 * ossie
 * BULKIOInterfaces

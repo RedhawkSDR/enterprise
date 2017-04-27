@@ -20,7 +20,7 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 -->
 <features name="redhawk-enterprise-integration-2.0.0-SNAPSHOT" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0">
 	<repository>mvn:org.apache.karaf.features/standard/4.0.8/xml/features</repository>
-	<repository>mvn:org.apache.cxf.karaf/apache-cxf/3.1.9/xml/features</repository>
+	<repository>mvn:org.apache.cxf.karaf/apache-cxf/3.1.10/xml/features</repository>
 	<repository>mvn:org.apache.camel.karaf/apache-camel/2.17.5/xml/features</repository>
 	<feature name="redhawk-enterprise-integration-driver" version="2.0.0-SNAPSHOT">
 		<bundle>mvn:redhawk/redhawk-driver/2.0.0-SNAPSHOT</bundle>
@@ -35,9 +35,11 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 	
 	<feature name="redhawk-enterprise-integration-rest" version="2.0.0-SNAPSHOT">
 		<feature version="2.0.0-SNAPSHOT">redhawk-enterprise-integration-connector</feature>
-		<feature version="3.1.9">cxf-core</feature>
-		<feature version="3.1.9">cxf-rs-security-cors</feature>
-		<feature version="3.1.9">cxf-rs-description-swagger2</feature>
+		<feature version="3.1.10">cxf-core</feature>
+		<feature version="3.1.10">cxf-rs-security-cors</feature>
+		<feature version="3.1.10">cxf-rs-description-swagger2</feature>
+		<!-- CXF 3.1.10 has a bug where you can't install the CXF feature -->
+		<bundle>mvn:org.yaml/snakeyaml/1.17</bundle>
 		<!-- JACKSON -->
 		<bundle>mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-xml/2.8.3</bundle>
 		<bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/2.8.3</bundle>

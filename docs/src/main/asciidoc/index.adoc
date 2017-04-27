@@ -1,9 +1,17 @@
 = REDHAWK Enterprise Integration User Guide
 {project-version}
 {timestamp}
-ifndef::imagesdir[:imagesdir: images]
+
+//ifndef::imagesdir{:imagesdir: images]
+
+:title-logo-image: image:images/RedHawk_Logo.png[scaledwidth=30%]
+
+
+
 
 //:docinfo: docinfo  
+
+
 
 //image::RedHawk_Logo.png[scaledwidth=30%]
 
@@ -76,7 +84,8 @@ include::demo/README.adoc[]
 
 ifdef::pdf-style[]
 = Copyright
-Copyright � 2012-2017 United States Government, as represented by the Secretary of
+
+Copyright (c) 2012-2017 United States Government, as represented by the Secretary of
 Defense.  All rights reserved. Any reproduction of this computer software, or portions thereof,
 marked with this legend must also reproduce these markings.
 endif::pdf-style[]

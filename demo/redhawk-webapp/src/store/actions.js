@@ -2,10 +2,16 @@
 import axios from 'axios'
 
 //Helper functions
-function getUsedTuners(state, deviceLabel){
+function getUsedTuners(deviceLabel){
   var deviceUsedTuners = state.baseURI+'/devicemanagers/'+state.deviceManager.label+'/devices/'+deviceLabel+'/tuners/USED'
 
   return axios.get(deviceUsedTuners)
+}
+
+function getUnusedTuners(deviceLabel){
+  var deviceUnusedTuners = state.baseURI+'/devicemanagers/'+state.deviceManager.label+'/devices/'+deviceLabel+'/tuners/UNUSED'
+
+  return axios.get(deviceUnusedTuners)
 }
 
 //Actions for editting domain configuration info.
@@ -56,8 +62,10 @@ export const showDeviceProperties = ({ commit }, show) => commit('showDeviceProp
 
 export const deallocate = ({ commit }, deallocate) => commit('deallocate', deallocate)
 export const showAllocationModal = ({ commit }, show) => commit('showAllocationModal', show)
-export const allocate = ({ commit }, allocate) => {
-  commit('allocate', allocate)
+export const allocate = (context, allocate) => {
+  //context
+  console.log(context)
+  //commit('allocate', allocate)
 }
 
 export const updateRedhawkRESTRoot = ({ commit }, updateURL ) => commit('updateRedhawkRESTRoot', updateURL)

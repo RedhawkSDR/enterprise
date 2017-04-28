@@ -31,6 +31,7 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
+import org.apache.commons.io.FileUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -73,6 +74,11 @@ public class RedhawkEventChannelEndpointTestIT extends CamelTestSupport{
 		driver = new RedhawkDriver();
 		
 		rhFS = driver.getDomain().getFileManager();
+
+		//Need to make sure EventSpitter is not still left over. 
+		if(!rhFS.findDirectories("/components/EventSpitter").isEmpty()){
+			rhFS.removeDirectory("/components/EventSpitter");
+		}
 
 		//Run build.sh so component can have necessary files
 		RedhawkTestUtils.runCommand("../demo/camel-event-channel/src/main/resources/EventSpitter", "build.sh");

@@ -58,6 +58,10 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.testutils.RedhawkTestUtils;
 
+/*
+ * User running this test must be in the REDHAWK group in order for this to work. 
+ * Possibly add in a check for that. 
+ */
 public class MessageConsumerPortTestIT extends RedhawkTestBase{	
 	private RedhawkFileSystem rhFS;
 	
@@ -80,10 +84,11 @@ public class MessageConsumerPortTestIT extends RedhawkTestBase{
 		rhFS = driver.getDomain().getFileManager();
 		
 		//Run build.sh so component can have necessary files
+		//TODO: build.sh install works on my box not on vm for some reason. 
 		RedhawkTestUtils.runCommand("src/test/resources/components/MessageProducer/", "build.sh");
 
 		//Deploy example component
-		RedhawkTestUtils.writeJavaComponentToCF("src/test/resources/components/MessageProducer", rhFS);	
+		//RedhawkTestUtils.writeJavaComponentToCF("src/test/resources/components/MessageProducer", rhFS);	
 		
 		//Deploy application
 		rhApplication = driver.getDomain().createApplication("myMessageProducer", new File("src/test/resources/waveforms/MPWaveform/MPWaveform.sad.xml"));

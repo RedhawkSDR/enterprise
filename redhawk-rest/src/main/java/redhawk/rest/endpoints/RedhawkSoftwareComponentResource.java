@@ -30,7 +30,6 @@ import javax.ws.rs.core.Response;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import redhawk.rest.RedhawkManager;
 import redhawk.rest.exceptions.ResourceNotFound;
 
 @Path("/{nameserver}/domains/{domain}/applications/{applicationId}/components/{componentId}/softwarecomponent")

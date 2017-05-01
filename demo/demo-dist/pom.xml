@@ -49,7 +49,7 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<finalName>${runtime.dir}</finalName>
+							<finalName>${project.artifactId}</finalName>
 							<descriptors>
 								<descriptor>${project.build.directory}/assembly/assembly.xml</descriptor>
 							</descriptors>

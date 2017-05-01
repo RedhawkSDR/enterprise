@@ -52,52 +52,24 @@ export const viewDomainConfig = (state, domain) => {
   state.showDomain = true
 }
 
-//TODO: Merge this with viewDomain config and execute in parralel
-export const getWaveformsAvailable = (state, index) => {
-  //Setting Waveforms based on config
-  var myState = state
-
-  axios.get(state.baseURI+'/waveforms.json')
-  .then(function(response){
-    var availableWaveforms = response.data.domains
-    myState.availableWaveforms = availableWaveforms
-  })
-}
-
-export const showWaveformComponents = (state, index) => {
-  state.applicationName = state.launchedWaveforms[index].name
+export const showWaveformComponents = (state, appInfo) => {
+  state.applicationName = appInfo.applicationName
 
   //TODO: Refactor to not care about applicationName just have vuex track the waveform
-  state.application = state.launchedWaveforms[index]
+  state.application = appInfo.application
 
   //If the application name changes ports show no longer show up
   if(state.componentPorts!=null){
     state.componentPorts = []
   }
 
-  var myState = state
-  axios.get(state.baseURI+'/applications/'+state.applicationName+'/components.json')
-  .then(function(response){
-      myState.waveformComponents = response.data.components
-      myState.showWaveformComponents = true
-  })
-  .catch(function(error){
-    console.log("ERROR: "+error)
-  })
+  state.waveformComponents = appInfo.applicationComponents
+  state.showWaveformComponents = true
 }
 
-export const showComponentPorts = (state, index) => {
-  console.log("Makeing it to show component ports")
-  state.portsComponentName = state.waveformComponents[index].name
-  console.log('Component Name: '+state.componentName)
-  var myState = state
-  axios.get(state.baseURI+'/applications/'+state.applicationName+'/components/'+state.portsComponentName+'/ports.json')
-  .then(function(response){
-    myState.componentPorts = response.data.ports
-  })
-  .catch(function(error){
-    console.log("ERROR "+error)
-  })
+export const showComponentPorts = (state, componentPorts) => {
+  state.portsComponentName = componentPorts.name
+  state.componentPorts = componentPorts.ports
 }
 
 export const showComponentProperties = (state, index) => {
@@ -336,18 +308,6 @@ export const showDevicePorts = (state, show) => {
   }
 }
 
-function fdGetUsedTuners(state, deviceLabel){
-  var deviceUsedTuners = state.baseURI+'/devicemanagers/'+state.deviceManager.label+'/devices/'+deviceLabel+'/tuners/USED'
-
-  return axios.get(deviceUsedTuners)
-}
-
-function fdGetUnusedTuners(state, deviceLabel){
-  var deviceUnusedTuners = state.baseURI+'/devicemanagers/'+state.deviceManager.label+'/devices/'+deviceLabel+'/tuners/UNUSED'
-
-  return axios.get(deviceUnusedTuners)
-}
-
 export const showDeviceTuners = (state, show) => {
   if(show.show){
     state.tuners.device = show.device
@@ -361,11 +321,6 @@ export const showDeviceTuners = (state, show) => {
 }
 
 export const updateTunersData = (state, tuners) => {
-  state.tuners.unusedTuners = tuners.unusedTuners
-  state.tuners.usedTuners = tuners.usedTuners
-}
-
-export const deallocate = (state, tuners) => {
   state.tuners.unusedTuners = tuners.unusedTuners
   state.tuners.usedTuners = tuners.usedTuners
 }

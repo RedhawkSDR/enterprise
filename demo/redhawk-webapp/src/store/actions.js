@@ -82,11 +82,42 @@ export const viewDomainConfig = ({ commit, getters }, index) => {
 
   //TODO: Add in appropriate alert on error
 }
-export const getWaveformsAvailable = ({ commit }, index) => commit('getWaveformsAvailable', index)
 
-export const showWaveformComponents = ({ commit }, index) => commit('showWaveformComponents', index)
-export const showComponentPorts = ({ commit }, index) => commit('showComponentPorts', index)
-export const showComponentProperties = ({ commit }, index) => commit('showComponentProperties', index)
+export const showWaveformComponents = ({ commit, getters }, index) => {
+  var application = getters.launchedWaveforms[index]
+  var applicationName = application.name
+  var applicationURL = getters.baseURI + '/applications/'+applicationName+'/components.json'
+
+  axios.get(applicationURL)
+  .then(function(response){
+    var applicationInfo = new Object()
+
+    applicationInfo.application = application
+    applicationInfo.applicationName = applicationName
+    applicationInfo.applicationComponents = response.data.components
+
+    commit('showWaveformComponents', applicationInfo)
+  })
+}
+
+export const showComponentPorts = ({ commit, getters }, index) => {
+  var portsComponentName = getters.waveformComponents[index].name
+  var componentPortsURL = getters.baseURI+'/applications/'+getters.applicationName+'/components/'+portsComponentName+'/ports.json'
+
+  axios.get(componentPortsURL)
+  .then(function(response){
+    var componentPorts = new Object()
+    componentPorts.name = portsComponentName
+    componentPorts.ports = response.data.ports
+
+    commit('showComponentPorts', componentPorts)
+  })
+}
+
+export const showComponentProperties = ({ commit }, index) => {
+  commit('showComponentProperties', index)
+}
+
 export const updateComponentProperty = ({ commit }, property) => commit('updateComponentProperty', property)
 
 //Waveform Controller props

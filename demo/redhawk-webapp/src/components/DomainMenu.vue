@@ -25,7 +25,6 @@ export default {
 		viewDomain: function(data){
       this.$store.dispatch('resetDomain')
 			this.$store.dispatch('viewDomainConfig', data)
-      //this.$store.dispatch('getWaveformsAvailable', data)
 		}
   }
 }

@@ -23,6 +23,16 @@ This repository provides a suite of assets for interacting with REDHAWK from a J
 
 * link:redhawk-camel/readme.adoc[Camel REDHAWK]: Provides a Camel Component for interacting with a REDHAWK Domain. This Component can be connected with other Apache Camel Components as a data flow solution.
 
+== Demo Assets
+
+* link:camel-event-channel/README.adoc[Camel Event Channel Demo]
+
+* link:demo/redhawk-webapp/README.md[REDHAWK Webapp Demo]
+
+== Archetypes
+
+* link:archetypes/redhawk-driver-bundle-archetype/readme.adoc[REDHAWK Driver Archetype]
+
 == Building From Source 
 
 

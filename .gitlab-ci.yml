@@ -19,6 +19,7 @@ cache:
     - cp dist/target/redhawk-enterprise-integration.tar.gz output/ #Tar of full distribution
     - cp dist/target/rpm/redhawk-enterprise-integration-dist/RPMS/noarch/*.rpm output/ #RPM for distribution
     - cp demo/demo-dist/target/rpm/redhawk-enterprise-integration-demo-dist/RPMS/noarch/*.rpm output/ #RPM for deploying demos
+    - cp demo/demo-dist/target/redhawk-enterprise-integration-demo-dist.tar.gz output/ #tar for deploying demos
     - tar zcvf output.tar.gz output/
   artifacts:
     name: $CI_JOB_NAME

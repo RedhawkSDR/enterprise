@@ -36,7 +36,7 @@ import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.xml.model.sca.sad.Softwareassembly;
 
-public class RedhawkFileManagerImplTestIT extends RedhawkTestBase{
+public class RedhawkFileManagerImplIT extends RedhawkTestBase{
 	private RedhawkFileManager fileManager; 
 	
 	private List<String> defaultRHWaveforms = new ArrayList<>();

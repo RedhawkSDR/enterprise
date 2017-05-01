@@ -47,8 +47,8 @@ import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 
-public class RedhawkDriverTestIT {
-	private static Logger logger = Logger.getLogger(RedhawkDriverTestIT.class.getName());
+public class RedhawkDriverIT {
+	private static Logger logger = Logger.getLogger(RedhawkDriverIT.class.getName());
 	
 	private String domainName;
 	

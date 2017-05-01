@@ -36,7 +36,7 @@ import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 
-public class RedhawkFileSystemTestIT extends RedhawkTestBase{
+public class RedhawkFileSystemIT extends RedhawkTestBase{
 	private RedhawkFileSystem domainFileSystem; 
 	
 	private RedhawkFileSystem deviceManagerFileSystem;

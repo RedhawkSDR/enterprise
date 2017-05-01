@@ -64,7 +64,7 @@ import redhawk.testutils.RedhawkTestUtils;
  * 
  * sudo /usr/sbin/usermod -a -G redhawk <user name>
  */
-public class MessageConsumerPortTestIT extends RedhawkTestBase{	
+public class MessageConsumerPortIT extends RedhawkTestBase{	
 	private RedhawkFileSystem rhFS;
 	
 	private RedhawkApplication rhApplication;
@@ -126,40 +126,6 @@ public class MessageConsumerPortTestIT extends RedhawkTestBase{
 			e.printStackTrace();
 		}
 	}
-	
-	/*
-	 * @Test
-	public void testSteveConsumer() throws InvalidName, ResourceNotFoundException, MultipleResourceException, CORBAException, ServantAlreadyActive, WrongPolicy, AdapterInactive{
-		MessageConsumerPort msgConsumerPort = new MessageConsumerPort("tnav-consumer");
-		msgConsumerPort.registerMessage("test_msg", test_msg_struct.class, new SteveMsgHandler());	
-		POA rootPOA = POAHelper.narrow(driver.getOrb().resolve_initial_references("RootPOA"));	
-		
-		rootPOA.the_POAManager().activate();
-		rootPOA.activate_object(msgConsumerPort);
-		
-		RedhawkPort port = driver.getDomain().getApplicationByName("MSPw.*").getComponentByName("MSP_1.*").getPort("msg_out");
-		
-		try{
-			CF.Port messageConsumerPort = CF.PortHelper.narrow(port.getCorbaObject());
-			messageConsumerPort.connectPort(msgConsumerPort._this(), "test-message-processing");
-
-			Thread.sleep(30000l);
-		}catch(Exception ex){
-			ex.printStackTrace();
-		}
-	}
-	
-	public class SteveMsgHandler implements MessageListener<test_msg_struct>{
-		public SteveMsgHandler(){}
-		
-		@Override
-		public void messageReceived(String messageId, test_msg_struct messageData) {
-			// TODO Auto-generated method stub
-			logger.info("messageReceived called: (jacorb callback) " + messageId + " data " + messageData.get_msg());			
-		}
-	}
-	
-	*/
 	
 	@After
 	public void cleanup() throws IOException, ApplicationReleaseException, InterruptedException{

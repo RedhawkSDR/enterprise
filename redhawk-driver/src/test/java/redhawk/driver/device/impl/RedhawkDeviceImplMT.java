@@ -43,12 +43,12 @@ import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 
 /*
- * This is currently a manual test until I figure out how to automatically launch a node from the REDHAWK Driver. 
+ * This is currently a manual test(MT) until I figure out how to automatically launch a node from the REDHAWK Driver. 
  * 
  * Test relies on the SimulatorNode in src/test/resources being available from the DeviceManager on your domain. 
  *TODO: Make this work with mvn clean install -P localIT
  */
-public class RedhawkDeviceImplTestMT extends RedhawkTestBase {
+public class RedhawkDeviceImplMT extends RedhawkTestBase {
 	private File nodeDir;
 	
 	Process devMgrProcess; 

@@ -53,7 +53,7 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.xml.model.sca.sad.Softwareassembly;
 
 
-public class RedhawkDomainManagerImplTestIT extends RedhawkTestBase{
+public class RedhawkDomainManagerImplIT extends RedhawkTestBase{
 	private RedhawkDomainManager domainManager;
 	
 

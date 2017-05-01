@@ -26,7 +26,7 @@ import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
 
-public class RedhawkDeviceManagerImplTestIT extends RedhawkTestBase{
+public class RedhawkDeviceManagerImplIT extends RedhawkTestBase{
 	@Test
 	public void test() throws MultipleResourceException, CORBAException, Exception{
 		//Create a device manager

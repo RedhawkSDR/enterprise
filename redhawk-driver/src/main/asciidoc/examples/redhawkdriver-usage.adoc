@@ -6,42 +6,42 @@ The following code examples explain how to use the `RedhawkDriver` class.
 
 [source,java,indent=0]
 ----
-include::snippets/RedhawkDriverTestIT.java[lines=165]
+include::snippets/RedhawkDriverIT.java[lines=165]
 ----
 
 === Get a REDHAWK Device Manager  
 
 [source,java,indent=0]
 ----
-include::snippets/RedhawkDriverTestIT.java[lines=114..119]
+include::snippets/RedhawkDriverIT.java[lines=114..119]
 ----
 
 === Get a REDHAWK Device  
 
 [source,java,indent=0]
 ----
-include::snippets/RedhawkDriverTestIT.java[lines=124..129]
+include::snippets/RedhawkDriverIT.java[lines=124..129]
 ----
 
 === Get a REDHAWK Application 
 
 [source,java,indent=0]
 ----
-include::snippets/RedhawkDriverTestIT.java[lines=170]
+include::snippets/RedhawkDriverIT.java[lines=170]
 ----
 
 === Get a REDHAWK Component 
 
 [source,java,indent=0]
 ----
-include::snippets/RedhawkDriverTestIT.java[lines=175]
+include::snippets/RedhawkDriverIT.java[lines=175]
 ----
 
 === Get a REDHAWK Component's Port
 
 [source,java,indent=0]
 ----
-include::snippets/RedhawkDriverTestIT.java[lines=179]
+include::snippets/RedhawkDriverIT.java[lines=179]
 ----
 
 === Helper Utility Examples 
@@ -50,6 +50,6 @@ The RedhawkDriver includes helper utilities to enable users to easily access the
 
 [source,java,indent=0]
 ----
-include::snippets/RedhawkDriverTestIT.java[lines=134..141]
+include::snippets/RedhawkDriverIT.java[lines=134..141]
 ----
 

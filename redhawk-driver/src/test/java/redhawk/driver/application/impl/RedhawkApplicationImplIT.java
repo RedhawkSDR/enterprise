@@ -46,7 +46,7 @@ import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 
-public class RedhawkApplicationImplTestIT extends RedhawkTestBase{	
+public class RedhawkApplicationImplIT extends RedhawkTestBase{	
 	private static String applicationName = "myTestApplication"; 
 	
 	private static RedhawkApplication application; 

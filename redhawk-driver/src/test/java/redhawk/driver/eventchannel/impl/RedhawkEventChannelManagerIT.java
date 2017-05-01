@@ -37,7 +37,7 @@ import redhawk.driver.exceptions.EventChannelCreationException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 
-public class RedhawkEventChannelManagerTestIT extends RedhawkTestBase{
+public class RedhawkEventChannelManagerIT extends RedhawkTestBase{
 	private RedhawkDomainManager impl;
 	
 	private RedhawkEventChannelManager eventChannelManager; 

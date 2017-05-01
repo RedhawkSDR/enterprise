@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-package redhawk.driver.component.impl;
+package redhawk.driver.properties;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -38,21 +38,18 @@ import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.CORBAException;
-import redhawk.driver.exceptions.ComponentStartException;
-import redhawk.driver.exceptions.ComponentStopException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
-import redhawk.driver.port.RedhawkPort;
-import redhawk.driver.properties.RedhawkProperty;
-import redhawk.driver.properties.RedhawkSimple;
 
-public class RedhawkComponentImplTestIT extends RedhawkTestBase{
-		private String applicationName = "myTestApplication"; 
+public class RedhawkPropertyIT extends RedhawkTestBase{
+	private String applicationName = "myTestApplication"; 
 	
 	private RedhawkApplication application; 
 	
 	private List<RedhawkComponent> components; 
+	
+	private List<RedhawkProperty> properties; 
 	
 	@Before
 	public void setup() throws ResourceNotFoundException, ApplicationCreationException, CORBAException, MultipleResourceException{
@@ -63,55 +60,34 @@ public class RedhawkComponentImplTestIT extends RedhawkTestBase{
 	}
 	
 	@Test
-	public void testComponentManagementLifecycle() throws ComponentStartException, ComponentStopException{
+	public void testSettingProperties() throws Exception{
 		for(RedhawkComponent component : components){
-			component.start();
-			assertEquals("Component should be started", true, component.started());
-			component.stop();
-			assertEquals("Component should be stopped.", false, component.started());
-		}
-	}
-	
-	@Test
-	public void testAccessToComponentPorts() throws ResourceNotFoundException, MultipleResourceException{
-		for(RedhawkComponent component : components){
-			for(RedhawkPort port : component.getPorts()){
-				assertNotNull(component.getPort(port.getName()));
-			}
-		}
-	}
-	
-	//SNIPPET 
-	@Test
-	public void snippets() throws Exception{
-		//Get your component
-		RedhawkComponent component = application.getComponentByName("SigGen.*");
-		
-		//Retrieve properties that are avaiable
-		Map<String, RedhawkProperty> propertiesMap = component.getProperties();
-		
-		//Change a specific property 
-		String propertyName = "sample_rate";
-		RedhawkSimple simpleProp = (RedhawkSimple) propertiesMap.get(propertyName);
-		simpleProp.setValue(1000);
-		
-		//Stop a component
-		component.stop();
-		
-		//Start a component
-		component.start();
-		
-		//Check if a component is started 
-		if(!component.started())
-			component.start();
-	}
-	//SNIPPET
-	
-	@Test
-	public void testAccessToComponentProperties() throws ResourceNotFoundException, MultipleResourceException{
-		for(RedhawkComponent component : components){
-			for(String propertyName : component.getProperties().keySet()){
-				assertNotNull(component.getProperty(propertyName));
+			for(Map.Entry<String, RedhawkProperty> propertyEntry : component.getProperties().entrySet()){
+				RedhawkProperty property = propertyEntry.getValue();
+				if(property instanceof RedhawkSimple){
+					RedhawkSimple simpleProperty = (RedhawkSimple) property;
+					if(simpleProperty.getValue() instanceof String){
+						simpleProperty.setValue("Foo");
+						assertEquals("Foo", simpleProperty.getValue());
+					}else if(simpleProperty.getValue() instanceof Double){
+						simpleProperty.setValue(10d);
+						assertEquals(10d, simpleProperty.getValue());
+					}else if(simpleProperty.getValue() instanceof Boolean){
+						Boolean originalVal = (Boolean)simpleProperty.getValue();
+						simpleProperty.setValue(!originalVal);
+						assertEquals(!originalVal, simpleProperty.getValue());
+					}else if(simpleProperty.getValue() instanceof Integer){
+						simpleProperty.setValue(7);
+						assertEquals(7, simpleProperty.getValue());
+					}else if(simpleProperty.getValue() instanceof Float){
+						simpleProperty.setValue(700f);
+						assertEquals(700f, simpleProperty.getValue());
+					}else{
+						System.out.println("Property type not accounted for "+simpleProperty.getValue().getClass());
+					}
+				}else{
+					System.out.println(property.getClass());
+				}
 			}
 		}
 	}

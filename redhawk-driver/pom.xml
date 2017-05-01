@@ -286,49 +286,49 @@
 											<directory>src/test/java/redhawk/driver</directory>
 											<targetPath>examples/snippets</targetPath>
 											<includes>
-												<include>RedhawkDriverTestIT.java</include>
+												<include>RedhawkDriverIT.java</include>
 											</includes>
 										</resource>
 										<resource>
 											<directory>src/test/java/redhawk/driver/application/impl</directory>
 											<targetPath>examples/snippets</targetPath>
 											<includes>
-												<include>RedhawkApplicationImplTestIT.java</include>
+												<include>RedhawkApplicationImplIT.java</include>
 											</includes>
 										</resource>
 										<resource>
 											<directory>src/test/java/redhawk/driver/domain/impl</directory>
 											<targetPath>examples/snippets</targetPath>
 											<includes>
-												<include>RedhawkDomainManagerImplTestIT.java</include>
+												<include>RedhawkDomainManagerImplIT.java</include>
 											</includes>
 										</resource>
 										<resource>
 											<directory>src/test/java/redhawk/driver/component/impl</directory>
 											<targetPath>examples/snippets</targetPath>
 											<includes>
-												<include>RedhawkComponentImplTestIT.java</include>
+												<include>RedhawkComponentImplIT.java</include>
 											</includes>
 										</resource>
 										<resource>
 											<directory>src/test/java/redhawk/driver/eventchannel/impl</directory>
 											<targetPath>examples/snippets</targetPath>
 											<includes>
-												<include>RedhawkEventChannelManagerTestIT.java</include>
+												<include>RedhawkEventChannelManagerIT.java</include>
 											</includes>
 										</resource>
 										<resource>
 											<directory>src/test/java/redhawk/driver/device/impl</directory>
 											<targetPath>examples/snippets</targetPath>
 											<includes>
-												<include>RedhawkDeviceImplTestMT.java</include>
+												<include>RedhawkDeviceImplMT.java</include>
 											</includes>
 										</resource>
 										<resource>
 											<directory>src/test/java/redhawk/driver/port/impl</directory>
 											<targetPath>examples/snippets</targetPath>
 											<includes>
-												<include>MessageConsumerPortTestIT.java</include>
+												<include>MessageConsumerPortIT.java</include>
 											</includes>
 										</resource>
 										<resource>

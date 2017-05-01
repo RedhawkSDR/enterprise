@@ -34,7 +34,7 @@ import redhawk.testutils.NodeBooterProxy;
 import redhawk.testutils.RedhawkTestUtils;
 import redhawk.testutils.StreamGobbler;
 
-public class NodeBooterProxyTestMT extends RedhawkTestBase{
+public class NodeBooterProxyMT extends RedhawkTestBase{
 	private String sdrRoot = "/var/redhawk/sdr";
 	
 	private String deviceManagerHome = this.sdrRoot+"/dev";

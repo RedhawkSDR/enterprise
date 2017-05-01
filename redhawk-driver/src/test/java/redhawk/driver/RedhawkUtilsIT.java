@@ -32,7 +32,7 @@ import BULKIO.StreamSRI;
 import CF.DataType;
 import CF.PropertiesHelper;
 
-public class RedhawkUtilsTestIT {
+public class RedhawkUtilsIT {
 	private static StreamSRI sri1;
 	
 	private static StreamSRI sri2;

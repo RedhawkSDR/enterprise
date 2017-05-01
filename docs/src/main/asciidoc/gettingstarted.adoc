@@ -1,6 +1,6 @@
 == Getting Started
 
-After installing REDHAWK Enterprise Integration, the following directories are displayed.
+After installing REDHAWK Enterprise Integration, the following directories are displayed:
 
 * `karaf-${karaf.version}`: Directory contains a custom distribution of Karaf prepackaged with all REDHAWK Java Tool assets. 
 * `shell`: Programatic access to REDHAWK Driver via the shell. 

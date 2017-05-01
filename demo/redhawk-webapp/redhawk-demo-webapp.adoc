@@ -2,7 +2,7 @@
 
 The REDHAWK Demo Webapp is an example web application that enables users to interact with a REDHAWK Domain via the web. The web application uses REDHAWK REST, REDHAWK Websocket, and REDHAWK Driver. The jetty running in the Karaf Container serves as your web server. 
 
-== Instructions
+=== Instructions
 
 To use this application, copy `redhawk-demo-webapp.jar` into the `$karaf.base/etc` directory, which deploys the web application into Karaf. After the application is deployed, you can view the path of the webapp by entering the following command:
 

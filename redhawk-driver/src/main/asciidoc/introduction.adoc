@@ -4,7 +4,7 @@ The REDHAWK Driver asset encompasses several utility interfaces that give users 
 
 == Getting Started
 
-If using maven, add the following to the dependency section of your project's pom:
+If using Maven, add the following to the dependency section of your project's pom:
 
 [source,xml]
 ----
@@ -13,7 +13,7 @@ If using maven, add the following to the dependency section of your project's po
 	<version>${project.version}</version>
 ----
 
-If familiar with maven, and you are starting from scratch, you can use the `redhawk-driver-bundle-archetype` to generate your project structure by running this command:
+If familiar with Maven, and you are starting from scratch, you can use the `redhawk-driver-bundle-archetype` to generate your project structure by running this command:
 
 ----
 mvn archetype:generate -DarchetypeGroupId=redhawk -DarchetypeArtifactId=redhawk-driver-bundle-archetype -DarchetypeVersion=1.0.0-SNAPSHOT
@@ -28,7 +28,7 @@ After running the command, you are prompted for the following information:
 
 After entering the necessary information, a template project is created that already has the REDHAWK Driver dependency setup and a simple main method in `App.java` that utilizes the REDHAWK Driver asset. 
 
-If not using maven, you can add the .jar file to your project's build path or configure it with your project's build tool as needed. 
+If not using Maven, you can add the .jar file to your project's build path or configure it with your project's build tool as needed. 
 
 The following code examples may be helpful to developers getting started with the REDHAWK Driver. 
 

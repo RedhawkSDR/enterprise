@@ -4,16 +4,14 @@ The REDHAWK Driver asset encompasses several utility interfaces that give users 
 
 == Getting Started
 
-If using maven, add the following xml to your project's current pom:
+If using maven, add the following to the dependency section of your project's pom:
 
 [source,xml]
 ----
-	<groupId>redhawk</groupId>
-	<artifactId>redhawk-driver</artifactId>
-	<version>${version}</version>
+	<groupId>${project.groupId}</groupId>
+	<artifactId>${project.artifactId}</artifactId>
+	<version>${project.version}</version>
 ----
-
-Note: `${version}` is version of the driver you want to use. 
 
 If familiar with maven, and you are starting from scratch, you can use the `redhawk-driver-bundle-archetype` to generate your project structure by running this command:
 

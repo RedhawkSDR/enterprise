@@ -6,6 +6,6 @@ The following code examples explain how to use the `RedhawkEventChannelManager` 
 
 [source,java,indent=0]
 ----
-include::snippets/RedhawkEventChannelManagerIT.java[lines=71..85]
+include::snippets/RedhawkEventChannelManagerIT.java[lines=72..86]
 ----
 

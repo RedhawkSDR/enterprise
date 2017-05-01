@@ -11,7 +11,7 @@
     Unused Tuners
   </md-subheader>
   <md-list>
-    <tuner v-for="(tuner, index) in unusedTuners"
+    <tuner v-for="(tuner, index) in tuners.unusedTuners"
       v-bind:tuner="tuner"
       v-bind:deviceLabel="device.label"
       >
@@ -22,7 +22,7 @@
   </md-subheader>
   <md-list>
     <tuner
-      v-for="(tuner, index) in usedTuners"
+      v-for="(tuner, index) in tuners.usedTuners"
       v-bind:tuner="tuner"
       v-bind:deviceLabel="device.label"
       >
@@ -37,14 +37,17 @@ import Tuner from './Tuner.vue'
 export default{
   name: 'tuners',
   computed: {
+    tuners(){
+      return this.$store.getters.tuners
+    },
     usedTuners(){
-      return this.$store.getters.tuners.usedTuners
+      return this.tuners.usedTuners
     },
     unusedTuners(){
-      return this.$store.getters.tuners.unusedTuners
+      return this.tuners.unusedTuners
     },
     device(){
-      return this.$store.getters.tuners.device
+      return this.tuners.device
     }
   },
   methods: {

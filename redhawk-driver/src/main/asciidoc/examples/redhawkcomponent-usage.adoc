@@ -2,7 +2,7 @@
 
 The following code examples explain how to use the `RedhawkComponent` class. 
 
-=== Managing Your Component's lifecycle
+=== Managing Your Component's Lifecycle
 
 [source,java,indent=0]
 ----

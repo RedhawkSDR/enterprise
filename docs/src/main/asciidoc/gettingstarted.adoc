@@ -33,7 +33,7 @@ In the console, you have access to the necessary imports for REDHAWK Driver via
 	
  application.release();
 
-More example commands can be found in the <<RedhawkDriver Code Examples>> section. //TODO: Make this link work :-( 
+More example commands can be found in the <<RedhawkDriver Code Examples>> section.
 
 === Working with Karaf
 

@@ -1,3 +1,5 @@
 == REDHAWK Enterprise Integration Demos
 
 The REDHAWK Enterprise Integration Demos provide users with an example of how they can use each asset to interact with a REDHAWK Domain. The following sections explain how to use the demos.
+
+The demos are available via tar.gz or RPM. The RPM has a dependency on REDHAWK Enterprise Integration artifact. 

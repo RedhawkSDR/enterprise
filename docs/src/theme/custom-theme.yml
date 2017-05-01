@@ -96,7 +96,7 @@ heading:
 title_page:
   align: right
   logo:
-    image: image:RedHawk_Logo.png[pdfwidth=50%]
+    image: image:images/RedHawk_Logo.png[pdfwidth=50%]
     align: center
     top: 10%
   title:

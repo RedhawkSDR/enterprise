@@ -42,8 +42,6 @@ include::driver/examples/redhawkport-usage.adoc[]
 
 include::driver/examples/redhawkdevice-usage.adoc[]
 
-device-usage
-
 include::driver/examples/redhawkeventchannelmanager-usage.adoc[]
 
 
@@ -72,13 +70,15 @@ include::websocket/overview.adoc[]
 
 include::camel/overview.adoc[]
 
-= REDHAWK Demo
+//End of docs being pulled from other modules....
 
 //Demo instructions 
 
-:leveloffset: 1
+:leveloffset: 0
 
 include::demo-introduction.adoc[] 
+
+:leveloffset: +1
 
 include::demo/redhawk-demo-webapp.adoc[]
 

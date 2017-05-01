@@ -1,3 +1,3 @@
 == REDHAWK Enterprise Integration Demos
 
-The REDHAWK Enterprise Integration Demos have been created to demonstrate how the REDHAWK Java Tool suite can interact with a REDHAWK Domain. The following sections explain how to use the demos.
+The REDHAWK Enterprise Integration Demos provide users with an example of how they can use each asset to interact with a REDHAWK Domain. The following sections explain how to use the demos.

@@ -61,6 +61,8 @@ import redhawk.testutils.RedhawkTestUtils;
 /*
  * User running this test must be in the REDHAWK group in order for this to work. 
  * Possibly add in a check for that. 
+ * 
+ * sudo /usr/sbin/usermod -a -G redhawk <user name>
  */
 public class MessageConsumerPortTestIT extends RedhawkTestBase{	
 	private RedhawkFileSystem rhFS;

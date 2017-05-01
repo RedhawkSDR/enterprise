@@ -44,6 +44,7 @@
 							<resources>
 								<resource>
 									<directory>src/main/asciidoc</directory>
+									<filtering>true</filtering><!-- Variable replacement -->
 								</resource>
 								<!-- Take the necessary adoc files from redhawk-driver -->
 								<resource>

@@ -5,7 +5,7 @@
 . Navigate to the directory where you want to install REDHAWK Enterprise Integration, and untar the tarball:
 +
 ----
-tar xzf java-tools.tar.gz
+tar -xzf ${project.parent.artifactId}.gz
 ----
 +
 
@@ -29,7 +29,7 @@ export JAVA_HOME
 . Run this command to install the RPM:
 +
 ----
- rpm -i java-tools-<version>-noach.rpm
+ rpm -i ${project.parent.artifactId}-dist-${project.version}-noach.rpm
 ----
 +
 

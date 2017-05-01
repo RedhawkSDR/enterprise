@@ -1,11 +1,15 @@
 = REDHAWK Enterprise Integration User Guide
 {project-version}
 {timestamp}
+//title_page:
+//  logo:
+//	image:images/RedHawk_Logo.png[scalewidth=10%]	
+
 //image::RedHawk_Logo.png[scaledwidth=30%]
 
 //ifndef::imagesdir{:imagesdir: images]
 
-:title-logo-image: image:images/RedHawk_Logo.png[scaledwidth=30%]
+//:title-logo-image: image:images/RedHawk_Logo.png[scaledwidth=30%] //Works
 
 
 

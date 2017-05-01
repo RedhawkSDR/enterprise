@@ -1,4 +1,4 @@
-== `RedhawkDriver` Code Examples
+== `RedhawkDriver` Code Examples[[redhawkdriver-codeexamples]]
 
 The following code examples explain how to use the `RedhawkDriver` class. 
 

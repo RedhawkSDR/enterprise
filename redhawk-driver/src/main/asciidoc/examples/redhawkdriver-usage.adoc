@@ -46,7 +46,7 @@ include::snippets/RedhawkDriverIT.java[lines=179]
 
 === Helper Utility Examples 
 
-The RedhawkDriver includes helper utilities to enable users to easily access their REDHAWK Domain/REDHAWK Device Managers/REDHAWK Devices. These helper methods only work if there is only one REDHAWK Domain/REDHAWK Device Manager/REDHAWK Device available. If more than one REDHAWK Domain/REDHAWK Device Manager/REDHAWK Device exists, use the methods provided in <<Get a REDHAWK Domain>>, <<Get a REDHAWK Device Manager>>, or <<Get a REDHAWK Device>> to access those resources. 
+The `RedhawkDriver` includes helper utilities to enable users to easily access their REDHAWK Domain/REDHAWK Device Managers/REDHAWK Devices. These helper methods only work if there is only one REDHAWK Domain/REDHAWK Device Manager/REDHAWK Device available. If more than one REDHAWK Domain/REDHAWK Device Manager/REDHAWK Device exists, use the methods provided in <<Get a REDHAWK Domain>>, <<Get a REDHAWK Device Manager>>, or <<Get a REDHAWK Device>> to access those resources. 
 
 [source,java,indent=0]
 ----

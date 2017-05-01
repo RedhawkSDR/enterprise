@@ -2,7 +2,7 @@
 
 == Overview
 
-Using the REDAHWK Connector to create a Redhawk Connection results in the following:
+Using the REDHAWK Connector to create a Redhawk Connection results in the following:
 
 * A REDHAWK Driver instance is registered in the OSGi Service Registry.
 * A REDHAWK Camel Component is resolved with the `Connection Name` configured.
@@ -38,7 +38,7 @@ Using the REDAHWK Connector to create a Redhawk Connection results in the follow
 | domainManager
 | No
 | null
-| Optional name of the REDHAWK Domain Manager(as found in the CORBA Naming Service). 
+| Optional name of the REDHAWK Domain Manager (as found in the CORBA Naming Service). 
 
 | Device Manager Name
 | deviceManagerName
@@ -76,7 +76,7 @@ domainManager=REDHAWK_DEV
 
 == Using Connection in blueprint
 
-To inject the Redhawk Driver instance into your application, add the following lines in your `blueprint.xml' file:
+To inject the Redhawk Driver instance into your application, add the following lines in your `blueprint.xml` file:
 
 [source,xml]
 ----

@@ -45,7 +45,7 @@ The `deviceManagerName`, `deviceLabel`, `portName` variables all support matchin
 
 === REDHAWK Event Channel Connection 
 
-To connect to an event channel, use this syntax: `eventchannels/{eventChannelName}`. The following example is a complete url for an event channel: 
+To connect to an Event Channel, use this syntax: `eventchannels/{eventChannelName}`. The following example is a complete url for an Event Channel: 
 
 ----
 ws://localhost:8181/redhawk/localRH/domains/REDHAWK_DEV/eventchannels/ODM_Channel

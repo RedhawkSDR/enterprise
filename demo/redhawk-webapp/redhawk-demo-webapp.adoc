@@ -1,6 +1,6 @@
 == REDHAWK Demo Webapp
 
-The REDHAWK Demo Webapp is an example web application that enables users to interact with a REDHAWK Domain via the web. The web application uses REDHAWK REST, REDHAWK Websocket, and REDHAWK Driver. The jetty running in the Karaf Container serves as your web server. 
+The REDHAWK Demo Webapp is an example web application that enables users to interact with a REDHAWK Domain via the web. The web application uses REDHAWK REST, REDHAWK Websocket, and REDHAWK Driver. The jetty running in the Karaf Container serves as the web server. 
 
 === Instructions
 

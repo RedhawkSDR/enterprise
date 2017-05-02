@@ -32,7 +32,6 @@ export default{
     allocate(){
       console.log("Allocate")
       this.$store.dispatch("showAllocationModal", true)
-      this.$forceUpdate()
     },
     deallocate(){
       var obj = new Object()
@@ -41,10 +40,10 @@ export default{
 
       console.log(obj)
       this.$store.dispatch("deallocate", obj)
-      console.log(this)
-      console.log(this.vm)
-      this.$forceUpdate()
-      //this.$store.dispatch("updateTuners", this.deviceLabel)
+      var obj = new Object()
+      obj.device = this.device
+      obj.show = true
+      this.$store.dispatch("showDeviceTuners", obj)
     }
   }
 }

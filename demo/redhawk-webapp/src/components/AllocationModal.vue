@@ -68,6 +68,12 @@ export default{
       this.$store.dispatch('allocate', this.allocation)
 
       this.$store.dispatch('showAllocationModal', false)
+
+      //Update deviceTuners
+      //var obj = new Object()
+      //obj.device = this.$store.getters.tuners.device
+      //obj.show = true
+      //this.$store.dispatch("showDeviceTuners", obj)
     }
   },
   watch: {

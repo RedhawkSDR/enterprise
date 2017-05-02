@@ -193,6 +193,7 @@ export const deallocate = ({ commit, getters }, deallocate) => {
     axios.all([getUsedTuners(getters, deviceLabel), getUnusedTuners(getters, deviceLabel)])
     .then(axios.spread(function(usedTuners, unusedTuners){
       var tuners = new Object()
+      tuners.device = getters.tuners.device
       tuners.usedTuners = usedTuners.data
       tuners.unusedTuners = unusedTuners.data
 
@@ -223,6 +224,7 @@ export const allocate = ({commit, getters}, allocate) => {
     axios.all([getUsedTuners(getters, deviceLabel), getUnusedTuners(getters, deviceLabel)])
     .then(axios.spread(function(usedTuners, unusedTuners){
       var tuners = new Object()
+      tuners.device = getters.tuners.device
       tuners.usedTuners = usedTuners.data
       tuners.unusedTuners = unusedTuners.data
 

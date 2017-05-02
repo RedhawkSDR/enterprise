@@ -321,8 +321,7 @@ export const showDeviceTuners = (state, show) => {
 }
 
 export const updateTunersData = (state, tuners) => {
-  state.tuners.unusedTuners = tuners.unusedTuners
-  state.tuners.usedTuners = tuners.usedTuners
+  state.tuners = tuners
 }
 
 export const showAllocationModal = (state, show) =>  {

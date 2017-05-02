@@ -3,6 +3,7 @@
 #Docs on format of CI file: https://docs.gitlab.com/ce/ci/yaml/README.html
 variables:
   redhawk_version: '2.0.6'
+  enterprise_version: '2.0.0'
 cache:
   key: "$CI_COMMIT_REF_NAME"
   paths:
@@ -14,7 +15,7 @@ cache:
   after_script:
     - mkdir -p output
     - cp docs/target/asciidoc/html/index.html output/index.html #Docs artifacts
-    - cp docs/target/asciidoc/pdf/index.pdf output/REDHAWK_Enterprise_v$redhawk_version.pdf
+    - cp docs/target/asciidoc/pdf/index.pdf output/REDHAWK_Enterprise_v$enterprise_version.pdf
     - cp docs/target/rpm/redhawk-enterprise-integration-docs/RPMS/noarch/*.rpm output/ #RPM for installing REDHAWK Java Tools Docs in KARAF
     - cp dist/target/redhawk-enterprise-integration.tar.gz output/ #Tar of full distribution
     - cp dist/target/rpm/redhawk-enterprise-integration-dist/RPMS/noarch/*.rpm output/ #RPM for distribution
@@ -28,6 +29,15 @@ cache:
       - output/*.pdf
       - output.tar.gz
     expire_in: 3 days
+
+.deploy-common: &deploy-common
+  image: centos:7
+  stage: deploy
+  dependencies: []
+  script:
+  - if [ -n "$jenkins_url" ]; then
+      curl --insecure -X POST $jenkins_url/job/$jenkins_job/buildWithParameters?pipeline_id=$CI_PIPELINE_ID --user $jenkins_user:$jenkins_api_token;
+    fi
 
 build:
   <<: *common
@@ -47,11 +57,14 @@ build-release:
 #Trigger a Jenkins job to aggregate artifacts there
 deploy:
   variables:
-    jenkins_job: $redhawk_version/job/REDHAWK-enterprise-$CI_COMMIT_REF_NAME
-  image: centos:7
-  stage: deploy
-  dependencies: []
-  script:
-  - if [ -n "$jenkins_url" ]; then
-      curl --insecure -X POST $jenkins_url/job/$jenkins_job/buildWithParameters?pipeline_id=$CI_PIPELINE_ID --user $jenkins_user:$jenkins_api_token;
-    fi
+    jenkins_job: REDHAWK-enterprise-$CI_COMMIT_REF_NAME
+  <<: *deploy-common
+  only:
+    - branches
+
+deploy-release:
+  variables:
+    jenkins_job: $redhawk_version/job/REDHAWK-enterprise-$enterprise_version
+  <<: *deploy-common
+  only:
+    - tags

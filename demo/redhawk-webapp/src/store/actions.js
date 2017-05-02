@@ -254,7 +254,25 @@ export const showDeviceManager = ({ commit, getters }, show) => {
   }
 }
 
-export const showDevicePorts = ({ commit }, show) => commit('showDevicePorts', show)
+export const showDevicePorts = ({ commit, getters }, show) => {
+  if(show.show){
+    var devicePortsURL = getters.baseURI+'/devicemanagers/'+getters.deviceManager.label+'/devices/'+show.device.label+'/ports.json'
+    axios.get(devicePortsURL)
+    .then(function(response){
+      console.log("Do I have access to this")
+      var devPorts = new Object()
+      devPorts.ports = response.data.ports
+      devPorts.device = show.device
+      console.log(devPorts)
+      commit('showDevicePorts', devPorts)
+    })
+    .catch(function(error){
+      console.log("ERROR: "+error)
+    })
+  }else{
+    //commit('showDeviceProperties', show)
+  }
+}
 
 export const showDeviceTuners = ({ commit, getters }, show) => {
   if(show.show){
@@ -273,24 +291,7 @@ export const showDeviceTuners = ({ commit, getters }, show) => {
   }
 }
 
-export const showDeviceProperties = ({ commit, getters }, show) => {
-  if(show.show){
-    var devicePortsURL = getters.baseURI+'/devicemanagers/'+getters.deviceManager.label+'/devices/'+show.device.label+'/ports.json'
-    axios.get(devicePortsURL)
-    .then(function(response){
-      console.log("Do I have access to this")
-      var devPorts = new Object()
-      devPorts.ports = response.data.ports
-      devPorts.device = myShow.device
-      commit('showDevicePorts', devPorts)
-    })
-    .catch(function(error){
-      console.log("ERROR: "+error)
-    })
-  }else{
-    //commit('showDeviceProperties', show)
-  }
-}
+export const showDeviceProperties = ({ commit, getters }, show) => commit('showDeviceProperties', show)
 
 export const deallocate = ({ commit, getters }, deallocate) => {
   console.log("Made it")

@@ -6,7 +6,7 @@
         <md-icon>menu</md-icon>
       </md-button>
       <md-menu-content>
-        <md-menu-item @click.native="control()" :disabled="true">Control</md-menu-item> 
+        <md-menu-item @click.native="control()" :disabled="true">Control</md-menu-item>
         <md-menu-item @click.native="showTuners()">Tuners</md-menu-item>
         <md-menu-item @click.native="showPorts()">Ports</md-menu-item>
         <md-menu-item @click.native="showProperties()">Properties</md-menu-item>
@@ -17,7 +17,7 @@
         <md-icon>menu</md-icon>
       </md-button>
       <md-menu-content>
-        <md-menu-item @click.native="control()">Control</md-menu-item>
+        <md-menu-item @click.native="control()" :disabled="true">Control</md-menu-item>
         <md-menu-item @click.native="showProperties()">Properties</md-menu-item>
       </md-menu-content>
     </md-menu>

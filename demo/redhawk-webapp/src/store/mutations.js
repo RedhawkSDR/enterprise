@@ -195,8 +195,8 @@ export const showDeviceManager = (state, show) => {
   }
 }
 
-export const showDevicePorts = (state, show) => {
-      myState.devicePorts = devPorts
+export const showDevicePorts = (state, devPorts) => {
+      state.devicePorts = devPorts
 }
 
 export const showDeviceTuners = (state, show) => {

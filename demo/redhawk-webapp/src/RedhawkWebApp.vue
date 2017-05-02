@@ -8,7 +8,7 @@
 					</md-icon>
 				</md-button>
 				<md-menu-content>
-					<md-menu-item @click.native="about">About</md-menu-item>
+					<md-menu-item @click.native="about" :disabled="true">About</md-menu-item>
 					<md-menu-item @click.native="editREST">Configure REST</md-menu-item>
 				</md-menu-content>
 			</md-menu>

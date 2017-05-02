@@ -46,11 +46,10 @@ export default {
     waveforms(){
       /*TODO: Clean up variable name should be applications
       */
-      console.log('Computing waveforms')
       return this.$store.getters.launchedWaveforms
     },
     applicationCount(){
-      return this.waveforms.length
+      return this.$store.getters.launchedWaveforms.length
     },
     showWaveformComponents(){
       return this.$store.getters.showWaveformComponents

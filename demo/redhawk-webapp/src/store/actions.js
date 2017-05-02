@@ -114,23 +114,119 @@ export const showComponentPorts = ({ commit, getters }, index) => {
   })
 }
 
-export const showComponentProperties = ({ commit }, index) => {
-  commit('showComponentProperties', index)
+export const showComponentProperties = ({ commit, getters }, index) => {
+  var propComponentName = getters.waveformComponents[index].name
+  var componentPropsURL = getters.baseURI+'/applications/'+getters.applicationName+'/components/'+propComponentName+'/properties.json'
+
+  axios.get(componentPropsURL)
+  .then(function(response){
+    var obj = new Object()
+    obj.propComponentName = propComponentName
+    obj.componentPropertiesToEdit = response.data.properties
+
+    commit('showComponentProperties', obj)
+  })
+  .catch(function(error){
+
+  })
 }
 
-export const updateComponentProperty = ({ commit }, property) => commit('updateComponentProperty', property)
+export const updateComponentProperty = ({ commit, getters }, property) => {
+  var propertyUpdateURL = getters.baseURI+'/applications/'+getters.applicationName+'/components/'+getters.propComponentName+'/properties/'+property.id
+
+  axios.put(propertyUpdateURL, JSON.stringify(property),
+  {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(function(response){
+    console.log("Update Made")
+    commit('updateComponentProperty', property)
+  })
+  .catch(function(error){
+
+  })
+}
 
 //Waveform Controller props
-export const showWaveformController = ({ commit }, index) => commit('showWaveformController', index)
+export const showWaveformController = ({ commit, getters }, index) => {
+  var applicationsURL = getters.baseURI+'/applications/'+getters.launchedWaveforms[index].name+'.json'
+
+  axios.get(applicationsURL)
+  .then(function(response){
+      var obj = new Object()
+      obj.waveformToControl = response.data
+      commit('showWaveformController', obj)
+  })
+  .catch(function(error){
+
+  })
+}
+
 export const closeWaveformController = ({ commit }) => commit('closeWaveformController')
-export const controlWaveform = ({ commit }, control) => commit('controlWaveform', control)
-export const releaseWaveform = ({ commit }, name) => commit('releaseWaveform', name)
+
+export const controlWaveform = ({ commit, getters }, control) => {
+  var applicationControlURI = getters.baseURI+'/applications/'+control.waveformName
+  axios.post(applicationControlURI, control.action,{
+    headers: {
+      'Content-Type':'application/json'
+    }
+  })
+  .then(function(response){
+      //TODO: If you ever want to just do a play button this i where u could make updates
+  })
+  .catch(function(response){
+
+  })
+}
+
+export const releaseWaveform = ({ commit, getters }, name) => {
+  axios.delete(getters.baseURI+'/applications/'+name)
+  .then(function(response){
+    //Get new application list post release
+    axios.get(getters.baseURI+'/applications.json')
+    .then(function(response){
+        var obj = new Object()
+        obj.releasedAppName = name
+        obj.applications = response.data.applications
+        commit('releaseWaveform', obj)
+    })
+    .catch(function(error){
+
+    })
+  })
+  .catch(function(error){
+
+  })
+}
 export const updateDomainStateAfterWaveformRelease = ({ commit }, name) => commit('updateDomainStateAfterWaveformRelease', name)
 
 //Launch Controls
 export const showLaunchWaveformModal = ({ commit }, waveform) => commit('showLaunchWaveformModal', waveform)
 export const closeLaunchWaveformModal = ({ commit }) => commit('closeLaunchWaveformModal')
-export const launchWaveform = ({ commit }, waveformToLaunch) => commit('launchWaveform', waveformToLaunch)
+
+export const launchWaveform = ({ commit, getters }, waveformToLaunch) => {
+  var launchWaveformURL = getters.baseURI+'/applications/'+waveformToLaunch.name
+
+  axios.put(launchWaveformURL, JSON.stringify(waveformToLaunch),
+  {
+    headers: { 'Content-Type' : 'application/json'}
+  })
+  .then(function(response){
+    //Get new application list post release
+    axios.get(getters.baseURI+'/applications.json')
+    .then(function(response){
+        var obj = new Object()
+        //obj.releasedAppName = name
+        obj.applications = response.data.applications
+        commit('launchWaveform', obj)
+    })
+    .catch(function(error){
+
+    })
+  })
+}
 //export const updateLaunchedWaveforms = ({ commit }) => commit('updateLaunchedWaveforms')
 
 export const plotPortData = ({ commit }, port) => commit('plotPortData', port)
@@ -176,7 +272,24 @@ export const showDeviceTuners = ({ commit, getters }, show) => {
   }
 }
 
-export const showDeviceProperties = ({ commit }, show) => commit('showDeviceProperties', show)
+export const showDeviceProperties = ({ commit, getters }, show) => {
+  if(show.show){
+    var devicePortsURL = getters.baseURI+'/devicemanagers/'+getters.deviceManager.label+'/devices/'+show.device.label+'/ports.json'
+    axios.get(devicePortsURL)
+    .then(function(response){
+      console.log("Do I have access to this")
+      var devPorts = new Object()
+      devPorts.ports = response.data.ports
+      devPorts.device = myShow.device
+      commit('showDevicePorts', devPorts)
+    })
+    .catch(function(error){
+      console.log("ERROR: "+error)
+    })
+  }else{
+    //commit('showDeviceProperties', show)
+  }
+}
 
 export const deallocate = ({ commit, getters }, deallocate) => {
   console.log("Made it")

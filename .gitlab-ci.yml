@@ -40,7 +40,7 @@ build-release:
   variables:
   <<: *common
   script:
-    - mvn -Djava.io.tmpdir=./ deploy -P docs,jaxb-generation,default -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository
+    - mvn -Djava.io.tmpdir=./ clean install -P docs,jaxb-generation,default -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository
   only:
     - tags
 

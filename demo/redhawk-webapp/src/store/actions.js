@@ -156,6 +156,7 @@ export const showWaveformController = ({ commit, getters }, index) => {
   axios.get(applicationsURL)
   .then(function(response){
       var obj = new Object()
+      console.log(response.data)
       obj.waveformToControl = response.data
       commit('showWaveformController', obj)
   })

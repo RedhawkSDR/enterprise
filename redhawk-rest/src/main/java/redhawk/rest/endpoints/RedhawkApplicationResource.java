@@ -60,12 +60,6 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     @ApiParam(value = "Name of REDHAWK Domain")
     @PathParam("domain")
     private String domainName;
-    
-    @GET
-    @Path("test")
-    public Response blah(){
-    	return Response.ok("HELLO WORLD").build();
-    }
 
     @GET
     @Path("/")

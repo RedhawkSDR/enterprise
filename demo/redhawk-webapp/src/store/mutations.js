@@ -80,8 +80,8 @@ export const updateComponentProperty = (state, property) => {
   console.log('Update property'+ property)
 }
 
-export const showWaveformController = (state, index) => {
-  state.waveformToControl = response.data
+export const showWaveformController = (state, obj) => {
+  state.waveformToControl = obj.waveformToControl
   state.showWaveformController = true
 }
 

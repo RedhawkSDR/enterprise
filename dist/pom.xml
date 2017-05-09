@@ -288,6 +288,10 @@
 						<scriptFile>${project.build.directory}/scripts/preremove.sh</scriptFile>
 						<fileEncoding>utf-8</fileEncoding>
 					</preremoveScriptlet>
+					<postremoveScriptlet>
+						<scriptFile>${project.build.directory}/scripts/postremove.sh</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>						
+					</postremoveScriptlet>
 				</configuration>
 			</plugin>
 		</plugins>

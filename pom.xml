@@ -180,7 +180,7 @@
 				<module>redhawk-driver</module>
 				<module>redhawk-connector</module>
 				<module>redhawk-rest</module>
-				<module>redhawk-websocket</module>				
+				<module>redhawk-websocket</module>
 				<module>demo</module>
 				<module>docs</module>
 			</modules>
@@ -203,16 +203,16 @@
 		</pluginManagement>
 		<plugins>
 			<!-- Release plugin -->
- 			<plugin>
-    			<groupId>org.apache.maven.plugins</groupId>
-   		 		<artifactId>maven-release-plugin</artifactId>
-    			<version>2.5.3</version>
-    			<configuration>
-      				<!-- During release:perform, enable the "release" profile -->
-      				<releaseProfiles>docs,default,jaxb-generation</releaseProfiles>
-    				<goals>install</goals>
-    			</configuration>
-  			</plugin>			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.5.3</version>
+				<configuration>
+					<!-- During release:perform, enable the "release" profile -->
+					<releaseProfiles>docs,default,jaxb-generation</releaseProfiles>
+					<goals>install</goals>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
@@ -289,38 +289,38 @@
 		</plugins>
 	</reporting>
 	<!-- Repositories for swagger2markup -->
-    <pluginRepositories>
-        <pluginRepository>
-            <id>jcenter-snapshots</id>
-            <name>jcenter</name>
-            <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>jcenter-releases</id>
-            <name>jcenter</name>
-            <url>http://jcenter.bintray.com</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>jcenter-snapshots</id>
+			<name>jcenter</name>
+			<url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
+		</pluginRepository>
+		<pluginRepository>
+			<id>jcenter-releases</id>
+			<name>jcenter</name>
+			<url>http://jcenter.bintray.com</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 
-    <repositories>
-        <repository>
-            <id>jcentral</id>
-            <name>bintray</name>
-            <url>http://jcenter.bintray.com</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>jcenter-snapshots</id>
-            <name>jcenter</name>
-            <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
-        </repository>
-    </repositories>
-  		
+	<repositories>
+		<repository>
+			<id>jcentral</id>
+			<name>bintray</name>
+			<url>http://jcenter.bintray.com</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>jcenter-snapshots</id>
+			<name>jcenter</name>
+			<url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
+		</repository>
+	</repositories>
+
 	<distributionManagement>
 		<repository>
 			<name>releases</name>

@@ -21,4 +21,8 @@ echo "Stopping KARAF if it's still running"
 cd ${HOME}
 ./${runtime.dir}/karaf-${karaf.version}/bin/stop
 
-rm -rf ${runtime.basedir}
+#Need to either ensure last command will have 0 status code(purpose of echo) or 
+#Add in logic to determine if it's necessary to stop karaf. May need to submit a 
+#bug because exit code of shell script should still be 0 if it failed to stop a 
+#process because it isn't running. 
+echo "Ready to uninstall ${project.artifactId}"

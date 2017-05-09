@@ -4,7 +4,7 @@
 EXTRA_JAVA_OPTS="-Djava.io.tmpdir=/tmp"
 
 main(){
-	java ${EXTRA_JAVA_OPTS} -cp ./lib/javarepl-${jrepl.version}.jar javarepl.Main
+	java ${EXTRA_JAVA_OPTS} -cp ./lib/javarepl-${jrepl.version}.jar:./lib/redhawk-driver-${project.version}.jar javarepl.Main
 }
 
 main

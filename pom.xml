@@ -212,6 +212,7 @@
 					<!-- During release:perform, enable the "release" profile -->
 					<releaseProfiles>docs,default,jaxb-generation</releaseProfiles>
 					<goals>install</goals>
+					<arguments>-P docs,default,jaxb-generation</arguments>
 					<preparationGoals>install</preparationGoals>
 				</configuration>
 			</plugin>

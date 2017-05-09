@@ -21,7 +21,6 @@
 		<jrepl.home>${runtime.basedir}/shell</jrepl.home>
 		<jacorb.version>3.8</jacorb.version>
 		<jrepl.version>428</jrepl.version>
-		<release>1</release>
 	</properties>
 	<dependencies>
 		<dependency>

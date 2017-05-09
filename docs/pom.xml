@@ -11,7 +11,6 @@
 	<packaging>bundle</packaging>
 	<properties>
 		<docs.directory>${runtime.basedir}/docs</docs.directory>
-		<release>1</release>
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>MM-dd-yyyy</maven.build.timestamp.format>
 	</properties>

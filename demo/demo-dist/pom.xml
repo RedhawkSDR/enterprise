@@ -12,7 +12,6 @@
 	<description>Distribution for REDHAWK Enterprise Integration Demo</description>
 	<properties>
 		<demo.directory>${runtime.basedir}/demos</demo.directory>
-		<release>1</release>
 	</properties>
 	<build>
 		<plugins>

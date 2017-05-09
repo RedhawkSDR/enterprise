@@ -20,6 +20,7 @@
 		<karaf.home>${runtime.basedir}/karaf</karaf.home>
 		<jrepl.home>${runtime.basedir}/shell</jrepl.home>
 		<jacorb.version>3.8</jacorb.version>
+		<jrepl.version>428</jrepl.version>
 		<release>1</release>
 	</properties>
 	<dependencies>
@@ -86,7 +87,6 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.0.2</version>
 				<executions>
 					<execution>
 						<id>copy-shell-resources</id>
@@ -176,7 +176,7 @@
 								<artfactItem>
 									<groupId>com.javarepl</groupId>
 									<artifactId>javarepl</artifactId>
-									<version>428</version>
+									<version>${jrepl.version}</version>
 								</artfactItem>
 								<artifactItem>
 									<groupId>redhawk</groupId>

@@ -87,7 +87,7 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @Path("/{domain}/properties")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value = "Properties for Requested REDHAWK Domain"
+    		value = "Returns Properties for Requested REDHAWK Domain"
     		)    
     public PropertyContainer getDomainProperties(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name) throws Exception {
         PropertyContainer props = redhawkManager.getProperties(nameServer, "domain", name);

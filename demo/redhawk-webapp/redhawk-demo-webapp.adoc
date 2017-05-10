@@ -18,6 +18,6 @@ Example output:
 	158 | Active      | Deployed    | 80    | /redhawkwebdemo | REDHAWK :: DEMO :: WEBAPP (2.0.4.SNAPSHOT)
 
 
-View the web application at http://{hostname}:8181/redhawkwebdemo . 
+View the web application at `http://{hostname}:8181/redhawkwebdemo` . 
 
 After opening the web application, to add a Domain, click the '+' button. Enter the information, and then click the 'view' button on the Domain you added. You have access to command and control your configured Domain from the web. 

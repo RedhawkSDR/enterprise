@@ -41,9 +41,9 @@ This example Application illustrates how to use a Camel REDHAWK Component to sub
 
 === Instructions
 
-. Start Karaf by entering this command:
+. Start Karaf by running the `start` script in the KARAF bin directory:
 
-	rhjt/apache-karaf-4.0.8/bin/start
+	./start
 
 . Add a configuration for REDHAWK by moving `redhawk.datasource.factory-localRH.cfg` into the `etc` directory of your Karaf install.
 . Add the Camel route to the `deploy` directory of Karaf.

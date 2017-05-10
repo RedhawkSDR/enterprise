@@ -1,6 +1,6 @@
 == `RedhawkDevice` Code Examples
 
-Below are code examples for using the `RedhawkDevice` class. 
+Below are code examples for using the `RedhawkDevice` interface. 
 
 === Allocate and Deallocate a Device
 

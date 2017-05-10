@@ -1,6 +1,6 @@
 == `RedhawkApplication` Code Examples
 
-The following code examples explain how to use the `RedhawkApplication` class. 
+The following code examples explain how to use the `RedhawkApplication` interface. 
 
 === Managing your Application's Lifecycle
 

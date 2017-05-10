@@ -1,6 +1,6 @@
 == `RedhawkComponent` Code Examples
 
-The following code examples explain how to use the `RedhawkComponent` class. 
+The following code examples explain how to use the `RedhawkComponent` interface. 
 
 === Managing Your Component's Lifecycle
 

@@ -4,7 +4,7 @@ The REDHAWK Demo Webapp is an example web application that enables users to inte
 
 === Instructions
 
-To use this application, copy `redhawk-demo-webapp.jar` into the `$karaf.base/etc` directory, which deploys the web application into Karaf. After the application is deployed, you can view the path of the webapp by entering the following command:
+To use this application, copy `redhawk-demo-webapp.jar` into the `$karaf.base/deploy` directory, which deploys the web application into Karaf. After the application is deployed, you can view the path of the webapp by entering the following command:
 
 	web:list
 	

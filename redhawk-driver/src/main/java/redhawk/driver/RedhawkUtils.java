@@ -26,11 +26,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.bind.JAXBException;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
 import org.ossie.properties.AnyUtils;
@@ -48,7 +48,7 @@ import redhawk.driver.xml.model.sca.sad.Softwareassembly;
  * Class for utility methods for doing things with REDHAWK. 
  */
 public class RedhawkUtils {
-	private static Logger logger = Logger.getLogger(RedhawkUtils.class);
+	private static Logger logger = Logger.getLogger(RedhawkUtils.class.getName());
 	
 	/**
 	 * Pass in an {@link java.io.InputStream} for your Software Assembly Descriptor(SAD) file and get back a POJO 
@@ -156,7 +156,7 @@ public class RedhawkUtils {
 	public static Any createAny(ORB orb, Object objectToCreate){
 		final Any any = orb.create_any();
 		
-		logger.debug("Original Object "+objectToCreate);
+		logger.log(Level.FINE, "Original Object "+objectToCreate);
         
 		if(objectToCreate instanceof String){
             any.insert_string((String) objectToCreate);

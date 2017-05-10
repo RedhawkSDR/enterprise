@@ -22,8 +22,9 @@ package redhawk.driver.properties;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-import org.apache.log4j.Logger;
 import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.TCKind;
@@ -37,7 +38,7 @@ import CF.PropertySetPackage.InvalidConfiguration;
 import CF.PropertySetPackage.PartialConfiguration;
 
 public class RedhawkProperty {
-	private static Logger logger = Logger.getLogger(RedhawkProperty.class);
+	private static Logger logger = Logger.getLogger(RedhawkProperty.class.getName());
 
 	protected String parentObject;
 	protected ORB orb;
@@ -101,7 +102,7 @@ public class RedhawkProperty {
 			Object[] objects = (Object[]) objectToCreate;
 
 			if (objects.length < 1) {
-				logger.debug("Empty array provided, returning empty any");
+				logger.log(Level.FINE, "Empty array provided, returning empty any");
 				return any;
 			}
 

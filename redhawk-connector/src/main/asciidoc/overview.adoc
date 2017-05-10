@@ -56,15 +56,36 @@ Using the REDHAWK Connector to create a Redhawk Connection results in the follow
 
 == Creating a REDHAWK Connector Configuration
 
-To create a REDHAWK Connector configuration through the console for your Karaf instance: 
+To create a REDHAWK Connector configuration in the Karaf web console: 
 
-* Open a browser to `/system/console/configMgr' of your running Karaf instance.
+. Open a browser to `/system/console/configMgr` of your running Karaf instance.
++
  
 _Note: For example, '127.0.0.1:8181/system/console/configMgr'._
++
+
+You are prompted to enter a username and password.
++
+. Enter a username and password. (Default username is `karaf`. Default password is `karaf`. Refer to the https://karaf.apache.org/manual/latest/#_users_groups_roles_and_passwords[Apache Karaf documentation] to change the default username or password.)
+
+. In the list of configurable services displayed on the Apache Karaf Web Console Configuration page, locate REDHAWK Connector.
+
+. To add a new configuration, click the '+' button.
++
+The REDHAWK Connector page is displayed.
++
+
+image::KarafConfiguration.png[]
++
+
+. Enter the appropriate information for the new configuration and click Save.
++
+
+The new configuration is displayed in the list of configurable services.
 
 To create a REDHAWK Connector configuration using a file:
 
-* Add a configuration for REDHAWK by dropping a file beginning with this prefix: `redhawk.datasource.factory` and append a unique string with a leading dash (i.e., `-myConfig.cfg`) file into the `etc` directory of your Karaf install.
+* In the $karaf.base/etc directory, add a file with this prefix: `redhawk.datasource.factory` and append a unique string with a leading dash (for example, `-myConfig.cfg`).
 
 .Example config file
 ----

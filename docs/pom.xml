@@ -169,6 +169,8 @@
 								<pagenums />
 								<toc />
 								<toclevels>3</toclevels>
+								<sectnums>true</sectnums>
+								<sectnumlevels>3</sectnumlevels>
 								<idprefix />
 								<idseparator>-</idseparator>
 							</attributes>

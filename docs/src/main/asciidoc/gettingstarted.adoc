@@ -51,6 +51,6 @@ More example commands can be found in the <<redhawk-driver-code-examples>> secti
 
 . Once logged in, run the command 'list' to display the REDHAWK Assets that have been preinstalled. Each asset includes documentation. Refer to the appropriate section in the online documentation for information about interacting with the individual assets. For more details on Karaf, refer to  https://karaf.apache.org/manual/latest/[Apache Karaf documentation]. 
 
-. Begin using the Java Tools provided to interact with REDHAWK or write your own applications that leverage these tools to interact with REDHAWK.
+. Begin using the bundles provided to interact with REDHAWK or write your own applications that leverage the REDHAWK Enterprise Integration bundles to interact with REDHAWK.
 
 

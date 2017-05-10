@@ -1,5 +1,5 @@
 [#redhawk-driver-code-examples]
-== RedhawkDriver Code Examples
+== `RedhawkDriver` Code Examples
 
 The following code examples explain how to use the `RedhawkDriver` class. 
 

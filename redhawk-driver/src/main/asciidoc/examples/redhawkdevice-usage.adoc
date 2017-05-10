@@ -1,4 +1,4 @@
-== `RedhawkDevice` Examples
+== `RedhawkDevice` Code Examples
 
 Below are code examples for using the `RedhawkDevice` class. 
 

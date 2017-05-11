@@ -64,7 +64,7 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     @Path("/")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Returns all Devices for a Device Manager"
+    		value="GET REDHAWK Devices"
     		)
     public Response getDevices(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws ResourceNotFound, Exception {
         return Response.ok(new DeviceContainer(redhawkManager.getAll(nameServer, "device", domainName + "/" + devManagerName, fetchMode))).build();
@@ -74,18 +74,19 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     @Path("/{deviceId}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Returns a Specific Device for a Device Manager"
+    		value="GET REDHAWK Device"
     		)
     public Response getDevice(@PathParam("deviceId") String deviceId) throws ResourceNotFound, Exception {
         return Response.ok(redhawkManager.get(nameServer, "device", domainName + "/" + devManagerName + "/" + deviceId)).build();
     }
     
+    //TODO: Should be a PUT
     @POST
     @Path("/{deviceId}/allocate")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Consumes({MediaType.APPLICATION_JSON})    
     @ApiOperation(
-    		value="Allocates a Specific Device"
+    		value="Allocate a REDHAWK Device"
     		)
     public Response allocateDevice(@PathParam("deviceId") String deviceId, Map<String, Object> allocation) throws Exception{
     	//TODO: Look into where the appropriate place to fix this is. 
@@ -94,12 +95,13 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     	return Response.ok().build();
     }
     
+    //TODO: Should be a DELETE
     @POST
     @Path("/{deviceId}/deallocate")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Consumes({MediaType.APPLICATION_JSON})    
     @ApiOperation(
-    		value="Deallocates a Specific Device"
+    		value="Deallocate a REDHAWK Device"
     		)
     public Response deallocateDevice(@PathParam("deviceId") String deviceId, String allocationId) throws Exception{
     	redhawkManager.deallocateDevice(nameServer, domainName+"/"+devManagerName+"/"+deviceId, allocationId);
@@ -111,7 +113,7 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     @Path("/{deviceId}/tuners/{tunerMode}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Returns a Specific Device for a Device Manager"
+    		value="=GET REDHAWK Device by tuner mode"
     		)
     public Response tuners(@PathParam("deviceId") String deviceId, @PathParam("tunerMode") String tunerMode) throws Exception{
     	List<Map<String, Object>> tunerStatus = redhawkManager.getTuners(nameServer, domainName+"/"+devManagerName+"/"+deviceId, TunerMode.valueOf(tunerMode));
@@ -124,7 +126,7 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     @Path("/{deviceId}/properties")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Returns all Properties for a Device Manager"
+    		value="GET REDHAWK Device Properties"
     		)
     public Response getDeviceProperties(@PathParam("deviceId") String deviceId) throws ResourceNotFound, ResourceNotFoundException, Exception {
         return Response.ok(redhawkManager.getProperties(nameServer, "device", domainName + "/" + devManagerName + "/" + deviceId)).build();
@@ -134,7 +136,7 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     @Path("/{deviceId}/properties/{propId}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Returns a Specific Property for a Device Manager"
+    		value="GET REDHAWK Device Property"
     		)
     public Response getDeviceProperty(@PathParam("deviceId") String deviceId, @PathParam("propId") String propertyId) throws ResourceNotFound, Exception {
         return Response.ok(redhawkManager.getProperty(propertyId, nameServer, "device", domainName + "/" + devManagerName + "/" + deviceId)).build();
@@ -145,7 +147,7 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Sets Properties for a Device Manager"
+    		value="Set REDHAWK Device Properties"
     		)
     public Response setDeviceProperties(@PathParam("deviceId") String deviceId, List<FullProperty> properties) throws Exception {
         redhawkManager.setProperties(properties, nameServer, "device", domainName + "/" + devManagerName + "/" + deviceId);
@@ -157,7 +159,7 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="Sets a Specific Property for a Device Manager"
+    		value="Set REDHAWK Device Property"
     		)
     public Response setDeviceProperty(@PathParam("deviceId") String deviceId, @PathParam("propId") String propertyId, FullProperty property) throws Exception {
         redhawkManager.setProperty(property, nameServer, "device", domainName + "/" + devManagerName + "/" + deviceId);

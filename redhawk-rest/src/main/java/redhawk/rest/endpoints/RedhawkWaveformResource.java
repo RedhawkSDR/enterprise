@@ -56,7 +56,7 @@ public class RedhawkWaveformResource extends RedhawkBaseResource {
 	@Path("/")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @ApiOperation(
-    		value="Returns Waveforms Available in a REDHAWK Domain"
+    		value="GET Waveforms in a REDHAWK Domain"
     		)	
 	public Response getApplications() throws ResourceNotFound, Exception {
 		Map<String, Softwareassembly> applications = redhawkManager.getWaveforms(nameServer, domainName);

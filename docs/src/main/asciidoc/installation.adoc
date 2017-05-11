@@ -34,4 +34,6 @@ export JAVA_HOME
 +
 
 By default, the RPM  is installed in `/usr/local/redhawk`.
-If you decided to resolve the dependency during install, the RPM installs jre-1.8 for you. Add a `JAVA_HOME` environment variable for Karaf to run properly.
+If you decided to resolve the dependency during install, the RPM installs jre-1.8 for you. Add a `JAVA_HOME`(see step 2 in tarball instructions) environment variable for Karaf to run properly.
+
+If using the RPM users will need to root or have sudo priviledges to perform tasks like starting KARAF or interacting with the java shell provided. 

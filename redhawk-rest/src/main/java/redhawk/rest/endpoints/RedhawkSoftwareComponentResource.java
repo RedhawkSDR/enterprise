@@ -53,7 +53,7 @@ public class RedhawkSoftwareComponentResource extends RedhawkBaseResource{
 	@Path("/")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
     @ApiOperation(
-    		value="Returns SCD for a Component"
+    		value="GET SCD for REDHAWK Component"
     		)	
 	public Response getSoftwareComponent() throws ResourceNotFound, Exception {
 		return Response.ok(redhawkManager.get(nameServer,

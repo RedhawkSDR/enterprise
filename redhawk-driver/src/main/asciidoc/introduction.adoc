@@ -16,7 +16,9 @@ If using Maven, add the following to the dependency section of your project's po
 If familiar with Maven, and you are starting from scratch, you can use the `redhawk-driver-bundle-archetype` to generate your project structure by running this command:
 
 ----
-mvn archetype:generate -DarchetypeGroupId=redhawk -DarchetypeArtifactId=redhawk-driver-bundle-archetype -DarchetypeVersion=1.0.0-SNAPSHOT
+mvn archetype:generate -DarchetypeGroupId=redhawk \
+ -DarchetypeArtifactId=redhawk-driver-bundle-archetype \
+ -DarchetypeVersion=1.0.0-SNAPSHOT
 ----
 
 After running the command, you are prompted for the following information:

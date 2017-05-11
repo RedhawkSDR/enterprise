@@ -10,6 +10,8 @@ After installing REDHAWK Enterprise Integration, the following directories are d
 
 The shell provides a convenient method to use the REDHAWK Driver without an IDE or other development tools. To start the REDHAWK Driver shell environment:
 
+*The commands below require access to a REDHAWK Domain and GPP.* 
+
 . Run the jrepl script:
 +
 ----
@@ -17,6 +19,8 @@ The shell provides a convenient method to use the REDHAWK Driver without an IDE 
 ----
 In the console, you have access to the necessary imports for REDHAWK Driver via 
  `:eval driver-imports`. You also have access to all the classes in REDHAWK Driver. 
+ 
+ _Note: More instructions and information on trouble shooting can be found in the README.md file contained in that directory._
 
 ==== Example Commands
 

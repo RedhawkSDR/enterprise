@@ -19,6 +19,8 @@
  */
 package redhawk.connector;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,71 +55,78 @@ public class RedhawkConnector implements ManagedServiceFactory {
 	private static final String DEVICE_MANAGER_FS_ROOT_PROPERTY = "deviceManagerFileSystemRoot";
 
 	public void updated(String pid, Dictionary properties) throws ConfigurationException {
-		
-		String connectionName = (String) properties.get(CONNECTION_NAME_PROPERTY);
-		if(isEmpty(connectionName)){
+
+		String connectionName = dynamicPropertyConversion(properties, CONNECTION_NAME_PROPERTY, String.class);
+		if (isEmpty(connectionName)) {
 			throw new ConfigurationException(CONNECTION_NAME_PROPERTY, "Connection Name is Required");
 		}
-		
-		String host = (String) properties.get(HOST_NAME_PROPERTY);
-		if(isEmpty(host)){
+
+		String host = dynamicPropertyConversion(properties, HOST_NAME_PROPERTY, String.class);
+
+		if (isEmpty(host)) {
 			throw new ConfigurationException(HOST_NAME_PROPERTY, "Host Name is Required");
 		}
-		
+
 		Long port = null;
-		
+
 		try {
-			port = (Long) properties.get(PORT_NAME_PROPERTY);
-		} catch(ClassCastException e) {
+			port = dynamicPropertyConversion(properties, PORT_NAME_PROPERTY, Long.class);
+		} catch (ClassCastException e) {
 			try {
 				port = Long.parseLong((String) properties.get(PORT_NAME_PROPERTY));
-			} catch(NumberFormatException e1) {
+			} catch (NumberFormatException e1) {
 				logger.severe(e.getMessage());
 			}
 		}
 
-		if(port == null) {
+		if (port == null) {
 			throw new ConfigurationException(PORT_NAME_PROPERTY, "Port is Required");
-		}		
-		
+		}
+
 		try {
 			logger.fine("Checking for a pre-existing REDHAWK connection with the connectionName of: " + connectionName);
-			ServiceReference<?>[] existingRHConnection = bundleContext.getAllServiceReferences(Redhawk.class.getName(), null);
-			
+			ServiceReference<?>[] existingRHConnection = bundleContext.getAllServiceReferences(Redhawk.class.getName(),
+					null);
+
 			if (existingRHConnection != null) {
 				String servicePid = (String) existingRHConnection[0].getProperty("service.pid");
 				String curConnectionName = (String) existingRHConnection[0].getProperty(CONNECTION_NAME_PROPERTY);
 
 				if (!pid.equalsIgnoreCase(servicePid) && connectionName.equalsIgnoreCase(curConnectionName)) {
-					throw new ConfigurationException(CONNECTION_NAME_PROPERTY, "A redhawk connection with this name already exists");
+					throw new ConfigurationException(CONNECTION_NAME_PROPERTY,
+							"A redhawk connection with this name already exists");
 				}
-
-				String curHost = (String) existingRHConnection[0].getProperty(HOST_NAME_PROPERTY);
-				long curPort = (Long) existingRHConnection[0].getProperty(PORT_NAME_PROPERTY);
+				
+				String curHost = dynamicPropertyConversion(existingRHConnection[0].getProperty(HOST_NAME_PROPERTY), String.class);
+				long curPort = dynamicPropertyConversion(existingRHConnection[0].getProperty(PORT_NAME_PROPERTY), Long.class);
 
 				if (!pid.equalsIgnoreCase(servicePid) && curHost.equalsIgnoreCase(host) && curPort == port) {
-					throw new ConfigurationException(CONNECTION_NAME_PROPERTY, "A connection has already been established with this REDHAWK Domain from this REDBUS Instance");
+					throw new ConfigurationException(CONNECTION_NAME_PROPERTY,
+							"A connection has already been established with this REDHAWK Domain from this REDBUS Instance");
 				}
 			}
 		} catch (InvalidSyntaxException e) {
 			logger.log(Level.SEVERE, "An InvalidSyntaxException has occurred", e);
 			throw new ConfigurationException("InvalidSyntaxException", e.getMessage());
-		}		
-		
+		}
+
 		if (connectionName.equalsIgnoreCase("redhawk")) {
-			logger.warning("Connection Name is redhawk. This will conflict with the REDHAWK Camel Component if it is installed. " + "Appending host name to the connectionName for uniqueness");
+			logger.warning(
+					"Connection Name is redhawk. This will conflict with the REDHAWK Camel Component if it is installed. "
+							+ "Appending host name to the connectionName for uniqueness");
 			connectionName = connectionName + "-" + host.replaceAll("\\.", "_");
 			properties.put(CONNECTION_NAME_PROPERTY, connectionName);
 		}
 
-		//remove old if updating.
+		// remove old if updating.
 		if (redhawkRegistrationEntries.get(pid) != null) {
 			deleted(pid);
 		}
 
-		// Domain Manager is optional. If its specified, connect and register a device manager.
-		String domainManagerName = (String) properties.get(DOMAIN_MANAGER_PROPERTY);
-		String deviceManagerName = (String) properties.get(DEVICE_MANAGER_NAME_PROPERTY);
+		// Domain Manager is optional. If its specified, connect and register a
+		// device manager.
+		String domainManagerName = dynamicPropertyConversion(properties.get(DOMAIN_MANAGER_PROPERTY), String.class);
+		String deviceManagerName = dynamicPropertyConversion(properties.get(DEVICE_MANAGER_NAME_PROPERTY), String.class);
 
 		Redhawk redhawkDriver = new RedhawkDriver(host, port.intValue());
 
@@ -126,7 +135,7 @@ public class RedhawkConnector implements ManagedServiceFactory {
 			try {
 				RedhawkDomainManager domMgr = redhawkDriver.getDomain(domainManagerName);
 				String deviceManagerFileSystemRoot = (String) properties.get(DEVICE_MANAGER_FS_ROOT_PROPERTY);
-				
+
 				if (isEmpty(deviceManagerFileSystemRoot)) {
 					deviceManagerFileSystemRoot = System.getProperty("karaf.base");
 				}
@@ -134,18 +143,21 @@ public class RedhawkConnector implements ManagedServiceFactory {
 				domMgr.createDeviceManager(deviceManagerName, deviceManagerFileSystemRoot, true);
 				redhawkDomainManagers.put(pid, domMgr);
 			} catch (Exception e) {
-				logger.log(Level.SEVERE, "There was a problem attempting to create the device manager.  The device manager will not be created at this time. Please update your configuration file.", e);
+				logger.log(Level.SEVERE,
+						"There was a problem attempting to create the device manager.  The device manager will not be created at this time. Please update your configuration file.",
+						e);
 				return;
 			}
 		}
 
-		ServiceRegistration<Redhawk> registration = (ServiceRegistration<Redhawk>) bundleContext.registerService(Redhawk.class.getName(), redhawkDriver, properties);
+		ServiceRegistration<Redhawk> registration = (ServiceRegistration<Redhawk>) bundleContext
+				.registerService(Redhawk.class.getName(), redhawkDriver, properties);
 		redhawkRegistrationEntries.put(pid, registration);
 	}
 
-	
 	public void deleted(String pid) {
-		//DomainManager connections are optional, so only remove if we actually have one
+		// DomainManager connections are optional, so only remove if we actually
+		// have one
 		RedhawkDomainManager dom = redhawkDomainManagers.get(pid);
 		if (dom != null) {
 			dom.unRegisterAllDriverRegisteredDeviceManagers();
@@ -154,18 +166,18 @@ public class RedhawkConnector implements ManagedServiceFactory {
 
 		ServiceRegistration<Redhawk> sreg = redhawkRegistrationEntries.get(pid);
 		if (sreg != null && sreg.getReference() != null) {
-			// Clean up the service registry so that nobody can get the service while we're shutting it down
+			// Clean up the service registry so that nobody can get the service
+			// while we're shutting it down
 			Redhawk redhawk = bundleContext.getService(sreg.getReference());
 			if (redhawk != null) {
 				redhawk.disconnect();
 			}
-			
+
 			bundleContext.ungetService(sreg.getReference());
 			sreg.unregister();
 			redhawkRegistrationEntries.remove(pid);
-		}		
+		}
 	}
-	
 
 	public void shutdown() {
 		for (String pid : redhawkRegistrationEntries.keySet()) {
@@ -191,8 +203,24 @@ public class RedhawkConnector implements ManagedServiceFactory {
 		this.name = name;
 	}
 
-    private boolean isEmpty(String str) {
-        return str == null || str.trim().length() == 0;
-    }
-    
+	private boolean isEmpty(String str) {
+		return str == null || str.trim().length() == 0;
+	}
+
+	private <T> T dynamicPropertyConversion(Dictionary properties, String name, Class aClass) throws ConfigurationException {
+		return this.dynamicPropertyConversion(properties.get(name), aClass);
+	}
+	
+	private <T> T dynamicPropertyConversion(Object property, Class aClass) throws ConfigurationException {
+		Method meth;
+
+		try {
+			meth = aClass.getMethod("valueOf", String.class);
+			return (T) meth.invoke(property, property.toString());
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e) {
+			throw new ConfigurationException(name, "Unable to get property "+name+" likely bad formatting.", e.getCause());
+		}
+	}
+
 }

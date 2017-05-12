@@ -5,7 +5,7 @@ The following code examples explain how to use the `RedhawkEventChannelManager` 
 === Interacting with the EventChannelManager 
 
 [source,java,indent=0]
-.RedhawkEventChannelManagerIT.java
+.`RedhawkEventChannelManagerIT.java`
 ----
 include::snippets/RedhawkEventChannelManagerIT.java[lines=72..86]
 ----

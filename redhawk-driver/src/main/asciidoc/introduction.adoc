@@ -34,6 +34,7 @@ If not using Maven, you can add the .jar file to your project's build path or co
 
 The following code examples may be helpful to developers getting started with the REDHAWK Driver. 
 
-_Note: All code examples are coming directly from actual Integration Tests. For the full imports needed for the code examples and more details refer to the source files where the examples(snippets) are taken from_
-
-
+[NOTE]
+====
+All code examples are coming directly from actual REDHAWK Driver Integration Tests. For the full imports needed for the code examples and more details refer to the source files where the examples(snippets) are taken from. The source files for all test relevant to the REDHAWK Driver can be found in the `src/test/java` directory for the REDHAWK Driver module.
+====

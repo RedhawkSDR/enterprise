@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
@@ -35,8 +36,6 @@ import org.omg.CosEventChannelAdmin.TypeError;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
 import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import CF.DataType;
 import CF.EventChannelManager;
@@ -55,7 +54,7 @@ import redhawk.driver.eventchannel.listeners.EventChannelListener;
 import redhawk.driver.exceptions.EventChannelException;
 
 public class RedhawkEventChannelImpl implements RedhawkEventChannel {
-	private Logger log = LoggerFactory.getLogger(RedhawkEventChannelImpl.class);
+	private Logger log = Logger.getLogger(RedhawkEventChannelImpl.class.getName());
 	
 	private String eventChannelName;
 	private ORB orb;

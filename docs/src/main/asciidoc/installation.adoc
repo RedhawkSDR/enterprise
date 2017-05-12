@@ -26,6 +26,8 @@ export JAVA_HOME
 
 === Installing via RPM
 
+IMPORTANT: If installing via RPM, you must be root or have sudo privileges.
+
 . Run this command to install the RPM:
 +
 ----
@@ -33,7 +35,7 @@ export JAVA_HOME
 ----
 +
 
-By default, the RPM  is installed in `/usr/local/redhawk`.
-If you decided to resolve the dependency during install, the RPM installs jre-1.8 for you. Add a `JAVA_HOME`(see step 2 in tarball instructions) environment variable for Karaf to run properly.
+By default, the RPM  is installed in `/usr/local/redhawk`. If you resolved the dependency during install, the RPM installs jre-1.8 for you.
++
 
-If using the RPM users will need to root or have sudo priviledges to perform tasks like starting KARAF or interacting with the java shell provided. 
+. If you did not resolve the dependency during install, add a `JAVA_HOME` environment variable for Karaf to run properly (refer to the previous procedure, Installing via Tarball).

@@ -58,15 +58,21 @@ Using the REDHAWK Connector to create a Redhawk Connection results in the follow
 
 To create a REDHAWK Connector configuration in the Karaf web console: 
 
-. Open a browser to `/system/console/configMgr` of your running Karaf instance.
+. Open a browser to `/system/console/configMgr` of your running Karaf instance. For example:
 +
- 
-_Note: For example, '127.0.0.1:8181/system/console/configMgr'._
+
+....
+http://127.0.0.1:8181/system/console/configMgr
+....
 +
 
 You are prompted to enter a username and password.
 +
-. Enter a username and password. (Default username is `karaf`. Default password is `karaf`. Refer to the https://karaf.apache.org/manual/latest/#_users_groups_roles_and_passwords[Apache Karaf documentation] to change the default username or password.)
+
+. Enter a username and password. (The default username is `karaf`, and the default password is `karaf`.)
++
+
+TIP:  To change the default username or password, refer to the https://karaf.apache.org/manual/latest/#_users_groups_roles_and_passwords[Apache Karaf documentation].
 
 . In the list of configurable services displayed on the Apache Karaf Web Console Configuration page, locate REDHAWK Connector.
 

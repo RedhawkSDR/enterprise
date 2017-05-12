@@ -10,7 +10,7 @@ REDHAWK Enterprise Integration is a suite of software for interacting with a RED
 
 The suite of software is prepackaged in a custom Karaf distribution to help users easily get started using REDHAWK Enterprise Integration. 
 
-All assets have been tested against REDHAWK `${redhawk.version}` . 
+All assets have been tested against REDHAWK ${redhawk.version}. 
 
 
 

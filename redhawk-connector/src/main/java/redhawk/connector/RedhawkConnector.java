@@ -102,7 +102,7 @@ public class RedhawkConnector implements ManagedServiceFactory {
 
 				if (!pid.equalsIgnoreCase(servicePid) && curHost.equalsIgnoreCase(host) && curPort == port) {
 					throw new ConfigurationException(CONNECTION_NAME_PROPERTY,
-							"A connection has already been established with this REDHAWK Domain from this REDBUS Instance");
+							"A connection has already been established with this REDHAWK Domain from this Karaf Instance");
 				}
 			}
 		} catch (InvalidSyntaxException e) {

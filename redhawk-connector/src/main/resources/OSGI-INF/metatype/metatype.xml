@@ -22,7 +22,7 @@ with this program.  If not, see http://www.gnu.org/licenses/.
     <AD name="Port"  id="port" required="true" type="Long" default="2809" description="Port where the Naming Service is listening"/>
     <AD name="Domain Name"  id="domainManager" required="false" type="String" default="REDHAWK_DEV" description="Optional name of the REDHAWK Domain Manager (as found in the CORBA Naming Service). If none is specified, you won't be connected to a Domain Manager by default."/>
     <AD name="Device Manager Name"  id="deviceManagerName" required="false" type="String" description="The name of the Device Manager to register with REDHAWK. If none is specified, you don't get a Device Manager." />
-    <AD name="Device Manager File System Root"  id="deviceManagerFileSystemRoot" required="false" type="String" description="The filesystem root of the Device Manager. Defaults to ${redbus.base}, the REDBUS home directory." />
+    <AD name="Device Manager File System Root"  id="deviceManagerFileSystemRoot" required="false" type="String" description="The filesystem root of the Device Manager. Defaults to ${karaf.base}, the KARAF home directory." />
   </OCD>
   
   <Designate pid="redhawk.datasource.factory" factoryPid="redhawk.datasource.factory" >

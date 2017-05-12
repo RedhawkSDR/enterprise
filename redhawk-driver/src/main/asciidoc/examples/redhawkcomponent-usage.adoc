@@ -5,6 +5,7 @@ The following code examples explain how to use the `RedhawkComponent` interface.
 === Managing Your Component's Lifecycle
 
 [source,java,indent=0]
+.RedhawkComponentImplIT.java
 ----
 include::snippets/RedhawkComponentImplIT.java[lines=99..106]
 ----
@@ -12,6 +13,7 @@ include::snippets/RedhawkComponentImplIT.java[lines=99..106]
 === Interacting with Component Properties on Your Component
 
 [source,java,indent=0]
+.RedhawkComponentImplIT.java
 ----
 include::snippets/RedhawkComponentImplIT.java[lines=88..96]
 ----

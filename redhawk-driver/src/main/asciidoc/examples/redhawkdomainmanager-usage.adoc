@@ -7,6 +7,7 @@ The following code examples explain how to use the `RedhawkDomainManager` interf
 Sample code for creating an Application from a Waveform that is already in your Domain. 
 
 [source,java,indent=0]
+.RedhawkDomainManagerImplIT.java
 ----
 include::snippets/RedhawkDomainManagerImplIT.java[lines=144..150]
 ----
@@ -14,6 +15,7 @@ include::snippets/RedhawkDomainManagerImplIT.java[lines=144..150]
 Sample code for creating an Application from a SAD file on a file system. 
 
 [source,java,indent=0]
+.RedhawkDomainManagerImplIT.java
 ----
 include::snippets/RedhawkComponentImplIT.java[lines=59]
 ----
@@ -21,6 +23,7 @@ include::snippets/RedhawkComponentImplIT.java[lines=59]
 === Get an Application from a REDHAWK Domain
 
 [source,java,indent=0]
+.RedhawkDomainManagerImplIT.java
 ----
 include::snippets/RedhawkDomainManagerImplIT.java[lines=153..156]
 ----
@@ -28,6 +31,7 @@ include::snippets/RedhawkDomainManagerImplIT.java[lines=153..156]
 === Get a Device from a REDHAWK Domain
 
 [source,java,indent=0]
+.RedhawkDomainManagerImplIT.java
 ----
 include::snippets/RedhawkDomainManagerImplIT.java[lines=159..166]
 ----
@@ -35,6 +39,7 @@ include::snippets/RedhawkDomainManagerImplIT.java[lines=159..166]
 === Get a Device Manager from a REDHAWK Domain
 
 [source,java,indent=0]
+.RedhawkDomainManagerImplIT.java
 ----
 include::snippets/RedhawkDomainManagerImplIT.java[lines=165..172]
 ----

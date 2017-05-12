@@ -6,6 +6,7 @@ The following code examples explain how to use the `RedhawkDriver` class.
 === Get a REDHAWK Domain
 
 [source,java,indent=0]
+.RedhawkDriverIT.java
 ----
 include::snippets/RedhawkDriverIT.java[lines=165]
 ----
@@ -13,6 +14,7 @@ include::snippets/RedhawkDriverIT.java[lines=165]
 === Get a REDHAWK Device Manager  
 
 [source,java,indent=0]
+.RedhawkDriverIT.java
 ----
 include::snippets/RedhawkDriverIT.java[lines=114..119]
 ----
@@ -20,6 +22,7 @@ include::snippets/RedhawkDriverIT.java[lines=114..119]
 === Get a REDHAWK Device  
 
 [source,java,indent=0]
+.RedhawkDriverIT.java
 ----
 include::snippets/RedhawkDriverIT.java[lines=124..129]
 ----
@@ -27,6 +30,7 @@ include::snippets/RedhawkDriverIT.java[lines=124..129]
 === Get a REDHAWK Application 
 
 [source,java,indent=0]
+.RedhawkDriverIT.java
 ----
 include::snippets/RedhawkDriverIT.java[lines=170]
 ----
@@ -34,6 +38,7 @@ include::snippets/RedhawkDriverIT.java[lines=170]
 === Get a REDHAWK Component 
 
 [source,java,indent=0]
+.RedhawkDriverIT.java
 ----
 include::snippets/RedhawkDriverIT.java[lines=175]
 ----
@@ -41,6 +46,7 @@ include::snippets/RedhawkDriverIT.java[lines=175]
 === Get a REDHAWK Component's Port
 
 [source,java,indent=0]
+.RedhawkDriverIT.java
 ----
 include::snippets/RedhawkDriverIT.java[lines=179]
 ----
@@ -50,6 +56,7 @@ include::snippets/RedhawkDriverIT.java[lines=179]
 The `RedhawkDriver` includes helper utilities to enable users to easily access their REDHAWK Domain/REDHAWK Device Managers/REDHAWK Devices. These helper methods only work if there is only one REDHAWK Domain/REDHAWK Device Manager/REDHAWK Device available. If more than one REDHAWK Domain/REDHAWK Device Manager/REDHAWK Device exists, use the methods provided in <<Get a REDHAWK Domain>>, <<Get a REDHAWK Device Manager>>, or <<Get a REDHAWK Device>> to access those resources. 
 
 [source,java,indent=0]
+.RedhawkDriverIT.java
 ----
 include::snippets/RedhawkDriverIT.java[lines=134..141]
 ----

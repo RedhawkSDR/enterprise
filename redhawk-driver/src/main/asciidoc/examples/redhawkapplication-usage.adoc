@@ -5,6 +5,7 @@ The following code examples explain how to use the `RedhawkApplication` interfac
 === Managing your Application's Lifecycle
 
 [source,java,indent=0]
+.`RedhawkApplicationImplIT.java`
 ----
 include::snippets/RedhawkApplicationImplIT.java[lines=100..110]
 ----
@@ -12,6 +13,7 @@ include::snippets/RedhawkApplicationImplIT.java[lines=100..110]
 === Interacting with Components from Your Application
 
 [source,java,indent=0]
+.`RedhawkApplicationImplIT.java`
 ----
 include::snippets/RedhawkApplicationImplIT.java[lines=92..96]
 ----

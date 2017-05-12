@@ -5,6 +5,7 @@ Below are code examples for using the `RedhawkPort` interface.
 === Consuming Messages from a REDHAWK Port
 
 [source,java,indent=0]
+.MessageConsumerPortIT.java
 ----
 include::snippets/MessageConsumerPortIT.java[lines=102..127]
 ----

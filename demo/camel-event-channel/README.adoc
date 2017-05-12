@@ -23,9 +23,10 @@ This example Application illustrates how to use a Camel REDHAWK Component to sub
 
 . To publish events to an ActiveMQ instance, install ActiveMQ on your machine or any machine to which your machine has access. For more information about ActiveMQ, refer to the following links:
 
-* Download ActiveMQ http://activemq.apache.org/download.html[here] 
+* http://activemq.apache.org/download.html[Download ActiveMQ] 
 
-* For ActiveMQ Getting Started information click http://activemq.apache.org/version-5-getting-started.html[here]
+* http://activemq.apache.org/version-5-getting-started.html[ActiveMQ Getting Started Information]
+
 
 === Example Output
 

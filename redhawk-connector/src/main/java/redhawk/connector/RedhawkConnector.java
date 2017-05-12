@@ -208,18 +208,31 @@ public class RedhawkConnector implements ManagedServiceFactory {
 	}
 
 	private <T> T dynamicPropertyConversion(Dictionary properties, String name, Class aClass) throws ConfigurationException {
-		return this.dynamicPropertyConversion(properties.get(name), aClass);
+		try{
+			return this.dynamicPropertyConversion(properties.get(name), aClass);
+		}catch(ConfigurationException ex){
+			throw new ConfigurationException(name, "Unable to get property "+properties.get(name)+" w/ key "+name+", likely bad formatting.", ex.getCause());
+		}
 	}
 	
 	private <T> T dynamicPropertyConversion(Object property, Class aClass) throws ConfigurationException {
 		Method meth;
-
-		try {
-			meth = aClass.getMethod("valueOf", String.class);
-			return (T) meth.invoke(property, property.toString());
-		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException e) {
-			throw new ConfigurationException(name, "Unable to get property "+name+" likely bad formatting.", e.getCause());
+		
+		if(property!=null){
+			try {
+				if(!aClass.isInstance(new String())){
+					meth = aClass.getMethod("valueOf", String.class);
+					return (T) meth.invoke(property, property.toString());				
+				}else{
+					return (T) property.toString();
+				}
+			} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e) {
+				throw new ConfigurationException(name, "Unable to get property "+property+" likely bad formatting.", e.getCause());
+			}			
+		}else{
+			logger.warning("Received Null for one of the properties being checked");
+			return null;
 		}
 	}
 

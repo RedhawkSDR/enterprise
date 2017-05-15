@@ -33,6 +33,12 @@ public class RedhawkExternalPortImpl implements RedhawkPort {
 		this.port = impl;
 	}
 	
+	public RedhawkExternalPortImpl(RedhawkPortImpl impl, String description, String externalName){
+		this.port = impl; 
+		this.description = description;
+		this.externalName = externalName;
+	}
+	
 	/**
 	 * Description of External port
 	 * @return

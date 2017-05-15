@@ -45,100 +45,113 @@ import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.driver.port.impl.RedhawkExternalPortImpl;
 
-public class RedhawkApplicationImplIT extends RedhawkTestBase{	
-	private static String applicationName = "myTestApplication"; 
-	
-	private static RedhawkApplication application; 
-	
+public class RedhawkApplicationImplIT extends RedhawkTestBase {
+	private static String applicationName = "myTestApplication";
+
+	private static RedhawkApplication application;
+
 	@BeforeClass
-	public static void setup() throws ResourceNotFoundException, ApplicationCreationException, CORBAException, MultipleResourceException{
-		driver.getDomain("REDHAWK_DEV").createApplication(applicationName, new File("src/test/resources/waveforms/rh/testWaveform.sad.xml"));
-		
-		application = driver.getApplication("REDHAWK_DEV/"+applicationName);
+	public static void setup()
+			throws ResourceNotFoundException, ApplicationCreationException, CORBAException, MultipleResourceException {
+		driver.getDomain("REDHAWK_DEV").createApplication(applicationName,
+				new File("src/test/resources/waveforms/rh/testWaveform.sad.xml"));
+
+		application = driver.getApplication("REDHAWK_DEV/" + applicationName);
 
 		assertNotNull(application);
 	}
-	
-	
+
 	@Test
-	public void testApplicationLifeCycleManagement() throws ApplicationStartException, ApplicationStopException{
+	public void testApplicationLifeCycleManagement() throws ApplicationStartException, ApplicationStopException {
 		assertEquals(applicationName, application.getName());
 		application.start();
 		assertEquals("Application should be started", true, application.isStarted());
 		application.stop();
 		assertEquals("Application should be stopped", false, application.isStarted());
 	}
-	
+
 	@Test
-	public void testGetAssembly() throws IOException{
-		assertNotNull(application.getAssembly());	
+	public void testGetAssembly() throws IOException {
+		assertNotNull(application.getAssembly());
 	}
-	
+
 	@Test
-	public void testGetComponents() throws MultipleResourceException, ResourceNotFoundException{
+	public void testGetComponents() throws MultipleResourceException, ResourceNotFoundException {
 		List<RedhawkComponent> redhawkComponents = application.getComponents();
 		assertEquals("There should be two components in the test waveform", 2, redhawkComponents.size());
-		
-		//Make sure you can retrieve each component by name 
-		for(RedhawkComponent component : redhawkComponents){
+
+		// Make sure you can retrieve each component by name
+		for (RedhawkComponent component : redhawkComponents) {
 			assertNotNull(application.getComponentByName(component.getName()));
-		}	
+		}
 	}
-	
-	//@Test TODO: Fix below logic
-	public void snippets() throws ApplicationStopException, ApplicationStartException, MultipleResourceException, ResourceNotFoundException, ApplicationReleaseException, ApplicationCreationException, CORBAException{
-		//Get all components
+
+	// @Test TODO: Fix below logic
+	public void snippets() throws ApplicationStopException, ApplicationStartException, MultipleResourceException,
+			ResourceNotFoundException, ApplicationReleaseException, ApplicationCreationException, CORBAException {
+		// Get all components
 		List<RedhawkComponent> components = application.getComponents();
-		
-		//Get a specific component
+
+		// Get a specific component
 		String componentName = components.get(0).getName();
 		RedhawkComponent component = application.getComponentByName(componentName);
-		
-		//Example code for managing an applications lifecyle
-		//Stop an application 
-		application.stop();
-		
-		//Start an application
-		application.start();
-		
-		//Check to see if an application is started
-		if(application.isStarted())
-			application.stop();
-		
-		//Release an application
-		application.release();
-	
-		//Above release is just for show other test in here may need that app so relaunch cause order of tests running is 
-		//not gauranteed.
-		driver.getDomain("REDHAWK_DEV").createApplication(applicationName, "/waveforms/testWaveform/testWaveform.sad.xml");
-	}
-	
 
-	//Test retrieving external ports
+		// Example code for managing an applications lifecyle
+		// Stop an application
+		application.stop();
+
+		// Start an application
+		application.start();
+
+		// Check to see if an application is started
+		if (application.isStarted())
+			application.stop();
+
+		// Release an application
+		application.release();
+
+		// Above release is just for show other test in here may need that app
+		// so relaunch cause order of tests running is
+		// not gauranteed.
+		driver.getDomain("REDHAWK_DEV").createApplication(applicationName,
+				"/waveforms/testWaveform/testWaveform.sad.xml");
+	}
+
+	// Test retrieving external ports
 	@Test
-	public void testGetExternalPorts() throws ResourceNotFoundException, ApplicationCreationException, CORBAException, MultipleResourceException, IOException{
-		//Launch application with External ports
-		String appName = "externalPortsApp";
-		
-		driver.getDomain("REDHAWK_DEV").createApplication(appName, new File("src/test/resources/waveforms/ExternalPropPortExample/ExternalPropPortExample.sad.xml"));
-		
-		application = driver.getApplication("REDHAWK_DEV/"+appName);
-		
-		//Should be two external ports 
-		assertEquals("Should be two external ports in this waveform", 2, application.getPorts().size());
-		
-		//Ensure you properly get properties related to external ports
-		
-		//Clean up
+	public void testGetExternalPorts() throws ResourceNotFoundException, ApplicationCreationException, CORBAException,
+			MultipleResourceException, IOException {
+		// Clean up
 		try {
-			application.release();
-			
-			driver.getDomain().getFileManager().removeDirectory("/waveforms/ExternalPropPortExample");
-		} catch (ApplicationReleaseException | ConnectionException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// Launch application with External ports
+			String appName = "externalPortsApp";
+
+			driver.getDomain("REDHAWK_DEV").createApplication(appName,
+					new File("src/test/resources/waveforms/ExternalPropPortExample/ExternalPropPortExample.sad.xml"));
+
+			application = driver.getApplication("REDHAWK_DEV/" + appName);
+
+			// Should be two external ports
+			assertEquals("Should be two external ports in this waveform", 2, application.getPorts().size());
+			logger.info(application.getPorts().toString());
+			// Ensure you properly get properties related to external ports
+			RedhawkExternalPortImpl externalPort = (RedhawkExternalPortImpl) application.getPort("sigGenPort");
+
+			assertNotNull(externalPort);
+			assertNotNull(externalPort.getDescription());
+		} finally {
+			if (application != null) {
+				try {
+					application.release();
+
+					driver.getDomain().getFileManager().removeDirectory("/waveforms/ExternalPropPortExample");
+				} catch (ApplicationReleaseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
-		
 	}
 }

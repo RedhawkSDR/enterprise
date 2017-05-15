@@ -144,9 +144,13 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 				String portName = port.getUsesidentifier() != null ? port.getUsesidentifier() : port.getProvidesidentifier(); 
 				String compName = port.getComponentinstantiationref().getRefid();
 				try {
-					return getComponentByName(compName).getPort(portName);
+					RedhawkPortImpl myPort = (RedhawkPortImpl) getComponentByName(compName+".*").getPort(portName);
+					
+					return new RedhawkExternalPortImpl(myPort, port.getDescription(), port.getExternalname());
 				} catch (MultipleResourceException e) {
+					logger.severe(e.getMessage());
 				} catch (Exception e) {
+					logger.severe(e.getMessage());
 				}
 			}
 		}
@@ -173,6 +177,7 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 					
 					externalPorts.add(exPort);
 				} catch (MultipleResourceException e) {
+					logger.severe(e.getMessage());					
 				} catch (Exception e) {
 					logger.severe(e.getMessage());
 				}

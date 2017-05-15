@@ -114,14 +114,31 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase{
 		driver.getDomain("REDHAWK_DEV").createApplication(applicationName, "/waveforms/testWaveform/testWaveform.sad.xml");
 	}
 	
-	//TODO: Add test for getting externalports
-	
-	@AfterClass
-	public static void shutdown() throws ApplicationReleaseException, ConnectionException, ResourceNotFoundException, IOException, CORBAException{
-		//Release application and clean it up from $SDRROOT
-		if(application!=null){
+
+	//Test retrieving external ports
+	@Test
+	public void testGetExternalPorts() throws ResourceNotFoundException, ApplicationCreationException, CORBAException, MultipleResourceException, IOException{
+		//Launch application with External ports
+		String appName = "externalPortsApp";
+		
+		driver.getDomain("REDHAWK_DEV").createApplication(appName, new File("src/test/resources/waveforms/ExternalPropPortExample/ExternalPropPortExample.sad.xml"));
+		
+		application = driver.getApplication("REDHAWK_DEV/"+appName);
+		
+		//Should be two external ports 
+		assertEquals("Should be two external ports in this waveform", 2, application.getPorts().size());
+		
+		//Ensure you properly get properties related to external ports
+		
+		//Clean up
+		try {
 			application.release();
+			
+			driver.getDomain().getFileManager().removeDirectory("/waveforms/ExternalPropPortExample");
+		} catch (ApplicationReleaseException | ConnectionException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		driver.getDomain("REDHAWK_DEV").getFileManager().removeDirectory("/waveforms/testWaveform");			
+		
 	}
 }

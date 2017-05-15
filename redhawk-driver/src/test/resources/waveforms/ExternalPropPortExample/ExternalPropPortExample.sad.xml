@@ -67,12 +67,12 @@
     </connectinterface>
   </connections>
   <externalports>
-    <port>
+    <port externalname="sigGenPort">
       <description>External port for SigGen</description>
       <usesidentifier>dataFloat_out</usesidentifier>
       <componentinstantiationref refid="SigGen_1"/>
     </port>
-    <port externalname="dataFloat_out_1">
+    <port externalname="hardLimitPort">
       <description>External Port for Hard Limit</description>
       <usesidentifier>dataFloat_out</usesidentifier>
       <componentinstantiationref refid="HardLimit_1"/>

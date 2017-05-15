@@ -48,6 +48,8 @@ import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
+import redhawk.driver.port.impl.RedhawkExternalPortImpl;
+import redhawk.driver.port.impl.RedhawkPortImpl;
 import redhawk.driver.xml.model.sca.sad.Externalports;
 import redhawk.driver.xml.model.sca.sad.Port;
 import redhawk.driver.xml.model.sca.sad.Softwareassembly;
@@ -163,9 +165,16 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 				String compName = port.getComponentinstantiationref().getRefid();
 				try {
 					RedhawkPort rhPort = getComponentByName(compName + ".*").getPort(portName);
-					externalPorts.add(rhPort);
+					RedhawkExternalPortImpl exPort = new RedhawkExternalPortImpl((RedhawkPortImpl) rhPort);
+					
+					//Adding additional methods. 
+					exPort.setExternalName(port.getExternalname());
+					exPort.setDescription(port.getDescription());
+					
+					externalPorts.add(exPort);
 				} catch (MultipleResourceException e) {
 				} catch (Exception e) {
+					logger.severe(e.getMessage());
 				}
 			}
 		}

@@ -210,7 +210,7 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 	@Override
 	public Map<String, RedhawkProperty> getProperties(){
 		PropertiesHolder ph = new PropertiesHolder(); 
-		Map<String, RedhawkProperty> propMap = new HashMap<>();
+		Map<String, RedhawkProperty> propMap = super.getProperties();
 
 		//Only return properties that are external
 		try {
@@ -231,8 +231,7 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
                 propMap.put(property.id, getAndCast(property));        	
         	}        	
 		} catch (IOException | UnknownProperties e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.severe(e.getMessage());
 		}
 		
     	return propMap;

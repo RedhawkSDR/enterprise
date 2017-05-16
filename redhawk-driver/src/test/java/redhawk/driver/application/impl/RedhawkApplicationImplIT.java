@@ -22,6 +22,7 @@ package redhawk.driver.application.impl;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import org.junit.After;
@@ -46,6 +47,7 @@ import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.impl.RedhawkExternalPortImpl;
+import redhawk.driver.properties.RedhawkProperty;
 
 public class RedhawkApplicationImplIT extends RedhawkTestBase {
 	private static String applicationName = "myTestApplication";
@@ -165,7 +167,11 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 					new File("src/test/resources/waveforms/ExternalPropPortExample/ExternalPropPortExample.sad.xml"));
 
 			application = driver.getApplication("REDHAWK_DEV/" + appName);
-
+			//System.out.println(application.getProperties());
+			
+			for(Map.Entry<String, RedhawkProperty> entry : application.getProperties().entrySet()){
+				System.out.println("Key: "+entry.getKey()+" Value: "+entry.getValue());
+			}
 			assertEquals("Should be 3 external properties", 3, application.getProperties().size());
 		
 			assertNotNull(application.getProperty("siggen_freq"));

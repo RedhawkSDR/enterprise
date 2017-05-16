@@ -23,6 +23,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -30,8 +31,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.omg.CORBA.Any;
+import org.ossie.properties.AnyUtils;
+
 import CF.Application;
 import CF.ApplicationHelper;
+import CF.DataType;
+import CF.PropertiesHolder;
+import CF.PropertySetHelper;
+import CF.PropertySetOperations;
+import CF.UnknownProperties;
 import CF.LifeCyclePackage.ReleaseError;
 import CF.ResourcePackage.StartError;
 import CF.ResourcePackage.StopError;
@@ -50,8 +59,15 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.port.impl.RedhawkExternalPortImpl;
 import redhawk.driver.port.impl.RedhawkPortImpl;
+import redhawk.driver.properties.RedhawkProperty;
+import redhawk.driver.properties.RedhawkSimple;
+import redhawk.driver.properties.RedhawkSimpleSequence;
+import redhawk.driver.properties.RedhawkStruct;
+import redhawk.driver.properties.RedhawkStructSequence;
 import redhawk.driver.xml.model.sca.sad.Externalports;
+import redhawk.driver.xml.model.sca.sad.Externalproperties;
 import redhawk.driver.xml.model.sca.sad.Port;
+import redhawk.driver.xml.model.sca.sad.Property;
 import redhawk.driver.xml.model.sca.sad.Softwareassembly;
 
 public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> implements RedhawkApplication {
@@ -186,6 +202,41 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 		
 		return externalPorts;
 	}
+	
+	/**
+	 * At this level the only properties that will be returned 
+	 * are external. 
+	 */
+	@Override
+	public Map<String, RedhawkProperty> getProperties(){
+		PropertiesHolder ph = new PropertiesHolder(); 
+		Map<String, RedhawkProperty> propMap = new HashMap<>();
+
+		//Only return properties that are external
+		try {
+			Externalproperties exProps = getAssembly().getExternalproperties();
+			List<DataType> dataTypes = new ArrayList<DataType>();
+			
+			for(Property prop : exProps.getProperties()){
+				logger.fine("External Prop Id to look for: "+prop.getExternalpropid());
+				dataTypes.add(new DataType(prop.getExternalpropid(), getOrb().create_any()));
+			}
+			
+            ph.value = dataTypes.toArray(new DataType[dataTypes.size()]);
+            
+        	PropertySetOperations properties = PropertySetHelper.narrow(getOrb().string_to_object(getIor()));
+        	properties.query(ph);
+        	
+        	for(DataType property : ph.value){
+                propMap.put(property.id, getAndCast(property));        	
+        	}        	
+		} catch (IOException | UnknownProperties e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+    	return propMap;
+	}
 
 	@Override
 	public void start() throws ApplicationStartException {
@@ -221,5 +272,21 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 		return ApplicationHelper.class;
 	}
 
-
+	//TODO: Refactor and move this to RedhawkUtils class. 
+    private RedhawkProperty getAndCast(DataType property){
+    	ClassLoader cl = Thread.currentThread().getContextClassLoader();
+		Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
+    	Object propertyValue = AnyUtils.convertAny(property.value);
+		Thread.currentThread().setContextClassLoader(cl);
+    	
+		if(propertyValue instanceof Any[]){
+            return new RedhawkStructSequence(getOrb(), getIor(), property.id, (Any[]) propertyValue);
+        } else if(propertyValue instanceof DataType[]) {
+            return new RedhawkStruct(getOrb(), getIor(), property.id, (DataType[]) propertyValue, null);
+        } else if(propertyValue instanceof Object[]){
+            return new RedhawkSimpleSequence(getOrb(), getIor(),  property.id, (Object[]) propertyValue, property.value.type());
+        } else {
+            return new RedhawkSimple(getOrb(), getIor(),  property.id, propertyValue);
+        }
+    }
 }

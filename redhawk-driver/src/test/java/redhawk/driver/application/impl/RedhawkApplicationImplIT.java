@@ -123,7 +123,6 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 	@Test
 	public void testGetExternalPorts() throws ResourceNotFoundException, ApplicationCreationException, CORBAException,
 			MultipleResourceException, IOException {
-		// Clean up
 		try {
 			// Launch application with External ports
 			String appName = "externalPortsApp";
@@ -153,5 +152,34 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 				}
 			}
 		}
+	}
+	
+	// Test retrieving External Properties
+	@Test
+	public void testGetExternalProperties() throws ResourceNotFoundException, ApplicationCreationException, CORBAException, MultipleResourceException, IOException{
+		try {
+			// Launch application with External ports
+			String appName = "externalPropertiesApp";
+
+			driver.getDomain("REDHAWK_DEV").createApplication(appName,
+					new File("src/test/resources/waveforms/ExternalPropPortExample/ExternalPropPortExample.sad.xml"));
+
+			application = driver.getApplication("REDHAWK_DEV/" + appName);
+
+			assertEquals("Should be 3 external properties", 3, application.getProperties().size());
+		
+			assertNotNull(application.getProperty("siggen_freq"));
+		} finally {
+			if (application != null) {
+				try {
+					application.release();
+
+					driver.getDomain().getFileManager().removeDirectory("/waveforms/ExternalPropPortExample");
+				} catch (ApplicationReleaseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}		
 	}
 }

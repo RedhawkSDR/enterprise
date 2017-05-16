@@ -63,6 +63,8 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
     /**
      * @return Properties related to the object.
      */
+    //TODO: The key isn't very unique here will cause problems on anything 
+    //That's not just a component. 
     public Map<String, RedhawkProperty> getProperties(){
         Map<String, RedhawkProperty> propMap = new HashMap<String, RedhawkProperty>();
         PropertiesHolder ph = query(null);
@@ -121,12 +123,20 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
     }
     
     
+    /**
+     * Return a DataType property object as a POJO
+     * 
+     * @param property
+     * @return
+     * 
+     */
     private RedhawkProperty getAndCast(DataType property){
     	ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
     	Object propertyValue = AnyUtils.convertAny(property.value);
 		Thread.currentThread().setContextClassLoader(cl);
-    	if(propertyValue instanceof Any[]){
+    	
+		if(propertyValue instanceof Any[]){
             return new RedhawkStructSequence(getOrb(), getIor(), property.id, (Any[]) propertyValue);
         } else if(propertyValue instanceof DataType[]) {
             return new RedhawkStruct(getOrb(), getIor(), property.id, (DataType[]) propertyValue, null);

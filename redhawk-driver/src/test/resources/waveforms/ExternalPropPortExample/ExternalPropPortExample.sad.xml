@@ -40,6 +40,15 @@
         </findcomponent>
       </componentinstantiation>
     </componentplacement>
+    <componentplacement>
+      <componentfileref refid="SigGen_4c3eadce-dab4-493d-ba6f-1c187e73c341"/>
+      <componentinstantiation id="SigGen_2" startorder="3">
+        <usagename>SigGen_2</usagename>
+        <findcomponent>
+          <namingservice name="SigGen_2"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
   </partitioning>
   <assemblycontroller>
     <componentinstantiationref refid="SigGen_1"/>
@@ -81,5 +90,6 @@
   <externalproperties>
     <property comprefid="SigGen_1" propid="frequency" externalpropid="siggen_freq"/>
     <property comprefid="psd_1" propid="fftSize" externalpropid="psd_fftSize"/>
+    <property comprefid="SigGen_2" propid="frequency" externalpropid="siggen2_freq"/>
   </externalproperties>
 </softwareassembly>

@@ -32,6 +32,7 @@ import redhawk.driver.exceptions.ApplicationStopException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
+import redhawk.driver.properties.RedhawkProperty;
 import redhawk.driver.xml.model.sca.sad.Softwareassembly;
 
 /**

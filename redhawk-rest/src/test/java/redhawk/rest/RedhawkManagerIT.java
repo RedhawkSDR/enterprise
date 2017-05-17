@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.Test;
 
 import redhawk.rest.model.Application;
+import redhawk.rest.model.ExternalPort;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.Port;
 
@@ -61,5 +62,18 @@ public class RedhawkManagerIT {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void testApplicationPort(){
+		try {
+			ExternalPort port = manager.get("localhost:2809", "applicationport", "REDHAWK_DEV/External.*", "sigGenPort");
+			
+			System.out.println(port);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
 	}
 }

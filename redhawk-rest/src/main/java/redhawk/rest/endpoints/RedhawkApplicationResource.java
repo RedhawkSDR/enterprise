@@ -41,6 +41,7 @@ import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.rest.exceptions.ResourceNotFound;
 import redhawk.rest.model.ApplicationContainer;
+import redhawk.rest.model.ExternalPort;
 import redhawk.rest.model.ExternalPortContainer;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.FullProperty;
@@ -185,9 +186,9 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET Application port"
     )
-    public Response getPort(
+    public ExternalPort getApplicationPort(
     		@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId,
     		@PathParam("portId") String portName) throws ResourceNotFound, Exception {
-        return Response.ok(redhawkManager.get(nameServer, "applicationport", domainName + "/" + applicationId + "/", portName)).build();
+        return redhawkManager.get(nameServer, "applicationport", domainName + "/" + applicationId + "/", portName);
     }
 }

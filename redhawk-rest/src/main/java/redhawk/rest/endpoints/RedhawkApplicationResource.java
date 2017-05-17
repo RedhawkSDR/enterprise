@@ -188,7 +188,10 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     )
     public ExternalPort getApplicationPort(
     		@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId,
-    		@PathParam("portId") String portName) throws ResourceNotFound, Exception {
-        return redhawkManager.get(nameServer, "applicationport", domainName + "/" + applicationId + "/", portName);
+    		@ApiParam(value = "External name for port") @PathParam("portId") String portName) throws ResourceNotFound, Exception {
+        logger.fine("Made it into port call");
+    	ExternalPort port = redhawkManager.get(nameServer, "applicationport", domainName + "/" + applicationId + "/", portName);
+    	logger.fine("Got port: "+port);
+    	return port;
     }
 }

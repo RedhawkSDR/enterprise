@@ -33,6 +33,8 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
+import com.fasterxml.jackson.jaxrs.xml.JacksonXMLProvider;
+
 import redhawk.driver.Redhawk;
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.application.RedhawkApplication;
@@ -56,6 +58,7 @@ import redhawk.driver.properties.RedhawkSimpleSequence;
 import redhawk.driver.properties.RedhawkStruct;
 import redhawk.driver.properties.RedhawkStructSequence;
 import redhawk.driver.xml.model.sca.prf.Properties;
+import redhawk.driver.xml.model.sca.sad.Externalproperties;
 import redhawk.driver.xml.model.sca.sad.Softwareassembly;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.FullProperty;
@@ -452,7 +455,9 @@ public class RedhawkManager {
 
         Map<String, RedhawkProperty> properties = null;
         Properties propConfig = null;
-
+        String assemblyControllerId = null;
+        Externalproperties exProps = null; 
+        
         switch (type) {
             case "domain": {
                 RedhawkDomainManager domain = internalGet(redhawk, type, location);
@@ -463,6 +468,11 @@ public class RedhawkManager {
             case "application": {
                 RedhawkApplication application = internalGet(redhawk, type, location);
                 properties = application.getProperties();
+                
+                //Get Component Refs for Assembly Controller and ExternalProps
+                assemblyControllerId = application.getAssembly().getAssemblycontroller().getComponentinstantiationref().getRefid();
+                exProps = application.getAssembly().getExternalproperties();
+                
                 break;
             }
             case "devicemanager": {
@@ -483,8 +493,26 @@ public class RedhawkManager {
                 break;
             }
         }
-
-        List<Property> propertyList = converter.convertProperties(properties, propConfig);
+        
+        List<Property> propertyList = new ArrayList<>();
+        if(type.equals("application")){
+        	//Get all property objects from assembly controller
+        	RedhawkComponent acComp = internalGet(redhawk, "component", location[0]+"/"+assemblyControllerId+".*");
+        	
+        	//Convert AC props
+        	propertyList = converter.convertProperties(acComp.getProperties(), acComp.getPropertyConfiguration());
+        	
+        	//Now Add any additional External Props
+        	for(redhawk.driver.xml.model.sca.sad.Property prop : exProps.getProperties()){
+        		Property exProp = this.getProperty(prop.getPropid(), nameServer, "component", location[0]+"/"+prop.getComprefid()+".*");
+        		
+        		//TODO: Possibly add another field here for external propId
+        		exProp.setId(prop.getExternalpropid());
+        		propertyList.add(exProp);
+        	}        	
+        }else{
+        	propertyList = converter.convertProperties(properties, propConfig);        	
+        }
         return new PropertyContainer(propertyList);
     }
 

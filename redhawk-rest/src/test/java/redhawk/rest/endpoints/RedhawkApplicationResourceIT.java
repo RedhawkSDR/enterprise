@@ -21,6 +21,8 @@ package redhawk.rest.endpoints;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.UUID;
 
 import javax.ws.rs.client.WebTarget;
@@ -31,6 +33,12 @@ import org.apache.cxf.jaxrs.client.WebClient;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import redhawk.driver.application.RedhawkApplication;
+import redhawk.driver.exceptions.ApplicationCreationException;
+import redhawk.driver.exceptions.ApplicationReleaseException;
+import redhawk.driver.exceptions.CORBAException;
+import redhawk.driver.exceptions.ConnectionException;
+import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.rest.model.WaveformInfo;
 
 public class RedhawkApplicationResourceIT extends RedhawkApplicationResourceTestBase{
@@ -83,6 +91,37 @@ public class RedhawkApplicationResourceIT extends RedhawkApplicationResourceTest
 		//Test Releasing a waveform 
 		r = client.delete();
 		assertEquals(200, r.getStatus());
+	}
+	
+	@Test
+	public void testExternalPropertiesAndPorts(){
+		RedhawkApplication myApp = null;
+		try {
+			String exApplicationName = "externalPropsAndPortsExample";
+			myApp = driver.getDomain().createApplication(exApplicationName, 
+					new File("../redhawk-driver/src/test/resources/waveforms/ExternalPropPortExample/ExternalPropPortExample.sad.xml"));
+			
+			WebTarget target = client.target(baseUri+"localhost:2809/domains/"+domainName+"/applications/"+exApplicationName+"/properties");
+			
+			Response response = target.request().accept(MediaType.APPLICATION_XML).get();
+
+			
+		} catch (MultipleResourceException | ApplicationCreationException | CORBAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally{
+			if(myApp!=null){
+				try {
+					myApp.release();
+					
+					driver.getDomain().getFileManager().removeDirectory("/waveforms/ExternalPropPortExample");
+				} catch (ApplicationReleaseException | ConnectionException | MultipleResourceException | IOException | CORBAException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}				
+			}
+		}
+
 	}
 	
 	@Test

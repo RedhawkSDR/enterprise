@@ -29,9 +29,7 @@ public class RedhawkExternalPortImpl implements RedhawkPort {
 	
 	private RedhawkPortImpl port;
 	
-	public RedhawkExternalPortImpl(RedhawkPortImpl impl){
-		this.port = impl;
-	}
+	private String componentReferenceId; 
 	
 	public RedhawkExternalPortImpl(RedhawkPortImpl impl, String description, String externalName){
 		this.port = impl; 
@@ -101,6 +99,26 @@ public class RedhawkExternalPortImpl implements RedhawkPort {
 	@Override
 	public Object getCorbaObject() {
 		return port.getCorbaObject();
+	}
+
+	public RedhawkPortImpl getPort() {
+		return port;
+	}
+
+	public void setPort(RedhawkPortImpl port) {
+		this.port = port;
+	}
+
+	public String getComponentReferenceId() {
+		return componentReferenceId;
+	}
+
+	public void setComponentReferenceId(String componentReferenceId) {
+		this.componentReferenceId = componentReferenceId;
+	}
+
+	public RedhawkExternalPortImpl(RedhawkPortImpl impl){
+		this.port = impl;
 	}
 	
 	@Override

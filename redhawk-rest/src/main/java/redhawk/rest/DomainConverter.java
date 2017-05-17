@@ -368,30 +368,32 @@ public class DomainConverter {
 
 				List<Property> properties = this.convertProperties(comp.getProperties(),
 						comp.getPropertyConfiguration());
-
-				for (redhawk.driver.xml.model.sca.sad.Property exProp : obj.getAssembly().getExternalproperties().getProperties()) {
-					RedhawkComponent component = obj.getComponentByName(exProp.getComprefid()+".*");
-					String externalPropertyId = exProp.getExternalpropid();
-					String propId = exProp.getPropid();
-					
-					//Get the RedhawkProperty by it's Component propId
-					RedhawkProperty prop = component.getProperty(propId);
-					
-					//Find prop configuration that matches then rollout
-					for(Object rhProp : component.getPropertyConfiguration().getSimplesAndSimplesequencesAndTests()){
-						Property myExProp = this.convertProperty(propId, prop, rhProp);
+				
+				if(obj.getAssembly().getExternalproperties()!=null){
+					for (redhawk.driver.xml.model.sca.sad.Property exProp : obj.getAssembly().getExternalproperties().getProperties()) {
+						RedhawkComponent component = obj.getComponentByName(exProp.getComprefid()+".*");
+						String externalPropertyId = exProp.getExternalpropid();
+						String propId = exProp.getPropid();
 						
-						if(exProp!=null){
-							myExProp.setExternalId(externalPropertyId);
-							properties.add(myExProp);
-							break;
+						//Get the RedhawkProperty by it's Component propId
+						RedhawkProperty prop = component.getProperty(propId);
+						
+						//Find prop configuration that matches then rollout
+						for(Object rhProp : component.getPropertyConfiguration().getSimplesAndSimplesequencesAndTests()){
+							Property myExProp = this.convertProperty(propId, prop, rhProp);
+							
+							if(exProp!=null){
+								myExProp.setExternalId(externalPropertyId);
+								properties.add(myExProp);
+								break;
+							}
 						}
-					}
+					}					
 				}
 
 				app.setProperties(properties);
 
-				app.setExternalPorts(obj.getPorts().stream().map(this::convertPort).collect(Collectors.toList()));
+				app.setExternalPorts(obj.getPorts().stream().map(this::convertExternalPort).collect(Collectors.toList()));
 			} catch (IOException | MultipleResourceException | ResourceNotFoundException e) {
 				logger.log(Level.WARNING, e.getMessage(), e);
 			}
@@ -492,6 +494,11 @@ public class DomainConverter {
 		p.setRepId(obj.getRepId());
 		p.setType(obj.getType());
 		return p;
+	}
+	
+	//TODO: Clean this up!!!
+	private ExternalPort convertExternalPort(RedhawkPort obj){
+		return this.convertExternalPort((RedhawkExternalPortImpl)obj);
 	}
 	
 	private ExternalPort convertExternalPort(RedhawkExternalPortImpl obj){

@@ -167,7 +167,7 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 				try {
 					RedhawkPortImpl myPort = (RedhawkPortImpl) getComponentByName(compName + ".*").getPort(portName);
 
-					return new RedhawkExternalPortImpl(myPort, port.getDescription(), port.getExternalname());
+					return new RedhawkExternalPortImpl(myPort, port.getDescription(), port.getExternalname(), port.getComponentinstantiationref().getRefid());
 				} catch (MultipleResourceException e) {
 					logger.severe(e.getMessage());
 				} catch (Exception e) {
@@ -196,7 +196,8 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 					// Adding additional methods.
 					exPort.setExternalName(port.getExternalname());
 					exPort.setDescription(port.getDescription());
-
+					exPort.setComponentReferenceId(port.getComponentinstantiationref().getRefid());
+					
 					externalPorts.add(exPort);
 				} catch (MultipleResourceException e) {
 					logger.severe(e.getMessage());
@@ -219,10 +220,12 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 		// Only return properties that are external
 		try {
 			Externalproperties exProps = getAssembly().getExternalproperties();
-			for(Property prop : exProps.getProperties())
-				exPropIds.add(prop.getExternalpropid());
-			
-			propMap = super.getProperty(exPropIds.toArray(new String[exPropIds.size()]));
+			if(exProps!=null){
+				for(Property prop : exProps.getProperties())
+					exPropIds.add(prop.getExternalpropid());
+				
+				propMap = super.getProperty(exPropIds.toArray(new String[exPropIds.size()]));				
+			}
 		} catch (IOException e) {
 			logger.severe(e.getMessage());
 		}

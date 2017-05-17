@@ -31,10 +31,11 @@ public class RedhawkExternalPortImpl implements RedhawkPort {
 	
 	private String componentReferenceId; 
 	
-	public RedhawkExternalPortImpl(RedhawkPortImpl impl, String description, String externalName){
+	public RedhawkExternalPortImpl(RedhawkPortImpl impl, String description, String externalName, String componentRefId){
 		this.port = impl; 
 		this.description = description;
 		this.externalName = externalName;
+		this.componentReferenceId = componentRefId;
 	}
 	
 	/**

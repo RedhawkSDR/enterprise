@@ -96,7 +96,7 @@ public class RedhawkManager {
     }
 
 
-    public <T> T get(String nameServer, String type, String location) throws ResourceNotFoundException, Exception {
+    public <T> T get(String nameServer, String type, String... location) throws ResourceNotFoundException, Exception {
         Redhawk redhawk = getDriverInstance(nameServer);
         return (T) converter.convert(type, internalGet(redhawk, type, location));
     }
@@ -554,6 +554,11 @@ public class RedhawkManager {
                 return (T) redhawk.getDomain(location[0]);
             case "application":
                 return (T) redhawk.getApplication(location[0]);
+            case "applicationport":
+            	//Get location
+            	String appAddress = location[0];
+            	String portName = location[1];
+            	return (T) redhawk.getApplication(appAddress).getPort(portName);
             case "devicemanager":
                 return (T) redhawk.getDeviceManager(location[0]);
             case "component":

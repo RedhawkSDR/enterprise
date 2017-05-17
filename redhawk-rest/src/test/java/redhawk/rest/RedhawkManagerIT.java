@@ -17,6 +17,20 @@ public class RedhawkManagerIT {
 	@Test
 	public void testApplicationWithExternalPortsAndProperties(){
 		try {
+			List<Application> applications = manager.getAll("localhost:2809", "application", "REDHAWK_DEV", FetchMode.EAGER);
+		
+			System.out.println(applications);
+			assertEquals("Should be atleast 1 app", true, applications.size()>=1);
+			assertEquals("Properties should be here", true, !applications.isEmpty());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testApplicationWithExternalPortsAndProperties2(){
+		try {
 			Application application = manager.get("localhost:2809", "application", "REDHAWK_DEV/External.*");
 		
 			assertNotNull("Should be 1 app", application);

@@ -39,12 +39,12 @@ public class Application {
     @XmlElement(name="component")
     private List<Component> components;
     
-    //@XmlElementWrapper(name="externalPorts")
-    //@XmlElement(name="port")
-    private List<Port> externalPorts;
+    @XmlElementWrapper(name="externalPorts")
+    @XmlElement(name="port")
+    private List<ExternalPort> externalPorts;
     
-    //@XmlElementWrapper(name="properties")
-    //@XmlElement(name="property")
+    @XmlElementWrapper(name="properties")
+    @XmlElement(name="property")
     private List<Property> properties;
     
     public String getIdentifier() {
@@ -71,10 +71,10 @@ public class Application {
     public void setComponents(List<Component> components) {
         this.components = components;
     }
-	public List<Port> getExternalPorts() {
+	public List<ExternalPort> getExternalPorts() {
 		return externalPorts;
 	}
-	public void setExternalPorts(List<Port> externalPorts) {
+	public void setExternalPorts(List<ExternalPort> externalPorts) {
 		this.externalPorts = externalPorts;
 	}
 	public List<Property> getProperties() {

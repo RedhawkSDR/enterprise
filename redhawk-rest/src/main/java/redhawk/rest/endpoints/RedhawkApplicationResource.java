@@ -43,6 +43,8 @@ import redhawk.rest.exceptions.ResourceNotFound;
 import redhawk.rest.model.ApplicationContainer;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.FullProperty;
+import redhawk.rest.model.Port;
+import redhawk.rest.model.PortContainer;
 import redhawk.rest.model.Property;
 import redhawk.rest.model.PropertyContainer;
 import redhawk.rest.model.WaveformInfo;
@@ -165,4 +167,14 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
         redhawkManager.setProperty(property, nameServer, "application", domainName + "/" + applicationId);
         return Response.ok().build();
     }
+    
+    @GET
+    @Path("/{applicationId}/ports")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @ApiOperation(
+    		value="GET Application ports"
+    )
+	public PortContainer getApplicationPorts(@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId) throws ResourceNotFoundException, Exception{
+		return new PortContainer(redhawkManager.getAll(nameServer, "applicationport", domainName+"/"+applicationId, FetchMode.EAGER));
+	}
 }

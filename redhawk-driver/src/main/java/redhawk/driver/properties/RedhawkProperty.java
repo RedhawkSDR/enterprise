@@ -37,6 +37,7 @@ import CF.PropertySetHelper;
 import CF.PropertySetPackage.InvalidConfiguration;
 import CF.PropertySetPackage.PartialConfiguration;
 
+//TODO: Make this an abstract class or something...
 public class RedhawkProperty {
 	private static Logger logger = Logger.getLogger(RedhawkProperty.class.getName());
 

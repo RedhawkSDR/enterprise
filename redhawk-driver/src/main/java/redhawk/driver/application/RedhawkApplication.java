@@ -21,6 +21,7 @@ package redhawk.driver.application;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import CF.Application;
 import redhawk.driver.base.QueryableResource;
@@ -120,7 +121,8 @@ public interface RedhawkApplication extends QueryableResource {
     RedhawkPort getPort(String name) throws ResourceNotFoundException, IOException;
     
     /**
-     * Use this method to get ExternalPorts for your application.  
+     * Use this method to get all ExternalPorts for an Application. 
+     * 
      * @return
      * @throws IOException
      */
@@ -131,4 +133,10 @@ public interface RedhawkApplication extends QueryableResource {
      * @return
      */
     boolean isStarted();
+    
+    /**
+     * Helper method for getting a map of External Properties from an application 
+     * 
+     */
+    Map<String, RedhawkProperty> getExternalProperties();
 }

@@ -87,9 +87,17 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
         PropertiesHolder ph = query(propertyNames);
         
         if(ph != null) {
-            for(DataType property : ph.value){
-                return (T)getAndCast(property);
-            }
+        	if(ph.value.length==1){
+                for(DataType property : ph.value){
+                    return (T)getAndCast(property);
+                }        		
+        	}else{
+                Map<String, RedhawkProperty> propMap = new HashMap<String, RedhawkProperty>();        		
+        		for(DataType property : ph.value){
+                    propMap.put(property.id, getAndCast(property));
+        		}
+        		return (T) propMap;
+        	}
         }
         
         return null;

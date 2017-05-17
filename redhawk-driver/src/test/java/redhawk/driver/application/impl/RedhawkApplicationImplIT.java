@@ -167,14 +167,10 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 					new File("src/test/resources/waveforms/ExternalPropPortExample/ExternalPropPortExample.sad.xml"));
 
 			application = driver.getApplication("REDHAWK_DEV/" + appName);
-			//System.out.println(application.getProperties());
-			
-			for(Map.Entry<String, RedhawkProperty> entry : application.getProperties().entrySet()){
-				System.out.println("Key: "+entry.getKey()+" Value: "+entry.getValue());
-			}
-			assertEquals("Should be 3 external properties", 3, application.getProperties().size());
-		
-			assertNotNull(application.getProperty("siggen_freq"));
+
+			assertEquals("Should be 12 properties w/ External and AssemblyController props", 12, application.getProperties().size());			
+			assertEquals("Should be 3 external properties", 3, application.getExternalProperties().size());
+			assertNotNull(application.getProperty("siggen_freq", "siggen2_freq"));
 		} finally {
 			if (application != null) {
 				try {

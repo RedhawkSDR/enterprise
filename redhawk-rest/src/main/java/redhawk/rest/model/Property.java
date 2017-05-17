@@ -26,6 +26,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
 import redhawk.driver.xml.model.sca.prf.AccessType;
 
 
@@ -33,6 +35,7 @@ import redhawk.driver.xml.model.sca.prf.AccessType;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlSeeAlso(value={SimpleRep.class})
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)//TODO: Upgrade this to @JsonInclude(Include.NON_NULL)
 public class Property {
 
     private static Logger logger = Logger.getLogger(Property.class.getName());
@@ -40,6 +43,7 @@ public class Property {
     protected String type;
     protected String description;
     protected String id;
+	protected String externalId;
     protected AccessType mode;
     protected String name;
 
@@ -49,6 +53,12 @@ public class Property {
     public void setDescription(String description) {
         this.description = description;
     }
+    public String getExternalId() {
+		return externalId;
+	}
+	public void setExternalId(String externalId) {
+		this.externalId = externalId;
+	}
     public String getId() {
         return id;
     }

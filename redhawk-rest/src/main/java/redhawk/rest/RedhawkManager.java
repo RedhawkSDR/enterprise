@@ -507,7 +507,7 @@ public class RedhawkManager {
         		Property exProp = this.getProperty(prop.getPropid(), nameServer, "component", location[0]+"/"+prop.getComprefid()+".*");
         		
         		//TODO: Possibly add another field here for external propId
-        		exProp.setId(prop.getExternalpropid());
+        		exProp.setExternalId(prop.getExternalpropid());
         		propertyList.add(exProp);
         	}        	
         }else{

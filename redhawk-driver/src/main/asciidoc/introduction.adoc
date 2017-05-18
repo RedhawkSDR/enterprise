@@ -28,7 +28,38 @@ After running the command, you are prompted for the following information:
 * `version`
 * `package`
 
-After entering the necessary information, a template project is created that already has the REDHAWK Driver dependency setup and a simple main method in `App.java` that utilizes the REDHAWK Driver asset. 
+After entering the necessary information, a template project is created that already has the REDHAWK Driver dependency in your pom and a simple main method in `App.java` that utilizes the REDHAWK Driver asset. 
+
+[IMPORTANT]
+====
+Until we deploy the dependencies to a public maven repository you will need to follow the `Build From Source` instructions in the readme included with this projects source code to add the redhawk-driver to your local maven repository. 
+
+Alternatively when you installed the redhawk-enterprise-integration tgz/rpm the karaf distribution came with a system maven repository. Add this system maven repository to your settings.xml file. Here is an example profile you could add to your settings.
+
+[source,xml]
+----
+<profile>
+	<id>rei</id>
+	<repositories>
+		<repository>
+			<id>dev-rei</id>
+			<name>Development REI</name>
+			<url>file://<!-- path to ${karaf.base}/system repo --></url>
+​          <releases>
+​            <enabled>true</enabled>
+​            <updatePolicy>never</updatePolicy>
+​          </releases>
+​          <snapshots>
+​            <enabled>false</enabled>
+​            <updatePolicy>never</updatePolicy>
+​          </snapshots>			
+		</repository>
+	</repositories>
+</profile>
+----
+
+_If using profile make sure you add to your active profiles_
+====
 
 If not using Maven, you can add the .jar file to your project's build path or configure it with your project's build tool as needed. 
 

@@ -1,7 +1,6 @@
 <template>
 	<md-layout>
-		<md-layout md-flex="25">
-			<md-layout md-column>
+			<md-layout md-column md-flex="25">
 				<md-toolbar>
 					<h1 class="md-title">{{ domainConfig.name }} :: {{ domainConfig.domainName}}</h1>
 				</md-toolbar>
@@ -25,9 +24,10 @@
 				<rhapplications></rhapplications>
 				<rhdevicemanagers></rhdevicemanagers>
 			</md-layout>
+		<md-layout md-flex>
+			<redhawkapplication v-if="showApplication"></redhawkapplication>
+			<rhdevicemanager v-if="showDeviceManager"></rhdevicemanager>
 		</md-layout>
-		<redhawkapplication v-if="showApplication"></redhawkapplication>
-		<rhdevicemanager v-if="showDeviceManager"></rhdevicemanager>
 	</md-layout>
 </template>
 

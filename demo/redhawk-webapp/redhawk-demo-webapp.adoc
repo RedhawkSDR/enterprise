@@ -24,3 +24,8 @@ http://{hostname}:8181/redhawkwebdemo  #hostname is the hostname of the server w
 ----
 
 After opening the web application, to add a Domain, click the '+' button. Enter the information, and then click the 'view' button on the Domain you added. You have access to command and control your configured Domain from the web. 
+
+Screenshot:
+
+image:demo-webscreenshot.png[Screen Shot of Demo Webapp]
+

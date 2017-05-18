@@ -32,9 +32,9 @@ After entering the necessary information, a template project is created that alr
 
 [IMPORTANT]
 ====
-Until we deploy the dependencies to a public maven repository you will need to follow the `Build From Source` instructions in the readme included with this projects source code to add the redhawk-driver to your local maven repository. 
+We're in the process of making the REDHAWK Enterprise Integration dependencies available on a public maven repository. Until then you will need to follow the `Build From Source` instructions in the readme included with this projects source code to add the redhawk-driver to your local maven repository. 
 
-Alternatively when you installed the redhawk-enterprise-integration tgz/rpm the karaf distribution came with a system maven repository. Add this system maven repository to your settings.xml file. Here is an example profile you could add to your settings.
+Alternatively, when you installed the redhawk-enterprise-integration tgz/rpm the karaf distribution came with a system maven repository. Add this system maven repository to your settings.xml file. Here is an example profile you could add to your settings.
 
 [source,xml]
 ----

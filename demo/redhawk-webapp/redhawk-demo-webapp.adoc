@@ -27,5 +27,5 @@ After opening the web application, to add a Domain, click the '+' button. Enter 
 
 Screenshot:
 
-image:demo-webscreenshot.png[Screen Shot of Demo Webapp]
+image::demo-webscreenshot.png[Screen Shot of Demo Webapp]
 

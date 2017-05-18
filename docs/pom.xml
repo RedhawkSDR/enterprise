@@ -91,6 +91,14 @@
 									<directory>${project.parent.basedir}/redhawk-camel/src/main/asciidoc</directory>
 									<targetPath>camel</targetPath>
 								</resource>
+								<!-- Get web screenshot -->
+								<resource>
+									<directory>${project.parent.basedir}/demo/redhawk-webapp</directory>
+									<targetPath>images</targetPath>
+									<includes>
+										<include>demo-webscreenshot.png</include>
+									</includes>
+								</resource>
 							</resources>
 						</configuration>
 					</execution>
@@ -164,7 +172,7 @@
 							<attributes>
 							 	<pdf-stylesdir>${project.basedir}/src/theme</pdf-stylesdir>
 								<pdf-style>custom</pdf-style>
-								<imagesdir>${project.basedir}/src/main/asciidoc/images</imagesdir>
+								<imagesdir>${project.build.directory}/asciidoc-workspace/images</imagesdir>
 								<icons/>
                             <!-- To do: Look into adding icons for admonitions -->
 								<pagenums />

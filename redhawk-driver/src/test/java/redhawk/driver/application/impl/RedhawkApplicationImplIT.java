@@ -34,7 +34,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import redhawk.RedhawkTestBase;
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
@@ -48,6 +47,7 @@ import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.impl.RedhawkExternalPortImpl;
 import redhawk.driver.properties.RedhawkProperty;
+import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkApplicationImplIT extends RedhawkTestBase {
 	private static String applicationName = "myTestApplication";

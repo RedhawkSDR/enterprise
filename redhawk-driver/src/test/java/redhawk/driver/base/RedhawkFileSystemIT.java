@@ -31,10 +31,10 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import redhawk.RedhawkTestBase;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkFileSystemIT extends RedhawkTestBase{
 	private RedhawkFileSystem domainFileSystem; 

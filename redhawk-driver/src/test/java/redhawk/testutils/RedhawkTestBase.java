@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-package redhawk;
+package redhawk.testutils;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -33,7 +33,6 @@ import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
-import redhawk.testutils.NodeBooterProxy;
 
 /**
  * Base test class giving you access to a RedhawkDriver that you 

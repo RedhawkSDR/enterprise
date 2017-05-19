@@ -29,12 +29,12 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import redhawk.RedhawkTestBase;
 import redhawk.driver.domain.RedhawkFileManager;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.xml.model.sca.sad.Softwareassembly;
+import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkFileManagerImplIT extends RedhawkTestBase{
 	private RedhawkFileManager fileManager; 

@@ -86,6 +86,10 @@
       <usesidentifier>dataFloat_out</usesidentifier>
       <componentinstantiationref refid="HardLimit_1"/>
     </port>
+    <port externalname="sigGen2Port">
+      <usesidentifier>dataFloat_out</usesidentifier>
+      <componentinstantiationref refid="SigGen_2"/>
+    </port>
   </externalports>
   <externalproperties>
     <property comprefid="SigGen_1" propid="frequency" externalpropid="siggen_freq"/>

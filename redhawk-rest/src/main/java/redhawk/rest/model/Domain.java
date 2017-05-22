@@ -42,13 +42,13 @@ public class Domain {
     @XmlElement(name="application")
     private List<Application> applications;
     
-    //@XmlElementWrapper(name="properties")
-    //@XmlElement(name="property")
+    @XmlElementWrapper(name="properties")
+    @XmlElement(name="property")
     private List<Property> properties;
     
     @XmlElementWrapper(name="eventchannels")
     @XmlElement(name="eventchannel")
-    private List<String> eventChannels;
+    private List<EventChannel> eventChannels;
     
     
     public String getIdentifier() {
@@ -69,10 +69,10 @@ public class Domain {
     public void setDeviceManagers(List<DeviceManager> deviceManagers) {
         this.deviceManagers = deviceManagers;
     }
-	public List<String> getEventChannels() {
+	public List<EventChannel> getEventChannels() {
 		return eventChannels;
 	}
-	public void setEventChannels(List<String> eventChannels) {
+	public void setEventChannels(List<EventChannel> eventChannels) {
 		this.eventChannels = eventChannels;
 	}
 	public List<Application> getApplications() {

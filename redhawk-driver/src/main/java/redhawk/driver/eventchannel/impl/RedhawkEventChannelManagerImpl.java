@@ -58,7 +58,7 @@ public class RedhawkEventChannelManagerImpl implements RedhawkEventChannelManage
     public void createEventChannel(String channelName) throws EventChannelCreationException {
     	try {
 			eventChannelManager.create(channelName);
-		} catch (ChannelAlreadyExists | OperationNotAllowed | OperationFailed | ServiceUnavailable e) {
+    	} catch (ChannelAlreadyExists | OperationNotAllowed | OperationFailed | ServiceUnavailable e) {
 			throw new EventChannelCreationException(e);
 		}
     }

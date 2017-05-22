@@ -26,6 +26,7 @@ import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.eventchannel.RedhawkEventChannel;
 import redhawk.driver.eventchannel.RedhawkEventChannelManager;
+import redhawk.driver.eventchannel.impl.RedhawkEventRegistrant;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
@@ -63,7 +64,7 @@ public class DomainConverter {
 				domain.setProperties(new ArrayList<>());
 			}
 
-			domain.setEventChannels(convertEventChannels(domainManager));
+			domain.setEventChannels(convertEventChannels(domainManager.getEventChannelManager().getEventChannels()));
 
 			domain.setDeviceManagers(domainManager.getDeviceManagers().parallelStream().map(this::convertDeviceManager)
 					.collect(Collectors.toList()));
@@ -492,6 +493,13 @@ public class DomainConverter {
 		
 		channel.setName(obj.getName());
 		
+		//TODO: Registrant number is hidden prob should have a way to set it 
+		List<String> registrants = new ArrayList<>();
+		for(RedhawkEventRegistrant registrant : obj.getRegistrants(10000)){
+			registrants.add(registrant.getRegistrationId());
+		}
+		
+		channel.setRegistrantIds(registrants);
 		return channel;
 	}
 
@@ -526,6 +534,19 @@ public class DomainConverter {
 		return p;
 	}
 
+	private List<EventChannel> convertEventChannels(List<RedhawkEventChannel> eventChannels){
+		//TODO: Make this work 
+		//eventChannels.stream().map(e -> convertEventChannel(e)).map(Collectors.toList());
+		List<EventChannel> channels = new ArrayList<>();
+		
+		for(RedhawkEventChannel channel : eventChannels){
+			channels.add(convertEventChannel(channel));
+		}
+		
+		return channels;
+	}
+	
+	@Deprecated
 	private List<String> convertEventChannels(RedhawkDomainManager domainManager) {
 		try {
 			return domainManager.getEventChannelManager().getEventChannels().stream().map(e -> e.getName())

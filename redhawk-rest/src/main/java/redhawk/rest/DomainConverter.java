@@ -24,6 +24,8 @@ import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.domain.RedhawkDomainManager;
+import redhawk.driver.eventchannel.RedhawkEventChannel;
+import redhawk.driver.eventchannel.RedhawkEventChannelManager;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
@@ -339,6 +341,9 @@ public class DomainConverter {
 		case "device": {
 			return list.stream().map(obj -> convertDevice((RedhawkDevice) obj, fetchMode)).collect(Collectors.toList());
 		}
+		case "eventchannel":{
+			return list.stream().map(obj -> convertEventChannel((RedhawkEventChannel)obj)).collect(Collectors.toList());
+		}
 		case "softwarecomponent": {
 			return list;
 		}
@@ -481,6 +486,14 @@ public class DomainConverter {
 
 		return device;
 	}
+	
+	private EventChannel convertEventChannel(RedhawkEventChannel obj){
+		EventChannel channel = new EventChannel(); 
+		
+		channel.setName(obj.getName());
+		
+		return channel;
+	}
 
 	/**
 	 * Helper method to convert RedhawkPort to Port
@@ -539,6 +552,8 @@ public class DomainConverter {
 			return convertDeviceManager((RedhawkDeviceManager) object);
 		case "device":
 			return convertDevice((RedhawkDevice) object);
+		case "eventchannel":
+			return convertEventChannel((RedhawkEventChannel) object);
 		case "softwarecomponent":
 			return object;
 		}

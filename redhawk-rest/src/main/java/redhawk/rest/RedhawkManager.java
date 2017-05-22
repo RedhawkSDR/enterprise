@@ -561,6 +561,10 @@ public class RedhawkManager {
             	return (T) redhawk.getApplication(appAddress).getPort(portName);
             case "devicemanager":
                 return (T) redhawk.getDeviceManager(location[0]);
+            case "eventchannel":
+            	String domainName = location[0];
+            	String eventChannelName = location[1];
+            	return (T) redhawk.getDomain(domainName).getEventChannelManager().getEventChannel(eventChannelName);
             case "component":
                 return (T) redhawk.getComponent(Arrays.stream(location).collect(Collectors.joining("/")));
             case "port":
@@ -597,6 +601,8 @@ public class RedhawkManager {
             case "applicationport":
             	RedhawkApplication app = redhawk.getApplication(location[0]);
             	return (List<T>) app.getPorts();
+            case "eventchannel":
+            	return (List<T>) redhawk.getDomain(location[0]).getEventChannelManager().getEventChannels();
             case "device":
                 return (List<T>) redhawk.getDeviceManager(Arrays.stream(location).collect(Collectors.joining("/"))).getDevices();
             //case "softwarecomponent": return (List<T>) redhawk.getComponent(Arrays.stream(location).collect(Collectors.joining("/"))).getSoftwareComponent();

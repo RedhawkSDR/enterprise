@@ -46,8 +46,8 @@ public class Domain {
     //@XmlElement(name="property")
     private List<Property> properties;
     
-    @XmlElementWrapper(name="eventChannels")
-    @XmlElement(name="eventChannel")
+    @XmlElementWrapper(name="eventchannels")
+    @XmlElement(name="eventchannel")
     private List<String> eventChannels;
     
     

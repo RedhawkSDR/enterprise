@@ -263,6 +263,8 @@ public class RedhawkManager {
             }
         }    	
     }
+
+    
     
     public void allocateDevice(String nameServer, String deviceLocation, Map<String, Object> allocation) throws Exception{
     	//TODO: Refactor to clean this code up 

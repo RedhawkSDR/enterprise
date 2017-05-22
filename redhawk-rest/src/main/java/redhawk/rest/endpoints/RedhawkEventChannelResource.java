@@ -45,7 +45,9 @@ public class RedhawkEventChannelResource extends RedhawkBaseResource{
     @ApiOperation(
     		value="GET REDHAWK Event Channel"
     		)
-   public EventChannel getEventChannel(@PathParam("eventchannel") String eventChannel) throws ResourceNotFoundException, Exception{
+    public EventChannel getEventChannel(@PathParam("eventchannel") String eventChannel) throws ResourceNotFoundException, Exception{
     	return redhawkManager.get(nameServer, "eventchannel", domainName, eventChannel);
     }
+    
+    
 }

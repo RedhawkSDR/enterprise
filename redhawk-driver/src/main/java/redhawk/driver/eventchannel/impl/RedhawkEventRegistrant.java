@@ -41,7 +41,7 @@ public class RedhawkEventRegistrant {
 	}
 	
 	public EventRegistration getEventRegistration(){
-		return new EventRegistration(this.registrationId, this.channelName);
+		return new EventRegistration(this.channelName, this.registrationId);
 	}
 	
 }

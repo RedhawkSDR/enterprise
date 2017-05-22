@@ -28,20 +28,23 @@ import java.util.logging.Logger;
 import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
+import org.omg.CosEventChannelAdmin.AlreadyConnected;
+import org.omg.CosEventChannelAdmin.TypeError;
 import org.omg.CosEventComm.Disconnected;
 import org.omg.CosEventComm.PushConsumer;
 import org.omg.CosEventComm.PushConsumerPOATie;
-import org.omg.CosEventChannelAdmin.AlreadyConnected;
-import org.omg.CosEventChannelAdmin.TypeError;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
 import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
 
 import CF.DataType;
 import CF.EventChannelManager;
+import CF.EventRegistrantIteratorHolder;
 import CF.PropertiesHelper;
 import CF.EventChannelManagerPackage.ChannelDoesNotExist;
 import CF.EventChannelManagerPackage.EventChannelReg;
+import CF.EventChannelManagerPackage.EventRegistrant;
+import CF.EventChannelManagerPackage.EventRegistrantListHolder;
 import CF.EventChannelManagerPackage.EventRegistration;
 import CF.EventChannelManagerPackage.InvalidChannelName;
 import CF.EventChannelManagerPackage.OperationFailed;
@@ -79,24 +82,34 @@ public class RedhawkEventChannelImpl implements RedhawkEventChannel {
 	}
 	
 	public <T> void subscribe(EventChannelListener<T> listener) throws EventChannelException {
+		this.subscribe(listener, null);
+    }
+	
+	public <T> void subscribe(EventChannelListener<T> listener, String subscriptionId) throws EventChannelException{
     	try {
     		POA rootPOA = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
     		rootPOA.the_POAManager().activate();
     		PushConsumerPOATie tie = new PushConsumerPOATie(listener);
     		PushConsumer pipeline = tie._this(orb);
-    		register();
+    		register(subscriptionId);
     		registration.channel.for_consumers().obtain_push_supplier().connect_push_consumer(pipeline);
     	} catch(InvalidName | AdapterInactive | TypeError e){
     		throw new EventChannelException("A CORBA Exception has occured:", e);
     	} catch (AlreadyConnected e) {
     		throw new EventChannelException("Already Connected to the event Channel:", e); 		
 		} 
-    }
+	}
 	
-	private void register() throws EventChannelException {
+	private void register(String s) throws EventChannelException {
 		if(registration == null) {
-	        UUID subscriptionId = UUID.randomUUID();
-	        EventRegistration er = new EventRegistration(eventChannelName, subscriptionId.toString());
+			String subscriptionId;
+			
+			if(s!=null){
+				subscriptionId = s;
+			}else{
+		        subscriptionId = UUID.randomUUID().toString();				
+			}
+	        EventRegistration er = new EventRegistration(eventChannelName, subscriptionId);
 	        try {
 				registration = eventChannelManager.registerResource(er);
 			} catch (InvalidChannelName | RegistrationAlreadyExists | OperationFailed | OperationNotAllowed | ServiceUnavailable e) {
@@ -107,8 +120,7 @@ public class RedhawkEventChannelImpl implements RedhawkEventChannel {
 	
 	
 	public void publish(String messageId, Map<String, java.lang.Object> message) throws EventChannelException {
-
-		register();
+		register(null);
 		
 		 List<CF.DataType> headers = new ArrayList<CF.DataType>();
          for (String key : message.keySet()) {
@@ -162,6 +174,35 @@ public class RedhawkEventChannelImpl implements RedhawkEventChannel {
 		} catch (ServiceUnavailable e) {
 			throw new EventChannelException("CORBA Exception:", e);
 		}
+	}
+	
+	public void unsubscribe(RedhawkEventRegistrant registrant) throws EventChannelException{
+		try {
+			eventChannelManager.unregister(registrant.getEventRegistration());
+		} catch (ChannelDoesNotExist e) {
+			throw new EventChannelException("Event Channel Does not exist:", e);
+		} catch (RegistrationDoesNotExist e) {
+			throw new EventChannelException("Event Channel Registration Does Not Exist:", e);
+		} catch (ServiceUnavailable e) {
+			throw new EventChannelException("CORBA Exception:", e);
+		}
+	}
+	
+	public List<RedhawkEventRegistrant> getRegistrants(Integer registrants){
+		List<RedhawkEventRegistrant> eventRegistrants = new ArrayList<>();
+		
+		EventRegistrantListHolder holder = new EventRegistrantListHolder(); 
+		EventRegistrantIteratorHolder iter = new EventRegistrantIteratorHolder();
+		eventChannelManager.listRegistrants(this.eventChannelName, registrants, holder, iter);
+		
+		//TODO: Figure out how to do this with Stream API
+		//eventRegistrants.addAll(Arrays.stream(holder.value).map(e -> ""+e.reg_id).collect(Collectors.toList());
+		
+		for(EventRegistrant registrant : holder.value){
+			eventRegistrants.add(new RedhawkEventRegistrant(registrant.reg_id, registrant.channel_name, registrant));
+		}
+		
+		return eventRegistrants;
 	}
 	
 }

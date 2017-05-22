@@ -19,8 +19,10 @@
  */
 package redhawk.driver.eventchannel;
 
+import java.util.List;
 import java.util.Map;
 
+import redhawk.driver.eventchannel.impl.RedhawkEventRegistrant;
 import redhawk.driver.eventchannel.listeners.EventChannelListener;
 import redhawk.driver.exceptions.EventChannelException;
 
@@ -40,6 +42,18 @@ public interface RedhawkEventChannel {
 	<T> void subscribe(EventChannelListener<T> listener) throws EventChannelException;
 	
 	/**
+	 * Subscribe to a specific EventChannel with a specific Id
+	 * @param listener
+	 * 	Listener object handle logic for what to do when receiving an 
+	 * 	event message. 	 
+	 * @param id
+	 * 	Id for the listener
+	 * @throws EventChannelException
+	 */
+	<T> void subscribe(EventChannelListener<T> listener, String id) throws EventChannelException;
+
+	
+	/**
 	 * Publish messages to an event channel 
 	 * @param messageId
 	 * 	Message Id for the message. 
@@ -50,9 +64,25 @@ public interface RedhawkEventChannel {
 	void publish(String messageId, Map<String, java.lang.Object> message) throws EventChannelException;
 	
 	/**
-	 * Unsubscribe to an event channel. 
+	 * Unsubscribe event listener managed by this object 
 	 * 
 	 * @throws EventChannelException
 	 */
 	void unsubscribe() throws EventChannelException;
+	
+	/**
+	 * Unsubscribe a particular registrant.
+	 * 
+	 * @param registrant
+	 */
+	void unsubscribe(RedhawkEventRegistrant registrant) throws EventChannelException;
+	
+	/**
+	 * Retrieve the list of Registrants for the Event Channel
+	 * 
+	 * @param registrants
+	 * 	Number of registrants to pull back
+	 * @return
+	 */
+	List<RedhawkEventRegistrant> getRegistrants(Integer registrants);
 }

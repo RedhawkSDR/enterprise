@@ -74,6 +74,10 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 	<bean id="redhawkSoftwareComponentResource" class="redhawk.rest.endpoints.RedhawkSoftwareComponentResource">
 		<property name="redhawkManager" ref="redhawkManagerBean" />
 	</bean>
+	
+	<bean id="redhawkEventChannelResource" class="redhawk.rest.endpoints.RedhawkEventChannelResource">
+		<property name="redhawkManager" ref="redhawkManagerBean" />
+	</bean>
 	    			
 	<jaxrs:server id="rsServer" address="/redhawk">
 		<jaxrs:serviceBeans>
@@ -86,6 +90,7 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 			<ref component-id="redhawkWaveformResource" />
 			<ref component-id="redhawkSoftwareComponentResource" />
 			<ref component-id="redhawkDevicePortsResource" />
+			<ref component-id="redhawkEventChannelResource" />
 		</jaxrs:serviceBeans>
 		<jaxrs:extensionMappings>
 			<entry key="json" value="application/json" />

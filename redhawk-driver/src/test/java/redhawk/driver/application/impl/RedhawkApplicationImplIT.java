@@ -125,27 +125,26 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 	@Test
 	public void testGetExternalPorts() throws ResourceNotFoundException, ApplicationCreationException, CORBAException,
 			MultipleResourceException, IOException {
+		RedhawkApplication extApplication = null; 
 		try {
 			// Launch application with External ports
 			String appName = "externalPortsApp";
 
-			driver.getDomain("REDHAWK_DEV").createApplication(appName,
+			extApplication = driver.getDomain("REDHAWK_DEV").createApplication(appName,
 					new File("src/test/resources/waveforms/ExternalPropPortExample/ExternalPropPortExample.sad.xml"));
 
-			application = driver.getApplication("REDHAWK_DEV/" + appName);
-
 			// Should be two external ports
-			assertEquals("Should be two external ports in this waveform", 2, application.getPorts().size());
+			assertEquals("Should be two external ports in this waveform", 3, extApplication.getPorts().size());
 			logger.info(application.getPorts().toString());
 			// Ensure you properly get properties related to external ports
-			RedhawkExternalPortImpl externalPort = (RedhawkExternalPortImpl) application.getPort("sigGenPort");
+			RedhawkExternalPortImpl externalPort = (RedhawkExternalPortImpl) extApplication.getPort("sigGenPort");
 
 			assertNotNull(externalPort);
 			assertNotNull(externalPort.getDescription());
 		} finally {
-			if (application != null) {
+			if (extApplication != null) {
 				try {
-					application.release();
+					extApplication.release();
 
 					driver.getDomain().getFileManager().removeDirectory("/waveforms/ExternalPropPortExample");
 				} catch (ApplicationReleaseException e) {
@@ -159,22 +158,21 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 	// Test retrieving External Properties
 	@Test
 	public void testGetExternalProperties() throws ResourceNotFoundException, ApplicationCreationException, CORBAException, MultipleResourceException, IOException{
+		RedhawkApplication extApplication = null; 
 		try {
 			// Launch application with External ports
 			String appName = "externalPropertiesApp";
 
-			driver.getDomain("REDHAWK_DEV").createApplication(appName,
+			extApplication = driver.getDomain("REDHAWK_DEV").createApplication(appName,
 					new File("src/test/resources/waveforms/ExternalPropPortExample/ExternalPropPortExample.sad.xml"));
 
-			application = driver.getApplication("REDHAWK_DEV/" + appName);
-
-			assertEquals("Should be 12 properties w/ External and AssemblyController props", 12, application.getProperties().size());			
-			assertEquals("Should be 3 external properties", 3, application.getExternalProperties().size());
-			assertNotNull(application.getProperty("siggen_freq", "siggen2_freq"));
+			assertEquals("Should be 12 properties w/ External and AssemblyController props", 12, extApplication.getProperties().size());			
+			assertEquals("Should be 3 external properties", 3, extApplication.getExternalProperties().size());
+			assertNotNull(extApplication.getProperty("siggen_freq", "siggen2_freq"));
 		} finally {
-			if (application != null) {
+			if (extApplication != null) {
 				try {
-					application.release();
+					extApplication.release();
 
 					driver.getDomain().getFileManager().removeDirectory("/waveforms/ExternalPropPortExample");
 				} catch (ApplicationReleaseException e) {

@@ -650,13 +650,15 @@ public class RedhawkManager {
 			propertyList = converter.convertProperties(acComp.getProperties(), acComp.getPropertyConfiguration());
 
 			// Now Add any additional External Props
+			if(exProps!=null){
 			for (redhawk.driver.xml.model.sca.sad.Property prop : exProps.getProperties()) {
-				Property exProp = this.getProperty(prop.getPropid(), nameServer, "component",
+					Property exProp = this.getProperty(prop.getPropid(), nameServer, "component",
 						location[0] + "/" + prop.getComprefid() + ".*");
 
-				// TODO: Possibly add another field here for external propId
-				exProp.setExternalId(prop.getExternalpropid());
-				propertyList.add(exProp);
+					// TODO: Possibly add another field here for external propId
+					exProp.setExternalId(prop.getExternalpropid());
+					propertyList.add(exProp);
+				}
 			}
 		} else {
 			propertyList = converter.convertProperties(properties, propConfig);

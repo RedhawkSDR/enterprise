@@ -2,6 +2,7 @@ package redhawk.rest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import redhawk.rest.model.Application;
 import redhawk.rest.model.ExternalPort;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.Port;
+import redhawk.rest.model.PropertyContainer;
 import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkManagerIT extends RedhawkTestBase{
@@ -77,6 +79,18 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testGetApplicationWithNoExternalProperties(){
+		try {
+			PropertyContainer container = manager.getProperties("localhost:2809", "application", "REDHAWK_DEV/"+noExternalPropsPortsApp);
+			assertNotNull(container);
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO Auto-generated catch block
+			fail("FAILED!!!!"+e.getMessage());
 		}
 	}
 	

@@ -3,15 +3,15 @@ services:
   redhawk:
     image: rei/redhawk:1.0
     container_name: redhawk_dev
-    volumes:
-      - sdr_root:/var/redhawk/sdr
+#    volumes:
+#      - sdrroot:/var/redhawk/sdr
   rei:
     image: rei/localit:1.0
     container_name: rei_maven
     command: /bin/bash
     tty: true
     volumes:
-      - maven-repo:/data/mkwyche/.m2:/root/.m2:rw
+      - /data/mkwyche/.m2:/root/.m2:rw
 
-volumes:
-  sdr_root:
+#volumes:
+#  sdrroot:

@@ -6,8 +6,17 @@ Stop downloading the world on build:
 * https://github.com/chanezon/docker-tips/blob/master/java-build-mount-maven-repo.mdi
 * http://blog.flurdy.com/2014/11/dont-download-internet-share-maven-ivy-docker.html
 
+Updating dir perms so you can see it:
+* https://github.com/moby/moby/issues/14175
+
 Example docker command: 
 ----
 docker run -d -t -v /data/mkwyche/.m2:/root/.m2:rw rei/maven:1.0
 ----
 
+Blah had to set TMP dir to get dockercompose working:
+https://github.com/docker/compose/issues/1339
+
+docker-compose v. 3 requires docker 1.13 which isn't available in any centos repo yet. So downgraded to v. 2
+
+Needed to set tty: https://stackoverflow.com/questions/37100358/docker-composer-exited-with-code-0

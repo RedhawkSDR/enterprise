@@ -1,34 +1,34 @@
 <template>
 	<md-layout>
-		<md-layout md-flex="25">
-			<md-layout md-column>
-				<md-toolbar>
-					<h1 class="md-title">{{ domainConfig.name }} :: {{ domainConfig.domainName}}</h1>
-				</md-toolbar>
-				<md-list>
-					<md-list-item>
-						<span>Waveforms [ {{ numberOfWaveforms }} ]
-						</span>
-						<md-list-expand>
-							<md-list-item
-							class="md-inset"
-							v-for="(waveform,index) in availableWaveforms"
-							v-bind:key="waveform"
-							@click.native="showWaveformLauncher(waveform)"
-							>
-							{{ waveform.name }}
-							<md-divider></md-divider>
-							</md-list-item>
-						</md-list-expand>
+		<md-layout md-column md-flex="25">
+			<md-toolbar>
+				<h1 class="md-title">{{ domainConfig.name }} :: {{ domainConfig.domainName}}</h1>
+			</md-toolbar>
+			<md-list>
+				<md-list-item>
+					<span>Waveforms [ {{ numberOfWaveforms }} ]
+					</span>
+					<md-list-expand>
+						<md-list-item
+						class="md-inset"
+						v-for="(waveform,index) in availableWaveforms"
+						v-bind:key="waveform"
+						@click.native="showWaveformLauncher(waveform)"
+						>
+						{{ waveform.name }}
+						<md-divider></md-divider>
 					</md-list-item>
-				</md-list>
-				<rhapplications></rhapplications>
-				<rhdevicemanagers></rhdevicemanagers>
-			</md-layout>
-		</md-layout>
+				</md-list-expand>
+			</md-list-item>
+		</md-list>
+		<rhapplications></rhapplications>
+		<rhdevicemanagers></rhdevicemanagers>
+	</md-layout>
+	<md-layout md-flex>
 		<redhawkapplication v-if="showApplication"></redhawkapplication>
 		<rhdevicemanager v-if="showDeviceManager"></rhdevicemanager>
 	</md-layout>
+</md-layout>
 </template>
 
 <script>

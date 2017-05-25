@@ -1,0 +1,13 @@
+= Notes on how to get IT test running with docker
+
+Need to mount host maven repo to make this run script faster: https://docs.docker.com/engine/tutorials/dockervolumes/#locate-a-volume
+
+Stop downloading the world on build: 
+* https://github.com/chanezon/docker-tips/blob/master/java-build-mount-maven-repo.mdi
+* http://blog.flurdy.com/2014/11/dont-download-internet-share-maven-ivy-docker.html
+
+Example docker command: 
+----
+docker run -d -t -v /data/mkwyche/.m2:/root/.m2:rw rei/maven:1.0
+----
+

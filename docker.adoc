@@ -16,6 +16,9 @@ docker run -d -t -v /data/mkwyche/.m2:/root/.m2:rw rei/maven:1.0
 
 Blah had to set TMP dir to get dockercompose working:
 https://github.com/docker/compose/issues/1339
+----
+export TMP=[dir with exec perms]
+----
 
 docker-compose v. 3 requires docker 1.13 which isn't available in any centos repo yet. So downgraded to v. 2
 

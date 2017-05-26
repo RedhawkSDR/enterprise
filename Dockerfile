@@ -13,6 +13,6 @@ COPY redhawk-connector redhawk-connector/
 COPY redhawk-rest redhawk-rest/
 COPY redhawk-websocket redhawk-websocket/
 COPY redhawk-camel redhawk-camel/
-COPY settings.xml /root/.m2
+#COPY settings.xml /root/.m2
 
 CMD ["/bin/bash"]

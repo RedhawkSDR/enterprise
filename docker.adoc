@@ -1,4 +1,13 @@
-= Notes on how to get IT test running with docker
+= REI Integration Tests Prototype
+
+Maven REI source code will be in one container. REDHAWK will be in the other. 
+
+The container w/ Maven REI source will run the integration tests agains the container w/ REDHAWK_DEV
+
+*How to link this in w/ GitLab-CI????*
+
+Run docker-compose up 
+== Notes on how to get IT test running with docker
 
 Need to mount host maven repo to make this run script faster: https://docs.docker.com/engine/tutorials/dockervolumes/#locate-a-volume
 

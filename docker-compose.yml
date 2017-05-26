@@ -10,10 +10,12 @@ services:
   rei:
     image: rei/localit:latest
     container_name: rei_maven
-    command: /bin/bash
-    tty: true
     volumes:
       - /data/mkwyche/.m2:/root/.m2:rw
+#    command: /bin/bash
+#    tty: true
+#    volumes:
+#      - /data/mkwyche/.m2:/root/.m2:rw
 
 #TODO: Directory is shared but can't see waveforms etc...
 #      - data-volume:/var/redhawk/sdr

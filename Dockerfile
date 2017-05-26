@@ -15,4 +15,5 @@ COPY redhawk-websocket redhawk-websocket/
 COPY redhawk-camel redhawk-camel/
 #COPY settings.xml /root/.m2
 
-CMD ["/bin/bash"]
+#CMD ["/bin/bash"]
+CMD ["mvn", "clean", "install", "-P", "localIT"]

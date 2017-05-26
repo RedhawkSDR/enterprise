@@ -47,72 +47,23 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.testutils.RedhawkTestBase;
 
-public class RedhawkDriverIT {
+public class RedhawkDriverIT extends RedhawkTestBase{
 	private static Logger logger = Logger.getLogger(RedhawkDriverIT.class.getName());
-	
-	private String domainName;
-	
-	private String hostName; 
-	
-	private int domainPort;
-	
-	private RedhawkDriver driver; 
-	
-	private static RedhawkDriver rhDriver; 
-	
+		
 	private static String sampleApp = "sampleApp";
 	
 	@BeforeClass
 	public static void setupApp() throws ResourceNotFoundException, ApplicationCreationException, CORBAException{
-		logger.info("Jacorb prop is: "+System.getProperty("jacorb"));
-		Boolean jacorbTest = Boolean.parseBoolean(System.getProperty("jacorb", "false"));
-		
-		if(jacorbTest){
-			logger.info("Testing with jacorb");
-			Properties props = new Properties(); 
-			props.put("org.omg.CORBA.ORBClass", "org.jacorb.orb.ORB");
-			props.put("org.omg.CORBA.ORBSingletonClass", "org.jacorb.orb.ORBSingleton");
-			rhDriver = new RedhawkDriver("127.0.0.1", 2809, props);
-		}else{
-			logger.info("Testing with default orb for JDK");			
-			rhDriver = new RedhawkDriver(); 
-		}
+		driver.getDomain("REDHAWK_DEV").createApplication(sampleApp, "/waveforms/rh/basic_components_demo/basic_components_demo.sad.xml");
+	}
 
-		rhDriver.getDomain("REDHAWK_DEV").createApplication(sampleApp, "/waveforms/rh/basic_components_demo/basic_components_demo.sad.xml");
-	}
-	
-	@Before
-	public void setup(){
-		domainName = "REDHAWK_DEV";
-		hostName = "localhost";
-		domainPort = 2809;
-	}
-	
 	@Test
-	public void testDefaultConstructor() throws CORBAException, ResourceNotFoundException, MultipleResourceException{
-		driver = new RedhawkDriver();
-		
+	public void testTwoArgConstructor() throws CORBAException, ResourceNotFoundException, MultipleResourceException{		
 		this.basicDriverTests(driver);
 	}
 	
 	@Test
-	public void testOneArgConstructor() throws CORBAException, ResourceNotFoundException, MultipleResourceException{
-		driver = new RedhawkDriver(hostName);
-		
-		this.basicDriverTests(driver);
-	}
-	
-	@Test
-	public void testTwoArgConstructor() throws CORBAException, ResourceNotFoundException, MultipleResourceException{
-		driver = new RedhawkDriver(hostName, domainPort);
-		
-		this.basicDriverTests(driver);
-	}
-	
-	@Test
-	public void testGetDeviceManager() throws ResourceNotFoundException, CORBAException, MultipleResourceException{
-		driver = new RedhawkDriver();
-		
+	public void testGetDeviceManager() throws ResourceNotFoundException, CORBAException, MultipleResourceException{		
 		String deviceManagerName = driver.getDomain("REDHAWK_DEV").getDeviceManagers().get(0).getName();
 		String pathForDevManager = "REDHAWK_DEV/"+deviceManagerName;
 		logger.info(pathForDevManager);
@@ -121,7 +72,6 @@ public class RedhawkDriverIT {
 	
 	@Test
 	public void testGetDevice() throws ResourceNotFoundException, CORBAException, MultipleResourceException{
-		driver = new RedhawkDriver();
 		RedhawkDeviceManager devManager = driver.getDomain("REDHAWK_DEV").getDeviceManagers().get(0);
 		RedhawkDevice device = devManager.getDevices().get(0);
 		String pathForDevice = domainName+File.separator+devManager.getName()+File.separator+device.getName();
@@ -130,9 +80,7 @@ public class RedhawkDriverIT {
 	}
 	
 	@Test
-	public void testHelperMethods() throws MultipleResourceException, CORBAException{
-		RedhawkDriver driver = new RedhawkDriver(); 
-		
+	public void testHelperMethods() throws MultipleResourceException, CORBAException{		
 		//Use these utility methods if you only have one REDHAWK Domain/Redhawk Device Manager/Redhawk Device
 		RedhawkDomainManager domainManager = driver.getDomain();
 		
@@ -151,8 +99,9 @@ public class RedhawkDriverIT {
 	 */
 	private void basicDriverTests(RedhawkDriver driver) throws CORBAException, ResourceNotFoundException, MultipleResourceException{
 		//Ensure default port and host and ORB are returned correctly
-		assertEquals(hostName, driver.getHostName());
-		assertEquals(domainPort, driver.getPort());
+		assertEquals(domainHost, driver.getHostName());
+		assertEquals(domainPort.intValue(), driver.getPort());
+		//assertEquals(domainPort, driver.getPort());
 		assertNotNull(driver.getOrb());
 		
 		Map<String, RedhawkDomainManager> domainMap = driver.getDomains();
@@ -180,14 +129,8 @@ public class RedhawkDriverIT {
 		assertNotNull(port);		
 	}
 	
-	@After
-	public void shutdown(){
-		if(driver!=null)
-			driver.disconnect();
-	}
-	
 	@AfterClass
 	public static void tearDownApp() throws MultipleResourceException, ResourceNotFoundException, ApplicationReleaseException, CORBAException{
-		rhDriver.getDomain("REDHAWK_DEV").getApplicationByName(sampleApp).release();
+		driver.getDomain("REDHAWK_DEV").getApplicationByName(sampleApp).release();
 	}
 }

@@ -19,6 +19,7 @@
  */
 package redhawk.testutils;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -53,20 +54,41 @@ public class RedhawkTestBase {
 	
 	public static String deviceManagerHome = sdrRoot+"/dev";
 	
+	public static String domainName = "REDHAWK_DEV";
+	
+	public static String domainHost = "127.0.0.1"; 
+	
+	public static Integer domainPort = 2809;
+	
 	@BeforeClass
 	public static void setupB4Class(){
 		logger.info("Jacorb prop is: "+System.getProperty("jacorb"));
 		Boolean jacorbTest = Boolean.parseBoolean(System.getProperty("jacorb", "false"));
 		
+		Properties buildProps = new Properties();
+		try {
+			buildProps.load(new FileInputStream("src/test/resources/test.properties"));
+			logger.info("Loaded properties");
+			domainName = buildProps.getProperty("domainName");
+			domainHost = buildProps.getProperty("domainHost");
+			domainPort = Integer.parseInt(buildProps.getProperty("domainPort"));
+			logger.info("Domain name: "+domainName+" Host: "+domainHost+" Port: "+domainPort);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		if(jacorbTest){
 			logger.info("Testing with jacorb");
+			
+			//TODO: Add a way to pass in properties
 			Properties props = new Properties(); 
 			props.put("org.omg.CORBA.ORBClass", "org.jacorb.orb.ORB");
 			props.put("org.omg.CORBA.ORBSingletonClass", "org.jacorb.orb.ORBSingleton");
-			driver = new RedhawkDriver("127.0.0.1", 2809, props);
+			driver = new RedhawkDriver(domainHost, domainPort, props);
 		}else{
 			logger.info("Testing with default orb for JDK");			
-			driver = new RedhawkDriver(); 
+			driver = new RedhawkDriver(domainHost, domainPort); 
 		}
 		
 		//Create proxy utility 
@@ -75,13 +97,6 @@ public class RedhawkTestBase {
 	
 	@AfterClass
 	public static void afterClass() throws MultipleResourceException, CORBAException, ApplicationReleaseException{
-		if(driver!=null){
-			for(RedhawkApplication application : driver.getDomain().getApplications()){
-				//Clean up applications
-				application.release();
-			}
-			driver.disconnect();
-		}
 		//Always make sure you delete waveforms you create
 		//TODO: Clean up this logic
 		try {
@@ -90,6 +105,14 @@ public class RedhawkTestBase {
 				manager.removeDirectory("/waveforms/testWaveform");
 		} catch (ConnectionException | IOException | CORBAException e) {
 			logger.info("Unable to delete wavemform likely cause it doesn't exist.");
+		}
+		
+		if(driver!=null){
+			for(RedhawkApplication application : driver.getDomain().getApplications()){
+				//Clean up applications
+				application.release();
+			}
+			driver.disconnect();
 		}
 	}
 }

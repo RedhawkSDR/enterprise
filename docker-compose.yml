@@ -1,17 +1,23 @@
 version: '2'
 services:
   redhawk:
-    image: rei/redhawk:1.0
+    image: redhawk:2.0-nightly
     container_name: redhawk_dev
+#    command: /bin/bash
+#    tty: true
 #    volumes:
-#      - sdrroot:/var/redhawk/sdr
+#      - data-volume:/var/redhawk/sdr
   rei:
-    image: rei/localit:1.0
+    image: rei/localit:latest
     container_name: rei_maven
     command: /bin/bash
     tty: true
     volumes:
       - /data/mkwyche/.m2:/root/.m2:rw
 
+#TODO: Directory is shared but can't see waveforms etc...
+#      - data-volume:/var/redhawk/sdr
+#      - /data/mkwyche/.m2:/root/.m2:rw
+
 #volumes:
-#  sdrroot:
+#  data-volume: {}

@@ -27,6 +27,7 @@ import java.io.IOException;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.PortableServer.POA;
@@ -64,6 +65,7 @@ import redhawk.testutils.RedhawkTestUtils;
  * 
  * sudo /usr/sbin/usermod -a -G redhawk <user name>
  */
+@Ignore("This may need to be a MT if we can't figure out the dir perm issue")
 public class MessageConsumerPortIT extends RedhawkTestBase{	
 	private RedhawkFileSystem rhFS;
 	

@@ -141,7 +141,6 @@ public class RedhawkDomainManagerImplIT extends RedhawkTestBase{
 	@Test
 	public void testSnippetForCreatingAnApplication() throws MultipleResourceException, ApplicationCreationException, CORBAException, ResourceNotFoundException, ApplicationReleaseException{
 		String applicationName = "myApp";
-		RedhawkDriver driver = new RedhawkDriver(); 
 		RedhawkDomainManager domainManager = driver.getDomain();
 		String waveformLocation = "/waveforms/rh/basic_components_demo/basic_components_demo.sad.xml";
 		

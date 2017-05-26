@@ -69,7 +69,6 @@ public class RedhawkEventChannelManagerIT extends RedhawkTestBase{
 	
 	@Test
 	public void snippets() throws MultipleResourceException, CORBAException, EventChannelCreationException, ResourceNotFoundException{
-		RedhawkDriver driver = new RedhawkDriver(); 
 		RedhawkEventChannelManager ecManager = driver.getDomain().getEventChannelManager();
 		
 		//Get the event channels in your domain

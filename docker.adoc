@@ -33,3 +33,5 @@ export TMP=[dir with exec perms]
 docker-compose v. 3 requires docker 1.13 which isn't available in any centos repo yet. So downgraded to v. 2
 
 Needed to set tty: https://stackoverflow.com/questions/37100358/docker-composer-exited-with-code-0
+
+Aborting on container exit: https://stackoverflow.com/questions/33799885/how-to-stop-all-containers-when-one-container-stops-with-docker-compose

@@ -60,6 +60,8 @@ public class RedhawkTestBase {
 	
 	public static Integer domainPort = 2809;
 	
+	static String propFileLocation = "src/test/resources/test.properties";
+	
 	@BeforeClass
 	public static void setupB4Class(){
 		logger.info("Jacorb prop is: "+System.getProperty("jacorb"));
@@ -67,7 +69,12 @@ public class RedhawkTestBase {
 		
 		Properties buildProps = new Properties();
 		try {
-			buildProps.load(new FileInputStream("src/test/resources/test.properties"));
+			String newPropLocation = System.getProperty("testProps");
+			if(newPropLocation!=null){
+				propFileLocation=newPropLocation;
+			}
+			logger.info("READING Properties from: "+propFileLocation);
+			buildProps.load(new FileInputStream(propFileLocation));
 			logger.info("Loaded properties");
 			domainName = buildProps.getProperty("domainName");
 			domainHost = buildProps.getProperty("domainHost");

@@ -51,7 +51,7 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 	@Test
 	public void testApplicationsWithExternalPortsAndProperties(){
 		try {
-			List<Application> applications = manager.getAll("localhost:2809", "application", "REDHAWK_DEV", FetchMode.EAGER);
+			List<Application> applications = manager.getAll(domainHost+":2809", "application", "REDHAWK_DEV", FetchMode.EAGER);
 		
 			assertEquals("Should be atleast 2 app", 2, applications.size());
 			
@@ -72,7 +72,7 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 	@Test
 	public void testApplicationWithExternalPortsAndProperties(){
 		try {
-			Application application = manager.get("localhost:2809", "application", "REDHAWK_DEV/External.*");
+			Application application = manager.get(domainHost+":2809", "application", "REDHAWK_DEV/External.*");
 		
 			assertNotNull("Should be 1 app", application);
 			this.externalApplicationAsserts(application);
@@ -85,7 +85,7 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 	@Test
 	public void testGetApplicationWithNoExternalProperties(){
 		try {
-			PropertyContainer container = manager.getProperties("localhost:2809", "application", "REDHAWK_DEV/"+noExternalPropsPortsApp);
+			PropertyContainer container = manager.getProperties(domainHost+":2809", "application", "REDHAWK_DEV/"+noExternalPropsPortsApp);
 			assertNotNull(container);
 		} catch (Exception e) {
 			e.printStackTrace();

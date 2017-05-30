@@ -10,9 +10,13 @@ services:
   rei:
     image: rei/localit:latest
     container_name: rei_maven
+    depends_on:
+      - "redhawk"
     volumes:
       - /data/mkwyche/.m2:/root/.m2:rw
-#    command: /bin/bash
+    command: /bin/bash
+    tty: true
+#    command: mvn test -Dtest=RedhawkDriverIT -DtestProps=/usr/local/workspace/enterprise/docker_test.properties
 #    tty: true
 #    volumes:
 #      - /data/mkwyche/.m2:/root/.m2:rw

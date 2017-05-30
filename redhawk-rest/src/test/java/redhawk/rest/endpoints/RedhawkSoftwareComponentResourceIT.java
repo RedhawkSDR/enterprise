@@ -33,8 +33,8 @@ import redhawk.rest.model.ComponentContainer;
 public class RedhawkSoftwareComponentResourceIT extends RedhawkApplicationResourceTestBase{
 	@Test
 	public void testSoftwareComponents() throws InterruptedException{
-		WebTarget target = client.target(baseUri+"localhost:2809/domains/"+domainName+"/applications/"+applicationName+"/components");
-		System.out.println(baseUri+"localhost:2809/domains/"+domainName+"/applications/"+applicationName+"/components");
+		WebTarget target = client.target(baseUri+"/"+domainName+"/applications/"+applicationName+"/components");
+		System.out.println(baseUri+"/"+domainName+"/applications/"+applicationName+"/components");
 		Response response = target.request().accept(MediaType.APPLICATION_XML).get();
 		ComponentContainer componentContainer = response.readEntity(ComponentContainer.class);
 		assertEquals(200, response.getStatus());
@@ -42,7 +42,7 @@ public class RedhawkSoftwareComponentResourceIT extends RedhawkApplicationResour
 		
 		//Hit each component endpoint
 		for(Component comp : componentContainer.getComponents()){
-			target = client.target(baseUri+"localhost:2809/domains/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName()+"/softwarecomponent");
+			target = client.target(baseUri+"/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName()+"/softwarecomponent");
 			response = target.request().accept(MediaType.APPLICATION_XML).get();
 			assertEquals(200, response.getStatus());
 		}

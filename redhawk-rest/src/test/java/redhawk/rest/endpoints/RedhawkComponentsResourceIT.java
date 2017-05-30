@@ -37,8 +37,8 @@ public class RedhawkComponentsResourceIT extends RedhawkApplicationResourceTestB
 	
 	@Test
 	public void testGetComponents() throws InterruptedException{
-		WebTarget target = client.target(baseUri+"localhost:2809/domains/"+domainName+"/applications/"+applicationName+"/components");
-		System.out.println(baseUri+"localhost:2809/domains/"+domainName+"/applications/"+applicationName+"/components");
+		WebTarget target = client.target(baseUri+"/"+domainName+"/applications/"+applicationName+"/components");
+		//System.out.println(baseUri+"/domains/"+domainName+"/applications/"+applicationName+"/components");
 		Response response = target.request().accept(MediaType.APPLICATION_XML).get();
 		ComponentContainer componentContainer = response.readEntity(ComponentContainer.class);
 		assertEquals(200, response.getStatus());
@@ -46,19 +46,19 @@ public class RedhawkComponentsResourceIT extends RedhawkApplicationResourceTestB
 		
 		//Hit each component endpoint
 		for(Component comp : componentContainer.getComponents()){
-			target = client.target(baseUri+"localhost:2809/domains/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName());
+			target = client.target(baseUri+"/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName());
 			response = target.request().accept(MediaType.APPLICATION_XML).get();
 			assertEquals(200, response.getStatus());
 
 			//Hit properties
-			target = client.target(baseUri+"localhost:2809/domains/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName()+"/properties");
+			target = client.target(baseUri+"/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName()+"/properties");
 			response = target.request().accept(MediaType.APPLICATION_XML).get();
 			PropertyContainer propContainer = response.readEntity(PropertyContainer.class);
 			assertEquals(200, response.getStatus());
 
 			//Hit each propertyId
 			for(Property property : propContainer.getProperties()){
-				target = client.target(baseUri+"localhost:2809/domains/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName()+"/properties/"+property.getId());
+				target = client.target(baseUri+"/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName()+"/properties/"+property.getId());
 				response = target.request().accept(MediaType.APPLICATION_XML).get();
 				assertEquals(200, response.getStatus());
 			}

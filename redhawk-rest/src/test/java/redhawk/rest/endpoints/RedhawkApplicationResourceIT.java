@@ -44,21 +44,21 @@ import redhawk.rest.model.WaveformInfo;
 public class RedhawkApplicationResourceIT extends RedhawkApplicationResourceTestBase{
 	@Test
 	public void testGetApplications() throws InterruptedException{
-		WebTarget target = client.target(baseUri+"localhost:2809/domains/"+domainName+"/applications");
+		WebTarget target = client.target(baseUri+"/"+domainName+"/applications");
 		Response response = target.request().accept(MediaType.APPLICATION_XML).get();
 		assertEquals(200, response.getStatus());
 	}
 	
 	@Test
 	public void testGetApplication(){
-		WebTarget target = client.target(baseUri+"localhost:2809/domains/"+domainName+"/applications/"+applicationName);
+		WebTarget target = client.target(baseUri+"/"+domainName+"/applications/"+applicationName);
 		Response response = target.request().accept(MediaType.APPLICATION_XML).get();
 		assertEquals(200, response.getStatus());
 	}
 	
 	@Test
 	public void testGetApplicationProperties(){
-		WebTarget target = client.target(baseUri+"localhost:2809/domains/"+domainName+"/applications/"+applicationName+"/properties");
+		WebTarget target = client.target(baseUri+"/"+domainName+"/applications/"+applicationName+"/properties");
 		Response response = target.request().accept(MediaType.APPLICATION_XML).get();
 		assertEquals(200, response.getStatus());
 	}
@@ -66,7 +66,7 @@ public class RedhawkApplicationResourceIT extends RedhawkApplicationResourceTest
 	@Test
 	public void testCommandAndControlOfWaveform(){
 		String applicationName = "restLaunchedApp";
-		WebClient client = WebClient.create(baseUri+"localhost:2809/domains/"+domainName+"/applications/"+applicationName);
+		WebClient client = WebClient.create(baseUri+"/"+domainName+"/applications/"+applicationName);
 		
 		WaveformInfo info = new WaveformInfo();
 		info.setSadLocation("/waveforms/rh/basic_components_demo/basic_components_demo.sad.xml");
@@ -101,7 +101,7 @@ public class RedhawkApplicationResourceIT extends RedhawkApplicationResourceTest
 			myApp = driver.getDomain().createApplication(exApplicationName, 
 					new File("../redhawk-driver/src/test/resources/waveforms/ExternalPropPortExample/ExternalPropPortExample.sad.xml"));
 			
-			WebTarget target = client.target(baseUri+"localhost:2809/domains/"+domainName+"/applications/"+exApplicationName+"/properties");
+			WebTarget target = client.target(baseUri+"/"+domainName+"/applications/"+exApplicationName+"/properties");
 			
 			Response response = target.request().accept(MediaType.APPLICATION_XML).get();
 

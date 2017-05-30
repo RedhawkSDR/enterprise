@@ -33,10 +33,10 @@ public class RedhawkResourceTestBase {
 	
 	static Client client; 
 	
-	static String baseUri = "http://localhost:8080/redhawk/";
+	public static String baseUri = "http://localhost:8080/redhawk/";
 	
-	static String domainName = "REDHAWK_DEV";
-	
+	public static String domainName = "REDHAWK_DEV";
+		
 	@BeforeClass
 	public static void setup() throws Exception{
 		server = new Server(8080);

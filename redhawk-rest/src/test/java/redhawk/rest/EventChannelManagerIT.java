@@ -21,7 +21,7 @@ public class EventChannelManagerIT extends RedhawkTestBase{
 	@Test
 	public void testGetEventChannels(){
 		try {
-			List<EventChannel> eventChannels = manager.getAll("localhost:2809", "eventchannel", "REDHAWK_DEV", FetchMode.EAGER);
+			List<EventChannel> eventChannels = manager.getAll(domainHost+":2809", "eventchannel", "REDHAWK_DEV", FetchMode.EAGER);
 			assertNotNull(eventChannels);
 			assertEquals("Should be atleast the 2 default event channels", true, eventChannels.size()>0);
 		} catch (Exception e) {
@@ -33,7 +33,7 @@ public class EventChannelManagerIT extends RedhawkTestBase{
 	@Test
 	public void testGetEventChannel(){
 		try {
-			EventChannel ec = manager.get("localhost:2809", "eventchannel", "REDHAWK_DEV", "IDM_Channel");
+			EventChannel ec = manager.get(domainHost+":2809", "eventchannel", "REDHAWK_DEV", "IDM_Channel");
 		
 			//Something should come back
 			assertNotNull(ec);

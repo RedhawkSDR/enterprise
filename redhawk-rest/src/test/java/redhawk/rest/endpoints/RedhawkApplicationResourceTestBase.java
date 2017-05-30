@@ -19,6 +19,11 @@
  */
 package redhawk.rest.endpoints;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
+import java.util.logging.Logger;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
@@ -29,17 +34,45 @@ import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkApplicationResourceTestBase extends RedhawkResourceTestBase{
+	public static Logger logger = Logger.getLogger(RedhawkApplicationResourceTestBase.class.getName());
+
 	static RedhawkDriver driver;
 	
 	static RedhawkDomainManager domain; 
 	
 	static String applicationName = "MyApplication";
 	
+	static String propFileLocation = "../redhawk-driver/src/test/resources/test.properties";
+	
+	public static String domainHost = "127.0.0.1"; 
+	
+	public static Integer domainPort = 2809;
+		
 	@BeforeClass
 	public static void setupApplication() throws ResourceNotFoundException, ApplicationCreationException, CORBAException{
-		driver = new RedhawkDriver();
+		Properties buildProps = new Properties();
+		try {
+			String newPropLocation = System.getProperty("testProps");
+			if(newPropLocation!=null){
+				propFileLocation=newPropLocation;
+			}
+			logger.info("READING Properties from: "+propFileLocation);
+			buildProps.load(new FileInputStream(propFileLocation));
+			logger.info("Loaded properties");
+			domainName = buildProps.getProperty("domainName");
+			domainHost = buildProps.getProperty("domainHost");
+			domainPort = Integer.parseInt(buildProps.getProperty("domainPort"));
+			baseUri+=domainHost+":"+domainPort+"/domains";
+			logger.info("Domain name: "+domainName+" Host: "+domainHost+" Port: "+domainPort+" baseURI: "+baseUri);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		driver = new RedhawkDriver(domainHost, domainPort);
 		domain = driver.getDomain("REDHAWK_DEV");
 		
 		domain.createApplication(applicationName, "/waveforms/rh/FM_mono_demo/FM_mono_demo.sad.xml");

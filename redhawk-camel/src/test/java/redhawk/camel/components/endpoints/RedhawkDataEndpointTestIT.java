@@ -40,6 +40,7 @@ import redhawk.driver.exceptions.ApplicationStartException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkDataEndpointTestIT extends CamelTestSupport { 
 	private static final String waveformName = "myDemo";
@@ -96,7 +97,9 @@ public class RedhawkDataEndpointTestIT extends CamelTestSupport {
 
 	@BeforeClass
 	public static void setup() throws ConnectionException, MultipleResourceException, CORBAException, FileNotFoundException, IOException, ApplicationCreationException, ApplicationStartException{
-		driver = new RedhawkDriver();
+		RedhawkTestBase base = new RedhawkTestBase();
+
+		driver = base.driver;
 		
 		rhFS = driver.getDomain().getFileManager();
 

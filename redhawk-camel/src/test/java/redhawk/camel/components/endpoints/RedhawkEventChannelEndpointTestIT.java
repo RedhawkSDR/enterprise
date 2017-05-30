@@ -45,6 +45,7 @@ import redhawk.driver.exceptions.ApplicationStartException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.testutils.RedhawkTestBase;
 import redhawk.testutils.RedhawkTestUtils;
 
 public class RedhawkEventChannelEndpointTestIT extends CamelTestSupport{
@@ -71,7 +72,9 @@ public class RedhawkEventChannelEndpointTestIT extends CamelTestSupport{
 	
 	@BeforeClass
 	public static void setup() throws ConnectionException, MultipleResourceException, CORBAException, FileNotFoundException, IOException, ApplicationCreationException, ApplicationStartException, InterruptedException{
-		driver = new RedhawkDriver();
+		RedhawkTestBase base = new RedhawkTestBase();
+
+		driver = base.driver;
 		
 		rhFS = driver.getDomain().getFileManager();
 

@@ -62,6 +62,10 @@ public class RedhawkTestBase {
 	
 	static String propFileLocation = "src/test/resources/test.properties";
 	
+	public RedhawkTestBase(){
+		this.setupB4Class();
+	}
+	
 	@BeforeClass
 	public static void setupB4Class(){
 		logger.info("Jacorb prop is: "+System.getProperty("jacorb"));

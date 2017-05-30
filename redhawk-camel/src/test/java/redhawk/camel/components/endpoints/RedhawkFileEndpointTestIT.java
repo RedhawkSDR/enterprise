@@ -43,6 +43,7 @@ import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.properties.RedhawkProperty;
 import redhawk.driver.properties.RedhawkSimple;
+import redhawk.testutils.RedhawkTestBase;
 
 /**
  * Test uses Apache Camel to send noaa.dat and noaa.dat.info files into the
@@ -70,6 +71,8 @@ public class RedhawkFileEndpointTestIT extends CamelTestSupport{
 	
 	@BeforeClass
 	public static void setup() throws ConnectionException, MultipleResourceException, CORBAException{
+		RedhawkTestBase base = new RedhawkTestBase();
+		
 		File file = new File("src/test/resources/data");
 		
 		File testOutput = new File("src/test/resources/data-processed");
@@ -78,7 +81,7 @@ public class RedhawkFileEndpointTestIT extends CamelTestSupport{
 		
 		testOutputDirectory = testOutput.getAbsolutePath();
 		
-		driver = new RedhawkDriver();
+		driver = base.driver;
 		
 		fileManager = driver.getDomain().getFileManager();
 		

@@ -31,27 +31,23 @@ import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkTestUtil extends RedhawkTestBase{
 	public static String sampleWebSocketPortEndpoint(String portName){
-		String ip = System.getProperty("redhawk.host", "localhost");
-		Integer port = Integer.parseInt(System.getProperty("redhawk.port", ""+2809));
 		String karafIp = System.getProperty("karaf.host", "localhost");
 		Integer jettyPort = Integer.valueOf(System.getProperty("jetty.port", "8781"));
 		
 		String wsEndpoint = "ws://"+karafIp+":"+jettyPort+"/redhawk/"
-				+ ip
-				+ ":"+port+"/domains/REDHAWK_DEV/applications/Websocket.*/components/SigGen.*/ports/"+portName;
+				+ domainHost
+				+ ":"+domainPort+"/domains/REDHAWK_DEV/applications/Websocket.*/components/SigGen.*/ports/"+portName;
 		
 		return wsEndpoint;
 	}
 	
 	public static String sampleWebSocketEventChannel(String eventType){
-		String ip = System.getProperty("redhawk.host", "localhost");
-		Integer port = Integer.parseInt(System.getProperty("redhawk.port", ""+2809));
 		String karafIp = System.getProperty("karaf.host", "localhost");
 		Integer jettyPort = Integer.valueOf(System.getProperty("jetty.port", "8781"));
 		
 		String wsEndpoint = "ws://"+karafIp+":"+jettyPort+"/redhawk/"
-				+ ip
-				+ ":"+port+"/domains/REDHAWK_DEV/eventchannels/ODM_Channel?messageType="+eventType;
+				+ domainHost
+				+ ":"+domainPort+"/domains/REDHAWK_DEV/eventchannels/ODM_Channel?messageType="+eventType;
 		
 		return wsEndpoint;
 	}

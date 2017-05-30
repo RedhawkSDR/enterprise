@@ -38,7 +38,8 @@ public class RedhawkWebsocketTestBase extends RedhawkTestBase{
 	
 	@AfterClass
 	public static void tearDownJetty() throws Exception{
-		application.release();
+		if(application!=null)
+			application.release();
 		
 		//Delete waveform from File System
 		driver.getDomain().getFileManager().removeDirectory("/waveforms/wf-integration-test");

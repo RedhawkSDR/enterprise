@@ -281,13 +281,17 @@
 							</sources>
 						</mapping>
 					</mappings>
+					<preinstallScriptlet>
+						<scriptFile>${project.build.directory}/scripts/preinstall.sh</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</preinstallScriptlet>
 					<preremoveScriptlet>
 						<scriptFile>${project.build.directory}/scripts/preremove.sh</scriptFile>
 						<fileEncoding>utf-8</fileEncoding>
 					</preremoveScriptlet>
 					<postremoveScriptlet>
 						<scriptFile>${project.build.directory}/scripts/postremove.sh</scriptFile>
-						<fileEncoding>utf-8</fileEncoding>						
+						<fileEncoding>utf-8</fileEncoding>
 					</postremoveScriptlet>
 				</configuration>
 			</plugin>

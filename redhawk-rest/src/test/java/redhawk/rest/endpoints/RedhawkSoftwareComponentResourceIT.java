@@ -25,16 +25,32 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import redhawk.driver.exceptions.ApplicationCreationException;
+import redhawk.driver.exceptions.CORBAException;
+import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.rest.model.Component;
 import redhawk.rest.model.ComponentContainer;
 
-public class RedhawkSoftwareComponentResourceIT extends RedhawkApplicationResourceTestBase{
+public class RedhawkSoftwareComponentResourceIT extends RedhawkResourceTestBase{
+	static String applicationName = "MyApplication";
+
+	@BeforeClass
+	public static void launchApplication(){
+		try {
+			driver.getDomain().createApplication(applicationName, "/waveforms/rh/FM_mono_demo/FM_mono_demo.sad.xml");
+		} catch (ApplicationCreationException | MultipleResourceException | CORBAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	@Test
 	public void testSoftwareComponents() throws InterruptedException{
-		WebTarget target = client.target(baseUri+"/"+domainName+"/applications/"+applicationName+"/components");
-		System.out.println(baseUri+"/"+domainName+"/applications/"+applicationName+"/components");
+		WebTarget target = client.target(baseURI+"/"+domainName+"/applications/"+applicationName+"/components");
+		System.out.println(baseURI+"/"+domainName+"/applications/"+applicationName+"/components");
 		Response response = target.request().accept(MediaType.APPLICATION_XML).get();
 		ComponentContainer componentContainer = response.readEntity(ComponentContainer.class);
 		assertEquals(200, response.getStatus());
@@ -42,7 +58,7 @@ public class RedhawkSoftwareComponentResourceIT extends RedhawkApplicationResour
 		
 		//Hit each component endpoint
 		for(Component comp : componentContainer.getComponents()){
-			target = client.target(baseUri+"/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName()+"/softwarecomponent");
+			target = client.target(baseURI+"/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName()+"/softwarecomponent");
 			response = target.request().accept(MediaType.APPLICATION_XML).get();
 			assertEquals(200, response.getStatus());
 		}

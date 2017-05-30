@@ -25,18 +25,34 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 
+import redhawk.driver.exceptions.ApplicationCreationException;
+import redhawk.driver.exceptions.CORBAException;
+import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.rest.model.Component;
 import redhawk.rest.model.ComponentContainer;
 import redhawk.rest.model.Port;
 import redhawk.rest.model.PortContainer;
 
-public class RedhawkPortsResourceIT extends RedhawkApplicationResourceTestBase{
+public class RedhawkPortsResourceIT extends RedhawkResourceTestBase{
+	static String applicationName = "MyApplication";
+
+	@BeforeClass
+	public static void launchApplication(){
+		try {
+			driver.getDomain().createApplication(applicationName, "/waveforms/rh/FM_mono_demo/FM_mono_demo.sad.xml");
+		} catch (ApplicationCreationException | MultipleResourceException | CORBAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	@Test
 	public void testPorts() throws InterruptedException{
-		WebTarget target = client.target(baseUri+"/"+domainName+"/applications/"+applicationName+"/components");
-		System.out.println(baseUri+"/"+domainName+"/applications/"+applicationName+"/components");
+		WebTarget target = client.target(baseURI+"/"+domainName+"/applications/"+applicationName+"/components");
+		System.out.println(baseURI+"/"+domainName+"/applications/"+applicationName+"/components");
 		Response response = target.request().accept(MediaType.APPLICATION_XML).get();
 		ComponentContainer componentContainer = response.readEntity(ComponentContainer.class);
 		assertEquals(200, response.getStatus());
@@ -45,14 +61,14 @@ public class RedhawkPortsResourceIT extends RedhawkApplicationResourceTestBase{
 		
 		//Hit each component endpoint
 		for(Component comp : componentContainer.getComponents()){
-			target = client.target(baseUri+"/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName()+"/ports");
+			target = client.target(baseURI+"/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName()+"/ports");
 			response = target.request().accept(MediaType.APPLICATION_XML).get();
 			PortContainer pContainer = response.readEntity(PortContainer.class);
 			assertEquals(200, response.getStatus());
 			
 			//Get Each individual port and it's port statistics
 			for(Port port : pContainer.getPorts()){
-				target = client.target(baseUri+"/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName()+"/ports/"+port.getName());
+				target = client.target(baseURI+"/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName()+"/ports/"+port.getName());
 				response = target.request().accept(MediaType.APPLICATION_XML).get();
 				Port restPort = response.readEntity(Port.class);
 				assertEquals(200, response.getStatus());
@@ -60,7 +76,7 @@ public class RedhawkPortsResourceIT extends RedhawkApplicationResourceTestBase{
 				//Get the port statistics
 				//TODO: Talk to team figure out if you should be able to getPortstatistics on a 'out'(i.e. dataFloat_out) port.
 				if(port.getName().endsWith("in")){
-					target = client.target(baseUri+"/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName()+"/ports/"+port.getName()+"/statistics");
+					target = client.target(baseURI+"/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName()+"/ports/"+port.getName()+"/statistics");
 					response = target.request().accept(MediaType.APPLICATION_XML).get();
 					assertEquals(200, response.getStatus());							
 				}	

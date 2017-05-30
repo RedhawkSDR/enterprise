@@ -27,12 +27,12 @@ import javax.ws.rs.core.Response;
 
 import org.junit.Test;
 
-public class RedhawkDomainResourceIT extends RedhawkApplicationResourceTestBase{
+public class RedhawkDomainResourceIT extends RedhawkResourceTestBase{
 	//TODO: Check message body
 	
 	@Test
 	public void testGetDomains() throws InterruptedException{
-		WebTarget target = client.target(baseUri);
+		WebTarget target = client.target(baseURI);
 		//System.out.println(target.request().get().readEntity(String.class));
 		Response response = target.request().accept(MediaType.APPLICATION_XML).get();
 		assertEquals(200, response.getStatus());		
@@ -40,7 +40,7 @@ public class RedhawkDomainResourceIT extends RedhawkApplicationResourceTestBase{
 	
 	@Test
 	public void testGetDomain() throws InterruptedException{
-		WebTarget target = client.target(baseUri+"/"+domainName);
+		WebTarget target = client.target(baseURI+"/"+domainName);
 		//System.out.println(target.request().get().readEntity(String.class));
 		Response response = target.request().accept(MediaType.APPLICATION_XML).get();
 		assertEquals(200, response.getStatus());		
@@ -48,7 +48,7 @@ public class RedhawkDomainResourceIT extends RedhawkApplicationResourceTestBase{
 	
 	@Test
 	public void testGetDomainProperties(){
-		WebTarget target = client.target(baseUri+"/"+domainName+"/properties");
+		WebTarget target = client.target(baseURI+"/"+domainName+"/properties");
 		//System.out.println(target.request().get().readEntity(String.class));
 		Response response = target.request().accept(MediaType.APPLICATION_XML).get();
 		assertEquals(200, response.getStatus());

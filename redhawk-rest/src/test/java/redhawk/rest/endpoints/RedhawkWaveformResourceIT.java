@@ -31,10 +31,10 @@ import redhawk.driver.xml.model.sca.sad.Softwareassembly;
 import redhawk.rest.model.WaveformContainer;
 import redhawk.rest.model.WaveformInfo;
 
-public class RedhawkWaveformResourceIT extends RedhawkApplicationResourceTestBase{
+public class RedhawkWaveformResourceIT extends RedhawkResourceTestBase{
 	@Test
 	public void testGetWaveforms() throws InterruptedException{
-		WebTarget target = client.target(baseUri+"/"+domainName+"/waveforms");
+		WebTarget target = client.target(baseURI+"/"+domainName+"/waveforms");
 		//System.out.println(target.request().get().readEntity(String.class));
 		Response response = target.request().accept(MediaType.APPLICATION_XML).get();
 		
@@ -42,7 +42,7 @@ public class RedhawkWaveformResourceIT extends RedhawkApplicationResourceTestBas
 		assertEquals(200, response.getStatus());		
 		
 		for(WaveformInfo waveform : wvContainer.getDomains()){
-			target = client.target(baseUri+"/"+domainName+"/waveforms/"+waveform.getId());
+			target = client.target(baseURI+"/"+domainName+"/waveforms/"+waveform.getId());
 			response = target.request().accept(MediaType.APPLICATION_XML).get();
 			Softwareassembly info = response.readEntity(Softwareassembly.class);
 			assertEquals(200, response.getStatus());

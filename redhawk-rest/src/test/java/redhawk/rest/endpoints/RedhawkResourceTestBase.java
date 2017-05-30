@@ -28,17 +28,20 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-public class RedhawkResourceTestBase {
+import redhawk.testutils.RedhawkTestBase;
+
+public class RedhawkResourceTestBase extends RedhawkTestBase{
 	static Server server;
 	
 	static Client client; 
 	
-	public static String baseUri = "http://localhost:8080/redhawk/";
+	public static String baseURI;
 	
 	public static String domainName = "REDHAWK_DEV";
 		
 	@BeforeClass
 	public static void setup() throws Exception{
+		baseURI = "http://localhost:8080/redhawk/"+domainHost+":"+domainPort+"/domains";
 		server = new Server(8080);
 		WebAppContext webapp = new WebAppContext();
 		webapp.setResourceBase("src/test/resources/webapp");
@@ -47,6 +50,9 @@ public class RedhawkResourceTestBase {
 		server.start();
 
 		client = ClientBuilder.newBuilder().newClient();
+		
+		//Set up base uri
+		logger.info("Domain name: "+domainName+" Host: "+domainHost+" Port: "+domainPort+" baseURI: "+baseURI);
 	}
 	
 	@AfterClass

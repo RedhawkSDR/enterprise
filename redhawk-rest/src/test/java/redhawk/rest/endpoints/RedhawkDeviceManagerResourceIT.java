@@ -29,11 +29,11 @@ import org.junit.Test;
 
 import redhawk.rest.model.DeviceManagerContainer;
 
-public class RedhawkDeviceManagerResourceIT extends RedhawkApplicationResourceTestBase{	
+public class RedhawkDeviceManagerResourceIT extends RedhawkResourceTestBase{	
 
 	@Test
 	public void testGetDeviceManagers(){
-		WebTarget target = client.target(baseUri+"/"+domainName+"/devicemanagers");
+		WebTarget target = client.target(baseURI+"/"+domainName+"/devicemanagers");
 		Response response = target.request().accept(MediaType.APPLICATION_XML).get();
 		assertEquals(200, response.getStatus());		
 	}
@@ -41,13 +41,13 @@ public class RedhawkDeviceManagerResourceIT extends RedhawkApplicationResourceTe
 	@Test
 	public void testGetDeviceManager(){		
 		//Get Target From REST Endpoint
-		WebTarget target = client.target(baseUri+"/"+domainName+"/devicemanagers");
+		WebTarget target = client.target(baseURI+"/"+domainName+"/devicemanagers");
 		Response response = target.request().accept(MediaType.APPLICATION_XML).get();
 		DeviceManagerContainer container = response.readEntity(DeviceManagerContainer.class);
 		assertEquals(200, response.getStatus());		
 
 		//Hit Specific DeviceManager 
-		target = client.target(baseUri+"/"+domainName+"/devicemanagers/"+container.getDeviceManagers().get(0).getLabel());
+		target = client.target(baseURI+"/"+domainName+"/devicemanagers/"+container.getDeviceManagers().get(0).getLabel());
 		response = target.request().accept(MediaType.APPLICATION_XML).get();
 		assertEquals(200, response.getStatus());		
 	}

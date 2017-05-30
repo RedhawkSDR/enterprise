@@ -34,13 +34,13 @@ import redhawk.rest.model.DeviceManagerContainer;
 import redhawk.rest.model.Property;
 import redhawk.rest.model.PropertyContainer;
 
-public class RedhawkDeviceResourceIT extends RedhawkApplicationResourceTestBase{
+public class RedhawkDeviceResourceIT extends RedhawkResourceTestBase{
 	private static String deviceManagerLabel; 
 	
 	@BeforeClass
 	public static void setupDeviceManagerUri(){
 		//Get Target From REST Endpoint
-		WebTarget target = client.target(baseUri+"/"+domainName+"/devicemanagers");
+		WebTarget target = client.target(baseURI+"/"+domainName+"/devicemanagers");
 		Response response = target.request().accept(MediaType.APPLICATION_XML).get();
 		DeviceManagerContainer container = response.readEntity(DeviceManagerContainer.class);
 		deviceManagerLabel = container.getDeviceManagers().get(0).getLabel();
@@ -48,7 +48,7 @@ public class RedhawkDeviceResourceIT extends RedhawkApplicationResourceTestBase{
 	
 	@Test
 	public void testGetDevices(){
-		WebTarget target = client.target(baseUri+"/"+domainName+"/devicemanagers/"+deviceManagerLabel);
+		WebTarget target = client.target(baseURI+"/"+domainName+"/devicemanagers/"+deviceManagerLabel);
 		Response response = target.request().accept(MediaType.APPLICATION_XML).get();
 		DeviceManager deviceManager = response.readEntity(DeviceManager.class);
 		
@@ -56,7 +56,7 @@ public class RedhawkDeviceResourceIT extends RedhawkApplicationResourceTestBase{
 		assertEquals(200, response.getStatus());
 		
 		for(Device device : deviceManager.getDevices()){
-			target = client.target(baseUri+"/"+domainName+"/devicemanagers/"+deviceManagerLabel+"/devices/"+device.getLabel());
+			target = client.target(baseURI+"/"+domainName+"/devicemanagers/"+deviceManagerLabel+"/devices/"+device.getLabel());
 			
 			//Hits the device endpoint
 			response = target.request().accept(MediaType.APPLICATION_XML).get();
@@ -65,14 +65,14 @@ public class RedhawkDeviceResourceIT extends RedhawkApplicationResourceTestBase{
 
 			
 			//Hit the properties endpoint
-			target = client.target(baseUri+"/"+domainName+"/devicemanagers/"+deviceManagerLabel+"/devices/"+device.getLabel()+"/properties");
+			target = client.target(baseURI+"/"+domainName+"/devicemanagers/"+deviceManagerLabel+"/devices/"+device.getLabel()+"/properties");
 			response = target.request().accept(MediaType.APPLICATION_XML).get();
 			PropertyContainer restProperties = response.readEntity(PropertyContainer.class);
 			assertEquals(200, response.getStatus());
 			
 			//Hit all the properties for a device
 			for(Property property : restProperties.getProperties()){
-				target = client.target(baseUri+"/"+domainName+"/devicemanagers/"+deviceManagerLabel+"/devices/"+device.getLabel()+"/properties/"+property.getId());
+				target = client.target(baseURI+"/"+domainName+"/devicemanagers/"+deviceManagerLabel+"/devices/"+device.getLabel()+"/properties/"+property.getId());
 				response = target.request().accept(MediaType.APPLICATION_XML).get();
 				assertEquals(200, response.getStatus());
 			}

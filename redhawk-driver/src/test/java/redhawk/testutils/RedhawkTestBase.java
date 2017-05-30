@@ -72,13 +72,14 @@ public class RedhawkTestBase {
 			String newPropLocation = System.getProperty("testProps");
 			if(newPropLocation!=null){
 				propFileLocation=newPropLocation;
+				logger.info("READING Properties from: "+propFileLocation);
+				buildProps.load(new FileInputStream(propFileLocation));
+				logger.info("Loaded properties");
+				domainName = buildProps.getProperty("domainName");
+				domainHost = buildProps.getProperty("domainHost");
+				domainPort = Integer.parseInt(buildProps.getProperty("domainPort"));
 			}
-			logger.info("READING Properties from: "+propFileLocation);
-			buildProps.load(new FileInputStream(propFileLocation));
-			logger.info("Loaded properties");
-			domainName = buildProps.getProperty("domainName");
-			domainHost = buildProps.getProperty("domainHost");
-			domainPort = Integer.parseInt(buildProps.getProperty("domainPort"));
+
 			logger.info("Domain name: "+domainName+" Host: "+domainHost+" Port: "+domainPort);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

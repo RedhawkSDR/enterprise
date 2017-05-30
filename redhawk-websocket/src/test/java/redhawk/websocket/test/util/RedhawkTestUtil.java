@@ -27,8 +27,9 @@ import redhawk.driver.Redhawk;
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.properties.RedhawkSimple;
+import redhawk.testutils.RedhawkTestBase;
 
-public class RedhawkTestUtil {
+public class RedhawkTestUtil extends RedhawkTestBase{
 	public static String sampleWebSocketPortEndpoint(String portName){
 		String ip = System.getProperty("redhawk.host", "localhost");
 		Integer port = Integer.parseInt(System.getProperty("redhawk.port", ""+2809));
@@ -57,18 +58,13 @@ public class RedhawkTestUtil {
 	
 	public static RedhawkApplication launchApplication(boolean start) throws Exception{
 		File waveForm;
-		
-		String ip = System.getProperty("redhawk.host", "localhost");
-		Integer port = Integer.parseInt(System.getProperty("redhawk.port", ""+2809));
-		
-		Redhawk redhawk = new RedhawkDriver(ip, 2809);
-		Integer majorVersion = getRHMajorVersion(); 
+				
 		RedhawkApplication application; 
 		waveForm = new File("src/test/resources/waveform/wf-integration-test.sad.xml");
 		try {
-			application = redhawk.getDomain("REDHAWK_DEV").createApplication("WebsocketTest", waveForm);
+			application = driver.getDomain().createApplication("WebsocketTest", waveForm);
 		} catch (Exception ex) {
-			application = redhawk.getDomain("REDHAWK_DEV").createApplication("WebsocketTest", "/waveforms/wf-integration-test/wf-integration-test.sad.xml");
+			application = driver.getDomain().createApplication("WebsocketTest", "/waveforms/wf-integration-test/wf-integration-test.sad.xml");
 		}
 		
 		if(start)
@@ -91,19 +87,6 @@ public class RedhawkTestUtil {
 		}
 		
 		return rhDevExists;
-	}
-	
-	public static Integer getRHMajorVersion() throws Exception{
-		String ip = System.getProperty("redhawk.host", "localhost");
-		Integer port = Integer.parseInt(System.getProperty("redhawk.port", ""+2809));
-		
-		Redhawk redhawk = new RedhawkDriver(ip, port);
-		RedhawkSimple version = redhawk.getDomain("REDHAWK_DEV")
-				.getProperty("REDHAWK_VERSION");
-		Integer majorVersion = Integer.valueOf(version.getValue().toString()
-				.substring(0, 1));
-		
-		return majorVersion;
 	}
 	
 	public static Boolean karafIsRunning(){

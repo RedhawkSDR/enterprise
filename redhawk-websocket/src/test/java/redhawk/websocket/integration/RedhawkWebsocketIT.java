@@ -46,23 +46,12 @@ import redhawk.websocket.test.util.JettySupport;
 import redhawk.websocket.test.util.RedhawkTestUtil;
 import redhawk.websocket.test.util.RedhawkWebSocketTestUtil;
 
-public class RedhawkWebsocketIT {
+public class RedhawkWebsocketIT extends RedhawkWebsocketTestBase{
     private static Log logger = LogFactory.getLog(RedhawkWebsocketIT.class);
 
 	private static RedhawkApplication application;
 
 	private final String jsonRegex = ".*[{\\[].*[\\]}]";
-
-	private static Server server;
-
-	@BeforeClass
-	public static void setup() throws Exception {
-		assertTrue(
-				"REDHAWK_DEV must exist to run this System test. Pass in param -DskipSystemTests=true to skip this test.",
-				RedhawkTestUtil.redhawkDevExists());
-		application = RedhawkTestUtil.launchApplication(true);
-		server = JettySupport.setupJettyServer();
-	}
 
 	@Test
 	public void testWebsocketOnJsonPort() throws Exception {
@@ -171,11 +160,6 @@ public class RedhawkWebsocketIT {
 		}
 
 		assertTrue(remove && add);
-	}
-
-	@AfterClass
-	public static void cleanup() throws Exception {
-		application.release();
 	}
 
 	public void performSocketConnection(String uriString,

@@ -113,7 +113,7 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     @Path("/{deviceId}/tuners/{tunerMode}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="=GET REDHAWK Device by tuner mode"
+    		value="GET REDHAWK Device by tuner mode"
     		)
     public Response tuners(@PathParam("deviceId") String deviceId, @PathParam("tunerMode") String tunerMode) throws Exception{
     	List<Map<String, Object>> tunerStatus = redhawkManager.getTuners(nameServer, domainName+"/"+devManagerName+"/"+deviceId, TunerMode.valueOf(tunerMode));

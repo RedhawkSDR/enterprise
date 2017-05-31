@@ -26,9 +26,7 @@
 			>
 			</domainmenu>
 		</md-toolbar>
-		<md-layout v-if="showDomain">
-			<rhdomain></rhdomain>
-		</md-layout>
+		<rhdomain v-if="showDomain"></rhdomain>
 		<rhdomainconfig v-if="showAddDomainConfig" @close="showAddDomainConfig=false" @domainConfig="addDomainToList">
 		</rhdomainconfig>
 		<editdomainconfig v-if="showEditDomainConfig" @close="showEditDomainConfig=false">

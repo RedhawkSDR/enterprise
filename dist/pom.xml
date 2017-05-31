@@ -22,8 +22,8 @@
 	</properties>
 	<dependencies>
 		<dependency>
-			<!-- scope is compile so all features (there is only one) are installed
-				into startup.properties and the feature repo itself is not added in etc/org.apache.karaf.features.cfg
+			<!-- scope is compile so all features (there is only one) are installed 
+				into startup.properties and the feature repo itself is not added in etc/org.apache.karaf.features.cfg 
 				file -->
 			<groupId>org.apache.karaf.features</groupId>
 			<artifactId>framework</artifactId>
@@ -44,8 +44,8 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<!-- scope is runtime so the feature repo is listed in etc/org.apache.karaf.features.cfg
-				file, and features will installed into the system directory if specify in
+			<!-- scope is runtime so the feature repo is listed in etc/org.apache.karaf.features.cfg 
+				file, and features will installed into the system directory if specify in 
 				the plugin configuration -->
 			<groupId>org.apache.karaf.features</groupId>
 			<artifactId>standard</artifactId>
@@ -281,16 +281,55 @@
 							</sources>
 						</mapping>
 					</mappings>
+					<preinstallScriptlet>
+						<scriptFile>${project.build.directory}/scripts/preinstall.sh</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</preinstallScriptlet>
 					<preremoveScriptlet>
 						<scriptFile>${project.build.directory}/scripts/preremove.sh</scriptFile>
 						<fileEncoding>utf-8</fileEncoding>
 					</preremoveScriptlet>
 					<postremoveScriptlet>
 						<scriptFile>${project.build.directory}/scripts/postremove.sh</scriptFile>
-						<fileEncoding>utf-8</fileEncoding>						
+						<fileEncoding>utf-8</fileEncoding>
 					</postremoveScriptlet>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
+	<!-- Profile to create simple docker image for this RPM -->
+	<profiles>
+		<profile>
+			<id>docker</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<!-- https://mvnrepository.com/artifact/com.spotify/docker-maven-plugin -->
+						<groupId>com.spotify</groupId>
+						<artifactId>docker-maven-plugin</artifactId>
+						<version>0.4.14</version>
+						<executions>
+							<execution>
+								<id>default</id>
+								<phase>package</phase>
+								<goals>
+									<goal>build</goal>
+									<!--<goal>push</goal> -->
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<repository>redhawk/rei</repository>
+							<dockerDirectory>${basedir}</dockerDirectory>
+							<imageName>redhawk/rei</imageName>
+							<tag>${project.version}</tag>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

@@ -1,3 +1,4 @@
+feature/src/main/feature/*
 *.class
 *.pyc
 .idea

@@ -24,12 +24,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.camel.EndpointInject;
-import org.apache.camel.builder.AdviceWithRouteBuilder;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -49,25 +47,23 @@ public class RedhawkDataEndpointTestIT extends CamelTestSupport {
 	
 	private static final String waveformName = "myDemo";
 	
-	private final String componentName = "DataConverter_1.*";
+	private static final String componentName = "DataConverter_1.*";
 	
-	private final String floatPortName = "dataFloat_out";
+	private final static String floatPortName = "dataFloat_out";
 	
-	private final String doublePortName = "dataDouble_out";
+	private final static String doublePortName = "dataDouble_out";
 	
-	private final String floatPortType = "float";
+	private final static String floatPortType = "float";
 	
-	private final String doublePortType = "double";
+	private final static String doublePortType = "double";
 	
-	private final String baseUri = "redhawk://data:localhost:2809:REDHAWK_DEV?waveformName="+waveformName+"&componentName="+componentName+"&portName=";
+	private static final String dataFloatUri = floatPortName+"&portType="+floatPortType;
 	
-	private final String dataFloatUri = baseUri+floatPortName+"&portType="+floatPortType;
+	private final static String dataDoubleUri = doublePortName+"&portType="+doublePortType;
 	
-	private final String dataDoubleUri = baseUri+doublePortName+"&portType="+doublePortType;
-	
-	private final String dataShortUri = baseUri+"dataShort_out&portType=short";
+	private final static String dataShortUri = "dataShort_out&portType=short";
 
-	private final String dataOctetUri = baseUri+"dataOctet_out&portType=octet";
+	private final static String dataOctetUri = "dataOctet_out&portType=octet";
 	
 	@EndpointInject(uri = "mock:floatResult")
     protected MockEndpoint floatResultEndpoint;
@@ -80,29 +76,27 @@ public class RedhawkDataEndpointTestIT extends CamelTestSupport {
 	
 	@EndpointInject(uri ="mock:shortResult")
     protected MockEndpoint shortResultEndpoint;	
-
-	@EndpointInject(uri = dataFloatUri)
-	protected RedhawkDataEndpoint floatDataEndpoint;
-	
-	@EndpointInject(uri = dataDoubleUri)
-	protected RedhawkDataEndpoint doubleDataEndpoint;
-	
-	@EndpointInject(uri = dataShortUri)
-	protected RedhawkDataEndpoint shortDataEndpoint;
-	
-	@EndpointInject(uri = dataOctetUri)
-	protected RedhawkDataEndpoint octetDataEndpoint;
 	
 	private static RedhawkDriver driver; 
 
 	private static RedhawkApplication rhApplication;
 	
 	private static RedhawkFileSystem rhFS;
-
+	
+	private static String floatEndpoint, doubleEndpoint, shortEndpoint, octetEndpoint;
+	
 	@BeforeClass
 	public static void setup() throws ConnectionException, MultipleResourceException, CORBAException, FileNotFoundException, IOException, ApplicationCreationException, ApplicationStartException{
 		RedhawkTestBase base = new RedhawkTestBase();
+		
+		String baseURI = "redhawk://data:"+base.domainHost+":"+base.domainPort+":"+base.domainName+"?waveformName="+waveformName+"&componentName="+componentName+"&portName=";
 
+		//Create endpoints
+		floatEndpoint = baseURI+dataFloatUri;
+		doubleEndpoint = baseURI+dataDoubleUri;
+		shortEndpoint = baseURI+dataShortUri;
+		octetEndpoint = baseURI+dataOctetUri;
+		
 		driver = base.driver;
 		
 		rhFS = driver.getDomain().getFileManager();
@@ -112,35 +106,8 @@ public class RedhawkDataEndpointTestIT extends CamelTestSupport {
 		rhApplication.start();
 	}
 	
-    /**
-     * Strategy to perform any pre setup, before {@link CamelContext} is created
-     */
-	protected void doPreSetup() throws Exception {
-		String testBaseUri = "redhawk://data:test:7777:REDHAWK_DEV?waveformName="+waveformName+"&componentName="+componentName+"&portName=";
-		testBaseUri+=floatPortName+"&portType="+floatPortType;
-    	this.replaceRouteFromWith(FLOAT_ROUTE_ID, testBaseUri);
-    }
-    
-	@Override
-    public boolean isUseAdviceWith() {
-        return true;
-    }
-	
-	@Override
-    public boolean isUseRouteBuilder() {
-        return true;
-    }
-	
 	@Test
 	public void testPortToCamel() throws InterruptedException{
-		try {
-			System.out.println("Routes "+this.context().getRouteDefinitions());
-			context.startAllRoutes();
-			//this.context().start();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		/*
 		 * Expecting a minimum number of messages for each redhawk endpoint 
 		 * to satisfy that it's receiving data 
@@ -160,13 +127,6 @@ public class RedhawkDataEndpointTestIT extends CamelTestSupport {
 		octetResultEndpoint.assertIsSatisfied();
 		shortResultEndpoint.assertIsSatisfied();
 		floatResultEndpoint.assertIsSatisfied();
-		
-		try {
-			this.context().stop();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
     protected RouteBuilder createRouteBuilder() {
@@ -175,7 +135,7 @@ public class RedhawkDataEndpointTestIT extends CamelTestSupport {
                 /*
                  * Route to ensure can receive port data point to point
                  */
-            	from(floatDataEndpoint)
+            	from(floatEndpoint)
             	.routeId(FLOAT_ROUTE_ID)
 				.log("received float data")
                 .to(floatResultEndpoint);
@@ -183,21 +143,21 @@ public class RedhawkDataEndpointTestIT extends CamelTestSupport {
             	/*
             	 * Route to ensure receiving double data works  
             	 */
-            	from(doubleDataEndpoint)
+            	from(doubleEndpoint)
                 .log("received double data")
                 .to(doubleResultEndpoint);
 
                 /*
                  * Route to ensure receiving short data works
                  */
-            	from(shortDataEndpoint)
+            	from(shortEndpoint)
                 .log("received short data")
                 .to(shortResultEndpoint);
             	
                 /*
                  * Route to ensure receiving octet data works
                  */
-            	from(octetDataEndpoint)
+            	from(octetEndpoint)
                 .log("received octet data")
                 .to(octetResultEndpoint);
             }

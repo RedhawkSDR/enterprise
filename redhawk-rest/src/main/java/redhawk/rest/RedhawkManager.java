@@ -33,8 +33,6 @@ import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
-import com.fasterxml.jackson.jaxrs.xml.JacksonXMLProvider;
-
 import redhawk.driver.Redhawk;
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.application.RedhawkApplication;

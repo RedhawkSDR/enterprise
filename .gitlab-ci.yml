@@ -9,7 +9,8 @@ cache:
   paths:
     - cache/maven.repository
 .common: &common
-  image: ${DOCKER_REGISTRY_URL}redbus/maven:3-jdk-8
+  image: ${docker_registry}redbus/maven:3-jdk-8
+  stage: build
   before_script:
     - mvn -P CFDependencies clean install -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository
   after_script:
@@ -27,6 +28,7 @@ cache:
     paths:
       - output/index.html
       - output/*.pdf
+      - output/*.rpm
       - output.tar.gz
     expire_in: 3 days
 
@@ -45,6 +47,12 @@ build:
     - mvn -Djava.io.tmpdir=./ deploy -P docs,jaxb-generation,default -B -U -Dmaven.repo.local=`pwd`/cache/maven.repository -Drelease=0.$CI_PIPELINE_ID
   only:
     - branches
+
+test:
+  image: centos:7
+  stage: test
+  script:
+    - yum install -y `find output -name '*.rpm'`
 
 build-release:
   variables:

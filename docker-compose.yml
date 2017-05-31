@@ -14,8 +14,8 @@ services:
       - "redhawk"
     volumes:
       - /data/mkwyche/.m2:/root/.m2:rw
-    command: /bin/bash
-    tty: true
+#    command: /bin/bash
+#    tty: true
 #    command: mvn test -Dtest=RedhawkDriverIT -DtestProps=/usr/local/workspace/enterprise/docker_test.properties
 #    tty: true
 #    volumes:

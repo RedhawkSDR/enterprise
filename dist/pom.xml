@@ -327,8 +327,6 @@
 							<dockerDirectory>${basedir}</dockerDirectory>
 							<imageName>redhawk/rei</imageName>
 							<tag>${project.version}</tag>
-							<!-- <baseImage>openjdk:8-jdk</baseImage> <tag>${project.version}</tag> 
-								<imageName>datadidit/mlhp-rest</imageName> -->
 						</configuration>
 					</plugin>
 				</plugins>

@@ -55,12 +55,6 @@ public class RedhawkEventChannelEndpointTestIT extends CamelTestSupport{
     @EndpointInject(uri = "mock:producerResult")
     protected MockEndpoint pResultEndpoint;
     
-    @EndpointInject(uri = "redhawk://event-channel:localhost:2809:REDHAWK_DEV?eventChannelName=EventsSpat&dataTypeName=messages")
-    protected RedhawkEventChannelEndpoint eventChannelConsumerEndpoint;
-    
-    @EndpointInject(uri ="redhawk://event-channel:localhost:2809:REDHAWK_DEV?eventChannelName=testChannel&messageId=fooBar")
-    protected RedhawkEventChannelEndpoint eventChannelProducerEndpoint;
-    
     @Produce(uri = "direct:start")
     protected ProducerTemplate template;
     
@@ -70,10 +64,18 @@ public class RedhawkEventChannelEndpointTestIT extends CamelTestSupport{
 	
 	private static RedhawkApplication rhApplication;
 	
+	private static String eventChannelConsumerURI, eventChannelProducerURI;
+	
 	@BeforeClass
 	public static void setup() throws ConnectionException, MultipleResourceException, CORBAException, FileNotFoundException, IOException, ApplicationCreationException, ApplicationStartException, InterruptedException{
 		RedhawkTestBase base = new RedhawkTestBase();
+		
+		String baseURI = "redhawk://event-channel:"+base.domainHost+":"+base.domainPort+":"+base.domainName;
+		
+		eventChannelConsumerURI = baseURI+"?eventChannelName=EventsSpat&dataTypeName=messages";
 
+		eventChannelProducerURI = baseURI+"?eventChannelName=testChannel&messageId=fooBar";
+		
 		driver = base.driver;
 		
 		rhFS = driver.getDomain().getFileManager();
@@ -131,12 +133,12 @@ public class RedhawkEventChannelEndpointTestIT extends CamelTestSupport{
     protected RouteBuilder createRouteBuilder() {
         return new RouteBuilder() {
             public void configure() {
-                from(eventChannelConsumerEndpoint)
+                from(eventChannelConsumerURI)
                 .to("log:eventTest")
                 .to(resultEndpoint);
                 
                 from("direct:start")
-                .to(eventChannelProducerEndpoint)
+                .to(eventChannelProducerURI)
                 .to(pResultEndpoint);
             }
         };

@@ -59,19 +59,17 @@ public class RedhawkFileEndpointTestIT extends CamelTestSupport{
 	
 	private static RedhawkFileManager fileManager;
 	
-	@EndpointInject(uri="redhawk://file-manager:localhost:2809:REDHAWK_DEV?directory=data")
-	RedhawkFileEndpoint redhawkFileProducerEndpoint; 
-	
-	@EndpointInject(uri="redhawk://file-manager:localhost:2809:REDHAWK_DEV?directory=data-out&delete=true")
-	RedhawkFileEndpoint redhawkFileConsumerEndpoint; 
-	
-	private static String resourcesDirectory;
-	
-	private static String testOutputDirectory;
+	private static String resourcesDirectory, testOutputDirectory, redhawkFileProducerURI, redhawkFileConsumerURI;
 	
 	@BeforeClass
 	public static void setup() throws ConnectionException, MultipleResourceException, CORBAException{
 		RedhawkTestBase base = new RedhawkTestBase();
+		
+		String baseURI = "redhawk://file-manager:"+base.domainHost+":"+base.domainPort+":"+base.domainName;
+		
+		redhawkFileProducerURI = baseURI+"?directory=data";
+		
+		redhawkFileConsumerURI = baseURI+"?directory=data-out&delete=true";
 		
 		File file = new File("src/test/resources/data");
 		
@@ -166,13 +164,13 @@ public class RedhawkFileEndpointTestIT extends CamelTestSupport{
 				  */
 				 from("file://"+resourcesDirectory)
 				 .log("Received Data ")
-				 .to(redhawkFileProducerEndpoint);
+				 .to(redhawkFileProducerURI);
 				 
 				 
 				 /*
 				  * Pick data up from Waveform output
 				  */
-				 from(redhawkFileConsumerEndpoint)
+				 from(redhawkFileConsumerURI)
 				 .log("Received Processed Data")
 				 .to("file://"+testOutputDirectory);
 			 }

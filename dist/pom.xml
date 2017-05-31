@@ -282,6 +282,10 @@
 							</sources>
 						</mapping>
 					</mappings>
+					<preinstallScriptlet>
+						<scriptFile>${project.build.directory}/scripts/preinstall.sh</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</preinstallScriptlet>
 					<preremoveScriptlet>
 						<scriptFile>${project.build.directory}/scripts/preremove.sh</scriptFile>
 						<fileEncoding>utf-8</fileEncoding>

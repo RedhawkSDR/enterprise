@@ -24,10 +24,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.apache.camel.EndpointInject;
+import org.apache.camel.builder.AdviceWithRouteBuilder;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -43,6 +45,8 @@ import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkDataEndpointTestIT extends CamelTestSupport { 
+	private final String FLOAT_ROUTE_ID = "floatRoute";
+	
 	private static final String waveformName = "myDemo";
 	
 	private final String componentName = "DataConverter_1.*";
@@ -108,26 +112,61 @@ public class RedhawkDataEndpointTestIT extends CamelTestSupport {
 		rhApplication.start();
 	}
 	
+    /**
+     * Strategy to perform any pre setup, before {@link CamelContext} is created
+     */
+	protected void doPreSetup() throws Exception {
+		String testBaseUri = "redhawk://data:test:7777:REDHAWK_DEV?waveformName="+waveformName+"&componentName="+componentName+"&portName=";
+		testBaseUri+=floatPortName+"&portType="+floatPortType;
+    	this.replaceRouteFromWith(FLOAT_ROUTE_ID, testBaseUri);
+    }
+    
+	@Override
+    public boolean isUseAdviceWith() {
+        return true;
+    }
+	
+	@Override
+    public boolean isUseRouteBuilder() {
+        return true;
+    }
+	
 	@Test
 	public void testPortToCamel() throws InterruptedException{
+		try {
+			System.out.println("Routes "+this.context().getRouteDefinitions());
+			context.startAllRoutes();
+			//this.context().start();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		/*
 		 * Expecting a minimum number of messages for each redhawk endpoint 
 		 * to satisfy that it's receiving data 
 		 */
-		floatResultEndpoint.expectedMinimumMessageCount(10);
 		doubleResultEndpoint.expectedMinimumMessageCount(10);
 		octetResultEndpoint.expectedMinimumMessageCount(10);
 		shortResultEndpoint.expectedMinimumMessageCount(10);
+		floatResultEndpoint.expectedMinimumMessageCount(10);
+
 		
 		Thread.sleep(5000l);
 		
 		/*
 		 * Ensuring that assert has been satisfied. 
 		 */
-		floatResultEndpoint.assertIsSatisfied();
 		doubleResultEndpoint.assertIsSatisfied();
 		octetResultEndpoint.assertIsSatisfied();
 		shortResultEndpoint.assertIsSatisfied();
+		floatResultEndpoint.assertIsSatisfied();
+		
+		try {
+			this.context().stop();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
     protected RouteBuilder createRouteBuilder() {
@@ -137,7 +176,8 @@ public class RedhawkDataEndpointTestIT extends CamelTestSupport {
                  * Route to ensure can receive port data point to point
                  */
             	from(floatDataEndpoint)
-                .log("received float data")
+            	.routeId(FLOAT_ROUTE_ID)
+				.log("received float data")
                 .to(floatResultEndpoint);
             	
             	/*

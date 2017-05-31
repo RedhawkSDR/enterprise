@@ -15,6 +15,7 @@ COPY redhawk-websocket redhawk-websocket/
 COPY redhawk-camel redhawk-camel/
 COPY docker_test.properties .
 
+
 #CMD ["/bin/bash"]
 CMD ["mvn", "clean", "install", "-P", "localIT", "-DtestProps=/usr/local/workspace/enterprise/docker_test.properties"]
 #CMD ["mvn", "-X", "test", "-PlocalIT", "-Dtest=RedhawkDriverIT", "-DtestProps=/usr/local/workspace/enterprise/docker_test.properties"]

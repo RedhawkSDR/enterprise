@@ -48,7 +48,8 @@ import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.testutils.RedhawkTestBase;
 import redhawk.testutils.RedhawkTestUtils;
 
-public class RedhawkEventChannelEndpointTestIT extends CamelTestSupport{
+//TODO: Make this work with Docker
+public class RedhawkEventChannelEndpointTestMT extends CamelTestSupport{
     @EndpointInject(uri = "mock:result")
     protected MockEndpoint resultEndpoint;
     

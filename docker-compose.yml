@@ -1,16 +1,14 @@
 version: '2'
 services:
   redhawk:
-    image: redhawk:2.0-nightly
-    container_name: redhawk_dev
+    image: ${docker_registry}redhawk/redhawk:${redhawk_version}-el7-x86_64
+    container_name: redhawk
   rei:
-    image: rei/localit:latest
-    container_name: rei_maven
+    image: ${docker_registry}redbus/maven:3-jdk-8
     depends_on:
-      - "redhawk"
+      - redhawk
     volumes:
-      - /data/mkwyche/.m2:/root/.m2:rw
-
-#If adding data-volume between container
-#volumes:
-#  data-volume: {}
+      - .:/usr/src/app
+      - ${m2cache}/repository:/root/.m2/repository:rw
+    working_dir: /usr/src/app
+    command: bash -c "mvn -P CFDependencies clean install -B -U && mvn clean install -PlocalIT -DfailIfNoTests=false -DtestProps=`pwd`/docker_test.properties"

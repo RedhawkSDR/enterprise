@@ -18,7 +18,7 @@
     </md-table-body>
   </md-table>
 
-  <md-button class="md-raised">Subscribe</md-button>
+  <md-button class="md-raised" @click.native="subscribe">Subscribe</md-button>
   </div>
   <div id="registrants">
     <md-toolbar md-theme="white">
@@ -45,6 +45,11 @@ export default{
     },
     registrants(){
       return this.eventchannel.registrantIds
+    }
+  },
+  methods: {
+    subscribe(){
+      console.log("Subscribe to channel")
     }
   }
 }

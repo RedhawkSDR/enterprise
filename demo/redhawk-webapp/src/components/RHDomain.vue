@@ -28,6 +28,7 @@
 	<md-layout md-flex>
 		<redhawkapplication v-if="showApplication"></redhawkapplication>
 		<rhdevicemanager v-if="showDeviceManager"></rhdevicemanager>
+		<eventchannel v-if="showEventChannel"></eventchannel>
 	</md-layout>
 </md-layout>
 </template>
@@ -42,6 +43,7 @@ import RHApplication from './RHApplicationView.vue'
 import RHDeviceManagers from './RHDeviceManagers.vue'
 import RHDeviceManagerView from './RHDeviceManagerView.vue'
 import EventChannelManager from './EventChannelManager.vue'
+import EventChannel from './EventChannel.vue'
 
 export default {
 	name: 'rhdomainview',
@@ -54,7 +56,8 @@ export default {
 		'redhawkapplication' : RHApplication,
 		'rhdevicemanagers' : RHDeviceManagers,
 		'rhdevicemanager' : RHDeviceManagerView,
-		'eventchannelmgr' : EventChannelManager
+		'eventchannelmgr' : EventChannelManager,
+		'eventchannel' : EventChannel
 	},
 	computed: {
 		baseURI() {
@@ -77,6 +80,9 @@ export default {
 		},
 		showDeviceManager(){
 			return this.$store.getters.showDeviceManager
+		},
+		showEventChannel(){
+			return this.$store.getters.showEventChannel
 		}
 	},
 	methods: {

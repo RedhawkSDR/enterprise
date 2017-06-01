@@ -44,7 +44,9 @@ const state = {
   showAllocationModal : false,
   deviceForPropView : {},
   showDeviceProperties: false,
-  eventchannels: {}
+  eventchannels: {},
+  eventchannel: {}, //Event Channel to show
+  showEventChannel: false
 }
 
 const store = new Vuex.Store({

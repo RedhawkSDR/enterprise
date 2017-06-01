@@ -38,7 +38,6 @@
 
 <script>
 import Waveform from './waveform.vue'
-import axios from 'axios'
 
 export default {
   name: 'rhwaveforms',

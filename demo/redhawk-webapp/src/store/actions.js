@@ -292,6 +292,8 @@ export const showDeviceTuners = ({ commit, getters }, show) => {
   }
 }
 
+export const showEventChannel = ({ commit }, show) => commit('showEventChannel', show)
+
 export const showDeviceProperties = ({ commit, getters }, show) => commit('showDeviceProperties', show)
 
 export const deallocate = ({ commit, getters }, deallocate) => {

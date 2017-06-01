@@ -67,6 +67,15 @@ export const showWaveformComponents = (state, appInfo) => {
   state.showWaveformComponents = true
 }
 
+export const showEventChannel = (state, show) => {
+  if(show.show){
+    state.eventchannel = show.eventchannel
+    state.showEventChannel = true
+  }else{
+    state.showEventChannel = false
+  }
+}
+
 export const showComponentPorts = (state, componentPorts) => {
   state.portsComponentName = componentPorts.name
   state.componentPorts = componentPorts.ports

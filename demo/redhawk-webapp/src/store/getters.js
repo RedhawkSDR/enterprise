@@ -34,3 +34,4 @@ export const tuners = state => state.tuners
 export const showAllocationModal = state => state.showAllocationModal
 export const deviceForPropView = state => state.deviceForPropView
 export const showDeviceProperties = state => state.showDeviceProperties
+export const eventchannels = state => state.eventchannels

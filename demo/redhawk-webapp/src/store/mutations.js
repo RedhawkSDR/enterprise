@@ -47,6 +47,8 @@ export const viewDomainConfig = (state, domain) => {
   state.availableWaveforms = domain.waveforms
   state.launchedWaveforms = domain.applications //TODO: Fix index put appropriate name
   state.devicemanagers = domain.deviceManagers
+  state.eventchannels = domain.eventchannels
+
   state.showDomain = true
 }
 

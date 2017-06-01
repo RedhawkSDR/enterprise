@@ -47,6 +47,10 @@ function getApplications(applicationsURL){
 function getDeviceManagers(deviceManagersURL){
   return axios.get(deviceManagersURL)
 }
+
+function getEventChannels(eventChannelsURL){
+  return axios.get(eventChannelsURL)
+}
 //End of Helper functions
 
 //Actions for editting domain configuration info.
@@ -64,18 +68,15 @@ export const viewDomainConfig = ({ commit, getters }, index) => {
   var baseURI = getters.redhawkRESTRoot+config.nameServer+'/domains/'+config.domainName
 
   axios.all([getWaveforms(baseURI+'/waveforms.json'), getApplications(baseURI+'/applications.json'),
-  getDeviceManagers(baseURI+'/devicemanagers.json')])
-  .then(axios.spread(function(waveforms, applications, deviceManagers){
-    console.log(deviceManagers)
-    console.log(waveforms)
-    console.log(applications)
-
+  getDeviceManagers(baseURI+'/devicemanagers.json'), getEventChannels(baseURI+'/eventchannels.json')])
+  .then(axios.spread(function(waveforms, applications, deviceManagers, eventchannels){
     var domain = new Object()
     domain.config = config
     domain.baseURI = baseURI
     domain.waveforms = waveforms.data.domains //TODO: Umm that's a bad key
     domain.applications = applications.data.applications
     domain.deviceManagers = deviceManagers.data.deviceManagers
+    domain.eventchannels = eventchannels.data.eventChannels
 
     commit('viewDomainConfig', domain)
   }))

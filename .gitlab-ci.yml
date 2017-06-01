@@ -68,7 +68,7 @@ test-integration:
   script:
     - docker-compose up -d redhawk
     - docker-compose exec -T redhawk yum install -y redhawk-basic-components redhawk-basic-waveforms
-    - docker-compose up rei
+    - docker-compose up --exit-code-from rei
     - find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -
   after_script:
     - docker-compose down

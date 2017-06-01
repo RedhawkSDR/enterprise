@@ -45,6 +45,10 @@ export default{
       eventChannel.eventchannel = this.eventchannels[index]
 
       console.log(eventChannel)
+      var showOthers = new Object();
+      showOthers.show = false
+      this.$store.dispatch('showDeviceManager', showOthers)
+      this.$store.dispatch('showApplication', false) //TODO: Make this action uniform
       this.$store.dispatch('showEventChannel', eventChannel)
     }
   }

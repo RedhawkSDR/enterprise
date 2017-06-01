@@ -67,6 +67,7 @@ export default {
       var showDevManager = new Object()
       showDevManager.show = false
       this.$store.dispatch('showDeviceManager', showDevManager)
+      this.$store.dispatch('showEventChannel', showDevManager)
       this.$store.dispatch('showApplication', true)
     },
     showController(data){

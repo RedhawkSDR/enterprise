@@ -23,6 +23,7 @@
 		</md-list>
 		<rhapplications></rhapplications>
 		<rhdevicemanagers></rhdevicemanagers>
+		<eventchannelmgr></eventchannelmgr>
 	</md-layout>
 	<md-layout md-flex>
 		<redhawkapplication v-if="showApplication"></redhawkapplication>
@@ -40,6 +41,7 @@ import EditComponentProperties from './EditComponentProperties.vue'
 import RHApplication from './RHApplicationView.vue'
 import RHDeviceManagers from './RHDeviceManagers.vue'
 import RHDeviceManagerView from './RHDeviceManagerView.vue'
+import EventChannelManager from './EventChannelManager.vue'
 
 export default {
 	name: 'rhdomainview',
@@ -51,7 +53,8 @@ export default {
 		'editcomponentprops' : EditComponentProperties,
 		'redhawkapplication' : RHApplication,
 		'rhdevicemanagers' : RHDeviceManagers,
-		'rhdevicemanager' : RHDeviceManagerView
+		'rhdevicemanager' : RHDeviceManagerView,
+		'eventchannelmgr' : EventChannelManager
 	},
 	computed: {
 		baseURI() {

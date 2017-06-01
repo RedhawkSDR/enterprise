@@ -43,9 +43,12 @@ export default {
       var dmRequest = new Object()
       dmRequest.show = true
       dmRequest.index = index
+      var closeOthers = new Object()
+      closeOthers.show = false
 
       //Can only show one thing at a time so close the application if open
       this.$store.dispatch('showApplication', false)
+      this.$store.dispatch('showEventChannel', closeOthers)
       this.$store.dispatch('showDeviceManager', dmRequest)
     }
   }

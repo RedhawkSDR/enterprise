@@ -1,6 +1,9 @@
 <template>
-<div>
-  <div>
+<div id="wrapper">
+  <md-toolbar class="md-warn">
+    <h1 class="md-title">Event Channel {{ eventchannel.name }}</h1>
+  </md-toolbar>
+  <div id="channelSub">
   <!-- Add Event Channel Name and Way to close view -->
   <md-table v-once>
     <md-table-header>
@@ -17,8 +20,42 @@
 
   <md-button class="md-raised">Subscribe</md-button>
   </div>
-  <div>
-    <h1>Registrants</h1>
+  <div id="registrants">
+    <md-toolbar md-theme="white">
+      <span class="md-title">Registrants [{{ registrants.length }}]</span>
+    </md-toolbar>
+    <md-list>
+      <md-list-item
+        v-for="(registrant, index) in registrants"
+      >
+      {{ registrant }}
+      </md-list-item>
+    </md-list>
   </div>
 </div>
 </template>
+
+<script>
+export default{
+  name: 'eventchannel',
+  computed: {
+    eventchannel(){
+      console.log("Getting event channel")
+      return this.$store.getters.eventchannel
+    },
+    registrants(){
+      return this.eventchannel.registrantIds
+    }
+  }
+}
+</script>
+
+<style>
+  #wrapper {
+    width: 100%
+  }
+  #channelSub {
+    float: left;
+    width: 75%
+  }
+</style>

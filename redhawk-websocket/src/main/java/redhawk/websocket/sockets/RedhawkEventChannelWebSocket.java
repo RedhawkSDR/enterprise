@@ -86,11 +86,10 @@ public class RedhawkEventChannelWebSocket extends RedhawkEventAdminWebSocket {
                     public void onMessage(Object message) {
                         try {
                         	logger.fine("Got StandardEvent Message "+eventChannelName);
-                        	if(message instanceof DomainManagementModel){
-                                session.getRemote().sendString(gson.toJson(message));                        		
-                        	}else{
-                        		logger.severe("Unknown message type!!!");
-                        	}
+                        	Object newMessage = EventChannelConverter.convertData(message);
+                        	if(newMessage!=null)
+                        		message = newMessage;
+                        	session.getRemote().sendString(gson.toJson(message));
                         } catch (IOException e) {
                         	logger.severe(e.getMessage());
                         }
@@ -104,7 +103,10 @@ public class RedhawkEventChannelWebSocket extends RedhawkEventAdminWebSocket {
 						// TODO Auto-generated method stub
                         try {
                         	logger.fine("Got non PropertyChange Message "+message);
-                            session.getRemote().sendString(gson.toJson(message));
+                        	Object newMessage = EventChannelConverter.convertData(message);
+                        	if(newMessage!=null)
+                        		message = newMessage;
+                        	session.getRemote().sendString(gson.toJson(message));
                         } catch (IOException e) {
                         	logger.severe(e.getMessage());
                         }						

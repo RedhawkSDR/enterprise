@@ -27,6 +27,7 @@ import org.omg.CORBA.Any;
 import org.ossie.properties.AnyUtils;
 
 import CF.DataType;
+import ExtendedEvent.ResourceStateChangeEventType;
 import StandardEvent.DomainManagementObjectAddedEventType;
 import StandardEvent.DomainManagementObjectRemovedEventType;
 import StandardEvent.SourceCategoryType;
@@ -35,9 +36,23 @@ import redhawk.driver.properties.RedhawkStructSequence;
 import redhawk.websocket.model.DomainManagementAction;
 import redhawk.websocket.model.DomainManagementModel;
 import redhawk.websocket.model.PropertyChangeModel;
+import redhawk.websocket.model.ResourceState;
+import redhawk.websocket.model.ResourceStateChangeModel;
 import redhawk.websocket.model.SourceCategory;
 
 public class EventChannelConverter {
+	public static Object convertData(Object obj){
+		if(obj instanceof DomainManagementObjectAddedEventType){
+			return convertDomainManagementObjectToModel(obj);
+		}else if(obj instanceof DomainManagementObjectRemovedEventType){
+			return convertDomainManagementObjectToModel(obj);
+		}else if(obj instanceof ResourceStateChangeEventType){
+			return convertResourceStateChangeEventType((ResourceStateChangeEventType)obj);
+		}else{
+			return null;
+		}
+	}
+	
 	/**
 	 * Turns a PropertyChange CORBA object into a PropertyChangeModel which can be serialized into JSON. 
 	 * @param message
@@ -99,6 +114,21 @@ public class EventChannelConverter {
 		}
 		return model;
 	}
+	
+	/**
+	 * Converts ResourceStateChangeEventType to model 
+	 */
+	public static ResourceStateChangeModel convertResourceStateChangeEventType(ResourceStateChangeEventType object){
+		ResourceStateChangeModel model = new ResourceStateChangeModel();
+		
+		model.setSourceId(object.sourceId);
+		model.setSourceName(object.sourceName);
+		model.setStateChangedFrom(ResourceState.getValue(object.stateChangeFrom.value()));
+		model.setStateChangedTo(ResourceState.getValue(object.stateChangeTo.value()));
+	
+		return model;
+	}
+	
 	
 	/**
 	 * Based on the int value of SourceCategory will return String representation of category. 

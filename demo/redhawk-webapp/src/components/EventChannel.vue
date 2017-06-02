@@ -35,6 +35,9 @@
       v-for="(registrant, index) in registrants"
       >
       {{ registrant }}
+      <md-button class="md-icon-button md-raised" @click.native="unregisterRegistrant(registrant)">
+        <md-icon>close</md-icon>
+      </md-button>
     </md-list-item>
   </md-list>
 </div>
@@ -95,6 +98,10 @@ export default{
     unsubscribe(){
       this.eventchannelWS.close()
       this.subscribed = false
+    },
+    unregisterRegistrant(id){
+      console.log("Unregister!!!! "+id)
+      //this.$store.dispatch("releaseRegistrant", )
     }
   },
   watch: {

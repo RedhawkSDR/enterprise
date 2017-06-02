@@ -45,7 +45,11 @@ const state = {
   deviceForPropView : {},
   showDeviceProperties: false,
   eventchannels: {},
-  eventchannel: {}, //Event Channel to show
+  eventchannel: {
+    name: null,
+    registrantIds: [],
+    wsurl: null
+  }, //Event Channel to show
   showEventChannel: false
 }
 

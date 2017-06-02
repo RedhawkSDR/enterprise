@@ -49,6 +49,19 @@ export const viewDomainConfig = (state, domain) => {
   state.devicemanagers = domain.deviceManagers
   state.eventchannels = domain.eventchannels
 
+  //Add more data to each event channel object to make state more flexible
+  for(var i=0; i < state.eventchannels.length; i++){
+    //Get url here as well
+    var url = new URL(state.baseURI)
+    var eventChannelWsURL = 'ws://'+url.hostname+':'+url.port+'/redhawk/'+state.configToView.nameServer
+      +'/domains/'+state.configToView.domainName+'/eventchannels/'+state.eventchannels[i].name
+
+    state.eventchannels[i].wsurl = eventChannelWsURL
+    //state.eventchannels[i].eventchannelWS = new WebSocket(eventChannelWsURL)
+    //state.eventchannels[i].subscribed = false
+    //state.eventchannels[i].messages = []
+  }
+
   state.showDomain = true
 }
 
@@ -70,17 +83,15 @@ export const showWaveformComponents = (state, appInfo) => {
 export const showEventChannel = (state, show) => {
   if(show.show){
     state.eventchannel = show.eventchannel
-
-    //Get url here as well
-    var url = new URL(state.baseURI)
-    var eventChannelWsURL = 'ws://'+url.hostname+':'+url.port+'/redhawk/'+state.configToView.nameServer
-      +'/domains/'+state.configToView.domainName+'/eventchannels/'+show.eventchannel.name
-
-    state.eventchannel.wsurl = eventChannelWsURL
     state.showEventChannel = true
   }else{
     state.showEventChannel = false
   }
+}
+
+export const subscribeToEventChannel = (state, sub) => {
+  console.log("Update event channel subscription")
+  state.eventchannel.subscribed = sub
 }
 
 export const showComponentPorts = (state, componentPorts) => {

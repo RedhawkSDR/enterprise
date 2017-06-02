@@ -50,7 +50,7 @@ export default{
   name: 'eventchannel',
   computed: {
     eventchannel(){
-      console.log("Getting event channel")
+      //TODO: Not correct
       return this.$store.getters.eventchannel
     },
     registrants(){
@@ -94,6 +94,17 @@ export default{
     },
     unsubscribe(){
       this.eventchannelWS.close()
+      this.subscribed = false
+    }
+  },
+  watch: {
+    eventchannel: function(){
+      if(this.eventchannelWS!=null)
+        this.eventchannelWS.close()
+
+      //Reset to default if eventchannel changes
+      this.eventchannelWS = null
+      this.eventchannelData = []
       this.subscribed = false
     }
   }

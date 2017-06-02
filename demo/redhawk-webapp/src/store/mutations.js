@@ -70,6 +70,13 @@ export const showWaveformComponents = (state, appInfo) => {
 export const showEventChannel = (state, show) => {
   if(show.show){
     state.eventchannel = show.eventchannel
+
+    //Get url here as well
+    var url = new URL(state.baseURI)
+    var eventChannelWsURL = 'ws://'+url.hostname+':'+url.port+'/redhawk/'+state.configToView.nameServer
+      +'/domains/'+state.configToView.domainName+'/eventchannels/'+show.eventchannel.name
+
+    state.eventchannel.wsurl = eventChannelWsURL
     state.showEventChannel = true
   }else{
     state.showEventChannel = false
@@ -137,7 +144,7 @@ export const plotPortData = (state, port) => {
 
   console.log(port)
   if(port.portType=='component'){
-    var wsURL = 'ws://'+url.hostname+':8181/redhawk/'+state.configToView.nameServer+'/domains/'+state.configToView.domainName
+    var wsURL = 'ws://'+url.hostname+':'+url.port+'/redhawk/'+state.configToView.nameServer+'/domains/'+state.configToView.domainName
     +'/applications/'+state.applicationName+'/components/'+state.portsComponentName+'/ports/'+port.port.name
 
     //Update wsURL
@@ -145,7 +152,7 @@ export const plotPortData = (state, port) => {
     state.portToDisplayName = port.port.name
   }else{
     console.log("Display Device port data")
-    var wsURL = 'ws://'+url.hostname+':8181/redhawk/'+state.configToView.nameServer+'/domains/'+state.configToView.domainName
+    var wsURL = 'ws://'+url.hostname+':'+url.port+'/redhawk/'+state.configToView.nameServer+'/domains/'+state.configToView.domainName
     +'/devicemanagers/'+state.deviceManager.label+'/devices/'+port.device.label+'/ports/'+port.port.name
 
     state.wsURL = wsURL

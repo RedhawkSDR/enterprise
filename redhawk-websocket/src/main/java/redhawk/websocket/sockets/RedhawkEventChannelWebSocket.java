@@ -20,7 +20,6 @@
 package redhawk.websocket.sockets;
 
 import java.io.IOException;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import org.eclipse.jetty.websocket.api.Session;
@@ -30,11 +29,10 @@ import com.google.gson.Gson;
 import redhawk.driver.Redhawk;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.eventchannel.RedhawkEventChannel;
-import redhawk.driver.eventchannel.listeners.MessageListener;
+import redhawk.driver.eventchannel.listeners.GenericEventListener;
 import redhawk.driver.eventchannel.listeners.PropertyChange;
 import redhawk.driver.eventchannel.listeners.PropertyChangeListener;
 import redhawk.driver.exceptions.EventChannelException;
-import redhawk.websocket.eventchannel.listeners.ObjectEventChannelListener;
 import redhawk.websocket.model.DomainManagementModel;
 import redhawk.websocket.model.MessageType;
 import redhawk.websocket.utils.EventChannelConverter;
@@ -83,7 +81,7 @@ public class RedhawkEventChannelWebSocket extends RedhawkEventAdminWebSocket {
                 });
                 break;
         	case STANDARD_EVENT:
-        		eventChannel.subscribe(new ObjectEventChannelListener() {
+        		eventChannel.subscribe(new GenericEventListener() {
                     @Override
                     public void onMessage(Object message) {
                         try {
@@ -100,16 +98,17 @@ public class RedhawkEventChannelWebSocket extends RedhawkEventAdminWebSocket {
                 });
                 break;
         	default:
-        		eventChannel.subscribe(new MessageListener() {
-                    @Override
-                    public void onMessage(Map<String, Object> message) {
+        		eventChannel.subscribe(new GenericEventListener() {
+					@Override
+					public void onMessage(Object message) {
+						// TODO Auto-generated method stub
                         try {
                         	logger.fine("Got non PropertyChange Message "+message);
                             session.getRemote().sendString(gson.toJson(message));
                         } catch (IOException e) {
                         	logger.severe(e.getMessage());
-                        }
-                    }
+                        }						
+					}
                 });
                 break;
         	}

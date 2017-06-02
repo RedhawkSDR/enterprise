@@ -11,8 +11,8 @@ import redhawk.driver.RedhawkUtils;
  * Server as a catch all listener for all the different event listeners that are available
  *
  */
-public abstract class GenericMessageListener extends EventChannelListener<Object>{
-	Logger logger = Logger.getLogger(GenericMessageListener.class.getName());
+public abstract class GenericEventListener extends EventChannelListener<Object>{
+	Logger logger = Logger.getLogger(GenericEventListener.class.getName());
 	
 	@Override
 	protected Object processMessage(Any data) {

@@ -3,11 +3,22 @@ package redhawk.driver.eventchannel.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.util.Map;
 
 import org.junit.Test;
 
+import StandardEvent.DomainManagementObjectAddedEventType;
+import redhawk.driver.RedhawkUtils;
+import redhawk.driver.application.RedhawkApplication;
+import redhawk.driver.eventchannel.listeners.DomainObjectAddedEventListener;
+import redhawk.driver.eventchannel.listeners.EventTypes;
+import redhawk.driver.eventchannel.listeners.GenericMessageListener;
 import redhawk.driver.eventchannel.listeners.MessageListener;
+import redhawk.driver.exceptions.ApplicationCreationException;
+import redhawk.driver.exceptions.ApplicationReleaseException;
+import redhawk.driver.exceptions.ApplicationStartException;
+import redhawk.driver.exceptions.ApplicationStopException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.EventChannelException;
 import redhawk.driver.exceptions.MultipleResourceException;
@@ -50,6 +61,61 @@ public class RedhawkEventChannelIT extends RedhawkTestBase{
 		} catch (MultipleResourceException | ResourceNotFoundException | CORBAException | EventChannelException e) {
 			fail("No exceptions should've been thrown"+e.getMessage());
 		}
+	}
+	
+	//Test listening to messages on ODM_Channel
+	@Test
+	public void testSubscribe(){
+		String subscriptionId = "odmListener";
+		RedhawkApplication app = null;
+		try {
+			RedhawkEventChannelImpl impl = (RedhawkEventChannelImpl) driver.getDomain().getEventChannelManager().getEventChannel("ODM_Channel");
+			
+			MyMessageListener testMessageListener = new MyMessageListener(); 
+			//Register a listener and do stuff on events 
+			impl.subscribe(testMessageListener);
+			
+			//Launch an applicatication to generate an ODM_Message
+			app = driver.getDomain("REDHAWK_DEV").createApplication("odmTest",
+					new File("src/test/resources/waveforms/rh/testWaveform.sad.xml"));
+			
+			//Stop/Start an application to generate an ODM_Message
+			app.stop();
+			app.start();
+			app.release();
+			impl.unsubscribe();
+			
+			//TODO: Should be exactly 4
+			assertEquals("Should be four events based on above actions on application", true, testMessageListener.getMessageCount()>=3);
+			app=null;
+		} catch (MultipleResourceException | ResourceNotFoundException | CORBAException | EventChannelException | ApplicationCreationException | ApplicationStartException | ApplicationStopException | ApplicationReleaseException e) {
+			e.printStackTrace();
+			fail("Issue during test "+e.getMessage());
+		} finally{
+			if(app!=null){
+				try {
+					app.release();
+				} catch (ApplicationReleaseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+			}
+		}
+
+	}
+	
+	class MyMessageListener extends GenericMessageListener{
+		private Integer messageCount = 0; 
 		
+		public Integer getMessageCount() {
+			return messageCount;
+		}
+
+		@Override
+		public void onMessage(Object message) {
+			messageCount++;
+			System.out.println("Received a message "+message);
+			System.out.println("Message count: "+messageCount);
+		}
 	}
 }

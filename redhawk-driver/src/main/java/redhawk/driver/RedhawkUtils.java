@@ -204,7 +204,7 @@ public class RedhawkUtils {
 	 * @return
 	 */
 	public static Map<String, Object> convertPropertiesAnyToMap(Any any) {
-
+		
 		CF.DataType[] message = PropertiesHelper.extract(any);
 		Map<String, Object> mapObject = new HashMap<String, Object>();
 

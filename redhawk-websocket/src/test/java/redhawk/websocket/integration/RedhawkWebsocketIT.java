@@ -29,27 +29,20 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.gson.Gson;
 
-import redhawk.driver.application.RedhawkApplication;
 import redhawk.websocket.model.DomainManagementAction;
 import redhawk.websocket.model.DomainManagementModel;
-import redhawk.websocket.test.util.JettySupport;
 import redhawk.websocket.test.util.RedhawkTestUtil;
 import redhawk.websocket.test.util.RedhawkWebSocketTestUtil;
 
-public class RedhawkWebsocketIT extends RedhawkWebsocketTestBase{
-    private static Log logger = LogFactory.getLog(RedhawkWebsocketIT.class);
-
-	private static RedhawkApplication application;
+public class RedhawkWebsocketIT extends RedhawkWebsocketTestBase {
+	private static Log logger = LogFactory.getLog(RedhawkWebsocketIT.class);
 
 	private final String jsonRegex = ".*[{\\[].*[\\]}]";
 
@@ -61,11 +54,9 @@ public class RedhawkWebsocketIT extends RedhawkWebsocketTestBase{
 
 		this.performSocketConnection(endpoint, socket);
 
-		assertTrue(
-				"Socket data should indicate that it was able to connect to web server",
+		assertTrue("Socket data should indicate that it was able to connect to web server",
 				socket.getData().contains("socket connected: "));
-		assertTrue(
-				"Socket data should indicate that it was able to disconnect from web server",
+		assertTrue("Socket data should indicate that it was able to disconnect from web server",
 				socket.getData().contains("socket disconnected: "));
 
 		String[] messages = socket.getData().split("\n");
@@ -73,45 +64,41 @@ public class RedhawkWebsocketIT extends RedhawkWebsocketTestBase{
 		for (String message : messages) {
 			if (message.startsWith("received ")) {
 				Matcher matcher = pattern.matcher(message);
-				assertTrue("Message should contain json pattern ",
-						matcher.find());
+				assertTrue("Message should contain json pattern ", matcher.find());
 			}
 		}
 	}
 
 	@Test
 	public void testWebsocketOnBinaryPort() throws Exception {
-		String endpoint; 
+		String endpoint;
 		endpoint = RedhawkTestUtil.sampleWebSocketPortEndpoint("dataFloat_out");
-		System.out.println("Endpoint: "+endpoint);
+		System.out.println("Endpoint: " + endpoint);
 		RedhawkWebSocketTestUtil socket = new RedhawkWebSocketTestUtil(3);
 
 		this.performSocketConnection(endpoint, socket);
 
-		assertTrue(
-				"Socket data should indicate that it was able to connect to web server",
+		assertTrue("Socket data should indicate that it was able to connect to web server",
 				socket.getData().contains("socket connected: "));
-		assertTrue(
-				"Socket data should indicate that it was able to disconnect from web server",
+		assertTrue("Socket data should indicate that it was able to disconnect from web server",
 				socket.getData().contains("socket disconnected: "));
 
 		String[] messages = socket.getData().split("\n");
 		assertTrue("Should have 5 messages ", messages.length == 5);
-		int binaryMessageCount = 0; 
+		int binaryMessageCount = 0;
 		for (String message : messages) {
 			if (message.startsWith("received binary")) {
-				binaryMessageCount++; 
+				binaryMessageCount++;
 			}
 		}
 		assertEquals("Should have received 2 binary messages.", 2, binaryMessageCount);
 	}
 
-	//TODO: Write a waveform that takes pushes out events to a port....
+	// TODO: Write a waveform that takes pushes out events to a port....
 	@Test
 	@Ignore
 	public void testWebsocketEventChannel() throws Exception {
-		URI uri = URI.create(RedhawkTestUtil
-				.sampleWebSocketEventChannel("standardEvent"));
+		URI uri = URI.create(RedhawkTestUtil.sampleWebSocketEventChannel("standardEvent"));
 
 		WebSocketClient client = new WebSocketClient();
 		RedhawkWebSocketTestUtil socket = new RedhawkWebSocketTestUtil(2);
@@ -124,7 +111,8 @@ public class RedhawkWebsocketIT extends RedhawkWebsocketTestBase{
 				application.release();
 				application = RedhawkTestUtil.launchApplication(true);
 				while (socket.getMessageCount() < socket.getMessagesToKeep()) {
-					logger.info("Message Count: "+socket.getMessageCount()+" Messages to Keep: "+socket.getMessagesToKeep());
+					logger.info("Message Count: " + socket.getMessageCount() + " Messages to Keep: "
+							+ socket.getMessagesToKeep());
 				}
 				// client.stop();
 			} finally {
@@ -133,13 +121,11 @@ public class RedhawkWebsocketIT extends RedhawkWebsocketTestBase{
 		} catch (Throwable t) {
 			t.printStackTrace(System.err);
 		}
-		
+
 		String[] json = socket.getData().split("\n");
-		assertTrue(
-				"Socket data should indicate that it was able to connect to web server",
+		assertTrue("Socket data should indicate that it was able to connect to web server",
 				socket.getData().contains("socket connected: "));
-		assertTrue(
-				"Socket data should indicate that it was able to disconnect from web server",
+		assertTrue("Socket data should indicate that it was able to disconnect from web server",
 				socket.getData().contains("socket disconnected: "));
 		Gson gson = new Gson();
 		Boolean remove = false, add = false;
@@ -147,9 +133,9 @@ public class RedhawkWebsocketIT extends RedhawkWebsocketTestBase{
 			int beginJson = a.indexOf("{");
 			int endJson = a.indexOf("}");
 			if (a.startsWith("received text message:") && beginJson != -1 && endJson != -1) {
-				//System.out.println("JSON: "+a.substring(beginJson, endJson + 1));
-				DomainManagementModel model = gson.fromJson(
-						a.substring(beginJson, endJson + 1),
+				// System.out.println("JSON: "+a.substring(beginJson, endJson +
+				// 1));
+				DomainManagementModel model = gson.fromJson(a.substring(beginJson, endJson + 1),
 						DomainManagementModel.class);
 				if (model.getAction().equals(DomainManagementAction.ADD)) {
 					add = true;
@@ -162,8 +148,7 @@ public class RedhawkWebsocketIT extends RedhawkWebsocketTestBase{
 		assertTrue(remove && add);
 	}
 
-	public void performSocketConnection(String uriString,
-			RedhawkWebSocketTestUtil socket) {
+	public void performSocketConnection(String uriString, RedhawkWebSocketTestUtil socket) {
 		/*
 		 * All this needs to be cleaned up but need to test
 		 */
@@ -171,21 +156,24 @@ public class RedhawkWebsocketIT extends RedhawkWebsocketTestBase{
 
 		WebSocketClient client = new WebSocketClient();
 		try {
-			try {
-				client.start();
+			client.start();
 
-				// Attempt Connect
-				Future<Session> fut = client.connect(socket, uri);
-				while (socket.getMessageCount() < socket.getMessagesToKeep()) {
-					logger.info("Message Count: "+socket.getMessageCount()+" Messages to Keep: "+socket.getMessagesToKeep());
-				}
-
-				// client.stop();
-			} finally {
-				client.stop();
+			// Attempt Connect
+			Future<Session> fut = client.connect(socket, uri);
+			while (socket.getMessageCount() < socket.getMessagesToKeep()) {
+				logger.info("Message Count: " + socket.getMessageCount() + " Messages to Keep: "
+						+ socket.getMessagesToKeep());
 			}
+
+			// client.stop();
 		} catch (Throwable t) {
 			t.printStackTrace(System.err);
+		} finally {
+			try {
+				client.stop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

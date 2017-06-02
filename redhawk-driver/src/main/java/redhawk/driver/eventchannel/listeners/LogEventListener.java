@@ -32,7 +32,11 @@ public abstract class LogEventListener extends EventChannelListener<LogEvent> {
 
 	@Override
 	protected LogEvent processMessage(Any data) {
-		return LogEventHelper.extract(data);
+		return getLogEvent(data);
+	}
+	
+	protected static LogEvent getLogEvent(Any data){
+		return LogEventHelper.extract(data);		
 	}
 
 }

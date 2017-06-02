@@ -28,12 +28,15 @@ import org.ossie.properties.AnyUtils;
 import ExtendedEvent.PropertySetChangeEventType;
 import ExtendedEvent.PropertySetChangeEventTypeHelper;
 
-
+//TODO: Look into this you'll never receive an event of that type 
 public abstract class PropertyChangeListener extends EventChannelListener<PropertyChange> {
 
 	@Override
 	protected PropertyChange processMessage(Any data) {
+		return getPropertyChange(data);
+	}
 
+	protected static PropertyChange getPropertyChange(Any data){
 		PropertySetChangeEventType propChangeEvent = PropertySetChangeEventTypeHelper.extract(data);
 		
 		PropertyChange propChange = new PropertyChange();
@@ -50,6 +53,4 @@ public abstract class PropertyChangeListener extends EventChannelListener<Proper
 		
 		return propChange;
 	}
-
-
 }

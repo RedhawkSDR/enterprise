@@ -22,6 +22,7 @@ package redhawk.driver.eventchannel.listeners;
 import java.util.Map;
 
 import org.omg.CORBA.Any;
+import org.omg.CORBA.TypeCodePackage.BadKind;
 
 import redhawk.driver.RedhawkUtils;
 

@@ -13,7 +13,7 @@ import redhawk.driver.RedhawkUtils;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.eventchannel.listeners.DomainObjectAddedEventListener;
 import redhawk.driver.eventchannel.listeners.EventTypes;
-import redhawk.driver.eventchannel.listeners.GenericMessageListener;
+import redhawk.driver.eventchannel.listeners.GenericEventListener;
 import redhawk.driver.eventchannel.listeners.MessageListener;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ApplicationReleaseException;
@@ -104,7 +104,7 @@ public class RedhawkEventChannelIT extends RedhawkTestBase{
 
 	}
 	
-	class MyMessageListener extends GenericMessageListener{
+	class MyMessageListener extends GenericEventListener{
 		private Integer messageCount = 0; 
 		
 		public Integer getMessageCount() {

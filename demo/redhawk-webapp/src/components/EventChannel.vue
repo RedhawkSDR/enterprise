@@ -1,49 +1,30 @@
 <template>
-<div id="wrapper">
-  <md-toolbar class="md-warn">
-    <h1 class="md-title">Event Channel {{ eventchannel.name }}</h1>
-  </md-toolbar>
-  <div id="channelSub">
-  <!-- Add Event Channel Name and Way to close view -->
-  <md-table>
-    <md-table-header>
-      <md-table-row>
-        <md-table-head>Timestamp</md-table-head>
-        <md-table-head>Type</md-table-head>
-        <md-table-head>Message Body</md-table-head>
-      </md-table-row>
-    </md-table-header>
+  <div id="wrapper">
+    <md-toolbar class="md-warn">
+      <h1 class="md-title">Event Channel {{ eventchannel.name }}</h1>
+    </md-toolbar>
+    <div id="channelSub">
+      <!-- Add Event Channel Name and Way to close view -->
+      <md-table id="ecTable">
+        <md-table-header>
+          <md-table-row>
+            <md-table-head>Timestamp</md-table-head>
+            <md-table-head>Type</md-table-head>
+            <md-table-head>Message Body</md-table-head>
+          </md-table-row>
+        </md-table-header>
 
-    <md-table-body>
-      <md-table-row v-for="(row, index) in eventchannelData"
-      :key="index">
-        <md-table-cell>{{row.timeStamp}}</md-table-cell>
-        <md-table-cell>{{row.type}}</md-table-cell>
-        <md-table-cell>{{row.data}}</md-table-cell>
-      </md-table-row>
-    </md-table-body>
-  </md-table>
-  <!--
-  Works!!!!
-  <table class="table">
-    <thead>
-      <tr>
-        <td><strong>Timestamp</strong></td>
-        <td><strong>Type</strong></td>
-        <td><strong>Data</strong></td>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="row in eventchannelData">
-        <td>Timestamp</td>
-        <td>{{row.type}}</td>
-        <td><input type="text" v-model="row.data"></td>
-      </tr>
-    </tbody>
-  </table>
-  -->
-  <md-button id="subscribe" v-if="!subscribed" class="md-raised" @click.native="subscribe">Subscribe</md-button>
-  <md-button id="unsubscribe" v-else class="md-raised" @click.native="unsubscribe">Unsubscribe</md-button>
+        <md-table-body>
+          <md-table-row v-for="(row, index) in eventchannelData"
+          :key="index">
+          <md-table-cell>{{row.timeStamp}}</md-table-cell>
+          <md-table-cell>{{row.type}}</md-table-cell>
+          <md-table-cell>{{row.data}}</md-table-cell>
+        </md-table-row>
+      </md-table-body>
+    </md-table>
+    <md-button id="subscribe" v-if="!subscribed" class="md-raised" @click.native="subscribe">Subscribe</md-button>
+    <md-button id="unsubscribe" v-else class="md-raised" @click.native="unsubscribe">Unsubscribe</md-button>
   </div>
   <div id="registrants">
     <md-toolbar md-theme="white">
@@ -51,12 +32,12 @@
     </md-toolbar>
     <md-list>
       <md-list-item
-        v-for="(registrant, index) in registrants"
+      v-for="(registrant, index) in registrants"
       >
       {{ registrant }}
-      </md-list-item>
-    </md-list>
-  </div>
+    </md-list-item>
+  </md-list>
+</div>
 </div>
 </template>
 
@@ -120,17 +101,24 @@ export default{
 </script>
 
 <style>
-  #wrapper {
-    width: 100%
-  }
-  #channelSub {
-    float: left;
-    width: 75%
-  }
-  #subscribe {
-    background-color: green
-  }
-  #unsubscribe {
-    background-color: red
-  }
+#wrapper {
+  width: 100%
+}
+#channelSub {
+  float: left;
+  width: 75%
+}
+#subscribe {
+  background-color: green;
+  margin: auto;
+  display: block;
+}
+#unsubscribe {
+  background-color: red;
+  margin: auto;
+  display: block;
+}
+#ecTable {
+  min-height: 55vh
+}
 </style>

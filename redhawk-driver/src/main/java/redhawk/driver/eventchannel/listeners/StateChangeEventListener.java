@@ -29,7 +29,10 @@ public abstract class StateChangeEventListener extends EventChannelListener<Stat
 
 	@Override
 	protected StateChangeEventType processMessage(Any data) {
+		return getStateChangeEventType(data);
+	}
+	
+	protected static StateChangeEventType getStateChangeEventType(Any data){
 		return StateChangeEventTypeHelper.extract(data);
 	}
-
 }

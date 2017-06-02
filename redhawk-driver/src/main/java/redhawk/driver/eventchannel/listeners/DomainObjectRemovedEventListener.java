@@ -29,7 +29,10 @@ public abstract class DomainObjectRemovedEventListener extends EventChannelListe
 
 	@Override
 	protected DomainManagementObjectRemovedEventType processMessage(Any data) {
+		return getDomainManagementObjectRemovedEventType(data);
+	}
+	
+	protected static DomainManagementObjectRemovedEventType getDomainManagementObjectRemovedEventType(Any data){
 		return DomainManagementObjectRemovedEventTypeHelper.extract(data);
 	}
-
 }

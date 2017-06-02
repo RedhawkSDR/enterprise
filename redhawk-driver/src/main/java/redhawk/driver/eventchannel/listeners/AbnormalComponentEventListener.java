@@ -29,6 +29,10 @@ public abstract class AbnormalComponentEventListener extends EventChannelListene
 
 	@Override
 	protected AbnormalComponentTerminationEventType processMessage(Any data) {
+		return getAbnormalComponentTerminationEventType(data);
+	}
+	
+	protected static AbnormalComponentTerminationEventType getAbnormalComponentTerminationEventType(Any data){
 		return AbnormalComponentTerminationEventTypeHelper.extract(data);
 	}
 

@@ -142,6 +142,8 @@ public class RedhawkWebSocketCreator implements WebSocketCreator {
                             	type = MessageType.PROPERTY_CHANGE;
                             }else if(standardEvent){
                             	type = MessageType.STANDARD_EVENT;
+                            }else{
+                            	logger.warning("Not handling this "+req.getQueryString());
                             }
                             logger.fine("MessageType is: "+type);
                             return new RedhawkEventChannelWebSocket(newDriverInstance, redhawkConnection, redhawkConnection.getDomain(domainName), eventChannel, type, path);

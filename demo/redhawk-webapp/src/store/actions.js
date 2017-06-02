@@ -202,6 +202,17 @@ export const releaseWaveform = ({ commit, getters }, name) => {
 
   })
 }
+
+export const releaseRegistrant = ({ commit, getters }, registrantId) => {
+  axios.delete(getters.baseURI+'/eventchannels/'+getters.eventchannels.name+'.json')
+  .then(function(response){
+    
+  })
+  .catch(function(error){
+    console.log(error)
+  })
+}
+
 export const updateDomainStateAfterWaveformRelease = ({ commit }, name) => commit('updateDomainStateAfterWaveformRelease', name)
 
 //Launch Controls

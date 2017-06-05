@@ -89,6 +89,10 @@ export const showEventChannel = (state, show) => {
   }
 }
 
+export const updateEventChannelRegistrants = (state, eventchannel) => {
+  state.eventchannel.registrantIds = eventchannel.registrantIds
+}
+
 export const subscribeToEventChannel = (state, sub) => {
   console.log("Update event channel subscription")
   state.eventchannel.subscribed = sub

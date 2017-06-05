@@ -5,9 +5,15 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.List;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import redhawk.driver.eventchannel.RedhawkEventChannelManager;
+import redhawk.driver.eventchannel.listeners.GenericEventListener;
+import redhawk.driver.exceptions.CORBAException;
+import redhawk.driver.exceptions.EventChannelException;
+import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.rest.model.EventChannel;
 import redhawk.rest.model.FetchMode;
 import redhawk.testutils.RedhawkTestBase;
@@ -39,6 +45,33 @@ public class EventChannelManagerIT extends RedhawkTestBase{
 			assertNotNull(ec);
 			assertEquals("Name should be IDM_Channel", "IDM_Channel", ec.getName());
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testUnsubscribe(){
+		String subscriptionId = "mySub";
+		
+		try {
+			Integer originalSize = driver.getDomain().getEventChannelManager().getEventChannel("ODM_Channel").getRegistrants(1000).size();
+			driver.getDomain().getEventChannelManager().getEventChannel("ODM_Channel").subscribe(new GenericEventListener(){
+				@Override
+				public void onMessage(Object message) {
+					System.out.println("Hello World");
+				}
+				
+			}, subscriptionId);
+			Integer expectedSize = originalSize+1;
+			assertEquals("Number of channels should be "+expectedSize, expectedSize, 
+					new Integer(driver.getDomain().getEventChannelManager().getEventChannel("ODM_Channel").getRegistrants(1000).size()));
+			
+			manager.unsubscribeFromEventChannel(domainHost+":2809", "REDHAWK_DEV", "ODM_Channel", subscriptionId);
+			
+			assertEquals("Number should now be back to original size "+originalSize, originalSize, 
+					new Integer(driver.getDomain().getEventChannelManager().getEventChannel("ODM_Channel").getRegistrants(1000).size()));
+		} catch (MultipleResourceException | ResourceNotFoundException | EventChannelException | CORBAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

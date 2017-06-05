@@ -98,6 +98,34 @@ export const subscribeToEventChannel = (state, sub) => {
   state.eventchannel.subscribed = sub
 }
 
+export const updateEventChannels = (state, obj) => {
+  //Update EventChannel list
+  state.eventchannels = obj.eventchannels
+
+  //Add more data to each event channel object to make state more flexible
+  for(var i=0; i < state.eventchannels.length; i++){
+    //Get url here as well
+    var url = new URL(state.baseURI)
+    var eventChannelWsURL = 'ws://'+url.hostname+':'+url.port+'/redhawk/'+state.configToView.nameServer
+      +'/domains/'+state.configToView.domainName+'/eventchannels/'+state.eventchannels[i].name
+
+    state.eventchannels[i].wsurl = eventChannelWsURL
+    //state.eventchannels[i].eventchannelWS = new WebSocket(eventChannelWsURL)
+    //state.eventchannels[i].subscribed = false
+    //state.eventchannels[i].messages = []
+  }
+
+  //Update eventchannel view if necessary
+  if(state.eventchannel.name===obj.deletedName){
+    console.log("Need to clean up view")
+    state.eventchannel = {
+      name: null,
+      registrantIds: [],
+      wsurl: null
+    }
+  }
+}
+
 export const showComponentPorts = (state, componentPorts) => {
   state.portsComponentName = componentPorts.name
   state.componentPorts = componentPorts.ports

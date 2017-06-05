@@ -82,7 +82,7 @@ public class RedhawkEventChannelResource extends RedhawkBaseResource{
     @ApiOperation(
     		value="DELETE REDHAWK Event Channel Registrant"
     		)
-    public Response deleteEventChannelRegistrant(@PathParam("{eventchannel}") String eventChannel, @PathParam("{id}") String id){
+    public Response deleteEventChannelRegistrant(@PathParam("eventchannel") String eventChannel, @PathParam("id") String id){
     	redhawkManager.unsubscribeFromEventChannel(nameServer, domainName, eventChannel, id);
     	
     	return Response.ok().build();

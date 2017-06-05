@@ -204,9 +204,15 @@ export const releaseWaveform = ({ commit, getters }, name) => {
 }
 
 export const releaseRegistrant = ({ commit, getters }, registrantId) => {
-  axios.delete(getters.baseURI+'/eventchannels/'+getters.eventchannels.name+'.json')
+  axios.delete(getters.baseURI+'/eventchannels/'+getters.eventchannel.name+'/registrant/'+registrantId)
   .then(function(response){
-    
+    //Get latest registrants
+    axios.get(getters.baseURI+'/eventchannels/'+getters.eventchannel.name)
+    .then(function(response){
+        console.log("Response is ")
+        console.log(response.data)
+        commit('updateEventChannelRegistrants', response.data)
+    })
   })
   .catch(function(error){
     console.log(error)

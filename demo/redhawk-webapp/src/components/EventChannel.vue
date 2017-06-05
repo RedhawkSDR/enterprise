@@ -101,7 +101,7 @@ export default{
     },
     unregisterRegistrant(id){
       console.log("Unregister!!!! "+id)
-      //this.$store.dispatch("releaseRegistrant", )
+      this.$store.dispatch("releaseRegistrant", id)
     }
   },
   watch: {

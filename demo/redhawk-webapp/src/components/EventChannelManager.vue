@@ -50,6 +50,10 @@ export default{
       this.$store.dispatch('showDeviceManager', showOthers)
       this.$store.dispatch('showApplication', false) //TODO: Make this action uniform
       this.$store.dispatch('showEventChannel', eventChannel)
+    },
+    deleteChannel(index){
+      console.log("Deleteing name: "+this.eventchannels[index].name)
+      this.$store.dispatch('deleteEventChannel', this.eventchannels[index].name)
     }
   }
 }

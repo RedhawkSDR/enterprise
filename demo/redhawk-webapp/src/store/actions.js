@@ -228,6 +228,27 @@ export const updateEventChannelRegistrants = ({ commit, getters }, name) => {
   })
 }
 
+export const deleteEventChannel = ({commit, getters}, name) => {
+  axios.delete(getters.baseURI+'/eventchannels/'+name)
+  .then(function(response){
+    //Update Event Channels list and view
+    getEventChannels(getters.baseURI+'/eventchannels.json')
+    .then(function(response){
+      var obj = new Object();
+      obj.eventchannels = response.data.eventChannels
+      obj.deletedName = name
+
+      console.log("Event Channels is now")
+      console.log(obj.eventchannels)
+      commit('updateEventChannels', obj)
+    })
+    .catch(function(error){
+      console.log(error)
+    })
+  })
+
+}
+
 export const updateDomainStateAfterWaveformRelease = ({ commit }, name) => commit('updateDomainStateAfterWaveformRelease', name)
 
 //Launch Controls

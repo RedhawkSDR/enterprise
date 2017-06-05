@@ -3,6 +3,9 @@
 		<md-layout md-column md-flex="25">
 			<md-toolbar>
 				<h1 class="md-title">{{ domainConfig.name }} :: {{ domainConfig.domainName}}</h1>
+				<md-button @click.native="refreshDomain()" class="md-icon-button md-raised md-warn" id="refreshButton">
+					<md-icon>refresh</md-icon>
+				</md-button>
 			</md-toolbar>
 			<md-list>
 				<md-list-item>
@@ -88,6 +91,11 @@ export default {
 	methods: {
 		showWaveformLauncher(waveform){
 			this.$store.dispatch('showLaunchWaveformModal', waveform)
+		},
+		refreshDomain(){
+			console.log("Refresh view")
+			var configIndex = this.$store.getters.domainConfigs.indexOf(this.domainConfig)
+			this.$store.dispatch('viewDomainConfig', configIndex)
 		}
 	}
 }
@@ -96,5 +104,10 @@ export default {
 <style>
 .rowHeight {
 	min-height: 430px;
+}
+
+#refreshButton {
+	position: absolute;
+	right: 0;
 }
 </style>

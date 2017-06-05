@@ -219,6 +219,15 @@ export const releaseRegistrant = ({ commit, getters }, registrantId) => {
   })
 }
 
+export const updateEventChannelRegistrants = ({ commit, getters }, name) => {
+  axios.get(getters.baseURI+'/eventchannels/'+name+".json")
+  .then(function(response){
+      console.log("Response is ")
+      console.log(response.data)
+      commit('updateEventChannelRegistrants', response.data)
+  })
+}
+
 export const updateDomainStateAfterWaveformRelease = ({ commit }, name) => commit('updateDomainStateAfterWaveformRelease', name)
 
 //Launch Controls

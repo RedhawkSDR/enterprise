@@ -2,6 +2,8 @@ package redhawk.rest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 import java.util.List;
 
@@ -11,6 +13,7 @@ import org.junit.Test;
 import redhawk.driver.eventchannel.RedhawkEventChannelManager;
 import redhawk.driver.eventchannel.listeners.GenericEventListener;
 import redhawk.driver.exceptions.CORBAException;
+import redhawk.driver.exceptions.EventChannelCreationException;
 import redhawk.driver.exceptions.EventChannelException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
@@ -75,5 +78,32 @@ public class EventChannelManagerIT extends RedhawkTestBase{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void createAndShutownofEventChannel(){
+		String eventChannelName = "Foo";
+		
+		try {
+			//Create an event channel 
+			manager.createEventChannel(domainHost+":2809", "REDHAWK_DEV", eventChannelName);
+			
+			//Make sure it was created
+			assertNotNull(manager.get(domainHost+":2809", "eventchannel", "REDHAWK_DEV", eventChannelName));
+		
+			//Delete an event channel
+			manager.deleteEventChannel(domainHost+":2809", "REDHAWK_DEV", eventChannelName);
+			
+			try{
+				manager.get(domainHost+":2809", "eventchannel", "REDHAWK_DEV", eventChannelName);
+				fail("Should have thrown an exception indication Event Channel does not exist");
+			}catch(Exception ex){
+				//Exception should be thrown because event channel does not exist.
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }

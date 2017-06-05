@@ -77,6 +77,7 @@ export default{
       this.eventchannelWS = new WebSocket(this.wsurl)
       this.eventchannelWS.onopen = function(evt){
         console.log("Connected")
+        self.$store.dispatch("updateEventChannelRegistrants", self.eventchannel.name)
       }
       this.eventchannelWS.onmessage = function(evt){
         console.log(evt)
@@ -92,6 +93,7 @@ export default{
       }
       this.eventchannelWS.onclose = function(){
         console.log("Closed")
+        self.$store.dispatch("updateEventChannelRegistrants", self.eventchannel.name)
       }
       this.subscribed = true
     },

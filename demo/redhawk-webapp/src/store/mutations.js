@@ -6,7 +6,6 @@ export const addDomainConfig = (state, domainConfig) => {
 export const deleteDomainConfig = (state, index) => {
   var configToDelete = state.domainConfigs[index]
   if(configToDelete==state.configToView){
-    console.log('Deleting configuration')
     state.showDomain = false
   }
   state.domainConfigs.splice(index, 1)
@@ -94,7 +93,6 @@ export const updateEventChannelRegistrants = (state, eventchannel) => {
 }
 
 export const subscribeToEventChannel = (state, sub) => {
-  console.log("Update event channel subscription")
   state.eventchannel.subscribed = sub
 }
 
@@ -117,7 +115,6 @@ export const updateEventChannels = (state, obj) => {
 
   //Update eventchannel view if necessary
   if(state.eventchannel.name===obj.deletedName){
-    console.log("Need to clean up view")
     state.eventchannel = {
       name: null,
       registrantIds: [],

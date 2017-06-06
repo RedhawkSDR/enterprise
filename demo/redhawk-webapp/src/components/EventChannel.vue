@@ -17,7 +17,11 @@
         <md-table-body>
           <md-table-row v-for="(row, index) in eventchannelData"
           :key="index">
-          <md-table-cell>{{row.timeStamp}}</md-table-cell>
+          <!--
+          Figure out why evt timestamp is incorrect and use it
+            <md-table-cell>{{row.timeStamp}}</md-table-cell>
+          -->
+          <md-table-cell>{{row.myTS}}</md-table-cell>
           <md-table-cell>{{row.type}}</md-table-cell>
           <md-table-cell>{{row.data}}</md-table-cell>
         </md-table-row>
@@ -76,11 +80,11 @@ export default{
       var self = this
       this.eventchannelWS = new WebSocket(this.wsurl)
       this.eventchannelWS.onopen = function(evt){
-        console.log("Connected")
         self.$store.dispatch("updateEventChannelRegistrants", self.eventchannel.name)
       }
       this.eventchannelWS.onmessage = function(evt){
-        console.log(evt)
+        //console.log(evt)
+        evt.myTS = self.getCurrentTimestamp()
         if(self.eventchannelData.length<10){
           self.eventchannelData.unshift(evt)
         }else{
@@ -92,7 +96,6 @@ export default{
         console.log("ERROR "+evt)
       }
       this.eventchannelWS.onclose = function(){
-        console.log("Closed")
         self.$store.dispatch("updateEventChannelRegistrants", self.eventchannel.name)
       }
       this.subscribed = true
@@ -102,8 +105,12 @@ export default{
       this.subscribed = false
     },
     unregisterRegistrant(id){
-      console.log("Unregister!!!! "+id)
       this.$store.dispatch("releaseRegistrant", id)
+    },
+    getCurrentTimestamp(){
+      var d = new Date();
+
+      return d.getHours()+':'+d.getMinutes()+':'+d.getSeconds()+'.'+d.getMilliseconds();
     }
   },
   watch: {

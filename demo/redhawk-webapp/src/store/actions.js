@@ -142,7 +142,6 @@ export const updateComponentProperty = ({ commit, getters }, property) => {
     }
   })
   .then(function(response){
-    console.log("Update Made")
     commit('updateComponentProperty', property)
   })
   .catch(function(error){
@@ -157,7 +156,6 @@ export const showWaveformController = ({ commit, getters }, index) => {
   axios.get(applicationsURL)
   .then(function(response){
       var obj = new Object()
-      console.log(response.data)
       obj.waveformToControl = response.data
       commit('showWaveformController', obj)
   })
@@ -209,8 +207,6 @@ export const releaseRegistrant = ({ commit, getters }, registrantId) => {
     //Get latest registrants
     axios.get(getters.baseURI+'/eventchannels/'+getters.eventchannel.name)
     .then(function(response){
-        console.log("Response is ")
-        console.log(response.data)
         commit('updateEventChannelRegistrants', response.data)
     })
   })
@@ -222,8 +218,6 @@ export const releaseRegistrant = ({ commit, getters }, registrantId) => {
 export const updateEventChannelRegistrants = ({ commit, getters }, name) => {
   axios.get(getters.baseURI+'/eventchannels/'+name+".json")
   .then(function(response){
-      console.log("Response is ")
-      console.log(response.data)
       commit('updateEventChannelRegistrants', response.data)
   })
 }
@@ -238,8 +232,6 @@ export const deleteEventChannel = ({commit, getters}, name) => {
       obj.eventchannels = response.data.eventChannels
       obj.deletedName = name
 
-      console.log("Event Channels is now")
-      console.log(obj.eventchannels)
       commit('updateEventChannels', obj)
     })
     .catch(function(error){
@@ -293,7 +285,6 @@ export const showDeviceManager = ({ commit, getters }, show) => {
   if(show.show){
     axios.all([getDeviceManager(getters, show)])
     .then(axios.spread(function(deviceManager){
-      console.log(deviceManager)
       show.deviceManager = deviceManager.data
       commit('showDeviceManager', show)
     }))
@@ -307,11 +298,11 @@ export const showDevicePorts = ({ commit, getters }, show) => {
     var devicePortsURL = getters.baseURI+'/devicemanagers/'+getters.deviceManager.label+'/devices/'+show.device.label+'/ports.json'
     axios.get(devicePortsURL)
     .then(function(response){
-      console.log("Do I have access to this")
       var devPorts = new Object()
+
       devPorts.ports = response.data.ports
       devPorts.device = show.device
-      console.log(devPorts)
+
       commit('showDevicePorts', devPorts)
     })
     .catch(function(error){
@@ -346,10 +337,7 @@ export const subscribeToEventChannel = ({ commit }, sub) => commit('subscribeToE
 export const showDeviceProperties = ({ commit, getters }, show) => commit('showDeviceProperties', show)
 
 export const deallocate = ({ commit, getters }, deallocate) => {
-  console.log("Made it")
   var deallocateURL = getters.baseURI+'/devicemanagers/'+getters.deviceManager.label+'/devices/'+deallocate.deviceLabel+'/deallocate'
-  console.log(deallocateURL)
-  console.log(deallocate)
   var deviceLabel = getters.tuners.device.label
   axios.post(deallocateURL, deallocate.allocationId, {
     headers: {

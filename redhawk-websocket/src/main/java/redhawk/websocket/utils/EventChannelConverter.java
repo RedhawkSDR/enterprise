@@ -102,7 +102,8 @@ public class EventChannelConverter {
 			model.setSourceCategory(getSourceCategory(obj.sourceCategory.value()));
 			model.setAction(DomainManagementAction.ADD);
 			model.setSourceName(obj.sourceName);
-			model.setSourceIOR(obj.sourceIOR.toString());
+			//At the frontend this is likely unnecessary
+			//model.setSourceIOR(obj.sourceIOR.toString());
 		}else if(managementObject instanceof DomainManagementObjectRemovedEventType){
 			DomainManagementObjectRemovedEventType obj = (DomainManagementObjectRemovedEventType) managementObject;
 			model.setProducerId(obj.producerId);

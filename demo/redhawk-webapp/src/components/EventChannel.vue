@@ -122,11 +122,13 @@ export default{
 
 <style>
 #wrapper {
-  width: 100%
+  width: 75vw;
+  max-width: 75vw;
 }
 #channelSub {
   float: left;
-  width: 75%
+  width: 75%;
+  max-width: 75%;
 }
 #subscribe {
   background-color: green;

@@ -28,11 +28,9 @@
 		<rhdevicemanagers></rhdevicemanagers>
 		<eventchannelmgr></eventchannelmgr>
 	</md-layout>
-	<md-layout md-flex>
-		<redhawkapplication v-if="showApplication"></redhawkapplication>
-		<rhdevicemanager v-if="showDeviceManager"></rhdevicemanager>
-		<eventchannel v-if="showEventChannel"></eventchannel>
-	</md-layout>
+	<redhawkapplication v-if="showApplication"></redhawkapplication>
+	<rhdevicemanager v-if="showDeviceManager"></rhdevicemanager>
+	<eventchannel v-if="showEventChannel"></eventchannel>
 </md-layout>
 </template>
 

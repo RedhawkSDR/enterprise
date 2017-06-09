@@ -471,7 +471,7 @@ public class RedhawkDomainManagerImpl extends
 			return appToReturn;
 		} catch (CreateApplicationError | CreateApplicationRequestError
 				| CreateApplicationInsufficientCapacityError
-				| InvalidInitConfiguration | InvalidProfile | InvalidFileName e) {
+				| InvalidInitConfiguration | InvalidProfile | InvalidFileName | ApplicationInstallationError e) {
 			throw new ApplicationCreationException(e);
 		}
 	}

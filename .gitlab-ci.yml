@@ -2,7 +2,7 @@
 #Tutuorial on using GitLab CI: https://docs.gitlab.com/ce/ci/quick_start/README.html
 #Docs on format of CI file: https://docs.gitlab.com/ce/ci/yaml/README.html
 variables:
-  redhawk_version: '2.1.1'
+  redhawk_version: '2.1-nightly'
   enterprise_version: '2.1.0'
 .common: &common
   image: ${docker_registry}redbus/maven:3-jdk-8

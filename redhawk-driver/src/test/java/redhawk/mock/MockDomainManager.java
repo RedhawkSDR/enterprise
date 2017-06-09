@@ -22,6 +22,7 @@ package redhawk.mock;
 import org.omg.CORBA.Context;
 import org.omg.CORBA.ContextList;
 import org.omg.CORBA.ExceptionList;
+import org.omg.CORBA.IntHolder;
 import org.omg.CORBA.InterfaceDef;
 import org.omg.CORBA.NVList;
 import org.omg.CORBA.NamedValue;
@@ -46,7 +47,9 @@ import CF.FileManager;
 import CF.InvalidFileName;
 import CF.InvalidObjectReference;
 import CF.InvalidProfile;
+import CF.LogEvent;
 import CF.PropertiesHolder;
+import CF.UnknownIdentifier;
 import CF.UnknownProperties;
 import CF.ApplicationFactoryPackage.CreateApplicationError;
 import CF.ApplicationFactoryPackage.CreateApplicationInsufficientCapacityError;
@@ -381,6 +384,60 @@ public class MockDomainManager implements DomainManager {
 	public ORB _get_orb() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public LogEvent[] retrieve_records(IntHolder howMany, int startingRecord) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public LogEvent[] retrieve_records_by_date(IntHolder howMany, long to_timeStamp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public LogEvent[] retrieve_records_from_date(IntHolder howMany, long from_timeStamp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int log_level() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void log_level(int newLog_level) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setLogLevel(String logger_id, int newLevel) throws UnknownIdentifier {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getLogConfig() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLogConfig(String config_contents) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setLogConfigURL(String config_url) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

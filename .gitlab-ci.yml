@@ -59,7 +59,7 @@ test-install:
   script:
     - yum install -y `find output -name '*.rpm'`
 
-test-integration:
+test-el7-x86_46:
   image: ${docker_registry}utils/docker-compose:latest
   stage: test
   tags:
@@ -69,6 +69,52 @@ test-integration:
     redhawk_version: 2.1-nightly
     dist: el7
     arch: x86_64
+  script:
+    - docker-compose up -d redhawk
+    - docker-compose exec -T redhawk yum install -y redhawk-basic-components redhawk-basic-waveforms
+    - docker-compose up --exit-code-from rei
+    - find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -
+  after_script:
+    - docker-compose down
+  artifacts:
+    name: $CI_JOB_NAME
+    paths:
+      - output.tar
+    expire_in: 3 days
+
+test-el6-x86_46:
+  image: ${docker_registry}utils/docker-compose:latest
+  stage: test
+  tags:
+    - mvn-cache
+  dependencies: []
+  variables:
+    redhawk_version: 2.1-nightly
+    dist: el6
+    arch: x86_64
+  script:
+    - docker-compose up -d redhawk
+    - docker-compose exec -T redhawk yum install -y redhawk-basic-components redhawk-basic-waveforms
+    - docker-compose up --exit-code-from rei
+    - find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -
+  after_script:
+    - docker-compose down
+  artifacts:
+    name: $CI_JOB_NAME
+    paths:
+      - output.tar
+    expire_in: 3 days
+
+test-el6-i386:
+  image: ${docker_registry}utils/docker-compose:latest
+  stage: test
+  tags:
+    - mvn-cache
+  dependencies: []
+  variables:
+    redhawk_version: 2.1-nightly
+    dist: el6
+    arch: i686
   script:
     - docker-compose up -d redhawk
     - docker-compose exec -T redhawk yum install -y redhawk-basic-components redhawk-basic-waveforms

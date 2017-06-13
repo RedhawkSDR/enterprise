@@ -70,7 +70,7 @@ test-el7-x86_46:
     dist: el7
     arch: x86_64
   script:
-    - docker-compose up -d redhawk
+    - docker-compose up --force-recreate -d redhawk
     - docker-compose exec -T redhawk yum install -y redhawk-basic-components redhawk-basic-waveforms
     - docker-compose up --exit-code-from rei
     - find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -
@@ -93,7 +93,7 @@ test-el6-x86_46:
     dist: el6
     arch: x86_64
   script:
-    - docker-compose up -d redhawk
+    - docker-compose up --force-recreate -d redhawk
     - docker-compose exec -T redhawk yum install -y redhawk-basic-components redhawk-basic-waveforms
     - docker-compose up --exit-code-from rei
     - find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -
@@ -105,7 +105,7 @@ test-el6-x86_46:
       - output.tar
     expire_in: 3 days
 
-test-el6-i386:
+test-el6-i686:
   image: ${docker_registry}utils/docker-compose:latest
   stage: test
   tags:
@@ -116,7 +116,7 @@ test-el6-i386:
     dist: el6
     arch: i686
   script:
-    - docker-compose up -d redhawk
+    - docker-compose up --force-recreate -d redhawk
     - docker-compose exec -T redhawk yum install -y redhawk-basic-components redhawk-basic-waveforms
     - docker-compose up --exit-code-from rei
     - find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -

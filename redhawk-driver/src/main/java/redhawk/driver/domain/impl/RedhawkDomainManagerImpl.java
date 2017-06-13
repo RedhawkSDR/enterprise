@@ -393,7 +393,7 @@ public class RedhawkDomainManagerImpl extends
 			try {
 				deviceManager.shutdown();
 			} catch (OBJECT_NOT_EXIST e) {
-
+				e.printStackTrace();
 			}
 		}
 

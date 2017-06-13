@@ -2,8 +2,8 @@
 #Tutuorial on using GitLab CI: https://docs.gitlab.com/ce/ci/quick_start/README.html
 #Docs on format of CI file: https://docs.gitlab.com/ce/ci/yaml/README.html
 variables:
-  redhawk_version: '2.1-nightly'
   enterprise_version: '2.1.0'
+#  redhawk_version: '2.1-nightly'
 .common: &common
   image: ${docker_registry}redbus/maven:3-jdk-8
   stage: build
@@ -65,6 +65,10 @@ test-integration:
   tags:
     - mvn-cache
   dependencies: []
+  variables:
+    redhawk_version: 2.1-nightly
+    dist: el7
+    arch: x86_64
   script:
     - docker-compose up -d redhawk
     - docker-compose exec -T redhawk yum install -y redhawk-basic-components redhawk-basic-waveforms

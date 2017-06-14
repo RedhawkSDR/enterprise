@@ -19,24 +19,39 @@
  */
 package redhawk.driver.domain.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.omg.CORBA.ORB;
 
 import CF.AllocationManager;
+import CF.DeviceLocationIteratorHolder;
+import CF.AllocationManagerPackage.DeviceLocationSequenceHolder;
 import CF.AllocationManagerPackage.DeviceLocationType;
+import CF.AllocationManagerPackage.DeviceScopeType;
+import redhawk.driver.RedhawkDriver;
+import redhawk.driver.base.impl.CorbaBackedObject;
+import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.domain.RedhawkAllocationManager;
+import redhawk.driver.domain.RedhawkDomainManager;
+import redhawk.driver.exceptions.ResourceNotFoundException;
 
-public class RedhawkAllocationManagerImpl  implements RedhawkAllocationManager{
+public class RedhawkAllocationManagerImpl extends CorbaBackedObject<AllocationManager> implements RedhawkAllocationManager{
 
 	private static Logger logger = Logger.getLogger(RedhawkAllocationManagerImpl.class.getName());
 
 	private AllocationManager allocationManager;
 	
+	private RedhawkDomainManager domainManager;
+	
 	private ORB orb;
 	
-	public RedhawkAllocationManagerImpl(ORB orb, AllocationManager mgr){
-		this.orb = orb;
+	public RedhawkAllocationManagerImpl(RedhawkDomainManager domMgr, AllocationManager mgr){
+		super(domMgr.getDriver().getOrb().object_to_string(mgr), domMgr.getDriver().getOrb());
+		domainManager = domMgr;
+		this.orb = domMgr.getDriver().getOrb();
 		this.allocationManager = mgr;
 	}
 	
@@ -54,6 +69,60 @@ public class RedhawkAllocationManagerImpl  implements RedhawkAllocationManager{
 	@Override
 	public AllocationManager getCorbaObj() {
 		return this.allocationManager;
+	}
+
+	@Override
+	public List<Map<String, Object>> getAllocations() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void allocate(String deviceId, Map<String, Object> allocation) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deallocate(String allocationId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void dellocate(String[] allocationIds) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<RedhawkDevice> listDevices() {
+		List<RedhawkDriver> device = new ArrayList<>();
+		//TODO: Shouldn't need to put in a number????
+		DeviceLocationSequenceHolder holder = new DeviceLocationSequenceHolder();
+		DeviceLocationIteratorHolder iterHold = new DeviceLocationIteratorHolder();
+		
+		allocationManager.listDevices(DeviceScopeType.ALL_DEVICES, 1000, holder, iterHold);
+		
+		for(DeviceLocationType location : holder.value){
+			//Device dev = location.dev;
+			//DeviceManager devMgr = location.devMgr;
+			
+		}
+		
+		return null;
+	}
+
+	@Override
+	protected AllocationManager locateCorbaObject() throws ResourceNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Class<?> getHelperClass() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 //	  /* The readonly AllocationManager attribute allDevices contains all devices in all Domains that can be seen by any Allocation Manager seen by the local Allocation Manager */

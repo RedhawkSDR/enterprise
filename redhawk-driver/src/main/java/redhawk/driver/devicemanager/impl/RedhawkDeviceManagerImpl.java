@@ -83,6 +83,8 @@ public class RedhawkDeviceManagerImpl extends QueryableResourceImpl<DeviceManage
 
     private RedhawkDevice createRedhawkDevice(Device device, RedhawkDeviceManager deviceManager, String deviceIor, String identifier) {
     	RedhawkDevice dev = new RedhawkDeviceImpl(this, getOrb().object_to_string(device), device.identifier());
+    	
+    	//TODO: Why is this happening
     	RedhawkSimple dev_kind = dev.getProperty("DCE:cdc5ee18-7ceb-4ae6-bf4c-31f983179b4d");
     	if ((dev_kind != null) && (dev_kind.getValue() != null)) {
 	    	String kind = dev_kind.getValue().toString();

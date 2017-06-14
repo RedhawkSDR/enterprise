@@ -19,7 +19,11 @@
  */
 package redhawk.driver.domain;
 
+import java.util.List;
+import java.util.Map;
+
 import CF.AllocationManager;
+import redhawk.driver.device.RedhawkDevice;
 
 /**
  * provides a single point for creating, inspecting, and delegating
@@ -27,5 +31,15 @@ import CF.AllocationManager;
  *
  */
 public interface RedhawkAllocationManager {
+	List<Map<String, Object>> getAllocations();
+	
+	void allocate(String deviceId, Map<String, Object> allocation);
+	
+	void deallocate(String allocationId);
+	
+	void dellocate(String[] allocationIds);
+	
+	List<RedhawkDevice> listDevices();
+	
 	AllocationManager getCorbaObj();
 }

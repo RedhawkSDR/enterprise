@@ -547,7 +547,7 @@ public class RedhawkDomainManagerImpl extends
 	}
 
 	public RedhawkAllocationManager getAllocationManager() {
-		return new RedhawkAllocationManagerImpl(this.getOrb(), getCorbaObj().allocationMgr());
+		return new RedhawkAllocationManagerImpl(this, getCorbaObj().allocationMgr());
 	}
 
 	public RedhawkEventChannelManager getEventChannelManager() {

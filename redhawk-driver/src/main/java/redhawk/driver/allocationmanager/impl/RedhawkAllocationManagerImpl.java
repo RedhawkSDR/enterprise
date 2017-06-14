@@ -17,7 +17,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-package redhawk.driver.domain.impl;
+package redhawk.driver.allocationmanager.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,12 +41,12 @@ import CF.AllocationManagerPackage.DeviceScopeType;
 import CF.AllocationManagerPackage.InvalidAllocationId;
 import redhawk.driver.RedhawkUtils;
 import redhawk.driver.allocationmanager.AllocationInfo;
+import redhawk.driver.allocationmanager.RedhawkAllocationManager;
 import redhawk.driver.base.impl.CorbaBackedObject;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.device.impl.RedhawkDeviceImpl;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.devicemanager.impl.RedhawkDeviceManagerImpl;
-import redhawk.driver.domain.RedhawkAllocationManager;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.AllocationException;
 import redhawk.driver.exceptions.ResourceNotFoundException;

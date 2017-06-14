@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Map;
 
 import redhawk.driver.Redhawk;
+import redhawk.driver.allocationmanager.RedhawkAllocationManager;
+import redhawk.driver.allocationmanager.impl.RedhawkAllocationManagerImpl;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.application.impl.RedhawkApplicationFactoryImpl;
 import redhawk.driver.base.QueryableResource;
@@ -31,7 +33,6 @@ import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.devicemanager.DeviceManagerInturruptedCallback;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.devicemanager.RedhawkService;
-import redhawk.driver.domain.impl.RedhawkAllocationManagerImpl;
 import redhawk.driver.eventchannel.RedhawkEventChannelManager;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ConnectionException;

@@ -17,13 +17,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-package redhawk.driver.domain;
+package redhawk.driver.allocationmanager;
 
 import java.util.List;
 import java.util.Map;
 
 import CF.AllocationManager;
-import redhawk.driver.allocationmanager.AllocationInfo;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.exceptions.AllocationException;
 

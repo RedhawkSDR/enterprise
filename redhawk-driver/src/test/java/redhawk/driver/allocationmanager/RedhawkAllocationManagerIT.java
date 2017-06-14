@@ -1,4 +1,4 @@
-package redhawk.driver.domain.impl;
+package redhawk.driver.allocationmanager;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -21,7 +21,6 @@ import org.junit.Test;
 import redhawk.driver.allocationmanager.AllocationInfo;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
-import redhawk.driver.domain.RedhawkAllocationManager;
 import redhawk.driver.exceptions.AllocationException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.EventChannelCreationException;

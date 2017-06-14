@@ -44,6 +44,8 @@ import org.xml.sax.SAXException;
 
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.RedhawkUtils;
+import redhawk.driver.allocationmanager.RedhawkAllocationManager;
+import redhawk.driver.allocationmanager.impl.RedhawkAllocationManagerImpl;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.application.impl.RedhawkApplicationFactoryImpl;
 import redhawk.driver.application.impl.RedhawkApplicationImpl;
@@ -56,7 +58,6 @@ import redhawk.driver.devicemanager.impl.DeviceManagerTemplate;
 import redhawk.driver.devicemanager.impl.DurableRedhawkDeviceManagerImpl;
 import redhawk.driver.devicemanager.impl.RedhawkDeviceManagerImpl;
 import redhawk.driver.devicemanager.impl.RedhawkServiceImpl;
-import redhawk.driver.domain.RedhawkAllocationManager;
 import redhawk.driver.domain.RedhawkConnectionManager;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.domain.RedhawkFileManager;

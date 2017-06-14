@@ -20,6 +20,7 @@
 package redhawk.driver.domain.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -27,13 +28,18 @@ import java.util.logging.Logger;
 import org.omg.CORBA.ORB;
 
 import CF.AllocationManager;
+import CF.Device;
 import CF.DeviceLocationIteratorHolder;
+import CF.DeviceManager;
 import CF.AllocationManagerPackage.DeviceLocationSequenceHolder;
 import CF.AllocationManagerPackage.DeviceLocationType;
 import CF.AllocationManagerPackage.DeviceScopeType;
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.base.impl.CorbaBackedObject;
 import redhawk.driver.device.RedhawkDevice;
+import redhawk.driver.device.impl.RedhawkDeviceImpl;
+import redhawk.driver.devicemanager.RedhawkDeviceManager;
+import redhawk.driver.devicemanager.impl.RedhawkDeviceManagerImpl;
 import redhawk.driver.domain.RedhawkAllocationManager;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.ResourceNotFoundException;
@@ -45,6 +51,8 @@ public class RedhawkAllocationManagerImpl extends CorbaBackedObject<AllocationMa
 	private AllocationManager allocationManager;
 	
 	private RedhawkDomainManager domainManager;
+	
+	private Map<String, RedhawkDeviceManager> devMgrs = new HashMap<>();
 	
 	private ORB orb;
 	
@@ -97,7 +105,7 @@ public class RedhawkAllocationManagerImpl extends CorbaBackedObject<AllocationMa
 
 	@Override
 	public List<RedhawkDevice> listDevices() {
-		List<RedhawkDriver> device = new ArrayList<>();
+		List<RedhawkDevice> devices = new ArrayList<>();
 		//TODO: Shouldn't need to put in a number????
 		DeviceLocationSequenceHolder holder = new DeviceLocationSequenceHolder();
 		DeviceLocationIteratorHolder iterHold = new DeviceLocationIteratorHolder();
@@ -105,12 +113,21 @@ public class RedhawkAllocationManagerImpl extends CorbaBackedObject<AllocationMa
 		allocationManager.listDevices(DeviceScopeType.ALL_DEVICES, 1000, holder, iterHold);
 		
 		for(DeviceLocationType location : holder.value){
-			//Device dev = location.dev;
-			//DeviceManager devMgr = location.devMgr;
+			//TODO: Should I really need to create a devManager object
+			Device dev = location.dev;
+			DeviceManager devMgr = location.devMgr;
+			RedhawkDeviceManager rhDevMgr = devMgrs.get(devMgr.identifier());
 			
+			//If not in cache create
+			if(rhDevMgr==null){
+				rhDevMgr = new RedhawkDeviceManagerImpl(domainManager, domainManager.getDriver().getOrb().object_to_string(devMgr), devMgr.identifier());
+				devMgrs.put(devMgr.identifier(), rhDevMgr);
+			}
+			
+			devices.add(new RedhawkDeviceImpl(rhDevMgr, domainManager.getDriver().getOrb().object_to_string(dev), dev.identifier()));
 		}
 		
-		return null;
+		return devices;
 	}
 
 	@Override

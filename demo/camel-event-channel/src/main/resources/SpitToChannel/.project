@@ -5,11 +5,6 @@
 	<projects>
 	</projects>
 	<buildSpec>
-		<buildCommand>
-			<name>gov.redhawk.ide.codegen.builders.TopLevelRPMSpec</name>
-			<arguments>
-			</arguments>
-		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>gov.redhawk.ide.natures.scaproject</nature>

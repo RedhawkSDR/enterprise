@@ -1,11 +1,15 @@
 package redhawk.driver.domain.impl;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
+
+import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.domain.RedhawkAllocationManager;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
@@ -32,6 +36,12 @@ public class RedhawkAllocationManagerIT extends RedhawkTestBase{
 	
 	@Test
 	public void testListDevices(){
-		allocMgr.listDevices();
+		List<RedhawkDevice> devices = allocMgr.listDevices();
+		
+		for(RedhawkDevice dev : devices){
+			System.out.println(dev);
+		}
+		
+		assertEquals("Should be a simulator and GPP available", 2, devices.size());
 	}
 }

@@ -21,19 +21,23 @@ package redhawk.driver.domain.impl;
 
 import java.util.logging.Logger;
 
+import org.omg.CORBA.ORB;
+
 import CF.AllocationManager;
 import CF.AllocationManagerPackage.DeviceLocationType;
 import redhawk.driver.domain.RedhawkAllocationManager;
 
-public class RedhawkAllocationManagerImpl implements RedhawkAllocationManager  {
+public class RedhawkAllocationManagerImpl  implements RedhawkAllocationManager{
 
 	private static Logger logger = Logger.getLogger(RedhawkAllocationManagerImpl.class.getName());
 
 	private AllocationManager allocationManager;
 	
-	public RedhawkAllocationManagerImpl(AllocationManager allocationManager){
-		this.allocationManager = allocationManager;
-		
+	private ORB orb;
+	
+	public RedhawkAllocationManagerImpl(ORB orb, AllocationManager mgr){
+		this.orb = orb;
+		this.allocationManager = mgr;
 	}
 	
 	public void getLocalDevices() {
@@ -46,9 +50,11 @@ public class RedhawkAllocationManagerImpl implements RedhawkAllocationManager  {
 		
 		
 	}
-	
-	
-	
+
+	@Override
+	public AllocationManager getCorbaObj() {
+		return this.allocationManager;
+	}
 	
 //	  /* The readonly AllocationManager attribute allDevices contains all devices in all Domains that can be seen by any Allocation Manager seen by the local Allocation Manager */
 //	  CF.AllocationManagerPackage.DeviceLocationType[] allDevices ();

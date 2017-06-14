@@ -301,7 +301,7 @@ public interface RedhawkDomainManager extends QueryableResource {
 	 * Returns a pojo representing an Allocation Manaager. 
 	 * @return
 	 */
-    RedhawkAllocationManagerImpl getAllocationManager();
+    RedhawkAllocationManager getAllocationManager();
     
     /**
      * Returns a POJO representing a EventChannelManager

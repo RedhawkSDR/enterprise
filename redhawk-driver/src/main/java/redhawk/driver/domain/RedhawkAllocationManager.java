@@ -19,7 +19,8 @@
  */
 package redhawk.driver.domain;
 
-//TODO: Need to implement this at some point. 
-public interface RedhawkAllocationManager {
+import CF.AllocationManager;
 
+public interface RedhawkAllocationManager {
+	AllocationManager getCorbaObj();
 }

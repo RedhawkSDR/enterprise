@@ -56,6 +56,7 @@ import redhawk.driver.devicemanager.impl.DeviceManagerTemplate;
 import redhawk.driver.devicemanager.impl.DurableRedhawkDeviceManagerImpl;
 import redhawk.driver.devicemanager.impl.RedhawkDeviceManagerImpl;
 import redhawk.driver.devicemanager.impl.RedhawkServiceImpl;
+import redhawk.driver.domain.RedhawkAllocationManager;
 import redhawk.driver.domain.RedhawkConnectionManager;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.domain.RedhawkFileManager;
@@ -171,7 +172,7 @@ public class RedhawkDomainManagerImpl extends
 
 	public List<RedhawkApplication> getApplications() {
 		List<RedhawkApplication> applications = new ArrayList<RedhawkApplication>();
-
+		
 		for (Application application : getCorbaObject().applications()) {
 			try {
 				applications.add(new RedhawkApplicationImpl(this, getOrb()
@@ -545,8 +546,8 @@ public class RedhawkDomainManagerImpl extends
 		return new RedhawkConnectionManagerImpl(getCorbaObj().connectionMgr());
 	}
 
-	public RedhawkAllocationManagerImpl getAllocationManager() {
-		return new RedhawkAllocationManagerImpl(getCorbaObj().allocationMgr());
+	public RedhawkAllocationManager getAllocationManager() {
+		return new RedhawkAllocationManagerImpl(this.getOrb(), getCorbaObj().allocationMgr());
 	}
 
 	public RedhawkEventChannelManager getEventChannelManager() {

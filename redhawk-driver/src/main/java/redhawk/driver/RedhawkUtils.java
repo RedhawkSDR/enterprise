@@ -206,9 +206,18 @@ public class RedhawkUtils {
 	public static Map<String, Object> convertPropertiesAnyToMap(Any any) {
 		
 		CF.DataType[] message = PropertiesHelper.extract(any);
+		return convertDataTypeArrayToMap(message);
+	}
+	
+	/**
+	 * Helper method to convert a DataType[] to a Map
+	 * @param dt
+	 * @return
+	 */
+	public static Map<String, Object> convertDataTypeArrayToMap(DataType[] dt){
 		Map<String, Object> mapObject = new HashMap<String, Object>();
 
-		for (CF.DataType prop : message) {
+		for (CF.DataType prop : dt) {
 			CF.DataType[] attributes = PropertiesHelper.extract(prop.value);
 
 			for (CF.DataType attr : attributes) {

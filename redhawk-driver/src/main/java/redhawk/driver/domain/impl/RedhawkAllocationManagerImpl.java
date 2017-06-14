@@ -26,8 +26,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import org.omg.CORBA.ORB;
-
 import CF.AllocationManager;
 import CF.AllocationManagerHelper;
 import CF.DataType;
@@ -36,11 +34,13 @@ import CF.DeviceLocationIteratorHolder;
 import CF.DeviceManager;
 import CF.AllocationManagerPackage.AllocationError;
 import CF.AllocationManagerPackage.AllocationRequestType;
+import CF.AllocationManagerPackage.AllocationStatusType;
 import CF.AllocationManagerPackage.DeviceLocationSequenceHolder;
 import CF.AllocationManagerPackage.DeviceLocationType;
 import CF.AllocationManagerPackage.DeviceScopeType;
-import redhawk.driver.RedhawkDriver;
+import CF.AllocationManagerPackage.InvalidAllocationId;
 import redhawk.driver.RedhawkUtils;
+import redhawk.driver.allocationmanager.AllocationInfo;
 import redhawk.driver.base.impl.CorbaBackedObject;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.device.impl.RedhawkDeviceImpl;
@@ -59,32 +59,36 @@ public class RedhawkAllocationManagerImpl extends CorbaBackedObject<AllocationMa
 	
 	private RedhawkDomainManager domainManager;
 	
-	private Map<String, RedhawkDeviceManager> devMgrs = new HashMap<>();
-	
-	private ORB orb;
 	
 	public RedhawkAllocationManagerImpl(RedhawkDomainManager domMgr, AllocationManager mgr){
 		super(domMgr.getDriver().getOrb().object_to_string(mgr), domMgr.getDriver().getOrb());
 		domainManager = domMgr;
-		this.orb = domMgr.getDriver().getOrb();
 		this.allocationManager = mgr;
-	}
-	
-	public void getLocalDevices() {
-		for(DeviceLocationType d : allocationManager.localDevices()){
-//			d.dev;
-//			d.devMgr;
-//			d.pools;
-//			RedhawkDevice dd = new RedhawkDeviceImpl(d.devMgr, deviceIor, identifier)
-		}
-		
-		
 	}
 
 	@Override
-	public List<Map<String, Object>> getAllocations() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<AllocationInfo> getAllocations() {
+		List<AllocationInfo> allocations = new ArrayList<>();
+		try {
+			AllocationStatusType[] allocationStatus = allocationManager.allocations(new String[0]);
+		
+			for(AllocationStatusType allocStatus : allocationStatus){
+				AllocationInfo alloc = new AllocationInfo();
+				
+				alloc.setAllocatedDeviceId(allocStatus.allocatedDevice.identifier());
+				alloc.setAllocationId(allocStatus.allocationID);
+				alloc.setDeviceManagerId(allocStatus.allocationDeviceManager.identifier());
+				alloc.setSourceId(allocStatus.sourceID);
+				alloc.setRequestingDomain(allocStatus.requestingDomain);
+				alloc.setAllocationProperties(RedhawkUtils.convertDataTypeArrayToMap(allocStatus.allocationProperties));
+				allocations.add(alloc);
+			}
+		} catch (InvalidAllocationId e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return allocations;
 	}
 
 	@Override
@@ -115,14 +119,21 @@ public class RedhawkAllocationManagerImpl extends CorbaBackedObject<AllocationMa
 
 	@Override
 	public void deallocate(String allocationId) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void dellocate(String[] allocationIds) {
-		// TODO Auto-generated method stub
+		List<String> allocations = new ArrayList<>(); 
+		allocations.add(allocationId);
 		
+		this.deallocate(allocations);
+	}
+	
+	@Override
+	public void deallocate(List<String> allocationIds) {
+		// TODO Auto-generated method stub
+		try {
+			allocationManager.deallocate(allocationIds.toArray(new String[allocationIds.size()]));
+		} catch (InvalidAllocationId e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -130,9 +141,12 @@ public class RedhawkAllocationManagerImpl extends CorbaBackedObject<AllocationMa
 		List<RedhawkDevice> devices = new ArrayList<>();
 		DeviceLocationSequenceHolder holder = new DeviceLocationSequenceHolder();
 		DeviceLocationIteratorHolder iterHold = new DeviceLocationIteratorHolder();
+		Map<String, RedhawkDeviceManager> devMgrs = new HashMap<>();
 		
 		//TODO: Shouldn't need to put in a number????
 		allocationManager.listDevices(DeviceScopeType.ALL_DEVICES, 1000, holder, iterHold);
+		
+		
 		
 		for(DeviceLocationType location : holder.value){
 			//TODO: Should I really need to create a devManager object
@@ -140,7 +154,7 @@ public class RedhawkAllocationManagerImpl extends CorbaBackedObject<AllocationMa
 			DeviceManager devMgr = location.devMgr;
 			RedhawkDeviceManager rhDevMgr = devMgrs.get(devMgr.identifier());
 			
-			//If not in cache create
+			//If not in method scoped cache create
 			if(rhDevMgr==null){
 				rhDevMgr = new RedhawkDeviceManagerImpl(domainManager, getOrb().object_to_string(devMgr), devMgr.identifier());
 				devMgrs.put(devMgr.identifier(), rhDevMgr);
@@ -154,7 +168,8 @@ public class RedhawkAllocationManagerImpl extends CorbaBackedObject<AllocationMa
 
 	@Override
 	protected AllocationManager locateCorbaObject() throws ResourceNotFoundException {
-		return null;
+		String ior = this.getIor();
+		return AllocationManagerHelper.narrow(getOrb().string_to_object(ior));
 	}
 
 	@Override
@@ -167,40 +182,4 @@ public class RedhawkAllocationManagerImpl extends CorbaBackedObject<AllocationMa
 	public AllocationManager getCorbaObj() {
 		return getCorbaObject();
 	}
-	
-//	  /* The readonly AllocationManager attribute allDevices contains all devices in all Domains that can be seen by any Allocation Manager seen by the local Allocation Manager */
-//	  CF.AllocationManagerPackage.DeviceLocationType[] allDevices ();
-//
-//	  /* The readonly AllocationManager attribute authorizedDevices contains all devices after policy is applied by any Allocation Manager seen by the local Allocation Manager */
-//	  CF.AllocationManagerPackage.DeviceLocationType[] authorizedDevices ();
-//
-//	  /* The readonly AllocationManager attribute localDevices contains all devices that are located within the local Domain */
-//	  CF.AllocationManagerPackage.DeviceLocationType[] localDevices ();
-//
-//	  /* Lists up to 'count' devices within the given scope (local or all Domains). If there are more remaining, the out iterator can be used to fetch additional allocations. */
-//	  void listDevices (CF.AllocationManagerPackage.DeviceScopeType deviceScope, int count, CF.AllocationManagerPackage.DeviceLocationSequenceHolder devices, CF.DeviceLocationIteratorHolder dl);
-//
-//	  /* Allocates a set of depenedencies */
-//	  CF.AllocationManagerPackage.AllocationResponseType[] allocate (CF.AllocationManagerPackage.AllocationRequestType[] requests) throws CF.AllocationManagerPackage.AllocationError;
-//
-//	  /* Allocates a set of dependencies only inside the local Domain */
-//	  CF.AllocationManagerPackage.AllocationResponseType[] allocateLocal (CF.AllocationManagerPackage.AllocationRequestType[] requests, String domainName) throws CF.AllocationManagerPackage.AllocationError;
-//
-//	  /* Deallocates a set of allocations */
-//	  void deallocate (String[] allocationIDs) throws CF.AllocationManagerPackage.InvalidAllocationId;
-//
-//	  /* Returns all current allocations on all Domains with an optional list of selected allocations to return */
-//	  CF.AllocationManagerPackage.AllocationStatusType[] allocations (String[] allocationIDs) throws CF.AllocationManagerPackage.InvalidAllocationId;
-//
-//	  /* Returns all current allocations that were made through the Allocation Manager that have not been deallocated with an optional list of selected allocations to return */
-//	  CF.AllocationManagerPackage.AllocationStatusType[] localAllocations (String[] allocationIDs) throws CF.AllocationManagerPackage.InvalidAllocationId;
-//
-//	  /* Lists up to 'count' current allocations within the given scope (local or all Domains). If there are more remaining, the out iterator can be used to fetch additional allocations. */
-//	  void listAllocations (CF.AllocationManagerPackage.AllocationScopeType allocScope, int how_many, CF.AllocationManagerPackage.AllocationStatusSequenceHolder allocs, CF.AllocationStatusIteratorHolder ai);	
-	
-	
-	
-	
-	
-	
 }

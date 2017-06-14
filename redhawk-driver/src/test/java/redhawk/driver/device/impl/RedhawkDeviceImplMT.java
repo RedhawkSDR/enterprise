@@ -65,9 +65,6 @@ public class RedhawkDeviceImplMT extends RedhawkTestBase {
 		/*
 		 * Place Dcd in it's proper directory 
 		 */
-		/*
-		 * Place Dcd in it's proper directory 
-		 */
 		File file = new File("src/test/resources/node/SimulatorNode");
 		
 		nodeDir = new File(deviceManagerHome+"/nodes/SimulatorNode");

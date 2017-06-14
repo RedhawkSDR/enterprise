@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import CF.AllocationManager;
+import redhawk.driver.allocationmanager.AllocationInfo;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.exceptions.AllocationException;
 
@@ -32,13 +33,13 @@ import redhawk.driver.exceptions.AllocationException;
  *
  */
 public interface RedhawkAllocationManager {
-	List<Map<String, Object>> getAllocations();
+	List<AllocationInfo> getAllocations();
 	
 	void allocate(String deviceId, String allocationType, Map<String, Object> allocation) throws AllocationException;
 	
 	void deallocate(String allocationId);
 	
-	void dellocate(String[] allocationIds);
+	void deallocate(List<String> allocationIds);
 	
 	List<RedhawkDevice> listDevices();
 	

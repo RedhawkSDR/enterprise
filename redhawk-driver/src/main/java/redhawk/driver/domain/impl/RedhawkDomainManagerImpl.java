@@ -50,6 +50,7 @@ import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.application.impl.RedhawkApplicationFactoryImpl;
 import redhawk.driver.application.impl.RedhawkApplicationImpl;
 import redhawk.driver.base.impl.QueryableResourceImpl;
+import redhawk.driver.connectionmanager.impl.RedhawkConnectionManagerImpl;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.devicemanager.DeviceManagerInturruptedCallback;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;

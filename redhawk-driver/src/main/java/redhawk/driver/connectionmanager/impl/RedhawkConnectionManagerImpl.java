@@ -17,9 +17,37 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-package redhawk.driver.domain;
+package redhawk.driver.connectionmanager.impl;
 
-//TODO: Need to implement this at some point...
-public interface RedhawkConnectionManager {
+import java.util.List;
 
+import CF.ConnectionManager;
+import redhawk.driver.connectionmanager.RedhawkConnectionManager;
+import redhawk.driver.port.RedhawkPort;
+
+public class RedhawkConnectionManagerImpl implements RedhawkConnectionManager {
+
+	private ConnectionManager connectionManager;
+	
+	public RedhawkConnectionManagerImpl(ConnectionManager connectionManager) {
+		this.connectionManager = connectionManager;
+	}
+
+	@Override
+	public void connect(RedhawkPort outputPort, RedhawkPort inputPort, String requestId, String connectionId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void disconnect(String connectionId) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<ConnectionInfo> getConnections() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

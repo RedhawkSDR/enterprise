@@ -21,6 +21,11 @@ package redhawk.driver.domain;
 
 import CF.AllocationManager;
 
+/**
+ * provides a single point for creating, inspecting, and delegating
+ * allocations
+ *
+ */
 public interface RedhawkAllocationManager {
 	AllocationManager getCorbaObj();
 }

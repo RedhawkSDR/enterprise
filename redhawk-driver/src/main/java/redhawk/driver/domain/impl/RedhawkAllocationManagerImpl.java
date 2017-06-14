@@ -23,18 +23,24 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import org.omg.CORBA.ORB;
 
 import CF.AllocationManager;
+import CF.AllocationManagerHelper;
+import CF.DataType;
 import CF.Device;
 import CF.DeviceLocationIteratorHolder;
 import CF.DeviceManager;
+import CF.AllocationManagerPackage.AllocationError;
+import CF.AllocationManagerPackage.AllocationRequestType;
 import CF.AllocationManagerPackage.DeviceLocationSequenceHolder;
 import CF.AllocationManagerPackage.DeviceLocationType;
 import CF.AllocationManagerPackage.DeviceScopeType;
 import redhawk.driver.RedhawkDriver;
+import redhawk.driver.RedhawkUtils;
 import redhawk.driver.base.impl.CorbaBackedObject;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.device.impl.RedhawkDeviceImpl;
@@ -42,6 +48,7 @@ import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.devicemanager.impl.RedhawkDeviceManagerImpl;
 import redhawk.driver.domain.RedhawkAllocationManager;
 import redhawk.driver.domain.RedhawkDomainManager;
+import redhawk.driver.exceptions.AllocationException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 
 public class RedhawkAllocationManagerImpl extends CorbaBackedObject<AllocationManager> implements RedhawkAllocationManager{
@@ -75,26 +82,41 @@ public class RedhawkAllocationManagerImpl extends CorbaBackedObject<AllocationMa
 	}
 
 	@Override
-	public AllocationManager getCorbaObj() {
-		return this.allocationManager;
-	}
-
-	@Override
 	public List<Map<String, Object>> getAllocations() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void allocate(String deviceId, Map<String, Object> allocation) {
-		// TODO Auto-generated method stub
+	public void allocate(String deviceId, String allocationType, Map<String, Object> allocation) throws AllocationException {
+		DataType[] allocationProperties  = new DataType[1];
+		Device[] devices = new Device[1];
+		AllocationRequestType[] allocations = new AllocationRequestType[1];
 		
+		allocationProperties[0] = new DataType(allocationType, RedhawkUtils.createAny(getOrb(), allocation));
+		devices[0] = domainManager.getDeviceByIdentifier(deviceId).getCorbaObj();
+	
+		AllocationRequestType type = new AllocationRequestType(); 
+		type.allocationProperties = allocationProperties;
+		type.requestedDevices = devices;
+		type.devicePools = new String[0];
+		
+		//TODO: Do something other than UUID
+		type.requestID = UUID.randomUUID().toString();
+		type.sourceID = UUID.randomUUID().toString();
+		
+		allocations[0] = type;
+		try {
+			allocationManager.allocate(allocations);
+		} catch (AllocationError e) {
+			throw new AllocationException("Exception allocating device "+deviceId+" with these properties: "+allocation, e);
+		}
 	}
 
 	@Override
 	public void deallocate(String allocationId) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -102,14 +124,14 @@ public class RedhawkAllocationManagerImpl extends CorbaBackedObject<AllocationMa
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
 	public List<RedhawkDevice> listDevices() {
 		List<RedhawkDevice> devices = new ArrayList<>();
-		//TODO: Shouldn't need to put in a number????
 		DeviceLocationSequenceHolder holder = new DeviceLocationSequenceHolder();
 		DeviceLocationIteratorHolder iterHold = new DeviceLocationIteratorHolder();
 		
+		//TODO: Shouldn't need to put in a number????
 		allocationManager.listDevices(DeviceScopeType.ALL_DEVICES, 1000, holder, iterHold);
 		
 		for(DeviceLocationType location : holder.value){
@@ -120,11 +142,11 @@ public class RedhawkAllocationManagerImpl extends CorbaBackedObject<AllocationMa
 			
 			//If not in cache create
 			if(rhDevMgr==null){
-				rhDevMgr = new RedhawkDeviceManagerImpl(domainManager, domainManager.getDriver().getOrb().object_to_string(devMgr), devMgr.identifier());
+				rhDevMgr = new RedhawkDeviceManagerImpl(domainManager, getOrb().object_to_string(devMgr), devMgr.identifier());
 				devMgrs.put(devMgr.identifier(), rhDevMgr);
 			}
 			
-			devices.add(new RedhawkDeviceImpl(rhDevMgr, domainManager.getDriver().getOrb().object_to_string(dev), dev.identifier()));
+			devices.add(new RedhawkDeviceImpl(rhDevMgr, getOrb().object_to_string(dev), dev.identifier()));
 		}
 		
 		return devices;
@@ -132,14 +154,18 @@ public class RedhawkAllocationManagerImpl extends CorbaBackedObject<AllocationMa
 
 	@Override
 	protected AllocationManager locateCorbaObject() throws ResourceNotFoundException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Class<?> getHelperClass() {
 		// TODO Auto-generated method stub
-		return null;
+		return AllocationManagerHelper.class;
+	}
+
+	@Override
+	public AllocationManager getCorbaObj() {
+		return getCorbaObject();
 	}
 	
 //	  /* The readonly AllocationManager attribute allDevices contains all devices in all Domains that can be seen by any Allocation Manager seen by the local Allocation Manager */

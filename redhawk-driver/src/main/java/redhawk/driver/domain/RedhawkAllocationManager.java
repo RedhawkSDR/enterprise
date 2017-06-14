@@ -24,6 +24,7 @@ import java.util.Map;
 
 import CF.AllocationManager;
 import redhawk.driver.device.RedhawkDevice;
+import redhawk.driver.exceptions.AllocationException;
 
 /**
  * provides a single point for creating, inspecting, and delegating
@@ -33,7 +34,7 @@ import redhawk.driver.device.RedhawkDevice;
 public interface RedhawkAllocationManager {
 	List<Map<String, Object>> getAllocations();
 	
-	void allocate(String deviceId, Map<String, Object> allocation);
+	void allocate(String deviceId, String allocationType, Map<String, Object> allocation) throws AllocationException;
 	
 	void deallocate(String allocationId);
 	

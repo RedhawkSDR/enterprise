@@ -60,10 +60,10 @@ public class RedhawkAllocationManagerImpl extends CorbaBackedObject<AllocationMa
 	private RedhawkDomainManager domainManager;
 	
 	
-	public RedhawkAllocationManagerImpl(RedhawkDomainManager domMgr, AllocationManager mgr){
-		super(domMgr.getDriver().getOrb().object_to_string(mgr), domMgr.getDriver().getOrb());
+	public RedhawkAllocationManagerImpl(RedhawkDomainManager domMgr, AllocationManager allocationMgr){
+		super(domMgr.getDriver().getOrb().object_to_string(allocationMgr), domMgr.getDriver().getOrb());
 		domainManager = domMgr;
-		this.allocationManager = mgr;
+		this.allocationManager = allocationMgr;
 	}
 
 	@Override

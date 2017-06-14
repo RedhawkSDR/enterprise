@@ -21,13 +21,17 @@ package redhawk.driver.connectionmanager;
 
 import java.util.List;
 
+import CF.ConnectionManager;
 import redhawk.driver.connectionmanager.impl.ConnectionInfo;
 import redhawk.driver.port.RedhawkPort;
 
 public interface RedhawkConnectionManager {
+	//TODO: Not just ports it could be any endpoint
 	void connect(RedhawkPort outputPort, RedhawkPort inputPort, String requestId, String connectionId);
 	
 	void disconnect(String connectionId);
 	
 	List<ConnectionInfo> getConnections();
+	
+	ConnectionManager getCorbaObj();
 }

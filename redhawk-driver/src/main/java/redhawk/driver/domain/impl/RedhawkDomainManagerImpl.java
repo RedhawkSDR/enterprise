@@ -50,6 +50,7 @@ import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.application.impl.RedhawkApplicationFactoryImpl;
 import redhawk.driver.application.impl.RedhawkApplicationImpl;
 import redhawk.driver.base.impl.QueryableResourceImpl;
+import redhawk.driver.connectionmanager.RedhawkConnectionManager;
 import redhawk.driver.connectionmanager.impl.RedhawkConnectionManagerImpl;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.devicemanager.DeviceManagerInturruptedCallback;
@@ -59,7 +60,6 @@ import redhawk.driver.devicemanager.impl.DeviceManagerTemplate;
 import redhawk.driver.devicemanager.impl.DurableRedhawkDeviceManagerImpl;
 import redhawk.driver.devicemanager.impl.RedhawkDeviceManagerImpl;
 import redhawk.driver.devicemanager.impl.RedhawkServiceImpl;
-import redhawk.driver.domain.RedhawkConnectionManager;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.domain.RedhawkFileManager;
 import redhawk.driver.eventchannel.RedhawkEventChannelManager;
@@ -545,7 +545,7 @@ public class RedhawkDomainManagerImpl extends
 	}
 
 	public RedhawkConnectionManager getConnectionManager() {
-		return new RedhawkConnectionManagerImpl(getCorbaObj().connectionMgr());
+		return new RedhawkConnectionManagerImpl(this, getCorbaObj().connectionMgr());
 	}
 
 	public RedhawkAllocationManager getAllocationManager() {

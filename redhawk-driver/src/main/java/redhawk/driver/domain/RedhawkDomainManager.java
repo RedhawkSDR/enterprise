@@ -29,6 +29,7 @@ import redhawk.driver.allocationmanager.impl.RedhawkAllocationManagerImpl;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.application.impl.RedhawkApplicationFactoryImpl;
 import redhawk.driver.base.QueryableResource;
+import redhawk.driver.connectionmanager.RedhawkConnectionManager;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.devicemanager.DeviceManagerInturruptedCallback;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;

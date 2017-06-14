@@ -19,17 +19,26 @@
  */
 package redhawk.driver.connectionmanager.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import CF.ConnectionManager;
+import CF.ConnectionManagerHelper;
+import CF.ConnectionStatusIteratorHolder;
+import CF.ConnectionManagerPackage.ConnectionStatusSequenceHolder;
+import CF.ConnectionManagerPackage.ConnectionStatusType;
+import redhawk.driver.base.impl.CorbaBackedObject;
 import redhawk.driver.connectionmanager.RedhawkConnectionManager;
+import redhawk.driver.domain.RedhawkDomainManager;
+import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 
-public class RedhawkConnectionManagerImpl implements RedhawkConnectionManager {
+public class RedhawkConnectionManagerImpl extends CorbaBackedObject<ConnectionManager> implements RedhawkConnectionManager {
 
 	private ConnectionManager connectionManager;
 	
-	public RedhawkConnectionManagerImpl(ConnectionManager connectionManager) {
+	public RedhawkConnectionManagerImpl(RedhawkDomainManager mgr, ConnectionManager connectionManager) {
+		super(mgr.getDriver().getOrb().object_to_string(connectionManager), mgr.getDriver().getOrb());
 		this.connectionManager = connectionManager;
 	}
 
@@ -47,7 +56,40 @@ public class RedhawkConnectionManagerImpl implements RedhawkConnectionManager {
 
 	@Override
 	public List<ConnectionInfo> getConnections() {
+		List<ConnectionInfo> connections = new ArrayList<>();
+		ConnectionStatusSequenceHolder holder = new ConnectionStatusSequenceHolder(); 
+		ConnectionStatusIteratorHolder iter = new ConnectionStatusIteratorHolder();
+		
+		connectionManager.listConnections(100000, holder, iter);
+
+		for(ConnectionStatusType connection : holder.value){
+			ConnectionInfo info = new ConnectionInfo(); 
+			info.setConnected(connection.connected);
+			info.setConnectionId(connection.connectionId);
+			info.setConnectionRecordId(connection.connectionRecordId);
+			info.setConnected(connection.connected);
+			info.setRequestorId(connection.requesterId);
+			
+			connections.add(info);
+		}
+		
+		return connections;
+	}
+
+	@Override
+	protected ConnectionManager locateCorbaObject() throws ResourceNotFoundException {
+		return ConnectionManagerHelper.narrow(getOrb().string_to_object(this.getIor()));
+	}
+
+	@Override
+	public Class<?> getHelperClass() {
 		// TODO Auto-generated method stub
-		return null;
+		return ConnectionManagerHelper.class;
+	}
+
+	@Override
+	public ConnectionManager getCorbaObj() {
+		// TODO Auto-generated method stub
+		return this.getCorbaObject();
 	}
 }

@@ -1,11 +1,9 @@
 package redhawk.driver.connectionmanager.impl;
 
-import redhawk.driver.base.impl.RedhawkEndpoint;
-
 public class ConnectionInfo {
-	private RedhawkEndpoint providesEndpoint;
+	private RedhawkEndpointStatus providesEndpoint;
 	
-	private RedhawkEndpoint usesEndpoint; 
+	private RedhawkEndpointStatus usesEndpoint; 
 	
 	private String connectionId;
 	
@@ -17,20 +15,20 @@ public class ConnectionInfo {
 	
 	public ConnectionInfo(){}
 
-	public RedhawkEndpoint getProvidesPort() {
+	public RedhawkEndpointStatus getProvidesEndpointStatus() {
 		return providesEndpoint;
 	}
 
-	public void setProvidesPort(RedhawkEndpoint providesPort) {
-		this.providesEndpoint = providesPort;
+	public void setProvidesEndpointStatus(RedhawkEndpointStatus providesEndpointStatus) {
+		this.providesEndpoint = providesEndpointStatus;
 	}
 
-	public RedhawkEndpoint getUsesPort() {
+	public RedhawkEndpointStatus getUsesEndpointStatus() {
 		return usesEndpoint;
 	}
 
-	public void setUsesPort(RedhawkEndpoint usesPort) {
-		this.usesEndpoint = usesPort;
+	public void setUsesEndpointStatus(RedhawkEndpointStatus usesEndpointStatus) {
+		this.usesEndpoint = usesEndpointStatus;
 	}
 
 	public String getConnectionId() {
@@ -67,10 +65,10 @@ public class ConnectionInfo {
 
 	@Override
 	public String toString() {
-		return "ConnectionInfo [providesPort=" + providesEndpoint + ", usesPort=" + usesEndpoint + ", connectionId="
-				+ connectionId + ", requestorId=" + requestorId + ", connectionRecordId=" + connectionRecordId
-				+ ", connected=" + connected + "]";
-	} 
-	
-	
+		return "ConnectionInfo [providesEndpoint=" + providesEndpoint + ", usesEndpoint=" + usesEndpoint
+				+ ", connectionId=" + connectionId + ", requestorId=" + requestorId + ", connectionRecordId="
+				+ connectionRecordId + ", connected=" + connected + "]";
+	}
+
+		
 }

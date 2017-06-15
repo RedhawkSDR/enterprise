@@ -22,13 +22,13 @@ package redhawk.driver.connectionmanager;
 import java.util.List;
 
 import CF.ConnectionManager;
-import redhawk.driver.base.impl.RedhawkEndpoint;
 import redhawk.driver.connectionmanager.impl.ConnectionInfo;
+import redhawk.driver.connectionmanager.impl.RedhawkEndpoint;
 import redhawk.driver.exceptions.ConnectionException;
 
 public interface RedhawkConnectionManager {
 	//TODO: Not just ports it could be any endpoint
-	void connect(RedhawkEndpoint outputPort, RedhawkEndpoint inputPort, String requestId, String connectionId) throws ConnectionException;
+	void connect(RedhawkEndpoint usesEndpoint, RedhawkEndpoint providesEndpoint, String requestId, String connectionId) throws ConnectionException;
 	
 	void disconnect(String connectionId);
 	

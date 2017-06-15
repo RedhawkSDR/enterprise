@@ -31,23 +31,29 @@ import CF.ConnectionManagerPackage.ConnectionStatusType;
 import CF.ConnectionManagerPackage.EndpointKind;
 import CF.ConnectionManagerPackage.EndpointRequest;
 import CF.ConnectionManagerPackage.EndpointResolutionType;
+import CF.ConnectionManagerPackage.EndpointStatusType;
 import CF.PortPackage.InvalidPort;
 import redhawk.driver.base.impl.CorbaBackedObject;
-import redhawk.driver.base.impl.EndpointType;
-import redhawk.driver.base.impl.RedhawkEndpoint;
 import redhawk.driver.connectionmanager.RedhawkConnectionManager;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
+import redhawk.driver.port.impl.RedhawkExternalPortImpl;
+import redhawk.driver.port.impl.RedhawkPortImpl;
+import redhawk.driver.xml.model.sca.scd.Provides;
+import redhawk.driver.xml.model.sca.scd.Uses;
 
 public class RedhawkConnectionManagerImpl extends CorbaBackedObject<ConnectionManager> implements RedhawkConnectionManager {
 
 	private ConnectionManager connectionManager;
 	
+	private RedhawkDomainManager domainManager;
+	
 	public RedhawkConnectionManagerImpl(RedhawkDomainManager mgr, ConnectionManager connectionManager) {
 		super(mgr.getDriver().getOrb().object_to_string(connectionManager), mgr.getDriver().getOrb());
 		this.connectionManager = connectionManager;
+		this.domainManager = mgr;
 	}
 
 	@Override
@@ -82,7 +88,12 @@ public class RedhawkConnectionManagerImpl extends CorbaBackedObject<ConnectionMa
 			info.setConnectionRecordId(connection.connectionRecordId);
 			info.setConnected(connection.connected);
 			info.setRequestorId(connection.requesterId);
-						
+			EndpointStatusType status = connection.providesEndpoint;
+			info.setProvidesEndpointStatus(new RedhawkEndpointStatus(status.portName, status.repositoryId, status.entityId, status.endpointObject));
+			
+			status = connection.usesEndpoint;
+			info.setUsesEndpointStatus(new RedhawkEndpointStatus(status.portName, status.repositoryId, status.entityId, status.endpointObject));
+
 			connections.add(info);
 		}
 		
@@ -110,11 +121,18 @@ public class RedhawkConnectionManagerImpl extends CorbaBackedObject<ConnectionMa
 		EndpointResolutionType request = new EndpointResolutionType();
 		switch(point.getType()){
 		case Application:
-			request.applicationId(point.getUniqueId());
+			request.applicationId(point.getResourceId());
+			
+			//Can't give interface too much information either provide object or provide <id and name>
 			//request.objectRef(point.getPort().getCorbaObject());
-			return new EndpointRequest(request, "tunerFloat_in");
+			if(point.getPort() instanceof RedhawkExternalPortImpl){
+				return new EndpointRequest(request, ((RedhawkExternalPortImpl)point.getPort()).getExternalName());
+			}
+			throw new IOException("ConnectionManager is expecting an External port for your application ");
 		case Device:
-			request.deviceId(point.getUniqueId());
+			request.deviceId(point.getResourceId());
+			
+			//Can't give interface too much information either provide object or provide <id and name>
 			//request.objectRef(point.getPort().getCorbaObject());
 			return new EndpointRequest(request, point.getPort().getName());
 		default:

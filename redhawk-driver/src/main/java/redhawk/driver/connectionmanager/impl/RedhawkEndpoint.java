@@ -1,26 +1,19 @@
-package redhawk.driver.base.impl;
+package redhawk.driver.connectionmanager.impl;
 
 import redhawk.driver.port.RedhawkPort;
 
 public class RedhawkEndpoint {
-	public String getUniqueId() {
-		return uniqueId;
-	}
-
-	public void setUniqueId(String uniqueId) {
-		this.uniqueId = uniqueId;
-	}
 
 	private EndpointType type;
 	
 	private RedhawkPort port;
 	
-	private String uniqueId;
+	private String resourceId;
 		
-	public RedhawkEndpoint(EndpointType type, String uniqueId, RedhawkPort port){
+	public RedhawkEndpoint(EndpointType type, String resourceId, RedhawkPort port){
 		this.type = type;
 		this.port = port;
-		this.uniqueId = uniqueId;
+		this.resourceId = resourceId;
 	}
 
 	public EndpointType getType() {
@@ -39,5 +32,11 @@ public class RedhawkEndpoint {
 		this.port = port;
 	}
 	
-	
+	public String getResourceId() {
+		return resourceId;
+	}
+
+	public void setResourceId(String resourceId) {
+		this.resourceId = resourceId;
+	}
 }

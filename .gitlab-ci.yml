@@ -60,7 +60,7 @@ build-release:
 
 test-install:
   image: centos:7
-  stage: test
+  stage: test-el7
   script:
     - yum install -y `find output -name '*.rpm'`
 

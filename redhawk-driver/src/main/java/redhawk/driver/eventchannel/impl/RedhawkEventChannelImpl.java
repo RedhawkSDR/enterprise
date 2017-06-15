@@ -23,12 +23,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosEventChannelAdmin.AlreadyConnected;
+import org.omg.CosEventChannelAdmin.EventChannel;
 import org.omg.CosEventChannelAdmin.TypeError;
 import org.omg.CosEventComm.Disconnected;
 import org.omg.CosEventComm.PushConsumer;
@@ -203,6 +205,17 @@ public class RedhawkEventChannelImpl implements RedhawkEventChannel {
 		}
 		
 		return eventRegistrants;
+	}
+
+
+	@Override
+	public EventChannel getCorbaObj() throws EventChannelException {
+		try {
+			return eventChannelManager.get(this.eventChannelName);
+		} catch (ChannelDoesNotExist | OperationNotAllowed | OperationFailed | ServiceUnavailable e) {
+			log.log(Level.SEVERE, "Unable to get corba object for event channel name "+eventChannelName, e);
+			throw new EventChannelException("Unable to get corba object for event channel name "+eventChannelName, e);
+		}
 	}
 	
 }

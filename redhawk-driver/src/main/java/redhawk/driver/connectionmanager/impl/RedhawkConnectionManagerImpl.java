@@ -37,6 +37,7 @@ import redhawk.driver.base.impl.CorbaBackedObject;
 import redhawk.driver.connectionmanager.RedhawkConnectionManager;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.ConnectionException;
+import redhawk.driver.exceptions.EventChannelException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.port.impl.RedhawkExternalPortImpl;
@@ -62,7 +63,7 @@ public class RedhawkConnectionManagerImpl extends CorbaBackedObject<ConnectionMa
 		try {
 			connectionManager.connect(this.getEndpointRequestFromRedhawkEndpoint(usesPort), 
 					this.getEndpointRequestFromRedhawkEndpoint(providesPort), requestId, connectionId);
-		} catch (InvalidPort | IOException e) {
+		} catch (InvalidPort | IOException | EventChannelException e) {
 			e.printStackTrace();
 			throw new ConnectionException("Issue connecting these two endpoints [provides: "+usesPort+" uses: "+providesPort+"] "+e.getMessage(), e);
 		}
@@ -117,24 +118,31 @@ public class RedhawkConnectionManagerImpl extends CorbaBackedObject<ConnectionMa
 		return this.getCorbaObject();
 	}
 	
-	private EndpointRequest getEndpointRequestFromRedhawkEndpoint(RedhawkEndpoint point) throws IOException{
+	private EndpointRequest getEndpointRequestFromRedhawkEndpoint(RedhawkEndpoint point) throws IOException, EventChannelException{
 		EndpointResolutionType request = new EndpointResolutionType();
 		switch(point.getType()){
 		case Application:
 			request.applicationId(point.getResourceId());
 			
+			RedhawkPortEndpoint portEndpoint = (RedhawkPortEndpoint) point;
 			//Can't give interface too much information either provide object or provide <id and name>
 			//request.objectRef(point.getPort().getCorbaObject());
-			if(point.getPort() instanceof RedhawkExternalPortImpl){
-				return new EndpointRequest(request, ((RedhawkExternalPortImpl)point.getPort()).getExternalName());
+			if(portEndpoint.getPort() instanceof RedhawkExternalPortImpl){
+				return new EndpointRequest(request, ((RedhawkExternalPortImpl)portEndpoint.getPort()).getExternalName());
 			}
 			throw new IOException("ConnectionManager is expecting an External port for your application ");
 		case Device:
 			request.deviceId(point.getResourceId());
 			
+			RedhawkPortEndpoint devicePortEndpoint = (RedhawkPortEndpoint) point;
 			//Can't give interface too much information either provide object or provide <id and name>
 			//request.objectRef(point.getPort().getCorbaObject());
-			return new EndpointRequest(request, point.getPort().getName());
+			return new EndpointRequest(request, devicePortEndpoint.getPort().getName());
+		case EventChannel:
+			RedhawkEventChannelEndpoint ecEndPoint = (RedhawkEventChannelEndpoint) point;
+			request.channelName(ecEndPoint.getResourceId());
+			request.objectRef(ecEndPoint.getChannel().getCorbaObj());
+			return new EndpointRequest(request, "");
 		default:
 			throw new IOException("Unhandled Endpoint Type kind");
 		}

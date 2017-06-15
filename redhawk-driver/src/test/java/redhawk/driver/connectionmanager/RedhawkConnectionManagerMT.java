@@ -20,9 +20,13 @@ import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.connectionmanager.impl.ConnectionInfo;
 import redhawk.driver.connectionmanager.impl.EndpointType;
 import redhawk.driver.connectionmanager.impl.RedhawkEndpoint;
+import redhawk.driver.connectionmanager.impl.RedhawkEventChannelEndpoint;
+import redhawk.driver.connectionmanager.impl.RedhawkPortEndpoint;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
+import redhawk.driver.eventchannel.RedhawkEventChannel;
 import redhawk.driver.exceptions.ApplicationCreationException;
+import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.EventChannelCreationException;
 import redhawk.driver.exceptions.MultipleResourceException;
@@ -109,6 +113,93 @@ public class RedhawkConnectionManagerMT extends RedhawkTestBase{
 		}
 	}
 	
+	@Test
+	public void testConnectApplictionToApplication() throws Exception{
+		String appName = "FM_RBDS_demo";
+		String connMgrTestAppName = "connMgrTest";
+		String connectionId = "myConnection";
+		RedhawkApplication providesApp = null, usesApp = null;
+		
+		try {
+			providesApp = driver.getDomain().createApplication(appName, "/waveforms/rh/FM_RBDS_demo/FM_RBDS_demo.sad.xml");
+			usesApp = driver.getDomain().createApplication(connMgrTestAppName, new File("src/test/resources/waveforms/ConnectionManagerTest/ConnectionManagerTest.sad.xml"));
+		
+			//System.out.println(usesApp.getPort("floatOutput"));
+			RedhawkEndpoint usesEndpoint = this.createRedhawkEndpoint(usesApp.getPort("floatOutput"), usesApp.getIdentifier(), EndpointType.Application);
+			RedhawkEndpoint providesEndpoint = this.createRedhawkEndpoint(providesApp.getPort("tunerFloat_in"), providesApp.getIdentifier(), EndpointType.Application);
+		
+			//Number of connections prior to creating one
+			Integer connectionNumber = connectionManager.getConnections().size();
+			assertEquals("Should be zero connections currently", new Integer(0), connectionNumber);
+			connectionManager.connect(usesEndpoint, providesEndpoint, UUID.randomUUID().toString(), connectionId);
+			
+			//Connection size should have gone up 1
+			assertEquals("Should be 1 connection", 1, connectionManager.getConnections().size());
+			assertEquals("Number of connection should be "+connectionNumber+1, connectionNumber+1, connectionManager.getConnections().size());
+			
+			this.listConnections();
+			
+			//Test disconnect
+			this.disconnect();
+		} catch (MultipleResourceException | ApplicationCreationException | CORBAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally{
+			if(providesApp!=null)
+				providesApp.release();
+			
+			if(usesApp!=null){
+				usesApp.release();
+				driver.getDomain().getFileManager().removeDirectory("/waveforms/ConnectionManagerTest");
+			}
+		}
+	}
+	
+	@Test
+	public void testConnectApplictionToEventChannel() throws Exception{
+		String connMgrTestAppName = "connMgrTest";
+		String connectionId = "myConnection";
+		String channelName = "ConnMgrTest";
+		RedhawkApplication usesApp = null;
+		RedhawkEventChannel eventChannel = null;
+		
+		try {
+			usesApp = driver.getDomain().createApplication(connMgrTestAppName, new File("src/test/resources/waveforms/ConnectionManagerTest/ConnectionManagerTest.sad.xml"));
+			driver.getDomain().getEventChannelManager().createEventChannel(channelName);
+			eventChannel = driver.getDomain().getEventChannelManager().getEventChannel(channelName);
+			
+			//System.out.println(usesApp.getPort("floatOutput"));
+			RedhawkEndpoint usesEndpoint = this.createRedhawkEndpoint(usesApp.getPort("messageOut"), usesApp.getIdentifier(), EndpointType.Application);
+			RedhawkEndpoint providesEndpoint = new RedhawkEventChannelEndpoint(EndpointType.EventChannel, eventChannel.getName(), eventChannel);
+		
+			//Number of connections prior to creating one
+			Integer connectionNumber = connectionManager.getConnections().size();
+			assertEquals("Should be zero connections currently", new Integer(0), connectionNumber);
+			connectionManager.connect(usesEndpoint, providesEndpoint, UUID.randomUUID().toString(), connectionId);
+			
+			//Connection size should have gone up 1
+			assertEquals("Should be 1 connection", 1, connectionManager.getConnections().size());
+			assertEquals("Number of connection should be "+connectionNumber+1, connectionNumber+1, connectionManager.getConnections().size());
+			
+			this.listConnections();
+			
+			//Test disconnect
+			this.disconnect();
+		} catch (MultipleResourceException | ApplicationCreationException | CORBAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally{
+			if(eventChannel!=null){
+				driver.getDomain().getEventChannelManager().releaseEventChannel(eventChannel.getName());
+			}
+			
+			if(usesApp!=null){
+				usesApp.release();
+				driver.getDomain().getFileManager().removeDirectory("/waveforms/ConnectionManagerTest");
+			}
+		}
+	}
+	
 	public void listConnections(){
 		for(ConnectionInfo info : connectionManager.getConnections()){
 			System.out.println(info);
@@ -123,29 +214,8 @@ public class RedhawkConnectionManagerMT extends RedhawkTestBase{
 		assertTrue("Should no longer be any connections", connectionManager.getConnections().isEmpty());
 	}
 	
-	public void createConnection(){
-		try {
-			RedhawkPort usesPort = driver.getDevice("REDHAWK_DEV/Simulator.*/FmRds.*").getPort("dataFloat_out");
-			RedhawkPort providesPort = driver.getApplication("REDHAWK_DEV/rh.FM.*").getPort("tunerFloat_in");
-			
-			RedhawkEndpoint usesEndpoint = new RedhawkEndpoint(EndpointType.Device, driver.getDevice("REDHAWK_DEV/Simulator.*/FmRds.*").getIdentifier(), usesPort);
-			RedhawkEndpoint providesEndpoint = new RedhawkEndpoint(EndpointType.Application, driver.getApplication("REDHAWK_DEV/rh.FM.*").getIdentifier(), providesPort);
-			System.out.println(providesPort);
-			System.out.println(providesPort.getType());
-			System.out.println(providesPort.getRepId());			
-			System.out.println(usesPort);
-			System.out.println(usesPort.getType());
-			System.out.println(usesPort.getRepId());			
-			driver.getApplication("REDHAWK_DEV/rh.FM.*").getAssembly().getExternalports().getPorts();
-			connectionManager.connect(usesEndpoint, providesEndpoint, UUID.randomUUID().toString(), UUID.randomUUID().toString());
-		} catch (ResourceNotFoundException | MultipleResourceException | IOException | CORBAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	private RedhawkEndpoint createRedhawkEndpoint(RedhawkPort port, String resourceId, EndpointType type){
-		return new RedhawkEndpoint(type, resourceId, port);
+	private RedhawkPortEndpoint createRedhawkEndpoint(RedhawkPort port, String resourceId, EndpointType type){
+		return new RedhawkPortEndpoint(type, resourceId, port);
 	}
 	
 	@AfterClass

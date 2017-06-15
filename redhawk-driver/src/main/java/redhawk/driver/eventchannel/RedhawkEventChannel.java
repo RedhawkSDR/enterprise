@@ -22,6 +22,8 @@ package redhawk.driver.eventchannel;
 import java.util.List;
 import java.util.Map;
 
+import org.omg.CosEventChannelAdmin.EventChannel;
+
 import redhawk.driver.eventchannel.impl.RedhawkEventRegistrant;
 import redhawk.driver.eventchannel.listeners.EventChannelListener;
 import redhawk.driver.exceptions.EventChannelException;
@@ -85,4 +87,6 @@ public interface RedhawkEventChannel {
 	 * @return
 	 */
 	List<RedhawkEventRegistrant> getRegistrants(Integer registrants);
+	
+	EventChannel getCorbaObj() throws EventChannelException;
 }

@@ -1,18 +1,13 @@
 package redhawk.driver.connectionmanager.impl;
 
-import redhawk.driver.port.RedhawkPort;
-
-public class RedhawkEndpoint {
+public abstract class RedhawkEndpoint {
 
 	private EndpointType type;
-	
-	private RedhawkPort port;
-	
+			
 	private String resourceId;
 		
-	public RedhawkEndpoint(EndpointType type, String resourceId, RedhawkPort port){
+	public RedhawkEndpoint(EndpointType type, String resourceId){
 		this.type = type;
-		this.port = port;
 		this.resourceId = resourceId;
 	}
 
@@ -22,14 +17,6 @@ public class RedhawkEndpoint {
 
 	public void setType(EndpointType type) {
 		this.type = type;
-	}
-
-	public RedhawkPort getPort() {
-		return port;
-	}
-
-	public void setPort(RedhawkPort port) {
-		this.port = port;
 	}
 	
 	public String getResourceId() {

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE softwareassembly PUBLIC "-//JTRS//DTD SCA V2.2.2 SAD//EN" "softwareassembly.dtd">
+<softwareassembly id="DCE:9e4c3e31-0ff5-4d99-8d0c-27c90d9862ef" name="ConnectionManagerTest">
+  <componentfiles>
+    <componentfile id="EventSpitter_0a585d11-4e12-4913-a732-3f0e6cd73303" type="SPD">
+      <localfile name="/components/EventSpitter/EventSpitter.spd.xml"/>
+    </componentfile>
+    <componentfile id="SigGen_c65873c7-9e4c-4368-88c3-fa892d8c400a" type="SPD">
+      <localfile name="/components/rh/SigGen/SigGen.spd.xml"/>
+    </componentfile>
+  </componentfiles>
+  <partitioning>
+    <componentplacement>
+      <componentfileref refid="EventSpitter_0a585d11-4e12-4913-a732-3f0e6cd73303"/>
+      <componentinstantiation id="EventSpitter_1" startorder="0">
+        <usagename>EventSpitter_1</usagename>
+        <findcomponent>
+          <namingservice name="EventSpitter_1"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
+    <componentplacement>
+      <componentfileref refid="SigGen_c65873c7-9e4c-4368-88c3-fa892d8c400a"/>
+      <componentinstantiation id="SigGen_1" startorder="1">
+        <usagename>SigGen_1</usagename>
+        <findcomponent>
+          <namingservice name="SigGen_1"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
+  </partitioning>
+  <assemblycontroller>
+    <componentinstantiationref refid="EventSpitter_1"/>
+  </assemblycontroller>
+  <externalports>
+    <port externalname="messageOut">
+      <description>Port for spitting out random messages</description>
+      <usesidentifier>messages</usesidentifier>
+      <componentinstantiationref refid="EventSpitter_1"/>
+    </port>
+    <port externalname="floatOutput">
+      <description>Output dataFloat_out data to another application.</description>
+      <usesidentifier>dataFloat_out</usesidentifier>
+      <componentinstantiationref refid="SigGen_1"/>
+    </port>
+  </externalports>
+</softwareassembly>

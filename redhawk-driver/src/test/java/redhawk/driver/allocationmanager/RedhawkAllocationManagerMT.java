@@ -28,7 +28,7 @@ import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.testutils.RedhawkTestBase;
 
-public class RedhawkAllocationManagerIT extends RedhawkTestBase{
+public class RedhawkAllocationManagerMT extends RedhawkTestBase{
 	private static RedhawkAllocationManager allocMgr;
 	
 	private static RedhawkDeviceManager deviceManager;

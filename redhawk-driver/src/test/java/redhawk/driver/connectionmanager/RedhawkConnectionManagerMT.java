@@ -30,7 +30,7 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.testutils.RedhawkTestBase;
 
-public class RedhawkConnectionManagerIT extends RedhawkTestBase{
+public class RedhawkConnectionManagerMT extends RedhawkTestBase{
 	private static RedhawkConnectionManager connectionManager;
 	
 	private static RedhawkDeviceManager deviceManager;

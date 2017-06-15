@@ -19,6 +19,7 @@
  */
 package redhawk.driver.connectionmanager.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +28,16 @@ import CF.ConnectionManagerHelper;
 import CF.ConnectionStatusIteratorHolder;
 import CF.ConnectionManagerPackage.ConnectionStatusSequenceHolder;
 import CF.ConnectionManagerPackage.ConnectionStatusType;
+import CF.ConnectionManagerPackage.EndpointKind;
+import CF.ConnectionManagerPackage.EndpointRequest;
+import CF.ConnectionManagerPackage.EndpointResolutionType;
+import CF.PortPackage.InvalidPort;
 import redhawk.driver.base.impl.CorbaBackedObject;
+import redhawk.driver.base.impl.EndpointType;
+import redhawk.driver.base.impl.RedhawkEndpoint;
 import redhawk.driver.connectionmanager.RedhawkConnectionManager;
 import redhawk.driver.domain.RedhawkDomainManager;
+import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 
@@ -43,33 +51,38 @@ public class RedhawkConnectionManagerImpl extends CorbaBackedObject<ConnectionMa
 	}
 
 	@Override
-	public void connect(RedhawkPort outputPort, RedhawkPort inputPort, String requestId, String connectionId) {
-		// TODO Auto-generated method stub
-		
+	public void connect(RedhawkEndpoint usesPort, RedhawkEndpoint providesPort, String requestId, String connectionId) throws ConnectionException{
+		//TODO: Move this to a method
+		try {
+			connectionManager.connect(this.getEndpointRequestFromRedhawkEndpoint(usesPort), 
+					this.getEndpointRequestFromRedhawkEndpoint(providesPort), requestId, connectionId);
+		} catch (InvalidPort | IOException e) {
+			e.printStackTrace();
+			throw new ConnectionException("Issue connecting these two endpoints [provides: "+usesPort+" uses: "+providesPort+"] "+e.getMessage(), e);
+		}
 	}
 
 	@Override
-	public void disconnect(String connectionId) {
-		// TODO Auto-generated method stub
-		
+	public void disconnect(String connectionRecordId) {
+		try {
+			connectionManager.disconnect(connectionRecordId);
+		} catch (InvalidPort e) {
+			throw new ConnectionException("Unable do disconnect using this id: "+connectionRecordId);
+		}
 	}
 
 	@Override
 	public List<ConnectionInfo> getConnections() {
 		List<ConnectionInfo> connections = new ArrayList<>();
-		ConnectionStatusSequenceHolder holder = new ConnectionStatusSequenceHolder(); 
-		ConnectionStatusIteratorHolder iter = new ConnectionStatusIteratorHolder();
 		
-		connectionManager.listConnections(100000, holder, iter);
-
-		for(ConnectionStatusType connection : holder.value){
+		for(ConnectionStatusType connection : connectionManager.connections()){
 			ConnectionInfo info = new ConnectionInfo(); 
 			info.setConnected(connection.connected);
 			info.setConnectionId(connection.connectionId);
 			info.setConnectionRecordId(connection.connectionRecordId);
 			info.setConnected(connection.connected);
 			info.setRequestorId(connection.requesterId);
-			
+						
 			connections.add(info);
 		}
 		
@@ -91,5 +104,21 @@ public class RedhawkConnectionManagerImpl extends CorbaBackedObject<ConnectionMa
 	public ConnectionManager getCorbaObj() {
 		// TODO Auto-generated method stub
 		return this.getCorbaObject();
+	}
+	
+	private EndpointRequest getEndpointRequestFromRedhawkEndpoint(RedhawkEndpoint point) throws IOException{
+		EndpointResolutionType request = new EndpointResolutionType();
+		switch(point.getType()){
+		case Application:
+			request.applicationId(point.getUniqueId());
+			//request.objectRef(point.getPort().getCorbaObject());
+			return new EndpointRequest(request, "tunerFloat_in");
+		case Device:
+			request.deviceId(point.getUniqueId());
+			//request.objectRef(point.getPort().getCorbaObject());
+			return new EndpointRequest(request, point.getPort().getName());
+		default:
+			throw new IOException("Unhandled Endpoint Type kind");
+		}
 	}
 }

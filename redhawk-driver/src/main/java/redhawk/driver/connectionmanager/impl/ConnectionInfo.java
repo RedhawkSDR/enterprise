@@ -1,11 +1,11 @@
 package redhawk.driver.connectionmanager.impl;
 
-import redhawk.driver.port.RedhawkPort;
+import redhawk.driver.base.impl.RedhawkEndpoint;
 
 public class ConnectionInfo {
-	private RedhawkPort providesPort;
+	private RedhawkEndpoint providesEndpoint;
 	
-	private RedhawkPort usesPort; 
+	private RedhawkEndpoint usesEndpoint; 
 	
 	private String connectionId;
 	
@@ -17,20 +17,20 @@ public class ConnectionInfo {
 	
 	public ConnectionInfo(){}
 
-	public RedhawkPort getProvidesPort() {
-		return providesPort;
+	public RedhawkEndpoint getProvidesPort() {
+		return providesEndpoint;
 	}
 
-	public void setProvidesPort(RedhawkPort providesPort) {
-		this.providesPort = providesPort;
+	public void setProvidesPort(RedhawkEndpoint providesPort) {
+		this.providesEndpoint = providesPort;
 	}
 
-	public RedhawkPort getUsesPort() {
-		return usesPort;
+	public RedhawkEndpoint getUsesPort() {
+		return usesEndpoint;
 	}
 
-	public void setUsesPort(RedhawkPort usesPort) {
-		this.usesPort = usesPort;
+	public void setUsesPort(RedhawkEndpoint usesPort) {
+		this.usesEndpoint = usesPort;
 	}
 
 	public String getConnectionId() {
@@ -63,6 +63,13 @@ public class ConnectionInfo {
 
 	public void setConnected(Boolean connected) {
 		this.connected = connected;
+	}
+
+	@Override
+	public String toString() {
+		return "ConnectionInfo [providesPort=" + providesEndpoint + ", usesPort=" + usesEndpoint + ", connectionId="
+				+ connectionId + ", requestorId=" + requestorId + ", connectionRecordId=" + connectionRecordId
+				+ ", connected=" + connected + "]";
 	} 
 	
 	

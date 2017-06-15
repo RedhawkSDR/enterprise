@@ -82,6 +82,7 @@ import CF.DomainManager;
 import CF.DomainManagerHelper;
 import CF.InvalidFileName;
 import CF.InvalidProfile;
+import CF.Resource;
 import CF.ApplicationFactoryPackage.CreateApplicationError;
 import CF.ApplicationFactoryPackage.CreateApplicationInsufficientCapacityError;
 import CF.ApplicationFactoryPackage.CreateApplicationRequestError;
@@ -102,6 +103,9 @@ public class RedhawkDomainManagerImpl extends
 		super(domainManagerIor, driver.getOrb());
 		this.driver = driver;
 		this.domainName = domainName;
+		
+		DomainManager test;
+		Resource r;
 	}
 
 	public RedhawkDeviceManager createDeviceManager(String deviceManagerName,

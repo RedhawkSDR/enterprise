@@ -6,6 +6,8 @@ stages:
   - test-el6
   - test-el6-i386
   - test-el7
+  - deploy
+
 variables:
   enterprise_version: '2.1.0'
 #  redhawk_version: '2.1-nightly'

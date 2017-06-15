@@ -1,6 +1,11 @@
 #GitLab CI File for REDHAWK Integration Asset
 #Tutuorial on using GitLab CI: https://docs.gitlab.com/ce/ci/quick_start/README.html
 #Docs on format of CI file: https://docs.gitlab.com/ce/ci/yaml/README.html
+stages:
+  - build
+  - test-el6
+  - test-el6-i386
+  - test-el7
 variables:
   enterprise_version: '2.1.0'
 #  redhawk_version: '2.1-nightly'
@@ -59,9 +64,9 @@ test-install:
   script:
     - yum install -y `find output -name '*.rpm'`
 
-test-el7-x86_46:
+test-el7-x86_64:
   image: ${docker_registry}utils/docker-compose:latest
-  stage: test
+  stage: test-el7
   tags:
     - mvn-cache
   dependencies: []
@@ -82,9 +87,9 @@ test-el7-x86_46:
       - output.tar
     expire_in: 3 days
 
-test-el6-x86_46:
+test-el6-x86_64:
   image: ${docker_registry}utils/docker-compose:latest
-  stage: test
+  stage: test-el6
   tags:
     - mvn-cache
   dependencies: []
@@ -105,9 +110,9 @@ test-el6-x86_46:
       - output.tar
     expire_in: 3 days
 
-test-el6-i686:
+test-el6-i386:
   image: ${docker_registry}utils/docker-compose:latest
-  stage: test
+  stage: test-el6-i386
   tags:
     - mvn-cache
   dependencies: []

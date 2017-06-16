@@ -2,8 +2,8 @@
 #Tutuorial on using GitLab CI: https://docs.gitlab.com/ce/ci/quick_start/README.html
 #Docs on format of CI file: https://docs.gitlab.com/ce/ci/yaml/README.html
 variables:
-  redhawk_version: '2.0.6'
-  enterprise_version: '2.0.0'
+  redhawk_version: '2.0.7'
+  enterprise_version: '2.0.1'
 .common: &common
   image: ${docker_registry}redbus/maven:3-jdk-8
   stage: build
@@ -81,14 +81,14 @@ test-integration:
 #Trigger a Jenkins job to aggregate artifacts there
 deploy:
   variables:
-    jenkins_job: REDHAWK-enterprise-$CI_COMMIT_REF_NAME
+    jenkins_job: $CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME-$CI_COMMIT_REF_NAME
   <<: *deploy-common
   only:
     - branches
 
 deploy-release:
   variables:
-    jenkins_job: $redhawk_version/job/REDHAWK-enterprise-$enterprise_version
+    jenkins_job: $redhawk_version/job/$CI_PROJECT_NAME-$enterprise_version
   <<: *deploy-common
   only:
     - tags

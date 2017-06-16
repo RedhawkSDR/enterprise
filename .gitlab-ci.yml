@@ -1,6 +1,13 @@
 #GitLab CI File for REDHAWK Integration Asset
 #Tutuorial on using GitLab CI: https://docs.gitlab.com/ce/ci/quick_start/README.html
 #Docs on format of CI file: https://docs.gitlab.com/ce/ci/yaml/README.html
+stages:
+  - build
+  - test-el6
+  - test-el6-i386
+  - test-el7
+  - deploy
+
 variables:
   redhawk_version: '2.1-nightly'
   enterprise_version: '2.1.0'
@@ -55,18 +62,68 @@ build-release:
 
 test-install:
   image: centos:7
-  stage: test
+  stage: test-el7
   script:
     - yum install -y `find output -name '*.rpm'`
 
-test-integration:
+test-el7-x86_64:
   image: ${docker_registry}utils/docker-compose:latest
-  stage: test
+  stage: test-el7
   tags:
     - mvn-cache
   dependencies: []
+  variables:
+    redhawk_version: 2.1-nightly
+    dist: el7
+    arch: x86_64
   script:
-    - docker-compose up -d redhawk
+    - docker-compose up --force-recreate -d redhawk
+    - docker-compose exec -T redhawk yum install -y redhawk-basic-components redhawk-basic-waveforms
+    - docker-compose up --exit-code-from rei
+    - find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -
+  after_script:
+    - docker-compose down
+  artifacts:
+    name: $CI_JOB_NAME
+    paths:
+      - output.tar
+    expire_in: 3 days
+
+test-el6-x86_64:
+  image: ${docker_registry}utils/docker-compose:latest
+  stage: test-el6
+  tags:
+    - mvn-cache
+  dependencies: []
+  variables:
+    redhawk_version: 2.1-nightly
+    dist: el6
+    arch: x86_64
+  script:
+    - docker-compose up --force-recreate -d redhawk
+    - docker-compose exec -T redhawk yum install -y redhawk-basic-components redhawk-basic-waveforms
+    - docker-compose up --exit-code-from rei
+    - find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -
+  after_script:
+    - docker-compose down
+  artifacts:
+    name: $CI_JOB_NAME
+    paths:
+      - output.tar
+    expire_in: 3 days
+
+test-el6-i386:
+  image: ${docker_registry}utils/docker-compose:latest
+  stage: test-el6-i386
+  tags:
+    - mvn-cache
+  dependencies: []
+  variables:
+    redhawk_version: 2.1-nightly
+    dist: el6
+    arch: i686
+  script:
+    - docker-compose up --force-recreate -d redhawk
     - docker-compose exec -T redhawk yum install -y redhawk-basic-components redhawk-basic-waveforms
     - docker-compose up --exit-code-from rei
     - find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -

@@ -32,15 +32,46 @@ import redhawk.driver.exceptions.AllocationException;
  *
  */
 public interface RedhawkAllocationManager {
+	/**
+	 * Get all allocations from a domain
+	 * 
+	 * @return
+	 */
 	List<AllocationInfo> getAllocations();
 	
+	/**
+	 * Allocate a Device
+	 * @param deviceId
+	 * 	String representing the Device Id
+	 * @param allocationType
+	 * 	String representing the allocation type
+	 * @param allocation
+	 * 	Map representing the allocation
+	 * @throws AllocationException
+	 */
 	void allocate(String deviceId, String allocationType, Map<String, Object> allocation) throws AllocationException;
 	
+	/**
+	 * Deallocate a device by allocation Id
+	 * @param allocationId
+	 */
 	void deallocate(String allocationId);
 	
+	/**
+	 * Deallocate several devices by allocation Id
+	 * @param allocationIds
+	 */
 	void deallocate(List<String> allocationIds);
 	
+	/**
+	 * List devices available in a Domain
+	 * @return
+	 */
 	List<RedhawkDevice> listDevices();
 	
+	/**
+	 * CorbaObj representing the AllocationManager
+	 * @return
+	 */
 	AllocationManager getCorbaObj();
 }

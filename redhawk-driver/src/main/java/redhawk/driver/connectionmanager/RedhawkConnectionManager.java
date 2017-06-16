@@ -26,13 +26,40 @@ import redhawk.driver.connectionmanager.impl.ConnectionInfo;
 import redhawk.driver.connectionmanager.impl.RedhawkEndpoint;
 import redhawk.driver.exceptions.ConnectionException;
 
+/**
+ * the Connection Manager provides a central access point for connections between Domain objects
+ *
+ */
 public interface RedhawkConnectionManager {
-	//TODO: Not just ports it could be any endpoint
+	/**
+	 * Connect two REDHAWK Endpoints. 
+	 * @param usesEndpoint
+	 * @param providesEndpoint
+	 * @param requestId
+	 * 	Id for the request
+	 * @param connectionId
+	 * 	Id for the connection
+	 * @throws ConnectionException
+	 */
 	void connect(RedhawkEndpoint usesEndpoint, RedhawkEndpoint providesEndpoint, String requestId, String connectionId) throws ConnectionException;
 	
+	/**
+	 * Disconnect two endpoints via their connection Id
+	 * 
+	 * @param connectionId
+	 * 	Unique Id for the connection
+	 */
 	void disconnect(String connectionId);
 	
+	/**
+	 * Returns a list of connections managed by the ConnectionManager
+	 * @return
+	 */
 	List<ConnectionInfo> getConnections();
 	
+	/**
+	 * ConnectionManager object. 
+	 * @return
+	 */
 	ConnectionManager getCorbaObj();
 }

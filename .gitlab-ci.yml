@@ -145,7 +145,7 @@ deploy:
 
 deploy-release:
   variables:
-    jenkins_job: $redhawk_version/job/$CI_PROJECT_NAME-$enterprise_version
+    jenkins_job: 2.1.1/job/$CI_PROJECT_NAME-$enterprise_version
   <<: *deploy-common
   only:
     - tags

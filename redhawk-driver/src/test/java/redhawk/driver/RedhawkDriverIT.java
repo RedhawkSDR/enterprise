@@ -21,6 +21,7 @@ package redhawk.driver;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.util.Map;
@@ -63,20 +64,38 @@ public class RedhawkDriverIT extends RedhawkTestBase{
 	}
 	
 	@Test
+	public void testGetDomain(){
+		try {
+			RedhawkDomainManager domain = driver.getDomain(domainName);
+			assertNotNull(domain);
+		} catch (ResourceNotFoundException | CORBAException e) {
+			fail("Unable to use driver to get domain "+e.getMessage());
+		}
+	}
+	
+	@Test
 	public void testGetDeviceManager() throws ResourceNotFoundException, CORBAException, MultipleResourceException{		
 		String deviceManagerName = driver.getDomain("REDHAWK_DEV").getDeviceManagers().get(0).getName();
-		String pathForDevManager = "REDHAWK_DEV/"+deviceManagerName;
+		//Path to dev Manager
+		String pathForDevManager = domainName+"/"+deviceManagerName;
 		logger.info(pathForDevManager);
-		assertNotNull(driver.getDeviceManager(pathForDevManager));
+		
+		RedhawkDeviceManager deviceManager = driver.getDeviceManager(pathForDevManager);
+		assertNotNull(deviceManager);
 	}
 	
 	@Test
 	public void testGetDevice() throws ResourceNotFoundException, CORBAException, MultipleResourceException{
 		RedhawkDeviceManager devManager = driver.getDomain("REDHAWK_DEV").getDeviceManagers().get(0);
-		RedhawkDevice device = devManager.getDevices().get(0);
-		String pathForDevice = domainName+File.separator+devManager.getName()+File.separator+device.getName();
+		RedhawkDevice tDevice = devManager.getDevices().get(0);
+		String deviceName = tDevice.getName();
+		
+		//Path to device
+		String pathForDevice = domainName+File.separator+devManager.getName()+File.separator+deviceName;
 		logger.info(pathForDevice);
-		assertNotNull(driver.getDevice(pathForDevice));
+		
+		RedhawkDevice device = driver.getDevice(pathForDevice);
+		assertNotNull(device);
 	}
 	
 	@Test

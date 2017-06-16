@@ -7,7 +7,7 @@ The following code examples explain how to use the `RedhawkApplication` interfac
 [source,java,indent=0]
 .`RedhawkApplicationImplIT.java`
 ----
-include::snippets/RedhawkApplicationImplIT.java[lines=100..110]
+include::snippets/RedhawkApplicationImplIT.java[lines=105..115]
 ----
 
 === Interacting with Components from Your Application
@@ -15,7 +15,7 @@ include::snippets/RedhawkApplicationImplIT.java[lines=100..110]
 [source,java,indent=0]
 .`RedhawkApplicationImplIT.java`
 ----
-include::snippets/RedhawkApplicationImplIT.java[lines=92..96]
+include::snippets/RedhawkApplicationImplIT.java[lines=97..101]
 ----
 
 

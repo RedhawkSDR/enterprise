@@ -7,5 +7,5 @@ Below are code examples for using the `RedhawkPort` interface.
 [source,java,indent=0]
 .`MessageConsumerPortIT.java`
 ----
-include::snippets/MessageConsumerPortIT.java[lines=102..127]
+include::snippets/MessageConsumerPortIT.java[lines=104..129]
 ----

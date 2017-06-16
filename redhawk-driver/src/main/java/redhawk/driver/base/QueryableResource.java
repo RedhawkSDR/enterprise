@@ -21,9 +21,10 @@ package redhawk.driver.base;
 
 import java.util.Map;
 
+import redhawk.driver.logging.RedhawkLogging;
 import redhawk.driver.properties.RedhawkProperty;
 
-public interface QueryableResource {
+public interface QueryableResource extends RedhawkLogging{
 	/**
 	 * Get all the properties for a resource. 
 	 * @return

@@ -43,6 +43,7 @@ import org.omg.CORBA.TRANSIENT;
 import org.xml.sax.SAXException;
 
 import redhawk.driver.RedhawkDriver;
+import redhawk.driver.RedhawkLogLevel;
 import redhawk.driver.RedhawkUtils;
 import redhawk.driver.allocationmanager.RedhawkAllocationManager;
 import redhawk.driver.allocationmanager.impl.RedhawkAllocationManagerImpl;
@@ -623,6 +624,16 @@ public class RedhawkDomainManagerImpl extends
 		} catch (IOException | JAXBException | SAXException e) {
 			throw new ResourceNotFoundException(e);
 		}
+	}
+
+	@Override
+	public RedhawkLogLevel getLogLevel() {
+		return RedhawkLogLevel.reverseLookup(getCorbaObject().log_level());
+	}
+
+	@Override
+	public void setLogLevel(RedhawkLogLevel level) {
+		getCorbaObject().log_level(level.getValue());
 	}
 
 }

@@ -39,6 +39,7 @@ import CF.DevicePackage.InvalidState;
 import CF.LifeCyclePackage.ReleaseError;
 import CF.ResourcePackage.StartError;
 import CF.ResourcePackage.StopError;
+import redhawk.driver.RedhawkLogLevel;
 import redhawk.driver.RedhawkUtils;
 import redhawk.driver.base.impl.PortBackedObjectImpl;
 import redhawk.driver.device.RedhawkDevice;
@@ -288,6 +289,16 @@ public class RedhawkDeviceImpl extends PortBackedObjectImpl<Device> implements R
 		}
 		
 		return tuners;
+	}
+
+	@Override
+	public RedhawkLogLevel getLogLevel() {
+		return RedhawkLogLevel.reverseLookup(getCorbaObject().log_level());
+	}
+
+	@Override
+	public void setLogLevel(RedhawkLogLevel level) {
+		getCorbaObject().log_level(level.getValue());		
 	}
 
 	

@@ -45,6 +45,9 @@ import CF.Device;
 import CF.DeviceManager;
 import CF.DeviceManagerHelper;
 import CF.InvalidObjectReference;
+import CF.Resource;
+import CF.ResourceHelper;
+import redhawk.driver.RedhawkLogLevel;
 import redhawk.driver.base.impl.QueryableResourceImpl;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.device.impl.RedhawkDeviceImpl;
@@ -243,4 +246,13 @@ public class RedhawkDeviceManagerImpl extends QueryableResourceImpl<DeviceManage
 		}
 	}
 
+	@Override
+	public RedhawkLogLevel getLogLevel() {
+		throw new UnsupportedOperationException("DeviceManager does not implemnt the CORBA Logging interface.");
+	}
+
+	@Override
+	public void setLogLevel(RedhawkLogLevel level) {
+		throw new UnsupportedOperationException("DeviceManager does not implement the CORBA Logging interface.");		
+	}
 }

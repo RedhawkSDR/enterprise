@@ -24,9 +24,11 @@ import java.util.logging.Logger;
 import CF.ComponentType;
 import CF.ComponentTypeHelper;
 import CF.ComponentTypeHolder;
+import CF.Resource;
 import CF.ResourceHelper;
 import CF.ResourcePackage.StartError;
 import CF.ResourcePackage.StopError;
+import redhawk.driver.RedhawkLogLevel;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.base.impl.PortBackedObjectImpl;
 import redhawk.driver.component.RedhawkComponent;
@@ -110,6 +112,18 @@ public class RedhawkComponentImpl extends PortBackedObjectImpl<ComponentType> im
 	@Override
 	public Class<?> getHelperClass() {
 		return ComponentTypeHelper.class;
+	}
+
+	@Override
+	public RedhawkLogLevel getLogLevel() {
+		Resource resource = ResourceHelper.narrow(component.componentObject);
+		return RedhawkLogLevel.reverseLookup(resource.log_level());
+	}
+
+	@Override
+	public void setLogLevel(RedhawkLogLevel level) {
+		Resource resource = ResourceHelper.narrow(component.componentObject);
+		resource.log_level(level.getValue());
 	}
 
 

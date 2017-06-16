@@ -1,19 +1,49 @@
 package redhawk.driver;
 
-public enum RedhawkLogLevels {
-	OFF,
+import java.util.HashMap;
+import java.util.Map;
+
+public enum RedhawkLogLevel {
+	OFF(60000),
 	
-	FATAL,
+	FATAL(50000),
 	
-	ERROR,
+	ERROR(40000),
 	
-	WARN,
+	WARN(30000),
 	
-	INFO,
+	INFO(20000),
 	
-	DEBUG,
+	DEBUG(10000),
 	
-	TRACE,
+	TRACE(5000),
 	
-	ALL
+	ALL(0);
+	
+	private Integer value;
+	
+	private static final Map<Integer, RedhawkLogLevel> REHDAWKLOGLEVELS = new HashMap<>();
+	
+	static {
+		for(RedhawkLogLevel value : values()){
+			REHDAWKLOGLEVELS.put(value.getValue(), value);
+		}
+	}
+	
+	RedhawkLogLevel(Integer t){
+		this.value = t;
+	}
+	
+	public Integer getValue(){
+		return value;
+	}
+	
+	public static RedhawkLogLevel reverseLookup(Integer value){
+		RedhawkLogLevel level = REHDAWKLOGLEVELS.get(value);
+		if(level==null){
+			throw new IllegalArgumentException("Unknown log level "+value);
+		}
+		
+		return level;
+	}
 }

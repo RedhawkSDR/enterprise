@@ -44,6 +44,7 @@ import CF.UnknownProperties;
 import CF.LifeCyclePackage.ReleaseError;
 import CF.ResourcePackage.StartError;
 import CF.ResourcePackage.StopError;
+import redhawk.driver.RedhawkLogLevel;
 import redhawk.driver.RedhawkUtils;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.base.impl.QueryableResourceImpl;
@@ -266,5 +267,15 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 	@Override
 	public Class<?> getHelperClass() {
 		return ApplicationHelper.class;
+	}
+
+	@Override
+	public RedhawkLogLevel getLogLevel() {
+		return RedhawkLogLevel.reverseLookup(getCorbaObject().log_level());		
+	}
+
+	@Override
+	public void setLogLevel(RedhawkLogLevel level) {
+		getCorbaObject().log_level(level.getValue());
 	}
 }

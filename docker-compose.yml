@@ -1,7 +1,7 @@
 version: '2'
 services:
   redhawk:
-    image: ${docker_registry}redhawk/redhawk:${redhawk_version}-el7-x86_64
+    image: ${docker_registry}redhawk/redhawk:2.0-nightly-el7-x86_64
     container_name: redhawk
   rei:
     image: ${docker_registry}redbus/maven:3-jdk-8

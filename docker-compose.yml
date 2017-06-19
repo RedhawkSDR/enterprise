@@ -6,7 +6,7 @@ services:
   rei:
     image: ${docker_registry}redbus/maven:3-jdk-8
     depends_on:
-      - redhawk_${CI_JOB_ID}
+      - redhawk
     volumes:
       - .:/usr/src/app
       - ${m2cache}/repository:/root/.m2/repository:rw

@@ -479,7 +479,7 @@ public class RedhawkDomainManagerImpl extends
 			return appToReturn;
 		} catch (CreateApplicationError | CreateApplicationRequestError
 				| CreateApplicationInsufficientCapacityError
-				| InvalidInitConfiguration | InvalidProfile | InvalidFileName | ApplicationInstallationError e) {
+				| InvalidInitConfiguration | InvalidProfile | InvalidFileName e) {
 			throw new ApplicationCreationException(e);
 		}
 	}
@@ -628,12 +628,12 @@ public class RedhawkDomainManagerImpl extends
 
 	@Override
 	public RedhawkLogLevel getLogLevel() {
-		return RedhawkLogLevel.reverseLookup(getCorbaObject().log_level());
+		throw new UnsupportedOperationException("DomainManager does not implemnt the CORBA Logging interface until 2.1.X series.");		
 	}
 
 	@Override
 	public void setLogLevel(RedhawkLogLevel level) {
-		getCorbaObject().log_level(level.getValue());
+		throw new UnsupportedOperationException("DomainManager does not implemnt the CORBA Logging interface until 2.1.X series.");		
 	}
 
 }

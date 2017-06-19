@@ -34,6 +34,7 @@ import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
+import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.CORBAException;
@@ -43,20 +44,24 @@ import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkLoggingMT extends RedhawkTestBase {
 	@Test
-	public void testDomainLogLevels() throws MultipleResourceException, CORBAException {
+	public void testDomainManagerLog(){
 		try {
-			// Expecting Domain log level to be at INFO
-			assertEquals(RedhawkLogLevel.INFO, driver.getDomain().getLogLevel());
-
-			// Set log level to something else
-			driver.getDomain().setLogLevel(RedhawkLogLevel.ALL);
-			assertEquals(RedhawkLogLevel.ALL, driver.getDomain().getLogLevel());
+			RedhawkDomainManager domManager = driver.getDomain();
+			
+			try{
+				domManager.getLogLevel();
+				fail("Should have thrown an UnsupportedOperationException");
+			}catch(UnsupportedOperationException ex){
+			}
+			
+			try{
+				domManager.setLogLevel(RedhawkLogLevel.ALL);
+				fail("Should have thrown an UnsupportedOperationException");
+			}catch(UnsupportedOperationException ex){
+			}
 		} catch (MultipleResourceException | CORBAException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
-			// Reset defaults
-			driver.getDomain().setLogLevel(RedhawkLogLevel.INFO);
+			fail("Unable to run test "+e.getMessage());
 		}
 	}
 

@@ -68,6 +68,8 @@ test-install:
   stage: test
   script:
     - yum install -y `find output -name '*.rpm'`
+  except:
+    - RELENG-650    
 
 test-el7-x86_64:
   image: ${docker_registry}utils/docker-compose:latest

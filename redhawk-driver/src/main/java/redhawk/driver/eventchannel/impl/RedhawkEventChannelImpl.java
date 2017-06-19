@@ -210,12 +210,9 @@ public class RedhawkEventChannelImpl implements RedhawkEventChannel {
 
 	@Override
 	public EventChannel getCorbaObj() throws EventChannelException {
-		try {
-			return eventChannelManager.get(this.eventChannelName);
-		} catch (ChannelDoesNotExist | OperationNotAllowed | OperationFailed | ServiceUnavailable e) {
-			log.log(Level.SEVERE, "Unable to get corba object for event channel name "+eventChannelName, e);
-			throw new EventChannelException("Unable to get corba object for event channel name "+eventChannelName, e);
-		}
+		//TODO: Update this this
+		//return eventChannelManager.get(this.eventChannelName);
+		return null;
 	}
 	
 }

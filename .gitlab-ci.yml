@@ -2,12 +2,12 @@
 #Tutuorial on using GitLab CI: https://docs.gitlab.com/ce/ci/quick_start/README.html
 #Docs on format of CI file: https://docs.gitlab.com/ce/ci/yaml/README.html
 stages:
-- test
-#  - build
-#  - test-el6
-#  - test-el6-i386
-#  - test-el7
-#  - deploy
+  - test
+  - build
+  - test-el6
+  - test-el6-i386
+  - test-el7
+  - deploy
 
 variables:
   redhawk_version: '2.1-nightly'
@@ -53,6 +53,8 @@ build:
     - mvn -Djava.io.tmpdir=./ deploy -P docs,jaxb-generation,default -B -U -Drelease=0.$CI_PIPELINE_ID
   only:
     - branches
+  except:
+    - RELENG-650
 
 build-release:
   <<: *common
@@ -135,6 +137,8 @@ test-el6-i386:
     paths:
       - output.tar
     expire_in: 3 days
+  except:
+    - RELENG-650
 
 #Trigger a Jenkins job to aggregate artifacts there
 deploy:
@@ -143,6 +147,8 @@ deploy:
   <<: *deploy-common
   only:
     - branches
+  except:
+    - RELENG-650
 
 deploy-release:
   variables:
@@ -150,3 +156,5 @@ deploy-release:
   <<: *deploy-common
   only:
     - tags
+  except:
+    - RELENG-650

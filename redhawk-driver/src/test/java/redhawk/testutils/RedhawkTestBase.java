@@ -83,7 +83,10 @@ public class RedhawkTestBase {
 				domainHost = buildProps.getProperty("domainHost");
 				domainPort = Integer.parseInt(buildProps.getProperty("domainPort"));
 			}
-
+			
+			//Add ability to override domainHost 
+			domainHost = System.getProperty("domainHost", domainHost);
+			
 			logger.info("Domain name: "+domainName+" Host: "+domainHost+" Port: "+domainPort);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

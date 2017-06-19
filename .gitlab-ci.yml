@@ -2,11 +2,12 @@
 #Tutuorial on using GitLab CI: https://docs.gitlab.com/ce/ci/quick_start/README.html
 #Docs on format of CI file: https://docs.gitlab.com/ce/ci/yaml/README.html
 stages:
-  - build
-  - test-el6
-  - test-el6-i386
-  - test-el7
-  - deploy
+- test
+#  - build
+#  - test-el6
+#  - test-el6-i386
+#  - test-el7
+#  - deploy
 
 variables:
   redhawk_version: '2.1-nightly'
@@ -62,13 +63,13 @@ build-release:
 
 test-install:
   image: centos:7
-  stage: test-el7
+  stage: test
   script:
     - yum install -y `find output -name '*.rpm'`
 
 test-el7-x86_64:
   image: ${docker_registry}utils/docker-compose:latest
-  stage: test-el7
+  stage: test
   tags:
     - mvn-cache
   dependencies: []
@@ -91,7 +92,7 @@ test-el7-x86_64:
 
 test-el6-x86_64:
   image: ${docker_registry}utils/docker-compose:latest
-  stage: test-el6
+  stage: test
   tags:
     - mvn-cache
   dependencies: []

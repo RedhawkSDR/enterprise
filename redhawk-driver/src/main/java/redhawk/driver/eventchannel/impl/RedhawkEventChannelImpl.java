@@ -23,18 +23,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
+import org.omg.CORBA.Object;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosEventChannelAdmin.AlreadyConnected;
 import org.omg.CosEventChannelAdmin.EventChannel;
+import org.omg.CosEventChannelAdmin.EventChannelHelper;
 import org.omg.CosEventChannelAdmin.TypeError;
 import org.omg.CosEventComm.Disconnected;
 import org.omg.CosEventComm.PushConsumer;
 import org.omg.CosEventComm.PushConsumerPOATie;
+import org.omg.CosNaming.NameComponent;
+import org.omg.CosNaming.NamingContextExt;
+import org.omg.CosNaming.NamingContextExtHelper;
+import org.omg.CosNaming.NamingContextPackage.CannotProceed;
+import org.omg.CosNaming.NamingContextPackage.NotFound;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
 import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
@@ -58,6 +64,7 @@ import redhawk.driver.eventchannel.RedhawkEventChannel;
 import redhawk.driver.eventchannel.listeners.EventChannelListener;
 import redhawk.driver.exceptions.EventChannelException;
 
+//TODO: This should be a CorbaBackedObject but will avoid to in 2.0.X series fix in 2.1.1
 public class RedhawkEventChannelImpl implements RedhawkEventChannel {
 	private Logger log = Logger.getLogger(RedhawkEventChannelImpl.class.getName());
 	
@@ -65,6 +72,7 @@ public class RedhawkEventChannelImpl implements RedhawkEventChannel {
 	private ORB orb;
 	private EventChannelManager eventChannelManager;
 	private EventChannelReg registration;
+	private RedhawkEventChannelManagerImpl rhEventChannelManager;
 	
 	/**
 	 * 
@@ -78,6 +86,13 @@ public class RedhawkEventChannelImpl implements RedhawkEventChannel {
 		this.eventChannelManager = eventChannelManager;
 	}
 	
+	public RedhawkEventChannelImpl(RedhawkEventChannelManagerImpl impl, ORB orb, String eventChannelName){
+		this.rhEventChannelManager = impl;
+		this.eventChannelManager = impl.getCorbaObject();
+		this.orb = orb;
+		this.eventChannelName = eventChannelName;
+	}
+
 	
 	public String getName() {
 		return eventChannelName;
@@ -210,9 +225,27 @@ public class RedhawkEventChannelImpl implements RedhawkEventChannel {
 
 	@Override
 	public EventChannel getCorbaObj() throws EventChannelException {
-		//TODO: Update this this
-		//return eventChannelManager.get(this.eventChannelName);
-		return null;
+		Object objRef;
+		try {
+			objRef = orb.resolve_initial_references("NameService");
+			NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
+			
+			NameComponent[] name = new NameComponent[2];
+			if(rhEventChannelManager!=null){
+				name[0] = new NameComponent(rhEventChannelManager.getDomainManager().getName(), "");
+				name[1] = new NameComponent(eventChannelName, "");
+				
+				org.omg.CORBA.Object channel = ncRef.resolve(name);
+				
+				EventChannel corbaChannel = EventChannelHelper.narrow(channel);
+				
+				return corbaChannel;
+			}else{
+				throw new EventChannelException("Need DomainManager to be able to retrieve EventChannel CORBA object in 2.0.X series. Use other contructor.");
+			}
+		} catch (InvalidName | NotFound | CannotProceed | org.omg.CosNaming.NamingContextPackage.InvalidName e) {
+			throw new EventChannelException("Issue retrieving event channel ", e);
+		}
 	}
 	
 }

@@ -558,7 +558,7 @@ public class RedhawkDomainManagerImpl extends
 	}
 
 	public RedhawkEventChannelManager getEventChannelManager() {
-		return new RedhawkEventChannelManagerImpl(getOrb(), getCorbaObj()
+		return new RedhawkEventChannelManagerImpl(this, getCorbaObj()
 				.eventChannelMgr());
 	}
 

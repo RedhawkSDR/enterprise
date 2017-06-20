@@ -58,6 +58,13 @@ public class RedhawkEventChannelManagerIT extends RedhawkTestBase{
 	}
 	
 	@Test
+	public void testDomainIsAvailable(){
+		//When event channel manager was initialized from the DomainManager. EC 
+		//Should have access to DomainManager object
+		assertNotNull(((RedhawkEventChannelManagerImpl)eventChannelManager).getDomainManager());
+	}
+	
+	@Test
 	public void testEventChannelManagement() throws EventChannelCreationException, MultipleResourceException, ResourceNotFoundException{
 		String eventChannelName = "MyEventChannel";
 		Integer initialChannelCount = eventChannelManager.getEventChannels().size();

@@ -20,6 +20,7 @@
 package redhawk.driver.eventchannel.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -27,11 +28,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import StandardEvent.DomainManagementObjectAddedEventType;
-import redhawk.driver.RedhawkUtils;
 import redhawk.driver.application.RedhawkApplication;
-import redhawk.driver.eventchannel.listeners.DomainObjectAddedEventListener;
-import redhawk.driver.eventchannel.listeners.EventTypes;
 import redhawk.driver.eventchannel.listeners.GenericEventListener;
 import redhawk.driver.eventchannel.listeners.MessageListener;
 import redhawk.driver.exceptions.ApplicationCreationException;
@@ -51,6 +48,11 @@ public class RedhawkEventChannelIT extends RedhawkTestBase{
 		
 		//Should be 2 registrants
 		assertEquals("Should be 2 registrants from the GPP", 2, impl.getRegistrants(1000).size());
+	}
+	
+	@Test
+	public void testGetCorbaObj() throws MultipleResourceException, ResourceNotFoundException, EventChannelException, CORBAException{
+		assertNotNull(driver.getDomain().getEventChannelManager().getEventChannel("IDM_Channel").getCorbaObj());
 	}
 	
 	@Test

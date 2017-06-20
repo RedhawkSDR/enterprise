@@ -1,5 +1,5 @@
 /*
- * This file is protected by Copyright. Please refer to the COPYRIGHT file
+g * This file is protected by Copyright. Please refer to the COPYRIGHT file
  * distributed with this source distribution.
  *
  * This file is part of REDHAWK __REDHAWK_PROJECT__.

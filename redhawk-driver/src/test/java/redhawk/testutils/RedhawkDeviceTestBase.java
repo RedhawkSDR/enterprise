@@ -17,14 +17,14 @@ import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 
 public class RedhawkDeviceTestBase extends RedhawkTestBase{
-	private static RedhawkDeviceManager deviceManager; 
+	public static RedhawkDeviceManager deviceManager; 
 	
-	private static File nodeDir;
+	public static File nodeDir;
 	
-	private static Process devMgrProcess;
+	public static Process devMgrProcess;
 	
 	//Variable indicating whether dev manager for simulator is available
-	private static Boolean devMgrStartedExternally = false;	
+	public static Boolean devMgrStartedExternally = false;	
 	
 	@BeforeClass
 	public static void setupDevice(){

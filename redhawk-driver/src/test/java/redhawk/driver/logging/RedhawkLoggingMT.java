@@ -39,9 +39,10 @@ import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.testutils.RedhawkDeviceTestBase;
 import redhawk.testutils.RedhawkTestBase;
 
-public class RedhawkLoggingMT extends RedhawkTestBase {
+public class RedhawkLoggingMT extends RedhawkDeviceTestBase {
 	@Test
 	public void testDomainLogLevels() throws MultipleResourceException, CORBAException {
 		try {

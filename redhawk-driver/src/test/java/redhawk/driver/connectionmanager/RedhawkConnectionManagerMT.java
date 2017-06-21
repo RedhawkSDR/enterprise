@@ -28,13 +28,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import redhawk.driver.RedhawkDriver;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.connectionmanager.impl.ConnectionInfo;
 import redhawk.driver.connectionmanager.impl.EndpointType;
@@ -42,25 +38,16 @@ import redhawk.driver.connectionmanager.impl.RedhawkEndpoint;
 import redhawk.driver.connectionmanager.impl.RedhawkEventChannelEndpoint;
 import redhawk.driver.connectionmanager.impl.RedhawkPortEndpoint;
 import redhawk.driver.device.RedhawkDevice;
-import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.eventchannel.RedhawkEventChannel;
 import redhawk.driver.exceptions.ApplicationCreationException;
-import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.CORBAException;
-import redhawk.driver.exceptions.EventChannelCreationException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
-import redhawk.testutils.RedhawkTestBase;
+import redhawk.testutils.RedhawkDeviceTestBase;
 
-public class RedhawkConnectionManagerMT extends RedhawkTestBase{
+public class RedhawkConnectionManagerMT extends RedhawkDeviceTestBase{
 	private static RedhawkConnectionManager connectionManager;
-	
-	private static RedhawkDeviceManager deviceManager;
-			
-	private static File nodeDir;
-	
-	private static Process devMgrProcess; 
 	
 	/*
 	 * Set up launches any necessary devices
@@ -68,26 +55,7 @@ public class RedhawkConnectionManagerMT extends RedhawkTestBase{
 	@BeforeClass
 	public static void setupConnectionMgr(){
 		try {
-			/*
-			 * Place Dcd in it's proper directory 
-			 */
-			File file = new File("src/test/resources/node/SimulatorNode");
-			
-			nodeDir = new File(deviceManagerHome+"/nodes/SimulatorNode");
-			
-			/*
-			 * Copy Nodes directory over  
-			 */
-			FileUtils.copyDirectory(file, nodeDir, FileFilterUtils.suffixFileFilter(".dcd.xml"));	
-		
-			
-			devMgrProcess = proxy.launchDeviceManager("/var/redhawk/sdr/dev/nodes/SimulatorNode/DeviceManager.dcd.xml");
-			
-			//Could use EventChannel to know when it's available
-			Thread.sleep(5000l);
-			
 			connectionManager = driver.getDomain().getConnectionManager();
-			deviceManager = driver.getDeviceManager("REDHAWK_DEV/Simulator.*");
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Issue setting up test "+e.getMessage());
@@ -235,15 +203,5 @@ public class RedhawkConnectionManagerMT extends RedhawkTestBase{
 	
 	private RedhawkPortEndpoint createRedhawkEndpoint(RedhawkPort port, String resourceId, EndpointType type){
 		return new RedhawkPortEndpoint(type, resourceId, port);
-	}
-	
-	@AfterClass
-	public static void cleanupAllocationManager() throws IOException, MultipleResourceException, EventChannelCreationException, CORBAException{
-		deviceManager.shutdown();
-		
-		//Remove directory for node
-		FileUtils.deleteDirectory(nodeDir);
-
-		devMgrProcess.destroy();		
 	}
 }

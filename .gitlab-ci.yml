@@ -7,8 +7,8 @@ stages:
   - deploy
 
 variables:
-  redhawk_version: '2.1-nightly'
-  enterprise_version: '2.1.0'
+  redhawk_version: '2.0-nightly'
+  enterprise_version: '2.0.1'
 .common: &common
   image: ${docker_registry}redbus/maven:3-jdk-8
   stage: build

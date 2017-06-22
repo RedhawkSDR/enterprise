@@ -20,6 +20,7 @@
 package redhawk.driver.device.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -138,6 +139,9 @@ public class RedhawkDeviceImplMT extends RedhawkDeviceTestBase {
 		//Allocate Device
 		device.allocate(newAlloc);
 		
+		//Should now have an allocation Id
+		assertEquals("Should now have one allocation.", 1, device.getAllocIds().size());
+		
 		//Should now have a used tuner
 		assertEquals(false, device.getUsedTuners().isEmpty());
 		
@@ -166,8 +170,7 @@ public class RedhawkDeviceImplMT extends RedhawkDeviceTestBase {
 
 			//Get Device you want 
 			RedhawkDeviceImpl device = (RedhawkDeviceImpl) deviceManager.getDeviceByName("FmRdsSimulator.*");
-			
-			System.out.println(device.getStatus());
+			assertTrue("No allocation should be empty", device.getAllocIds().isEmpty());
 		} catch (MultipleResourceException | ResourceNotFoundException | CORBAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

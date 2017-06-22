@@ -205,7 +205,7 @@ public class RedhawkDeviceImpl extends PortBackedObjectImpl<Device> implements R
 		deallocate("FRONTEND::tuner_allocation", allocation);
 	}
 	
-	String getAllocId(RedhawkStruct s) {
+	public String getAllocId(RedhawkStruct s) {
 		//return (String) s.toMap().get("FRONTEND::tuner_status::allocation_id");
 		List<String> allocIds = getAllocIds(s);
 		
@@ -222,16 +222,17 @@ public class RedhawkDeviceImpl extends PortBackedObjectImpl<Device> implements R
 	 * @param s
 	 * @return
 	 */
-	List<String> getAllocIds(RedhawkStruct s) {
-		String allocIdCsv = (String) s.toMap().get("FRONTEND::tuner_status::allocation_id_csv");
-		if (allocIdCsv == null)
-			return null;
+	public List<String> getAllocIds(RedhawkStruct s) {
 		ArrayList<String> allocIds = new ArrayList<String>();
-		if (allocIdCsv.isEmpty())
+		String allocIdCsv = (String) s.toMap().get("FRONTEND::tuner_status::allocation_id_csv");
+		
+		if (allocIdCsv == null || allocIdCsv.isEmpty())
 			return allocIds;
+		
 		for (String tunerAlloc : allocIdCsv.split(",")) {
 			allocIds.add(tunerAlloc.trim());
 		}
+		
 		return allocIds;
 	}
 	

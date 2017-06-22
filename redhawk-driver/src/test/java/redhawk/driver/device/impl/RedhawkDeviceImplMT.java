@@ -196,6 +196,23 @@ public class RedhawkDeviceImplMT extends RedhawkTestBase {
 		assertEquals(false, device.getUnusedTuners().isEmpty());
 	}
 	
+	@Test
+	public void testGetAllocIds(){
+		//Get Device Manager
+		RedhawkDeviceManager deviceManager;
+		try {
+			deviceManager = driver.getDomain().getDeviceManagerByName("Simulator.*");
+
+			//Get Device you want 
+			RedhawkDeviceImpl device = (RedhawkDeviceImpl) deviceManager.getDeviceByName("FmRdsSimulator.*");
+			
+			System.out.println(device.getStatus());
+		} catch (MultipleResourceException | ResourceNotFoundException | CORBAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+	}
+	
 	//TODO: Add tests for managing a devices lifecycle
 	
 	@After

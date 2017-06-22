@@ -56,31 +56,46 @@ public class RedhawkAllocationManagerMT extends RedhawkTestBase{
 	
 	private static File nodeDir;
 	
-	private static Process devMgrProcess; 
+	private static Process devMgrProcess;
+	
+	//Variable indicating whether dev manager for simulator is available
+	private static Boolean devMgrStartedExternally = false;
 	
 	@BeforeClass
 	public static void setupAllocationManager(){
+		try{
+			deviceManager = driver.getDeviceManager("REDHAWK_DEV/Simulator.*");
+			devMgrStartedExternally = true;
+			allocMgr = driver.getDomain().getAllocationManager();
+		}catch(Exception ex){
+		}
+		
 		try {
 			/*
-			 * Place Dcd in it's proper directory 
+			 * If the device manager does not exist try to launch it.
 			 */
-			File file = new File("src/test/resources/node/SimulatorNode");
-			
-			nodeDir = new File(deviceManagerHome+"/nodes/SimulatorNode");
+			if(!devMgrStartedExternally){
+				/*
+				 * Place Dcd in it's proper directory 
+				 */
+				File file = new File("src/test/resources/node/SimulatorNode");
+				
+				nodeDir = new File(deviceManagerHome+"/nodes/SimulatorNode");
 
-			allocMgr = driver.getDomain().getAllocationManager();
+				allocMgr = driver.getDomain().getAllocationManager();
+				
+				/*
+				 * Copy Nodes directory over  
+				 */
+				FileUtils.copyDirectory(file, nodeDir, FileFilterUtils.suffixFileFilter(".dcd.xml"));	
 			
-			/*
-			 * Copy Nodes directory over  
-			 */
-			FileUtils.copyDirectory(file, nodeDir, FileFilterUtils.suffixFileFilter(".dcd.xml"));	
-		
-			
-			devMgrProcess = proxy.launchDeviceManager("/var/redhawk/sdr/dev/nodes/SimulatorNode/DeviceManager.dcd.xml");
-			
-			//Could use EventChannel to know when it's available
-			Thread.sleep(10000l);
-			deviceManager = driver.getDeviceManager("REDHAWK_DEV/Simulator.*");
+				
+				devMgrProcess = proxy.launchDeviceManager("/var/redhawk/sdr/dev/nodes/SimulatorNode/DeviceManager.dcd.xml");
+				
+				//Could use EventChannel to know when it's available
+				Thread.sleep(10000l);
+				deviceManager = driver.getDeviceManager("REDHAWK_DEV/Simulator.*");	
+			}
 		} catch (MultipleResourceException | CORBAException | IOException | InterruptedException | ResourceNotFoundException e) {
 			// TODO Auto-generated catch block
 			fail("Issue setting up test"+e.getMessage());
@@ -182,11 +197,13 @@ public class RedhawkAllocationManagerMT extends RedhawkTestBase{
 	
 	@AfterClass
 	public static void cleanupAllocationManager() throws IOException, MultipleResourceException, EventChannelCreationException, CORBAException{
-		deviceManager.shutdown();
-		
-		//Remove directory for node
-		FileUtils.deleteDirectory(nodeDir);
+		if(devMgrStartedExternally){
+			deviceManager.shutdown();
+			
+			//Remove directory for node
+			FileUtils.deleteDirectory(nodeDir);
 
-		devMgrProcess.destroy();		
+			devMgrProcess.destroy();	
+		}	
 	}
 }

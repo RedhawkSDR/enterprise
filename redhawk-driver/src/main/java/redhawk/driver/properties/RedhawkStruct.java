@@ -255,4 +255,18 @@ public class RedhawkStruct extends RedhawkProperty implements Map<String, Object
 	public Collection<Object> values() {
 		return toMap().values();
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder build = new StringBuilder();
+		build.append("structId="+structId);
+		build.append("\n");
+		build.append("Struct Properties: \n");
+		for(CF.DataType dt : structProperties){
+			build.append("\tid: "+dt.id+" value: "+AnyUtils.convertAny(dt.value)+" \n");
+		}
+		
+		return build.toString();
+	}
+
 }

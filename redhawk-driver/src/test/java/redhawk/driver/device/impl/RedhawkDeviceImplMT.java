@@ -21,27 +21,16 @@ package redhawk.driver.device.impl;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
-import redhawk.driver.domain.RedhawkFileManager;
 import redhawk.driver.exceptions.CORBAException;
-import redhawk.driver.exceptions.ConnectionException;
-import redhawk.driver.exceptions.EventChannelCreationException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.testutils.RedhawkDeviceTestBase;
-import redhawk.testutils.RedhawkTestBase;
 
 /*
  * This is currently a manual test(MT) until I figure out how to automatically launch a node from the REDHAWK Driver. 
@@ -53,7 +42,7 @@ public class RedhawkDeviceImplMT extends RedhawkDeviceTestBase {
 	@Test
 	public void testAllocate() throws MultipleResourceException, CORBAException, ResourceNotFoundException {
 		//Get Device Manager
-		RedhawkDeviceManager deviceManager = driver.getDomain().getDeviceManagerByName("SimulatorNode");
+		RedhawkDeviceManager deviceManager = driver.getDomain().getDeviceManagerByName("Simulator.*");
 		
 		//Get Device you want 
 		RedhawkDeviceImpl device = (RedhawkDeviceImpl) deviceManager.getDeviceByName("FmRdsSimulator.*");
@@ -112,7 +101,7 @@ public class RedhawkDeviceImplMT extends RedhawkDeviceTestBase {
 	@Test
 	public void testAllocate2() throws MultipleResourceException, CORBAException, ResourceNotFoundException {
 		//Get Device Manager
-		RedhawkDeviceManager deviceManager = driver.getDomain().getDeviceManagerByName("SimulatorNode");
+		RedhawkDeviceManager deviceManager = driver.getDomain().getDeviceManagerByName("Simulator.*");
 		
 		//Get Device you want 
 		RedhawkDeviceImpl device = (RedhawkDeviceImpl) deviceManager.getDeviceByName("FmRdsSimulator.*");

@@ -170,7 +170,7 @@ public class RedhawkDeviceImplMT extends RedhawkDeviceTestBase {
 
 			//Get Device you want 
 			RedhawkDeviceImpl device = (RedhawkDeviceImpl) deviceManager.getDeviceByName("FmRdsSimulator.*");
-			assertTrue("No allocation should be empty", device.getAllocIds().isEmpty());
+			assertTrue("Allocations should be empty", device.getAllocIds().isEmpty());
 		} catch (MultipleResourceException | ResourceNotFoundException | CORBAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

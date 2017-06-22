@@ -40,6 +40,7 @@ import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.EventChannelCreationException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.testutils.RedhawkDeviceTestBase;
 import redhawk.testutils.RedhawkTestBase;
 
 /*
@@ -48,36 +49,7 @@ import redhawk.testutils.RedhawkTestBase;
  * Test relies on the SimulatorNode in src/test/resources being available from the DeviceManager on your domain. 
  *TODO: Make this work with mvn clean install -P localIT
  */
-public class RedhawkDeviceImplMT extends RedhawkTestBase {
-	private File nodeDir;
-	
-	Process devMgrProcess; 
-	
-	@Before
-	public void setup() throws IOException, InterruptedException, ConnectionException, MultipleResourceException, CORBAException{
-		/*
-		 * Node Structure
-		 * |nodes
-		 * |-NodeName/
-		 * |-dcd.xml
-		 */
-		//Write the Node to your SDR
-		/*
-		 * Place Dcd in it's proper directory 
-		 */
-		File file = new File("src/test/resources/node/SimulatorNode");
-		
-		nodeDir = new File(deviceManagerHome+"/nodes/SimulatorNode");
-		
-		/*
-		 * Copy Nodes directory over  
-		 */
-		FileUtils.copyDirectory(file, nodeDir, FileFilterUtils.suffixFileFilter(".dcd.xml"));	
-	
-		
-		devMgrProcess = proxy.launchDeviceManager("/var/redhawk/sdr/dev/nodes/SimulatorNode/DeviceManager.dcd.xml");
-	}
-	
+public class RedhawkDeviceImplMT extends RedhawkDeviceTestBase {
 	@Test
 	public void testAllocate() throws MultipleResourceException, CORBAException, ResourceNotFoundException {
 		//Get Device Manager
@@ -197,12 +169,4 @@ public class RedhawkDeviceImplMT extends RedhawkTestBase {
 	}
 	
 	//TODO: Add tests for managing a devices lifecycle
-	
-	@After
-	public void cleanup() throws IOException, MultipleResourceException, EventChannelCreationException, CORBAException{
-		//Remove directory for node
-		FileUtils.deleteDirectory(nodeDir);
-
-		devMgrProcess.destroy();		
-	}
 }

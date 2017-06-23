@@ -476,6 +476,7 @@ public class RedhawkDriver implements Redhawk {
 		logger.log(Level.FINE, "Shutting down the Object Request Broker");
 		if (orb != null) {
 			orb.shutdown(true);
+			orb.destroy();
 			orb = null;
 		}
 	}

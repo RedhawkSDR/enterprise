@@ -64,6 +64,17 @@ public class RedhawkDriverIT extends RedhawkTestBase{
 	}
 	
 	@Test
+	public void testDisconnect(){
+		try {
+			driver.getDomain();
+			driver.disconnect();
+		} catch (MultipleResourceException | CORBAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
 	public void testGetDomain(){
 		try {
 			RedhawkDomainManager domain = driver.getDomain(domainName);

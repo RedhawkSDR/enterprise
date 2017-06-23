@@ -25,6 +25,7 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.util.Map;
+import java.util.UUID;
 
 import org.junit.Test;
 import org.omg.CosEventChannelAdmin.EventChannel;
@@ -48,7 +49,7 @@ public class RedhawkEventChannelIT extends RedhawkTestBase{
 		RedhawkEventChannelImpl impl = (RedhawkEventChannelImpl) driver.getDomain().getEventChannelManager().getEventChannel("IDM_Channel");
 		
 		//Should be 2 registrants
-		assertEquals("Should be 2 registrants from the GPP", 2, impl.getRegistrants(1000).size());
+		assertEquals("Should be atleast 2 registrants from the GPP. Could be more if other tests have run and created registrant", true, impl.getRegistrants(1000).size()>=2);
 	}
 	
 	@Test
@@ -60,10 +61,12 @@ public class RedhawkEventChannelIT extends RedhawkTestBase{
 	@Test
 	public void testUnregister(){
 		try {
-			String subscriptionId = "listenHere";
+			String subscriptionId = "listenHere_"+UUID.randomUUID();
 			
 			RedhawkEventChannelImpl impl = (RedhawkEventChannelImpl) driver.getDomain().getEventChannelManager().getEventChannel("IDM_Channel");
-		
+			
+			Integer initialRegistrants = impl.getRegistrants(1000).size();
+			
 			//Register a Listener
 			impl.subscribe(new MessageListener(){
 				@Override
@@ -74,15 +77,16 @@ public class RedhawkEventChannelIT extends RedhawkTestBase{
 			}, subscriptionId);
 			
 			//Should now be three registrants
-			assertEquals("Should now be 3 registrants", 3, impl.getRegistrants(1000).size());
+			assertEquals("Should now be atleast 3 registrants. Could be more if other tests have created registrant", initialRegistrants+1, impl.getRegistrants(1000).size());
 			
 			//Unregister a registrant you added
 			//TODO: Add a helper method at this level user only needs to know Id
 			impl.unsubscribe(new RedhawkEventRegistrant(subscriptionId, impl.getName(), null));
 			
-			assertEquals("Should now be 2 registrants", 2, impl.getRegistrants(1000).size());
+			assertEquals("Should now be "+initialRegistrants+" registrants", initialRegistrants, new Integer(impl.getRegistrants(1000).size()));
 		} catch (MultipleResourceException | ResourceNotFoundException | CORBAException | EventChannelException e) {
-			fail("No exceptions should've been thrown"+e.getMessage());
+			e.printStackTrace();
+			fail("No exceptions should've been thrown "+e.getMessage());
 		}
 	}
 	

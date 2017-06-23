@@ -226,10 +226,10 @@ public class RedhawkDriver implements Redhawk {
 			args[1] = "NameService=corbaname::" + hostName + ":" + port;
 			logger.info("Connecting with the following args");
 			for (String arg : args) {
-				logger.info("Args: " + arg);
+				logger.log(Level.FINE, "Args: " + arg);
 			}
 
-			logger.info("Connection with these properties "
+			logger.log(Level.FINE, "Connection with these properties "
 					+ connectionProperties);
 			orb = (ORB) ORB.init(args, connectionProperties);
 			Thread.currentThread().setContextClassLoader(cl);

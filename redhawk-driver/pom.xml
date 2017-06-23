@@ -37,6 +37,7 @@
 				<version>2.10.4</version>
 				<configuration>
 					<failOnError>false</failOnError>
+				         <additionalparam>-Xdoclint:none</additionalparam>
 				</configuration>
 				<executions>
 					<execution>

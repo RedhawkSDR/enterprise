@@ -6,7 +6,12 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -21,7 +26,6 @@ import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.rest.model.Application;
 import redhawk.rest.model.ExternalPort;
 import redhawk.rest.model.FetchMode;
-import redhawk.rest.model.Port;
 import redhawk.rest.model.PropertyContainer;
 import redhawk.testutils.RedhawkTestBase;
 
@@ -67,6 +71,36 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	@Test
+	public void testGetApplicationWithIdvsName(){
+		try{
+			Application appFromName = manager.get(domainHost+":2809", "application", domainName+"/"+basicApplication.getIdentifier());
+			Application appFromId = manager.get(domainHost+":2809", "application", domainName+"/"+basicApplication.getName());
+			
+			String xmlForAppFromName = this.getStringFromJAXB(appFromName);
+			String xmlForAppFromId = this.getStringFromJAXB(appFromId);
+			
+			assertEquals("XML should be the same whether app from name and app from Id ", xmlForAppFromName, xmlForAppFromId);
+		}catch(Exception ex){
+			fail("Unable to retrieve application "+ex.getMessage());
+		}
+	}
+	
+	public String getStringFromJAXB(Object obj) throws JAXBException{
+        StringWriter stringWriter = new StringWriter();			
+		try {
+			JAXBContext jc = JAXBContext.newInstance(new Class[]{obj.getClass()});
+			
+			Marshaller m = jc.createMarshaller();
+			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			m.marshal(obj, stringWriter);
+			
+		} catch (JAXBException e) {
+			throw new JAXBException("Issue getting String ", e);
+		}
+		return stringWriter.toString();
 	}
 	
 	@Test

@@ -40,6 +40,7 @@ import io.swagger.annotations.ApiParam;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.rest.exceptions.ResourceNotFound;
+import redhawk.rest.model.Application;
 import redhawk.rest.model.ApplicationContainer;
 import redhawk.rest.model.ExternalPort;
 import redhawk.rest.model.ExternalPortContainer;
@@ -82,11 +83,10 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET Application for a REDHAWK Domain"
     		)
-    public Response getApplication(@PathParam("applicationId") String applicationId)
+    public Application getApplication(@PathParam("applicationId") String applicationId)
             throws ResourceNotFound, Exception {
-        return Response.ok(
-                redhawkManager.get(nameServer, "application", domainName + "/"
-                        + applicationId)).build();
+        return redhawkManager.get(nameServer, "application", domainName + "/"
+                        + applicationId);
     }
 
     @DELETE

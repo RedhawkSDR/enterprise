@@ -66,6 +66,7 @@ public class RedhawkApplicationResourceIT extends RedhawkResourceTestBase{
 	public void testGetApplication(){
 		WebTarget target = client.target(baseURI+"/"+domainName+"/applications/"+applicationName);
 		Response response = target.request().accept(MediaType.APPLICATION_XML).get();
+		
 		assertEquals(200, response.getStatus());
 	}
 	

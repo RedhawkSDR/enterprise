@@ -47,6 +47,8 @@ public class Application {
     @XmlElement(name="property")
     private List<Property> properties;
     
+    public Application(){}
+    
     public String getIdentifier() {
         return identifier;
     }
@@ -83,6 +85,4 @@ public class Application {
 	public void setProperties(List<Property> properties) {
 		this.properties = properties;
 	}
-    
-
 }

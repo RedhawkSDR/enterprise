@@ -27,6 +27,7 @@ import java.io.File;
 import java.util.Map;
 
 import org.junit.Test;
+import org.omg.CosEventChannelAdmin.EventChannel;
 
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.eventchannel.listeners.GenericEventListener;
@@ -52,7 +53,8 @@ public class RedhawkEventChannelIT extends RedhawkTestBase{
 	
 	@Test
 	public void testGetCorbaObj() throws MultipleResourceException, ResourceNotFoundException, EventChannelException, CORBAException{
-		assertNotNull(driver.getDomain().getEventChannelManager().getEventChannel("IDM_Channel").getCorbaObj());
+		EventChannel channel = driver.getDomain().getEventChannelManager().getEventChannel("IDM_Channel").getCorbaObj();
+		assertNotNull(channel);
 	}
 	
 	@Test

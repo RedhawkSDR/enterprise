@@ -227,23 +227,13 @@ public class RedhawkEventChannelImpl implements RedhawkEventChannel {
 	public EventChannel getCorbaObj() throws EventChannelException {
 		Object objRef;
 		try {
-			objRef = orb.resolve_initial_references("NameService");
-			NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
-			
-			NameComponent[] name = new NameComponent[2];
-			if(rhEventChannelManager!=null){
-				name[0] = new NameComponent(rhEventChannelManager.getDomainManager().getName(), "");
-				name[1] = new NameComponent(eventChannelName, "");
-				
-				org.omg.CORBA.Object channel = ncRef.resolve(name);
-				
-				EventChannel corbaChannel = EventChannelHelper.narrow(channel);
-				
-				return corbaChannel;
-			}else{
-				throw new EventChannelException("Need DomainManager to be able to retrieve EventChannel CORBA object in 2.0.X series. Use other contructor.");
-			}
-		} catch (InvalidName | NotFound | CannotProceed | org.omg.CosNaming.NamingContextPackage.InvalidName e) {
+            EventRegistration  ereg = new EventRegistration();
+            EventChannelReg registration;
+            ereg.channel_name = this.eventChannelName;
+            ereg.reg_id = "REI_"+UUID.randomUUID();
+            registration = this.eventChannelManager.registerResource(ereg);
+            return registration.channel;
+		} catch (InvalidChannelName | RegistrationAlreadyExists | OperationFailed | OperationNotAllowed | ServiceUnavailable e) {
 			throw new EventChannelException("Issue retrieving event channel ", e);
 		}
 	}

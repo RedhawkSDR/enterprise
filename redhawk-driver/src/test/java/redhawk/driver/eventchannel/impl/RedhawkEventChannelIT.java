@@ -140,6 +140,7 @@ public class RedhawkEventChannelIT extends RedhawkTestBase{
 
 		@Override
 		public void onMessage(Object message) {
+			//Code for what to do when you have a message. 
 			messageCount++;
 			System.out.println("Received a message "+message);
 			System.out.println("Message count: "+messageCount);

@@ -24,6 +24,7 @@ import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.rest.model.Application;
+import redhawk.rest.model.Domain;
 import redhawk.rest.model.ExternalPort;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.PropertyContainer;
@@ -49,6 +50,16 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 		} catch (MultipleResourceException | ApplicationCreationException | CORBAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testGetDomain(){
+		try {
+			List<Domain> domains = manager.getAll("localhost:2809", "domain", null, FetchMode.EAGER);
+			assertNotNull(domains);
+		} catch (Exception e) {
+			fail("Unable to get domains "+e.getMessage());
 		}
 	}
 	
@@ -86,21 +97,6 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 		}catch(Exception ex){
 			fail("Unable to retrieve application "+ex.getMessage());
 		}
-	}
-	
-	public String getStringFromJAXB(Object obj) throws JAXBException{
-        StringWriter stringWriter = new StringWriter();			
-		try {
-			JAXBContext jc = JAXBContext.newInstance(new Class[]{obj.getClass()});
-			
-			Marshaller m = jc.createMarshaller();
-			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-			m.marshal(obj, stringWriter);
-			
-		} catch (JAXBException e) {
-			throw new JAXBException("Issue getting String ", e);
-		}
-		return stringWriter.toString();
 	}
 	
 	@Test
@@ -153,5 +149,20 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 				e.printStackTrace();
 			}		
 		}
+	}
+	
+	public String getStringFromJAXB(Object obj) throws JAXBException{
+        StringWriter stringWriter = new StringWriter();			
+		try {
+			JAXBContext jc = JAXBContext.newInstance(new Class[]{obj.getClass()});
+			
+			Marshaller m = jc.createMarshaller();
+			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+			m.marshal(obj, stringWriter);
+			
+		} catch (JAXBException e) {
+			throw new JAXBException("Issue getting String ", e);
+		}
+		return stringWriter.toString();
 	}
 }

@@ -134,9 +134,13 @@ public class RedhawkDomainManagerImpl extends
 					.object_to_string(devMgr.getCorbaDeviceManager()), devMgr
 					.getCorbaDeviceManager().identifier());
 		}
-
+		
+		/*
+		 * Need to use actual deviceManager name in key or you will have 
+		 * no wave of cleaning up on shutdown.
+		 */
 		driverRegisteredDeviceManagers.put(
-				domainName + ":" + deviceManagerName, deviceManager);
+				domainName + ":" + deviceManager.getName(), deviceManager);
 		return deviceManager;
 	}
 

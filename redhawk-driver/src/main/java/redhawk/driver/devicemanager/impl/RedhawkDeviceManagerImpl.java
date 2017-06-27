@@ -74,6 +74,17 @@ public class RedhawkDeviceManagerImpl extends QueryableResourceImpl<DeviceManage
     }
     
     public void shutdown() {
+		/*
+		 * Check to see if this was a driver registered device manager. 
+		 * If so remove from the driver list
+		 */
+		String key = domainManager.getName()+":"+this.getName();
+		
+		//If key exist remove from list
+		if(domainManager.getDriverRegisteredDeviceManagers().containsKey(key)){
+			domainManager.getDriverRegisteredDeviceManagers().remove(key);
+		}
+		
 		this.getCorbaObject().shutdown();
     }
     

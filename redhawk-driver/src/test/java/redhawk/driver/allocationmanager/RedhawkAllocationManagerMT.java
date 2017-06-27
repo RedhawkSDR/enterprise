@@ -70,6 +70,7 @@ public class RedhawkAllocationManagerMT extends RedhawkDeviceTestBase{
 	
 	@Test
 	public void testListDevices(){
+		//List Devices that the allocation manager is aware of. 
 		List<RedhawkDevice> devices = allocMgr.listDevices();
 		
 		for(RedhawkDevice dev : devices){
@@ -92,6 +93,7 @@ public class RedhawkAllocationManagerMT extends RedhawkDeviceTestBase{
 	}
 	
 	public void deallocate(){
+		//Use allocation manager to get a list of Allocations 
 		List<AllocationInfo> allocation = allocMgr.getAllocations();
 		
 		Integer allocNum = allocation.size();
@@ -99,18 +101,19 @@ public class RedhawkAllocationManagerMT extends RedhawkDeviceTestBase{
 		assertTrue("Needs to be an allocation to deallocate ", allocNum>0);
 		String allocationId = allocMgr.getAllocations().get(0).getAllocationId();
 		
-		
+		//Deallocate a specific allocation
 		allocMgr.deallocate(allocationId);
 		assertEquals("Should be less allocations than original amount", allocNum-1, allocMgr.getAllocations().size());	
 	}
 	
 	public void allocateDevice(){
-		//Get simulator deviceId
 		try {
+			//Get device from Device Manager
 			RedhawkDevice device = driver.getDeviceManager("REDHAWK_DEV/Simulator.*").getDevices().get(0);
 			
 			String identifier = device.getIdentifier();
 			
+			//Perform allocation
 			allocMgr.allocate(identifier, allocationType, this.getAllocationProperties());
 		} catch (ResourceNotFoundException | MultipleResourceException | CORBAException | AllocationException e) {
 			fail("Issue allocating device "+e.getMessage());

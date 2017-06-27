@@ -1,0 +1,37 @@
+== `RedhawkAllocationManager` Code Examples
+
+Below are code examples for using the `RedhawkAllocationManager` interface. 
+
+=== Get the AllocationManager 
+
+[source,java,indent=0]
+.`RedhawkAllocationManagerMT.java`
+----
+include::snippets/RedhawkAllocationManagerMT.java[lines=59]
+----
+
+=== List Devices from the AllocationManager 
+
+List devices the AllocationManager has access to. 
+
+[source,java,indent=0]
+.`RedhawkAllocationManagerMT.java`
+----
+include::snippets/RedhawkAllocationManagerMT.java[lines=74]
+----
+
+=== Allocate a Device
+
+[source,java,indent=0]
+.`RedhawkAllocationManagerMT.java`
+----
+include::snippets/RedhawkAllocationManagerMT.java[lines=111..117]
+----
+
+=== Deallocate a Device
+
+[source,java,indent=0]
+.`RedhawkAllocationManagerMT.java`
+----
+include::snippets/RedhawkAllocationManagerMT.java[lines=96..105]
+----

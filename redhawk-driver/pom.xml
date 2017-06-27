@@ -337,7 +337,14 @@
 											<includes>
 												<include>RedhawkLoggingMT.java</include>
 											</includes>
-										</resource>										
+										</resource>
+										<resource>
+											<directory>src/test/java/redhawk/driver/allocationmanager</directory>
+											<targetPath>examples/snippets</targetPath>
+											<includes>
+												<include>RedhawkAllocationManagerMT.java</include>
+											</includes>
+										</resource>																					
 										<resource>
 											<directory>src/main/asciidoc</directory>
 											<filtering>true</filtering>

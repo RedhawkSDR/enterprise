@@ -344,7 +344,14 @@
 											<includes>
 												<include>RedhawkAllocationManagerMT.java</include>
 											</includes>
-										</resource>																					
+										</resource>
+										<resource>
+											<directory>src/test/java/redhawk/driver/connectionmanager</directory>
+											<targetPath>examples/snippets</targetPath>
+											<includes>
+												<include>RedhawkConnectionManagerMT.java</include>
+											</includes>
+										</resource>																															
 										<resource>
 											<directory>src/main/asciidoc</directory>
 											<filtering>true</filtering>

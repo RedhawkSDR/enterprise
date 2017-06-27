@@ -70,10 +70,12 @@ public class RedhawkConnectionManagerMT extends RedhawkDeviceTestBase{
 	@Test
 	public void testConnectDeviceToApplication(){
 		try {
+			//Create application
 			String appName = "FM_RBDS_demo";
 			RedhawkApplication app = driver.getDomain().createApplication(appName, "/waveforms/rh/FM_RBDS_demo/FM_RBDS_demo.sad.xml");
-			String connectionId = "myConnection";
 			
+			//Create Endpoints
+			String connectionId = "myConnection";
 			RedhawkEndpoint providesEndpoint = this.createRedhawkEndpoint(app.getPort("tunerFloat_in"), app.getIdentifier(), EndpointType.Application);
 			
 			RedhawkDevice dev = driver.getDevice("REDHAWK_DEV/Simulator.*/FmRds.*");
@@ -108,10 +110,11 @@ public class RedhawkConnectionManagerMT extends RedhawkDeviceTestBase{
 		RedhawkApplication providesApp = null, usesApp = null;
 		
 		try {
+			//Create Applications
 			providesApp = driver.getDomain().createApplication(appName, "/waveforms/rh/FM_RBDS_demo/FM_RBDS_demo.sad.xml");
 			usesApp = driver.getDomain().createApplication(connMgrTestAppName, new File("src/test/resources/waveforms/ConnectionManagerTest/ConnectionManagerTest.sad.xml"));
 		
-			//System.out.println(usesApp.getPort("floatOutput"));
+			//Create Endpoints 
 			RedhawkEndpoint usesEndpoint = this.createRedhawkEndpoint(usesApp.getPort("floatOutput"), usesApp.getIdentifier(), EndpointType.Application);
 			RedhawkEndpoint providesEndpoint = this.createRedhawkEndpoint(providesApp.getPort("tunerFloat_in"), providesApp.getIdentifier(), EndpointType.Application);
 		
@@ -151,11 +154,12 @@ public class RedhawkConnectionManagerMT extends RedhawkDeviceTestBase{
 		RedhawkEventChannel eventChannel = null;
 		
 		try {
+			//Create Application and Event Channel
 			usesApp = driver.getDomain().createApplication(connMgrTestAppName, new File("src/test/resources/waveforms/ConnectionManagerTest/ConnectionManagerTest.sad.xml"));
 			driver.getDomain().getEventChannelManager().createEventChannel(channelName);
 			eventChannel = driver.getDomain().getEventChannelManager().getEventChannel(channelName);
 			
-			//System.out.println(usesApp.getPort("floatOutput"));
+			//Create Endpoints
 			RedhawkEndpoint usesEndpoint = this.createRedhawkEndpoint(usesApp.getPort("messageOut"), usesApp.getIdentifier(), EndpointType.Application);
 			RedhawkEndpoint providesEndpoint = new RedhawkEventChannelEndpoint(EndpointType.EventChannel, eventChannel.getName(), eventChannel);
 		

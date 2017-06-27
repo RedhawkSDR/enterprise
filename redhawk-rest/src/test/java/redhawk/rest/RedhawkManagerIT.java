@@ -56,7 +56,7 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 	@Test
 	public void testGetDomain(){
 		try {
-			List<Domain> domains = manager.getAll("localhost:2809", "domain", null, FetchMode.EAGER);
+			List<Domain> domains = manager.getAll(domainHost+":2809", "domain", null, FetchMode.EAGER);
 			assertNotNull(domains);
 		} catch (Exception e) {
 			fail("Unable to get domains "+e.getMessage());

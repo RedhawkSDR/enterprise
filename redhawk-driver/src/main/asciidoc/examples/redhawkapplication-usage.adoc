@@ -18,4 +18,11 @@ include::snippets/RedhawkApplicationImplIT.java[lines=105..115]
 include::snippets/RedhawkApplicationImplIT.java[lines=97..101]
 ----
 
+=== Example of how to get and set the log level of an application 
+
+[source,java,indent=0]
+.`RedhawkLoggingMT.java`	
+----
+include::snippets/RedhawkLoggingMT.java[lines=74..80]
+----
 

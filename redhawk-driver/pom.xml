@@ -332,6 +332,13 @@
 											</includes>
 										</resource>
 										<resource>
+											<directory>src/test/java/redhawk/driver/logging</directory>
+											<targetPath>examples/snippets</targetPath>
+											<includes>
+												<include>RedhawkLoggingMT.java</include>
+											</includes>
+										</resource>										
+										<resource>
 											<directory>src/main/asciidoc</directory>
 											<filtering>true</filtering>
 										</resource>

@@ -41,7 +41,6 @@ import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.testutils.RedhawkDeviceTestBase;
-import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkLoggingMT extends RedhawkDeviceTestBase {
 	@Test
@@ -77,7 +76,7 @@ public class RedhawkLoggingMT extends RedhawkDeviceTestBase {
 
 			assertEquals(RedhawkLogLevel.INFO, application.getLogLevel());
 
-			// Set log level to something else
+			// Change log level 
 			application.setLogLevel(RedhawkLogLevel.DEBUG);
 			assertEquals(RedhawkLogLevel.DEBUG, application.getLogLevel());
 		} catch (MultipleResourceException | ApplicationCreationException | CORBAException e) {
@@ -105,7 +104,7 @@ public class RedhawkLoggingMT extends RedhawkDeviceTestBase {
 
 			assertEquals(RedhawkLogLevel.INFO, component.getLogLevel());
 
-			// Set log level to something else
+			// Change log level 
 			component.setLogLevel(RedhawkLogLevel.ALL);
 			assertEquals(RedhawkLogLevel.ALL, component.getLogLevel());
 		} catch (MultipleResourceException | ApplicationCreationException | CORBAException e) {
@@ -150,12 +149,11 @@ public class RedhawkLoggingMT extends RedhawkDeviceTestBase {
 			Thread.sleep(5000l);
 
 			deviceManager = driver.getDeviceManager("REDHAWK_DEV/Simulator.*");
-			// Device is now set up
 
 			RedhawkDevice dev = deviceManager.getDevices().get(0);
 			assertEquals(RedhawkLogLevel.INFO, dev.getLogLevel());
 
-			// Update log level
+			// Change log level 
 			dev.setLogLevel(RedhawkLogLevel.TRACE);
 			assertEquals(RedhawkLogLevel.TRACE, dev.getLogLevel());
 		} catch (IOException | InterruptedException | ResourceNotFoundException | MultipleResourceException

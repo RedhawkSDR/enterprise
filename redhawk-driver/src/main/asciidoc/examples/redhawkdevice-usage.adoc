@@ -12,4 +12,12 @@ Sample code for allocating and deallocating a frontend device.
 include::snippets/RedhawkDeviceImplMT.java[lines=83..131]
 ----
 
+=== Example of how to get and set the log level of a Device
+
+[source,java,indent=0]
+.`RedhawkLoggingMT.java`	
+----
+include::snippets/RedhawkLoggingMT.java[lines=151..157]
+----
+
 

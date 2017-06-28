@@ -63,8 +63,10 @@ public class RedhawkEventChannelIT extends RedhawkTestBase{
 		try {
 			String subscriptionId = "listenHere_"+UUID.randomUUID();
 			
+			//Get Event Channel 
 			RedhawkEventChannelImpl impl = (RedhawkEventChannelImpl) driver.getDomain().getEventChannelManager().getEventChannel("IDM_Channel");
 			
+			//Get number of Registrants
 			Integer initialRegistrants = impl.getRegistrants(1000).size();
 			
 			//Register a Listener
@@ -80,7 +82,6 @@ public class RedhawkEventChannelIT extends RedhawkTestBase{
 			assertEquals("Should now be atleast 3 registrants. Could be more if other tests have created registrant", initialRegistrants+1, impl.getRegistrants(1000).size());
 			
 			//Unregister a registrant you added
-			//TODO: Add a helper method at this level user only needs to know Id
 			impl.unsubscribe(new RedhawkEventRegistrant(subscriptionId, impl.getName(), null));
 			
 			assertEquals("Should now be "+initialRegistrants+" registrants", initialRegistrants, new Integer(impl.getRegistrants(1000).size()));
@@ -99,6 +100,7 @@ public class RedhawkEventChannelIT extends RedhawkTestBase{
 			RedhawkEventChannelImpl impl = (RedhawkEventChannelImpl) driver.getDomain().getEventChannelManager().getEventChannel("ODM_Channel");
 			
 			MyMessageListener testMessageListener = new MyMessageListener(); 
+			
 			//Register a listener and do stuff on events 
 			impl.subscribe(testMessageListener);
 			

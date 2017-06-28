@@ -16,6 +16,8 @@ include::examples/redhawkport-usage.adoc[]
 
 include::examples/redhawkeventchannelmanager-usage.adoc[]
 
+include::examples/redhawkeventchannel-usage.adoc[]
+
 include::examples/redhawkallocationmanager-usage.adoc[]
 
 include::examples/redhawkconnectionmanager-usage.adoc[]

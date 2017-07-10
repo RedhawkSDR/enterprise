@@ -44,6 +44,11 @@ include::driver/examples/redhawkdevice-usage.adoc[]
 
 include::driver/examples/redhawkeventchannelmanager-usage.adoc[]
 
+include::driver/examples/redhawkeventchannel-usage.adoc[]
+
+include::driver/examples/redhawkallocationmanager-usage.adoc[]
+
+include::driver/examples/redhawkconnectionmanager-usage.adoc[]
 
 //These are coming coming from Redhawk Connector Module
 

@@ -76,6 +76,20 @@
 							<file>lib/FRONTENDInterfaces.jar</file>
 						</configuration>
 					</execution>
+					<execution>
+						<id>burstiointerfaces</id>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<phase>install</phase>
+						<configuration>
+							<groupId>redhawk</groupId>
+							<artifactId>burstiointerfaces</artifactId>
+							<version>${redhawk.version}</version>
+							<packaging>jar</packaging>
+							<file>lib/BURSTIOInterfaces.jar</file>
+						</configuration>
+					</execution>					
 				</executions>
 			</plugin>
 		</plugins>

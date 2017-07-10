@@ -139,16 +139,16 @@ public class RedhawkAllocationManagerImpl extends CorbaBackedObject<AllocationMa
 	@Override
 	public List<RedhawkDevice> listDevices() {
 		List<RedhawkDevice> devices = new ArrayList<>();
-		DeviceLocationSequenceHolder holder = new DeviceLocationSequenceHolder();
-		DeviceLocationIteratorHolder iterHold = new DeviceLocationIteratorHolder();
+		//DeviceLocationSequenceHolder holder = new DeviceLocationSequenceHolder();
+		//DeviceLocationIteratorHolder iterHold = new DeviceLocationIteratorHolder();
 		Map<String, RedhawkDeviceManager> devMgrs = new HashMap<>();
 		
 		//TODO: Shouldn't need to put in a number????
-		allocationManager.listDevices(DeviceScopeType.ALL_DEVICES, 1000, holder, iterHold);
+		//allocationManager.listDevices(DeviceScopeType.ALL_DEVICES, 1000, holder, iterHold);
 		
 		
 		
-		for(DeviceLocationType location : holder.value){
+		for(DeviceLocationType location : allocationManager.allDevices()){
 			//TODO: Should I really need to create a devManager object
 			Device dev = location.dev;
 			DeviceManager devMgr = location.devMgr;

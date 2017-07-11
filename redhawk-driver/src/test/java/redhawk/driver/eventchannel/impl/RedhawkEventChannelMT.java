@@ -27,11 +27,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import StandardEvent.DomainManagementObjectAddedEventType;
-import redhawk.driver.RedhawkUtils;
 import redhawk.driver.application.RedhawkApplication;
-import redhawk.driver.eventchannel.listeners.DomainObjectAddedEventListener;
-import redhawk.driver.eventchannel.listeners.EventTypes;
 import redhawk.driver.eventchannel.listeners.GenericEventListener;
 import redhawk.driver.eventchannel.listeners.MessageListener;
 import redhawk.driver.exceptions.ApplicationCreationException;
@@ -44,7 +40,7 @@ import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.testutils.RedhawkTestBase;
 
-public class RedhawkEventChannelIT extends RedhawkTestBase{
+public class RedhawkEventChannelMT extends RedhawkTestBase{
 	@Test
 	public void testGetRegistrants() throws MultipleResourceException, ResourceNotFoundException, CORBAException{
 		RedhawkEventChannelImpl impl = (RedhawkEventChannelImpl) driver.getDomain().getEventChannelManager().getEventChannel("IDM_Channel");

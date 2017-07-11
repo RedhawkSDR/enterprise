@@ -82,6 +82,8 @@ public class RedhawkConnector implements ManagedServiceFactory {
 		if (port == null) {
 			throw new ConfigurationException(PORT_NAME_PROPERTY, "Port is Required");
 		}
+		
+		String domainManagerName = dynamicPropertyConversion(properties.get(DOMAIN_MANAGER_PROPERTY), String.class);
 
 		try {
 			logger.fine("Checking for a pre-existing REDHAWK connection with the connectionName of: " + connectionName);
@@ -89,20 +91,33 @@ public class RedhawkConnector implements ManagedServiceFactory {
 					null);
 
 			if (existingRHConnection != null) {
-				String servicePid = (String) existingRHConnection[0].getProperty("service.pid");
-				String curConnectionName = (String) existingRHConnection[0].getProperty(CONNECTION_NAME_PROPERTY);
+				/*
+				 * Loop through all existing RH Connections and ensure user is
+				 * not attempting to create a duplicate
+				 */
+				for (int i = 0; i < existingRHConnection.length; i++) {
+					String servicePid = (String) existingRHConnection[i].getProperty("service.pid");
+					String curConnectionName = (String) existingRHConnection[i].getProperty(CONNECTION_NAME_PROPERTY);
 
-				if (!pid.equalsIgnoreCase(servicePid) && connectionName.equalsIgnoreCase(curConnectionName)) {
-					throw new ConfigurationException(CONNECTION_NAME_PROPERTY,
-							"A redhawk connection with this name already exists");
-				}
-				
-				String curHost = dynamicPropertyConversion(existingRHConnection[0].getProperty(HOST_NAME_PROPERTY), String.class);
-				long curPort = dynamicPropertyConversion(existingRHConnection[0].getProperty(PORT_NAME_PROPERTY), Long.class);
+					if (!pid.equalsIgnoreCase(servicePid) && connectionName.equalsIgnoreCase(curConnectionName)) {
+						throw new ConfigurationException(CONNECTION_NAME_PROPERTY,
+								"A redhawk connection with this name already exists");
+					}
 
-				if (!pid.equalsIgnoreCase(servicePid) && curHost.equalsIgnoreCase(host) && curPort == port) {
-					throw new ConfigurationException(CONNECTION_NAME_PROPERTY,
-							"A connection has already been established with this REDHAWK Domain from this Karaf Instance");
+					String curHost = dynamicPropertyConversion(existingRHConnection[i].getProperty(HOST_NAME_PROPERTY),
+							String.class);
+					long curPort = dynamicPropertyConversion(existingRHConnection[i].getProperty(PORT_NAME_PROPERTY),
+							Long.class);
+
+					String domainManager = dynamicPropertyConversion(
+							existingRHConnection[i].getProperty(DOMAIN_MANAGER_PROPERTY), Long.class);
+
+					if (!pid.equalsIgnoreCase(servicePid) && curHost.equalsIgnoreCase(host) && curPort == port
+							&& domainManager.equalsIgnoreCase(domainManagerName)) {
+						throw new ConfigurationException(CONNECTION_NAME_PROPERTY,
+								"A connection has already been established with this REDHAWK Domain, Port, and Host combination from this Karaf Instance");
+					}
+
 				}
 			}
 		} catch (InvalidSyntaxException e) {
@@ -125,8 +140,8 @@ public class RedhawkConnector implements ManagedServiceFactory {
 
 		// Domain Manager is optional. If its specified, connect and register a
 		// device manager.
-		String domainManagerName = dynamicPropertyConversion(properties.get(DOMAIN_MANAGER_PROPERTY), String.class);
-		String deviceManagerName = dynamicPropertyConversion(properties.get(DEVICE_MANAGER_NAME_PROPERTY), String.class);
+		String deviceManagerName = dynamicPropertyConversion(properties.get(DEVICE_MANAGER_NAME_PROPERTY),
+				String.class);
 
 		Redhawk redhawkDriver = new RedhawkDriver(host, port.intValue());
 
@@ -207,30 +222,34 @@ public class RedhawkConnector implements ManagedServiceFactory {
 		return str == null || str.trim().length() == 0;
 	}
 
-	private <T> T dynamicPropertyConversion(Dictionary properties, String name, Class aClass) throws ConfigurationException {
-		try{
+	private <T> T dynamicPropertyConversion(Dictionary properties, String name, Class aClass)
+			throws ConfigurationException {
+		try {
 			return this.dynamicPropertyConversion(properties.get(name), aClass);
-		}catch(ConfigurationException ex){
-			throw new ConfigurationException(name, "Unable to get property "+properties.get(name)+" w/ key "+name+", likely bad formatting.", ex.getCause());
+		} catch (ConfigurationException ex) {
+			throw new ConfigurationException(name,
+					"Unable to get property " + properties.get(name) + " w/ key " + name + ", likely bad formatting.",
+					ex.getCause());
 		}
 	}
-	
+
 	private <T> T dynamicPropertyConversion(Object property, Class aClass) throws ConfigurationException {
 		Method meth;
-		
-		if(property!=null){
+
+		if (property != null) {
 			try {
-				if(!aClass.isInstance(new String())){
+				if (!aClass.isInstance(new String())) {
 					meth = aClass.getMethod("valueOf", String.class);
-					return (T) meth.invoke(property, property.toString());				
-				}else{
+					return (T) meth.invoke(property, property.toString());
+				} else {
 					return (T) property.toString();
 				}
 			} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException e) {
-				throw new ConfigurationException(name, "Unable to get property "+property+" likely bad formatting.", e.getCause());
-			}			
-		}else{
+				throw new ConfigurationException(name, "Unable to get property " + property + " likely bad formatting.",
+						e.getCause());
+			}
+		} else {
 			logger.warning("Received Null for one of the properties being checked");
 			return null;
 		}

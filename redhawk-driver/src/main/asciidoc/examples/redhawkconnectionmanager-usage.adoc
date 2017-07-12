@@ -1,6 +1,6 @@
 == `RedhawkConnectionManager` Code Examples
 
-Below are code examples for using the `RedhawkConnectionManager` interface. 
+The following code examples explain how to use the `RedhawkConnectionManager` interface.
 
 === Get the ConnectionManager
 
@@ -18,7 +18,7 @@ include::snippets/RedhawkConnectionManagerMT.java[lines=58]
 include::snippets/RedhawkConnectionManagerMT.java[lines=73..97]
 ----
 
-=== Connect two Application Ports 
+=== Connect Two Application Ports 
 
 [source,java,indent=0]
 .`RedhawkConnectionManagerMT.java`

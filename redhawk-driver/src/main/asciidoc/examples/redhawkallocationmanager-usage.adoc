@@ -1,6 +1,7 @@
 == `RedhawkAllocationManager` Code Examples
 
-Below are code examples for using the `RedhawkAllocationManager` interface. 
+The following code examples explain how to use the `RedhawkAllocationManager` interface.
+
 
 === Get the AllocationManager 
 
@@ -12,7 +13,7 @@ include::snippets/RedhawkAllocationManagerMT.java[lines=59]
 
 === List Devices from the AllocationManager 
 
-List devices the AllocationManager has access to. 
+List Devices to which the AllocationManager has access. 
 
 [source,java,indent=0]
 .`RedhawkAllocationManagerMT.java`

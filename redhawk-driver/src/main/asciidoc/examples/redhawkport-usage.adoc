@@ -1,6 +1,6 @@
 == `RedhawkPort` Code Examples
 
-Below are code examples for using the `RedhawkPort` interface.
+The following code examples explain how to use the `RedhawkPort` interface.
 
 === Consuming Messages from a REDHAWK Port
 

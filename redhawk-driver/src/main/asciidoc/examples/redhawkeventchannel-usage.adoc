@@ -4,7 +4,7 @@ The following code examples explain how to use the `RedhawkEventChannel` interfa
 
 === Create an Event Channel Listener 
 
-The `REDHAWKDriver` has abstract classes that provide base functionality for the different event types provided in REDHAWK. Users can extend one of the Helper abstract classes as shown in the following example and would only be responsible for implementing the onMessage function.
+The `REDHAWKDriver` has abstract classes that provide base functionality for the different event types provided in REDHAWK. Users may extend one of the Helper abstract classes as shown in the following example. If a Helper abstract class is extended, then the `onMessage` function must be implemented.
 
 [source,java,indent=0]
 .`RedhawkEventChannelIT.java`

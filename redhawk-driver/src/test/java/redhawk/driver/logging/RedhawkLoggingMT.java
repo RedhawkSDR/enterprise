@@ -160,17 +160,6 @@ public class RedhawkLoggingMT extends RedhawkDeviceTestBase {
 				| CORBAException ex) {
 			ex.printStackTrace();
 			fail("Failure running test " + ex.getMessage());
-		} finally{
-			if(deviceManager!=null){
-				deviceManager.shutdown();
-			}
-			
-			//Remove directory for node
-			FileUtils.deleteDirectory(nodeDir);
-			
-			if(devMgrProcess!=null){
-				devMgrProcess.destroy();
-			}
 		}
 	}
 	

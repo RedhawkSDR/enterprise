@@ -1,10 +1,10 @@
 == `RedhawkEventChannel` Code Examples
 
-Below are code examples for using the `RedhawkEventChannel` interface. 
+The following code examples explain how to use the `RedhawkEventChannel` interface.
 
 === Create an Event Channel Listener 
 
-The Redhawk Driver has abstract classes that provide base functionality for the different event types provided in REDHAWK. Users can extend one of the Helper abstract classes like shown below and would only be responsible for implementing the onMessage function.
+The `REDHAWKDriver` has abstract classes that provide base functionality for the different event types provided in REDHAWK. Users can extend one of the Helper abstract classes as shown in the following example and would only be responsible for implementing the onMessage function.
 
 [source,java,indent=0]
 .`RedhawkEventChannelIT.java`
@@ -14,7 +14,7 @@ include::snippets/RedhawkEventChannelIT.java[lines=136..150]
 
 === Subscribe and Unsubscribe to an Event Channel
 
-Using the Listener defined above below are examples of subscribing and unsubscribing to an Event Channel. 
+Using the Listener defined in the previous example, use the follwing code to subscribe to an Event Channel. 
 
 [source,java,indent=0]
 .`RedhawkEventChannelIT.java`
@@ -22,7 +22,7 @@ Using the Listener defined above below are examples of subscribing and unsubscri
 include::snippets/RedhawkEventChannelIT.java[lines=100..105]
 ----
 
-Unsubscribe by using the following code: 
+Using the Listener defined in the previous example, use the following code to unsubscribe to and Event Channel: 
 
 [source,java,indent=0]
 .`RedhawkEventChannelIT.java`
@@ -32,7 +32,7 @@ include::snippets/RedhawkEventChannelIT.java[lines=115]
 
 === Interacting with Event Channel Registrants
 
-Every time a user subscribes or produces data to an Event Channel a Registrant is created. You can see that list of registrants and unsubscribe particular registrants using the code below. 
+Every time a user subscribes or produces data to an Event Channel, a Registrant is created. The following code can be used to display the list of registrants and unsubscribe particular registrants. 
 
 [source,java,indent=0]
 .`RedhawkEventChannelIT.java`

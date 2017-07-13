@@ -36,6 +36,8 @@ import BULKIO.PortStatistics;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class RedhawkPortStatistics {
+	private String connectionId; 
+	
 	private String portName; 
 	
 	private float elementsPerSecond; 
@@ -55,13 +57,18 @@ public class RedhawkPortStatistics {
 	public RedhawkPortStatistics(){	
 	}
 	
+	public RedhawkPortStatistics(String connectionId, PortStatistics stats){
+		this(stats);
+		this.connectionId = connectionId;
+	}
+	
 	public RedhawkPortStatistics(PortStatistics stats){
 		Collections.addAll(streamIDs, stats.streamIDs);		
 		this.setPortName(stats.portName);
 		this.setBitsPerSecond(stats.bitsPerSecond);
 		this.setCallsPerSecond(stats.callsPerSecond); 
 		this.setTimeSinceLastCall(stats.timeSinceLastCall);
-		this.setElementsPerSecont(stats.elementsPerSecond);
+		this.setElementsPerSecond(stats.elementsPerSecond);
 	}
 	
 	public String getPortName() {
@@ -72,12 +79,12 @@ public class RedhawkPortStatistics {
 		this.portName = portName;
 	}
 
-	public float getElementsPerSecont() {
+	public float getElementsPerSecond() {
 		return elementsPerSecond;
 	}
 
-	public void setElementsPerSecont(float elementsPerSecont) {
-		this.elementsPerSecond = elementsPerSecont;
+	public void setElementsPerSecond(float elementsPerSecond) {
+		this.elementsPerSecond = elementsPerSecond;
 	}
 
 	public float getBitsPerSecond() {
@@ -118,5 +125,21 @@ public class RedhawkPortStatistics {
 
 	public void setAverageQueueDepth(float averageQueueDepth) {
 		this.averageQueueDepth = averageQueueDepth;
+	}
+
+	public String getConnectionId() {
+		return connectionId;
+	}
+
+	public void setConnectionId(String connectionId) {
+		this.connectionId = connectionId;
+	}
+
+	public Object[] getKeyWords() {
+		return keyWords;
+	}
+
+	public void setKeyWords(Object[] keyWords) {
+		this.keyWords = keyWords;
 	}
 }

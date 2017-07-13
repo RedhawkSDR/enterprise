@@ -328,7 +328,7 @@ public class RedhawkPortImpl implements RedhawkPort {
 		if(portType.equalsIgnoreCase("uses")){
 			UsesPortStatisticsProvider stats = UsesPortStatisticsProviderHelper.narrow(this.port);
 			for(UsesPortStatistics stat : stats.statistics()){
-				list.add(new RedhawkPortStatistics(stat.statistics));
+				list.add(new RedhawkPortStatistics(stat.connectionId, stat.statistics));
 			}
 		}else{
 			/*

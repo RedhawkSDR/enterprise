@@ -28,13 +28,13 @@ import CF.Resource;
 import CF.ResourceHelper;
 import CF.ResourcePackage.StartError;
 import CF.ResourcePackage.StopError;
-import redhawk.driver.RedhawkLogLevel;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.base.impl.PortBackedObjectImpl;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.exceptions.ComponentStartException;
 import redhawk.driver.exceptions.ComponentStopException;
 import redhawk.driver.exceptions.ConnectionException;
+import redhawk.driver.logging.RedhawkLogLevel;
 
 public class RedhawkComponentImpl extends PortBackedObjectImpl<ComponentType> implements RedhawkComponent {
 

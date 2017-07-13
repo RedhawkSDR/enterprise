@@ -333,7 +333,10 @@ public class RedhawkPortImpl implements RedhawkPort {
 		}else{
 			/*
 			 * Already narrowed down to actual port type no need to narrow again w/ 
-			 * ProvidesPortStatisticsProviderHelper
+			 * ProvidesPortStatisticsProviderHelper. 
+			 * 
+			 * Note: By doing this you miss out on state in the stats. But user can still get 
+			 * state from the actual port object. 
 			 */
 			if(factory.getStatistics()!=null)
 				list.add(new RedhawkPortStatistics(factory.getStatistics()));		

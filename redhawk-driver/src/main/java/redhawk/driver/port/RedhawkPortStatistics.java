@@ -20,6 +20,7 @@
 package redhawk.driver.port;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -69,6 +70,7 @@ public class RedhawkPortStatistics {
 		this.setCallsPerSecond(stats.callsPerSecond); 
 		this.setTimeSinceLastCall(stats.timeSinceLastCall);
 		this.setElementsPerSecond(stats.elementsPerSecond);
+		this.setKeyWords(stats.keywords);
 	}
 	
 	public String getPortName() {
@@ -141,5 +143,13 @@ public class RedhawkPortStatistics {
 
 	public void setKeyWords(Object[] keyWords) {
 		this.keyWords = keyWords;
+	}
+
+	@Override
+	public String toString() {
+		return "RedhawkPortStatistics [connectionId=" + connectionId + ", portName=" + portName + ", elementsPerSecond="
+				+ elementsPerSecond + ", bitsPerSecond=" + bitsPerSecond + ", callsPerSecond=" + callsPerSecond
+				+ ", streamIDs=" + streamIDs + ", timeSinceLastCall=" + timeSinceLastCall + ", keyWords="
+				+ Arrays.toString(keyWords) + ", averageQueueDepth=" + averageQueueDepth + "]";
 	}
 }

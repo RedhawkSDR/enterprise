@@ -115,6 +115,7 @@ public class RedhawkTestBase {
 		//Always make sure you delete waveforms you create
 		//TODO: Clean up this logic
 		try {
+			//TODO: Get a specific domainName
 			RedhawkFileManager manager = driver.getDomain().getFileManager();
 			//if(!manager.findDirectories("/waveforms/testWaveform").isEmpty()) //TODO: Look into why this doesn't work 
 				manager.removeDirectory("/waveforms/testWaveform");

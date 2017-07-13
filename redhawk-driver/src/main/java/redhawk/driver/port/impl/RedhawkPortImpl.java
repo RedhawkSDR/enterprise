@@ -34,6 +34,9 @@ import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
 
 import BULKIO.PrecisionUTCTime;
+import BULKIO.UsesPortStatistics;
+import BULKIO.UsesPortStatisticsProvider;
+import BULKIO.UsesPortStatisticsProviderHelper;
 import BULKIO.dataChar;
 import BULKIO.dataDouble;
 import BULKIO.dataFile;
@@ -322,8 +325,19 @@ public class RedhawkPortImpl implements RedhawkPort {
 	@Override
 	public List<RedhawkPortStatistics> getPortStatistics() {
 		List<RedhawkPortStatistics> list = new ArrayList<>(); 
-		if(factory.getStatistics()!=null)
-			list.add(new RedhawkPortStatistics(factory.getStatistics()));
+		if(portType.equalsIgnoreCase("uses")){
+			UsesPortStatisticsProvider stats = UsesPortStatisticsProviderHelper.narrow(this.port);
+			for(UsesPortStatistics stat : stats.statistics()){
+				list.add(new RedhawkPortStatistics(stat.statistics));
+			}
+		}else{
+			/*
+			 * Already narrowed down to actual port type no need to narrow again w/ 
+			 * ProvidesPortStatisticsProviderHelper
+			 */
+			if(factory.getStatistics()!=null)
+				list.add(new RedhawkPortStatistics(factory.getStatistics()));		
+		}
 		
 		return list; 
 	}	

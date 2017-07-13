@@ -6,12 +6,19 @@ import static org.junit.Assert.fail;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import BULKIO.StreamSRI;
+import BULKIO.updateSRI;
+import BULKIO.updateSRIHelper;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
+import redhawk.driver.exceptions.CORBAException;
+import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.port.RedhawkPortStatistics;
 import redhawk.testutils.RedhawkTestBase;
 
-public class RedhawkPortImplTestIT extends RedhawkTestBase{
+public class RedhawkPortImplIT extends RedhawkTestBase{
 	private static RedhawkApplication application; 
 	
 	@BeforeClass
@@ -48,6 +55,34 @@ public class RedhawkPortImplTestIT extends RedhawkTestBase{
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Issue w/ test "+e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testGetActiveSRIs(){
+		try{
+			RedhawkPort port = driver.getPort("REDHAWK_DEV/myApp/HardLimit.*/dataFloat_in");
+			updateSRI t = updateSRIHelper.narrow(port.getCorbaObject());
+			for(StreamSRI sri : t.activeSRIs()){
+				System.out.println(sri);
+			}
+		}catch(Exception ex){
+			ex.printStackTrace();
+			fail("Test failure "+ex.getMessage());
+		}
+	}
+	
+	@Test
+	public void getPortState(){
+		RedhawkPort port;
+		try {
+			port = driver.getPort("REDHAWK_DEV/myApp/HardLimit.*/dataFloat_in");
+		
+			//Checks to make sure port State is not null
+			assertNotNull(port.getPortState());
+		}catch(Exception ex){
+			ex.printStackTrace();
+			fail("Test failure "+ex.getMessage());
 		}
 	}
 }

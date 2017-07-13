@@ -21,6 +21,8 @@ package redhawk.driver.port;
 
 import java.util.List;
 
+import BULKIO.ProvidesPortStatisticsProvider;
+import BULKIO.jni.ProvidesPortStatisticsProviderHelper;
 import redhawk.driver.bulkio.Packet;
 import redhawk.driver.exceptions.PortException;
 import CF.PortPackage.InvalidPort;
@@ -88,5 +90,22 @@ public interface RedhawkPort {
 	 * @return CORBA object representing port. 
 	 */
 	public org.omg.CORBA.Object getCorbaObject();
-
+	
+	/**
+	 *  Returns the State of the Port. This enum maps to BULKIO.PortUsageType
+	 * @return
+	 * @throws UnsupportedOperationException
+	 * 	Occurs when you call this method on a Uses Port.
+	 */
+	default PortState getPortState() throws UnsupportedOperationException{
+		String portType = this.getType();
+		
+		//Only Provides ports have state
+		if(portType.equalsIgnoreCase("provides")){
+			ProvidesPortStatisticsProvider provider = ProvidesPortStatisticsProviderHelper.narrow(this.getCorbaObject());
+			return PortState.reverseLookup(provider.state().value());
+		}else{
+			throw new UnsupportedOperationException("Uses Ports do not support state method.");
+		}
+	}
 }

@@ -43,13 +43,17 @@ import redhawk.testutils.RedhawkTestBase;
 /*
  * Adding tests for dynamically getting Event Channel Manager
  */
-public class EventChannelManagerMT extends RedhawkTestBase{
+public class EventChannelManagerIT extends RedhawkTestBase{
 	private static RedhawkManager manager = new RedhawkManager(); 
 	
 	@Test
 	public void testGetEventChannels(){
 		try {
 			List<EventChannel> eventChannels = manager.getAll(domainHost+":2809", "eventchannel", "REDHAWK_DEV", FetchMode.EAGER);
+			System.out.println("============================================");
+			System.out.println("Are there any event channels");
+			System.out.println(driver.getDomain().getEventChannelManager().getEventChannels());
+			System.out.println("============================================");
 			assertNotNull(eventChannels);
 			assertEquals("Should be atleast the 2 default event channels", true, eventChannels.size()>0);
 		} catch (Exception e) {

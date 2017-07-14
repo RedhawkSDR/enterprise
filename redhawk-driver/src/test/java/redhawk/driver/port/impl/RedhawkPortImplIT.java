@@ -62,6 +62,7 @@ public class RedhawkPortImplIT extends RedhawkTestBase{
 	public void testGetActiveSRIs(){
 		try{
 			RedhawkPort port = driver.getPort("REDHAWK_DEV/myApp/HardLimit.*/dataFloat_in");
+			Thread.sleep(5000l);//Give waveform a second to start
 			updateSRI t = updateSRIHelper.narrow(port.getCorbaObject());
 			for(StreamSRI sri : t.activeSRIs()){
 				System.out.println(sri);

@@ -24,7 +24,7 @@ This repository provides a suite of assets for interacting with REDHAWK from a J
 
 == Demo Assets
 
-* link:camel-event-channel/README.adoc[Camel Event Channel Demo]
+* link:demo/camel-event-channel/README.adoc[Camel Event Channel Demo]
 
 * link:demo/redhawk-webapp/README.md[REDHAWK Webapp Demo]
 

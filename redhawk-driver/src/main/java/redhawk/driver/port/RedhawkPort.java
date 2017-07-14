@@ -19,6 +19,7 @@
  */
 package redhawk.driver.port;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import BULKIO.ProvidesPortStatisticsProvider;
@@ -26,9 +27,9 @@ import BULKIO.StreamSRI;
 import BULKIO.updateSRI;
 import BULKIO.updateSRIHelper;
 import BULKIO.jni.ProvidesPortStatisticsProviderHelper;
+import CF.PortPackage.InvalidPort;
 import redhawk.driver.bulkio.Packet;
 import redhawk.driver.exceptions.PortException;
-import CF.PortPackage.InvalidPort;
 
 public interface RedhawkPort {
 	/**
@@ -93,12 +94,17 @@ public interface RedhawkPort {
 	 * 
 	 * @return Active SRIs
 	 */
-	default StreamSRI[] getActiveSRIs() throws PortException{
+	default List<RedhawkStreamSRI> getActiveSRIs() throws PortException{
 		String portType = this.getType();
+		List<RedhawkStreamSRI> rhSRI = new ArrayList<>(); 
 		
 		if(portType.equalsIgnoreCase("provides")){
 			updateSRI sris = updateSRIHelper.narrow(this.getCorbaObject());
-			return sris.activeSRIs();
+			//Do this with Java 8 stuff at some point
+			for(StreamSRI sri : sris.activeSRIs())
+				rhSRI.add(new RedhawkStreamSRI(sri));
+			
+			return rhSRI;
 		}else{
 			throw new PortException("Uses Port does not support activeSRIs method");
 		}

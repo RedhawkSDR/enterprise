@@ -22,6 +22,9 @@ package redhawk.driver.port;
 import java.util.List;
 
 import BULKIO.ProvidesPortStatisticsProvider;
+import BULKIO.StreamSRI;
+import BULKIO.updateSRI;
+import BULKIO.updateSRIHelper;
 import BULKIO.jni.ProvidesPortStatisticsProviderHelper;
 import redhawk.driver.bulkio.Packet;
 import redhawk.driver.exceptions.PortException;
@@ -87,6 +90,21 @@ public interface RedhawkPort {
 	public String getName();
 	
 	/**
+	 * 
+	 * @return Active SRIs
+	 */
+	default StreamSRI[] getActiveSRIs() throws PortException{
+		String portType = this.getType();
+		
+		if(portType.equalsIgnoreCase("provides")){
+			updateSRI sris = updateSRIHelper.narrow(this.getCorbaObject());
+			return sris.activeSRIs();
+		}else{
+			throw new PortException("Uses Port does not support activeSRIs method");
+		}
+	}
+	
+	/**
 	 * @return CORBA object representing port. 
 	 */
 	public org.omg.CORBA.Object getCorbaObject();
@@ -97,7 +115,7 @@ public interface RedhawkPort {
 	 * @throws UnsupportedOperationException
 	 * 	Occurs when you call this method on a Uses Port.
 	 */
-	default PortState getPortState() throws UnsupportedOperationException{
+	default PortState getPortState() throws PortException{
 		String portType = this.getType();
 		
 		//Only Provides ports have state
@@ -105,7 +123,7 @@ public interface RedhawkPort {
 			ProvidesPortStatisticsProvider provider = ProvidesPortStatisticsProviderHelper.narrow(this.getCorbaObject());
 			return PortState.reverseLookup(provider.state().value());
 		}else{
-			throw new UnsupportedOperationException("Uses Ports do not support state method.");
+			throw new PortException("Uses Port do not support state method.");
 		}
 	}
 }

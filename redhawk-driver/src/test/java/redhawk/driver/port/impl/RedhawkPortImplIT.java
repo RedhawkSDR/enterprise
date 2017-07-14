@@ -1,21 +1,19 @@
 package redhawk.driver.port.impl;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import BULKIO.StreamSRI;
-import BULKIO.updateSRI;
-import BULKIO.updateSRIHelper;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.exceptions.PortException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
-import redhawk.driver.port.RedhawkPortStatistics;
 import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkPortImplIT extends RedhawkTestBase{
@@ -64,22 +62,24 @@ public class RedhawkPortImplIT extends RedhawkTestBase{
 			//Start app so SRI is present 
 			application.start();
 			RedhawkPort port = driver.getPort("REDHAWK_DEV/myApp/HardLimit.*/dataFloat_in");
-			//Thread.sleep(5000l);//Give waveform a second to start
-			updateSRI t = updateSRIHelper.narrow(port.getCorbaObject());
-			for(StreamSRI sri : t.activeSRIs()){
-				System.out.println(sri);
-			}
-			
-			System.out.println("Stopped application");
-			application.stop();
-			t = updateSRIHelper.narrow(port.getCorbaObject());
-			for(StreamSRI sri : t.activeSRIs()){
-				System.out.println(sri);
-			}
+			assertNotNull(port.getActiveSRIs());
 		}catch(Exception ex){
 			ex.printStackTrace();
 			fail("Test failure "+ex.getMessage());
 		}
+		
+		//Make sure Uses Port actually throws Exception
+		try {
+			RedhawkPort port = driver.getPort("REDHAWK_DEV/myApp/HardLimit.*/dataFloat_out");
+			port.getActiveSRIs();
+			fail("Exception should've been thrown Uses port does not have activeSRIs");
+		} catch (ResourceNotFoundException | MultipleResourceException | CORBAException e) {
+			e.printStackTrace();
+			fail("Test failure "+e.getMessage());
+		} catch (PortException e) {
+			assertTrue("Expected exception thrown", true);
+		}
+
 	}
 	
 	@Test
@@ -90,9 +90,16 @@ public class RedhawkPortImplIT extends RedhawkTestBase{
 		
 			//Checks to make sure port State is not null
 			assertNotNull(port.getPortState());
-		}catch(Exception ex){
-			ex.printStackTrace();
-			fail("Test failure "+ex.getMessage());
+			
+			port = driver.getPort("REDHAWK_DEV/myApp/HardLimit.*/dataFloat_out");
+			port.getPortState();
+			fail("Exception should've been thrown Uses port does not have state");
+		} catch (ResourceNotFoundException | MultipleResourceException | CORBAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Test failure "+e.getMessage());
+		} catch(PortException ex){
+			assertTrue("Expected exception thrown", true);			
 		}
 	}
 }

@@ -61,9 +61,18 @@ public class RedhawkPortImplIT extends RedhawkTestBase{
 	@Test
 	public void testGetActiveSRIs(){
 		try{
+			//Start app so SRI is present 
+			application.start();
 			RedhawkPort port = driver.getPort("REDHAWK_DEV/myApp/HardLimit.*/dataFloat_in");
-			Thread.sleep(5000l);//Give waveform a second to start
+			//Thread.sleep(5000l);//Give waveform a second to start
 			updateSRI t = updateSRIHelper.narrow(port.getCorbaObject());
+			for(StreamSRI sri : t.activeSRIs()){
+				System.out.println(sri);
+			}
+			
+			System.out.println("Stopped application");
+			application.stop();
+			t = updateSRIHelper.narrow(port.getCorbaObject());
 			for(StreamSRI sri : t.activeSRIs()){
 				System.out.println(sri);
 			}

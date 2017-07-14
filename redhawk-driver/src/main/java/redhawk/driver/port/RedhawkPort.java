@@ -24,10 +24,13 @@ import java.util.List;
 
 import BULKIO.ProvidesPortStatisticsProvider;
 import BULKIO.StreamSRI;
+import BULKIO.UsesPortStatisticsProvider;
+import BULKIO.UsesPortStatisticsProviderHelper;
 import BULKIO.updateSRI;
 import BULKIO.updateSRIHelper;
 import BULKIO.jni.ProvidesPortStatisticsProviderHelper;
 import CF.PortPackage.InvalidPort;
+import ExtendedCF.UsesConnection;
 import redhawk.driver.bulkio.Packet;
 import redhawk.driver.exceptions.PortException;
 
@@ -130,6 +133,27 @@ public interface RedhawkPort {
 			return PortState.reverseLookup(provider.state().value());
 		}else{
 			throw new PortException("Uses Port do not support state method.");
+		}
+	}
+	
+	/**
+	 * Returns the connectionIds for a uses port
+	 * @return
+	 */
+	default List<String> getConnectionIds() throws PortException{
+		String portType = this.getType();
+		List<String> connectionIds = new ArrayList<>(); 
+		
+		//Only Uses ports have connections
+		if(portType.equalsIgnoreCase("uses")){
+			UsesPortStatisticsProvider stats = UsesPortStatisticsProviderHelper.narrow(this.getCorbaObject());
+			for(UsesConnection connection : stats.connections()){
+				connectionIds.add(connection.connectionId);
+			}
+			
+			return connectionIds;
+		}else{
+			throw new PortException("Provides Port does not support connections() method.");
 		}
 	}
 }

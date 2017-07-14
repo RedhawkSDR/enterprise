@@ -26,6 +26,9 @@ import static org.junit.Assert.fail;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import BULKIO.UsesPortStatisticsProvider;
+import BULKIO.UsesPortStatisticsProviderHelper;
+import ExtendedCF.UsesConnection;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.exceptions.CORBAException;
@@ -119,6 +122,25 @@ public class RedhawkPortImplIT extends RedhawkTestBase{
 			fail("Test failure "+e.getMessage());
 		} catch(PortException ex){
 			assertTrue("Expected exception thrown", true);			
+		}
+	}
+	
+	@Test
+	public void getPortConnections(){
+		RedhawkComponent comp;
+		try {
+			comp = driver.getComponent("REDHAWK_DEV/myApp/HardLimit.*");
+
+			RedhawkPort port = comp.getPort("dataFloat_out");
+
+			UsesPortStatisticsProvider stats = UsesPortStatisticsProviderHelper.narrow(port.getCorbaObject());
+			
+			for(UsesConnection connection : stats.connections()){
+				System.out.println(connection.connectionId);
+			}
+		} catch (ResourceNotFoundException | MultipleResourceException | CORBAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }

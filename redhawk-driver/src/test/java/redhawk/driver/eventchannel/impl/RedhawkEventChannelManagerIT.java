@@ -27,7 +27,6 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import redhawk.driver.RedhawkDriver;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.eventchannel.RedhawkEventChannel;
 import redhawk.driver.eventchannel.RedhawkEventChannelManager;

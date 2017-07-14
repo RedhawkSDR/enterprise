@@ -11,4 +11,5 @@ services:
       - .:/usr/src/app
       - ${m2cache}/repository:/root/.m2/repository:rw
     working_dir: /usr/src/app
-    command: bash -c "mvn -P CFDependencies clean install -B -U && mvn clean install -PlocalIT -DfailIfNoTests=false -DtestProps=`pwd`/docker_test.properties"
+    command: bash -c "mvn -P CFDependencies clean install -B -U && mvn test -pl redhawk-driver -Dtest=LostEventChannelsIT -DtestProps=`pwd`/docker_test.properties"
+#    command: bash -c "mvn -P CFDependencies clean install -B -U && mvn clean install -PlocalIT -DfailIfNoTests=false -DtestProps=`pwd`/docker_test.properties"

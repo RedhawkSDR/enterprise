@@ -26,9 +26,6 @@ import static org.junit.Assert.fail;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import BULKIO.UsesPortStatisticsProvider;
-import BULKIO.UsesPortStatisticsProviderHelper;
-import ExtendedCF.UsesConnection;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.exceptions.CORBAException;
@@ -112,35 +109,50 @@ public class RedhawkPortImplIT extends RedhawkTestBase{
 		
 			//Checks to make sure port State is not null
 			assertNotNull(port.getPortState());
-			
+		} catch (ResourceNotFoundException | MultipleResourceException | CORBAException | PortException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Test failure "+e.getMessage());
+		} 
+		
+		try {
 			port = driver.getPort("REDHAWK_DEV/myApp/HardLimit.*/dataFloat_out");
 			port.getPortState();
 			fail("Exception should've been thrown Uses port does not have state");
 		} catch (ResourceNotFoundException | MultipleResourceException | CORBAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			fail("Test failure "+e.getMessage());
-		} catch(PortException ex){
-			assertTrue("Expected exception thrown", true);			
+		} catch (PortException e) {
+			assertTrue("Expected exception thrown", true);
 		}
+		
 	}
 	
 	@Test
 	public void getPortConnections(){
-		RedhawkComponent comp;
+		RedhawkComponent comp = null;
 		try {
 			comp = driver.getComponent("REDHAWK_DEV/myApp/HardLimit.*");
 
 			RedhawkPort port = comp.getPort("dataFloat_out");
-
-			UsesPortStatisticsProvider stats = UsesPortStatisticsProviderHelper.narrow(port.getCorbaObject());
-			
-			for(UsesConnection connection : stats.connections()){
-				System.out.println(connection.connectionId);
-			}
-		} catch (ResourceNotFoundException | MultipleResourceException | CORBAException e) {
+			assertTrue("Should be atleast 1 connection id", !port.getConnectionIds().isEmpty());
+		} catch (ResourceNotFoundException | MultipleResourceException | CORBAException | PortException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			fail("Test failure "+e.getMessage());
 		}
+		
+		try {
+			RedhawkPort port = comp.getPort("dataFloat_in");
+			port.getConnectionIds();
+			fail("Exception should've been thrown Provides port does not have connections");
+		} catch (ResourceNotFoundException | MultipleResourceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Test failure "+e.getMessage());
+		} catch (PortException e) {
+			assertTrue("Expected exception thrown", true);
+		}
+		
 	}
 }

@@ -43,7 +43,7 @@ import redhawk.testutils.RedhawkTestBase;
 /*
  * Adding tests for dynamically getting Event Channel Manager
  */
-public class EventChannelManagerIT extends RedhawkTestBase{
+public class EventChannelManagerMT extends RedhawkTestBase{
 	private static RedhawkManager manager = new RedhawkManager(); 
 	
 	@Test

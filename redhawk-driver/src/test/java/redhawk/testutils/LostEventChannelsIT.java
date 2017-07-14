@@ -20,10 +20,10 @@ public class LostEventChannelsIT extends RedhawkTestBase{
 				Thread.sleep(10000l);
 				mgr.createEventChannel("HelloWorld");
 				System.out.println("Created event channel "+mgr.getEventChannels());
-				RedhawkEventChannel channel = mgr.getEventChannel("ODM_Channel");
-				System.out.println(channel);
-				channel = mgr.getEventChannel("HelloWorld");
+				RedhawkEventChannel channel = mgr.getEventChannel("HelloWorld");
 				System.out.println("Hello "+channel);
+				channel = mgr.getEventChannel("ODM_Channel");
+				System.out.println(channel);
 			}
 			System.out.println("OMG found you!!!!!!");
 		} catch (MultipleResourceException | CORBAException | EventChannelCreationException | ResourceNotFoundException e) {

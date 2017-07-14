@@ -36,6 +36,8 @@ variables:
       - output/*.rpm
       - output.tar.gz
     expire_in: 3 days
+  except:
+    - develop-2.1.0
 
 .deploy-common: &deploy-common
   image: centos:7
@@ -142,6 +144,8 @@ deploy:
   <<: *deploy-common
   only:
     - branches
+  except:
+    - develop-2.1.0
 
 deploy-release:
   variables:
@@ -149,3 +153,5 @@ deploy-release:
   <<: *deploy-common
   only:
     - tags
+  except:
+    - develop-2.1.0

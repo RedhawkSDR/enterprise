@@ -60,7 +60,6 @@ The Karaf log displays the messages being sent to the Event Channel.
 	2017-02-23 14:35:21,678 | INFO  | eadpool; w: Idle | eventTest                        | 31 - org.apache.camel.camel-core - 2.17.5 | Exchange[ExchangePattern: InOnly, BodyType: java.util.HashMap, Body: {bar=1.6, foo=foo-0dc62388-5dee-43b5-8c1b-7bfa91f2bc39}]
 	2017-02-23 14:35:22,808 | INFO  | eadpool; w: Idle | eventTest                        | 31 - org.apache.camel.camel-core - 2.17.5 | Exchange[ExchangePattern: InOnly, BodyType: java.util.HashMap, Body: {bar=1.6, foo=foo-090be096-49ba-4943-ae65-3a4ae1438398}]
 	2017-02-23 14:35:23,938 | INFO  | eadpool; w: Idle | eventTest                        | 31 - org.apache.camel.camel-core - 2.17.5 | Exchange[ExchangePattern: InOnly, BodyType: java.util.HashMap, Body: {bar=1.6, foo=foo-0dcc5772-0759-4122-ba11-fc7fe10c697f}]
-[source]
 	
 === ActiveMQ Integration
 

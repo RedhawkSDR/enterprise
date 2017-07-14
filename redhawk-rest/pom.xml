@@ -320,8 +320,8 @@
 							<apiSources>
 								<apiSource>
 									<locations>redhawk.rest.endpoints</locations>
-									<basePath>redhawk</basePath>
-                					<schemes>http,https</schemes>									
+									<basePath>cxf/redhawk</basePath>
+                					<schemes>http</schemes>									
 									<host>127.0.0.1</host>
 									<info>
 										<title>REDHAWK REST</title>

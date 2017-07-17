@@ -39,6 +39,7 @@ import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
+import redhawk.driver.port.RedhawkPortStatistics;
 import redhawk.driver.port.impl.RedhawkExternalPortImpl;
 import redhawk.testutils.RedhawkTestBase;
 
@@ -141,6 +142,12 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 			for(RedhawkPort port : extApplication.getPorts()){
 				assertNotNull(port.getPortStatistics());
 			}
+			
+			/*
+			 * Test retrieving a ports stats
+			 */
+			List<RedhawkPortStatistics> stats = extApplication.getPort("hardLimitPort").getPortStatistics();
+			System.out.println(stats);
 		} finally {
 			if (extApplication != null) {
 				try {

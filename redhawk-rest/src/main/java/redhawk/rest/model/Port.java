@@ -19,8 +19,12 @@
  */
 package redhawk.rest.model;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -36,6 +40,10 @@ public class Port {
 	private String repId;
 	
 	private String state;
+	
+    @XmlElementWrapper(name="connectionIds")
+    @XmlElement(name="id")
+	List<String> connectionIds;
 	
 	public String getName() {
 		return name;
@@ -67,5 +75,13 @@ public class Port {
 
 	public void setState(String state) {
 		this.state = state;
+	}
+
+	public List<String> getConnectionIds() {
+		return connectionIds;
+	}
+
+	public void setConnectionIds(List<String> connectionIds) {
+		this.connectionIds = connectionIds;
 	}
 }

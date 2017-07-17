@@ -16,6 +16,17 @@ public class ExternalPort extends Port{
 	
 	private String description;
 	
+	public ExternalPort(){}
+	
+	public ExternalPort(Port port){
+		//See port properties
+		this.setName(port.getName());
+		this.setType(port.getType());
+		this.setRepId(port.getRepId());
+		this.setConnectionIds(port.getConnectionIds());
+		this.setState(port.getState());
+	}
+	
 	public String getDescription() {
 		return description;
 	}

@@ -28,7 +28,7 @@ import BULKIO.UsesPortStatisticsProvider;
 import BULKIO.UsesPortStatisticsProviderHelper;
 import BULKIO.updateSRI;
 import BULKIO.updateSRIHelper;
-import BULKIO.jni.ProvidesPortStatisticsProviderHelper;
+import BULKIO.ProvidesPortStatisticsProviderHelper;
 import CF.PortPackage.InvalidPort;
 import ExtendedCF.UsesConnection;
 import redhawk.driver.bulkio.Packet;

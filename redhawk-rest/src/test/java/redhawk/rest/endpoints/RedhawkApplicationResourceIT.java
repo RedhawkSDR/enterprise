@@ -117,9 +117,18 @@ public class RedhawkApplicationResourceIT extends RedhawkResourceTestBase{
 			
 			WebTarget target = client.target(baseURI+"/"+domainName+"/applications/"+exApplicationName+"/properties");
 			
-			Response response = target.request().accept(MediaType.APPLICATION_XML).get();
-
+			Response appPropertiesResponse = target.request().accept(MediaType.APPLICATION_XML).get();
 			
+			//Test properties response
+			assertEquals(200, appPropertiesResponse.getStatus());
+			
+			target = client.target(baseURI+"/"+domainName+"/applications/"+exApplicationName+"/ports/hardLimitPort");
+			Response appPortResponse = target.request(MediaType.APPLICATION_XML).get();
+			assertEquals(200, appPortResponse.getStatus());
+			
+			target = client.target(baseURI+"/"+domainName+"/applications/"+exApplicationName+"/ports/hardLimitPort/statistics");
+			Response appPortStatisticsResponse = target.request(MediaType.APPLICATION_XML).get();
+			assertEquals(200, appPortStatisticsResponse.getStatus());
 		} catch (MultipleResourceException | ApplicationCreationException | CORBAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -28,6 +28,7 @@ import redhawk.rest.model.Domain;
 import redhawk.rest.model.ExternalPort;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.PropertyContainer;
+import redhawk.rest.utils.TestUtils;
 import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkManagerIT extends RedhawkTestBase{
@@ -90,8 +91,8 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 			Application appFromName = manager.get(domainHost+":2809", "application", domainName+"/"+basicApplication.getIdentifier());
 			Application appFromId = manager.get(domainHost+":2809", "application", domainName+"/"+basicApplication.getName());
 			
-			String xmlForAppFromName = this.getStringFromJAXB(appFromName);
-			String xmlForAppFromId = this.getStringFromJAXB(appFromId);
+			String xmlForAppFromName = TestUtils.getStringFromJAXB(appFromName);
+			String xmlForAppFromId = TestUtils.getStringFromJAXB(appFromId);
 			
 			assertEquals("XML should be the same whether app from name and app from Id ", xmlForAppFromName, xmlForAppFromId);
 		}catch(Exception ex){
@@ -149,20 +150,5 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 				e.printStackTrace();
 			}		
 		}
-	}
-	
-	public String getStringFromJAXB(Object obj) throws JAXBException{
-        StringWriter stringWriter = new StringWriter();			
-		try {
-			JAXBContext jc = JAXBContext.newInstance(new Class[]{obj.getClass()});
-			
-			Marshaller m = jc.createMarshaller();
-			m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-			m.marshal(obj, stringWriter);
-			
-		} catch (JAXBException e) {
-			throw new JAXBException("Issue getting String ", e);
-		}
-		return stringWriter.toString();
 	}
 }

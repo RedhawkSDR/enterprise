@@ -96,6 +96,14 @@ public class RedhawkManager {
 		}
 	}
 
+	public <T> T get(String nameServer, String type, String location) throws ResourceNotFoundException, Exception {
+		Redhawk redhawk = getDriverInstance(nameServer);
+		
+		String[] locationArray = location.split("/");
+
+		return (T) converter.convert(type, internalGet(redhawk, type, locationArray));
+	}
+	
 	public <T> T get(String nameServer, String type, String... location) throws ResourceNotFoundException, Exception {
 		Redhawk redhawk = getDriverInstance(nameServer);
 		return (T) converter.convert(type, internalGet(redhawk, type, location));
@@ -104,7 +112,8 @@ public class RedhawkManager {
 	public <T> PortStatisticsContainer getRhPortStatistics(String nameServer, String type, String location)
 			throws Exception {
 		Redhawk redhawk = getDriverInstance(nameServer);
-		T port = internalGet(redhawk, type, location);
+		String[] locationArray = location.split("/");
+		T port = internalGet(redhawk, type, locationArray);
 		List<RedhawkPortStatistics> stats = new ArrayList<>();
 
 		if (port instanceof RedhawkPort) {
@@ -696,7 +705,7 @@ public class RedhawkManager {
 			}
 		});
 	}
-
+	
 	private <T> T internalGet(Redhawk redhawk, String type, String... location)
 			throws ResourceNotFoundException, Exception {
 		switch (type) {
@@ -705,9 +714,9 @@ public class RedhawkManager {
 		case "application":
 			return (T) redhawk.getApplication(location[0]);
 		case "applicationport":
-			// Get location
-			String appAddress = location[0];
-			String portName = location[1];
+			// Location array should be of this for <Domain Name>/<application>/<port>
+			String appAddress = location[0]+"/"+location[1];
+			String portName = location[2];
 			return (T) redhawk.getApplication(appAddress).getPort(portName);
 		case "devicemanager":
 			return (T) redhawk.getDeviceManager(location[0]);

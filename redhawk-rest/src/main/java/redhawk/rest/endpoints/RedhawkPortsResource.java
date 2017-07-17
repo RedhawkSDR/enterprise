@@ -19,10 +19,7 @@
  */
 package redhawk.rest.endpoints;
 
-import redhawk.rest.RedhawkManager;
-import redhawk.rest.exceptions.ResourceNotFound;
-import redhawk.rest.model.FetchMode;
-import redhawk.rest.model.PortContainer;
+import java.util.logging.Logger;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -33,8 +30,9 @@ import javax.ws.rs.core.Response;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
-import java.util.logging.Logger;
+import redhawk.rest.exceptions.ResourceNotFound;
+import redhawk.rest.model.FetchMode;
+import redhawk.rest.model.PortContainer;
 
 @Path("/{nameserver}/domains/{domain}/applications/{applicationId}/components/{componentId}/ports")
 @Api(value="/{nameserver}/domains/{domain}/applications/{applicationId}/components/{componentId}/ports")

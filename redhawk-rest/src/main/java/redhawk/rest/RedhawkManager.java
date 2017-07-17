@@ -95,14 +95,6 @@ public class RedhawkManager {
 			}
 		}
 	}
-
-	public <T> T get(String nameServer, String type, String location) throws ResourceNotFoundException, Exception {
-		Redhawk redhawk = getDriverInstance(nameServer);
-		
-		String[] locationArray = location.split("/");
-
-		return (T) converter.convert(type, internalGet(redhawk, type, locationArray));
-	}
 	
 	public <T> T get(String nameServer, String type, String... location) throws ResourceNotFoundException, Exception {
 		Redhawk redhawk = getDriverInstance(nameServer);

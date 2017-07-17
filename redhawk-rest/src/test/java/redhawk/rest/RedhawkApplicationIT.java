@@ -52,7 +52,7 @@ public class RedhawkApplicationIT extends RedhawkTestBase{
 		String applicationPath = domainName + "/" + externalApplication.getIdentifier() + "/hardLimitPort";
 		
 		try {
-			ExternalPort port = manager.get(nameServer, "applicationport", applicationPath);
+			ExternalPort port = manager.get(nameServer, "applicationport", applicationPath.split("/"));
 		
 			assertNotNull(port);
 			logger.info(TestUtils.getStringFromJAXB(port));

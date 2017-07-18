@@ -79,7 +79,10 @@ public class RedhawkApplicationIT extends RedhawkTestBase{
 		}
 	}
 	
-	
+	@Test
+	public void testDisconnectionPortConnection(){
+		
+	}
 	
 	@AfterClass
 	public static void cleanupManager(){

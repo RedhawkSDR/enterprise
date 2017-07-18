@@ -30,6 +30,8 @@ import BULKIO.updateSRI;
 import BULKIO.updateSRIHelper;
 import BULKIO.ProvidesPortStatisticsProviderHelper;
 import CF.PortPackage.InvalidPort;
+import ExtendedCF.QueryablePort;
+import ExtendedCF.QueryablePortHelper;
 import ExtendedCF.UsesConnection;
 import redhawk.driver.bulkio.Packet;
 import redhawk.driver.exceptions.PortException;
@@ -107,7 +109,7 @@ public interface RedhawkPort {
 		String portType = this.getType();
 		List<RedhawkStreamSRI> rhSRI = new ArrayList<>(); 
 		
-		if(portType.equalsIgnoreCase("provides")){
+		if(portType.equalsIgnoreCase("provides") && this.getCorbaObject() instanceof updateSRI){
 			updateSRI sris = updateSRIHelper.narrow(this.getCorbaObject());
 			//Do this with Java 8 stuff at some point
 			for(StreamSRI sri : sris.activeSRIs())
@@ -134,7 +136,7 @@ public interface RedhawkPort {
 		String portType = this.getType();
 		
 		//Only Provides ports have state
-		if(portType.equalsIgnoreCase("provides")){
+		if(portType.equalsIgnoreCase("provides") && this.getCorbaObject() instanceof ProvidesPortStatisticsProvider){
 			ProvidesPortStatisticsProvider provider = ProvidesPortStatisticsProviderHelper.narrow(this.getCorbaObject());
 			return PortState.reverseLookup(provider.state().value());
 		}else{
@@ -152,9 +154,12 @@ public interface RedhawkPort {
 		
 		//Only Uses ports have connections
 		if(portType.equalsIgnoreCase("uses")){
-			UsesPortStatisticsProvider stats = UsesPortStatisticsProviderHelper.narrow(this.getCorbaObject());
-			for(UsesConnection connection : stats.connections()){
-				connectionIds.add(connection.connectionId);
+			if(this.getCorbaObject() instanceof QueryablePort){
+				QueryablePort qPort = QueryablePortHelper.narrow(this.getCorbaObject());
+				
+				for(UsesConnection connection : qPort.connections()){
+					connectionIds.add(connection.connectionId);
+				}
 			}
 			
 			return connectionIds;

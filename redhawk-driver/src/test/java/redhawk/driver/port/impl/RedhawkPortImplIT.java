@@ -23,11 +23,14 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.IOException;
+
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
+import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.PortException;
@@ -153,6 +156,23 @@ public class RedhawkPortImplIT extends RedhawkTestBase{
 		} catch (PortException e) {
 			assertTrue("Expected exception thrown", true);
 		}
+	}
+	
+	@Test
+	public void getPortConnectionsNonQuerable(){
+		RedhawkApplication rbdsApplication;
+		
+		try {
+			String appName = "rbdsTest";
+			rbdsApplication = driver.getDomain().createApplication(appName, "/waveforms/rh/FM_RBDS_demo/FM_RBDS_demo.sad.xml");
+			
+			RedhawkPort port = driver.getPort("REDHAWK_DEV/"+appName+"/RBDS.*/messageEvent_out");
+			assertTrue("Should be no connections but call should not fail", port.getConnectionIds().isEmpty());
+		} catch (MultipleResourceException | ApplicationCreationException | CORBAException | ResourceNotFoundException | PortException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 	
 	@Test

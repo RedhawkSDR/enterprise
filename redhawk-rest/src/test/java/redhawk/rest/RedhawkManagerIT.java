@@ -51,6 +51,7 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 		} catch (MultipleResourceException | ApplicationCreationException | CORBAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			fail("Unable to launch applications required for the test "+e.getMessage());
 		}
 	}
 	

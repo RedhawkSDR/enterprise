@@ -31,8 +31,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
+
+import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -188,5 +192,23 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 		String applicationPath = domainName+"/"+applicationId+"/"+portName;
 		
 		return redhawkManager.getRhPortStatistics(nameServer, "applicationport", applicationPath);
+	}
+	
+	@DELETE
+	@Path("/{applicationId}/ports/{portId}/disconnect/{connectionId}")
+	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+	@ApiOperation(value = "DELETE a connection from a Port by it's connectionId")
+	public Response disconnectPortConnection(
+			@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId,
+			@ApiParam(value = "External name for port") @PathParam("portId") String portName,
+			@PathParam("connectionId") String connectionId){
+		String applicationPath = domainName+"/"+applicationId+"/"+portName;
+		
+		try {
+			redhawkManager.disconnectConnectionById(nameServer, "applicationport", applicationPath, connectionId);
+			return Response.ok("Disconnected "+connectionId).build();
+		} catch (Exception e) {
+			throw new WebApplicationException("Error disconnecting port", Response.Status.BAD_REQUEST);
+		}
 	}
 }

@@ -50,6 +50,8 @@ import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.EventChannelCreationException;
 import redhawk.driver.exceptions.EventChannelException;
 import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.exceptions.PortException;
+import redhawk.driver.exceptions.ResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.port.RedhawkPortStatistics;
@@ -113,6 +115,24 @@ public class RedhawkManager {
 			stats.addAll(rhPort.getPortStatistics());
 		}
 		return new PortStatisticsContainer(stats);
+	}
+	
+	public <T> void disconnectConnectionById(String nameServer, String type, String portLocation, String connectionId) throws Exception {
+		try {
+			Redhawk redhawk = getDriverInstance(nameServer);
+			
+			String[] locationArray = portLocation.split("/");
+			
+			T port = internalGet(redhawk, type, locationArray);
+			if(port instanceof RedhawkPort){
+				RedhawkPort rhPort = (RedhawkPort) port;
+				rhPort.disconnect(connectionId);
+			}
+		} catch (Exception e) {
+			logger.error("Error disconnecting port "+e.getMessage());
+			throw new Exception("Error disconnecting port", e);
+		}
+
 	}
 
 	public void deleteEventChannel(String nameServer, String domainName, String eventChannelName) {

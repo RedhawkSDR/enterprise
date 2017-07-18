@@ -21,10 +21,12 @@ package redhawk.rest.endpoints;
 
 import java.util.logging.Logger;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -80,5 +82,22 @@ public class RedhawkPortsResource extends RedhawkBaseResource {
     		)
     public Response getPortStatistics(@PathParam("portId") String portName) throws Exception {
         return Response.ok(redhawkManager.getRhPortStatistics(nameServer, "port", domainName + "/" + applicationId + "/" + componentId + "/" + portName)).build();
+    }
+    
+    @DELETE
+    @Path("/{portId}/disconnect/{connectionId}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @ApiOperation(value = "DELETE a connection from a Port by it's connectionId")
+    public Response disconnectPortConnection(
+    		@PathParam("portId") String portName,
+    		@PathParam("connectionId") String connectionId){
+    	String portPath = domainName + "/" + applicationId + "/" + componentId + "/" + portName;
+    	
+    	try {
+			redhawkManager.disconnectConnectionById(nameServer, "port", portPath, connectionId);
+			return Response.ok("Disconnected "+connectionId).build();
+    	} catch (Exception e) {
+			throw new WebApplicationException("Error disconnecting port", Response.Status.BAD_REQUEST);
+		}
     }
 }

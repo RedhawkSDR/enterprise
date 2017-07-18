@@ -72,8 +72,13 @@ public class RedhawkExternalPortImpl implements RedhawkPort {
 	}
 
 	@Override
-	public void disconnect() throws InvalidPort, PortException {
+	public void disconnect() throws PortException {
 		port.disconnect();
+	}
+	
+	@Override
+	public void disconnect(String connectionId) throws PortException{
+		port.disconnect(connectionId);
 	}
 
 	@Override

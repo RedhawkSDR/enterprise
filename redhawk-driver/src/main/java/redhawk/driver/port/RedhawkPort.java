@@ -60,10 +60,16 @@ public interface RedhawkPort {
     
     /**
      * Disconnect from a port. 
-     * @throws InvalidPort
      * @throws PortException
      */
-    public void disconnect() throws InvalidPort, PortException;
+    public void disconnect() throws PortException;
+    
+    /**
+     * Disconnect a specific connection from the 
+     * port.
+     * @param connectionId
+     */
+    public void disconnect(String connectionId) throws PortException;
     
     /**
      * Send data to a port. 

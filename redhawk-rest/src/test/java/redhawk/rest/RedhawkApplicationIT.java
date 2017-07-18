@@ -79,6 +79,8 @@ public class RedhawkApplicationIT extends RedhawkTestBase{
 		}
 	}
 	
+	
+	
 	@AfterClass
 	public static void cleanupManager(){
 		if(externalApplication!=null && basicApplication!=null){

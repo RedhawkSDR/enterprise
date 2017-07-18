@@ -34,9 +34,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.ResponseBuilder;
-
-import org.apache.cxf.jaxrs.impl.ResponseBuilderImpl;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -50,8 +47,6 @@ import redhawk.rest.model.ExternalPort;
 import redhawk.rest.model.ExternalPortContainer;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.FullProperty;
-import redhawk.rest.model.Port;
-import redhawk.rest.model.PortContainer;
 import redhawk.rest.model.PortStatisticsContainer;
 import redhawk.rest.model.Property;
 import redhawk.rest.model.PropertyContainer;

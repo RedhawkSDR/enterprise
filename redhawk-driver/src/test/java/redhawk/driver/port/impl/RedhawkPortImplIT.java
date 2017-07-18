@@ -153,6 +153,26 @@ public class RedhawkPortImplIT extends RedhawkTestBase{
 		} catch (PortException e) {
 			assertTrue("Expected exception thrown", true);
 		}
-		
+	}
+	
+	@Test
+	public void testGetPortConnections(){
+		RedhawkComponent comp = null;
+		try {
+			comp = driver.getComponent("REDHAWK_DEV/myApp/HardLimit.*");
+
+			RedhawkPort port = comp.getPort("dataFloat_out");
+			assertTrue("Should be atleast 1 connection id", !port.getConnectionIds().isEmpty());
+			
+			for(String connectionId : port.getConnectionIds()){
+				port.disconnect(connectionId);
+			}
+			
+			assertTrue("Should no longer be any connections", port.getConnectionIds().isEmpty());
+		} catch (ResourceNotFoundException | MultipleResourceException | CORBAException | PortException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			fail("Test failure "+e.getMessage());
+		}
 	}
 }

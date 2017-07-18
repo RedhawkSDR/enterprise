@@ -66,9 +66,9 @@ public class RedhawkApplicationIT extends RedhawkTestBase{
 	@Test
 	public void testGetApplicationPortStatistics(){ 		
 		try {
-			String applicationPath = domainName + "/" + externalApplication.getIdentifier() + "/hardLimitPort";
-			logger.info("Application path: "+applicationPath);
-			PortStatisticsContainer container = manager.getRhPortStatistics(nameServer, "applicationport", applicationPath);
+			String portPath = domainName + "/" + externalApplication.getIdentifier() + "/hardLimitPort";
+			logger.info("Application path: "+portPath);
+			PortStatisticsContainer container = manager.getRhPortStatistics(nameServer, "applicationport", portPath);
 		
 			assertNotNull(container);
 

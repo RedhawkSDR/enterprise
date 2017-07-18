@@ -62,19 +62,6 @@ public class RedhawkFileSystemIT extends RedhawkTestBase{
 	}
 	
 	@Test
-	public void testFileSystemInteractionData() throws FileNotFoundException, IOException{
-		File dataDir = new File("src/test/resources/data");
-		for(File data : dataDir.listFiles()){
-			domainFileSystem.writeFile(new FileInputStream(data), "/data/"+data.getName());
-		}
-		
-		assertEquals("Should now be two files in the directory", 2, domainFileSystem.findFilesInDirectory("data", ".*").size());
-		domainFileSystem.removeDirectory("/data");
-		
-		assertTrue("Should now be zero files in the directory", domainFileSystem.findFilesInDirectory("data", ".*").isEmpty());
-	}
-	
-	@Test
 	public void testDeviceManagerFileSystem(){
 		List<String> directories = deviceManagerFileSystem.findDirectories("/nodes");
 	

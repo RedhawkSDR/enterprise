@@ -1,6 +1,7 @@
 package redhawk.rest;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -81,7 +82,23 @@ public class RedhawkApplicationIT extends RedhawkTestBase{
 	
 	@Test
 	public void testDisconnectionPortConnection(){
-		
+		try {
+			String portPath = domainName + "/" + externalApplication.getIdentifier() + "/hardLimitPort";
+			logger.info("Port path: "+portPath);
+			ExternalPort port = manager.get(nameServer, "applicationport", portPath.split("/"));
+			
+			//At beginning of test port should be there
+			assertTrue(!port.getConnectionIds().isEmpty());
+			
+			manager.disconnectConnectionById(nameServer, "applicationport", portPath, port.getConnectionIds().get(0));
+			
+			//Should now be empty
+			port = manager.get(nameServer, "applicationport", portPath.split("/"));
+			assertTrue(port.getConnectionIds().isEmpty());
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Test failure "+e.getMessage());
+		}		
 	}
 	
 	@AfterClass

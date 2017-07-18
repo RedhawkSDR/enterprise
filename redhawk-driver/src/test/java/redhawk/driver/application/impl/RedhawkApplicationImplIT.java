@@ -128,7 +128,7 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 					new File("src/test/resources/waveforms/ExternalPropPortExample/ExternalPropPortExample.sad.xml"));
 
 			// Should be two external ports
-			assertEquals("Should be two external ports in this waveform", 3, extApplication.getPorts().size());
+			assertEquals("Should be two external ports in this waveform", 4, extApplication.getPorts().size());
 			logger.info(application.getPorts().toString());
 			// Ensure you properly get properties related to external ports
 			RedhawkExternalPortImpl externalPort = (RedhawkExternalPortImpl) extApplication.getPort("sigGenPort");

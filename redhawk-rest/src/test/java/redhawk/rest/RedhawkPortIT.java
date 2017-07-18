@@ -13,6 +13,7 @@ import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.rest.model.Port;
 import redhawk.rest.model.PortStatisticsContainer;
+import redhawk.rest.model.SRIContainer;
 import redhawk.rest.utils.TestUtils;
 import redhawk.testutils.RedhawkTestBase;
 
@@ -57,6 +58,25 @@ public class RedhawkPortIT extends RedhawkTestBase {
 		}
 
 	}
+	
+	@Test
+	public void testGetPortSRI(){
+		String portPath = domainName + "/" + app.getIdentifier() + "/HardLimit.*/dataFloat_in";
+		
+		try {
+			app.start();
+			Thread.sleep(1000l);
+			SRIContainer container = manager.getSRI(nameServer, "port", portPath);
+			
+			assertNotNull(container);
+			String xml = TestUtils.getStringFromJAXB(container);
+			logger.info(xml);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Test failure "+e.getMessage());
+		}
+
+	}
 
 	@Test
 	public void testDisconnectPort() {
@@ -77,4 +97,6 @@ public class RedhawkPortIT extends RedhawkTestBase {
 			fail("Failed test "+ex.getMessage());
 		}
 	}
+	
+	
 }

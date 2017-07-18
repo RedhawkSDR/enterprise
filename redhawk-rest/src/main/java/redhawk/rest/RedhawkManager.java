@@ -55,6 +55,7 @@ import redhawk.driver.exceptions.ResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.port.RedhawkPortStatistics;
+import redhawk.driver.port.RedhawkStreamSRI;
 import redhawk.driver.properties.RedhawkProperty;
 import redhawk.driver.properties.RedhawkSimple;
 import redhawk.driver.properties.RedhawkSimpleSequence;
@@ -68,6 +69,7 @@ import redhawk.rest.model.FullProperty;
 import redhawk.rest.model.PortStatisticsContainer;
 import redhawk.rest.model.Property;
 import redhawk.rest.model.PropertyContainer;
+import redhawk.rest.model.SRIContainer;
 import redhawk.rest.model.TunerMode;
 import redhawk.rest.model.WaveformInfo;
 
@@ -117,6 +119,21 @@ public class RedhawkManager {
 		return new PortStatisticsContainer(stats);
 	}
 	
+	public <T> SRIContainer getSRI(String nameServer, String type, String location)
+			throws Exception {
+		Redhawk redhawk = getDriverInstance(nameServer);
+		String[] locationArray = location.split("/");
+		T port = internalGet(redhawk, type, locationArray);
+		List<RedhawkStreamSRI> sri = new ArrayList<>();
+
+		if (port instanceof RedhawkPort) {
+			RedhawkPort rhPort = (RedhawkPort) port;
+			sri.addAll(rhPort.getActiveSRIs());
+		}
+		
+		return new SRIContainer(sri);
+	}
+	
 	public <T> void disconnectConnectionById(String nameServer, String type, String portLocation, String connectionId) throws Exception {
 		try {
 			Redhawk redhawk = getDriverInstance(nameServer);
@@ -132,7 +149,6 @@ public class RedhawkManager {
 			logger.error("Error disconnecting port "+e.getMessage());
 			throw new Exception("Error disconnecting port", e);
 		}
-
 	}
 
 	public void deleteEventChannel(String nameServer, String domainName, String eventChannelName) {

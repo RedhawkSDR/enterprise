@@ -19,6 +19,7 @@ import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.rest.model.ExternalPort;
 import redhawk.rest.model.PortStatisticsContainer;
+import redhawk.rest.model.SRIContainer;
 import redhawk.rest.utils.TestUtils;
 import redhawk.testutils.RedhawkTestBase;
 
@@ -69,6 +70,25 @@ public class RedhawkApplicationIT extends RedhawkTestBase{
 			String portPath = domainName + "/" + externalApplication.getIdentifier() + "/hardLimitPort";
 			logger.info("Application path: "+portPath);
 			PortStatisticsContainer container = manager.getRhPortStatistics(nameServer, "applicationport", portPath);
+		
+			assertNotNull(container);
+
+			String xml = TestUtils.getStringFromJAXB(container);
+			logger.info(xml);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Test failure "+e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testGetPortSRI(){ 		
+		try {
+			String portPath = domainName + "/" + externalApplication.getIdentifier() + "/hardLimitPort_in";
+			externalApplication.start();
+			Thread.sleep(1000l);
+			logger.info("Application path: "+portPath);
+			SRIContainer container = manager.getSRI(nameServer, "applicationport", portPath);
 		
 			assertNotNull(container);
 

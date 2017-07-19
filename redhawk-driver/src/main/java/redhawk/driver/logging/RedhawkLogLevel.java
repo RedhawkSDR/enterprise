@@ -1,4 +1,4 @@
-package redhawk.driver;
+package redhawk.driver.logging;
 
 import java.util.HashMap;
 import java.util.Map;

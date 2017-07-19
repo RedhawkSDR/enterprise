@@ -19,11 +19,19 @@
  */
 package redhawk.driver.port;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import BULKIO.ProvidesPortStatisticsProvider;
+import BULKIO.ProvidesPortStatisticsProviderHelper;
+import BULKIO.StreamSRI;
+import BULKIO.updateSRI;
+import BULKIO.updateSRIHelper;
+import ExtendedCF.QueryablePort;
+import ExtendedCF.QueryablePortHelper;
+import ExtendedCF.UsesConnection;
 import redhawk.driver.bulkio.Packet;
 import redhawk.driver.exceptions.PortException;
-import CF.PortPackage.InvalidPort;
 
 public interface RedhawkPort {
 	/**
@@ -51,10 +59,16 @@ public interface RedhawkPort {
     
     /**
      * Disconnect from a port. 
-     * @throws InvalidPort
      * @throws PortException
      */
-    public void disconnect() throws InvalidPort, PortException;
+    public void disconnect() throws PortException;
+    
+    /**
+     * Disconnect a specific connection from the 
+     * port.
+     * @param connectionId
+     */
+    public void disconnect(String connectionId) throws PortException;
     
     /**
      * Send data to a port. 
@@ -85,8 +99,69 @@ public interface RedhawkPort {
 	public String getName();
 	
 	/**
+	 * 
+	 * @return Active SRIs
+	 */
+	default List<RedhawkStreamSRI> getActiveSRIs() throws PortException{
+		String portType = this.getType();
+		List<RedhawkStreamSRI> rhSRI = new ArrayList<>(); 
+		
+		if(portType.equalsIgnoreCase("provides") && this.getCorbaObject() instanceof updateSRI){
+			updateSRI sris = updateSRIHelper.narrow(this.getCorbaObject());
+			//Do this with Java 8 stuff at some point
+			for(StreamSRI sri : sris.activeSRIs())
+				rhSRI.add(new RedhawkStreamSRI(sri));
+			
+			return rhSRI;
+		}else{
+			throw new PortException("Uses Port does not support activeSRIs method");
+		}
+	}
+	
+	/**
 	 * @return CORBA object representing port. 
 	 */
 	public org.omg.CORBA.Object getCorbaObject();
-
+	
+	/**
+	 *  Returns the State of the Port. This enum maps to BULKIO.PortUsageType
+	 * @return
+	 * @throws UnsupportedOperationException
+	 * 	Occurs when you call this method on a Uses Port.
+	 */
+	default PortState getPortState() throws PortException{
+		String portType = this.getType();
+		
+		//Only Provides ports have state
+		if(portType.equalsIgnoreCase("provides") && this.getCorbaObject() instanceof ProvidesPortStatisticsProvider){
+			ProvidesPortStatisticsProvider provider = ProvidesPortStatisticsProviderHelper.narrow(this.getCorbaObject());
+			return PortState.reverseLookup(provider.state().value());
+		}else{
+			throw new PortException("Uses Port do not support state method.");
+		}
+	}
+	
+	/**
+	 * Returns the connectionIds for a uses port
+	 * @return
+	 */
+	default List<String> getConnectionIds() throws PortException{
+		String portType = this.getType();
+		List<String> connectionIds = new ArrayList<>(); 
+		
+		//Only Uses ports have connections
+		if(portType.equalsIgnoreCase("uses")){
+			if(this.getCorbaObject() instanceof QueryablePort){
+				QueryablePort qPort = QueryablePortHelper.narrow(this.getCorbaObject());
+				
+				for(UsesConnection connection : qPort.connections()){
+					connectionIds.add(connection.connectionId);
+				}
+			}
+			
+			return connectionIds;
+		}else{
+			throw new PortException("Provides Port does not support connections() method.");
+		}
+	}
 }

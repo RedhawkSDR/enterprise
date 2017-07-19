@@ -28,6 +28,7 @@ import redhawk.driver.eventchannel.RedhawkEventChannel;
 import redhawk.driver.eventchannel.RedhawkEventChannelManager;
 import redhawk.driver.eventchannel.impl.RedhawkEventRegistrant;
 import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.exceptions.PortException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.port.impl.RedhawkExternalPortImpl;
@@ -333,7 +334,7 @@ public class DomainConverter {
 			return list.stream().map(obj -> convertPort((RedhawkPort) obj)).collect(Collectors.toList());
 		}
 		case "applicationport": {
-			return list.stream().map(obj -> convertExternalPort((RedhawkExternalPortImpl) obj)).collect(Collectors.toList());
+			return list.stream().map(obj -> convertExternalPort((RedhawkPort) obj)).collect(Collectors.toList());
 		}
 		case "devicemanager": {
 			return list.stream().map(obj -> convertDeviceManager((RedhawkDeviceManager) obj, fetchMode))
@@ -514,19 +515,34 @@ public class DomainConverter {
 		p.setName(obj.getName());
 		p.setRepId(obj.getRepId());
 		p.setType(obj.getType());
+		
+		if(obj.getType().equalsIgnoreCase("provides")){
+			try {
+				p.setState(obj.getPortState().toString());
+			} catch (PortException e) {
+				logger.fine("Unable to get state of port "+e.getMessage());
+			}
+		}
+		
+		if(obj.getType().equalsIgnoreCase("uses")){
+			try {
+				p.setConnectionIds(obj.getConnectionIds());
+			} catch (PortException e) {
+				logger.fine("Unable to get connectionIds of port "+e.getMessage());
+			}
+		}
+
 		return p;
 	}
 	
 	//TODO: Clean this up!!!
 	private ExternalPort convertExternalPort(RedhawkPort obj){
-		return this.convertExternalPort((RedhawkExternalPortImpl)obj);
+		Port port = this.convertPort(obj);
+		return this.convertExternalPort((RedhawkExternalPortImpl)obj, port);
 	}
 	
-	private ExternalPort convertExternalPort(RedhawkExternalPortImpl obj){
-		ExternalPort p = new ExternalPort(); 
-		p.setName(obj.getName());
-		p.setRepId(obj.getRepId());
-		p.setType(obj.getType());
+	private ExternalPort convertExternalPort(RedhawkExternalPortImpl obj, Port port){
+		ExternalPort p = new ExternalPort(port); 
 		p.setExternalname(obj.getExternalName());
 		p.setComponentRefId(obj.getComponentReferenceId());;
 		p.setDescription(obj.getDescription());

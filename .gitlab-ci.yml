@@ -47,6 +47,7 @@ variables:
 #Common commands for the compose jobs
 .compose-test-common: &compose-test-common
   script:
+    - docker-compose pull
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} up --force-recreate -d redhawk
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk yum install -y redhawk-basic-components redhawk-basic-waveforms
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} up --exit-code-from rei

@@ -29,7 +29,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.junit.Test;
 
-import redhawk.driver.RedhawkLogLevel;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.device.RedhawkDevice;

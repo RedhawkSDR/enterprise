@@ -122,12 +122,10 @@
 			</activation>
 			<modules>
 				<module>redhawk-driver</module>
-				<!--
 				<module>redhawk-connector</module>
 				<module>redhawk-rest</module>
 				<module>redhawk-websocket</module>
 				<module>redhawk-camel</module>
-    			-->
     			<module>testing</module>				
 			</modules>
 			<build>

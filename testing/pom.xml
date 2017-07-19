@@ -19,6 +19,21 @@
 			<artifactId>redhawk-driver</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>redhawk-rest</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>redhawk-websocket</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.parent.groupId}</groupId>
+			<artifactId>redhawk-camel</artifactId>
+			<version>${project.version}</version>
+		</dependency>				
 	</dependencies>
 	<build>
 		<plugins>

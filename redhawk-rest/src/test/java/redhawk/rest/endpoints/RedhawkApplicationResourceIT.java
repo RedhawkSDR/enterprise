@@ -63,6 +63,19 @@ public class RedhawkApplicationResourceIT extends RedhawkResourceTestBase{
 	}
 	
 	@Test
+	public void testGetApplicationsStress() throws InterruptedException{
+		/*
+		 * Stress test the applications.json endpoint since GUI is giving you 
+		 * NPE that seems to work just fine on first hit. 
+		 */
+		for(int i=0; i<10; i++){
+			WebTarget target = client.target(baseURI+"/"+domainName+"/applications");
+			Response response = target.request().accept(MediaType.APPLICATION_XML).get();
+			assertEquals(200, response.getStatus());	
+		}
+	}
+	
+	@Test
 	public void testGetApplication(){
 		WebTarget target = client.target(baseURI+"/"+domainName+"/applications/"+applicationName);
 		Response response = target.request().accept(MediaType.APPLICATION_XML).get();

@@ -50,6 +50,7 @@ import redhawk.rest.model.FullProperty;
 import redhawk.rest.model.PortStatisticsContainer;
 import redhawk.rest.model.Property;
 import redhawk.rest.model.PropertyContainer;
+import redhawk.rest.model.SRIContainer;
 import redhawk.rest.model.WaveformInfo;
 
 @Path("/{nameserver}/domains/{domain}/applications")
@@ -187,6 +188,18 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 		String applicationPath = domainName+"/"+applicationId+"/"+portName;
 		
 		return redhawkManager.getRhPortStatistics(nameServer, "applicationport", applicationPath);
+	}
+	
+	@GET
+	@Path("/{applicationId}/ports/{portId}/sri")
+	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+	@ApiOperation(value = "GET Application port statistics")
+	public SRIContainer getApplicationSRI(
+			@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId,
+			@ApiParam(value = "External name for port") @PathParam("portId") String portName) throws Exception {
+		String applicationPath = domainName+"/"+applicationId+"/"+portName;
+		
+		return redhawkManager.getSRI(nameServer, "applicationport", applicationPath);
 	}
 	
 	@DELETE

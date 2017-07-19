@@ -35,6 +35,8 @@ import io.swagger.annotations.ApiOperation;
 import redhawk.rest.exceptions.ResourceNotFound;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.PortContainer;
+import redhawk.rest.model.PortStatisticsContainer;
+import redhawk.rest.model.SRIContainer;
 
 @Path("/{nameserver}/domains/{domain}/applications/{applicationId}/components/{componentId}/ports")
 @Api(value="/{nameserver}/domains/{domain}/applications/{applicationId}/components/{componentId}/ports")
@@ -80,8 +82,18 @@ public class RedhawkPortsResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET REDHAWK Component Port Statistics"
     		)
-    public Response getPortStatistics(@PathParam("portId") String portName) throws Exception {
-        return Response.ok(redhawkManager.getRhPortStatistics(nameServer, "port", domainName + "/" + applicationId + "/" + componentId + "/" + portName)).build();
+    public PortStatisticsContainer getPortStatistics(@PathParam("portId") String portName) throws Exception {
+        return redhawkManager.getRhPortStatistics(nameServer, "port", domainName + "/" + applicationId + "/" + componentId + "/" + portName);
+    }
+    
+    @GET
+    @Path("/{portId}/sri")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @ApiOperation(
+    		value="GET REDHAWK Component Port Statistics"
+    		)
+    public SRIContainer getActiveSRIs(@PathParam("portId") String portName) throws Exception {
+        return redhawkManager.getSRI(nameServer, "port", domainName + "/" + applicationId + "/" + componentId + "/" + portName);
     }
     
     @DELETE

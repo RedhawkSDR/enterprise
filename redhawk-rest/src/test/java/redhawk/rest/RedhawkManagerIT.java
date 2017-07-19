@@ -2,16 +2,12 @@ package redhawk.rest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.util.List;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -24,6 +20,7 @@ import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.rest.model.Application;
+import redhawk.rest.model.ApplicationContainer;
 import redhawk.rest.model.Domain;
 import redhawk.rest.model.ExternalPort;
 import redhawk.rest.model.FetchMode;
@@ -39,11 +36,15 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 	private static String applicationName = "ExternalPropsApp";
 	
 	private static String noExternalPropsPortsApp = "basicApp";
+	
+	private static String nameServer;
 
 	@BeforeClass
 	public static void setup(){
 		//Launch app 
 		try {
+			nameServer = domainHost+":"+domainPort;
+			
 			externalApplication = driver.getDomain().createApplication(applicationName, 
 					new File("../redhawk-driver/src/test/resources/waveforms/ExternalPropPortExample/ExternalPropPortExample.sad.xml"));
 			basicApplication = driver.getDomain().createApplication(noExternalPropsPortsApp, 
@@ -123,6 +124,20 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 			e.printStackTrace();
 			// TODO Auto-generated catch block
 			fail("FAILED!!!!"+e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testGetAll(){
+		try {
+			List<Application> applications = manager.getAll(nameServer, "application", domainName, FetchMode.EAGER);
+			
+			assertTrue("Applications should have data", !applications.isEmpty());
+		
+			String xml = TestUtils.getStringFromJAXB(new ApplicationContainer(applications));
+			logger.info(xml);
+		} catch (Exception e) {
+			fail("Test failure "+e.getLocalizedMessage());
 		}
 	}
 	

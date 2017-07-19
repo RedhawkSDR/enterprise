@@ -23,13 +23,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import BULKIO.ProvidesPortStatisticsProvider;
+import BULKIO.ProvidesPortStatisticsProviderHelper;
 import BULKIO.StreamSRI;
-import BULKIO.UsesPortStatisticsProvider;
-import BULKIO.UsesPortStatisticsProviderHelper;
 import BULKIO.updateSRI;
 import BULKIO.updateSRIHelper;
-import BULKIO.ProvidesPortStatisticsProviderHelper;
-import CF.PortPackage.InvalidPort;
 import ExtendedCF.QueryablePort;
 import ExtendedCF.QueryablePortHelper;
 import ExtendedCF.UsesConnection;

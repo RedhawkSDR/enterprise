@@ -143,7 +143,7 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 	
 	private void externalApplicationAsserts(Application application){
 		assertEquals("Properties should be here", true, !application.getProperties().isEmpty());
-		assertEquals("Should be three external ports", 3, application.getExternalPorts().size());
+		assertEquals("Should be four external ports", 4, application.getExternalPorts().size());
 	
 		//Make sure external ports contain the externalname
 		List<ExternalPort> ports = application.getExternalPorts();

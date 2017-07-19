@@ -157,9 +157,8 @@ public class RedhawkApplicationResourceIT extends RedhawkResourceTestBase{
 				}				
 			}
 		}
-
 	}
-	
+
 	@Test
 	@Ignore("Temporarily ignore until you figure out why provider is not working in Integration Tests w/ JSON but works on deployed asset")
 	public void testLaunchAndReleaseApplicationJSON(){

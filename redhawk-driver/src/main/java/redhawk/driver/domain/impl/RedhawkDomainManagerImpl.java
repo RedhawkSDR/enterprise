@@ -43,7 +43,6 @@ import org.omg.CORBA.TRANSIENT;
 import org.xml.sax.SAXException;
 
 import redhawk.driver.RedhawkDriver;
-import redhawk.driver.RedhawkLogLevel;
 import redhawk.driver.RedhawkUtils;
 import redhawk.driver.allocationmanager.RedhawkAllocationManager;
 import redhawk.driver.allocationmanager.impl.RedhawkAllocationManagerImpl;
@@ -69,6 +68,7 @@ import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.driver.logging.RedhawkLogLevel;
 import redhawk.driver.xml.ScaXmlProcessor;
 import redhawk.driver.xml.model.sca.dmd.Domainmanagerconfiguration;
 import redhawk.driver.xml.model.sca.prf.Properties;

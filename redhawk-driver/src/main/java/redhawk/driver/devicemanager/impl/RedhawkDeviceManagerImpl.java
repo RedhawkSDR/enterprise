@@ -47,7 +47,6 @@ import CF.DeviceManagerHelper;
 import CF.InvalidObjectReference;
 import CF.Resource;
 import CF.ResourceHelper;
-import redhawk.driver.RedhawkLogLevel;
 import redhawk.driver.base.impl.QueryableResourceImpl;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.device.impl.RedhawkDeviceImpl;
@@ -59,6 +58,7 @@ import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.exceptions.ServiceRegistrationException;
+import redhawk.driver.logging.RedhawkLogLevel;
 import redhawk.driver.properties.RedhawkSimple;
 
 public class RedhawkDeviceManagerImpl extends QueryableResourceImpl<DeviceManager> implements RedhawkDeviceManager  {

@@ -19,22 +19,16 @@
  */
 package redhawk.driver.application.impl;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import redhawk.driver.RedhawkDriver;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.exceptions.ApplicationCreationException;
@@ -42,11 +36,11 @@ import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.ApplicationStartException;
 import redhawk.driver.exceptions.ApplicationStopException;
 import redhawk.driver.exceptions.CORBAException;
-import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.driver.port.RedhawkPort;
+import redhawk.driver.port.RedhawkPortStatistics;
 import redhawk.driver.port.impl.RedhawkExternalPortImpl;
-import redhawk.driver.properties.RedhawkProperty;
 import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkApplicationImplIT extends RedhawkTestBase {
@@ -123,7 +117,7 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 
 	// Test retrieving external ports
 	@Test
-	public void testGetExternalPorts() throws ResourceNotFoundException, ApplicationCreationException, CORBAException,
+	public void testGetExternalPortsAndStats() throws ResourceNotFoundException, ApplicationCreationException, CORBAException,
 			MultipleResourceException, IOException {
 		RedhawkApplication extApplication = null; 
 		try {
@@ -134,13 +128,26 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 					new File("src/test/resources/waveforms/ExternalPropPortExample/ExternalPropPortExample.sad.xml"));
 
 			// Should be two external ports
-			assertEquals("Should be two external ports in this waveform", 3, extApplication.getPorts().size());
+			assertEquals("Should be two external ports in this waveform", 4, extApplication.getPorts().size());
 			logger.info(application.getPorts().toString());
 			// Ensure you properly get properties related to external ports
 			RedhawkExternalPortImpl externalPort = (RedhawkExternalPortImpl) extApplication.getPort("sigGenPort");
 
 			assertNotNull(externalPort);
 			assertNotNull(externalPort.getDescription());
+			
+			/*
+			 * Test retrieving each ports stats
+			 */
+			for(RedhawkPort port : extApplication.getPorts()){
+				assertNotNull(port.getPortStatistics());
+			}
+			
+			/*
+			 * Test retrieving a ports stats
+			 */
+			List<RedhawkPortStatistics> stats = extApplication.getPort("hardLimitPort").getPortStatistics();
+			System.out.println(stats);
 		} finally {
 			if (extApplication != null) {
 				try {

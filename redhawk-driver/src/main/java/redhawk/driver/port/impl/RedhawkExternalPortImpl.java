@@ -31,6 +31,10 @@ public class RedhawkExternalPortImpl implements RedhawkPort {
 	
 	private String componentReferenceId; 
 	
+	public RedhawkExternalPortImpl(RedhawkPortImpl impl){
+		this.port = impl;
+	}
+	
 	public RedhawkExternalPortImpl(RedhawkPortImpl impl, String description, String externalName, String componentRefId){
 		this.port = impl; 
 		this.description = description;
@@ -68,8 +72,13 @@ public class RedhawkExternalPortImpl implements RedhawkPort {
 	}
 
 	@Override
-	public void disconnect() throws InvalidPort, PortException {
+	public void disconnect() throws PortException {
 		port.disconnect();
+	}
+	
+	@Override
+	public void disconnect(String connectionId) throws PortException{
+		port.disconnect(connectionId);
 	}
 
 	@Override
@@ -116,10 +125,6 @@ public class RedhawkExternalPortImpl implements RedhawkPort {
 
 	public void setComponentReferenceId(String componentReferenceId) {
 		this.componentReferenceId = componentReferenceId;
-	}
-
-	public RedhawkExternalPortImpl(RedhawkPortImpl impl){
-		this.port = impl;
 	}
 	
 	@Override

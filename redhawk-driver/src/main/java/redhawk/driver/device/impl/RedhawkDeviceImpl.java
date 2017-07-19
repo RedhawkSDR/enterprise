@@ -39,13 +39,13 @@ import CF.DevicePackage.InvalidState;
 import CF.LifeCyclePackage.ReleaseError;
 import CF.ResourcePackage.StartError;
 import CF.ResourcePackage.StopError;
-import redhawk.driver.RedhawkLogLevel;
 import redhawk.driver.RedhawkUtils;
 import redhawk.driver.base.impl.PortBackedObjectImpl;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.driver.logging.RedhawkLogLevel;
 import redhawk.driver.properties.RedhawkStruct;
 import redhawk.driver.properties.RedhawkStructSequence;
 

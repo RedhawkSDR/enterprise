@@ -37,9 +37,9 @@
 		<rpm.group.name>REDHAWK Enterprise Integration</rpm.group.name>
 		<!-- Default distribution Management properties so build works on all machines -->
 		<distributionManagement.repository.id>Releases</distributionManagement.repository.id>
-		<distributionManagement.repository.url>${project.basedir}/repo/releases</distributionManagement.repository.url>
+		<distributionManagement.repository.url>file://${project.basedir}/repo/releases</distributionManagement.repository.url>
 		<distributionManagement.snapshotRepository.id>Snapshots</distributionManagement.snapshotRepository.id>
-		<distributionManagement.snapshotRepository.url>${project.basedir}/repo/snapshots</distributionManagement.snapshotRepository.url>
+		<distributionManagement.snapshotRepository.url>file://${project.basedir}/repo/snapshots</distributionManagement.snapshotRepository.url>
 	</properties>
 
 	<dependencyManagement>
@@ -255,7 +255,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.7.8</version>
+				<version>0.7.9</version>
 				<executions>
 					<execution>
 						<id>default-prepare-agent</id>

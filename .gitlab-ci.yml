@@ -53,6 +53,8 @@ variables:
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} up --exit-code-from rei
     - find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -
     - find */target -name "*.exec" | tar -cvf jacoco-exec.tar.gz --files-from -
+    - find */target/classes | tar cvf jacoco-classes.tar --files-from -
+    - find redhawk-*/src/main/java | tar cvf jacoco-sources.tar --files-from -
     - tar -C docs/target -czvf site.tar.gz site
   after_script:
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} down

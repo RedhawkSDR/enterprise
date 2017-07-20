@@ -1,4 +1,0 @@
-= REDHAWK Enterprise Integration Testing
-
-Mainly using this module to be able to aggregate the jacoco or any other project 
-reports that are generated. 

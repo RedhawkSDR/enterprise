@@ -53,7 +53,7 @@ variables:
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} up --exit-code-from rei
     - find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -
     - find */target -name "*.exec" | tar -czvf jacoco-exec.tar.gz --files-from -
-    - tar -cvf site.tar.gz docs/target/site
+    - tar -C docs/target -cvf site.tar.gz site
   after_script:
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} down
   artifacts:

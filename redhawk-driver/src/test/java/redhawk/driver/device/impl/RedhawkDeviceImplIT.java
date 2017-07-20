@@ -39,7 +39,7 @@ import redhawk.testutils.RedhawkDeviceTestBase;
  * Test relies on the SimulatorNode in src/test/resources being available from the DeviceManager on your domain. 
  *TODO: Make this work with mvn clean install -P localIT
  */
-public class RedhawkDeviceImplMT extends RedhawkDeviceTestBase {
+public class RedhawkDeviceImplIT extends RedhawkDeviceTestBase {
 	@Test
 	public void testAllocate() throws MultipleResourceException, CORBAException, ResourceNotFoundException {
 		//Get Device Manager

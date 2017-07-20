@@ -60,7 +60,7 @@ variables:
     name: $CI_JOB_NAME
     paths:
       - output.tar
-      - jacoco.xml
+      - jacoco-exec.tar.gz
       - site.tar.gz
     expire_in: 3 days
 

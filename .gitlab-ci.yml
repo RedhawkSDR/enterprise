@@ -63,6 +63,8 @@ variables:
     paths:
       - output.tar
       - jacoco-exec.tar.gz
+      - jacoco-classes.tar
+      - jacoco-sources.tar
       #- site.tar.gz
     expire_in: 3 days
 

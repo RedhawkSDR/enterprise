@@ -64,11 +64,9 @@
 							<excludes>
 								<!-- Excluding generated classes from xsd -->
 								<exclude>redhawk/driver/xml/**</exclude>
-								<!-- 
-									Excluding jsr356 classes. This is good code to have 
-									still because we should look into implementing jsr356 so 
-									the websocket is more generic and not jetty based.  
-								-->
+								<!-- Excluding jsr356 classes. This is good code to have still because 
+									we should look into implementing jsr356 so the websocket is more generic 
+									and not jetty based. -->
 								<exclude>redhawk/driver/xml/**</exclude>
 							</excludes>
 						</configuration>
@@ -84,6 +82,49 @@
 					</plugin>
 				</plugins>
 			</build>
+			<reporting>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-project-info-reports-plugin</artifactId>
+						<version>2.6</version>
+						<reportSets>
+							<reportSet>
+								<reports><!-- select reports -->
+									<report>index</report>
+								</reports>
+							</reportSet>
+						</reportSets>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-report-plugin</artifactId>
+						<version>2.20</version>
+						<configuration>
+							<reportsDirectories>
+								<reportsDirectory>${project.parent.basedir}/redhawk-driver/target/surefire-reports</reportsDirectory>
+								<reportsDirectory>${project.parent.basedir}/redhawk-driver/target/failsafe-reports</reportsDirectory>
+								<reportsDirectory>${project.parent.basedir}/redhawk-rest/target/failsafe-reports</reportsDirectory>
+								<reportsDirectory>${project.parent.basedir}/redhawk-websocket/target/surefire-reports</reportsDirectory>
+								<reportsDirectory>${project.parent.basedir}/redhawk-websocket/target/failsafe-reports</reportsDirectory>
+								<reportsDirectory>${project.parent.basedir}/redhawk-camel/target/failsafe-reports</reportsDirectory>
+							</reportsDirectories>
+						</configuration>
+						<reportSets>
+							<reportSet>
+								<reports>
+									<report>report-only</report>
+								</reports>
+							</reportSet>
+						</reportSets>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jxr-plugin</artifactId>
+						<version>2.1</version>
+					</plugin>
+				</plugins>
+			</reporting>
 		</profile>
 		<profile>
 			<id>docs</id>

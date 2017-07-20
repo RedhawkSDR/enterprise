@@ -142,8 +142,8 @@
 								</goals>
 							</execution>
 						</executions>
-					</plugin>
-				</plugins>
+					</plugin>					
+				</plugins>				
 			</build>
 		</profile>
 		<profile>

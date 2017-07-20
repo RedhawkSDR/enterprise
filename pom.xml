@@ -126,7 +126,7 @@
 				<module>redhawk-rest</module>
 				<module>redhawk-websocket</module>
 				<module>redhawk-camel</module>
-    			<module>testing</module>				
+				<module>docs</module>
 			</modules>
 			<build>
 				<plugins>

@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -29,15 +30,23 @@
 			</resource>
 		</resources>
 		<plugins>
-			<!-- Having issues building with 1.8 due to JAVADOC errors adding this 
-				for now -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<!-- Excluding generated classes from xsd -->
+						<exclude>redhawk/driver/xml/**</exclude>
+					</excludes>
+				</configuration>
+			</plugin>	
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.10.4</version>
 				<configuration>
 					<failOnError>false</failOnError>
-				         <additionalparam>-Xdoclint:none</additionalparam>
+					<additionalparam>-Xdoclint:none</additionalparam>
 				</configuration>
 				<executions>
 					<execution>
@@ -132,8 +141,8 @@
 						</goals>
 						<configuration>
 							<includes>
-         						<include>**/testutils/**</include>
-        					</includes>
+								<include>**/testutils/**</include>
+							</includes>
 						</configuration>
 					</execution>
 				</executions>
@@ -358,7 +367,7 @@
 											<includes>
 												<include>RedhawkEventChannelIT.java</include>
 											</includes>
-										</resource>																																										
+										</resource>
 										<resource>
 											<directory>src/main/asciidoc</directory>
 											<filtering>true</filtering>
@@ -368,13 +377,6 @@
 							</execution>
 						</executions>
 					</plugin>
-					<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-site-plugin</artifactId> 
-						<configuration> <asciidoc> <baseDir>${project.basedir}</baseDir> <sourceDir>src/test/java</sourceDir> 
-						<attributes> <source-highlighter>coderay</source-highlighter> <coderay-css>style</coderay-css> 
-						</attributes> </asciidoc> </configuration> <dependencies> <dependency> <groupId>org.apache.maven.doxia</groupId> 
-						<artifactId>doxia-module-markdown</artifactId> <version>1.7</version> </dependency> 
-						<dependency> <groupId>org.asciidoctor</groupId> <artifactId>asciidoctor-maven-plugin</artifactId> 
-						<version>1.5.3</version> </dependency> </dependencies> </plugin> -->
 					<plugin>
 						<groupId>org.asciidoctor</groupId>
 						<artifactId>asciidoctor-maven-plugin</artifactId>
@@ -449,16 +451,6 @@
 					</plugin>
 				</plugins>
 			</build>
-			<!-- <reporting> <plugins> <plugin> <groupId>org.apache.maven.plugins</groupId> 
-				<artifactId>maven-project-info-reports-plugin</artifactId> <version>2.9</version> 
-				<reportSets> <reportSet> <reports> <report>dependency-info</report> <report>summary</report> 
-				</reports> </reportSet> </reportSets> </plugin> <plugin> <groupId>org.apache.maven.plugins</groupId> 
-				<artifactId>maven-javadoc-plugin</artifactId> <version>2.10.4</version> <configuration> 
-				<failOnError>false</failOnError> </configuration> <reportSets> <reportSet> 
-				<id>default</id> <reports> <report>javadoc</report> </reports> </reportSet> 
-				</reportSets> </plugin> <plugin> <groupId>org.jacoco</groupId> <artifactId>jacoco-maven-plugin</artifactId> 
-				<reportSets> <reportSet> <reports> <report>report</report> </reports> </reportSet> 
-				</reportSets> </plugin> </plugins> </reporting> -->
 		</profile>
 		<profile>
 			<id>jacorb-tests</id>

@@ -29,6 +29,11 @@ public class RedhawkDeviceTestBase extends RedhawkTestBase{
 	@BeforeClass
 	public static void setupDevice(){
 		try{
+			System.out.println("======================================");
+			for(RedhawkDeviceManager devMgr : driver.getDomain(domainName).getDeviceManagers()){
+				System.out.println("DevMgr: "+devMgr);
+			}
+			System.out.println("======================================");
 			deviceManager = driver.getDeviceManager("REDHAWK_DEV/Simulator.*");
 			devMgrStartedExternally = true;
 		}catch(Exception ex){

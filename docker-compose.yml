@@ -12,3 +12,4 @@ services:
       - ${m2cache}/repository:/root/.m2/repository:rw
     working_dir: /usr/src/app
     command: bash -c "mvn -P CFDependencies clean install -B -U && mvn clean install site -PlocalIT -DfailIfNoTests=false -DdomainHost=redhawk_${dist}_${arch}_${CI_JOB_ID} -DtestProps=`pwd`/docker_test.properties"
+#    command: bash -c "mvn -P CFDependencies clean install -B -U && mvn clean install site -PlocalIT -DfailIfNoTests=false -DdomainHost=redhawk_${dist}_${arch}_${CI_JOB_ID} -DtestProps=`pwd`/docker_test.properties"

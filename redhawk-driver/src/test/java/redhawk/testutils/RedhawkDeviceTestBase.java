@@ -34,7 +34,7 @@ public class RedhawkDeviceTestBase extends RedhawkTestBase{
 				System.out.println("DevMgr: "+devMgr);
 			}
 			System.out.println("======================================");
-			deviceManager = driver.getDeviceManager("REDHAWK_DEV/Simulator.*");
+			deviceManager = driver.getDeviceManager(domainName+"/Simulator.*");
 			devMgrStartedExternally = true;
 		}catch(Exception ex){
 		}

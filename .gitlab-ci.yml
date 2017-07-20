@@ -52,8 +52,17 @@ variables:
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk yum install -y redhawk-basic-components redhawk-basic-waveforms
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} up --exit-code-from rei
     - find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -
+    - find */target -name "*.exec" | tar -cvf jacoco-exec.tar.gz --files-from -
+    - tar -C docs/target -czvf site.tar.gz site
   after_script:
-    - docker-compose down
+    - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} down
+  artifacts:
+    name: $CI_JOB_NAME
+    paths:
+      - output.tar
+      - jacoco-exec.tar.gz
+      - site.tar.gz
+    expire_in: 3 days
 
 build:
   <<: *common
@@ -86,11 +95,6 @@ test-el7-x86_64:
     redhawk_version: 2.1-nightly
     dist: el7
     arch: x86_64
-  artifacts:
-    name: $CI_JOB_NAME
-    paths:
-      - output.tar
-    expire_in: 3 days
 
 test-el6-x86_64:
   <<: *compose-test-common
@@ -103,11 +107,6 @@ test-el6-x86_64:
     redhawk_version: 2.1-nightly
     dist: el6
     arch: x86_64
-  artifacts:
-    name: $CI_JOB_NAME
-    paths:
-      - output.tar
-    expire_in: 3 days
 
 test-el6-i386:
   <<: *compose-test-common
@@ -120,11 +119,6 @@ test-el6-i386:
     redhawk_version: 2.1-nightly
     dist: el6
     arch: i686
-  artifacts:
-    name: $CI_JOB_NAME
-    paths:
-      - output.tar
-    expire_in: 3 days
 
 #Trigger a Jenkins job to aggregate artifacts there
 deploy:

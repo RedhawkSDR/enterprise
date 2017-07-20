@@ -1,0 +1,3 @@
+= Redhawk Enterprise Integration Docs
+
+Module for aggregating the Manual and any project reports. 

@@ -53,7 +53,7 @@ variables:
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} up --exit-code-from rei
     - find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -
     - find */target -name "*.exec" | tar -czvf jacoco-exec.tar.gz --files-from -
-    - tar -C docs/target -cvf site.tar.gz site
+    - tar -C docs/target -czvf site.tar.gz site
   after_script:
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} down
   artifacts:
@@ -70,6 +70,8 @@ build:
     - mvn -Djava.io.tmpdir=./ deploy -P docs,jaxb-generation,default -B -U -Drelease=0.$CI_PIPELINE_ID
   only:
     - branches
+  except:
+    - RELENG-665
 
 build-release:
   <<: *common
@@ -83,6 +85,8 @@ test-install:
   stage: test
   script:
     - yum install -y `find output -name '*.rpm'`
+  except:
+    - RELENG-665
 
 test-el7-x86_64:
   <<: *compose-test-common
@@ -127,6 +131,8 @@ deploy:
   <<: *deploy-common
   only:
     - branches
+  except:
+    - RELENG-665
 
 deploy-release:
   variables:

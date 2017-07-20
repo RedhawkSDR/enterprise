@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.util.UUID;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import redhawk.driver.application.RedhawkApplication;
@@ -47,7 +46,10 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.testutils.RedhawkDeviceTestBase;
 
-public class RedhawkConnectionManagerIT extends RedhawkDeviceTestBase{
+/*
+ * Test does not work Hmmmmmm
+ */
+public class RedhawkConnectionManagerMT extends RedhawkDeviceTestBase{
 	private static RedhawkConnectionManager connectionManager;
 	
 	/*
@@ -147,7 +149,6 @@ public class RedhawkConnectionManagerIT extends RedhawkDeviceTestBase{
 	}
 	
 	@Test
-	@Ignore("Come back to this test figure out why it doesn't work in Docker")
 	public void testConnectApplictionToEventChannel() throws Exception{
 		String connMgrTestAppName = "connMgrTest";
 		String connectionId = "myConnection";

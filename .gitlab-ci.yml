@@ -70,8 +70,6 @@ build:
     - mvn -Djava.io.tmpdir=./ deploy -P docs,jaxb-generation,default -B -U -Drelease=0.$CI_PIPELINE_ID
   only:
     - branches
-  except:
-    - RELENG-665
 
 build-release:
   <<: *common
@@ -85,8 +83,6 @@ test-install:
   stage: test
   script:
     - yum install -y `find output -name '*.rpm'`
-  except:
-    - RELENG-665
 
 test-el7-x86_64:
   <<: *compose-test-common
@@ -131,8 +127,6 @@ deploy:
   <<: *deploy-common
   only:
     - branches
-  except:
-    - RELENG-665
 
 deploy-release:
   variables:

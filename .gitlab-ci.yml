@@ -52,7 +52,7 @@ variables:
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk yum install -y redhawk-basic-components redhawk-basic-waveforms
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} up --exit-code-from rei
     - find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -
-    - find testing/target/site -name 'jacoco.xml' -exec cp {} $CI_PROJECT_DIR \;
+    - find docs/target/site -name 'jacoco.xml' -exec cp {} $CI_PROJECT_DIR \;
     - tar -czf site.tar.gz docs/target/site
   after_script:
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} down

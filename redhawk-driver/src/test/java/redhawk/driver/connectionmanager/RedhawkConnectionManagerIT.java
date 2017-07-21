@@ -61,6 +61,7 @@ public class RedhawkConnectionManagerIT extends RedhawkDeviceTestBase{
 	@BeforeClass
 	public static void setupConnectionMgr(){
 		try {
+			//TODO: Add code to launch Component that this waveform is dependent on. 
 			connectionManager = driver.getDomain().getConnectionManager();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -69,6 +70,7 @@ public class RedhawkConnectionManagerIT extends RedhawkDeviceTestBase{
 	}
 	
 	@Test
+	@Ignore("This was only used for debugging delete before closing ticket")
 	public void createAppTest(){
 		try {
 			RedhawkApplication app = driver.getDomain().createApplication("testApp", new File("src/test/resources/waveforms/ConnectionManagerTest/ConnectionManagerTest.sad.xml"));

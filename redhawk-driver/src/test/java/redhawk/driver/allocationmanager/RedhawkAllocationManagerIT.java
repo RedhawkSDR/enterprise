@@ -42,13 +42,12 @@ import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.exceptions.AllocationException;
 import redhawk.driver.exceptions.CORBAException;
-import redhawk.driver.exceptions.EventChannelCreationException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.testutils.RedhawkDeviceTestBase;
 import redhawk.testutils.RedhawkTestBase;
 
-public class RedhawkAllocationManagerMT extends RedhawkDeviceTestBase{
+public class RedhawkAllocationManagerIT extends RedhawkDeviceTestBase{
 	private static RedhawkAllocationManager allocMgr;
 		
 	private final String allocationType = "FRONTEND::tuner_allocation";

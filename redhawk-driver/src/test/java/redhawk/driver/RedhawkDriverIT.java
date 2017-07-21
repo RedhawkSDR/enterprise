@@ -21,6 +21,7 @@ package redhawk.driver;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -114,13 +115,38 @@ public class RedhawkDriverIT extends RedhawkTestBase{
 		//Use these utility methods if you only have one REDHAWK Domain/Redhawk Device Manager/Redhawk Device
 		RedhawkDomainManager domainManager = driver.getDomain();
 		
-		RedhawkDeviceManager deviceManager = driver.getDeviceManager();
-		
-		RedhawkDevice device = driver.getDevice();
+		/*
+		 * You'll be running this test in multiple scenarios so you need to make sure 
+		 * when you call this method that there's only one deviceManager and adjust
+		 * the asserts accordingly
+		 */
+		if(driver.getDomain().getDeviceManagers().size()>1){
+			try{
+				driver.getDeviceManager();
+				fail("Exception should've been thrown because there are multiple deviceManagers");
+			}catch(MultipleResourceException ex){
+				assertTrue("Expected exception thrown", true);
+			}
+			
+			try{
+				driver.getDevice();
+				fail("Exception should've been thrown because there are multiple deviceManagers");
+			}catch(MultipleResourceException ex){
+				assertTrue("Expected exception thrown", true);
+			}
+		}else{
+			RedhawkDeviceManager deviceManager = driver.getDeviceManager();
+			
+			RedhawkDevice device = driver.getDevice();
+			
+			//Make sure objects aren't null 
+			assertNotNull(deviceManager);
+			assertNotNull(device);
+		}
+
 		
 		assertNotNull(domainManager);
-		assertNotNull(deviceManager);
-		assertNotNull(device);
+
 		driver.disconnect();
 	}
 	

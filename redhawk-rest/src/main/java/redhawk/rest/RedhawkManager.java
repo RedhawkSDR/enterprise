@@ -47,7 +47,6 @@ import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ApplicationStartException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
-import redhawk.driver.exceptions.EventChannelCreationException;
 import redhawk.driver.exceptions.EventChannelException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.PortException;
@@ -179,7 +178,7 @@ public class RedhawkManager {
 		} catch (ResourceNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (EventChannelCreationException e) {
+		} catch (EventChannelException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
@@ -217,7 +216,7 @@ public class RedhawkManager {
 		} catch (ResourceNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (EventChannelCreationException e) {
+		} catch (EventChannelException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {

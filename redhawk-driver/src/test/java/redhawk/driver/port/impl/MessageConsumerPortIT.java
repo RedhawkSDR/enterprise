@@ -27,7 +27,6 @@ import java.io.IOException;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.PortableServer.POA;
@@ -57,7 +56,6 @@ import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.testutils.RedhawkTestBase;
-import redhawk.testutils.RedhawkTestUtils;
 
 /*
  * User running this test must be in the REDHAWK group in order for this to work. 
@@ -65,7 +63,6 @@ import redhawk.testutils.RedhawkTestUtils;
  * 
  * sudo /usr/sbin/usermod -a -G redhawk <user name>
  */
-@Ignore("This may need to be a MT if we can't figure out the dir perm issue")
 public class MessageConsumerPortIT extends RedhawkTestBase{	
 	private RedhawkFileSystem rhFS;
 	
@@ -73,7 +70,7 @@ public class MessageConsumerPortIT extends RedhawkTestBase{
 	
 	@Before
 	public void setup() throws ConnectionException, MultipleResourceException, CORBAException, FileNotFoundException, IOException, ApplicationCreationException, ApplicationStartException, InterruptedException{
-		//TODO: Make this a helper method
+		//TODO: Detect whether component is already installed if not then install it. Run 'build.sh install' install
 		//Use FileSystem to create the appropriate directory structure for your components. 
 		/*
 		 * Java Component
@@ -85,14 +82,15 @@ public class MessageConsumerPortIT extends RedhawkTestBase{
 		 * |- .jar
 		 * |- startJava.sh
 		 */
-		rhFS = driver.getDomain().getFileManager();
+		/*rhFS = driver.getDomain().getFileManager();
 		
 		//Run build.sh so component can have necessary files
-		//TODO: build.sh install works on my box not on vm for some reason. 
 		RedhawkTestUtils.runCommand("src/test/resources/components/MessageProducer/", "build.sh");
 
 		//Deploy example component
 		RedhawkTestUtils.writeJavaComponentToCF("src/test/resources/components/MessageProducer", rhFS);	
+		*/
+		rhFS = driver.getDomain().getFileManager();
 		
 		//Deploy application
 		rhApplication = driver.getDomain().createApplication("myMessageProducer", new File("src/test/resources/waveforms/MPWaveform/MPWaveform.sad.xml"));
@@ -135,12 +133,14 @@ public class MessageConsumerPortIT extends RedhawkTestBase{
 			rhApplication.release();
 		
 		rhFS.removeDirectory("/waveforms/MPWaveform");
-		rhFS.removeDirectory("/components/MessageProducer");
+		
+		//TODO: Clean up only if necessary
+		//rhFS.removeDirectory("/components/MessageProducer");
 		
 		/*
 		 * Clean up component dir
 		 */
-		RedhawkTestUtils.runCommand("src/test/resources/components/MessageProducer/java", "make distclean");
+		//RedhawkTestUtils.runCommand("src/test/resources/components/MessageProducer/java", "make distclean");
 	}
 	
 	public class InMsgHandler implements MessageListener<myMessage_struct> {

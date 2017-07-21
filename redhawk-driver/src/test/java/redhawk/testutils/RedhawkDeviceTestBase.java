@@ -12,7 +12,6 @@ import org.junit.BeforeClass;
 
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.exceptions.CORBAException;
-import redhawk.driver.exceptions.EventChannelCreationException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 
@@ -29,9 +28,15 @@ public class RedhawkDeviceTestBase extends RedhawkTestBase{
 	@BeforeClass
 	public static void setupDevice(){
 		try{
-			deviceManager = driver.getDeviceManager("REDHAWK_DEV/Simulator.*");
+			System.out.println("======================================");
+			for(RedhawkDeviceManager devMgr : driver.getDomain(domainName).getDeviceManagers()){
+				System.out.println("DevMgr: "+devMgr);
+			}
+			System.out.println("======================================");
+			deviceManager = driver.getDeviceManager(domainName+"/Simulator.*");
 			devMgrStartedExternally = true;
 		}catch(Exception ex){
+			logger.info("No simulator going to try to launch one myself");
 		}
 		
 		try {
@@ -42,6 +47,7 @@ public class RedhawkDeviceTestBase extends RedhawkTestBase{
 				/*
 				 * Place Dcd in it's proper directory 
 				 */
+				//TODO: Add a way to configure this from a file
 				File file = new File("src/test/resources/node/SimulatorNode");
 				
 				nodeDir = new File(deviceManagerHome+"/nodes/SimulatorNode");
@@ -66,7 +72,7 @@ public class RedhawkDeviceTestBase extends RedhawkTestBase{
 	
 	
 	@AfterClass
-	public static void cleanupDevice() throws IOException, MultipleResourceException, EventChannelCreationException, CORBAException{
+	public static void cleanupDevice() throws IOException, MultipleResourceException, CORBAException{
 		if(!devMgrStartedExternally){
 			deviceManager.shutdown();
 			

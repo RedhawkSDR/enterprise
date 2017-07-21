@@ -26,10 +26,12 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import redhawk.driver.application.RedhawkApplication;
@@ -63,6 +65,20 @@ public class RedhawkConnectionManagerIT extends RedhawkDeviceTestBase{
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Issue setting up test "+e.getMessage());
+		}
+	}
+	
+	@Test
+	public void createAppTest(){
+		try {
+			RedhawkApplication app = driver.getDomain().createApplication("testApp", new File("src/test/resources/waveforms/ConnectionManagerTest/ConnectionManagerTest.sad.xml"));
+			app.release();
+		}catch(Exception ex){
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			ex.printStackTrace(pw);
+			logger.log(Level.SEVERE, "WHAT IS HAPPENING????");
+			System.out.println(sw.toString());
 		}
 	}
 	

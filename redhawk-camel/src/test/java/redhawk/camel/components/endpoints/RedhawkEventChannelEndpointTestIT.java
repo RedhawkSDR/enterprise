@@ -38,7 +38,6 @@ import org.junit.Test;
 
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.application.RedhawkApplication;
-import redhawk.driver.base.RedhawkFileSystem;
 import redhawk.driver.domain.RedhawkFileManager;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ApplicationReleaseException;
@@ -49,8 +48,8 @@ import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.testutils.RedhawkTestBase;
 import redhawk.testutils.RedhawkTestUtils;
 
-public class RedhawkEventChannelEndpointTestMT extends CamelTestSupport{
-    private static Logger logger = Logger.getLogger(RedhawkEventChannelEndpointTestMT.class);
+public class RedhawkEventChannelEndpointTestIT extends CamelTestSupport{
+    private static Logger logger = Logger.getLogger(RedhawkEventChannelEndpointTestIT.class);
     
 	@EndpointInject(uri = "mock:result")
     protected MockEndpoint resultEndpoint;

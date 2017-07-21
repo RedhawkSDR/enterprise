@@ -90,6 +90,8 @@ public class MessageConsumerPortIT extends RedhawkTestBase{
 		//Deploy example component
 		RedhawkTestUtils.writeJavaComponentToCF("src/test/resources/components/MessageProducer", rhFS);	
 		*/
+		rhFS = driver.getDomain().getFileManager();
+		
 		//Deploy application
 		rhApplication = driver.getDomain().createApplication("myMessageProducer", new File("src/test/resources/waveforms/MPWaveform/MPWaveform.sad.xml"));
 		rhApplication.start();

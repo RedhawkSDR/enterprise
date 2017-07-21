@@ -138,14 +138,15 @@ test-el6-i386:
 #Trigger a Jenkins job to aggregate artifacts there
 deploy:
   variables:
-    jenkins_job: REDHAWK-enterprise-$CI_COMMIT_REF_NAME
+    jenkins_job: redhawk/job/enterprise-$CI_COMMIT_REF_NAME
   <<: *deploy-common
   only:
     - branches
 
 deploy-release:
   variables:
-    jenkins_job: $redhawk_version/job/REDHAWK-enterprise-$enterprise_version
+    redhawk_version: '2.1.1'
+    jenkins_job: $redhawk_version/job/enterprise
   <<: *deploy-common
   only:
     - tags

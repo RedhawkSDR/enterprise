@@ -83,7 +83,6 @@ public class RedhawkManagerAllocationIT extends RedhawkDeviceTestBase{
 	@Test
 	@Ignore("Think about this logic a bit more honestly this is tested elsewhere in the redhawk-driver")
 	public void testShutdownDeviceManager() throws Exception{
-		System.out.println("Hello World");
 		/*
 		 * Use the NodeBooter proxy to launch your device manager 
 		 */		
@@ -92,7 +91,7 @@ public class RedhawkManagerAllocationIT extends RedhawkDeviceTestBase{
 		List<RedhawkDeviceManager> managers = manager.getAll("localhost:2809", "devicemanager", domainName, FetchMode.LAZY);
 		
 		assertEquals("Should now be 2 Devicemanagers ", 2, managers.size());
-		manager.shutdownDeviceManager(nameServer, domainName+"SimulatorNode");
+		manager.shutdownDeviceManager(nameServer, domainName+"/SimulatorNode");
 		
 		managers = manager.getAll(nameServer, "devicemanager", domainName, FetchMode.LAZY);
 		assertEquals("Should now be 1 Devicemanagers ", 1, managers.size());		
@@ -118,22 +117,22 @@ public class RedhawkManagerAllocationIT extends RedhawkDeviceTestBase{
 		newAlloc.put("FRONTEND::tuner_allocation::bandwidth_tolerance", 20.0);
 		newAlloc.put("FRONTEND::tuner_allocation::sample_rate_tolerance", 20.0);
 		
-		List<Map<String, Object>> usedTuners = manager.getTuners(nameServer, domainName+"SimulatorNode/FmRdsSimulator.*", TunerMode.USED);		
-		List<Map<String, Object>> unusedTuners = manager.getTuners(nameServer, domainName+"SimulatorNode/FmRdsSimulator.*", TunerMode.UNUSED);		
+		List<Map<String, Object>> usedTuners = manager.getTuners(nameServer, domainName+"/SimulatorNode/FmRdsSimulator.*", TunerMode.USED);		
+		List<Map<String, Object>> unusedTuners = manager.getTuners(nameServer, domainName+"/SimulatorNode/FmRdsSimulator.*", TunerMode.UNUSED);		
 		
 		assertEquals("Should be 1 unused tuner ", 1, unusedTuners.size());
 		assertEquals("Should be 0 used tuner ", 0, usedTuners.size());
 		
 		
-		manager.allocateDevice(nameServer, domainName+"SimulatorNode/FmRdsSimulator.*", newAlloc);
+		manager.allocateDevice(nameServer, domainName+"/SimulatorNode/FmRdsSimulator.*", newAlloc);
 		
-		usedTuners = manager.getTuners(nameServer, domainName+"SimulatorNode/FmRdsSimulator.*", TunerMode.USED);		
-		unusedTuners = manager.getTuners(nameServer, domainName+"SimulatorNode/FmRdsSimulator.*", TunerMode.UNUSED);		
+		usedTuners = manager.getTuners(nameServer, domainName+"/SimulatorNode/FmRdsSimulator.*", TunerMode.USED);		
+		unusedTuners = manager.getTuners(nameServer, domainName+"/SimulatorNode/FmRdsSimulator.*", TunerMode.UNUSED);		
 		
 		assertEquals("Should be 1 used tuner ", 1, usedTuners.size());
 		assertEquals("Should be 1 unused tuner ", 0, unusedTuners.size());
 		
-		manager.deallocateDevice(nameServer, domainName+"SimulatorNode/FmRdsSimulator.*", allocId);
+		manager.deallocateDevice(nameServer, domainName+"/SimulatorNode/FmRdsSimulator.*", allocId);
 
 		usedTuners = manager.getTuners(nameServer, domainName+"/SimulatorNode/FmRdsSimulator.*", TunerMode.USED);		
 		unusedTuners = manager.getTuners(nameServer, domainName+"/SimulatorNode/FmRdsSimulator.*", TunerMode.UNUSED);		

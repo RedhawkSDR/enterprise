@@ -37,6 +37,7 @@ public class RedhawkDeviceTestBase extends RedhawkTestBase{
 			deviceManager = driver.getDeviceManager(domainName+"/Simulator.*");
 			devMgrStartedExternally = true;
 		}catch(Exception ex){
+			logger.info("No simulator going to try to launch one myself");
 		}
 		
 		try {
@@ -47,6 +48,7 @@ public class RedhawkDeviceTestBase extends RedhawkTestBase{
 				/*
 				 * Place Dcd in it's proper directory 
 				 */
+				//TODO: Add a way to configure this from a file
 				File file = new File("src/test/resources/node/SimulatorNode");
 				
 				nodeDir = new File(deviceManagerHome+"/nodes/SimulatorNode");

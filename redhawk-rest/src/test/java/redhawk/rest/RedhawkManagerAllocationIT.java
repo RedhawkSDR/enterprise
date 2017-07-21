@@ -24,15 +24,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -50,15 +46,18 @@ public class RedhawkManagerAllocationIT extends RedhawkDeviceTestBase{
 	
 	private static NodeBooterProxy proxy;
 	
+	private static String nameServer;
+	
 	@BeforeClass
 	public static void setup() throws IOException, InterruptedException{
-		manager = new RedhawkManager(); 						
+		manager = new RedhawkManager();
+		nameServer = domainHost+":"+domainPort;
 	}
 	
 	@Test
 	public void TestLazyRetrieval() {
 		try{
-			manager.getAll("localhost:2809", "domain", null, FetchMode.LAZY);
+			manager.getAll(nameServer, "domain", null, FetchMode.LAZY);
 			assertTrue("Passed test!", true);
 		}catch(Exception ex){
 			fail("Exception doing lazy retrieval of domain ");
@@ -69,7 +68,7 @@ public class RedhawkManagerAllocationIT extends RedhawkDeviceTestBase{
 	@Test
 	public void TestEagerRetrieval(){
 		try{
-			manager.getAll("localhost:2809", "domain", null, FetchMode.EAGER);
+			manager.getAll(nameServer, "domain", null, FetchMode.EAGER);
 			assertTrue("Passed test!", true);
 		}catch(Exception ex){
 			ex.printStackTrace();
@@ -90,12 +89,12 @@ public class RedhawkManagerAllocationIT extends RedhawkDeviceTestBase{
 		 */		
 		//process = proxy.launchDeviceManager("/var/redhawk/sdr/dev/nodes/SimulatorNode/DeviceManager.dcd.xml");		
 		
-		List<RedhawkDeviceManager> managers = manager.getAll("localhost:2809", "devicemanager", "REDHAWK_DEV", FetchMode.LAZY);
+		List<RedhawkDeviceManager> managers = manager.getAll("localhost:2809", "devicemanager", domainName, FetchMode.LAZY);
 		
 		assertEquals("Should now be 2 Devicemanagers ", 2, managers.size());
-		manager.shutdownDeviceManager("localhost:2809", "REDHAWK_DEV/SimulatorNode");
+		manager.shutdownDeviceManager(nameServer, domainName+"SimulatorNode");
 		
-		managers = manager.getAll("localhost:2809", "devicemanager", "REDHAWK_DEV", FetchMode.LAZY);
+		managers = manager.getAll(nameServer, "devicemanager", domainName, FetchMode.LAZY);
 		assertEquals("Should now be 1 Devicemanagers ", 1, managers.size());		
 	}
 	
@@ -119,25 +118,25 @@ public class RedhawkManagerAllocationIT extends RedhawkDeviceTestBase{
 		newAlloc.put("FRONTEND::tuner_allocation::bandwidth_tolerance", 20.0);
 		newAlloc.put("FRONTEND::tuner_allocation::sample_rate_tolerance", 20.0);
 		
-		List<Map<String, Object>> usedTuners = manager.getTuners("localhost:2809", "REDHAWK_DEV/SimulatorNode/FmRdsSimulator.*", TunerMode.USED);		
-		List<Map<String, Object>> unusedTuners = manager.getTuners("localhost:2809", "REDHAWK_DEV/SimulatorNode/FmRdsSimulator.*", TunerMode.UNUSED);		
+		List<Map<String, Object>> usedTuners = manager.getTuners("localhost:2809", domainName+"SimulatorNode/FmRdsSimulator.*", TunerMode.USED);		
+		List<Map<String, Object>> unusedTuners = manager.getTuners("localhost:2809", domainName+"SimulatorNode/FmRdsSimulator.*", TunerMode.UNUSED);		
 		
 		assertEquals("Should be 1 unused tuner ", 1, unusedTuners.size());
 		assertEquals("Should be 0 used tuner ", 0, usedTuners.size());
 		
 		
-		manager.allocateDevice("localhost:2809", "REDHAWK_DEV/SimulatorNode/FmRdsSimulator.*", newAlloc);
+		manager.allocateDevice(nameServer, domainName+"SimulatorNode/FmRdsSimulator.*", newAlloc);
 		
-		usedTuners = manager.getTuners("localhost:2809", "REDHAWK_DEV/SimulatorNode/FmRdsSimulator.*", TunerMode.USED);		
-		unusedTuners = manager.getTuners("localhost:2809", "REDHAWK_DEV/SimulatorNode/FmRdsSimulator.*", TunerMode.UNUSED);		
+		usedTuners = manager.getTuners(nameServer, domainName+"SimulatorNode/FmRdsSimulator.*", TunerMode.USED);		
+		unusedTuners = manager.getTuners(nameServer, domainName+"SimulatorNode/FmRdsSimulator.*", TunerMode.UNUSED);		
 		
 		assertEquals("Should be 1 used tuner ", 1, usedTuners.size());
 		assertEquals("Should be 1 unused tuner ", 0, unusedTuners.size());
 		
-		manager.deallocateDevice("localhost:2809", "REDHAWK_DEV/SimulatorNode/FmRdsSimulator.*", allocId);
+		manager.deallocateDevice(nameServer, domainName+"SimulatorNode/FmRdsSimulator.*", allocId);
 
-		usedTuners = manager.getTuners("localhost:2809", "REDHAWK_DEV/SimulatorNode/FmRdsSimulator.*", TunerMode.USED);		
-		unusedTuners = manager.getTuners("localhost:2809", "REDHAWK_DEV/SimulatorNode/FmRdsSimulator.*", TunerMode.UNUSED);		
+		usedTuners = manager.getTuners(nameServer, domainName+"SimulatorNode/FmRdsSimulator.*", TunerMode.USED);		
+		unusedTuners = manager.getTuners(nameServer, domainName+"SimulatorNode/FmRdsSimulator.*", TunerMode.UNUSED);		
 
 		assertEquals("Should be 1 unused tuner ", 1, unusedTuners.size());
 		assertEquals("Should be 0 used tuner ", 0, usedTuners.size());
@@ -148,7 +147,7 @@ public class RedhawkManagerAllocationIT extends RedhawkDeviceTestBase{
 	@Test
 	public void testGetDevicePorts(){
 		try {
-			List<Port> ports = manager.getAll("localhost:2809", "deviceport", "REDHAWK_DEV/SimulatorNode/FmRdsSimulator.*", FetchMode.LAZY);
+			List<Port> ports = manager.getAll(nameServer, "deviceport", domainName+"/SimulatorNode/FmRdsSimulator.*", FetchMode.LAZY);
 			System.out.println(ports);
 			assertNotNull(ports);
 		} catch (ResourceNotFoundException e) {

@@ -52,6 +52,9 @@ variables:
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk yum install -y redhawk-basic-components redhawk-basic-waveforms rh.FmRdsSimulator
     - docker cp redhawk-driver/src/test/resources/node/SimulatorNode redhawk_${dist}_${arch}_${CI_JOB_ID}:/var/redhawk/sdr/dev/nodes/ # Deploy devMgr
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec redhawk nodeBooter -d /var/redhawk/sdr/dev/nodes/SimulatorNode/DeviceManager.dcd.xml 2>&1 & #Start DevMgr
+    - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk mkdir -p /usr/local/redhawk/workspace #Make dir for deploying components
+    - docker cp demo/camel-event-channel/src/main/resources/EventSpitter redhawk_${dist}_${arch}_${CI_JOB_ID}:/usr/local/redhawk/workspace #Copy component into workspace
+    - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk /usr/local/redhawk/workspace/EventSpitter/build.sh install #Install component
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} up --exit-code-from rei
     - find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -
     - find */target -name "*.exec" | tar -cvf jacoco-exec.tar.gz --files-from -
@@ -113,6 +116,8 @@ test-el6-x86_64:
     redhawk_version: 2.1-nightly
     dist: el6
     arch: x86_64
+  except:
+    - RI-56_develop-2.0
 
 test-el6-i386:
   <<: *compose-test-common
@@ -125,6 +130,8 @@ test-el6-i386:
     redhawk_version: 2.1-nightly
     dist: el6
     arch: i686
+  except:
+    - RI-56_develop-2.0
 
 #Trigger a Jenkins job to aggregate artifacts there
 deploy:

@@ -118,8 +118,8 @@ public class RedhawkManagerAllocationIT extends RedhawkDeviceTestBase{
 		newAlloc.put("FRONTEND::tuner_allocation::bandwidth_tolerance", 20.0);
 		newAlloc.put("FRONTEND::tuner_allocation::sample_rate_tolerance", 20.0);
 		
-		List<Map<String, Object>> usedTuners = manager.getTuners("localhost:2809", domainName+"SimulatorNode/FmRdsSimulator.*", TunerMode.USED);		
-		List<Map<String, Object>> unusedTuners = manager.getTuners("localhost:2809", domainName+"SimulatorNode/FmRdsSimulator.*", TunerMode.UNUSED);		
+		List<Map<String, Object>> usedTuners = manager.getTuners(nameServer, domainName+"SimulatorNode/FmRdsSimulator.*", TunerMode.USED);		
+		List<Map<String, Object>> unusedTuners = manager.getTuners(nameServer, domainName+"SimulatorNode/FmRdsSimulator.*", TunerMode.UNUSED);		
 		
 		assertEquals("Should be 1 unused tuner ", 1, unusedTuners.size());
 		assertEquals("Should be 0 used tuner ", 0, usedTuners.size());

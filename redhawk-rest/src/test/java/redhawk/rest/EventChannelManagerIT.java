@@ -2,18 +2,14 @@ package redhawk.rest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import org.junit.Assert;
 import org.junit.Test;
 
-import redhawk.driver.eventchannel.RedhawkEventChannelManager;
 import redhawk.driver.eventchannel.listeners.GenericEventListener;
 import redhawk.driver.exceptions.CORBAException;
-import redhawk.driver.exceptions.EventChannelCreationException;
 import redhawk.driver.exceptions.EventChannelException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;

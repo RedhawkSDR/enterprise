@@ -38,7 +38,7 @@ import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.testutils.RedhawkDeviceTestBase;
 
-public class RedhawkLoggingMT extends RedhawkDeviceTestBase {
+public class RedhawkLoggingIT extends RedhawkDeviceTestBase {
 	@Test
 	public void testDomainManagerLog(){
 		try {

@@ -31,7 +31,7 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -39,6 +39,7 @@ import org.junit.Test;
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.base.RedhawkFileSystem;
+import redhawk.driver.domain.RedhawkFileManager;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.ApplicationStartException;
@@ -48,9 +49,10 @@ import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.testutils.RedhawkTestBase;
 import redhawk.testutils.RedhawkTestUtils;
 
-//TODO: Make this work with Docker
 public class RedhawkEventChannelEndpointTestMT extends CamelTestSupport{
-    @EndpointInject(uri = "mock:result")
+    private static Logger logger = Logger.getLogger(RedhawkEventChannelEndpointTestMT.class);
+    
+	@EndpointInject(uri = "mock:result")
     protected MockEndpoint resultEndpoint;
     
     @EndpointInject(uri = "mock:producerResult")
@@ -61,11 +63,14 @@ public class RedhawkEventChannelEndpointTestMT extends CamelTestSupport{
     
 	private static RedhawkDriver driver; 
 	
-	private static RedhawkFileSystem rhFS;
+	private static RedhawkFileManager rhFS;
 	
 	private static RedhawkApplication rhApplication;
 	
 	private static String eventChannelConsumerURI, eventChannelProducerURI;
+	
+	//TODO: Clean this up 
+	private static Boolean launchedByTest = true;
 	
 	@BeforeClass
 	public static void setup() throws ConnectionException, MultipleResourceException, CORBAException, FileNotFoundException, IOException, ApplicationCreationException, ApplicationStartException, InterruptedException{
@@ -82,18 +87,18 @@ public class RedhawkEventChannelEndpointTestMT extends CamelTestSupport{
 		rhFS = driver.getDomain().getFileManager();
 
 		//Need to make sure EventSpitter is not still left over. 
-		if(!rhFS.findDirectories("/components/EventSpitter").isEmpty()){
-			rhFS.removeDirectory("/components/EventSpitter");
+		if(!rhFS.getComponents().containsKey("/components/EventSpitter/EventSpitter.scd.xml")){
+			//Run build.sh so component can have necessary files
+			RedhawkTestUtils.runCommand("../demo/camel-event-channel/src/main/resources/EventSpitter", "build.sh");
+			
+			/*
+			 * Deploy EventSpitter Component 
+			 */
+			RedhawkTestUtils.writeJavaComponentToCF("../demo/camel-event-channel/src/main/resources/EventSpitter", rhFS);
+		}else{
+			launchedByTest = false;
+			logger.info("Component already deployed");
 		}
-
-		//Run build.sh so component can have necessary files
-		RedhawkTestUtils.runCommand("../demo/camel-event-channel/src/main/resources/EventSpitter", "build.sh");
-		
-		/*
-		 * Deploy EventSpitter Component 
-		 */
-		RedhawkTestUtils.writeJavaComponentToCF("../demo/camel-event-channel/src/main/resources/EventSpitter", rhFS);
-	
 		
 		//Deploy application
 		rhApplication = driver.getDomain().createApplication("spitToChannel", new File("../demo/camel-event-channel/src/main/resources/SpitToChannel/SpitToChannel.sad.xml"));
@@ -151,8 +156,7 @@ public class RedhawkEventChannelEndpointTestMT extends CamelTestSupport{
 			rhApplication.release();
 		
 		rhFS.removeDirectory("/waveforms/SpitToChannel");
-		rhFS.removeDirectory("/components/EventSpitter");
-		
+				
 		if(driver!=null){
 			driver.disconnect();
 		}
@@ -160,6 +164,10 @@ public class RedhawkEventChannelEndpointTestMT extends CamelTestSupport{
 		/*
 		 * Clean up component dir
 		 */
-		RedhawkTestUtils.runCommand("../demo/camel-event-channel/src/main/resources/EventSpitter", "make distclean");
+		if(launchedByTest){
+			//TODO: Make this dynamic
+			//RedhawkTestUtils.runCommand("../demo/camel-event-channel/src/main/resources/EventSpitter", "make distclean");			
+			rhFS.removeDirectory("/components/EventSpitter");		
+		}
 	}
 }

@@ -106,7 +106,7 @@ public class RedhawkConnectionManagerMT extends RedhawkDeviceTestBase{
 	}
 	
 	@Test
-	public void testConnectApplictionToApplication() throws Exception{
+	public void testConnectApplicationToApplication() throws Exception{
 		String appName = "FM_RBDS_demo";
 		String connMgrTestAppName = "connMgrTest";
 		String connectionId = "myConnection";
@@ -149,7 +149,7 @@ public class RedhawkConnectionManagerMT extends RedhawkDeviceTestBase{
 	}
 	
 	@Test
-	public void testConnectApplictionToEventChannel() throws Exception{
+	public void testConnectApplicationToEventChannel() throws Exception{
 		String connMgrTestAppName = "connMgrTest";
 		String connectionId = "myConnection";
 		String channelName = "ConnMgrTest";
@@ -180,15 +180,16 @@ public class RedhawkConnectionManagerMT extends RedhawkDeviceTestBase{
 			//Test disconnect
 			this.disconnect();
 		} catch (MultipleResourceException | ApplicationCreationException | CORBAException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			fail("Test failure "+e.getMessage());
 		} finally{
 			//Clean up Event Channel
 			try{
 				RedhawkEventChannel channel = driver.getDomain().getEventChannelManager().getEventChannel(channelName);
 				
 				//TODO: Add a shutdown method on the actual channel
-				driver.getDomain().getEventChannelManager().releaseEventChannel(channelName);
+				if(channel!=null)
+					driver.getDomain().getEventChannelManager().releaseEventChannel(channel.getName());
 			}catch(ResourceNotFoundException ex){
 				logger.fine("No Event Channel to clean up this exception is expected");
 			}

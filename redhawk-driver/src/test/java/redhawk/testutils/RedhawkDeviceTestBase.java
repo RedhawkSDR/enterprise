@@ -12,7 +12,6 @@ import org.junit.BeforeClass;
 
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.exceptions.CORBAException;
-import redhawk.driver.exceptions.EventChannelCreationException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 
@@ -73,7 +72,7 @@ public class RedhawkDeviceTestBase extends RedhawkTestBase{
 	
 	
 	@AfterClass
-	public static void cleanupDevice() throws IOException, MultipleResourceException, EventChannelCreationException, CORBAException{
+	public static void cleanupDevice() throws IOException, MultipleResourceException, CORBAException{
 		if(!devMgrStartedExternally){
 			deviceManager.shutdown();
 			

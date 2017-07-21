@@ -43,7 +43,7 @@ import redhawk.driver.base.impl.CorbaBackedObject;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.eventchannel.RedhawkEventChannel;
 import redhawk.driver.eventchannel.RedhawkEventChannelManager;
-import redhawk.driver.exceptions.EventChannelCreationException;
+import redhawk.driver.exceptions.EventChannelException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 
@@ -68,11 +68,11 @@ public class RedhawkEventChannelManagerImpl extends CorbaBackedObject<EventChann
     }
     
     //TODO: This should return a RedhawkEventChannel object
-    public void createEventChannel(String channelName) throws EventChannelCreationException {
+    public void createEventChannel(String channelName) throws EventChannelException {
     	try {
 			eventChannelManager.create(channelName);
     	} catch (ChannelAlreadyExists | OperationNotAllowed | OperationFailed | ServiceUnavailable e) {
-			throw new EventChannelCreationException(e);
+			throw new EventChannelException("Exception thrown while attempting to create EventChannel", e);
 		}
     }
     
@@ -105,15 +105,34 @@ public class RedhawkEventChannelManagerImpl extends CorbaBackedObject<EventChann
     }
 
 	@Override
-	public void releaseEventChannel(String channelName) throws EventChannelCreationException {
-		try {
-			eventChannelManager.release(channelName);
-		} catch (ChannelDoesNotExist | RegistrationsExists
-				| OperationNotAllowed | OperationFailed | ServiceUnavailable e) {
-			throw new EventChannelCreationException(e);
-		}
+	public void releaseEventChannel(String channelName) throws EventChannelException {
+		this.releaseEventChanne(channelName, true);
 	}
 
+	@Override
+	public void releaseEventChanne(String channelName, Boolean deleteRegistrants) throws EventChannelException {
+		try {
+			/*
+			 * Clean up all registrants if any exist so that you can release event channel
+			 */
+			if(deleteRegistrants){
+				RedhawkEventChannel channel = this.getEventChannel(channelName);
+				
+				if(channel!=null){
+					//TODO: This is a magic number need to clean
+					for(RedhawkEventRegistrant registrant : channel.getRegistrants(1000)){
+						channel.unsubscribe(registrant);
+					}
+				}
+			}
+			
+			eventChannelManager.release(channelName);
+		} catch (ChannelDoesNotExist
+				| OperationNotAllowed | OperationFailed | ServiceUnavailable | RegistrationsExists | MultipleResourceException | ResourceNotFoundException e) {
+			throw new EventChannelException(e);
+		}
+	}
+	
 	@Override
 	protected EventChannelManager locateCorbaObject() throws ResourceNotFoundException {
 		return EventChannelManagerHelper.narrow(this.orb.string_to_object(this.getIor()));
@@ -122,6 +141,5 @@ public class RedhawkEventChannelManagerImpl extends CorbaBackedObject<EventChann
 	@Override
 	public Class<?> getHelperClass() {
 		return EventChannelManagerHelper.class;
-	}
-		
+	}	
 }

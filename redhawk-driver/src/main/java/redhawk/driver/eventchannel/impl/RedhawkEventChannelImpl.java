@@ -225,7 +225,6 @@ public class RedhawkEventChannelImpl implements RedhawkEventChannel {
 
 	@Override
 	public EventChannel getCorbaObj() throws EventChannelException {
-		Object objRef;
 		try {
             EventRegistration  ereg = new EventRegistration();
             EventChannelReg registration;

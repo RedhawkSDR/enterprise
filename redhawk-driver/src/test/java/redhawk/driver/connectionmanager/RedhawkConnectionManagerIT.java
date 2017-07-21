@@ -49,7 +49,7 @@ import redhawk.testutils.RedhawkDeviceTestBase;
 /*
  * Test does not work Hmmmmmm
  */
-public class RedhawkConnectionManagerMT extends RedhawkDeviceTestBase{
+public class RedhawkConnectionManagerIT extends RedhawkDeviceTestBase{
 	private static RedhawkConnectionManager connectionManager;
 	
 	/*

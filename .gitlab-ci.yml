@@ -54,7 +54,7 @@ variables:
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec redhawk nodeBooter -d /var/redhawk/sdr/dev/nodes/SimulatorNode/DeviceManager.dcd.xml 2>&1 & #Start DevMgr
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk mkdir -p /usr/local/redhawk/workspace #Make dir for deploying components
     - docker cp demo/camel-event-channel/src/main/resources/EventSpitter redhawk_${dist}_${arch}_${CI_JOB_ID}:/usr/local/redhawk/workspace #Copy component into workspace
-    - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk /usr/local/redhawk/workspace/EventSpitter/build.sh install #Install component
+    - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk bash -c "cd /usr/local/redhawk/workspace/EventSpitter; ./build.sh install" #Install component
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} up --exit-code-from rei
     - find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -
     - find */target -name "*.exec" | tar -cvf jacoco-exec.tar.gz --files-from -

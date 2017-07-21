@@ -34,6 +34,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
@@ -42,35 +43,16 @@ import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.Port;
 import redhawk.rest.model.TunerMode;
 import redhawk.testutils.NodeBooterProxy;
+import redhawk.testutils.RedhawkDeviceTestBase;
 
-public class RedhawkManagerAllocationMT {
+public class RedhawkManagerAllocationIT extends RedhawkDeviceTestBase{
 	private static RedhawkManager manager; 
-	
-	private static String sdrRoot = "/var/redhawk/sdr";
-	
-	private static String deviceManagerHome = sdrRoot+"/dev";
-	
-	private static Process process;
-	
-	private static File nodeDir;
 	
 	private static NodeBooterProxy proxy;
 	
 	@BeforeClass
 	public static void setup() throws IOException, InterruptedException{
-		manager = new RedhawkManager(); 
-		proxy = new NodeBooterProxy();
-	
-		File file = new File("../redhawk-driver/src/test/resources/node/SimulatorNode");
-		
-		nodeDir = new File(deviceManagerHome+"/nodes/SimulatorNode");
-
-		System.out.println(file.exists());
-		
-		/*
-		 * Copy Nodes directory over  
-		 */
-		FileUtils.copyDirectory(file, nodeDir, FileFilterUtils.suffixFileFilter(".dcd.xml"));						
+		manager = new RedhawkManager(); 						
 	}
 	
 	@Test
@@ -100,12 +82,13 @@ public class RedhawkManagerAllocationMT {
 	 * something wrong with how I'm shutting down the devicemanager. 
 	 */
 	@Test
+	@Ignore("Think about this logic a bit more honestly this is tested elsewhere in the redhawk-driver")
 	public void testShutdownDeviceManager() throws Exception{
 		System.out.println("Hello World");
 		/*
 		 * Use the NodeBooter proxy to launch your device manager 
 		 */		
-		process = proxy.launchDeviceManager("/var/redhawk/sdr/dev/nodes/SimulatorNode/DeviceManager.dcd.xml");		
+		//process = proxy.launchDeviceManager("/var/redhawk/sdr/dev/nodes/SimulatorNode/DeviceManager.dcd.xml");		
 		
 		List<RedhawkDeviceManager> managers = manager.getAll("localhost:2809", "devicemanager", "REDHAWK_DEV", FetchMode.LAZY);
 		
@@ -121,7 +104,7 @@ public class RedhawkManagerAllocationMT {
 		/*
 		 * Use the NodeBooter proxy to launch your device manager 
 		 */		
-		process = proxy.launchDeviceManager("/var/redhawk/sdr/dev/nodes/SimulatorNode/DeviceManager.dcd.xml");		
+		//process = proxy.launchDeviceManager("/var/redhawk/sdr/dev/nodes/SimulatorNode/DeviceManager.dcd.xml");		
 		
 		String allocationId = "myAllocation";
 		
@@ -159,7 +142,7 @@ public class RedhawkManagerAllocationMT {
 		assertEquals("Should be 1 unused tuner ", 1, unusedTuners.size());
 		assertEquals("Should be 0 used tuner ", 0, usedTuners.size());
 	
-		manager.shutdownDeviceManager("localhost:2809", "REDHAWK_DEV/SimulatorNode");
+		//manager.shutdownDeviceManager("localhost:2809", domainName+"/SimulatorNode");
 	}
 	
 	@Test
@@ -174,15 +157,6 @@ public class RedhawkManagerAllocationMT {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-	}
-	
-	@AfterClass
-	public static void cleanup() throws IOException{
-		if(process!=null){
-			FileUtils.deleteDirectory(nodeDir);
-			
-			process.destroy();			
 		}
 	}
 }

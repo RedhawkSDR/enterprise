@@ -135,8 +135,8 @@ public class RedhawkManagerAllocationIT extends RedhawkDeviceTestBase{
 		
 		manager.deallocateDevice(nameServer, domainName+"SimulatorNode/FmRdsSimulator.*", allocId);
 
-		usedTuners = manager.getTuners(nameServer, domainName+"SimulatorNode/FmRdsSimulator.*", TunerMode.USED);		
-		unusedTuners = manager.getTuners(nameServer, domainName+"SimulatorNode/FmRdsSimulator.*", TunerMode.UNUSED);		
+		usedTuners = manager.getTuners(nameServer, domainName+"/SimulatorNode/FmRdsSimulator.*", TunerMode.USED);		
+		unusedTuners = manager.getTuners(nameServer, domainName+"/SimulatorNode/FmRdsSimulator.*", TunerMode.UNUSED);		
 
 		assertEquals("Should be 1 unused tuner ", 1, unusedTuners.size());
 		assertEquals("Should be 0 used tuner ", 0, usedTuners.size());

@@ -77,8 +77,6 @@ build:
     - mvn -Djava.io.tmpdir=./ deploy -P docs,jaxb-generation,default -B -U -Drelease=0.$CI_PIPELINE_ID
   only:
     - branches
-  except:
-    - RI-56_develop-2.0
 
 build-release:
   <<: *common
@@ -92,8 +90,6 @@ test-install:
   stage: test
   script:
     - yum install -y `find output -name '*.rpm'`
-  except:
-    - RI-56_develop-2.0
 
 test-el7-x86_64:
   <<: *compose-test-common
@@ -118,8 +114,6 @@ test-el6-x86_64:
     redhawk_version: 2.1-nightly
     dist: el6
     arch: x86_64
-  except:
-    - RI-56_develop-2.0
 
 test-el6-i386:
   <<: *compose-test-common
@@ -132,8 +126,6 @@ test-el6-i386:
     redhawk_version: 2.1-nightly
     dist: el6
     arch: i686
-  except:
-    - RI-56_develop-2.0
 
 #Trigger a Jenkins job to aggregate artifacts there
 deploy:
@@ -142,8 +134,6 @@ deploy:
   <<: *deploy-common
   only:
     - branches
-  except:
-    - RI-56_develop-2.0
 
 deploy-release:
   variables:

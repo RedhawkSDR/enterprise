@@ -183,8 +183,14 @@ public class RedhawkConnectionManagerMT extends RedhawkDeviceTestBase{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally{
-			if(eventChannel!=null){
-				driver.getDomain().getEventChannelManager().releaseEventChannel(eventChannel.getName());
+			//Clean up Event Channel
+			try{
+				RedhawkEventChannel channel = driver.getDomain().getEventChannelManager().getEventChannel(channelName);
+				
+				//TODO: Add a shutdown method on the actual channel
+				driver.getDomain().getEventChannelManager().releaseEventChannel(channelName);
+			}catch(ResourceNotFoundException ex){
+				logger.fine("No Event Channel to clean up this exception is expected");
 			}
 			
 			if(usesApp!=null){

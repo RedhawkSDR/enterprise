@@ -153,4 +153,10 @@ public interface RedhawkApplication extends QueryableResource {
      * @return
      */
     Map<String, RedhawkDevice> getComponentDevices(); 
+    
+    /**
+     * Return a map of Component->ProcessId
+     * @return
+     */
+    Map<String, Integer> getComponentProcessIds();
 }

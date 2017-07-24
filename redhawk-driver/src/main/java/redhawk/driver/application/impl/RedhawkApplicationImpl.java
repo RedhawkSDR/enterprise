@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import CF.Application;
 import CF.ApplicationHelper;
 import CF.DeviceAssignmentType;
+import CF.ApplicationPackage.ComponentProcessIdType;
 import CF.LifeCyclePackage.ReleaseError;
 import CF.ResourcePackage.StartError;
 import CF.ResourcePackage.StopError;
@@ -291,12 +292,19 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 			}else{
 				compToDevice.put(devAss.componentId, devCache.get(devAss.assignedDeviceId));
 			}
-			RedhawkDevice dev = domainManager.getDeviceByIdentifier(devAss.assignedDeviceId);
-			
-			System.out.println("Dev: "+dev);
-			System.out.println(devAss.componentId);
 		}
 		
-		return null;
+		return compToDevice;
+	}
+
+	@Override
+	public Map<String, Integer> getComponentProcessIds() {
+		Map<String, Integer> compToProcess = new HashMap<>();
+		
+		for(ComponentProcessIdType id : this.getCorbaObject().componentProcessIds()) {
+			compToProcess.put(id.componentId, id.processId);
+		}
+		
+		return compToProcess;
 	}
 }

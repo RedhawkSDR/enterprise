@@ -21,17 +21,20 @@ package redhawk.driver.application.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
+import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.ApplicationStartException;
@@ -204,6 +207,19 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 	
 	@Test
 	public void testComponentDevices(){
-		application.getComponentDevices();
+		Map<String, RedhawkDevice> compToDeviceMap = application.getComponentDevices();
+		
+		//Map has stuff in it
+		assertTrue(!compToDeviceMap.isEmpty());
+		assertEquals("Should be 2 entries", 2, compToDeviceMap.size());
+	}
+	
+	@Test
+	public void testComponentProcessIds(){
+		Map<String, Integer> compToProcess = application.getComponentProcessIds();
+		
+		//Map has stuff in it
+		assertTrue(!compToProcess.isEmpty());
+		assertEquals("Should be 2 entries", 2, compToProcess.size());
 	}
 }

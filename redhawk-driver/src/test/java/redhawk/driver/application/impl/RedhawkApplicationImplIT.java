@@ -201,4 +201,9 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 			fail("Unable to call aware method"+ex.getMessage());
 		}
 	}
+	
+	@Test
+	public void testComponentDevices(){
+		application.getComponentDevices();
+	}
 }

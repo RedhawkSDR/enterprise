@@ -26,6 +26,7 @@ import java.util.Map;
 import CF.Application;
 import redhawk.driver.base.QueryableResource;
 import redhawk.driver.component.RedhawkComponent;
+import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.ApplicationStartException;
@@ -147,4 +148,9 @@ public interface RedhawkApplication extends QueryableResource {
      **/
     boolean isAware();
     
+    /**
+     * Return a map of Components in your application to the Device they're launched on. 
+     * @return
+     */
+    Map<String, RedhawkDevice> getComponentDevices(); 
 }

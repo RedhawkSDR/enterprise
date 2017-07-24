@@ -33,6 +33,7 @@ import java.util.stream.Collectors;
 
 import CF.Application;
 import CF.ApplicationHelper;
+import CF.DeviceAssignmentType;
 import CF.LifeCyclePackage.ReleaseError;
 import CF.ResourcePackage.StartError;
 import CF.ResourcePackage.StopError;
@@ -41,6 +42,7 @@ import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.base.impl.QueryableResourceImpl;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.component.impl.RedhawkComponentImpl;
+import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.ApplicationStartException;
@@ -270,5 +272,31 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 	@Override
 	public boolean isAware() {
 		return this.getCorbaObject().aware();
+	}
+
+	@Override
+	public Map<String, RedhawkDevice> getComponentDevices() {
+		Map<String, RedhawkDevice> compToDevice = new HashMap<>(); 
+		Map<String, RedhawkDevice> devCache = new HashMap<>(); 
+		
+		for(DeviceAssignmentType devAss : this.getCorbaObject().componentDevices()){
+			if(devCache.containsKey(devAss.assignedDeviceId)){
+				RedhawkDevice dev = domainManager.getDeviceByIdentifier(devAss.assignedDeviceId);
+				
+				//Add Device to component map
+				compToDevice.put(devAss.componentId, dev);
+				
+				//Update cache
+				devCache.put(devAss.assignedDeviceId, dev);
+			}else{
+				compToDevice.put(devAss.componentId, devCache.get(devAss.assignedDeviceId));
+			}
+			RedhawkDevice dev = domainManager.getDeviceByIdentifier(devAss.assignedDeviceId);
+			
+			System.out.println("Dev: "+dev);
+			System.out.println(devAss.componentId);
+		}
+		
+		return null;
 	}
 }

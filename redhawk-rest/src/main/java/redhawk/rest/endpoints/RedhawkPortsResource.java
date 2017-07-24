@@ -90,7 +90,7 @@ public class RedhawkPortsResource extends RedhawkBaseResource {
     @Path("/{portId}/sri")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value="GET REDHAWK Component Port Statistics"
+    		value="GET REDHAWK Component Port SRI"
     		)
     public SRIContainer getActiveSRIs(@PathParam("portId") String portName) throws Exception {
         return redhawkManager.getSRI(nameServer, "port", domainName + "/" + applicationId + "/" + componentId + "/" + portName);

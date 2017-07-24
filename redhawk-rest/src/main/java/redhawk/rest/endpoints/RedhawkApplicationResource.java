@@ -193,7 +193,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@GET
 	@Path("/{applicationId}/ports/{portId}/sri")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@ApiOperation(value = "GET Application port statistics")
+	@ApiOperation(value = "GET Application port SRI")
 	public SRIContainer getApplicationSRI(
 			@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId,
 			@ApiParam(value = "External name for port") @PathParam("portId") String portName) throws Exception {

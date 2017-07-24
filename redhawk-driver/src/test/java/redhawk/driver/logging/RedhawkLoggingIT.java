@@ -22,11 +22,8 @@ package redhawk.driver.logging;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import java.io.File;
 import java.io.IOException;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.junit.Test;
 
 import redhawk.driver.application.RedhawkApplication;
@@ -41,7 +38,7 @@ import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.testutils.RedhawkDeviceTestBase;
 
-public class RedhawkLoggingMT extends RedhawkDeviceTestBase {
+public class RedhawkLoggingIT extends RedhawkDeviceTestBase {
 	@Test
 	public void testDomainManagerLog(){
 		try {
@@ -123,30 +120,8 @@ public class RedhawkLoggingMT extends RedhawkDeviceTestBase {
 	@Test
 	public void testDeviceLogLevels() throws IOException {
 		RedhawkDeviceManager deviceManager = null;
-		File nodeDir = null;
-		Process devMgrProcess = null;
-
+		
 		try {
-			/*
-			 * Set up a device
-			 */
-			/*
-			 * Place Dcd in it's proper directory
-			 */
-			File file = new File("src/test/resources/node/SimulatorNode");
-
-			nodeDir = new File(deviceManagerHome + "/nodes/SimulatorNode");
-
-			/*
-			 * Copy Nodes directory over
-			 */
-			FileUtils.copyDirectory(file, nodeDir, FileFilterUtils.suffixFileFilter(".dcd.xml"));
-
-			devMgrProcess = proxy.launchDeviceManager("/var/redhawk/sdr/dev/nodes/SimulatorNode/DeviceManager.dcd.xml");
-
-			// Could use EventChannel to know when it's available
-			Thread.sleep(5000l);
-
 			deviceManager = driver.getDeviceManager("REDHAWK_DEV/Simulator.*");
 
 			RedhawkDevice dev = deviceManager.getDevices().get(0);
@@ -155,7 +130,7 @@ public class RedhawkLoggingMT extends RedhawkDeviceTestBase {
 			// Change log level 
 			dev.setLogLevel(RedhawkLogLevel.TRACE);
 			assertEquals(RedhawkLogLevel.TRACE, dev.getLogLevel());
-		} catch (IOException | InterruptedException | ResourceNotFoundException | MultipleResourceException
+		} catch (ResourceNotFoundException | MultipleResourceException
 				| CORBAException ex) {
 			ex.printStackTrace();
 			fail("Failure running test " + ex.getMessage());

@@ -28,13 +28,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.omg.CORBA.Any;
 
-import CF.EventChannelManagerPackage.ChannelAlreadyExists;
 import redhawk.camel.components.RedhawkComponent;
 import redhawk.camel.components.endpoints.RedhawkEventChannelEndpoint;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.eventchannel.RedhawkEventChannel;
 import redhawk.driver.eventchannel.RedhawkEventChannelManager;
-import redhawk.driver.exceptions.EventChannelCreationException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 
 public class RedhawkEventChannelProducer extends DefaultProducer {

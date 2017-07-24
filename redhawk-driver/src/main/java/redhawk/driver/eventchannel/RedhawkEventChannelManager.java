@@ -22,7 +22,7 @@ package redhawk.driver.eventchannel;
 import java.util.List;
 import java.util.Map;
 
-import redhawk.driver.exceptions.EventChannelCreationException;
+import redhawk.driver.exceptions.EventChannelException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 
@@ -33,15 +33,26 @@ public interface RedhawkEventChannelManager {
 	 * 	Name for the event channel. 
 	 * @throws EventChannelCreationException
 	 */
-	void createEventChannel(String channelName) throws EventChannelCreationException;
+	void createEventChannel(String channelName) throws EventChannelException;
 	
 	/**
-	 * Release an Event Channel. 
+	 * Release an Event Channel whether registrants exist or not. 
+	 *
 	 * @param channelName
 	 * 	Channel name to release. 
 	 * @throws EventChannelCreationException
 	 */
-	void releaseEventChannel(String channelName) throws EventChannelCreationException;
+	void releaseEventChannel(String channelName) throws EventChannelException;
+
+	/**
+	 * Release an Event channel.
+	 * 
+	 * @param channelName
+	 * 	Channel name to release
+	 * @param deleteRegistrants
+	 * 	Whether or not to delete registrants automatically. If false an exception will occur. 
+	 */
+	void releaseEventChanne(String channelName, Boolean deleteRegistrants) throws EventChannelException;
 	
 	/**
 	 * Retrieve a managed Event Channel. 

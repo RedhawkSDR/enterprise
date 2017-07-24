@@ -26,9 +26,13 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import redhawk.driver.application.RedhawkApplication;
@@ -46,7 +50,10 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.testutils.RedhawkDeviceTestBase;
 
-public class RedhawkConnectionManagerMT extends RedhawkDeviceTestBase{
+/*
+ * Test does not work Hmmmmmm
+ */
+public class RedhawkConnectionManagerIT extends RedhawkDeviceTestBase{
 	private static RedhawkConnectionManager connectionManager;
 	
 	/*
@@ -55,10 +62,26 @@ public class RedhawkConnectionManagerMT extends RedhawkDeviceTestBase{
 	@BeforeClass
 	public static void setupConnectionMgr(){
 		try {
+			//TODO: Add code to launch Component that this waveform is dependent on. 
 			connectionManager = driver.getDomain().getConnectionManager();
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Issue setting up test "+e.getMessage());
+		}
+	}
+	
+	@Test
+	@Ignore("This was only used for debugging delete before closing ticket")
+	public void createAppTest(){
+		try {
+			RedhawkApplication app = driver.getDomain().createApplication("testApp", new File("src/test/resources/waveforms/ConnectionManagerTest/ConnectionManagerTest.sad.xml"));
+			app.release();
+		}catch(Exception ex){
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			ex.printStackTrace(pw);
+			logger.log(Level.SEVERE, "WHAT IS HAPPENING????");
+			System.out.println(sw.toString());
 		}
 	}
 	
@@ -103,7 +126,7 @@ public class RedhawkConnectionManagerMT extends RedhawkDeviceTestBase{
 	}
 	
 	@Test
-	public void testConnectApplictionToApplication() throws Exception{
+	public void testConnectApplicationToApplication() throws Exception{
 		String appName = "FM_RBDS_demo";
 		String connMgrTestAppName = "connMgrTest";
 		String connectionId = "myConnection";
@@ -146,7 +169,7 @@ public class RedhawkConnectionManagerMT extends RedhawkDeviceTestBase{
 	}
 	
 	@Test
-	public void testConnectApplictionToEventChannel() throws Exception{
+	public void testConnectApplicationToEventChannel() throws Exception{
 		String connMgrTestAppName = "connMgrTest";
 		String connectionId = "myConnection";
 		String channelName = "ConnMgrTest";
@@ -177,11 +200,18 @@ public class RedhawkConnectionManagerMT extends RedhawkDeviceTestBase{
 			//Test disconnect
 			this.disconnect();
 		} catch (MultipleResourceException | ApplicationCreationException | CORBAException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			fail("Test failure "+e.getMessage());
 		} finally{
-			if(eventChannel!=null){
-				driver.getDomain().getEventChannelManager().releaseEventChannel(eventChannel.getName());
+			//Clean up Event Channel
+			try{
+				RedhawkEventChannel channel = driver.getDomain().getEventChannelManager().getEventChannel(channelName);
+				
+				//TODO: Add a shutdown method on the actual channel
+				if(channel!=null)
+					driver.getDomain().getEventChannelManager().releaseEventChannel(channel.getName());
+			}catch(ResourceNotFoundException ex){
+				logger.fine("No Event Channel to clean up this exception is expected");
 			}
 			
 			if(usesApp!=null){

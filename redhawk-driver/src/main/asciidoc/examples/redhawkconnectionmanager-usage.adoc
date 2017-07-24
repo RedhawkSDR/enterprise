@@ -7,7 +7,7 @@ The following code examples explain how to use the `RedhawkConnectionManager` in
 [source,java,indent=0]
 .`RedhawkConnectionManagerMT.java`
 ----
-include::snippets/RedhawkConnectionManagerMT.java[lines=58]
+include::snippets/RedhawkConnectionManagerIT.java[lines=58]
 ----
 
 === Connect a Device Port to an Application Port
@@ -15,7 +15,7 @@ include::snippets/RedhawkConnectionManagerMT.java[lines=58]
 [source,java,indent=0]
 .`RedhawkConnectionManagerMT.java`
 ----
-include::snippets/RedhawkConnectionManagerMT.java[lines=73..97]
+include::snippets/RedhawkConnectionManagerIT.java[lines=73..97]
 ----
 
 === Connect Two Application Ports 
@@ -23,7 +23,7 @@ include::snippets/RedhawkConnectionManagerMT.java[lines=73..97]
 [source,java,indent=0]
 .`RedhawkConnectionManagerMT.java`
 ----
-include::snippets/RedhawkConnectionManagerMT.java[lines=113..133]
+include::snippets/RedhawkConnectionManagerIT.java[lines=113..133]
 ----
 
 === Connect Application Port to an Event Channel 
@@ -31,5 +31,5 @@ include::snippets/RedhawkConnectionManagerMT.java[lines=113..133]
 [source,java,indent=0]
 .`RedhawkConnectionManagerMT.java`
 ----
-include::snippets/RedhawkConnectionManagerMT.java[lines=157..178]
+include::snippets/RedhawkConnectionManagerIT.java[lines=157..178]
 ----

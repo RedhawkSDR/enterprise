@@ -8,7 +8,7 @@ The following code examples explain how to use the `RedhawkAllocationManager` in
 [source,java,indent=0]
 .`RedhawkAllocationManagerMT.java`
 ----
-include::snippets/RedhawkAllocationManagerMT.java[lines=59]
+include::snippets/RedhawkAllocationManagerIT.java[lines=59]
 ----
 
 === List Devices from the AllocationManager 
@@ -18,7 +18,7 @@ List Devices to which the AllocationManager has access.
 [source,java,indent=0]
 .`RedhawkAllocationManagerMT.java`
 ----
-include::snippets/RedhawkAllocationManagerMT.java[lines=74]
+include::snippets/RedhawkAllocationManagerIT.java[lines=74]
 ----
 
 === Allocate a Device
@@ -26,7 +26,7 @@ include::snippets/RedhawkAllocationManagerMT.java[lines=74]
 [source,java,indent=0]
 .`RedhawkAllocationManagerMT.java`
 ----
-include::snippets/RedhawkAllocationManagerMT.java[lines=111..117]
+include::snippets/RedhawkAllocationManagerIT.java[lines=111..117]
 ----
 
 === Deallocate a Device
@@ -34,5 +34,5 @@ include::snippets/RedhawkAllocationManagerMT.java[lines=111..117]
 [source,java,indent=0]
 .`RedhawkAllocationManagerMT.java`
 ----
-include::snippets/RedhawkAllocationManagerMT.java[lines=96..105]
+include::snippets/RedhawkAllocationManagerIT.java[lines=96..105]
 ----

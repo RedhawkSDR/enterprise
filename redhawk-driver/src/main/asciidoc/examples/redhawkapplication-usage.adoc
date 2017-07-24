@@ -23,6 +23,6 @@ include::snippets/RedhawkApplicationImplIT.java[lines=97..101]
 [source,java,indent=0]
 .`RedhawkLoggingMT.java`	
 ----
-include::snippets/RedhawkLoggingMT.java[lines=74..80]
+include::snippets/RedhawkLoggingIT.java[lines=74..80]
 ----
 

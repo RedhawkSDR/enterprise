@@ -330,7 +330,7 @@
 											<directory>src/test/java/redhawk/driver/device/impl</directory>
 											<targetPath>examples/snippets</targetPath>
 											<includes>
-												<include>RedhawkDeviceImplMT.java</include>
+												<include>RedhawkDeviceImplIT.java</include>
 											</includes>
 										</resource>
 										<resource>
@@ -341,24 +341,31 @@
 											</includes>
 										</resource>
 										<resource>
+											<directory>src/test/java/redhawk/driver/port/impl</directory>
+											<targetPath>examples/snippets</targetPath>
+											<includes>
+												<include>RedhawkPortImplIT.java</include>
+											</includes>
+										</resource>										
+										<resource>
 											<directory>src/test/java/redhawk/driver/logging</directory>
 											<targetPath>examples/snippets</targetPath>
 											<includes>
-												<include>RedhawkLoggingMT.java</include>
+												<include>RedhawkLoggingIT.java</include>
 											</includes>
 										</resource>
 										<resource>
 											<directory>src/test/java/redhawk/driver/allocationmanager</directory>
 											<targetPath>examples/snippets</targetPath>
 											<includes>
-												<include>RedhawkAllocationManagerMT.java</include>
+												<include>RedhawkAllocationManagerIT.java</include>
 											</includes>
 										</resource>
 										<resource>
 											<directory>src/test/java/redhawk/driver/connectionmanager</directory>
 											<targetPath>examples/snippets</targetPath>
 											<includes>
-												<include>RedhawkConnectionManagerMT.java</include>
+												<include>RedhawkConnectionManagerIT.java</include>
 											</includes>
 										</resource>
 										<resource>

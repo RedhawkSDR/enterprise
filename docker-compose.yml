@@ -1,4 +1,4 @@
-version: '2'
+version: '2.1'
 services:
   redhawk:
     image: ${docker_registry}redhawk/redhawk:${redhawk_version}-${dist}-${arch}

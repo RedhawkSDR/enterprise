@@ -38,7 +38,9 @@ public class Component {
     
     private String name;
     
-    //@XmlElementWrapper(name="properties")
+    private Integer processId;
+
+	//@XmlElementWrapper(name="properties")
     //@XmlElement(name="property")
     private List<Property> properties;
     
@@ -87,5 +89,12 @@ public class Component {
     
 	public void setSoftwareComponent(Softwarecomponent softwareComponent) {
 		this.softwarecomponent = softwareComponent;
+	}
+	
+    public Integer getProcessId() {
+		return processId;
+	}
+	public void setProcessId(Integer processId) {
+		this.processId = processId;
 	}
 }

@@ -52,4 +52,10 @@ public interface RedhawkComponent extends PortBackedObject {
      * @throws ComponentStopException
      */
     void stop() throws ComponentStopException;
+    
+    /**
+     * Process Id for this component. 
+     * @return
+     */
+    Integer getProcessId();
 }

@@ -126,6 +126,11 @@ public class RedhawkComponentImpl extends PortBackedObjectImpl<ComponentType> im
 		resource.log_level(level.getValue());
 	}
 
+	@Override
+	public Integer getProcessId() {
+		return application.getComponentProcessIds().get(component.identifier);
+	}
+
 
     
 }

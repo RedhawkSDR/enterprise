@@ -7,6 +7,7 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.log4j.Level;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,6 +18,7 @@ import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.rest.model.Application;
 import redhawk.rest.model.ExternalPort;
 import redhawk.rest.model.PortStatisticsContainer;
 import redhawk.rest.model.SRIContainer;
@@ -46,6 +48,19 @@ public class RedhawkApplicationIT extends RedhawkTestBase{
 		} catch (MultipleResourceException | ApplicationCreationException | CORBAException e) {
 			e.printStackTrace();
 			fail("Test is not setup properly unable to launch application "+e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testApplicationFields() {
+		try {
+			Application application = manager.get(nameServer, "application", domainName+"/"+basicApplication.getName());
+			
+			String xml = TestUtils.getStringFromJAXB(application);
+			logger.fine(xml);
+			assertNotNull(application.isAware());
+		} catch (Exception e) {
+			fail("Test failure: "+e.getMessage());
 		}
 	}
 	

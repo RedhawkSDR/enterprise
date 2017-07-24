@@ -62,7 +62,7 @@ variables:
     - find */target -name "*.exec" | tar -cvf jacoco-exec.tar.gz --files-from -
     - find */target/classes | tar -cvf jacoco-classes.tar --files-from -
     - find redhawk-*/src/main/java | tar -cvf jacoco-sources.tar --files-from -
-    #- tar -C docs/target -czvf site.tar.gz site
+    - tar -C docs/target -czvf site.tar.gz site
   after_script:
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} down
   artifacts:
@@ -72,7 +72,7 @@ variables:
       - jacoco-exec.tar.gz
       - jacoco-classes.tar
       - jacoco-sources.tar
-      #- site.tar.gz
+      - site.tar.gz
     expire_in: 3 days
 
 build:
@@ -81,8 +81,6 @@ build:
     - mvn -Djava.io.tmpdir=./ deploy -P docs,jaxb-generation,default -B -U -Drelease=0.$CI_PIPELINE_ID
   only:
     - branches
-  except:
-    - RELENG-665
 
 build-release:
   <<: *common
@@ -96,8 +94,6 @@ test-install:
   stage: test
   script:
     - yum install -y `find output -name '*.rpm'`
-  except:
-    - RELENG-665
 
 test-el7-x86_64:
   <<: *compose-test-common
@@ -142,8 +138,6 @@ deploy:
   <<: *deploy-common
   only:
     - branches
-  except:
-    - RELENG-665
 
 deploy-release:
   variables:

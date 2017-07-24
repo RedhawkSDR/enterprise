@@ -184,6 +184,9 @@ public class RedhawkPortImplIT extends RedhawkTestBase{
 			RedhawkPort port = comp.getPort("dataFloat_out");
 			assertTrue("Should be atleast 1 connection id", !port.getConnectionIds().isEmpty());
 			
+			/*
+			 * Remove connections by connectionId
+			 */
 			for(String connectionId : port.getConnectionIds()){
 				port.disconnect(connectionId);
 			}

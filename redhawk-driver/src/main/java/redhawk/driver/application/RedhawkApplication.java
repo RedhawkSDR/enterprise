@@ -139,4 +139,12 @@ public interface RedhawkApplication extends QueryableResource {
      * 
      */
     Map<String, RedhawkProperty> getExternalProperties();
+    
+    
+    /** 
+     * This boolean attribute contains the aware state of Application. 
+     * This attribute shows whether the Components in the Application are given a pointer to the Application and Domain Manager. 
+     **/
+    boolean isAware();
+    
 }

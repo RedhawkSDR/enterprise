@@ -31,16 +31,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.omg.CORBA.Any;
-import org.ossie.properties.AnyUtils;
-
 import CF.Application;
 import CF.ApplicationHelper;
-import CF.DataType;
-import CF.PropertiesHolder;
-import CF.PropertySetHelper;
-import CF.PropertySetOperations;
-import CF.UnknownProperties;
 import CF.LifeCyclePackage.ReleaseError;
 import CF.ResourcePackage.StartError;
 import CF.ResourcePackage.StopError;
@@ -61,10 +53,6 @@ import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.port.impl.RedhawkExternalPortImpl;
 import redhawk.driver.port.impl.RedhawkPortImpl;
 import redhawk.driver.properties.RedhawkProperty;
-import redhawk.driver.properties.RedhawkSimple;
-import redhawk.driver.properties.RedhawkSimpleSequence;
-import redhawk.driver.properties.RedhawkStruct;
-import redhawk.driver.properties.RedhawkStructSequence;
 import redhawk.driver.xml.model.sca.sad.Externalports;
 import redhawk.driver.xml.model.sca.sad.Externalproperties;
 import redhawk.driver.xml.model.sca.sad.Port;
@@ -277,5 +265,10 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 	@Override
 	public void setLogLevel(RedhawkLogLevel level) {
 		getCorbaObject().log_level(level.getValue());
+	}
+
+	@Override
+	public boolean isAware() {
+		return this.getCorbaObject().aware();
 	}
 }

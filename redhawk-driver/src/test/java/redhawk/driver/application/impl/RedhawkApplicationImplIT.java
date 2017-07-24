@@ -21,6 +21,7 @@ package redhawk.driver.application.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -188,5 +189,16 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 				}
 			}
 		}		
+	}
+	
+	@Test
+	public void testAware(){
+		try{
+			//Just test whether you can successfully call the method
+			Boolean isAware = application.isAware();
+			logger.info("Aware "+isAware);
+		}catch(Exception ex){
+			fail("Unable to call aware method"+ex.getMessage());
+		}
 	}
 }

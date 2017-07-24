@@ -159,4 +159,10 @@ public interface RedhawkApplication extends QueryableResource {
      * @return
      */
     Map<String, Integer> getComponentProcessIds();
+    
+    /**
+     * Map of each Component -> Implementation type(i.e. cpp, java, python)
+     * @return
+     */
+    Map<String, String> getComponentImplementations();
 }

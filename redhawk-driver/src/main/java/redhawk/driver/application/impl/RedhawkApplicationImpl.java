@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import CF.Application;
 import CF.ApplicationHelper;
 import CF.DeviceAssignmentType;
+import CF.ApplicationPackage.ComponentElementType;
 import CF.ApplicationPackage.ComponentProcessIdType;
 import CF.LifeCyclePackage.ReleaseError;
 import CF.ResourcePackage.StartError;
@@ -306,5 +307,16 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 		}
 		
 		return compToProcess;
+	}
+
+	@Override
+	public Map<String, String> getComponentImplementations() {
+		Map<String, String> compToImpl = new HashMap<>();
+		
+		for(ComponentElementType id : this.getCorbaObject().componentImplementations()) {
+			compToImpl.put(id.componentId, id.elementId);
+		}
+		
+		return compToImpl;
 	}
 }

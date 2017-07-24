@@ -222,4 +222,18 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 		assertTrue(!compToProcess.isEmpty());
 		assertEquals("Should be 2 entries", 2, compToProcess.size());
 	}
+	
+	@Test
+	public void testComponentImplementation() {
+		Map<String, String> compImpl = application.getComponentImplementations();
+		
+		//Map has stuff in it
+		assertTrue(!compImpl.isEmpty());
+		assertEquals("Should be 2 entries", 2, compImpl.size());
+		
+		//All values should be cpp
+		for(String impl : compImpl.values()) {
+			assertEquals("cpp", impl);
+		}
+	}
 }

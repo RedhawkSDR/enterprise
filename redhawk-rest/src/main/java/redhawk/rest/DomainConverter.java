@@ -366,6 +366,7 @@ public class DomainConverter {
 		app.setIdentifier(obj.getIdentifier());
 		app.setName(obj.getName());
 		app.setStarted(obj.isStarted());
+		app.setAware(obj.isAware());
 
 		if (fetchMode.equals(FetchMode.EAGER)) {
 			try {

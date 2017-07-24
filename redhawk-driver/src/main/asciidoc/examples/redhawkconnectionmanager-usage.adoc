@@ -5,31 +5,31 @@ The following code examples explain how to use the `RedhawkConnectionManager` in
 === Get the ConnectionManager
 
 [source,java,indent=0]
-.`RedhawkConnectionManagerMT.java`
+.`RedhawkConnectionManagerIT.java`
 ----
-include::snippets/RedhawkConnectionManagerIT.java[lines=58]
+include::snippets/RedhawkConnectionManagerIT.java[lines=63]
 ----
 
 === Connect a Device Port to an Application Port
 
 [source,java,indent=0]
-.`RedhawkConnectionManagerMT.java`
+.`RedhawkConnectionManagerIT.java`
 ----
-include::snippets/RedhawkConnectionManagerIT.java[lines=73..97]
+include::snippets/RedhawkConnectionManagerIT.java[lines=78..102]
 ----
 
 === Connect Two Application Ports 
 
 [source,java,indent=0]
-.`RedhawkConnectionManagerMT.java`
+.`RedhawkConnectionManagerIT.java`
 ----
-include::snippets/RedhawkConnectionManagerIT.java[lines=113..133]
+include::snippets/RedhawkConnectionManagerIT.java[lines=118..138]
 ----
 
 === Connect Application Port to an Event Channel 
 
 [source,java,indent=0]
-.`RedhawkConnectionManagerMT.java`
+.`RedhawkConnectionManagerIT.java`
 ----
-include::snippets/RedhawkConnectionManagerIT.java[lines=157..178]
+include::snippets/RedhawkConnectionManagerIT.java[lines=162..183]
 ----

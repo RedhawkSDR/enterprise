@@ -7,17 +7,17 @@ The following code examples explain how to use the `RedhawkDevice` interface.
 Sample code for allocating and deallocating a FrontEnd Device. 
 
 [source,java,indent=0]
-.`RedhawkDeviceImplMT.java`
+.`RedhawkDeviceImplIT.java`
 ----
-include::snippets/RedhawkDeviceImplIT.java[lines=83..131]
+include::snippets/RedhawkDeviceImplIT.java[lines=43..87]
 ----
 
 === Example of How to Get and Set the Log Level of a Device 
 
 [source,java,indent=0]
-.`RedhawkLoggingMT.java`	
+.`RedhawkLoggingIT.java`	
 ----
-include::snippets/RedhawkLoggingIT.java[lines=151..157]
+include::snippets/RedhawkLoggingIT.java[lines=127..132]
 ----
 
 

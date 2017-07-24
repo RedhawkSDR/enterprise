@@ -21,7 +21,7 @@ include::snippets/RedhawkComponentImplIT.java[lines=88..96]
 === Example of How to Get and Set the Log Level of a Component
 
 [source,java,indent=0]
-.`RedhawkLoggingMT.java`	
+.`RedhawkLoggingIT.java`	
 ----
 include::snippets/RedhawkLoggingIT.java[lines=101..105]
 ----

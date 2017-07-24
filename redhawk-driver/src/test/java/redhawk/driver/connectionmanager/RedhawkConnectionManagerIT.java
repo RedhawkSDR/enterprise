@@ -50,9 +50,6 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.testutils.RedhawkDeviceTestBase;
 
-/*
- * Test does not work Hmmmmmm
- */
 public class RedhawkConnectionManagerIT extends RedhawkDeviceTestBase{
 	private static RedhawkConnectionManager connectionManager;
 	
@@ -67,21 +64,6 @@ public class RedhawkConnectionManagerIT extends RedhawkDeviceTestBase{
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Issue setting up test "+e.getMessage());
-		}
-	}
-	
-	@Test
-	@Ignore("This was only used for debugging delete before closing ticket")
-	public void createAppTest(){
-		try {
-			RedhawkApplication app = driver.getDomain().createApplication("testApp", new File("src/test/resources/waveforms/ConnectionManagerTest/ConnectionManagerTest.sad.xml"));
-			app.release();
-		}catch(Exception ex){
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			ex.printStackTrace(pw);
-			logger.log(Level.SEVERE, "WHAT IS HAPPENING????");
-			System.out.println(sw.toString());
 		}
 	}
 	

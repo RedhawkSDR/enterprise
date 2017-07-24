@@ -26,15 +26,11 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.util.Map;
-import java.util.Properties;
 import java.util.logging.Logger;
 
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.omg.CORBA.ORBPackage.InvalidName;
 
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
@@ -88,6 +84,7 @@ public class RedhawkDriverIT extends RedhawkTestBase{
 	@Test
 	public void testGetDeviceManager() throws ResourceNotFoundException, CORBAException, MultipleResourceException{		
 		String deviceManagerName = driver.getDomain("REDHAWK_DEV").getDeviceManagers().get(0).getName();
+		
 		//Path to dev Manager
 		String pathForDevManager = domainName+"/"+deviceManagerName;
 		logger.info(pathForDevManager);

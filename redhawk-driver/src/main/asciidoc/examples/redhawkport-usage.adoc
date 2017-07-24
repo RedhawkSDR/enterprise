@@ -27,6 +27,7 @@ The examples below shows how to retrieve the following metadata from a REDHAWK P
 include::snippets/RedhawkPortImplIT.java[lines=57..60]
 ----
 
+[source,java,indent=0]
 ----
 include::snippets/RedhawkPortImplIT.java[lines=71..74]
 ----

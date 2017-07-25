@@ -336,6 +336,11 @@ public class RedhawkDeviceImpl extends PortBackedObjectImpl<Device> implements R
 		return UsageState.reverseLookup(getCorbaObject().usageState().value());
 	}
 
+	@Override
+	public String getImplementation() {
+		return deviceManager.getCorbaObject().getComponentImplementationId(this.getIdentifier());
+	}
+
 	
 //	RedhawkTuner getTuner(String allocId) {
 //		Map<String, Object> tunerStatus = getTunerById(allocId);

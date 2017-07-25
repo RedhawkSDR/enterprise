@@ -266,4 +266,24 @@ public class RedhawkDeviceManagerImpl extends QueryableResourceImpl<DeviceManage
 	public void setLogLevel(RedhawkLogLevel level) {
 		throw new UnsupportedOperationException("DeviceManager does not implement the CORBA Logging interface.");		
 	}
+
+	@Override
+	public String deviceConfigurationProfile() {
+		return this.getCorbaObject().deviceConfigurationProfile();
+	}
+
+	@Override
+	public String getComponentImplemantation() throws MultipleResourceException {
+		//Should only be one device per deviceManager
+		RedhawkDevice rhDevice = null;
+		for(RedhawkDevice device : this.getDevices()) {
+			if(rhDevice==null)
+				rhDevice = device;
+			else
+				throw new MultipleResourceException("Get Implementation from specific device since multipe devices are "
+						+ "available for this DeviceManager");
+		}
+		
+		return this.getCorbaObject().getComponentImplementationId(rhDevice.getIdentifier());
+	}
 }

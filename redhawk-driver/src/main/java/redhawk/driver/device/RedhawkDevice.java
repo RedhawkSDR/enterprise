@@ -153,4 +153,10 @@ public interface RedhawkDevice extends PortBackedObject {
 	 * @return
 	 */
 	UsageState usageState();
+	
+	/**
+	 * Returns the type of device Implementation for this device.
+	 * @return
+	 */
+	String getImplementation(); 
 }

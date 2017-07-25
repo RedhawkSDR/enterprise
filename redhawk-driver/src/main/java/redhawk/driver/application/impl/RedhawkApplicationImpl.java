@@ -31,16 +31,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.omg.CORBA.Any;
-import org.ossie.properties.AnyUtils;
-
 import CF.Application;
 import CF.ApplicationHelper;
-import CF.DataType;
-import CF.PropertiesHolder;
-import CF.PropertySetHelper;
-import CF.PropertySetOperations;
-import CF.UnknownProperties;
+import CF.DeviceAssignmentType;
+import CF.ApplicationPackage.ComponentElementType;
+import CF.ApplicationPackage.ComponentProcessIdType;
 import CF.LifeCyclePackage.ReleaseError;
 import CF.ResourcePackage.StartError;
 import CF.ResourcePackage.StopError;
@@ -49,6 +44,7 @@ import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.base.impl.QueryableResourceImpl;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.component.impl.RedhawkComponentImpl;
+import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.ApplicationStartException;
@@ -61,10 +57,6 @@ import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.port.impl.RedhawkExternalPortImpl;
 import redhawk.driver.port.impl.RedhawkPortImpl;
 import redhawk.driver.properties.RedhawkProperty;
-import redhawk.driver.properties.RedhawkSimple;
-import redhawk.driver.properties.RedhawkSimpleSequence;
-import redhawk.driver.properties.RedhawkStruct;
-import redhawk.driver.properties.RedhawkStructSequence;
 import redhawk.driver.xml.model.sca.sad.Externalports;
 import redhawk.driver.xml.model.sca.sad.Externalproperties;
 import redhawk.driver.xml.model.sca.sad.Port;
@@ -277,5 +269,54 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 	@Override
 	public void setLogLevel(RedhawkLogLevel level) {
 		getCorbaObject().log_level(level.getValue());
+	}
+
+	@Override
+	public boolean isAware() {
+		return this.getCorbaObject().aware();
+	}
+
+	@Override
+	public Map<String, RedhawkDevice> getComponentDevices() {
+		Map<String, RedhawkDevice> compToDevice = new HashMap<>(); 
+		Map<String, RedhawkDevice> devCache = new HashMap<>(); 
+		
+		for(DeviceAssignmentType devAss : this.getCorbaObject().componentDevices()){
+			if(!devCache.containsKey(devAss.assignedDeviceId)){
+				RedhawkDevice dev = domainManager.getDeviceByIdentifier(devAss.assignedDeviceId);
+				
+				//Add Device to component map
+				compToDevice.put(devAss.componentId, dev);
+				
+				//Update cache
+				devCache.put(devAss.assignedDeviceId, dev);
+			}else{
+				compToDevice.put(devAss.componentId, devCache.get(devAss.assignedDeviceId));
+			}
+		}
+		
+		return compToDevice;
+	}
+
+	@Override
+	public Map<String, Integer> getComponentProcessIds() {
+		Map<String, Integer> compToProcess = new HashMap<>();
+		
+		for(ComponentProcessIdType id : this.getCorbaObject().componentProcessIds()) {
+			compToProcess.put(id.componentId, id.processId);
+		}
+		
+		return compToProcess;
+	}
+
+	@Override
+	public Map<String, String> getComponentImplementations() {
+		Map<String, String> compToImpl = new HashMap<>();
+		
+		for(ComponentElementType id : this.getCorbaObject().componentImplementations()) {
+			compToImpl.put(id.componentId, id.elementId);
+		}
+		
+		return compToImpl;
 	}
 }

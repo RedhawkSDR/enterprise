@@ -19,11 +19,11 @@
  */
 package redhawk.driver.component.impl;
 
+import java.util.Map;
 import java.util.logging.Logger;
 
 import CF.ComponentType;
 import CF.ComponentTypeHelper;
-import CF.ComponentTypeHolder;
 import CF.Resource;
 import CF.ResourceHelper;
 import CF.ResourcePackage.StartError;
@@ -31,6 +31,7 @@ import CF.ResourcePackage.StopError;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.base.impl.PortBackedObjectImpl;
 import redhawk.driver.component.RedhawkComponent;
+import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.exceptions.ComponentStartException;
 import redhawk.driver.exceptions.ComponentStopException;
 import redhawk.driver.exceptions.ConnectionException;
@@ -101,13 +102,6 @@ public class RedhawkComponentImpl extends PortBackedObjectImpl<ComponentType> im
 			throw new ComponentStopException(e);
 		}
 	}
-	
-    @Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("RedhawkComponentImpl [name=").append(getName()).append("]");
-		return builder.toString();
-	}
 
 	@Override
 	public Class<?> getHelperClass() {
@@ -126,6 +120,27 @@ public class RedhawkComponentImpl extends PortBackedObjectImpl<ComponentType> im
 		resource.log_level(level.getValue());
 	}
 
+	@Override
+	public Integer getProcessId() {
+		return application.getComponentProcessIds().get(component.identifier);
+	}
 
-    
+	@Override
+	public String getComponentImplementation() {
+		return application.getComponentImplementations().get(component.identifier);
+	}
+
+	@Override
+	public RedhawkDevice getComponentDevice() {
+		Map<String, RedhawkDevice> compToDevice = application.getComponentDevices();
+		
+		return compToDevice.get(component.identifier);
+	}
+	
+    @Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("RedhawkComponentImpl [name=").append(getName()).append("]");
+		return builder.toString();
+	}
 }

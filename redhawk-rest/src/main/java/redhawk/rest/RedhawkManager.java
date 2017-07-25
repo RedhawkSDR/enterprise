@@ -38,6 +38,7 @@ import redhawk.driver.RedhawkDriver;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.base.QueryableResource;
 import redhawk.driver.component.RedhawkComponent;
+import redhawk.driver.device.AdminState;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.device.impl.RedhawkDeviceImpl;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
@@ -49,8 +50,6 @@ import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.EventChannelException;
 import redhawk.driver.exceptions.MultipleResourceException;
-import redhawk.driver.exceptions.PortException;
-import redhawk.driver.exceptions.ResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.port.RedhawkPortStatistics;
@@ -73,7 +72,6 @@ import redhawk.rest.model.TunerMode;
 import redhawk.rest.model.WaveformInfo;
 
 public class RedhawkManager {
-
 	private static Log logger = LogFactory.getLog(RedhawkManager.class);
 
 	private List<ServiceReference<Redhawk>> redhawkDriverServices;
@@ -488,6 +486,40 @@ public class RedhawkManager {
 				RedhawkDevice device = redhawk.getDevice(deviceLocation);
 
 				device.deallocate(allocationId);
+			} catch (ResourceNotFoundException | MultipleResourceException | CORBAException ex) {
+				logger.debug("Issue allocating Device at this location: " + deviceLocation);
+				throw new Exception("Unable allocate Device", ex);
+			}
+		} finally {
+			if (redhawk != null && createdNewInstance) {
+				redhawk.disconnect();
+			}
+		}
+	}
+	
+	public void setAdminState(String nameServer, String deviceLocation, AdminState state) throws Exception {
+		// TODO: Refactor to clean this code up
+		Redhawk redhawk = null;
+		boolean createdNewInstance = false;
+
+		try {
+			if (redhawkDrivers.get(nameServer) != null) {
+				redhawk = redhawkDrivers.get(nameServer);
+			} else {
+				if (nameServer.contains(":")) {
+					String[] hostAndPort = nameServer.split(":");
+					redhawk = new RedhawkDriver(hostAndPort[0], Integer.parseInt(hostAndPort[1]));
+					createdNewInstance = true;
+				} else {
+					throw new ResourceNotFoundException(
+							"You did not specify a valid host and port to the REDHAWK name server. An example of a valid url is: localhost:2809");
+				}
+			}
+
+			try {
+				RedhawkDevice device = redhawk.getDevice(deviceLocation);
+
+				device.adminState(state);
 			} catch (ResourceNotFoundException | MultipleResourceException | CORBAException ex) {
 				logger.debug("Issue allocating Device at this location: " + deviceLocation);
 				throw new Exception("Unable allocate Device", ex);
@@ -955,5 +987,4 @@ public class RedhawkManager {
 		}).collect(Collectors.toList());
 		return newValues.toArray();
 	}
-
 }

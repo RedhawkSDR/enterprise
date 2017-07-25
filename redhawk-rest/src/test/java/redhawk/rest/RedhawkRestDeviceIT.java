@@ -6,11 +6,9 @@ import static org.junit.Assert.fail;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.rest.model.Device;
 import redhawk.rest.model.DeviceManager;
 import redhawk.rest.model.FetchMode;
-import redhawk.rest.utils.TestUtils;
 import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkRestDeviceIT extends RedhawkTestBase{

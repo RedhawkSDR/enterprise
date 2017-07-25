@@ -25,6 +25,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.cxf.jaxrs.client.WebClient;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -37,13 +38,16 @@ import redhawk.rest.model.PropertyContainer;
 public class RedhawkDeviceResourceIT extends RedhawkResourceTestBase{
 	private static String deviceManagerLabel; 
 	
+	private static DeviceManager devMgr;
+	
 	@BeforeClass
 	public static void setupDeviceManagerUri(){
 		//Get Target From REST Endpoint
 		WebTarget target = client.target(baseURI+"/"+domainName+"/devicemanagers");
 		Response response = target.request().accept(MediaType.APPLICATION_XML).get();
 		DeviceManagerContainer container = response.readEntity(DeviceManagerContainer.class);
-		deviceManagerLabel = container.getDeviceManagers().get(0).getLabel();
+		devMgr = container.getDeviceManagers().get(0);
+		deviceManagerLabel = devMgr.getLabel();
 	}
 	
 	@Test
@@ -76,6 +80,38 @@ public class RedhawkDeviceResourceIT extends RedhawkResourceTestBase{
 				response = target.request().accept(MediaType.APPLICATION_XML).get();
 				assertEquals(200, response.getStatus());
 			}
+		}
+	}
+	
+	@Test
+	public void testSetAdminState() {
+		for(Device dev : devMgr.getDevices()) {
+			String deviceBase = baseURI+"/"+domainName+"/devicemanagers/"+deviceManagerLabel+"/devices/"+dev.getLabel();
+			WebClient adminClient = WebClient.create(deviceBase+"/adminstate");
+			
+			//Lock Device
+			String state = "LOCKED";
+			adminClient.type(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
+			Response r = adminClient.put(state);			
+			assertEquals(200, r.getStatus());
+			
+			WebTarget target = client.target(deviceBase);
+			Response deviceResponse =  target.request().accept(MediaType.APPLICATION_XML).get();
+			Device restDevice = deviceResponse.readEntity(Device.class);
+			
+			assertEquals(200, deviceResponse.getStatus());
+			assertEquals(state, restDevice.getAdminState().toString());
+			
+			//Unlock Device
+			state = "UNLOCKED";
+			adminClient.type(MediaType.APPLICATION_XML).accept(MediaType.APPLICATION_XML);
+			r = adminClient.put(state);
+			
+			deviceResponse =  target.request().accept(MediaType.APPLICATION_XML).get();
+			restDevice = deviceResponse.readEntity(Device.class);
+			
+			assertEquals(200, deviceResponse.getStatus());
+			assertEquals(state, restDevice.getAdminState().toString());
 		}
 	}
 }

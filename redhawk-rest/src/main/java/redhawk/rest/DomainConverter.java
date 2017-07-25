@@ -480,6 +480,9 @@ public class DomainConverter {
 		device.setIdentifier(obj.getIdentifier());
 		device.setLabel(obj.getName());
 		device.setStarted(obj.started());
+		device.setAdminState(obj.adminState());
+		device.setOperationState(obj.operationalState());
+		device.setUsageState(obj.usageState());
 
 		if (fetchMode.equals(FetchMode.EAGER)) {
 			try {

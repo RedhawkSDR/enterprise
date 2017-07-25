@@ -21,6 +21,7 @@ package redhawk.rest.endpoints;
 
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.rest.exceptions.ResourceNotFound;
+import redhawk.rest.model.DeviceContainer;
 import redhawk.rest.model.DeviceManagerContainer;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.FullProperty;
@@ -57,8 +58,8 @@ public class RedhawkDeviceManagerResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET REDHAWK Device Managers"
     		)
-    public Response getDeviceManagers(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws ResourceNotFound, Exception {
-        return Response.ok(new DeviceManagerContainer(redhawkManager.getAll(nameServer, "devicemanager", domainName, fetchMode))).build();
+    public DeviceManagerContainer getDeviceManagers(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws ResourceNotFound, Exception {
+        return new DeviceManagerContainer(redhawkManager.getAll(nameServer, "devicemanager", domainName, fetchMode));
     }
 
     @GET

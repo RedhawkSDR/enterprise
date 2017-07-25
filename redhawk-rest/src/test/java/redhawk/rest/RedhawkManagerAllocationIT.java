@@ -43,9 +43,7 @@ import redhawk.testutils.RedhawkDeviceTestBase;
 
 public class RedhawkManagerAllocationIT extends RedhawkDeviceTestBase{
 	private static RedhawkManager manager; 
-	
-	private static NodeBooterProxy proxy;
-	
+		
 	private static String nameServer;
 	
 	@BeforeClass

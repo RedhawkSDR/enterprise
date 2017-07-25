@@ -33,6 +33,7 @@ import org.omg.CORBA.TRANSIENT;
 import CF.DataType;
 import CF.Device;
 import CF.DeviceHelper;
+import CF.DevicePackage.AdminType;
 import CF.DevicePackage.InsufficientCapacity;
 import CF.DevicePackage.InvalidCapacity;
 import CF.DevicePackage.InvalidState;
@@ -41,6 +42,7 @@ import CF.ResourcePackage.StartError;
 import CF.ResourcePackage.StopError;
 import redhawk.driver.RedhawkUtils;
 import redhawk.driver.base.impl.PortBackedObjectImpl;
+import redhawk.driver.device.AdminState;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.exceptions.ConnectionException;
@@ -310,6 +312,16 @@ public class RedhawkDeviceImpl extends PortBackedObjectImpl<Device> implements R
 	@Override
 	public void setLogLevel(RedhawkLogLevel level) {
 		getCorbaObject().log_level(level.getValue());		
+	}
+
+	@Override
+	public AdminState adminState() {
+		return AdminState.reverseLookup(getCorbaObject().adminState().value());
+	}
+
+	@Override
+	public void adminState(AdminState state) {
+		getCorbaObject().adminState(AdminType.from_int(state.getValue()));
 	}
 
 	

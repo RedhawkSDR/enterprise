@@ -27,7 +27,7 @@ public enum AdminState {
 	
 	SHUTTING_DOWN(1),
 	
-	UNLOCKED(1);
+	UNLOCKED(2);
 	
 	private Integer value; 
 	

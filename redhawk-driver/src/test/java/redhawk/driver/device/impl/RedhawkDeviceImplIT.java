@@ -21,12 +21,15 @@ package redhawk.driver.device.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
 
+import redhawk.driver.device.AdminState;
+import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
@@ -172,4 +175,28 @@ public class RedhawkDeviceImplIT extends RedhawkDeviceTestBase {
 	}
 	
 	//TODO: Add tests for managing a devices lifecycle
+	@Test
+	public void testAdminState() {
+		try {
+			deviceManager = driver.getDomain().getDeviceManagerByName("Simulator.*");
+
+			//Get Device you want 
+			RedhawkDevice device = deviceManager.getDeviceByName("FmRdsSimulator.*");					
+			
+			//Check retrieving state
+			assertNotNull(device.adminState());
+			assertEquals(AdminState.UNLOCKED, device.adminState());
+			
+			//Check setting state
+			device.adminState(AdminState.LOCKED);
+			assertEquals(AdminState.LOCKED, device.adminState());
+			
+			//Put back to normal
+			device.adminState(AdminState.UNLOCKED);
+			assertEquals(AdminState.UNLOCKED, device.adminState());
+		} catch (MultipleResourceException | ResourceNotFoundException | CORBAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

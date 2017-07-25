@@ -198,6 +198,8 @@ public class RedhawkDeviceImplIT extends RedhawkDeviceTestBase {
 			assertNotNull(device.operationalState());
 			
 			assertNotNull(device.usageState());
+		
+			assertNotNull(device.getImplementation());
 		} catch (MultipleResourceException | ResourceNotFoundException | CORBAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -19,6 +19,9 @@
  */
 package redhawk.driver.devicemanager.impl;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
@@ -50,11 +53,25 @@ public class RedhawkDeviceManagerImplIT extends RedhawkTestBase {
 			System.out.println(domMgr.getDriverRegisteredDeviceManagers());
 			manager.shutdown();
 
-			
 			domMgr.unRegisterAllDriverRegisteredDeviceManagers();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testDeviceMethods() {
+		/*
+		 * Generic test for additional device methods
+		 */
+		try {
+			RedhawkDeviceManager devMgr = driver.getDomain().getDeviceManagers().get(0);
+
+			assertNotNull(devMgr.deviceConfigurationProfile());
+			assertNotNull(devMgr.getComponentImplemantation());
+		} catch (MultipleResourceException | CORBAException e) {
+			fail("Test failure "+e.getMessage());
 		}
 	}
 }

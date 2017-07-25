@@ -55,7 +55,6 @@ import redhawk.testutils.RedhawkTestBase;
 public class RedhawkDomainManagerImplIT extends RedhawkTestBase{
 	private RedhawkDomainManager domainManager;
 	
-
 	@Before
 	public void setup() throws ResourceNotFoundException, CORBAException{
 		domainManager = driver.getDomain("REDHAWK_DEV");
@@ -137,7 +136,6 @@ public class RedhawkDomainManagerImplIT extends RedhawkTestBase{
 		assertNotNull(domainManager.deviceManagers());		
 	}
 	
-	//Below will be snippets for docs for RedhawkDomainManager
 	@Test
 	public void testSnippetForCreatingAnApplication() throws MultipleResourceException, ApplicationCreationException, CORBAException, ResourceNotFoundException, ApplicationReleaseException{
 		String applicationName = "myApp";
@@ -169,7 +167,7 @@ public class RedhawkDomainManagerImplIT extends RedhawkTestBase{
 		//Get a specific device manager 
 		RedhawkDeviceManager devManager = domainManager.getDeviceManagerByName(managers.get(0).getName()); 
 	}
-	//End of SNIPPETS for RedhawkDomainManager
+	
 	
 	@After
 	public void shutdown() throws ApplicationReleaseException{

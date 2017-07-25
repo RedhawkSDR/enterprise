@@ -421,6 +421,9 @@ public class DomainConverter {
 		Component comp = new Component();
 		comp.setName(obj.getName());
 		comp.setStarted(obj.started());
+		comp.setProcessId(obj.getProcessId());
+		comp.setImplementation(obj.getComponentImplementation());
+		comp.setDeviceIdentifier(obj.getComponentDevice().getIdentifier());
 
 		if (fetchMode.equals(FetchMode.EAGER)) {
 			try {

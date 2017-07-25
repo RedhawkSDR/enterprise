@@ -39,9 +39,13 @@ public class Component {
     private String name;
     
     private Integer processId;
+    
+    private String deviceIdentifier; 
+    
+    private String implementation;
 
-	//@XmlElementWrapper(name="properties")
-    //@XmlElement(name="property")
+	@XmlElementWrapper(name="properties")
+    @XmlElement(name="property")
     private List<Property> properties;
     
     @XmlElementWrapper(name="ports")
@@ -96,5 +100,17 @@ public class Component {
 	}
 	public void setProcessId(Integer processId) {
 		this.processId = processId;
+	}
+	public String getDeviceIdentifier() {
+		return deviceIdentifier;
+	}
+	public void setDeviceIdentifier(String deviceName) {
+		this.deviceIdentifier = deviceName;
+	}
+	public String getImplementation() {
+		return implementation;
+	}
+	public void setImplementation(String implementation) {
+		this.implementation = implementation;
 	}
 }

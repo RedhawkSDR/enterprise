@@ -25,7 +25,7 @@ import redhawk.rest.model.SRIContainer;
 import redhawk.rest.utils.TestUtils;
 import redhawk.testutils.RedhawkTestBase;
 
-public class RedhawkApplicationIT extends RedhawkTestBase{
+public class RedhawkRestApplicationIT extends RedhawkTestBase{
 	private static RedhawkManager manager = new RedhawkManager();
 	
 	private static RedhawkApplication externalApplication, basicApplication;

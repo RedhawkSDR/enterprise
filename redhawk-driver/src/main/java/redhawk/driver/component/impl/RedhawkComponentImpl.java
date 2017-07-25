@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 
 import CF.ComponentType;
 import CF.ComponentTypeHelper;
-import CF.ComponentTypeHolder;
 import CF.Resource;
 import CF.ResourceHelper;
 import CF.ResourcePackage.StartError;

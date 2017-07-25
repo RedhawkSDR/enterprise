@@ -142,5 +142,15 @@ public interface RedhawkDevice extends PortBackedObject {
 	 */
 	void adminState(AdminState state);
 	
+	/**
+	 * Returns the operationalState of a Device
+	 * @return
+	 */
 	OperationalState operationalState();
+	
+	/**
+	 * Returns the usageState of a Device
+	 * @return
+	 */
+	UsageState usageState();
 }

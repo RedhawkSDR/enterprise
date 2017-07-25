@@ -45,6 +45,7 @@ import redhawk.driver.base.impl.PortBackedObjectImpl;
 import redhawk.driver.device.AdminState;
 import redhawk.driver.device.OperationalState;
 import redhawk.driver.device.RedhawkDevice;
+import redhawk.driver.device.UsageState;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
@@ -328,6 +329,11 @@ public class RedhawkDeviceImpl extends PortBackedObjectImpl<Device> implements R
 	@Override
 	public OperationalState operationalState() {
 		return OperationalState.reverseLookup(getCorbaObject().operationalState().value());
+	}
+
+	@Override
+	public UsageState usageState() {
+		return UsageState.reverseLookup(getCorbaObject().usageState().value());
 	}
 
 	

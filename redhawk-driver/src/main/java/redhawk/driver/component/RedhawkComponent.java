@@ -21,6 +21,7 @@ package redhawk.driver.component;
 
 import CF.ComponentType;
 import redhawk.driver.base.PortBackedObject;
+import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.exceptions.ComponentStartException;
 import redhawk.driver.exceptions.ComponentStopException;
 
@@ -64,4 +65,11 @@ public interface RedhawkComponent extends PortBackedObject {
      * @return
      */
     String getComponentImplementation();
+    
+    /**
+     * Helper method for getting the device that a component is running on. 
+     * 
+     * @return
+     */
+    RedhawkDevice getComponentDevice();
 }

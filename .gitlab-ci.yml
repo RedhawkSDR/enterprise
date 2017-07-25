@@ -81,6 +81,8 @@ build:
     - mvn -Djava.io.tmpdir=./ deploy -P docs,jaxb-generation,default -B -U -Drelease=0.$CI_PIPELINE_ID
   only:
     - branches
+  except:
+    - RI-69
 
 build-release:
   <<: *common
@@ -138,6 +140,8 @@ deploy:
   <<: *deploy-common
   only:
     - branches
+  except:
+    - RI-69
 
 deploy-release:
   variables:

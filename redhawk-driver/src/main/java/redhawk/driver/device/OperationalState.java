@@ -22,38 +22,36 @@ package redhawk.driver.device;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum AdminState {
-	LOCKED(0),
+public enum OperationalState {
+	ENABLED(0),
 	
-	SHUTTING_DOWN(1),
-	
-	UNLOCKED(2);
+	DISABLED(1);
 	
 	private Integer value; 
 	
-	private static final Map<Integer, AdminState> ADMINSTATES = new HashMap<>();
+	private static final Map<Integer, OperationalState> OPERATIONALSTATES = new HashMap<>(); 
 	
 	static {
-		for(AdminState value : values()) {
-			ADMINSTATES.put(value.getValue(), value);
+		for(OperationalState value : values()){
+			OPERATIONALSTATES.put(value.getValue(), value);
 		}
 	}
 	
-	AdminState(Integer value) {
+	OperationalState(Integer value){
 		this.value = value;
 	}
 	
-	public Integer getValue(){
+	public Integer getValue() {
 		return value;
 	}
 	
-	public static AdminState reverseLookup(Integer value) {
-		AdminState admin = ADMINSTATES.get(value);
+	public static OperationalState reverseLookup(Integer value) {
+		OperationalState state = OPERATIONALSTATES.get(value);
 		
-		if(admin==null) {
-			throw new IllegalArgumentException("Unknown Admin State "+value);
+		if(state==null) {
+			throw new IllegalArgumentException("Unknown operation state "+value);
 		}
 		
-		return admin;
+		return state;
 	}
 }

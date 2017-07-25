@@ -141,4 +141,6 @@ public interface RedhawkDevice extends PortBackedObject {
 	 * @param state
 	 */
 	void adminState(AdminState state);
+	
+	OperationalState operationalState();
 }

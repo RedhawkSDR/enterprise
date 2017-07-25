@@ -176,7 +176,7 @@ public class RedhawkDeviceImplIT extends RedhawkDeviceTestBase {
 	
 	//TODO: Add tests for managing a devices lifecycle
 	@Test
-	public void testAdminState() {
+	public void testAdminStateOperationalStateAndUsageState() {
 		try {
 			deviceManager = driver.getDomain().getDeviceManagerByName("Simulator.*");
 
@@ -194,6 +194,8 @@ public class RedhawkDeviceImplIT extends RedhawkDeviceTestBase {
 			//Put back to normal
 			device.adminState(AdminState.UNLOCKED);
 			assertEquals(AdminState.UNLOCKED, device.adminState());
+			
+			assertNotNull(device.operationalState());
 		} catch (MultipleResourceException | ResourceNotFoundException | CORBAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

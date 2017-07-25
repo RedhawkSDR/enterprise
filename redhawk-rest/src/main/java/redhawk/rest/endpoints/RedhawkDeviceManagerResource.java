@@ -40,6 +40,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.rest.exceptions.ResourceNotFound;
+import redhawk.rest.model.DeviceManager;
 import redhawk.rest.model.DeviceManagerContainer;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.FullProperty;
@@ -75,8 +76,8 @@ public class RedhawkDeviceManagerResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET REDHAWK Device Manager"
     		)    
-    public Response getDeviceManager(@PathParam("devMgrId") String deviceManagerId) throws ResourceNotFound, Exception {
-        return Response.ok(redhawkManager.get(nameServer, "devicemanager", domainName + "/" + deviceManagerId)).build();
+    public DeviceManager getDeviceManager(@PathParam("devMgrId") String deviceManagerId) throws ResourceNotFound, Exception {
+        return redhawkManager.get(nameServer, "devicemanager", domainName + "/" + deviceManagerId);
     }
     
     @DELETE

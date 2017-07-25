@@ -1,5 +1,5 @@
 /*
-g * This file is protected by Copyright. Please refer to the COPYRIGHT file
+ * This file is protected by Copyright. Please refer to the COPYRIGHT file
  * distributed with this source distribution.
  *
  * This file is part of REDHAWK __REDHAWK_PROJECT__.
@@ -17,52 +17,41 @@ g * This file is protected by Copyright. Please refer to the COPYRIGHT file
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-package redhawk.driver.logging;
+package redhawk.driver.device;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public enum RedhawkLogLevel {
-	OFF(60000),
+public enum OperationalState {
+	ENABLED(0),
 	
-	FATAL(50000),
+	DISABLED(1);
 	
-	ERROR(40000),
+	private Integer value; 
 	
-	WARN(30000),
-	
-	INFO(20000),
-	
-	DEBUG(10000),
-	
-	TRACE(5000),
-	
-	ALL(0);
-	
-	private Integer value;
-	
-	private static final Map<Integer, RedhawkLogLevel> REHDAWKLOGLEVELS = new HashMap<>();
+	private static final Map<Integer, OperationalState> OPERATIONALSTATES = new HashMap<>(); 
 	
 	static {
-		for(RedhawkLogLevel value : values()){
-			REHDAWKLOGLEVELS.put(value.getValue(), value);
+		for(OperationalState value : values()){
+			OPERATIONALSTATES.put(value.getValue(), value);
 		}
 	}
 	
-	RedhawkLogLevel(Integer t){
-		this.value = t;
+	OperationalState(Integer value){
+		this.value = value;
 	}
 	
-	public Integer getValue(){
+	public Integer getValue() {
 		return value;
 	}
 	
-	public static RedhawkLogLevel reverseLookup(Integer value){
-		RedhawkLogLevel level = REHDAWKLOGLEVELS.get(value);
-		if(level==null){
-			throw new IllegalArgumentException("Unknown log level "+value);
+	public static OperationalState reverseLookup(Integer value) {
+		OperationalState state = OPERATIONALSTATES.get(value);
+		
+		if(state==null) {
+			throw new IllegalArgumentException("Unknown operation state "+value);
 		}
 		
-		return level;
+		return state;
 	}
 }

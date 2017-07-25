@@ -1,5 +1,5 @@
 /*
-g * This file is protected by Copyright. Please refer to the COPYRIGHT file
+ * This file is protected by Copyright. Please refer to the COPYRIGHT file
  * distributed with this source distribution.
  *
  * This file is part of REDHAWK __REDHAWK_PROJECT__.
@@ -17,52 +17,43 @@ g * This file is protected by Copyright. Please refer to the COPYRIGHT file
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  */
-package redhawk.driver.logging;
+package redhawk.driver.device;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public enum RedhawkLogLevel {
-	OFF(60000),
+public enum AdminState {
+	LOCKED(0),
 	
-	FATAL(50000),
+	SHUTTING_DOWN(1),
 	
-	ERROR(40000),
+	UNLOCKED(2);
 	
-	WARN(30000),
+	private Integer value; 
 	
-	INFO(20000),
-	
-	DEBUG(10000),
-	
-	TRACE(5000),
-	
-	ALL(0);
-	
-	private Integer value;
-	
-	private static final Map<Integer, RedhawkLogLevel> REHDAWKLOGLEVELS = new HashMap<>();
+	private static final Map<Integer, AdminState> ADMINSTATES = new HashMap<>();
 	
 	static {
-		for(RedhawkLogLevel value : values()){
-			REHDAWKLOGLEVELS.put(value.getValue(), value);
+		for(AdminState value : values()) {
+			ADMINSTATES.put(value.getValue(), value);
 		}
 	}
 	
-	RedhawkLogLevel(Integer t){
-		this.value = t;
+	AdminState(Integer value) {
+		this.value = value;
 	}
 	
 	public Integer getValue(){
 		return value;
 	}
 	
-	public static RedhawkLogLevel reverseLookup(Integer value){
-		RedhawkLogLevel level = REHDAWKLOGLEVELS.get(value);
-		if(level==null){
-			throw new IllegalArgumentException("Unknown log level "+value);
+	public static AdminState reverseLookup(Integer value) {
+		AdminState admin = ADMINSTATES.get(value);
+		
+		if(admin==null) {
+			throw new IllegalArgumentException("Unknown Admin State "+value);
 		}
 		
-		return level;
+		return admin;
 	}
 }

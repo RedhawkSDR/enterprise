@@ -22,7 +22,13 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import redhawk.driver.device.AdminState;
+import redhawk.driver.device.OperationalState;
+import redhawk.driver.device.UsageState;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -31,9 +37,12 @@ public class Device {
     private String identifier;
     private String label;
     private boolean started;
+    private AdminState adminState;
+    private UsageState usageState;
+    private OperationalState operationState;
     
-    //@XmlElementWrapper(name="properties")
-    //@XmlElement(name="property")
+    @XmlElementWrapper(name="properties")
+    @XmlElement(name="property")
     private List<Property> properties;
     
     //@XmlElement(name="configuration")
@@ -70,6 +79,24 @@ public class Device {
 	}
 	public void setProperties(List<Property> properties) {
 		this.properties = properties;
+	}
+	public AdminState getAdminState() {
+		return adminState;
+	}
+	public void setAdminState(AdminState adminState) {
+		this.adminState = adminState;
+	}
+	public UsageState getUsageState() {
+		return usageState;
+	}
+	public void setUsageState(UsageState usageState) {
+		this.usageState = usageState;
+	}
+	public OperationalState getOperationState() {
+		return operationState;
+	}
+	public void setOperationState(OperationalState operationState) {
+		this.operationState = operationState;
 	}
 
 }

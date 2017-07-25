@@ -58,4 +58,10 @@ public interface RedhawkComponent extends PortBackedObject {
      * @return
      */
     Integer getProcessId();
+    
+    /**
+     * Returns the implementation type for the component. 
+     * @return
+     */
+    String getComponentImplementation();
 }

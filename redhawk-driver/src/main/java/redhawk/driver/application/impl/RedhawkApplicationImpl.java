@@ -282,7 +282,7 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 		Map<String, RedhawkDevice> devCache = new HashMap<>(); 
 		
 		for(DeviceAssignmentType devAss : this.getCorbaObject().componentDevices()){
-			if(devCache.containsKey(devAss.assignedDeviceId)){
+			if(!devCache.containsKey(devAss.assignedDeviceId)){
 				RedhawkDevice dev = domainManager.getDeviceByIdentifier(devAss.assignedDeviceId);
 				
 				//Add Device to component map

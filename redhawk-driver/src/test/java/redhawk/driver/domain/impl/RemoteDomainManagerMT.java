@@ -16,7 +16,7 @@ import redhawk.testutils.RedhawkTestBase;
  * Test this manually since it's an edge case in general users will 
  * have just one Domain. If this changes can look into automating. 
  */
-public class RemoteDomainManagersMT extends RedhawkTestBase{
+public class RemoteDomainManagerMT extends RedhawkTestBase{
 	@Test
 	public void testRemoteDomainManager() throws ResourceNotFoundException, CORBAException {
 		RedhawkDomainManager mgr = null;

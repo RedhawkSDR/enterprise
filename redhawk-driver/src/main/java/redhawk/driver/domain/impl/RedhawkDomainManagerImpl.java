@@ -42,6 +42,22 @@ import org.omg.CORBA.OBJECT_NOT_EXIST;
 import org.omg.CORBA.TRANSIENT;
 import org.xml.sax.SAXException;
 
+import CF.Application;
+import CF.ApplicationFactory;
+import CF.DataType;
+import CF.DeviceAssignmentType;
+import CF.DeviceManager;
+import CF.DomainManager;
+import CF.DomainManagerHelper;
+import CF.InvalidFileName;
+import CF.InvalidObjectReference;
+import CF.InvalidProfile;
+import CF.ApplicationFactoryPackage.CreateApplicationError;
+import CF.ApplicationFactoryPackage.CreateApplicationInsufficientCapacityError;
+import CF.ApplicationFactoryPackage.CreateApplicationRequestError;
+import CF.ApplicationFactoryPackage.InvalidInitConfiguration;
+import CF.DomainManagerPackage.RegisterError;
+import CF.DomainManagerPackage.UnregisterError;
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.RedhawkUtils;
 import redhawk.driver.allocationmanager.RedhawkAllocationManager;
@@ -66,6 +82,7 @@ import redhawk.driver.eventchannel.RedhawkEventChannelManager;
 import redhawk.driver.eventchannel.impl.RedhawkEventChannelManagerImpl;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.CORBAException;
+import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.logging.RedhawkLogLevel;
@@ -74,73 +91,48 @@ import redhawk.driver.xml.model.sca.dmd.Domainmanagerconfiguration;
 import redhawk.driver.xml.model.sca.prf.Properties;
 import redhawk.driver.xml.model.sca.sad.Softwareassembly;
 import redhawk.driver.xml.model.sca.spd.Softpkg;
-import CF.Application;
-import CF.ApplicationFactory;
-import CF.DataType;
-import CF.DeviceAssignmentType;
-import CF.DeviceManager;
-import CF.DomainManager;
-import CF.DomainManagerHelper;
-import CF.InvalidFileName;
-import CF.InvalidProfile;
-import CF.Resource;
-import CF.ApplicationFactoryPackage.CreateApplicationError;
-import CF.ApplicationFactoryPackage.CreateApplicationInsufficientCapacityError;
-import CF.ApplicationFactoryPackage.CreateApplicationRequestError;
-import CF.ApplicationFactoryPackage.InvalidInitConfiguration;
-import CF.DomainManagerPackage.ApplicationInstallationError;
 
-public class RedhawkDomainManagerImpl extends
-		QueryableResourceImpl<DomainManager> implements RedhawkDomainManager {
+public class RedhawkDomainManagerImpl extends QueryableResourceImpl<DomainManager> implements RedhawkDomainManager {
 
-	private static Logger logger = Logger
-			.getLogger(RedhawkDomainManagerImpl.class.getName());
+	private static Logger logger = Logger.getLogger(RedhawkDomainManagerImpl.class.getName());
 	private RedhawkDriver driver;
 	private String domainName;
 	private Map<String, RedhawkDeviceManager> driverRegisteredDeviceManagers = new HashMap<String, RedhawkDeviceManager>();
+	private Map<String, RedhawkDomainManager> driverRegisteredRemoteDomainManager = new HashMap<>();
 
-	public RedhawkDomainManagerImpl(RedhawkDriver driver,
-			String domainManagerIor, String domainName) {
+	public RedhawkDomainManagerImpl(RedhawkDriver driver, String domainManagerIor, String domainName) {
 		super(domainManagerIor, driver.getOrb());
 		this.driver = driver;
 		this.domainName = domainName;
-		
-		DomainManager test;
-		Resource r;
 	}
 
-	public RedhawkDeviceManager createDeviceManager(String deviceManagerName,
-			String fileSystemRoot, boolean durable) throws Exception {
-		return createDeviceManager(deviceManagerName, fileSystemRoot, durable,
-				null);
+	public RedhawkDeviceManager createDeviceManager(String deviceManagerName, String fileSystemRoot, boolean durable)
+			throws Exception {
+		return createDeviceManager(deviceManagerName, fileSystemRoot, durable, null);
 	}
 
 	@Override
-	public RedhawkDeviceManager createDeviceManager(String deviceManagerName,
-			String fileSystemRoot, boolean durable,
+	public RedhawkDeviceManager createDeviceManager(String deviceManagerName, String fileSystemRoot, boolean durable,
 			DeviceManagerInturruptedCallback callback) throws Exception {
-		final DeviceManagerTemplate devMgr = new DeviceManagerTemplate(
-				domainName, getCorbaObj(), getOrb(), deviceManagerName,
-				fileSystemRoot);
+		final DeviceManagerTemplate devMgr = new DeviceManagerTemplate(domainName, getCorbaObj(), getOrb(),
+				deviceManagerName, fileSystemRoot);
 
 		RedhawkDeviceManager deviceManager;
 		if (durable) {
-			deviceManager = new DurableRedhawkDeviceManagerImpl(domainName,
-					deviceManagerName, fileSystemRoot, this, getOrb()
-							.object_to_string(devMgr.getCorbaDeviceManager()),
+			deviceManager = new DurableRedhawkDeviceManagerImpl(domainName, deviceManagerName, fileSystemRoot, this,
+					getOrb().object_to_string(devMgr.getCorbaDeviceManager()),
 					devMgr.getCorbaDeviceManager().identifier(), callback);
 		} else {
-			deviceManager = new RedhawkDeviceManagerImpl(this, getOrb()
-					.object_to_string(devMgr.getCorbaDeviceManager()), devMgr
-					.getCorbaDeviceManager().identifier());
+			deviceManager = new RedhawkDeviceManagerImpl(this,
+					getOrb().object_to_string(devMgr.getCorbaDeviceManager()),
+					devMgr.getCorbaDeviceManager().identifier());
 		}
-		
+
 		/*
-		 * Need to use actual deviceManager name in key or you will have 
-		 * no wave of cleaning up on shutdown.
+		 * Need to use actual deviceManager name in key or you will have no wave of
+		 * cleaning up on shutdown.
 		 */
-		driverRegisteredDeviceManagers.put(
-				domainName + ":" + deviceManager.getName(), deviceManager);
+		driverRegisteredDeviceManagers.put(domainName + ":" + deviceManager.getName(), deviceManager);
 		return deviceManager;
 	}
 
@@ -168,11 +160,10 @@ public class RedhawkDomainManagerImpl extends
 				apps.put(app.getName(), app);
 			} catch (OBJECT_NOT_EXIST cf) {
 				/*
-				 * If something no longer exists ( for example a narrowband
-				 * waveform that existed when getCorbaObject().applications()
-				 * was called and dropped before application.name() was called )
-				 * then we still need the rest of the items which could include
-				 * what we want.
+				 * If something no longer exists ( for example a narrowband waveform that
+				 * existed when getCorbaObject().applications() was called and dropped before
+				 * application.name() was called ) then we still need the rest of the items
+				 * which could include what we want.
 				 */
 				logger.log(Level.FINE, "Item no longer exists", cf);
 			}
@@ -183,12 +174,11 @@ public class RedhawkDomainManagerImpl extends
 
 	public List<RedhawkApplication> getApplications() {
 		List<RedhawkApplication> applications = new ArrayList<RedhawkApplication>();
-		
+
 		for (Application application : getCorbaObject().applications()) {
 			try {
-				applications.add(new RedhawkApplicationImpl(this, getOrb()
-						.object_to_string(application), application
-						.identifier()));
+				applications.add(new RedhawkApplicationImpl(this, getOrb().object_to_string(application),
+						application.identifier()));
 			} catch (OBJECT_NOT_EXIST cf) {
 				logger.log(Level.FINE, "Item no longer exists", cf);
 			}
@@ -207,40 +197,29 @@ public class RedhawkDomainManagerImpl extends
 		} else if (applications.size() == 1) {
 			return applications.get(0);
 		} else {
-			throw new ResourceNotFoundException(
-					"Could not find an application with the name: " + name);
+			throw new ResourceNotFoundException("Could not find an application with the name: " + name);
 		}
 	}
 
 	@Override
 	public List<RedhawkApplication> getApplicationsByName(String name) {
-		return getApplications()
-				.stream()
-				.filter(a -> {
-					boolean matches = a.getName().toLowerCase()
-							.matches(name.toLowerCase());
-					boolean equals = a.getName().equalsIgnoreCase(name);
-					logger.log(Level.FINE, "NAME: " + a.getName() + ":" + name
-							+ " : " + matches);
-					return equals || matches;
-				}).collect(Collectors.toList());
+		return getApplications().stream().filter(a -> {
+			boolean matches = a.getName().toLowerCase().matches(name.toLowerCase());
+			boolean equals = a.getName().equalsIgnoreCase(name);
+			logger.log(Level.FINE, "NAME: " + a.getName() + ":" + name + " : " + matches);
+			return equals || matches;
+		}).collect(Collectors.toList());
 	}
 
-	public RedhawkApplication getApplicationByIdentifier(String identifier)
-			throws ResourceNotFoundException {
-		List<RedhawkApplication> applications = getApplications()
-				.stream()
-				.filter(a -> {
-					return a.getIdentifier().toLowerCase()
-							.matches(identifier.toLowerCase());
-				}).collect(Collectors.toList());
+	public RedhawkApplication getApplicationByIdentifier(String identifier) throws ResourceNotFoundException {
+		List<RedhawkApplication> applications = getApplications().stream().filter(a -> {
+			return a.getIdentifier().toLowerCase().matches(identifier.toLowerCase());
+		}).collect(Collectors.toList());
 
 		if (applications.size() > 0) {
 			return applications.get(0);
 		} else {
-			throw new ResourceNotFoundException(
-					"Could not find an application with the identifier: "
-							+ identifier);
+			throw new ResourceNotFoundException("Could not find an application with the identifier: " + identifier);
 		}
 	}
 
@@ -248,9 +227,8 @@ public class RedhawkDomainManagerImpl extends
 		List<RedhawkDeviceManager> deviceManagers = new ArrayList<RedhawkDeviceManager>();
 		for (DeviceManager deviceManager : getCorbaObject().deviceManagers()) {
 			try {
-				deviceManagers.add(new RedhawkDeviceManagerImpl(this, getOrb()
-						.object_to_string(deviceManager), deviceManager
-						.identifier()));
+				deviceManagers.add(new RedhawkDeviceManagerImpl(this, getOrb().object_to_string(deviceManager),
+						deviceManager.identifier()));
 			} catch (TRANSIENT | OBJECT_NOT_EXIST t) {
 				// Skip and don't add dev manager to the list.
 			}
@@ -273,10 +251,8 @@ public class RedhawkDomainManagerImpl extends
 		List<RedhawkDeviceManager> deviceManagers = new ArrayList<RedhawkDeviceManager>();
 		for (DeviceManager deviceManager : getCorbaObject().deviceManagers()) {
 			try {
-				if (deviceManager.label().toLowerCase()
-						.matches(name.toLowerCase()))
-					deviceManagers.add(new RedhawkDeviceManagerImpl(this,
-							getOrb().object_to_string(deviceManager),
+				if (deviceManager.label().toLowerCase().matches(name.toLowerCase()))
+					deviceManagers.add(new RedhawkDeviceManagerImpl(this, getOrb().object_to_string(deviceManager),
 							deviceManager.identifier()));
 			} catch (COMM_FAILURE | TRANSIENT e) {
 				// if a single device manager fails, don't give up on getting
@@ -296,19 +272,15 @@ public class RedhawkDomainManagerImpl extends
 		} else if (deviceManagers.size() == 1) {
 			return deviceManagers.get(0);
 		} else {
-			throw new ResourceNotFoundException(
-					"Unable to find a device manager with the name: " + name);
+			throw new ResourceNotFoundException("Unable to find a device manager with the name: " + name);
 		}
 	}
 
-	public RedhawkDeviceManager getDeviceManagerByIdentifier(String identifier)
-			throws ResourceNotFoundException {
+	public RedhawkDeviceManager getDeviceManagerByIdentifier(String identifier) throws ResourceNotFoundException {
 		for (DeviceManager deviceManager : getCorbaObject().deviceManagers()) {
 			try {
-				if (deviceManager.identifier().toLowerCase()
-						.matches(identifier.toLowerCase()))
-					return new RedhawkDeviceManagerImpl(this, getOrb()
-							.object_to_string(deviceManager),
+				if (deviceManager.identifier().toLowerCase().matches(identifier.toLowerCase()))
+					return new RedhawkDeviceManagerImpl(this, getOrb().object_to_string(deviceManager),
 							deviceManager.identifier());
 			} catch (COMM_FAILURE e) {
 				// if a single device manager fails, don't give up on getting
@@ -316,16 +288,13 @@ public class RedhawkDomainManagerImpl extends
 			}
 		}
 
-		throw new ResourceNotFoundException(
-				"Unable to find a device manager with the identifier: "
-						+ identifier);
+		throw new ResourceNotFoundException("Unable to find a device manager with the identifier: " + identifier);
 	}
 
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("RedhawkDomainManagerImpl [domainName=")
-				.append(domainName).append(", uniqueIdentifier=")
+		builder.append("RedhawkDomainManagerImpl [domainName=").append(domainName).append(", uniqueIdentifier=")
 				.append(getIdentifier()).append("]");
 		return builder.toString();
 	}
@@ -365,8 +334,7 @@ public class RedhawkDomainManagerImpl extends
 	}
 
 	@Override
-	public RedhawkDevice getDeviceByName(String deviceName)
-			throws MultipleResourceException {
+	public RedhawkDevice getDeviceByName(String deviceName) throws MultipleResourceException {
 		List<RedhawkDevice> devices = new ArrayList<RedhawkDevice>();
 		for (RedhawkDeviceManager deviceManager : getDeviceManagers()) {
 			for (RedhawkDevice device : deviceManager.getDevices()) {
@@ -400,8 +368,7 @@ public class RedhawkDomainManagerImpl extends
 	}
 
 	public void unRegisterAllDriverRegisteredDeviceManagers() {
-		for (RedhawkDeviceManager deviceManager : driverRegisteredDeviceManagers
-				.values()) {
+		for (RedhawkDeviceManager deviceManager : driverRegisteredDeviceManagers.values()) {
 			try {
 				deviceManager.shutdown();
 			} catch (OBJECT_NOT_EXIST e) {
@@ -412,51 +379,40 @@ public class RedhawkDomainManagerImpl extends
 		driverRegisteredDeviceManagers.clear();
 	}
 
-	public RedhawkApplication createApplication(String instanceName,
-			File sadFile) throws ApplicationCreationException {
+	public RedhawkApplication createApplication(String instanceName, File sadFile) throws ApplicationCreationException {
 		if (!sadFile.exists()) {
 			throw new ApplicationCreationException(
-					"The Sad file referenced by path: "
-							+ sadFile.getAbsolutePath() + " does not exist");
+					"The Sad file referenced by path: " + sadFile.getAbsolutePath() + " does not exist");
 		} else if (sadFile.isDirectory()) {
 			throw new ApplicationCreationException(
-					"The Sad file referenced by path: "
-							+ sadFile.getAbsolutePath()
-							+ " is a directory not a file");
+					"The Sad file referenced by path: " + sadFile.getAbsolutePath() + " is a directory not a file");
 		}
 
 		try {
-			Softwareassembly softwareAssembly = RedhawkUtils
-					.unMarshalSadFile(new FileInputStream(sadFile));
-			String sadFileDestination = File.separator + "waveforms"
-					+ File.separator + softwareAssembly.getName()
+			Softwareassembly softwareAssembly = RedhawkUtils.unMarshalSadFile(new FileInputStream(sadFile));
+			String sadFileDestination = File.separator + "waveforms" + File.separator + softwareAssembly.getName()
 					+ File.separator + softwareAssembly.getName() + ".sad.xml";
 			// TODO: Should you be able to create a Application that's file is
 			// already in SDR???
-			getFileManager().writeFile(new FileInputStream(sadFile),
-					sadFileDestination);
+			getFileManager().writeFile(new FileInputStream(sadFile), sadFileDestination);
 			return createApplication(instanceName, sadFileDestination);
 		} catch (IOException e) {
 			throw new ApplicationCreationException(e);
 		}
 	}
 
-	public RedhawkApplication createApplication(String instanceName,
-			Softwareassembly softwareAssembly)
+	public RedhawkApplication createApplication(String instanceName, Softwareassembly softwareAssembly)
 			throws ApplicationCreationException {
 		try {
-			String sadFileDestination = File.separator + "waveforms"
-					+ File.separator + softwareAssembly.getName()
+			String sadFileDestination = File.separator + "waveforms" + File.separator + softwareAssembly.getName()
 					+ File.separator + softwareAssembly.getName() + ".sad.xml";
 
-			JAXBContext context = JAXBContext
-					.newInstance(Softwareassembly.class.getPackage().getName());
+			JAXBContext context = JAXBContext.newInstance(Softwareassembly.class.getPackage().getName());
 			Marshaller marshaller = context.createMarshaller();
 			StringWriter stringWriter = new StringWriter();
 			marshaller.marshal(softwareAssembly, stringWriter);
 
-			ByteArrayInputStream sadInBytes = new ByteArrayInputStream(
-					stringWriter.toString().getBytes());
+			ByteArrayInputStream sadInBytes = new ByteArrayInputStream(stringWriter.toString().getBytes());
 			// TODO: Should you be able to create a Application that's file is
 			// already in SDR???
 			getFileManager().writeFile(sadInBytes, sadFileDestination);
@@ -467,22 +423,19 @@ public class RedhawkDomainManagerImpl extends
 		}
 	}
 
-	public RedhawkApplication createApplication(String instanceName,
-			String sadFileDestination) throws ApplicationCreationException {
+	public RedhawkApplication createApplication(String instanceName, String sadFileDestination)
+			throws ApplicationCreationException {
 		DataType[] initConfig = new DataType[] {};
 		DeviceAssignmentType[] deviceAssignmentTypes = new DeviceAssignmentType[] {};
 
 		Application applicationInstance;
 		try {
-			applicationInstance = getCorbaObj().createApplication(
-					sadFileDestination, instanceName, initConfig,
+			applicationInstance = getCorbaObj().createApplication(sadFileDestination, instanceName, initConfig,
 					deviceAssignmentTypes);
 			RedhawkApplication appToReturn = new RedhawkApplicationImpl(this,
-					getOrb().object_to_string(applicationInstance),
-					applicationInstance.identifier());
+					getOrb().object_to_string(applicationInstance), applicationInstance.identifier());
 			return appToReturn;
-		} catch (CreateApplicationError | CreateApplicationRequestError
-				| CreateApplicationInsufficientCapacityError
+		} catch (CreateApplicationError | CreateApplicationRequestError | CreateApplicationInsufficientCapacityError
 				| InvalidInitConfiguration | InvalidProfile | InvalidFileName e) {
 			throw new ApplicationCreationException(e);
 		}
@@ -494,14 +447,10 @@ public class RedhawkDomainManagerImpl extends
 
 	@Override
 	public List<RedhawkService> getServices() {
-		return getDeviceManagers()
-				.stream()
-				.map(d -> {
-					return Arrays
-							.stream(d.getCorbaObject().registeredServices())
-							.map(s -> new RedhawkServiceImpl(d, s))
-							.collect(Collectors.toList());
-				}).flatMap(l -> l.stream()).collect(Collectors.toList());
+		return getDeviceManagers().stream().map(d -> {
+			return Arrays.stream(d.getCorbaObject().registeredServices()).map(s -> new RedhawkServiceImpl(d, s))
+					.collect(Collectors.toList());
+		}).flatMap(l -> l.stream()).collect(Collectors.toList());
 	}
 
 	@Override
@@ -512,8 +461,7 @@ public class RedhawkDomainManagerImpl extends
 	}
 
 	@Override
-	public RedhawkService getServiceByName(String serviceName)
-			throws MultipleResourceException {
+	public RedhawkService getServiceByName(String serviceName) throws MultipleResourceException {
 		List<RedhawkService> services = getServicesByName(serviceName);
 
 		if (services.size() > 1) {
@@ -527,11 +475,9 @@ public class RedhawkDomainManagerImpl extends
 	}
 
 	@Override
-	protected DomainManager locateCorbaObject()
-			throws ResourceNotFoundException {
+	protected DomainManager locateCorbaObject() throws ResourceNotFoundException {
 		try {
-			String ior = ((RedhawkDomainManagerImpl) driver
-					.getDomain(domainName)).getIor();
+			String ior = ((RedhawkDomainManagerImpl) driver.getDomain(domainName)).getIor();
 			return DomainManagerHelper.narrow(getOrb().string_to_object(ior));
 		} catch (CORBAException e) {
 			throw new ResourceNotFoundException(e);
@@ -562,29 +508,23 @@ public class RedhawkDomainManagerImpl extends
 	}
 
 	public RedhawkEventChannelManager getEventChannelManager() {
-		return new RedhawkEventChannelManagerImpl(this, getCorbaObj()
-				.eventChannelMgr());
+		return new RedhawkEventChannelManagerImpl(this, getCorbaObj().eventChannelMgr());
 	}
 
 	@Override
-	public RedhawkApplicationFactoryImpl getApplicationFactoryByIdentifier(
-			String identifier) throws ResourceNotFoundException,
-			MultipleResourceException {
-		List<ApplicationFactory> factories = Arrays
-				.stream(getCorbaObj().applicationFactories()).filter(af -> {
-					return af.identifier().equalsIgnoreCase(identifier);
-				}).collect(Collectors.toList());
+	public RedhawkApplicationFactoryImpl getApplicationFactoryByIdentifier(String identifier)
+			throws ResourceNotFoundException, MultipleResourceException {
+		List<ApplicationFactory> factories = Arrays.stream(getCorbaObj().applicationFactories()).filter(af -> {
+			return af.identifier().equalsIgnoreCase(identifier);
+		}).collect(Collectors.toList());
 		if (factories.size() > 1) {
 			throw new MultipleResourceException(
-					"Multiple Application Factories were found with the identifier: "
-							+ identifier);
+					"Multiple Application Factories were found with the identifier: " + identifier);
 		} else if (factories.size() == 1) {
-			return new RedhawkApplicationFactoryImpl(this, getOrb()
-					.object_to_string(factories.get(0)), identifier);
+			return new RedhawkApplicationFactoryImpl(this, getOrb().object_to_string(factories.get(0)), identifier);
 		} else {
 			throw new ResourceNotFoundException(
-					"An application factory with the identifier of: "
-							+ identifier + " was not found");
+					"An application factory with the identifier of: " + identifier + " was not found");
 		}
 	}
 
@@ -592,8 +532,8 @@ public class RedhawkDomainManagerImpl extends
 		try {
 			String softwareProfile = getCorbaObj().domainManagerProfile();
 			byte[] dmdFileInBytes = getFileManager().getFile(softwareProfile);
-			return ScaXmlProcessor.unmarshal(new ByteArrayInputStream(
-					dmdFileInBytes), Domainmanagerconfiguration.class);
+			return ScaXmlProcessor.unmarshal(new ByteArrayInputStream(dmdFileInBytes),
+					Domainmanagerconfiguration.class);
 		} catch (JAXBException | SAXException | IOException e) {
 			// TODO Auto-generated catch block
 			return null;
@@ -602,29 +542,21 @@ public class RedhawkDomainManagerImpl extends
 
 	public Softpkg getDomainManagerAssembly() throws ResourceNotFoundException {
 		try {
-			String spdFileLocation = getDomainManagerConfiguration()
-					.getDomainmanagersoftpkg().getLocalfile().getName();
+			String spdFileLocation = getDomainManagerConfiguration().getDomainmanagersoftpkg().getLocalfile().getName();
 			byte[] spdFileInBytes = getFileManager().getFile(spdFileLocation);
-			return ScaXmlProcessor.unmarshal(new ByteArrayInputStream(
-					spdFileInBytes), Softpkg.class);
+			return ScaXmlProcessor.unmarshal(new ByteArrayInputStream(spdFileInBytes), Softpkg.class);
 		} catch (IOException | JAXBException | SAXException e) {
 			throw new ResourceNotFoundException(e);
 		}
 	}
 
-	public Properties getPropertyConfiguration()
-			throws ResourceNotFoundException {
+	public Properties getPropertyConfiguration() throws ResourceNotFoundException {
 		try {
-			String prfFileName = getDomainManagerAssembly().getPropertyfile()
-					.getLocalfile().getName();
-			String softwareProfile = getDomainManagerConfiguration()
-					.getDomainmanagersoftpkg().getLocalfile().getName();
-			String componentDirPath = softwareProfile.substring(0,
-					softwareProfile.lastIndexOf("/"));
-			byte[] prfFileInBytes = getFileManager().getFile(
-					componentDirPath + "/" + prfFileName);
-			return ScaXmlProcessor.unmarshal(new ByteArrayInputStream(
-					prfFileInBytes), Properties.class);
+			String prfFileName = getDomainManagerAssembly().getPropertyfile().getLocalfile().getName();
+			String softwareProfile = getDomainManagerConfiguration().getDomainmanagersoftpkg().getLocalfile().getName();
+			String componentDirPath = softwareProfile.substring(0, softwareProfile.lastIndexOf("/"));
+			byte[] prfFileInBytes = getFileManager().getFile(componentDirPath + "/" + prfFileName);
+			return ScaXmlProcessor.unmarshal(new ByteArrayInputStream(prfFileInBytes), Properties.class);
 		} catch (IOException | JAXBException | SAXException e) {
 			throw new ResourceNotFoundException(e);
 		}
@@ -632,12 +564,95 @@ public class RedhawkDomainManagerImpl extends
 
 	@Override
 	public RedhawkLogLevel getLogLevel() {
-		throw new UnsupportedOperationException("DomainManager does not implemnt the CORBA Logging interface until 2.1.X series.");		
+		throw new UnsupportedOperationException(
+				"DomainManager does not implemnt the CORBA Logging interface until 2.1.X series.");
 	}
 
 	@Override
 	public void setLogLevel(RedhawkLogLevel level) {
-		throw new UnsupportedOperationException("DomainManager does not implemnt the CORBA Logging interface until 2.1.X series.");		
+		throw new UnsupportedOperationException(
+				"DomainManager does not implemnt the CORBA Logging interface until 2.1.X series.");
+	}
+
+	@Override
+	public List<Object> remoteDomainManagers() {
+		List<Object> managers = new ArrayList<>();
+		for (DomainManager mgr : this.getCorbaObject().remoteDomainManagers()) {
+			if (driverRegisteredRemoteDomainManager.containsKey(mgr.identifier())) {
+				managers.add(driverRegisteredRemoteDomainManager.get(mgr.identifier()));
+			} else {
+				managers.add(mgr);
+			}
+		}
+
+		return managers;
+	}
+
+	@Override
+	public RedhawkDomainManager registerRemoteDomainManager(String remoteDomainName) throws CORBAException {
+		return this.registerRemoteDomainManager(remoteDomainName, null, null);
+	}
+
+	@Override
+	public void unregisterRemoteDomainManager(String remoteDomainName) throws ResourceNotFoundException, CORBAException {
+		Boolean unregisteredRemoteDomain = false;
+		try {
+			for (DomainManager mgr : this.getCorbaObject().remoteDomainManagers()) {
+				if (mgr.name().equals(remoteDomainName)) {
+					this.getCorbaObject().unregisterRemoteDomainManager(mgr);
+					unregisteredRemoteDomain = true;
+					break;
+				}
+			}
+			
+			//If nothing was unregistered throw an exception
+			if(!unregisteredRemoteDomain)
+				throw new ResourceNotFoundException("Remote domain was not found. Failed to unregister "+remoteDomainName);
+		} catch (InvalidObjectReference | UnregisterError | ConnectionException e) {
+			throw new CORBAException("Exception unregistering Remote domain "+remoteDomainName, e);
+		}
+	}
+
+	@Override
+	public RedhawkDomainManager registerRemoteDomainManager(String remoteDomainName, String remoteNameServerHost,
+			Integer remoteNameServerPort) throws CORBAException {
+		try {
+			RedhawkDomainManager remoteDomainManager;
+
+			// Create domain manager POJO for remote domain
+			if (remoteNameServerHost == null && remoteNameServerPort == null) {
+				remoteDomainManager = driver.getDomain(remoteDomainName);
+			} else {
+				RedhawkDriver remoteDriver = new RedhawkDriver(remoteNameServerHost, remoteNameServerPort);
+
+				remoteDomainManager = remoteDriver.getDomain(remoteDomainName);
+			}
+
+			// Register remote domain
+			this.getCorbaObject().registerRemoteDomainManager(remoteDomainManager.getCorbaObj());
+
+			// Add remote domain to Map
+			this.driverRegisteredRemoteDomainManager.put(remoteDomainManager.getName(), remoteDomainManager);
+
+			return remoteDomainManager;
+		} catch (ResourceNotFoundException | CORBAException | InvalidObjectReference | RegisterError
+				| ConnectionException e) {
+			throw new CORBAException("Unable to register remote domain", e);
+		}
+	}
+
+	@Override
+	public List<String> remoteDomainNames() {
+		List<String> remoteDomainNames = new ArrayList<>();
+		
+		for(DomainManager mgr : this.getCorbaObject().remoteDomainManagers())
+			remoteDomainNames.add(mgr.name());
+		
+		return remoteDomainNames;
+	}
+
+	public Map<String, RedhawkDomainManager> getDriverRegisteredRemoteDomainManager() {
+		return driverRegisteredRemoteDomainManager;
 	}
 
 }

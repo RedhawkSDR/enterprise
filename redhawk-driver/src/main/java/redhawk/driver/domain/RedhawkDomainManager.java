@@ -23,9 +23,9 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import CF.DomainManager;
 import redhawk.driver.Redhawk;
 import redhawk.driver.allocationmanager.RedhawkAllocationManager;
-import redhawk.driver.allocationmanager.impl.RedhawkAllocationManagerImpl;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.application.impl.RedhawkApplicationFactoryImpl;
 import redhawk.driver.base.QueryableResource;
@@ -36,6 +36,7 @@ import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.devicemanager.RedhawkService;
 import redhawk.driver.eventchannel.RedhawkEventChannelManager;
 import redhawk.driver.exceptions.ApplicationCreationException;
+import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
@@ -43,7 +44,6 @@ import redhawk.driver.xml.model.sca.dmd.Domainmanagerconfiguration;
 import redhawk.driver.xml.model.sca.prf.Properties;
 import redhawk.driver.xml.model.sca.sad.Softwareassembly;
 import redhawk.driver.xml.model.sca.spd.Softpkg;
-import CF.DomainManager;
 
 /**
  * POJO representing a REDHAWK Domain Manager. 
@@ -337,4 +337,55 @@ public interface RedhawkDomainManager extends QueryableResource {
 	 * @throws ResourceNotFoundException
 	 */
 	Properties getPropertyConfiguration() throws ResourceNotFoundException;
+	
+	/**
+	 * List of the remote domain managers for this domain. If the remote 
+	 * domainManager was registered by the driver then a RedhawkDomainManager 
+	 * object will be returned. If it was registered outside the driver then 
+	 * the raw CORBA Object will be returned since the RedhawkDomainManager object
+	 * is dependent on knowing the host/port of the remote Domain. 
+	 * 
+	 * @return
+	 */
+	List<Object> remoteDomainManagers();
+	
+	/**
+	 * Helper method for just returning the remote domain names.
+	 * @return
+	 */
+	List<String> remoteDomainNames();
+	
+	/**
+	 * Looks up domain name on current CORBA name server and registers 
+	 * it as a remote domain. 
+	 * @param remoteDomainName
+	 * 	Name of RemoteManager 
+	 * @return
+	 * 	POJO representing the remote domain
+	 * @throws CORBAException 
+	 */
+	RedhawkDomainManager registerRemoteDomainManager(String remoteDomainName) throws CORBAException;
+	
+	/**
+	 * Looks up a domain name based on the supplied parameters and registers it as a remote 
+	 * domain. 
+	 * 
+	 * @param remoteDomainName
+	 * 	Name of Remote Domain Manager
+	 * @param remoteNameServerHost
+	 * 	Host/IP of remote nameserver
+	 * @param remoteNameServerPort
+	 * Port for remote nameserver
+	 * @return
+	 * @throws CORBAException 
+	 */
+	RedhawkDomainManager registerRemoteDomainManager(String remoteDomainName, String remoteNameServerHost, Integer remoteNameServerPort) throws CORBAException;
+	
+	/**
+	 * Unregisted a remote domain manager by name. 
+	 * @param remoteDomainName
+	 * @throws ResourceNotFoundException 
+	 * @throws CORBAException 
+	 */
+	void unregisterRemoteDomainManager(String remoteDomainName) throws ResourceNotFoundException, CORBAException;
 }

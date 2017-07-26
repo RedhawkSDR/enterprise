@@ -40,8 +40,9 @@ public class Device {
     private AdminState adminState;
     private UsageState usageState;
     private OperationalState operationState;
+    private String implementation;
     
-    @XmlElementWrapper(name="properties")
+	@XmlElementWrapper(name="properties")
     @XmlElement(name="property")
     private List<Property> properties;
     
@@ -98,5 +99,12 @@ public class Device {
 	public void setOperationState(OperationalState operationState) {
 		this.operationState = operationState;
 	}
-
+	
+    public String getImplementation() {
+		return implementation;
+	}
+	
+    public void setImplementation(String implementation) {
+		this.implementation = implementation;
+	}
 }

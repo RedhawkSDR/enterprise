@@ -58,12 +58,10 @@ import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 
-//START SNIPPET: rhdriverIntro
 /**
  * RedhawkDriver class gives users the ability to interact with a the CORBA name service 
  * for REDHAWK using java. 
  */
-//END SNIPPET: rhdriverIntro
 public class RedhawkDriver implements Redhawk {
 
 	private static Logger logger = Logger.getLogger(RedhawkDriver.class

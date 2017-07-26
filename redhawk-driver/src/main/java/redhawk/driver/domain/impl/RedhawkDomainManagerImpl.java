@@ -632,13 +632,27 @@ public class RedhawkDomainManagerImpl extends QueryableResourceImpl<DomainManage
 			this.getCorbaObject().registerRemoteDomainManager(remoteDomainManager.getCorbaObj());
 
 			// Add remote domain to Map
-			this.driverRegisteredRemoteDomainManager.put(remoteDomainManager.getIdentifier(), remoteDomainManager);
+			this.driverRegisteredRemoteDomainManager.put(remoteDomainManager.getName(), remoteDomainManager);
 
 			return remoteDomainManager;
 		} catch (ResourceNotFoundException | CORBAException | InvalidObjectReference | RegisterError
 				| ConnectionException e) {
 			throw new CORBAException("Unable to register remote domain", e);
 		}
+	}
+
+	@Override
+	public List<String> remoteDomainNames() {
+		List<String> remoteDomainNames = new ArrayList<>();
+		
+		for(DomainManager mgr : this.getCorbaObject().remoteDomainManagers())
+			remoteDomainNames.add(mgr.name());
+		
+		return remoteDomainNames;
+	}
+
+	public Map<String, RedhawkDomainManager> getDriverRegisteredRemoteDomainManager() {
+		return driverRegisteredRemoteDomainManager;
 	}
 
 }

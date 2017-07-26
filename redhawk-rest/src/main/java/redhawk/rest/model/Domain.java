@@ -19,6 +19,7 @@
  */
 package redhawk.rest.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -50,6 +51,9 @@ public class Domain {
     @XmlElement(name="eventchannel")
     private List<EventChannel> eventChannels;
     
+    @XmlElementWrapper(name="remoteDomains")
+    @XmlElement(name="domainName")
+    List<String> remoteDomains = new ArrayList<>();
     
     public String getIdentifier() {
         return identifier;
@@ -86,6 +90,12 @@ public class Domain {
 	}
 	public void setProperties(List<Property> properties) {
 		this.properties = properties;
+	}
+	public List<String> getRemoteDomains() {
+		return remoteDomains;
+	}
+	public void setRemoteDomains(List<String> remoteDomains) {
+		this.remoteDomains = remoteDomains;
 	}
 
     

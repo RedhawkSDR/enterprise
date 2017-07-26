@@ -18,9 +18,10 @@ import redhawk.testutils.RedhawkTestBase;
  */
 public class RemoteDomainManagersMT extends RedhawkTestBase{
 	@Test
-	public void testRemoteDomainManager() {
+	public void testRemoteDomainManager() throws ResourceNotFoundException, CORBAException {
+		RedhawkDomainManager mgr = null;
 		try {
-			RedhawkDomainManager mgr = driver.getDomain(domainName);
+			mgr = driver.getDomain(domainName);
 			
 			mgr.registerRemoteDomainManager("REDHAWK_DEV2");
 			
@@ -33,6 +34,13 @@ public class RemoteDomainManagersMT extends RedhawkTestBase{
 			assertEquals(new Integer(0), new Integer(mgr.remoteDomainManagers().size()));
 		} catch (ResourceNotFoundException | CORBAException e) {
 			fail("Test failure "+e.getMessage());
+		} finally {
+			/*
+			 * Clear out any leftover remote domains
+			 */
+			for(String domain : mgr.remoteDomainNames()) {
+				mgr.unregisterRemoteDomainManager(domain);
+			}
 		}
 	}
 }

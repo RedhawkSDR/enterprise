@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -143,6 +144,19 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     public Response registerRemoteDomain(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name,
     		@ApiParam(value = "Remote Domain Information") RegisterRemoteDomain registerRequest) throws Exception {
         redhawkManager.registerRemoteDomain(nameServer, "domain", name, registerRequest);
+    	return Response.ok().build();
+    }
+    
+    @DELETE
+    @Path("/{domain}/unregisterremotedomain")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @ApiOperation(
+    		value = "Set a Property on a REDHAWK Domain"
+    		) 
+    public Response unregisterRemoteDomain(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name,
+    		@ApiParam(value = "Remote Domain Name") String remoteDomainName) throws Exception {
+        redhawkManager.unregisterRemoteDomain(nameServer, "domain", name, remoteDomainName);
     	return Response.ok().build();
     }
 

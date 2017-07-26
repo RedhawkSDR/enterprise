@@ -350,6 +350,12 @@ public interface RedhawkDomainManager extends QueryableResource {
 	List<Object> remoteDomainManagers();
 	
 	/**
+	 * Helper method for just returning the remote domain names.
+	 * @return
+	 */
+	List<String> remoteDomainNames();
+	
+	/**
 	 * Looks up domain name on current CORBA name server and registers 
 	 * it as a remote domain. 
 	 * @param remoteDomainName

@@ -43,6 +43,7 @@ import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.device.impl.RedhawkDeviceImpl;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.domain.RedhawkDomainManager;
+import redhawk.driver.domain.impl.RedhawkDomainManagerImpl;
 import redhawk.driver.eventchannel.impl.RedhawkEventRegistrant;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ApplicationStartException;
@@ -114,6 +115,19 @@ public class RedhawkManager {
 					registerRequest.getNameServerPort());
 		} catch (Exception e) {
 			throw new Exception("Unable to register remote domain manager "+e.getMessage());
+		}
+	}
+	
+	public void unregisterRemoteDomain(String nameServer, String type, String location, String remoteDomainName) throws Exception {
+		Redhawk redhawk;
+		try {
+			redhawk = getDriverInstance(nameServer);
+			
+			RedhawkDomainManager dom = internalGet(redhawk, type, location);
+			
+			dom.unregisterRemoteDomainManager(remoteDomainName);
+		} catch (Exception e) {
+			throw new Exception("Unable to unregister remote domain manager "+e.getMessage());
 		}
 	}
 	
@@ -784,7 +798,21 @@ public class RedhawkManager {
 			throws ResourceNotFoundException, Exception {
 		switch (type) {
 		case "domain":
-			return (T) redhawk.getDomain(location[0]);
+			RedhawkDomainManager domain = null;
+			try {
+				domain = redhawk.getDomain(location[0]);
+			}catch(Exception ex) {
+				//Try get the domain as a remote domain
+				logger.warn("Can't find domain name on local nameserver. Attempting to get remote domain. Note:"
+						+" This will only work w/ REST if remote Domain was registered via the REDHAWK Driver.");
+				RedhawkDomainManagerImpl impl = (RedhawkDomainManagerImpl) domain;
+				if(impl.getDriverRegisteredRemoteDomainManager().containsKey(location[0])) {
+					domain = impl;
+				}else {
+					throw new ResourceNotFoundException("Issue finding resource "+location[0]);
+				}
+			}
+			return (T) domain;
 		case "application":
 			return (T) redhawk.getApplication(location[0]);
 		case "applicationport":

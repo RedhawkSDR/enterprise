@@ -15,7 +15,7 @@ redhawk://data:<nameserver host>:<nameserver port>:<domain name>?waveformName=<w
 * If you are using the REDHAWK Connector, you can replace the address and Port with the connection name you specified when you created the connection. Make sure you specify `domainName` in your configuration.
 
 ----
-redhawk://data:<nameserver host>:<redhawk-connect-name>
+redhawk://data:<redhawk-connect-name>
 ----
 
 === Endpoint Options

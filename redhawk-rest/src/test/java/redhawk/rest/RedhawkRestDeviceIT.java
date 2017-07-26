@@ -43,6 +43,7 @@ public class RedhawkRestDeviceIT extends RedhawkTestBase{
 			assertNotNull(device.getAdminState());
 			assertNotNull(device.getUsageState());
 			assertNotNull(device.getOperationState());
+			assertNotNull(device.getImplementation());
 		} catch (Exception e) {
 			fail("Test failure "+e.getMessage());
 		}

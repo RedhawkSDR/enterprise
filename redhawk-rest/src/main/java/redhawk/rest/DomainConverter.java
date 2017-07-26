@@ -56,6 +56,10 @@ public class DomainConverter {
 		domain.setIdentifier(domainManager.getIdentifier());
 		domain.setName(domainManager.getName());
 		
+		//Add Remote Domains if available
+		if(!domainManager.remoteDomainManagers().isEmpty()) {
+			domain.setRemoteDomains(domainManager.remoteDomainNames());
+		}
 
 		if (fetchMode.equals(FetchMode.EAGER)) {
 
@@ -484,7 +488,8 @@ public class DomainConverter {
 		device.setAdminState(obj.adminState());
 		device.setOperationState(obj.operationalState());
 		device.setUsageState(obj.usageState());
-
+		device.setImplementation(obj.getImplementation());
+		
 		if (fetchMode.equals(FetchMode.EAGER)) {
 			try {
 				device.setProperties(convertProperties(obj.getProperties(), obj.getPropertyConfiguration()));

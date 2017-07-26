@@ -30,7 +30,6 @@ import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.rest.model.Domain;
 import redhawk.rest.model.RegisterRemoteDomain;
-import redhawk.rest.utils.TestUtils;
 import redhawk.testutils.RedhawkTestBase;
 
 /*

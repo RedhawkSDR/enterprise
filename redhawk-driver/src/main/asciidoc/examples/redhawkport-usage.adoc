@@ -12,7 +12,7 @@ include::snippets/MessageConsumerPortIT.java[lines=104..129]
 
 === Retrieving Metadata from a REDHAWK Port
 
-The examples below shows how to retrieve the following metadata from a REDHAWK Port object:
+The following code examples explain how to retrieve the following metadata from a REDHAWK Port object:
 
 * statistics
 * state
@@ -48,7 +48,7 @@ include::snippets/RedhawkPortImplIT.java[lines=84..87]
 include::snippets/RedhawkPortImplIT.java[lines=111..114]
 ----
  
-==== Get Port connections and disconnect by Connection Id
+==== Get Port Connections and Disconnect by Connection Id
 
 [source,java,indent=0]
 .`RedhawkPortImplIT`

@@ -156,7 +156,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@GET
 	@Path("/{applicationId}/ports")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@ApiOperation(value = "GET Application ports")
+	@ApiOperation(value = "GET Application Ports")
 	public ExternalPortContainer getApplicationPorts(
 			@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId)
 			throws ResourceNotFoundException, Exception {
@@ -167,10 +167,10 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@GET
 	@Path("/{applicationId}/ports/{portId}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@ApiOperation(value = "GET Application port")
+	@ApiOperation(value = "GET Application Port")
 	public ExternalPort getApplicationPort(
 			@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId,
-			@ApiParam(value = "External name for port") @PathParam("portId") String portName)
+			@ApiParam(value = "External name for Port") @PathParam("portId") String portName)
 			throws ResourceNotFound, Exception {
 		//TODO: Clean this call up it's inconsistent and not easily understandably either pass in an array or pass in a 
 		//String that's handled downstream. 
@@ -181,10 +181,10 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@GET
 	@Path("/{applicationId}/ports/{portId}/statistics")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@ApiOperation(value = "GET Application port statistics")
+	@ApiOperation(value = "GET Application Port Statistics")
 	public PortStatisticsContainer getApplicationPortStatistics(
 			@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId,
-			@ApiParam(value = "External name for port") @PathParam("portId") String portName) throws Exception {
+			@ApiParam(value = "External name for Port") @PathParam("portId") String portName) throws Exception {
 		String applicationPath = domainName+"/"+applicationId+"/"+portName;
 		
 		return redhawkManager.getRhPortStatistics(nameServer, "applicationport", applicationPath);
@@ -193,10 +193,10 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@GET
 	@Path("/{applicationId}/ports/{portId}/sri")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-	@ApiOperation(value = "GET Application port SRI")
+	@ApiOperation(value = "GET Application Port SRI")
 	public SRIContainer getApplicationSRI(
 			@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId,
-			@ApiParam(value = "External name for port") @PathParam("portId") String portName) throws Exception {
+			@ApiParam(value = "External name for Port") @PathParam("portId") String portName) throws Exception {
 		String applicationPath = domainName+"/"+applicationId+"/"+portName;
 		
 		return redhawkManager.getSRI(nameServer, "applicationport", applicationPath);
@@ -205,10 +205,10 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@DELETE
 	@Path("/{applicationId}/ports/{portId}/disconnect/{connectionId}")
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-	@ApiOperation(value = "DELETE a connection from a Port by it's connectionId")
+	@ApiOperation(value = "DELETE a Connection from a Port by connectionId")
 	public Response disconnectPortConnection(
 			@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId,
-			@ApiParam(value = "External name for port") @PathParam("portId") String portName,
+			@ApiParam(value = "External name for Port") @PathParam("portId") String portName,
 			@PathParam("connectionId") String connectionId){
 		String applicationPath = domainName+"/"+applicationId+"/"+portName;
 		
@@ -216,7 +216,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 			redhawkManager.disconnectConnectionById(nameServer, "applicationport", applicationPath, connectionId);
 			return Response.ok("Disconnected "+connectionId).build();
 		} catch (Exception e) {
-			throw new WebApplicationException("Error disconnecting port", Response.Status.BAD_REQUEST);
+			throw new WebApplicationException("Error disconnecting Port", Response.Status.BAD_REQUEST);
 		}
 	}
 }

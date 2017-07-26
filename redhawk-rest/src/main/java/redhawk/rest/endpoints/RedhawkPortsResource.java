@@ -99,7 +99,7 @@ public class RedhawkPortsResource extends RedhawkBaseResource {
     @DELETE
     @Path("/{portId}/disconnect/{connectionId}")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-    @ApiOperation(value = "DELETE a connection from a Port by it's connectionId")
+    @ApiOperation(value = "DELETE a Connection from a Port by connectionId")
     public Response disconnectPortConnection(
     		@PathParam("portId") String portName,
     		@PathParam("connectionId") String connectionId){
@@ -109,7 +109,7 @@ public class RedhawkPortsResource extends RedhawkBaseResource {
 			redhawkManager.disconnectConnectionById(nameServer, "port", portPath, connectionId);
 			return Response.ok("Disconnected "+connectionId).build();
     	} catch (Exception e) {
-			throw new WebApplicationException("Error disconnecting port", Response.Status.BAD_REQUEST);
+			throw new WebApplicationException("Error disconnecting Port", Response.Status.BAD_REQUEST);
 		}
     }
 }

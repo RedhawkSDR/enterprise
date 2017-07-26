@@ -12,6 +12,12 @@ Enables direct interaction between REDHAWK Component Ports and your Apache Camel
 redhawk://data:<nameserver host>:<nameserver port>:<domain name>?waveformName=<waveform name>&componentName=<component name>&portName=<port name>&portType=<port type>
 ----
 
+* If you are using the REDHAWK Connector, you can replace the address and Port with the connection name you specified when you created the connection. Make sure you specify `domainName` in your configuration.
+
+----
+redhawk://data:<nameserver host>:<redhawk-connect-name>
+----
+
 === Endpoint Options
 
 Enables direct interaction between a REDHAWK Corba FileSystem and your Apache Camel Context.

@@ -67,6 +67,7 @@ import redhawk.rest.model.FullProperty;
 import redhawk.rest.model.PortStatisticsContainer;
 import redhawk.rest.model.Property;
 import redhawk.rest.model.PropertyContainer;
+import redhawk.rest.model.RegisterRemoteDomain;
 import redhawk.rest.model.SRIContainer;
 import redhawk.rest.model.TunerMode;
 import redhawk.rest.model.WaveformInfo;
@@ -102,6 +103,20 @@ public class RedhawkManager {
 		return (T) converter.convert(type, internalGet(redhawk, type, location));
 	}
 
+	public void registerRemoteDomain(String nameServer, String type, String location, RegisterRemoteDomain registerRequest) throws Exception {
+		Redhawk redhawk;
+		try {
+			redhawk = getDriverInstance(nameServer);
+			
+			RedhawkDomainManager dom = internalGet(redhawk, type, location);
+			
+			dom.registerRemoteDomainManager(registerRequest.getDomainName(), registerRequest.getNameServerHost(), 
+					registerRequest.getNameServerPort());
+		} catch (Exception e) {
+			throw new Exception("Unable to register remote domain manager "+e.getMessage());
+		}
+	}
+	
 	public <T> PortStatisticsContainer getRhPortStatistics(String nameServer, String type, String location)
 			throws Exception {
 		Redhawk redhawk = getDriverInstance(nameServer);
@@ -986,5 +1001,5 @@ public class RedhawkManager {
 			}
 		}).collect(Collectors.toList());
 		return newValues.toArray();
-	}
+	}	
 }

@@ -55,6 +55,7 @@ public class DomainConverter {
 		Domain domain = new Domain();
 		domain.setIdentifier(domainManager.getIdentifier());
 		domain.setName(domainManager.getName());
+		
 
 		if (fetchMode.equals(FetchMode.EAGER)) {
 

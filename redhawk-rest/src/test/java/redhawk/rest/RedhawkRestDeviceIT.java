@@ -24,7 +24,10 @@ public class RedhawkRestDeviceIT extends RedhawkTestBase{
 		nameServer = domainHost+":"+domainPort;
 		
 		try {
-			devManager = (DeviceManager) manager.getAll(nameServer, "devicemanager", domainName, FetchMode.EAGER).get(0);
+			for(Object restDevMgr : manager.getAll(nameServer, "devicemanager", domainName, FetchMode.EAGER)) {
+				if(((DeviceManager)restDevMgr).getLabel().contains("GPP"))
+					devManager = (DeviceManager) restDevMgr;
+			}
 		} catch (Exception e) {
 			fail("Unable to run test can't get device manager "+e.getMessage());
 		}

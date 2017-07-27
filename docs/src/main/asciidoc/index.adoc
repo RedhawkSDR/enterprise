@@ -62,6 +62,8 @@ include::connector/overview.adoc[]
 
 include::rest/overview.adoc[]
 
+include::rest/note.adoc[]
+
 include::rest/paths.adoc[]
 
 include::rest/definitions.adoc[]

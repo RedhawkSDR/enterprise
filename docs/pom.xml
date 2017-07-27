@@ -188,11 +188,9 @@
 										<resource>
 											<directory>${project.parent.basedir}/redhawk-rest/target/asciidoc</directory>
 											<targetPath>${project.build.directory}/asciidoc-workspace/rest</targetPath>
-											<includes>
-												<include>overview.adoc</include>
-												<include>paths.adoc</include>
-												<include>definitions.adoc</include>
-											</includes>
+											<excludes>
+                                                                                                <exclude>index.adoc</exclude>
+                                                                                        </excludes>										
 										</resource>
 										<!-- Take the necessary adoc files from redhawk-connector -->
 										<resource>

@@ -120,11 +120,12 @@ public class RedhawkLoggingIT extends RedhawkDeviceTestBase {
 	@Test
 	public void testDeviceLogLevels() throws IOException {
 		RedhawkDeviceManager deviceManager = null;
+		RedhawkDevice dev = null;
 		
 		try {
 			deviceManager = driver.getDeviceManager("REDHAWK_DEV/Simulator.*");
 
-			RedhawkDevice dev = deviceManager.getDevices().get(0);
+			dev = deviceManager.getDevices().get(0);
 			assertEquals(RedhawkLogLevel.INFO, dev.getLogLevel());
 
 			// Change log level 
@@ -134,6 +135,9 @@ public class RedhawkLoggingIT extends RedhawkDeviceTestBase {
 				| CORBAException ex) {
 			ex.printStackTrace();
 			fail("Failure running test " + ex.getMessage());
+		}finally {
+			logger.info("Reseting log level");
+			dev.setLogLevel(RedhawkLogLevel.INFO);
 		}
 	}
 	

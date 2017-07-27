@@ -7,7 +7,7 @@ stages:
   - deploy
 
 variables:
-  redhawk_version: '2.0-nightly'
+  redhawk_version: '2.1-nightly'
   enterprise_version: '2.0.1'
 .common: &common
   image: ${docker_registry}redbus/maven:3-jdk-8
@@ -49,7 +49,7 @@ variables:
   script:
     - docker-compose pull
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} up --force-recreate -d redhawk
-    - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk yum install -y redhawk-basic-components redhawk-basic-waveforms rh.FmRdsSimulator 
+    - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk yum install -y redhawk-basic-components redhawk-basic-waveforms rh.FmRdsSimulator
     - docker cp redhawk-driver/src/test/resources/node/SimulatorNode redhawk_${dist}_${arch}_${CI_JOB_ID}:/var/redhawk/sdr/dev/nodes/ # Deploy devMgr
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec redhawk nodeBooter -d /var/redhawk/sdr/dev/nodes/SimulatorNode/DeviceManager.dcd.xml 2>&1 & #Start DevMgr
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk mkdir -p /usr/local/redhawk/workspace #Make dir for deploying components

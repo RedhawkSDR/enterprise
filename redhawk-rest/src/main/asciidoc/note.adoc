@@ -1,0 +1,14 @@
+[NOTE]
+====
+`nameserver` is the host/IP and the port of the omniNames server:
+
+----
+redhawk://data:<nameserver host>:<nameserver port>
+----
+
+If you are using the REDHAWK Connector, you can replace `nameserver` with the connection name you specified when you created the connection. Make sure you specify `domainName` in your configuration.
+
+----
+redhawk://data:<redhawk-connect-name>
+----
+====

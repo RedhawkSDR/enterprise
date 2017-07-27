@@ -1,7 +1,7 @@
 version: '2.1'
 services:
   redhawk:
-    image: ${docker_registry}redhawk/redhawk:${redhawk_version}-${dist}-${arch}
+    image: ${docker_registry}redhawk/redhawk:${redhawk_version}-assets-${dist}-${arch}
     container_name: redhawk_${dist}_${arch}_${CI_JOB_ID}
   rei:
     image: ${docker_registry}redbus/maven:3-jdk-8

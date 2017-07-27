@@ -25,7 +25,9 @@ public class RedhawkRestDeviceIT extends RedhawkTestBase{
 		
 		try {
 			for(Object restDevMgr : manager.getAll(nameServer, "devicemanager", domainName, FetchMode.EAGER)) {
-				if(((DeviceManager)restDevMgr).getLabel().contains("GPP"))
+				String label = ((DeviceManager)restDevMgr).getLabel();
+				System.out.println("Label: "+label);
+				if(label.contains("DevMgr"))
 					devManager = (DeviceManager) restDevMgr;
 			}
 		} catch (Exception e) {

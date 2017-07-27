@@ -49,8 +49,7 @@ variables:
   script:
     - docker-compose pull
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} up --force-recreate -d redhawk
-    - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk yum install -y rh.FmRdsSimulator
-    #- docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk yum install -y redhawk-basic-components redhawk-basic-waveforms rh.FmRdsSimulator
+    - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk yum install -y rh.FmRdsSimulator #TODO: This line shouldn't be necessary
     - docker cp redhawk-driver/src/test/resources/node/SimulatorNode redhawk_${dist}_${arch}_${CI_JOB_ID}:/var/redhawk/sdr/dev/nodes/ # Deploy devMgr
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec redhawk nodeBooter -d /var/redhawk/sdr/dev/nodes/SimulatorNode/DeviceManager.dcd.xml 2>&1 & #Start DevMgr
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk mkdir -p /usr/local/redhawk/workspace #Make dir for deploying components
@@ -61,11 +60,11 @@ variables:
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk bash -c "cd /usr/local/redhawk/workspace/MessageProducer; ./build.sh install" #Install EventSpitter component
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk bash -c "nameclt list REDHAWK_DEV" #Debug
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} up --exit-code-from rei
-    #- find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -
-    #- find */target -name "*.exec" | tar -cvf jacoco-exec.tar.gz --files-from -
-    #- find */target/classes | tar -cvf jacoco-classes.tar --files-from -
-    #- find redhawk-*/src/main/java | tar -cvf jacoco-sources.tar --files-from -
-    #- tar -C docs/target -czvf site.tar.gz site
+    - find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -
+    - find */target -name "*.exec" | tar -cvf jacoco-exec.tar.gz --files-from -
+    - find */target/classes | tar -cvf jacoco-classes.tar --files-from -
+    - find redhawk-*/src/main/java | tar -cvf jacoco-sources.tar --files-from -
+    - tar -C docs/target -czvf site.tar.gz site
   after_script:
     - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} down
   artifacts:
@@ -84,8 +83,6 @@ build:
     - mvn -Djava.io.tmpdir=./ deploy -P docs,jaxb-generation,default -B -U -Drelease=0.$CI_PIPELINE_ID
   only:
     - branches
-  except:
-    - RI-90
 
 build-release:
   <<: *common
@@ -99,8 +96,6 @@ test-install:
   stage: test
   script:
     - yum install -y `find output -name '*.rpm'`
-  except:
-    - RI-90
 
 test-el7-x86_64:
   <<: *compose-test-common
@@ -142,8 +137,6 @@ deploy:
   <<: *deploy-common
   only:
     - branches
-  except:
-    - RI-90
 
 deploy-release:
   variables:

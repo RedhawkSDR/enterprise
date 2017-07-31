@@ -30,6 +30,7 @@ import BULKIO.updateSRIHelper;
 import ExtendedCF.QueryablePort;
 import ExtendedCF.QueryablePortHelper;
 import ExtendedCF.UsesConnection;
+import redhawk.driver.bulkio.DataTypes;
 import redhawk.driver.bulkio.Packet;
 import redhawk.driver.exceptions.PortException;
 
@@ -164,4 +165,6 @@ public interface RedhawkPort {
 			throw new PortException("Provides Port does not support connections() method.");
 		}
 	}
+	
+	//TODO: Would be helpful to get dataType 
 }

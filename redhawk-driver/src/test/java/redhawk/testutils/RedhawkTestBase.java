@@ -116,10 +116,9 @@ public class RedhawkTestBase {
 		//Always make sure you delete waveforms you create
 		//TODO: Clean up this logic
 		try {
-			//TODO: Get a specific domainName
+			//TODO: Just get rid of everything that's not under RH
 			RedhawkFileManager manager = driver.getDomain(domainName).getFileManager();
-			//if(!manager.findDirectories("/waveforms/testWaveform").isEmpty()) //TODO: Look into why this doesn't work 
-				manager.removeDirectory("/waveforms/testWaveform");
+			manager.removeDirectory("/waveforms/testWaveform");
 		} catch (ConnectionException | IOException | CORBAException | ResourceNotFoundException e) {
 			logger.info("Unable to delete wavemform likely cause it doesn't exist.");
 		}

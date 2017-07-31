@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE softwareassembly PUBLIC "-//JTRS//DTD SCA V2.2.2 SAD//EN" "softwareassembly.dtd">
+<softwareassembly id="DCE:ba6bcc1d-9cd6-450b-b26d-712425cd76a7" name="PortListenerTest">
+  <componentfiles>
+    <componentfile id="SigGen_8e47e09c-d8f7-4e07-be39-7a243356478b" type="SPD">
+      <localfile name="/components/rh/SigGen/SigGen.spd.xml"/>
+    </componentfile>
+    <componentfile id="DataConverter_eb94f596-a577-47cb-99bb-117d6c3fed30" type="SPD">
+      <localfile name="/components/rh/DataConverter/DataConverter.spd.xml"/>
+    </componentfile>
+  </componentfiles>
+  <partitioning>
+    <componentplacement>
+      <componentfileref refid="SigGen_8e47e09c-d8f7-4e07-be39-7a243356478b"/>
+      <componentinstantiation id="SigGen_1" startorder="0">
+        <usagename>SigGen_1</usagename>
+        <findcomponent>
+          <namingservice name="SigGen_1"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
+    <componentplacement>
+      <componentfileref refid="DataConverter_eb94f596-a577-47cb-99bb-117d6c3fed30"/>
+      <componentinstantiation id="DataConverter_1" startorder="1">
+        <usagename>DataConverter_1</usagename>
+        <findcomponent>
+          <namingservice name="DataConverter_1"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
+    <componentplacement>
+      <componentfileref refid="DataConverter_eb94f596-a577-47cb-99bb-117d6c3fed30"/>
+      <componentinstantiation id="DataConverter_2" startorder="2">
+        <usagename>DataConverter_2</usagename>
+        <findcomponent>
+          <namingservice name="DataConverter_2"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
+  </partitioning>
+  <assemblycontroller>
+    <componentinstantiationref refid="SigGen_1"/>
+  </assemblycontroller>
+  <connections>
+    <connectinterface id="connection_1">
+      <usesport>
+        <usesidentifier>dataFloat_out</usesidentifier>
+        <componentinstantiationref refid="SigGen_1"/>
+      </usesport>
+      <providesport>
+        <providesidentifier>dataFloat</providesidentifier>
+        <componentinstantiationref refid="DataConverter_1"/>
+      </providesport>
+    </connectinterface>
+  </connections>
+</softwareassembly>

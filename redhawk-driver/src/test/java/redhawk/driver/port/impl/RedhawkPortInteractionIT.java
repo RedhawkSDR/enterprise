@@ -6,12 +6,9 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import redhawk.driver.application.RedhawkApplication;
@@ -38,7 +35,7 @@ public class RedhawkPortInteractionIT extends RedhawkTestBase{
 	}
 
 	@Test
-	public void connectOctet() throws ApplicationStopException, ApplicationReleaseException {
+	public void connectAndSend() throws ApplicationStopException, ApplicationReleaseException {
 		String[] portNames = {"dataOctet_out", "dataFloat_out", "dataShort_out", "dataDouble_out", "dataUshort_out"};
 		
 		for(String portName : portNames) {
@@ -89,71 +86,6 @@ public class RedhawkPortInteractionIT extends RedhawkTestBase{
 					fail("Broken test logic should be able to re deploy from that location.");
 				}
 			}
-		}
-	}
-
-	/*
-	 * Test sending data from a DataConverter to the various ports that data
-	 * converter has available via the driver
-	 */
-	@Test
-	@Ignore
-	public void test() {
-		try {
-			RedhawkApplication app = driver.getDomain().getApplications().get(0);
-
-			/*
-			 * Get the out(uses) ports on the DataConverter Component and it's matching
-			 * DataConverter for this test.
-			 */
-			List<RedhawkPort> usesPorts = new ArrayList<>();
-			// Don't check char with this test
-			for (RedhawkPort port : app.getComponentByName("DataConverter_1.*").getPorts()) {
-				if (port.getName().endsWith("out") && !port.getName().contains("Char")
-						&& !port.getName().contains("Octet")) {
-					System.out.println(port.getName());
-					usesPorts.add(port);
-				}
-			}
-
-			/*
-			 * For Each Uses port run a test to take it's data and send it into the other
-			 * data converter make sure you can get the data out
-			 */
-			for (RedhawkPort usesPort : usesPorts) {
-				System.out.println(usesPort);
-				/*
-				 * Make a port connection
-				 */
-				GenericPortListener pl = new GenericPortListener();
-				usesPort.connect(pl);
-				Boolean appStarted = false;
-				System.out.println(usesPort.getName());
-				while (!pl.getReceivedData()) {
-					/*
-					 * Start app and make sure I can receive data
-					 */
-					if (!appStarted) {
-						app.start();
-						appStarted = true;
-					}
-				}
-
-				/*
-				 * Stop app and disconnect ports to clean up
-				 */
-				app.stop();
-				usesPort.disconnect();
-				System.out.println("Received this many messages: " + pl.getMessagesReceived());
-				// Make sure you've cleaned up properly
-				assertTrue("Should no longer be port connections", usesPort.getConnectionIds().isEmpty());
-			}
-		} catch (MultipleResourceException | CORBAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 

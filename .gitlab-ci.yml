@@ -111,7 +111,6 @@ test-install:
 
 test-el7-x86_64:
   <<: *compose-test-common
-  <<: *general-it-command
   image: ${docker_registry}utils/docker-compose:latest
   stage: test
   tags:

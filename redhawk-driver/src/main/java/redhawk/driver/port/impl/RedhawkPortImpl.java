@@ -137,8 +137,8 @@ public class RedhawkPortImpl implements RedhawkPort {
 	
 	public <T> void send(Packet<T> packet) throws Exception {
 		
-		if(portType.equalsIgnoreCase(RedhawkPort.PORT_TYPE_PROVIDES)){
-			throw new PortException("Provides ports do not implement send()");		
+		if(portType.equalsIgnoreCase(RedhawkPort.PORT_TYPE_USES)){
+			throw new PortException("Uses ports do not implement send()");		
 		}
 		
 		boolean endOfDataStream = packet.isEndOfStream(); 
@@ -266,6 +266,8 @@ public class RedhawkPortImpl implements RedhawkPort {
         java.lang.Object poaTie = null;
         Method meth = null;
         
+        //TODO: At this point we should have the info to know exactly which dataType the port is 
+        //So why do we go through this list...
         for(DataTypes dataType : dataTypeList){
 	        c = Class.forName(dataType.poaTieClass, true, classloader).getConstructor(Class.forName(dataType.operationsClass, true, classloader));
 	        BulkIOData dataConnection = new BulkIOData(portListener);
@@ -273,7 +275,7 @@ public class RedhawkPortImpl implements RedhawkPort {
 	        meth = poaTie.getClass().getSuperclass().getMethod("_this", ORB.class);
 	        org.omg.CORBA.Object pipeline = (Object)meth.invoke(poaTie, orb);    	
 	        
-	    	String connectionId = UUID.randomUUID().toString();
+	    	String connectionId = "REI_"+UUID.randomUUID().toString();
 	    	try {
 	    		if(portType.equalsIgnoreCase("provides")){
 	    			throw new UnsupportedOperationException("You cannot connect to an input (provides) port.  Only output (uses) ports are allowed.");
@@ -363,7 +365,7 @@ public class RedhawkPortImpl implements RedhawkPort {
 		}
 		
 		return list; 
-	}	
+	}
 	
 	@Override
 	public String toString() {

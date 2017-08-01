@@ -4,6 +4,7 @@
 stages:
   - build
   - test
+  - test-jacorb
   - deploy
 
 variables:
@@ -76,6 +77,11 @@ variables:
       - jacoco-sources.tar
       - site.tar.gz
     expire_in: 3 days
+
+#General command for running the integration tests
+.general-it-command: &general-it-command
+  variables:
+    - maven_command: bash -c "mvn -P CFDependencies clean install -B -U && mvn clean install site -P localIT -DfailIfNoTests=false -DdomainHost=redhawk_${dist}_${arch}_${CI_JOB_ID} -DtestProps=`pwd`/docker_test.properties"
 
 build:
   <<: *common

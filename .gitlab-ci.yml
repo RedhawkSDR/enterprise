@@ -89,6 +89,8 @@ build:
     - mvn -Djava.io.tmpdir=./ deploy -P docs,jaxb-generation,default -B -U -Drelease=0.$CI_PIPELINE_ID
   only:
     - branches
+  except:
+    - RI-92
 
 build-release:
   <<: *common
@@ -102,9 +104,12 @@ test-install:
   stage: test
   script:
     - yum install -y `find output -name '*.rpm'`
+  except:
+    - RI-92
 
 test-el7-x86_64:
   <<: *compose-test-common
+  <<: *general-it-command
   image: ${docker_registry}utils/docker-compose:latest
   stage: test
   tags:
@@ -124,6 +129,8 @@ test-el6-x86_64:
   variables:
     dist: el6
     arch: x86_64
+  except:
+    - RI-92
 
 test-el6-i386:
   <<: *compose-test-common
@@ -135,6 +142,8 @@ test-el6-i386:
   variables:
     dist: el6
     arch: i686
+  except:
+    - RI-92
 
 #Trigger a Jenkins job to aggregate artifacts there
 deploy:
@@ -143,6 +152,8 @@ deploy:
   <<: *deploy-common
   only:
     - branches
+  except:
+    - RI-92
 
 deploy-release:
   variables:

@@ -52,6 +52,8 @@ build:
     - mvn -Djava.io.tmpdir=./ deploy -P docs,jaxb-generation,default -B -U -Drelease=0.$CI_PIPELINE_ID
   only:
     - branches
+  except:
+    - develop-2.1.0
 
 build-release:
   <<: *common
@@ -65,6 +67,8 @@ test-install:
   stage: test-el7
   script:
     - yum install -y `find output -name '*.rpm'`
+  except:
+    - develop-2.1.0
 
 test-el7-x86_64:
   image: ${docker_registry}utils/docker-compose:latest
@@ -142,6 +146,8 @@ deploy:
   <<: *deploy-common
   only:
     - branches
+  except:
+    - develop-2.1.0
 
 deploy-release:
   variables:

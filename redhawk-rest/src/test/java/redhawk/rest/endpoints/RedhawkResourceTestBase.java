@@ -41,7 +41,7 @@ public class RedhawkResourceTestBase extends RedhawkTestBase{
 		
 	@BeforeClass
 	public static void setup() throws Exception{
-		baseURI = "http://localhost:8080/redhawk/"+domainHost+":"+domainPort+"/domains";
+		baseURI = "http://127.0.0.1:8080/redhawk/"+domainHost+":"+domainPort+"/domains";
 		server = new Server(8080);
 		WebAppContext webapp = new WebAppContext();
 		webapp.setResourceBase("src/test/resources/webapp");

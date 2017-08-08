@@ -107,7 +107,7 @@ public class RedhawkConnector implements ManagedServiceFactory {
 					String curHost = dynamicPropertyConversion(existingRHConnection[i].getProperty(HOST_NAME_PROPERTY), String.class);
 					long curPort = dynamicPropertyConversion(existingRHConnection[i].getProperty(PORT_NAME_PROPERTY), Long.class);
 					
-					String domainManager = dynamicPropertyConversion(existingRHConnection[i].getProperty(DOMAIN_MANAGER_PROPERTY), Long.class);
+					String domainManager = dynamicPropertyConversion(existingRHConnection[i].getProperty(DOMAIN_MANAGER_PROPERTY), String.class);
 					
 					if (!pid.equalsIgnoreCase(servicePid) && curHost.equalsIgnoreCase(host) && curPort == port && domainManager.equalsIgnoreCase(domainManagerName)) {
 						throw new ConfigurationException(CONNECTION_NAME_PROPERTY,

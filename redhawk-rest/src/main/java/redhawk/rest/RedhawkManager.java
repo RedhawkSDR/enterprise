@@ -100,8 +100,14 @@ public class RedhawkManager {
 	}
 	
 	public <T> T get(String nameServer, String type, String... location) throws ResourceNotFoundException, Exception {
-		Redhawk redhawk = getDriverInstance(nameServer);
-		return (T) converter.convert(type, internalGet(redhawk, type, location));
+		Redhawk redhawk = null;
+		try {
+			redhawk = getDriverInstance(nameServer);
+			return (T) converter.convert(type, internalGet(redhawk, type, location));	
+		}finally{
+			if(redhawk!=null)
+				redhawk.disconnect();
+		}
 	}
 
 	public void registerRemoteDomain(String nameServer, String type, String location, RegisterRemoteDomain registerRequest) throws Exception {
@@ -653,7 +659,6 @@ public class RedhawkManager {
 	public <T> List<T> getAll(String nameServer, String type, String location, FetchMode fetchMode)
 			throws ResourceNotFoundException, Exception {
 		Redhawk redhawk = null;
-		boolean createdNewInstance = false;
 
 		try {
 			if (redhawkDrivers.get(nameServer) != null) {
@@ -662,7 +667,6 @@ public class RedhawkManager {
 				if (nameServer.contains(":")) {
 					String[] hostAndPort = nameServer.split(":");
 					redhawk = new RedhawkDriver(hostAndPort[0], Integer.parseInt(hostAndPort[1]));
-					createdNewInstance = true;
 				} else {
 					throw new ResourceNotFoundException(
 							"You did not specify a valid host and port to the REDHAWK name server. An example of a valid url is: localhost:2809");
@@ -672,7 +676,7 @@ public class RedhawkManager {
 			return (List<T>) converter.convertAll(type, internalGetAll(redhawk, type, location), fetchMode);
 
 		} finally {
-			if (redhawk != null && createdNewInstance) {
+			if (redhawk != null) {
 				redhawk.disconnect();
 			}
 		}

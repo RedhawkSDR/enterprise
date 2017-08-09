@@ -490,7 +490,6 @@ public class RedhawkDomainManagerImpl extends QueryableResourceImpl<DomainManage
 
 	@Override
 	public DomainManager getCorbaObj() {
-		DomainManager mgr;
 		return super.getCorbaObject();
 	}
 

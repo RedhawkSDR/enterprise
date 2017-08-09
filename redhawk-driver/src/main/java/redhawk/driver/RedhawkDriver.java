@@ -19,6 +19,7 @@
  */
 package redhawk.driver;
 
+import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,10 +31,12 @@ import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.omg.CORBA.Any;
 import org.omg.CORBA.BAD_PARAM;
 import org.omg.CORBA.COMM_FAILURE;
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.Object;
+import org.omg.CORBA.Policy;
 import org.omg.CORBA.TRANSIENT;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosNaming.BindingIteratorHolder;
@@ -44,6 +47,7 @@ import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
 import org.omg.CosNaming.NamingContextPackage.CannotProceed;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
+import org.omg.Messaging.REPLY_END_TIME_POLICY_TYPE;
 
 import CF.DomainManager;
 import CF.DomainManagerHelper;
@@ -235,11 +239,18 @@ public class RedhawkDriver implements Redhawk {
 	}
 
 	public Map<String, RedhawkDomainManager> getDomains() throws CORBAException {
+		NamingContextExt ncRef = null;
+		Object objRef = null;
 		try {
 			initializeOrb();
 			List<RedhawkDomainManager> domainManagers = new ArrayList<RedhawkDomainManager>();
-			Object objRef = orb.resolve_initial_references("NameService");
-			NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
+			objRef = orb.resolve_initial_references("NameService");
+			
+			ncRef = NamingContextExtHelper.narrow(objRef);
+			
+			//TODO: Discuss whether this is appropriate
+			//Figure out generic way to do this???
+			//ncRef._set_policy_override(policies, set_add)
 			findDomainManagers(domainManagers, ncRef, ncRef, "");
 			return domainManagers.stream().collect(
 					Collectors.toMap(e -> e.getName(), Function.identity()));
@@ -248,6 +259,14 @@ public class RedhawkDriver implements Redhawk {
 					"A CORBA InvalidName exception was thrown.  This is caused when using the orb to resolve initial references to the Name Service.  "
 							+ "Use the nameclt list command on your REDHAWK machine to verify that your Name Service is up.",
 					e1);
+		} finally {
+			//Clean up ncRef
+			if(ncRef!=null) {
+				ncRef._release();
+			}
+			
+			if(objRef!=null)
+				objRef._release();
 		}
 	}
 
@@ -282,27 +301,32 @@ public class RedhawkDriver implements Redhawk {
 		final int batchSize = 1000;
 		BindingListHolder bList = new BindingListHolder();
 		BindingIteratorHolder bIterator = new BindingIteratorHolder();
-
+		Object omgObj = null; 
+		
 		nc.list(batchSize, bList, bIterator);
 
 		for (int i = 0; i < bList.value.length; i++) {
 			NameComponent[] name = { bList.value[i].binding_name[0] };
-
+			
+			//logger.info("Name to bound to: "+name[0].id);
 			if (bList.value[i].binding_type == BindingType.ncontext) {
 				try {
-					NamingContextExt context = NamingContextExtHelper.narrow(nc
-							.resolve_str(name[0].id));
+					omgObj = nc.resolve_str(name[0].id);
+					NamingContextExt context = NamingContextExtHelper.narrow(omgObj);
 					findDomainManagers(domainManagers, rootnc, context, parent
 							+ (parent.isEmpty() ? "" : "/") + name[0].id);
 				} catch (org.omg.CosNaming.NamingContextPackage.InvalidName
 						| NotFound | CannotProceed e) {
 					logger.log(Level.FINE,
 							"InvalidName in find domain managers", e);
+					if(omgObj!=null) {
+						omgObj._release();
+					}
 				}
 			} else {
 				try {
-					DomainManager domMgr = DomainManagerHelper.narrow(rootnc
-							.resolve_str(parent + "/" + name[0].id));
+					omgObj = rootnc.resolve_str(parent + "/" + name[0].id);
+					DomainManager domMgr = DomainManagerHelper.narrow(omgObj);
 					domainManagers.add(new RedhawkDomainManagerImpl(this, orb
 							.object_to_string(domMgr), name[0].id));
 				} catch (org.omg.CosNaming.NamingContextPackage.InvalidName
@@ -314,6 +338,11 @@ public class RedhawkDriver implements Redhawk {
 					 * COMM_FAILURE if the item exists in the nameserver but
 					 * doesn't respond 4) NotFound ...
 					 */
+					logger.log(Level.FINE, "Unable to narrow object cleaning up", e);
+					
+					if(omgObj!=null) {
+						omgObj._release();
+					}
 				}
 			}
 		}

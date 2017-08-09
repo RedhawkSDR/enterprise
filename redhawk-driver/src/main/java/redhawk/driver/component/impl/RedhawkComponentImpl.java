@@ -91,7 +91,14 @@ public class RedhawkComponentImpl extends PortBackedObjectImpl<ComponentType> im
 
 	@Override
 	public boolean started() {
-		return ResourceHelper.narrow(component.componentObject).started();
+		CF.Resource res = null;
+		try {
+			res = ResourceHelper.narrow(component.componentObject);
+			return res.started();
+		}finally {
+			if(res!=null)
+				res._release();
+		}
 	}
 
 	@Override

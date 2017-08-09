@@ -15,7 +15,7 @@ import redhawk.driver.exceptions.MultipleResourceException;
 
 public class JacorbThreadIT {
 	@Test
-	public void test() throws MultipleResourceException, CORBAException {
+	public void test() throws MultipleResourceException, CORBAException, InterruptedException {
 		Integer threadCount = ManagementFactory.getThreadMXBean().getThreadCount();
 		
 		
@@ -26,18 +26,53 @@ public class JacorbThreadIT {
 		Properties props = new Properties(); 
 		props.put("org.omg.CORBA.ORBClass", "org.jacorb.orb.ORB");
 		props.put("org.omg.CORBA.ORBSingletonClass", "org.jacorb.orb.ORBSingleton");
-		
+		props.put("jacorb.log.default.verbosity", 0);
+		//See page 188 of jacorb docs http://www.jacorb.org/releases/3.8/ProgrammingGuide.pdf
+		props.put("jacorb.connection.client.max_idle_receptor_threads", 2);
+		//props.put("jacorb.connection.client.idle_timeout", 500);
+		//props.put("jacorb.connection.client.pending_reply_timeout", 500);
+		//props.put("jacorb.connection.client.timeout_ignores_pending_messages", "true");
+		//props.put("jacorb.connection.client.max_receptor_threads", 2);
+		//props.put("jacorb.connection.server.timeout", 1000); //Probably only need server side one
+		//props.put("jacorb.connection.nonblocking", "true");
+
 		RedhawkDriver driver = new RedhawkDriver("localhost", 2809, props); 
-		RedhawkApplication app = driver.getDomain().getApplications().get(0);
-		
-		for(RedhawkComponent comp : app.getComponents()) {
-			comp.started();
+		if(!driver.getDomain().getApplications().isEmpty()) {
+			RedhawkApplication app = driver.getDomain().getApplications().get(0);
+			
+			for(RedhawkComponent comp : app.getComponents()) {
+				comp.started();
+			}			
 		}
-		System.out.println("===============Post RH=====================");
+		
+		System.out.println("===============Post RH Creation=====================");
+		Thread.sleep(5000l);
 		threadCount = ManagementFactory.getThreadMXBean().getThreadCount();
 		System.out.println("Thread count "+threadCount);
 		System.out.println(this.crunchifyGenerateThreadDump());
 		
+		driver.disconnect();
+		System.out.println("===============Post RH Disconnect=====================");
+		Thread.sleep(5000l);
+		threadCount = ManagementFactory.getThreadMXBean().getThreadCount();
+		System.out.println("Thread count "+threadCount);
+		System.out.println(this.crunchifyGenerateThreadDump());
+	}
+	
+	@Test
+	public void testSetJacorbProperties() throws MultipleResourceException, CORBAException {
+		Properties props = new Properties(); 
+		//Props to make sure jacorb is used
+		props.put("org.omg.CORBA.ORBClass", "org.jacorb.orb.ORB");
+		props.put("org.omg.CORBA.ORBSingletonClass", "org.jacorb.orb.ORBSingleton");
+		
+		//Properties for jacorb
+		props.put("jacorb.connection.client.max_idle_receptor_threads", 2);
+		props.put("jacorb.connection.client.max_receptor_threads", 2);
+		
+		RedhawkDriver driver = new RedhawkDriver("localhost", 2809, props); 
+		//RedhawkDriver driver = new RedhawkDriver("localhost", 2809); 
+		driver.getDomain();
 	}
 	
 	/*

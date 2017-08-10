@@ -52,7 +52,7 @@ import redhawk.testutils.RedhawkTestBase;
  * sure I'm cleaning up when I can it's users responsibility to call disconnect
  * when fully done w/ orb.
  */
-public class CORBAThreadTest extends RedhawkTestBase {
+public class CORBAThreadIT extends RedhawkTestBase {
 	private static String appName = "myApp";
 
 	private RedhawkApplication app;

@@ -71,7 +71,17 @@ public class RedhawkPortImpl implements RedhawkPort {
 	private static Logger logger = Logger.getLogger(RedhawkPortImpl.class.getName());
 
 	private static final long serialVersionUID = 1L;
-    private Object port;
+    
+	/**
+     * CORBA Object representing port  
+     */
+	private Object port;
+    
+	/**
+	 * CORBA Object representing port being connected too 
+	 */
+	private CF.Port remotePort;
+	
     private ORB orb; 
     private String connectionId;
     private String repId;
@@ -280,7 +290,7 @@ public class RedhawkPortImpl implements RedhawkPort {
 	    		if(portType.equalsIgnoreCase("provides")){
 	    			throw new UnsupportedOperationException("You cannot connect to an input (provides) port.  Only output (uses) ports are allowed.");
 	    		}
-				Port remotePort = PortHelper.narrow(port);
+				remotePort = PortHelper.narrow(port);
 				remotePort.connectPort(pipeline, connectionId);
 				
 	    		foundValidPort = true;
@@ -303,7 +313,7 @@ public class RedhawkPortImpl implements RedhawkPort {
         if(!foundValidPort){
         	throw new Exception("Could Not Locate a Valid BULKIO Data Type for this Port.");
         }
-        
+                
     }
     
 	@Override
@@ -317,7 +327,11 @@ public class RedhawkPortImpl implements RedhawkPort {
 		 */
     	for(String connectionId : driverManagedConnections.keySet()){
     		this.disconnect(connectionId);
-    	}   	
+    	}
+    	
+    	if(remotePort!=null) {
+    		remotePort._release();
+    	}
     }
     
 	@Override
@@ -337,10 +351,14 @@ public class RedhawkPortImpl implements RedhawkPort {
 		
 		
 		try {
-			Port remotePort = PortHelper.narrow(port);
+			if(remotePort==null) 
+				remotePort = PortHelper.narrow(port);
+
 			remotePort.disconnectPort(connectionId);
 		} catch (InvalidPort e) {
 			throw new PortException("Error disconnecting from CF.Port", e);
+		}finally {
+			remotePort._release();
 		}
 	}	
 	

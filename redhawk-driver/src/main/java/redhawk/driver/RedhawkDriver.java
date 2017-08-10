@@ -19,7 +19,6 @@
  */
 package redhawk.driver;
 
-import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +36,8 @@ import org.omg.CORBA.COMM_FAILURE;
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.Object;
 import org.omg.CORBA.Policy;
+import org.omg.CORBA.PolicyError;
+import org.omg.CORBA.SetOverrideType;
 import org.omg.CORBA.TRANSIENT;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.omg.CosNaming.BindingIteratorHolder;
@@ -47,7 +48,7 @@ import org.omg.CosNaming.NamingContextExt;
 import org.omg.CosNaming.NamingContextExtHelper;
 import org.omg.CosNaming.NamingContextPackage.CannotProceed;
 import org.omg.CosNaming.NamingContextPackage.NotFound;
-import org.omg.Messaging.REPLY_END_TIME_POLICY_TYPE;
+import org.omg.Security.UtcTHelper;
 
 import CF.DomainManager;
 import CF.DomainManagerHelper;
@@ -250,7 +251,12 @@ public class RedhawkDriver implements Redhawk {
 			
 			//TODO: Discuss whether this is appropriate
 			//Figure out generic way to do this???
-			//ncRef._set_policy_override(policies, set_add)
+			//Any a = orb.create_any();
+			//org.omg.TimeBase.UtcT replyEndTime = Time.corbaTime(1000 * 10000);
+			//UtcTHelper.insert(a, replyEndTime);
+			//Policy p = orb.create_policy(31, a);
+			//ncRef._set_policy_override(new Policy[] {p}, SetOverrideType.ADD_OVERRIDE);
+
 			findDomainManagers(domainManagers, ncRef, ncRef, "");
 			return domainManagers.stream().collect(
 					Collectors.toMap(e -> e.getName(), Function.identity()));
@@ -509,9 +515,6 @@ public class RedhawkDriver implements Redhawk {
 	}
 
 	public ORB getOrb() {
-		// TODO: Why are we initializing an Orb when we get it? Hasn't this
-		// already
-		// Been done?
 		initializeOrb();
 		return orb;
 	}

@@ -156,6 +156,12 @@ test-el7-x86_64:
 
 test-el6-x86_64:
   <<: *compose-test-common
+  script:
+    - *compose-test-common-trial
+    - *failsafe-reports
+    - *site-report
+  after_script:
+    - *cleanup-compose
   image: ${docker_registry}utils/docker-compose:latest
   stage: test
   tags:
@@ -169,6 +175,12 @@ test-el6-x86_64:
 
 test-el6-i386:
   <<: *compose-test-common
+  script:
+    - *compose-test-common-trial
+    - *failsafe-reports
+    - *site-report
+  after_script:
+    - *cleanup-compose
   image: ${docker_registry}utils/docker-compose:latest
   stage: test
   tags:

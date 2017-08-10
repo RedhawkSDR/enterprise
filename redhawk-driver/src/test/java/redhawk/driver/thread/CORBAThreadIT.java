@@ -35,6 +35,8 @@ import org.junit.Test;
 
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
+import redhawk.driver.device.RedhawkDevice;
+import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.CORBAException;
@@ -57,21 +59,40 @@ public class CORBAThreadIT extends RedhawkTestBase {
 
 	private RedhawkApplication app;
 
+	private RedhawkDomainManager dom;
+
 	@BeforeClass
 	public static void setupCORBAThreadResources() {
 		try {
-			//Create application
+			// Create application
 			driver.getDomain(domainName).createApplication(appName,
 					"/waveforms/rh/basic_components_demo/basic_components_demo.sad.xml");
 		} catch (ApplicationCreationException | CORBAException | ResourceNotFoundException e) {
 			fail("Unable to launch application " + e.getMessage());
 		}
 	}
-	
+
 	@Before
 	public void resetORB() throws MultipleResourceException, ResourceNotFoundException, CORBAException {
-		//Get application 
-		app = driver.getDomain(domainName).getApplicationByName(appName);
+		// Get application
+		dom = driver.getDomain(domainName);
+		app = dom.getApplicationByName(appName);
+	}
+
+	@Test
+	public void testDeviceManagerAndDeviceTC() throws InterruptedException {
+		Integer originalTC = this.getThreadCount();
+
+		try {
+			RedhawkDeviceManager devMgr = dom.getDeviceManagers().get(0);
+			RedhawkDevice dev = devMgr.getDevices().get(0);
+
+			dev.started();
+		} finally {
+			driver.disconnect();
+			Thread.sleep(1000);
+			assertTrue("Making sure disconnect cleans all this up", originalTC >= this.getThreadCount());
+		}
 	}
 
 	@Test
@@ -94,7 +115,7 @@ public class CORBAThreadIT extends RedhawkTestBase {
 			Thread.sleep(1000l);
 
 			// Make sure disconnect cleaned everything up
-			assertTrue("Thread count should be same as original after", originalTC>=this.getThreadCount());
+			assertTrue("Thread count should be same as original after", originalTC >= this.getThreadCount());
 		}
 	}
 
@@ -125,7 +146,7 @@ public class CORBAThreadIT extends RedhawkTestBase {
 	public void testPortTC() throws InterruptedException {
 		Integer originalTC = this.getThreadCount();
 		List<RedhawkComponent> comps = app.getComponents();
-		
+
 		try {
 			// Components
 			for (RedhawkComponent comp : comps) {
@@ -133,24 +154,25 @@ public class CORBAThreadIT extends RedhawkTestBase {
 				for (RedhawkPort port : comp.getPorts()) {
 					GenericPortListener pl = new GenericPortListener();
 
-					if(!port.getType().equals(RedhawkPort.PORT_TYPE_PROVIDES)) {
+					if (!port.getType().equals(RedhawkPort.PORT_TYPE_PROVIDES)) {
 						port.connect(pl);
 						port.disconnect();
 					}
 				}
 			}
-			//TODO: Connecting a port with Jacorb will minimally create 9 threads it appears. 
-			
-			//Thread.sleep(5000l);
-			//System.out.println("Latest TC: "+this.getThreadCount());
-			//System.out.println(this.crunchifyGenerateThreadDump());
+			// TODO: Connecting a port with Jacorb will minimally create 9 threads it
+			// appears.
+
+			// Thread.sleep(5000l);
+			// System.out.println("Latest TC: "+this.getThreadCount());
+			// System.out.println(this.crunchifyGenerateThreadDump());
 		} catch (Exception e) {
-			fail("Test failure connecting/disconnecting from port "+e.getMessage());
+			fail("Test failure connecting/disconnecting from port " + e.getMessage());
 		} finally {
 			driver.disconnect();
 			Thread.sleep(1000);
-			
-			assertTrue("Making sure disconnect cleans all this up", originalTC>=this.getThreadCount());
+
+			assertTrue("Making sure disconnect cleans all this up", originalTC >= this.getThreadCount());
 		}
 	}
 
@@ -170,11 +192,11 @@ public class CORBAThreadIT extends RedhawkTestBase {
 			if (jacORB) {
 				// ClientMessageReceptor contains thread for connections
 				// to the DomainManager CORBA object
-				assertEquals("Expected 1 additional thread for DomainManager object", new Integer(originalTC+1),
+				assertTrue("Expected 1 additional thread for DomainManager object", new Integer(originalTC + 1)>=
 						this.getThreadCount());
 			} else {
 				// SunORB leaves one thread in Idle state outside of DomainManager
-				assertEquals("Expected two additional thread for DomainManager object", new Integer(originalTC + 2),
+				assertTrue("Expected two additional thread for DomainManager object", new Integer(originalTC + 2)>=
 						this.getThreadCount());
 			}
 
@@ -187,7 +209,7 @@ public class CORBAThreadIT extends RedhawkTestBase {
 			Thread.sleep(1000l);
 
 			// Make sure disconnect cleaned everything up
-			assertTrue("Thread count should be same as original after", originalTC>=this.getThreadCount());
+			assertTrue("Thread count should be same as original after", originalTC >= this.getThreadCount());
 		}
 	}
 
@@ -204,11 +226,11 @@ public class CORBAThreadIT extends RedhawkTestBase {
 			if (jacORB) {
 				// ClientMessageReceptor contains thread for connections
 				// to the DomainManager CORBA object
-				assertEquals("Expected one additional thread for DomainManager object", originalTC,
+				assertTrue("Expected one additional thread for DomainManager object", originalTC>=
 						this.getThreadCount());
 			} else {
 				// SunORB leaves one thread in Idle state outside of DomainManager
-				assertEquals("Expected one additional thread for DomainManager object", new Integer(originalTC + 2),
+				assertTrue("Expected one additional thread for DomainManager object", new Integer(originalTC + 2)>=
 						this.getThreadCount());
 			}
 
@@ -222,7 +244,7 @@ public class CORBAThreadIT extends RedhawkTestBase {
 			Thread.sleep(1000l);
 
 			// Make sure disconnect cleaned everything up
-			assertTrue("Thread count should be same as original after", originalTC>=this.getThreadCount());
+			assertTrue("Thread count should be same as original after", originalTC >= this.getThreadCount());
 		}
 	}
 

@@ -207,9 +207,10 @@ public class RedhawkComponent extends DefaultComponent {
     @Override
     protected void doStop() throws Exception {
     	connectionMonitorTimer.cancel();
-    	if(newRedhawkDriverInstance){
-    		redhawkDriver.disconnect();
-    	}
+    	
+    	//Should always disconnect to clean up threads
+    	redhawkDriver.disconnect();
+    	
         super.doStop();
     }
 

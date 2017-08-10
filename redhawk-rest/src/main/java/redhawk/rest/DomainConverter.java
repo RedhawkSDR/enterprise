@@ -395,7 +395,7 @@ public class DomainConverter {
 						for(Object rhProp : component.getPropertyConfiguration().getSimplesAndSimplesequencesAndTests()){
 							Property myExProp = this.convertProperty(propId, prop, rhProp);
 							
-							if(exProp!=null){
+							if(exProp!=null && myExProp!=null){
 								myExProp.setExternalId(externalPropertyId);
 								properties.add(myExProp);
 								break;

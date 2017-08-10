@@ -82,24 +82,41 @@ public class RedhawkComponentImpl extends PortBackedObjectImpl<ComponentType> im
     
 	@Override
 	public void start() throws ComponentStartException {
+		CF.Resource res = null; 
 		try {
-			ResourceHelper.narrow(component.componentObject).start();
+			res = ResourceHelper.narrow(component.componentObject);
+			res.start();
 		} catch (StartError e) {
 			throw new ComponentStartException(e);
+		} finally {
+			if(res!=null)
+				res._release();
 		}
 	}
 
 	@Override
 	public boolean started() {
-		return ResourceHelper.narrow(component.componentObject).started();
+		CF.Resource res = null;
+		try {
+			res = ResourceHelper.narrow(component.componentObject);
+			return res.started();
+		}finally {
+			if(res!=null)
+				res._release();
+		}
 	}
 
 	@Override
 	public void stop() throws ComponentStopException {
+		CF.Resource res = null;
 		try {
-			ResourceHelper.narrow(component.componentObject).stop();
+			res = ResourceHelper.narrow(component.componentObject);
+			res.stop();
 		} catch (StopError e) {
 			throw new ComponentStopException(e);
+		}finally {
+			if(res!=null)
+				res._release();
 		}
 	}
 
@@ -110,14 +127,27 @@ public class RedhawkComponentImpl extends PortBackedObjectImpl<ComponentType> im
 
 	@Override
 	public RedhawkLogLevel getLogLevel() {
-		Resource resource = ResourceHelper.narrow(component.componentObject);
-		return RedhawkLogLevel.reverseLookup(resource.log_level());
+		Resource resource = null; 
+		try {
+			resource = ResourceHelper.narrow(component.componentObject);
+			
+			return RedhawkLogLevel.reverseLookup(resource.log_level());
+		}finally {
+			if(resource!=null)
+				resource._release();
+		}
 	}
 
 	@Override
 	public void setLogLevel(RedhawkLogLevel level) {
-		Resource resource = ResourceHelper.narrow(component.componentObject);
-		resource.log_level(level.getValue());
+		Resource resource = null; 
+		try {
+			resource = ResourceHelper.narrow(component.componentObject);
+			resource.log_level(level.getValue());
+		}finally {
+			if(resource!=null)
+				resource._release();
+		}
 	}
 
 	@Override

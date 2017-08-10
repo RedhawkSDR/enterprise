@@ -231,6 +231,7 @@ public class RedhawkDomainManagerImpl extends QueryableResourceImpl<DomainManage
 						deviceManager.identifier()));
 			} catch (TRANSIENT | OBJECT_NOT_EXIST t) {
 				// Skip and don't add dev manager to the list.
+				logger.log(Level.FINE, "Exception retrieving device manager in list", t);
 			}
 		}
 
@@ -490,7 +491,6 @@ public class RedhawkDomainManagerImpl extends QueryableResourceImpl<DomainManage
 
 	@Override
 	public DomainManager getCorbaObj() {
-		DomainManager mgr;
 		return super.getCorbaObject();
 	}
 

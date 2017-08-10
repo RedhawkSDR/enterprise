@@ -99,8 +99,6 @@ build:
     - mvn -Djava.io.tmpdir=./ deploy -P docs,jaxb-generation,default -B -U -Drelease=0.$CI_PIPELINE_ID
   only:
     - branches
-  except:
-    - RI-92
 
 build-release:
   <<: *common
@@ -114,8 +112,6 @@ test-install:
   stage: test
   script:
     - yum install -y `find output -name '*.rpm'`
-  except:
-    - RI-92
 
 test-el7-x86_64:
   <<: *compose-test-artifacts
@@ -222,8 +218,6 @@ deploy:
   <<: *deploy-common
   only:
     - branches
-  except:
-    - RI-92
 
 deploy-release:
   variables:

@@ -12,7 +12,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import redhawk.driver.application.RedhawkApplication;
-import redhawk.driver.bulkio.Packet;
 import redhawk.driver.domain.RedhawkFileManager;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ApplicationReleaseException;
@@ -21,7 +20,6 @@ import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
-import redhawk.driver.port.PortListener;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.testutils.RedhawkTestBase;
 
@@ -48,7 +46,7 @@ public class RedhawkPortInteractionIT extends RedhawkTestBase{
 				RedhawkPort sendToPort = app.getComponentByName("DataConverter_2.*").getPort(providesPort);
 
 				// Listen to data on port
-				GenericPortListener pl = new GenericPortListener(sendToPort, true);
+				GenericPortListener pl = new GenericPortListener(sendToPort);
 
 				port.connect(pl);
 				//Active SRI should be empty because no data has been sent
@@ -56,6 +54,7 @@ public class RedhawkPortInteractionIT extends RedhawkTestBase{
 				
 				if (!app.isStarted())
 					app.start();
+				
 				while (pl.getMessagesReceived() < 10) {
 					// Loop can't be empty
 					Thread.sleep(1);
@@ -88,70 +87,6 @@ public class RedhawkPortInteractionIT extends RedhawkTestBase{
 			}
 		}
 	}
-
-	class GenericPortListener extends PortListener<Object[]> {
-		private Boolean receivedData = false;
-
-		private Integer messagesReceived = 0;
-
-		private RedhawkPort portToSendTo;
-
-		private Boolean sendForward;
-		
-		private Packet<Object[]> packet; 
-
-		public GenericPortListener() {
-			sendForward = false;
-		}
-
-		public GenericPortListener(RedhawkPort port, Boolean sendForward) {
-			portToSendTo = port;
-		}
-
-		@Override
-		public void onReceive(Packet<Object[]> packet) {
-			messagesReceived++;
-			receivedData = true;
-			this.packet = packet;
-			System.out.println("Received data " + messagesReceived);
-
-			/*if (sendForward && portToSendTo != null) {
-				System.out.println("Made it inside if");
-				try {
-					System.out.println("Hello World");
-					portToSendTo.send(packet);
-				} catch (Exception e) {
-					e.printStackTrace();
-					System.err.println("Doesn't work with driver send");
-					try {
-						dataOctet t = dataOctetHelper.narrow(portToSendTo.getCorbaObject());
-						Object[] data = packet.getData();
-						byte[] temp = new byte[data.length];
-						for(int i=0; i<packet.getData().length; i++){
-							temp[i] = (byte) data[i];
-						}
-						t.pushPacket(temp, packet.getTime(), packet.isEndOfStream(), packet.getStreamId());
-					}catch(Exception ex) {
-						System.err.println("Still not working :-(");
-						ex.printStackTrace();
-					}
-				}
-			}
-			*/
-		}
-
-		public Boolean getReceivedData() {
-			return receivedData;
-		}
-
-		public Integer getMessagesReceived() {
-			return messagesReceived;
-		}
-		
-		public Packet getPacket() {
-			return this.packet;
-		}
-	}	
 	
 	@AfterClass
 	public static void cleanupWaveform() throws ConnectionException, ResourceNotFoundException, CORBAException {

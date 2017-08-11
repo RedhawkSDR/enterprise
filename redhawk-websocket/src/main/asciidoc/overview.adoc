@@ -14,10 +14,10 @@ The WebSocket servlet resides at `ws://{hostname}:8181/redhawk`.
 ws://localhost:8181/redhawk/localhost:2809
 ----
 
-* If you are using the REDHAWK Connector, you can replace the address and Port with the connection name you specified when you created the connection.
+* If you are using the <<REDHAWK Connector>>, you can replace the address and Port with the connection name you specified when you created the connection.
 
 ----
-ws://localhost:8181/redhawk/redhawk-connect-name
+ws://localhost:8181/redhawk/redhawk-connection-name
 ----
 
 === REDHAWK Component Port Connection

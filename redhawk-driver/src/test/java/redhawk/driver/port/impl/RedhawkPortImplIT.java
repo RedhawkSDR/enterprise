@@ -24,7 +24,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
@@ -36,86 +38,90 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.testutils.RedhawkTestBase;
 
-public class RedhawkPortImplIT extends RedhawkTestBase{
-	private static RedhawkApplication application; 
+public class RedhawkPortImplIT extends RedhawkTestBase {
+	private static RedhawkApplication application;
 	
+	@Rule
+	public final ExpectedException exception = ExpectedException.none();
+	  
 	@BeforeClass
-	public static void setupRedhawkUsesPort(){
+	public static void setupRedhawkUsesPort() {
 		try {
-			application = driver.getDomain().createApplication("myApp", "/waveforms/rh/basic_components_demo/basic_components_demo.sad.xml");
+			application = driver.getDomain().createApplication("myApp",
+					"/waveforms/rh/basic_components_demo/basic_components_demo.sad.xml");
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail("Issue at startup "+e.getMessage());
+			fail("Issue at startup " + e.getMessage());
 		}
 	}
-	
+
 	@Test
-	public void testUsesPortStatistics(){
+	public void testUsesPortStatistics() {
 		try {
 			RedhawkComponent comp = driver.getComponent("REDHAWK_DEV/myApp/HardLimit.*");
-			
-			//Checks to make sure you're able to retrieve Uses Port Statistics
+
+			// Checks to make sure you're able to retrieve Uses Port Statistics
 			assertNotNull(comp.getPort("dataFloat_out").getPortStatistics());
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail("Issue w/ test "+e.getMessage());
+			fail("Issue w/ test " + e.getMessage());
 		}
 	}
-	
+
 	@Test
-	public void testProvidesPortStatistics(){
+	public void testProvidesPortStatistics() {
 		RedhawkComponent comp;
 		try {
 			comp = driver.getComponent("REDHAWK_DEV/myApp/HardLimit.*");
-		
-			//Checks to make sure you're able to retrieve Provides Port Statistics
+
+			// Checks to make sure you're able to retrieve Provides Port Statistics
 			assertNotNull(comp.getPort("dataFloat_in").getPortStatistics());
 		} catch (Exception e) {
 			e.printStackTrace();
-			fail("Issue w/ test "+e.getMessage());
+			fail("Issue w/ test " + e.getMessage());
 		}
 	}
-	
+
 	@Test
-	public void testGetActiveSRIs(){
-		try{
-			//Start app so SRI is present 
+	public void testGetActiveSRIs() {
+		try {
+			// Start app so SRI is present
 			application.start();
 			RedhawkPort port = driver.getPort("REDHAWK_DEV/myApp/HardLimit.*/dataFloat_in");
 			assertNotNull(port.getActiveSRIs());
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
-			fail("Test failure "+ex.getMessage());
+			fail("Test failure " + ex.getMessage());
 		}
-		
-		//Make sure Uses Port actually throws Exception
+
+		// Make sure Uses Port actually throws Exception
 		try {
 			RedhawkPort port = driver.getPort("REDHAWK_DEV/myApp/HardLimit.*/dataFloat_out");
 			port.getActiveSRIs();
 			fail("Exception should've been thrown Uses port does not have activeSRIs");
 		} catch (ResourceNotFoundException | MultipleResourceException | CORBAException e) {
 			e.printStackTrace();
-			fail("Test failure "+e.getMessage());
+			fail("Test failure " + e.getMessage());
 		} catch (PortException e) {
 			assertTrue("Expected exception thrown", true);
 		}
 
 	}
-	
+
 	@Test
-	public void getPortState(){
+	public void getPortState() {
 		RedhawkPort port;
 		try {
 			port = driver.getPort("REDHAWK_DEV/myApp/HardLimit.*/dataFloat_in");
-		
-			//Checks to make sure port State is not null
+
+			// Checks to make sure port State is not null
 			assertNotNull(port.getPortState());
 		} catch (ResourceNotFoundException | MultipleResourceException | CORBAException | PortException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			fail("Test failure "+e.getMessage());
-		} 
-		
+			fail("Test failure " + e.getMessage());
+		}
+
 		try {
 			port = driver.getPort("REDHAWK_DEV/myApp/HardLimit.*/dataFloat_out");
 			port.getPortState();
@@ -126,11 +132,11 @@ public class RedhawkPortImplIT extends RedhawkTestBase{
 		} catch (PortException e) {
 			assertTrue("Expected exception thrown", true);
 		}
-		
+
 	}
-	
+
 	@Test
-	public void getPortConnections(){
+	public void getPortConnections() {
 		RedhawkComponent comp = null;
 		try {
 			comp = driver.getComponent("REDHAWK_DEV/myApp/HardLimit.*");
@@ -140,9 +146,9 @@ public class RedhawkPortImplIT extends RedhawkTestBase{
 		} catch (ResourceNotFoundException | MultipleResourceException | CORBAException | PortException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			fail("Test failure "+e.getMessage());
+			fail("Test failure " + e.getMessage());
 		}
-		
+
 		try {
 			RedhawkPort port = comp.getPort("dataFloat_in");
 			port.getConnectionIds();
@@ -150,50 +156,51 @@ public class RedhawkPortImplIT extends RedhawkTestBase{
 		} catch (ResourceNotFoundException | MultipleResourceException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			fail("Test failure "+e.getMessage());
+			fail("Test failure " + e.getMessage());
 		} catch (PortException e) {
 			assertTrue("Expected exception thrown", true);
 		}
 	}
-	
-	@Test
-	public void getPortConnectionsNonQueryable(){
-		RedhawkApplication rbdsApplication;
-		
-		try {
-			String appName = "rbdsTest";
-			rbdsApplication = driver.getDomain().createApplication(appName, "/waveforms/rh/FM_RBDS_demo/FM_RBDS_demo.sad.xml");
-			
-			RedhawkPort port = driver.getPort("REDHAWK_DEV/"+appName+"/RBDS.*/messageEvent_out");
-			logger.info("Connection ids "+port.getConnectionIds());
-			assertTrue("Successfully run getConnectionIds() with no errors", true);
-		} catch (MultipleResourceException | ApplicationCreationException | CORBAException | ResourceNotFoundException | PortException e) {
-			fail("This call shouldn't fail should just log a warning "+e.getMessage());
-		}
 
-	}
-	
 	@Test
-	public void testGetPortConnections(){
+	public void getPortConnectionsNonQueryable() throws PortException {
+		RedhawkApplication rbdsApplication;
+
+		String appName = "rbdsTest";
+		try {
+			rbdsApplication = driver.getDomain().createApplication(appName,
+					"/waveforms/rh/FM_RBDS_demo/FM_RBDS_demo.sad.xml");
+		
+			RedhawkPort port = driver.getPort("REDHAWK_DEV/" + appName + "/RBDS.*/messageEvent_out");
+			
+			exception.expect(PortException.class);
+			port.getConnectionIds();
+		} catch (MultipleResourceException | ApplicationCreationException | CORBAException | ResourceNotFoundException e) {
+			fail("Test failure "+e.getMessage());
+		}
+	}
+
+	@Test
+	public void testGetPortConnections() {
 		RedhawkComponent comp = null;
 		try {
 			comp = driver.getComponent("REDHAWK_DEV/myApp/HardLimit.*");
 
 			RedhawkPort port = comp.getPort("dataFloat_out");
 			assertTrue("Should be atleast 1 connection id", !port.getConnectionIds().isEmpty());
-			
+
 			/*
 			 * Remove connections by connectionId
 			 */
-			for(String connectionId : port.getConnectionIds()){
+			for (String connectionId : port.getConnectionIds()) {
 				port.disconnect(connectionId);
 			}
-			
+
 			assertTrue("Should no longer be any connections", port.getConnectionIds().isEmpty());
 		} catch (ResourceNotFoundException | MultipleResourceException | CORBAException | PortException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			fail("Test failure "+e.getMessage());
+			fail("Test failure " + e.getMessage());
 		}
 	}
 }

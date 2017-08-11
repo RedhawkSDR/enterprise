@@ -65,7 +65,7 @@ public class RedhawkPortInteractionIT extends RedhawkTestBase{
 				}
 
 				port.disconnect();
-				assertEquals("Should have 10 messages", new Integer(10), pl.getMessagesReceived());
+				assertTrue("Should have greater than or equal to 10 messages", 10<=pl.getMessagesReceived());
 				
 				//ActiveSRI should be non empty because data has been sent
 				assertTrue(!sendToPort.getActiveSRIs().isEmpty());

@@ -4,11 +4,14 @@
 stages:
   - build
   - test
+  - test-jacorb
   - deploy
 
 variables:
   redhawk_version: '2.0-nightly'
   enterprise_version: '2.0.1'
+  maven_command: bash -c "mvn -P CFDependencies clean install -B -U && mvn clean install site -P localIT -DfailIfNoTests=false -DdomainHost=redhawk_${dist}_${arch}_${CI_JOB_ID} -DtestProps=`pwd`/docker_test.properties"
+
 .common: &common
   image: ${docker_registry}redbus/maven:3-jdk-8
   stage: build
@@ -45,28 +48,36 @@ variables:
     fi
 
 #Common commands for the compose jobs
-.compose-test-common: &compose-test-common
-  script:
-    - docker-compose pull
-    - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} up --force-recreate -d redhawk
-    - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk yum install -y rh.FmRdsSimulator #TODO: This line shouldn't be necessary
-    - docker cp redhawk-driver/src/test/resources/node/SimulatorNode redhawk_${dist}_${arch}_${CI_JOB_ID}:/var/redhawk/sdr/dev/nodes/ # Deploy devMgr
-    - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec redhawk nodeBooter -d /var/redhawk/sdr/dev/nodes/SimulatorNode/DeviceManager.dcd.xml 2>&1 & #Start DevMgr
-    - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk mkdir -p /usr/local/redhawk/workspace #Make dir for deploying components
-    - docker cp demo/camel-event-channel/src/main/resources/EventSpitter redhawk_${dist}_${arch}_${CI_JOB_ID}:/usr/local/redhawk/workspace #Copy Event Spitter component into workspace
-    - docker cp redhawk-driver/src/test/resources/components/MessageProducer redhawk_${dist}_${arch}_${CI_JOB_ID}:/usr/local/redhawk/workspace #Copy Message Producer component into workspace
-    - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk bash -c "cd /usr/local/redhawk/workspace/EventSpitter; ./build.sh install" #Install EventSpitter component
-    - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk bash -c "java -version" #Debug
-    - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk bash -c "cd /usr/local/redhawk/workspace/MessageProducer; ./build.sh install" #Install EventSpitter component
-    - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk bash -c "nameclt list REDHAWK_DEV" #Debug
-    - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} up --exit-code-from rei
-    - find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -
-    - find */target -name "*.exec" | tar -cvf jacoco-exec.tar.gz --files-from -
-    - find */target/classes | tar -cvf jacoco-classes.tar --files-from -
-    - find redhawk-*/src/main/java | tar -cvf jacoco-sources.tar --files-from -
-    - tar -C docs/target -czvf site.tar.gz site
-  after_script:
-    - docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} down
+#https://gitlab.com/gitlab-org/gitlab-ce/issues/19677 ayufan comment did the trick.
+.compose-test-common: &compose-test-common |
+  docker-compose pull
+  docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} up --force-recreate -d redhawk
+  docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk yum install -y rh.FmRdsSimulator #TODO: This line shouldn't be necessary
+  docker cp redhawk-driver/src/test/resources/node/SimulatorNode redhawk_${dist}_${arch}_${CI_JOB_ID}:/var/redhawk/sdr/dev/nodes/ # Deploy devMgr
+  docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec redhawk nodeBooter -d /var/redhawk/sdr/dev/nodes/SimulatorNode/DeviceManager.dcd.xml 2>&1 & #Start DevMgr
+  docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk mkdir -p /usr/local/redhawk/workspace #Make dir for deploying components
+  docker cp demo/camel-event-channel/src/main/resources/EventSpitter redhawk_${dist}_${arch}_${CI_JOB_ID}:/usr/local/redhawk/workspace #Copy Event Spitter component into workspace
+  docker cp redhawk-driver/src/test/resources/components/MessageProducer redhawk_${dist}_${arch}_${CI_JOB_ID}:/usr/local/redhawk/workspace #Copy Message Producer component into workspace
+  docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk bash -c "cd /usr/local/redhawk/workspace/EventSpitter; ./build.sh install" #Install EventSpitter component
+  docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk bash -c "java -version" #Debug
+  docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk bash -c "cd /usr/local/redhawk/workspace/MessageProducer; ./build.sh install" #Install EventSpitter component
+  docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} exec -T redhawk bash -c "nameclt list REDHAWK_DEV" #Debug
+  docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} up --exit-code-from rei
+
+.cleanup-compose: &cleanup-compose |
+  docker-compose --project-name ${dist}_${arch}_${CI_JOB_ID} down
+
+#TODO: You'll always need to do this make this common...
+.failsafe-reports: &failsafe-reports |
+  find */target/failsafe-reports -name 'TEST*.xml' | tar cvf $CI_PROJECT_DIR/output.tar --files-from -
+
+.site-report: &site-report |
+  find */target -name "*.exec" | tar -cvf jacoco-exec.tar.gz --files-from -
+  find */target/classes | tar -cvf jacoco-classes.tar --files-from -
+  find redhawk-*/src/main/java | tar -cvf jacoco-sources.tar --files-from -
+  tar -C docs/target -czvf site.tar.gz site
+
+.compose-test-artifacts: &compose-test-artifacts
   artifacts:
     name: $CI_JOB_NAME
     paths:
@@ -76,6 +87,11 @@ variables:
       - jacoco-sources.tar
       - site.tar.gz
     expire_in: 3 days
+
+#General command for running the integration tests
+#.general-it-command: &general-it-command
+#  variables:
+#    - maven_command: bash -c "mvn -P CFDependencies clean install -B -U && mvn clean install site -P localIT -DfailIfNoTests=false -DdomainHost=redhawk_${dist}_${arch}_${CI_JOB_ID} -DtestProps=`pwd`/docker_test.properties"
 
 build:
   <<: *common
@@ -98,7 +114,13 @@ test-install:
     - yum install -y `find output -name '*.rpm'`
 
 test-el7-x86_64:
-  <<: *compose-test-common
+  <<: *compose-test-artifacts
+  script:
+    - *compose-test-common
+    - *failsafe-reports
+    - *site-report
+  after_script:
+    - *cleanup-compose
   image: ${docker_registry}utils/docker-compose:latest
   stage: test
   tags:
@@ -109,7 +131,13 @@ test-el7-x86_64:
     arch: x86_64
 
 test-el6-x86_64:
-  <<: *compose-test-common
+  <<: *compose-test-artifacts
+  script:
+    - *compose-test-common
+    - *failsafe-reports
+    - *site-report
+  after_script:
+    - *cleanup-compose
   image: ${docker_registry}utils/docker-compose:latest
   stage: test
   tags:
@@ -120,7 +148,13 @@ test-el6-x86_64:
     arch: x86_64
 
 test-el6-i386:
-  <<: *compose-test-common
+  <<: *compose-test-artifacts
+  script:
+    - *compose-test-common
+    - *failsafe-reports
+    - *site-report
+  after_script:
+    - *cleanup-compose
   image: ${docker_registry}utils/docker-compose:latest
   stage: test
   tags:
@@ -129,6 +163,53 @@ test-el6-i386:
   variables:
     dist: el6
     arch: i686
+
+#Test Driver Against Jacorb
+test-jacorb-el7_x86_64:
+  script:
+    - *compose-test-common
+  image: ${docker_registry}utils/docker-compose:latest
+  stage: test-jacorb
+  tags:
+    - mvn-cache
+  after_script:
+    - *cleanup-compose
+  dependencies: []
+  variables:
+    dist: el7
+    arch: x86_64
+    maven_command: bash -c "mvn -P CFDependencies clean install -B -U && mvn -pl redhawk-driver clean install site -P localIT -Djacorb=true -DfailIfNoTests=false -DdomainHost=redhawk_${dist}_${arch}_${CI_JOB_ID} -DtestProps=`pwd`/docker_test.properties"
+
+test-jacorb-el6_x86_64:
+  script:
+    - *compose-test-common
+  image: ${docker_registry}utils/docker-compose:latest
+  stage: test-jacorb
+  tags:
+    - mvn-cache
+  after_script:
+    - *cleanup-compose
+  dependencies: []
+  variables:
+    dist: el6
+    arch: x86_64
+    maven_command: bash -c "mvn -P CFDependencies clean install -B -U && mvn -pl redhawk-driver clean install site -P localIT -Djacorb=true -DfailIfNoTests=false -DdomainHost=redhawk_${dist}_${arch}_${CI_JOB_ID} -DtestProps=`pwd`/docker_test.properties"
+
+test-jacorb-el6_i386:
+  script:
+    - *compose-test-common
+  image: ${docker_registry}utils/docker-compose:latest
+  stage: test-jacorb
+  tags:
+    - mvn-cache
+  after_script:
+    - *cleanup-compose
+  dependencies: []
+  variables:
+    dist: el6
+    arch: i686
+    maven_command: bash -c "mvn -P CFDependencies clean install -B -U && mvn -pl redhawk-driver clean install site -P localIT -Djacorb=true -DfailIfNoTests=false -DdomainHost=redhawk_${dist}_${arch}_${CI_JOB_ID} -DtestProps=`pwd`/docker_test.properties"
+
 
 #Trigger a Jenkins job to aggregate artifacts there
 deploy:

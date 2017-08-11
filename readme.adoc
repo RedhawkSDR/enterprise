@@ -65,7 +65,7 @@ mvn clean install
 Each individual project has it's own readme defining how to build it's docs. If you'd like to build the full user manual. Run this profile: 
 
 ----
-mvn -P jaxb-generation,docs compile
+mvn -P jaxb-generation,docs install
 ----
 
 == Build All Artifacts
@@ -101,7 +101,7 @@ If you run into this error building the docs
 You'll need to specify the java.io.tmpdir with your maven command. So your command will end up looking like this:
 
 ----
-mvn -P -Djava.io.tmpdir=./ -P jaxb-generation,docs compile
+mvn -Djava.io.tmpdir=./ -P jaxb-generation,docs install
 ----
 
 == Copyright 

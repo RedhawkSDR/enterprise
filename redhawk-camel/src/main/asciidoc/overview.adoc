@@ -1,21 +1,21 @@
-= REDHAWK Camel Component 
+= REDHAWK Camel Component
 
 The REDHAWK Camel Component provides a convenient method to integrate REDHAWK Domain functionality in a Camel Context. http://camel.apache.org/[Apache Camel] is a tool for solving any routing (data flow) or mediation problems within your system. Using Apache Camel provides access to 100+ http://camel.apache.org/components.html[Components] to solve routing/mediation problems. For example, if your system needs to persist data from an Event Channel, rather than writing more code, you can reuse the Components already provided by Camel to store your data in NoSQL/SQL data stores. Another possible use case is if your system needs to send data from the REDHAWK Corba File System to a JMS solution for distribution, rather than writing more code, you can integrate with one of the Camel Components for JMS. For additional information about using Apache Camel with your product, refer to the http://camel.apache.org/documentation.html[Apache Camel documentation].
 
 == REDHAWK Data Endpoint
 
-Enables direct interaction between REDHAWK Component Ports and your Apache Camel Context. 
+Enables direct interaction between REDHAWK Component Ports and your Apache Camel Context.
 
-=== URI Format 
+=== URI Format
 
 ----
 redhawk://data:<nameserver host>:<nameserver port>:<domain name>?waveformName=<waveform name>&componentName=<component name>&portName=<port name>&portType=<port type>
 ----
 
-* If you are using the REDHAWK Connector, you can replace the host, port and domain name parameters with the `Connection Name` you specified when you configured your REDHAWK Connection. *Make sure you specify `Domain Manager` in your REDHAWK Connector configuration. See REDHAWK Connnector chapter for more details.*
+* If you are using the REDHAWK Connector, you can replace the host, port and domain name parameters with the `Connection Name` you specified when you configured your REDHAWK Connection. *Make sure you specify `Domain Manager` in your REDHAWK Connector configuration. See <<REDHAWK Connector>> chapter for more details.*
 
 ----
-redhawk://data:<redhawk-connect-name>
+redhawk://data:<redhawk-connection-name>
 ----
 
 === Endpoint Options
@@ -30,7 +30,7 @@ The REDHAWK Data endpoint options are described in the following table.
 
 | bufferSize
 | 2000
-| Size of buffer for holding queued packets waiting to be processed. 
+| Size of buffer for holding queued packets waiting to be processed.
 
 | decimateTo
 | -1
@@ -46,7 +46,7 @@ TODO: Come up with nice example route
 
 == REDHAWK File Endpoint
 
-Enables direct interaction between a REDHAWK Event Channel and your Apache Camel Context. 
+Enables direct interaction between a REDHAWK Event Channel and your Apache Camel Context.
 
 === URI Format
 
@@ -54,10 +54,10 @@ Enables direct interaction between a REDHAWK Event Channel and your Apache Camel
 redhawk://file-manager:<nameserver host>:<nameserver port>:<domain name>?directory=<directory on FS>
 ----
 
-* If you are using the REDHAWK Connector, you can replace the host, port and domain name parameters with the `Connection Name` you specified when you configured your REDHAWK Connection. *Make sure you specify `Domain Manager` in your REDHAWK Connector configuration. See REDHAWK Connnector chapter for more details.*
+* If you are using the REDHAWK Connector, you can replace the host, port and domain name parameters with the `Connection Name` you specified when you configured your REDHAWK Connection. *Make sure you specify `Domain Manager` in your REDHAWK Connector configuration. See <<REDHAWK Connector>> chapter for more details.*
 
 ----
-redhawk://file-manager:<redhawk-connect-name>
+redhawk://file-manager:<redhawk-connection-name>
 ----
 
 === Endpoint Options
@@ -73,7 +73,7 @@ The REDHAWK File endpoint options are described in the following table.
 
 | fileManagerType
 | domain
-| Location of the root of Corba FileSystem. If `domain`, then root is `$SDROOT/dom` . If `dev`, then root is root of the Device Manager you set. 
+| Location of the root of Corba FileSystem. If `domain`, then root is `$SDROOT/dom` . If `dev`, then root is root of the Device Manager you set.
 
 | deviceManagerName
 | n/a
@@ -98,10 +98,10 @@ TODO: Come up with nice example route
 redhawk://event-channel:<nameserver host>:<nameserver port>:<domain name>?eventChannelName=<event channel name>&dataTypeName=<type of message>
 ----
 
-* If you are using the REDHAWK Connector, you can replace the host, port and domain name parameters with the `Connection Name` you specified when you configured your REDHAWK Connection. *Make sure you specify `Domain Manager` in your REDHAWK Connector configuration. See REDHAWK Connnector chapter for more details.*
+* If you are using the REDHAWK Connector, you can replace the host, port and domain name parameters with the `Connection Name` you specified when you configured your REDHAWK Connection. *Make sure you specify `Domain Manager` in your REDHAWK Connector configuration. See <<REDHAWK Connector>> chapter for more details.*
 
 ----
-redhawk://event-channel:<redhawk-connect-name>
+redhawk://event-channel:<redhawk-connection-name>
 ----
 
 === Endpoint Options

@@ -1,3 +1,15 @@
 = Redhawk Enterprise Integration Docs
 
-Module for aggregating the Manual and any project reports. 
+Module for aggregating the Manual and any project reports.
+
+== Building Docs
+
+The manual is an aggregate document build by pulling in the 'adoc' files from the other modules in
+this project. REDHAWK Driver, REDHAWK REST docs are both partially built at compile time. So to get
+a fresh copy of their docs or for those docs to be included you must compile them. Once you have the
+other modules docs in place that the full manual depends on you can build the manual using the
+following command:
+
+----
+mvn clean generate-resources -Djava.io.tmpdir=./
+----

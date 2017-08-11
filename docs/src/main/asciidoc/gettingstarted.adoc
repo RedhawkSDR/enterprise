@@ -61,11 +61,47 @@ More example commands can be found in the <<redhawk-driver-code-examples>> secti
 
 In order to make the REDHAWK Driver running inside of Karaf use JacORB instead of Sun ORB you'll need to add the following properties to your system.properties file:
 
+. Update the ${karaf.base}/etc/system.properties file to have the system properties necessary for JacORB.
++
 ----
-	org.omg.CORBA.ORBSingletonClass=org.jacorb.orb.ORBSingleton
-	org.omg.PortableInterceptor.ORBInitializerClass.standard_init=org.jacorb.orb.standardInterceptors.IORInterceptorInitializer
-	org.omg.CORBA.ORBClass=org.jacorb.orb.ORB
+#Jacorb configuration
+org.omg.CORBA.ORBSingletonClass=org.jacorb.orb.ORBSingleton
+org.omg.PortableInterceptor.ORBInitializerClass.standard_init=org.jacorb.orb.standardInterceptors.IORInterceptorInitializer
+org.omg.CORBA.ORBClass=org.jacorb.orb.ORB
+----
++
+
+. Copy the `jacorb-deps` into ${karaf.base}/lib/ext directory. 
+
+. Restart karaf if it's already started. 
+
+==== Configure JacORB logging w/ Karaf
+
+
+To make sure the JacORB logging doesn't fill the general karaf.log file. Add the snippet below to the bottom of your `org.ops4j.pax.logging.cfg` which is located in ${karaf.base}/etc directory:
+
+----
+# Jacorb Logging
+log4j.logger.org.jacorb=INFO, jacorb
+
+# Jacorb appender
+log4j.appender.jacorb=org.apache.log4j.RollingFileAppender
+log4j.appender.jacorb.layout=org.apache.log4j.PatternLayout
+log4j.appender.jacorb.layout.ConversionPattern=%d{ISO8601} | %-5.5p | %-16.16t | %-32.32c{1} | %X{bundle.id} - %X{bundle.name} - %X{bundle.version} | %m%n
+log4j.appender.jacorb.file=${karaf.data}/jacorb/jacorb.log
+log4j.appender.jacorb.append=true
+log4j.appender.jacorb.maxFileSize=1MB
+log4j.appender.jacorb.maxBackupIndex=10
 ----
 
-In order to add specific configuration for your ORB you'll need to also add 
+==== Additional JacORB Configuration
 
+To specify specific properties add a jacorb.properties file to ${karaf.base} . For example, if you wanted to control the number of ClientMessageReceptor threads created by JacORB and manage the Idle ones you'd add a jacorb.properties file like this:
+
+----
+#Jacorb Properties
+jacorb.connection.client.max_idle_receptor_threads=5
+jacorb.connection.client.max_receptor_threads=100
+---- 
+
+For additional JacORB information refer to JacORBs http://www.jacorb.org/documentation.html[Official Documentation]. 

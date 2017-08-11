@@ -1,0 +1,32 @@
+= Working with the Shell
+
+The shell provides a convenient method to use the REDHAWK Driver without an IDE or other development tools. It's mainly a trouble shooting tool for developers so don't expect to do everything you can do in an IDE with the shell. The shell is using a Java REPL(Read, Excecute, Print, Loop) and it's source can be found https://github.com/albertlatacz/java-repl[here]. To start the REDHAWK Driver shell environment:
+
+IMPORTANT: The following commands require access to a REDHAWK Domain and GPP.
+
+. Run the jrepl script:
++
+----
+ ./jrepl
+----
+In the console, you have access to the necessary imports for REDHAWK Driver via 
+ `:eval driver-imports`. You also have access to all the classes in REDHAWK Driver. 
+ 
+TIP: For additional instructions and information on trouble shooting, refer to the `README.md` file in the shell directory.
+
+== Example Commands
+
+* To create an Application: 
+
+ driver = new RedhawkDriver(); 
+ application = driver.getDomain("REDHAWK_DEV").createApplication("MyFirstApplication", "/waveforms/rh/FM_mono_demo/FM_mono_demo.sad.xml")
+	
+* To start an Application: 
+
+ application.start();
+
+* To release an Application:
+	
+ application.release();
+
+More example commands can be found in the <<redhawk-driver-code-examples>> section.

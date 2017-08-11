@@ -24,4 +24,14 @@ After installing REDHAWK Enterprise Integration, the following directories are d
 
 . Begin using the bundles provided to interact with REDHAWK or write your own applications that leverage the REDHAWK Enterprise Integration bundles to interact with REDHAWK.
 
+=== Configuring JacORB w/ Karaf
+
+In order to make the REDHAWK Driver running inside of Karaf use JacORB instead of Sun ORB you'll need to add the following properties to your system.properties file:
+
+----
+
+	org.omg.CORBA.ORBSingletonClass=org.jacorb.orb.ORBSingleton
+	org.omg.PortableInterceptor.ORBInitializerClass.standard_init=org.jacorb.orb.standardInterceptors.IORInterceptorInitializer
+	org.omg.CORBA.ORBClass=org.jacorb.orb.ORB
+----
 

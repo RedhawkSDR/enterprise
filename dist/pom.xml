@@ -153,7 +153,7 @@
 						</configuration>
 					</execution>
 					<execution>
-						<id>copy-additional-configs</id>
+						<id>copy-certs</id>
 						<phase>validate</phase>
 						<goals>
 							<goal>copy-resources</goal>
@@ -167,6 +167,21 @@
 							</resources>
 						</configuration>
 					</execution>
+					<execution>
+						<id>copy-additional-configuration</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/karaf-${karaf.version}/etc</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/etc</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>					
 				</executions>
 			</plugin>
 			<!-- Download deps for any other functionality -->

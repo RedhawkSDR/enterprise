@@ -49,14 +49,12 @@
 		<Set name="TrustStorePath"><SystemProperty name="javax.net.ssl.keyStore" /></Set>
 		<Set name="TrustStorePassword"><SystemProperty name="javax.net.ssl.keyStorePassword" /></Set>
   		<!-- Enable Forward Secrecy Ciphers. Note: this replaces the default Include Cipher list -->
-  		<!--
   		<Set name="IncludeCipherSuites">
     		<Array type="String">
       			<Item>TLS_DHE_RSA.*</Item>
       			<Item>TLS_ECDHE.*</Item>
    			</Array>
  	 	</Set>
-		-->
 		<!-- Eliminate Old / Insecure / Anonymous Ciphers -->
   		<Call name="addExcludeCipherSuites">
     		<Arg>

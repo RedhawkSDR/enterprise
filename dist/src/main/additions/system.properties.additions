@@ -2,6 +2,9 @@
 ##############################################################
 # SSL Configuration
 ##############################################################
+#HTTPS port
+https.port=8182
+
 #Adding SSL configuration using standard javax.net.* properties
 javax.net.ssl.keyStore=${karaf.base}/certs/keystores/default.jks
 javax.net.ssl.keyStorePassword=redhawk

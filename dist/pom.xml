@@ -317,7 +317,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!--
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>rpm-maven-plugin</artifactId>
@@ -366,7 +365,6 @@
 					</postremoveScriptlet>
 				</configuration>
 			</plugin>
-			-->
 		</plugins>
 	</build>
 	<!-- Profile to create simple docker image for this RPM -->

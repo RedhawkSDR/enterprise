@@ -280,6 +280,22 @@
 							</target>
 						</configuration>
 					</execution>
+					<execution>
+						<id>cat-logging.properties</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<concat destfile="${project.build.directory}/${runtime.dir}/karaf-${karaf.version}/etc/org.ops4j.pax.logging.cfg" append="true">
+					 				<fileset dir="src/main/additions">
+					 					<include name="logging.additions" />
+					 				</fileset>								
+								</concat>
+							</target>
+						</configuration>
+					</execution>					
 				</executions>
 			</plugin>
 			<plugin>

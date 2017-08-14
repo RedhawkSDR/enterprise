@@ -1,6 +1,6 @@
 === Web Server Configuration
 
-The web endpoints <<REDHAWK REST>> and websocket endpoints <<REDHAWK Websocket>> are all hosted by a http://www.eclipse.org/jetty/documentation/[Jetty] server running inside of your Karaf container. Karaf uses https://ops4j1.jira.com/wiki/display/paxweb/Pax+Web[Pax Web] to manage your Jetty instance in an OSGi environment. 
+The web endpoints <<REDHAWK REST>> and websocket endpoints <<REDHAWK WebSocket>> are all hosted by a http://www.eclipse.org/jetty/documentation/[Jetty] server running inside of your Karaf container. Karaf uses https://ops4j1.jira.com/wiki/display/paxweb/Pax+Web[Pax Web] to manage your Jetty instance in an OSGi environment. 
 
 ==== Jetty config
 

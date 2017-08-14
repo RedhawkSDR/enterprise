@@ -1,0 +1,46 @@
+=== Web Server Configuration
+
+The web endpoints <<REDHAWK REST>> and websocket endpoints <<REDHAWK Websocket>> are all hosted by a http://www.eclipse.org/jetty/documentation/[Jetty] server running inside of your Karaf container. Karaf uses https://ops4j1.jira.com/wiki/display/paxweb/Pax+Web[Pax Web] to manage your Jetty instance in an OSGi environment. 
+
+==== Jetty config
+
+Jetty configuration can be found in $karaf.base/etc/jetty.xml . The initial configuration that comes with the REDHAWK Enterprise Integration assets is the bare minimal to be able to accomplish https with Jetty. The initial keyStore used for the configuration is unsigned by a Certificate Authority and should not be used in production. The jetty.xml is setup to use the standard javax.net.ssl.* properties for configuring key and trust store parameters.
+
+* `javax.net.ssl.keyStore`: Path to your key store
+* `javax.net.ssl.keyStorePassword`: Password for your key store
+* `javax.net.ssl.keyStoreType`: Type for your key store. 
+* `javax.net.ssl.trustStore`: Path to your trust store
+* `javax.net.ssl.trustStorePassword`: Password for your trust store
+* `javax.net.ssl.trustStoreType`: Type for your trust store
+
+The port used by jetty for the https connection is also contained in the systems.properties file. Update `https.port` to change it by default it's set to 8182. 
+
+===== Cipher Suites
+
+There are a plethora of Cipher Suites you can enable and disable via your Jetty.xml file. The ones that are or are not available to you are dependent on which JRE/JDK you're using, browser version and the security posture applicable to your situation. Since this varies so much we have not included/excluded any cipher suites in the default configuration. You can refer to this https://www.eclipse.org/jetty/documentation/9.4.6.v20170531/configuring-ssl.html#configuring-sslcontextfactory-cipherSuites[section] of the Jetty documentation for pointers on how to add/exclude ciphers. 
+
+*Note: Jetty has many versions be sure to check the documentation for the version of Jetty that is in your Karaf container*
+
+===== Password Obfuscation
+
+By default the passwords are stored in plain text. If you'd like to obfuscate the passwords jetty provides utilities for that. You can refer to this http://www.eclipse.org/jetty/documentation/9.4.x/configuring-security-secure-passwords.html[documentation] from Jetty.
+
+===== Logging
+
+Jetty logs have been preconfigured to go into ${karaf.data}/jetty/jetty.log file. You can find the log configuration in `org.ops4j.pax.logging.cfg`. If you need to see additional logs update the logger `log4j.logger.org.eclipse.jetty` to your desired state. 
+
+==== Pax Web Config
+
+The `org.ops4j.pax.web.cfg` has the parameters necessary for Pax to configure your Jetty server in the OSGi(Karaf in our case) environment. If you'd like to change your http.port update the `org.osgi.service.http.port` property in that file. 
+
+===== Disable HTTP
+
+If you'd like to disable http update the `org.osgi.service.http.enabled` to be false instead of true.
+
+===== Disable HTTPS
+
+If you'd like to disable https update the `org.osgi.service.http.secure.enabled` to be false instead of true.
+
+===== Logging
+
+Pax Web logs have been preconfigured to go into ${karaf.data}/pax-web/pax-web.log file. You can find the log configuration in `org.ops4j.pax.logging.cfg`. If you need to see additional logs update the logger `log4j.logger.org.eclipse.pax.web` to your desired state. 

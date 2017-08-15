@@ -225,3 +225,13 @@ deploy-release:
   <<: *deploy-common
   only:
     - tags
+
+pages:
+  stage: deploy
+  script:
+    - mkdir .public
+    - if [ -f output/index.html ]; then echo "Found index.html"; cp output/index.html .public; fi
+    - mv .public public
+  artifacts:
+    paths:
+    - public

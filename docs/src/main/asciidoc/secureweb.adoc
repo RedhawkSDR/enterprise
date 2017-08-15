@@ -59,7 +59,7 @@ In order to configure additional Jetty configuration like login modules, connect
 
 * org.ops4j.pax.web.config.file: by default this file is in ${karaf.base}/etc/jetty.xml . 
 
-Refer to https://ops4j1.jira.com/wiki/spaces/paxweb/pages/12059279/Advanced+Jetty+Configuration[Advanced Jetty Configuration] section for details. 
+Refer to https://ops4j1.jira.com/wiki/spaces/paxweb/pages/12059279/Advanced+Jetty+Configuration[Advanced Jetty Configuration] section for details. Pax Web can also be configured via the web using the `Pax Web Runtime` configuration available in your `system/console/configMgr` endpoint available from Karaf. 
 
 ==== Jetty config
 

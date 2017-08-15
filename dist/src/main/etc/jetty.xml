@@ -34,47 +34,6 @@
 		<Set name="headerCacheSize">512</Set>
 	</New>
 
-	<!-- =========================================================== -->
-	<!-- SSL Configuration below -->
-	<!-- Set up sslContext Factory with standard javax properties -->
-	<!-- Latest docs: https://www.eclipse.org/jetty/documentation/9.4.x/configuring-ssl.html, remember to 
-		use docs relevant to jetty available in your karaf instance
-	 -->
-	<New id="sslContextFactory" class="org.eclipse.jetty.util.ssl.SslContextFactory">
-		<Set name="KeyStorePath"><SystemProperty name="javax.net.ssl.keyStore" /></Set>
-		<Set name="KeyStorePassword"><SystemProperty name="javax.net.ssl.keyStorePassword" /></Set>
-		<Set name="KeyManagerPassword"><SystemProperty name="javax.net.ssl.keyStorePassword" /></Set>
-		<Set name="TrustStorePath"><SystemProperty name="javax.net.ssl.keyStore" /></Set>
-		<Set name="TrustStorePassword"><SystemProperty name="javax.net.ssl.keyStorePassword" /></Set>
-		<Set name="renegotiationAllowed">FALSE</Set>		
-	</New>
-	
-	<New id="httpsConnector" class="org.eclipse.jetty.server.ServerConnector">
-		<Arg name="server"><Ref refid="Server"/></Arg>
-		<Arg name="factories">
-			<Array type="org.eclipse.jetty.server.ConnectionFactory">
-              <Item>
-                <New class="org.eclipse.jetty.server.SslConnectionFactory">
-                  <Arg name="next">http/1.1</Arg>
-                  <Arg name="sslContextFactory"><Ref refid="sslContextFactory"/></Arg>
-                </New>
-              </Item>
-              <Item>
-                <New class="org.eclipse.jetty.server.HttpConnectionFactory">
-                  <Arg name="config"><Ref refid="httpConfig"/></Arg>
-                </New>
-              </Item>
-       		</Array>		
-		</Arg>
-		<Set name="name">redhawkHTTPS</Set>
-	</New>
-	
-	<Call name="addConnector">
-		<Arg>
-			<Ref refid="httpsConnector"/>
-		</Arg>
-	</Call>
-
 	<!-- End of SSL Configuration -->
 	<!-- =========================================================== -->
 

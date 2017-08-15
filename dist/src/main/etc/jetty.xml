@@ -44,12 +44,9 @@
 		<Set name="KeyStorePath"><SystemProperty name="javax.net.ssl.keyStore" /></Set>
 		<Set name="KeyStorePassword"><SystemProperty name="javax.net.ssl.keyStorePassword" /></Set>
 		<Set name="KeyManagerPassword"><SystemProperty name="javax.net.ssl.keyStorePassword" /></Set>
-		<!-- Update below to real trustStore if you want to validate incoming client 
-			certificates -->
 		<Set name="TrustStorePath"><SystemProperty name="javax.net.ssl.keyStore" /></Set>
 		<Set name="TrustStorePassword"><SystemProperty name="javax.net.ssl.keyStorePassword" /></Set>
 		<Set name="renegotiationAllowed">FALSE</Set>		
-		<!-- Additional Ciphers and other security properties can be added see jetty docs for more details-->
 	</New>
 	
 	<New id="httpsConnector" class="org.eclipse.jetty.server.ServerConnector">
@@ -70,7 +67,6 @@
        		</Array>		
 		</Arg>
 		<Set name="name">redhawkHTTPS</Set>
- 		<Set name="port"><SystemProperty name="https.port" /></Set>	
 	</New>
 	
 	<Call name="addConnector">

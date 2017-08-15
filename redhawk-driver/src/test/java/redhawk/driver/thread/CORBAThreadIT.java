@@ -138,7 +138,7 @@ public class CORBAThreadIT extends RedhawkTestBase {
 
 		// Sleeping to allow timeout
 		Thread.sleep(1000l);
-		assertEquals("Thread count should be back to normal and idle threads should be gone", originalTC,
+		assertTrue("Thread count should be back to normal and idle threads should be gone", originalTC>=
 				this.getThreadCount());
 	}
 

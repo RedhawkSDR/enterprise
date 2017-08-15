@@ -3,8 +3,8 @@
 #Docs on format of CI file: https://docs.gitlab.com/ce/ci/yaml/README.html
 stages:
   - build
-  - test
-  - test-jacorb
+#  - test
+#  - test-jacorb
   - deploy
 
 variables:
@@ -18,7 +18,8 @@ variables:
   tags:
     - mvn-cache
   before_script:
-    - mvn -P CFDependencies clean install -B -U
+#    - mvn -P CFDependencies clean install -B -U
+    - mvn -P jaxb-generation,docs install
   after_script:
     - mkdir -p output
     - cp docs/target/asciidoc/html/index.html output/index.html #Docs artifacts
@@ -218,6 +219,8 @@ deploy:
   <<: *deploy-common
   only:
     - branches
+  except:
+    - RI-98
 
 deploy-release:
   variables:

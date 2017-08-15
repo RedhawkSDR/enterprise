@@ -23,6 +23,8 @@ include::installation.adoc[]
 
 include::gettingstarted.adoc[]
 
+include::secureweb.adoc[]
+
 //These are coming from REDHAWK Driver
 
 

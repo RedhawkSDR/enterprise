@@ -1,0 +1,12 @@
+
+##############################################################
+# SSL Cert Configuration
+##############################################################
+#Adding SSL configuration using standard javax.net.* properties
+javax.net.ssl.keyStore=${karaf.base}/certs/keystores/default.jks
+javax.net.ssl.keyStorePassword=redhawk
+#javax.net.ssl.keyStoreType=JKS
+
+#javax.net.ssl.trustStore=
+#javax.net.ssl.trustStorePassword=
+#javax.net.ssl.trustStoreType=

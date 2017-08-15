@@ -3,8 +3,8 @@
 #Docs on format of CI file: https://docs.gitlab.com/ce/ci/yaml/README.html
 stages:
   - build
-#  - test
-#  - test-jacorb
+  - test
+  - test-jacorb
   - deploy
 
 variables:

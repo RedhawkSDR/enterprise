@@ -115,13 +115,51 @@ If you'd like to do your SSL Configuration via Jetty instead here's a snippet yo
 	</Call>
 -----
 
+===== JAASLoginService
+
+By default a JAASLoginService has been configured for you in the jetty.xml file:
+
+[source,xml]
+-----
+	<Call name="addBean">
+		<Arg>
+			<New class="org.eclipse.jetty.jaas.JAASLoginService">
+				<Set name="name">karaf</Set>
+				<Set name="loginModuleName">karaf</Set>
+				<Set name="roleClassNames">
+					<Array type="java.lang.String">
+						<Item>org.apache.karaf.jaas.boot.principal.RolePrincipal
+						</Item>
+					</Array>
+				</Set>
+			</New>
+		</Arg>
+	</Call>
+	<Call name="addBean">
+		<Arg>
+			<New class="org.eclipse.jetty.jaas.JAASLoginService">
+				<Set name="name">default</Set>
+				<Set name="loginModuleName">karaf</Set>
+				<Set name="roleClassNames">
+					<Array type="java.lang.String">
+						<Item>org.apache.karaf.jaas.boot.principal.RolePrincipal
+						</Item>
+					</Array>
+				</Set>
+			</New>
+		</Arg>
+	</Call>
+-----
+
+The configuration above configures Jetty to have a login module using the default `karaf` user. For more information on Karaf Security(e.g updating user passwords, protecting the console, etc...) refer to the https://karaf.apache.org/manual/latest/security[console security] and https://karaf.apache.org/manual/latest/#_security[karaf security] sections of the Karaf manual. 
+
 ===== Cipher Suites
 
 Refer to the https://www.eclipse.org/jetty/documentation/9.4.6.v20170531/configuring-ssl.html#configuring-sslcontextfactory-cipherSuites[Disabling/Endabling Specific Cipher Suites] section of the Jetty documentation for pointers on how to add/exclude ciphers. 
 
 ===== Password Obfuscation
 
-By default the passwords are stored in plain text. If you'd like to obfuscate the passwords jetty provides utilities for that. Refer to the http://www.eclipse.org/jetty/documentation/9.4.x/configuring-security-secure-passwords.html[Secure Password Obfuscation] section from Jetty for more details. The jar necessary for generating the obsfucated password can be found in ${karaf.base}/system/org/eclipse/jetty/jetty-util/{jetty.version}/jetty-util-{jetty.version}.jar . 
+By default the passwords for your keystore/truststore are stored in plain text. If you'd like to obfuscate the passwords jetty provides utilities for that. Refer to the http://www.eclipse.org/jetty/documentation/9.4.x/configuring-security-secure-passwords.html[Secure Password Obfuscation] section from Jetty for more details. The jar necessary for generating the obsfucated password can be found in ${karaf.base}/system/org/eclipse/jetty/jetty-util/{jetty.version}/jetty-util-{jetty.version}.jar . 
 
 ===== Logging
 

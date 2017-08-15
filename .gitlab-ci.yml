@@ -113,6 +113,8 @@ test-install:
   stage: test
   script:
     - yum install -y `find output -name '*.rpm'`
+  except:
+    - RI-98
 
 test-el7-x86_64:
   <<: *compose-test-artifacts
@@ -130,6 +132,8 @@ test-el7-x86_64:
   variables:
     dist: el7
     arch: x86_64
+  except:
+    - RI-98
 
 test-el6-x86_64:
   <<: *compose-test-artifacts
@@ -147,6 +151,8 @@ test-el6-x86_64:
   variables:
     dist: el6
     arch: x86_64
+  except:
+    - RI-98
 
 test-el6-i386:
   <<: *compose-test-artifacts
@@ -164,6 +170,8 @@ test-el6-i386:
   variables:
     dist: el6
     arch: i686
+  except:
+    - RI-98
 
 #Test Driver Against Jacorb
 test-jacorb-el7_x86_64:
@@ -180,6 +188,8 @@ test-jacorb-el7_x86_64:
     dist: el7
     arch: x86_64
     maven_command: bash -c "mvn -P CFDependencies clean install -B -U && mvn -pl redhawk-driver clean install site -P localIT -Djacorb=true -DfailIfNoTests=false -DdomainHost=redhawk_${dist}_${arch}_${CI_JOB_ID} -DtestProps=`pwd`/docker_test.properties"
+  except:
+    - RI-98
 
 test-jacorb-el6_x86_64:
   script:
@@ -195,6 +205,8 @@ test-jacorb-el6_x86_64:
     dist: el6
     arch: x86_64
     maven_command: bash -c "mvn -P CFDependencies clean install -B -U && mvn -pl redhawk-driver clean install site -P localIT -Djacorb=true -DfailIfNoTests=false -DdomainHost=redhawk_${dist}_${arch}_${CI_JOB_ID} -DtestProps=`pwd`/docker_test.properties"
+  except:
+    - RI-98
 
 test-jacorb-el6_i386:
   script:
@@ -210,7 +222,8 @@ test-jacorb-el6_i386:
     dist: el6
     arch: i686
     maven_command: bash -c "mvn -P CFDependencies clean install -B -U && mvn -pl redhawk-driver clean install site -P localIT -Djacorb=true -DfailIfNoTests=false -DdomainHost=redhawk_${dist}_${arch}_${CI_JOB_ID} -DtestProps=`pwd`/docker_test.properties"
-
+  except:
+    - RI-98
 
 #Trigger a Jenkins job to aggregate artifacts there
 deploy:

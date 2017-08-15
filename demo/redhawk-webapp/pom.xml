@@ -9,6 +9,10 @@
 	<packaging>bundle</packaging>
 	<name>REDHAWK :: DEMO :: WEBAPP</name>
 	<description>Example web application with REDHAWK</description>
+	<properties>
+		<!--Update this property to set an npm proxy instead of using the official npm registry -->
+		<npm.proxy>https://registry.npmjs.org/</npm.proxy>
+	</properties>
 	<build>
 		<resources>
 			<resource>
@@ -23,17 +27,18 @@
 				<!-- Use the latest released version:
 				https://repo1.maven.org/maven2/com/github/eirslett/frontend-maven-plugin/ -->
 				<version>1.3</version>
+				<configuration>
+					<!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
+					<nodeVersion>v6.10.0</nodeVersion>
+					<npmVersion>4.4.1</npmVersion>
+					<downloadRoot>${npm.proxy}</downloadRoot>					
+				</configuration>
 				<executions>
 					<execution>
 						<id>install node and npm</id>
 						<goals>
 							<goal>install-node-and-npm</goal>
 						</goals>
-						<configuration>
-							<!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
-							<nodeVersion>v6.10.0</nodeVersion>
-							<npmVersion>4.4.1</npmVersion>
-						</configuration>
 					</execution>
 					<execution>
 						<id>npm install</id>

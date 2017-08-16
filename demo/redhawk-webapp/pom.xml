@@ -10,6 +10,10 @@
 	<packaging>bundle</packaging>
 	<name>REDHAWK :: DEMO :: WEBAPP</name>
 	<description>Example web application with REDHAWK</description>
+	<properties>
+		<node.version>v6.11.2</node.version>
+		<npm.version>4.4.1</npm.version>
+	</properties>
 	<build>
 		<resources>
 			<resource>
@@ -53,8 +57,8 @@
 								<configuration>
 									<!-- See https://nodejs.org/en/download/ for latest node and npm 
 										(lts) versions -->
-									<nodeVersion>v6.11.2</nodeVersion>
-									<npmVersion>4.4.1</npmVersion>
+									<nodeVersion>${node.version}</nodeVersion>
+									<npmVersion>${npm.version}</npmVersion>
 								</configuration>
 							</execution>
 							<execution>
@@ -105,8 +109,8 @@
 						<configuration>
 							<!-- See https://nodejs.org/en/download/ for latest node and npm (lts) 
 								versions -->
-							<nodeVersion>v6.11.2</nodeVersion>
-							<npmVersion>4.4.1</npmVersion>
+							<nodeVersion>${node.version}</nodeVersion>
+							<npmVersion>${npm.version}</npmVersion>
 						</configuration>
 						<executions>
 							<execution>

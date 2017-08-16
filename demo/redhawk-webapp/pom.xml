@@ -12,6 +12,10 @@
 	<properties>
 		<!--Update this property to set an npm proxy instead of using the official npm registry -->
 		<npm.proxy>https://registry.npmjs.org/</npm.proxy>
+		<!-- optional: where to download node from. Defaults to https://nodejs.org/dist/ -->
+		<nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
+        <!-- optional: where to download npm from. Defaults to https://registry.npmjs.org/npm/-/ -->		
+		<npmDownloadRoot>https://registry.npmjs.org/npm/</npmDownloadRoot>
 	</properties>
 	<build>
 		<resources>
@@ -31,7 +35,6 @@
 					<!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
 					<nodeVersion>v6.10.0</nodeVersion>
 					<npmVersion>4.4.1</npmVersion>
-					<downloadRoot>${npm.proxy}</downloadRoot>					
 				</configuration>
 				<executions>
 					<execution>
@@ -39,6 +42,10 @@
 						<goals>
 							<goal>install-node-and-npm</goal>
 						</goals>
+						<configuration>
+							<nodeDownloadRoot>${nodeDownloadRoot}</nodeDownloadRoot>
+							<nodeDownloadRoot>${npmDownloadRoot}</nodeDownloadRoot>							
+						</configuration>
 					</execution>
 					<execution>
 						<id>npm install</id>

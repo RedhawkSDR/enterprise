@@ -104,6 +104,12 @@ You'll need to specify the java.io.tmpdir with your maven command. So your comma
 mvn -Djava.io.tmpdir=./ -P jaxb-generation,docs install
 ----
 
+The build uses the frontend-maven-plugin for doing the node and npm portions of the build. The plugin enables developers to only need maven for the build instead of worrying about installing node/npm as well. The frontend-maven-plugin relies on being able to talk to npm and node repos to get node and & npm. If you're behind a proxy and need to do the full build run the following command:
+
+----
+mvn clean install -P default,docs,jaxb-generation,proxy
+----
+
 == Copyright 
 
 This work is protected by Copyright. Please refer to the link:COPYRIGHT[COPYRIGHT File] for more details.

@@ -53,7 +53,7 @@
 							<goal>npm</goal>
 						</goals>
 						<configuration>
-							<arguments>install</arguments>
+							<arguments>install --proxy ${npm.proxy}</arguments>
 						</configuration>
 					</execution>
 					<execution>

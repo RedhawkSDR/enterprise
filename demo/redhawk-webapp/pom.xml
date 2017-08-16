@@ -14,8 +14,8 @@
 		<npm.proxy>https://registry.npmjs.org/</npm.proxy>
 		<!-- optional: where to download node from. Defaults to https://nodejs.org/dist/ -->
 		<nodeDownloadRoot>https://nodejs.org/dist/</nodeDownloadRoot>
-        <!-- optional: where to download npm from. Defaults to https://registry.npmjs.org/npm/-/ -->		
-		<npmDownloadRoot>https://registry.npmjs.org/npm/</npmDownloadRoot>
+        	<!-- optional: where to download npm from. Defaults to https://registry.npmjs.org/npm/-/ -->		
+		<npmDownloadRoot>https://registry.npmjs.org/npm/-/</npmDownloadRoot>
 	</properties>
 	<build>
 		<resources>
@@ -33,7 +33,7 @@
 				<version>1.3</version>
 				<configuration>
 					<!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
-					<nodeVersion>v6.10.0</nodeVersion>
+					<nodeVersion>v6.11.2</nodeVersion>
 					<npmVersion>4.4.1</npmVersion>
 				</configuration>
 				<executions>

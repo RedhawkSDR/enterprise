@@ -120,16 +120,16 @@
 								</goals>
 								<configuration>
 									<nodeDownloadRoot>${nodeDownloadRoot}</nodeDownloadRoot>
-									<nodeDownloadRoot>${npmDownloadRoot}</nodeDownloadRoot>
+									<npmDownloadRoot>${npmDownloadRoot}</npmDownloadRoot>
 								</configuration>
 							</execution>
 							<execution>
-								<id>npm install --registry=${npm.proxy}</id>
+								<id>npm install</id>
 								<goals>
 									<goal>npm</goal>
 								</goals>
 								<configuration>
-									<arguments>install</arguments>
+									<arguments>install --registry=${npm.proxy}</arguments>
 								</configuration>
 							</execution>
 							<execution>

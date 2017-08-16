@@ -35,6 +35,9 @@
 					<!-- See https://nodejs.org/en/download/ for latest node and npm (lts) versions -->
 					<nodeVersion>v6.11.2</nodeVersion>
 					<npmVersion>4.4.1</npmVersion>
+					<environmentVariables>
+						
+					</environmentVariables>
 				</configuration>
 				<executions>
 					<execution>
@@ -53,7 +56,7 @@
 							<goal>npm</goal>
 						</goals>
 						<configuration>
-							<arguments>install --proxy ${npm.proxy}</arguments>
+							<arguments>install --registry ${npm.proxy}</arguments>
 						</configuration>
 					</execution>
 					<execution>

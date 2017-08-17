@@ -25,6 +25,7 @@ const state = {
   showWaveformController: false,
   waveformToControl: null,
   showLaunchWaveformModal : false,
+  showEventChannelModal : false,
   waveformToLaunch: null,
   showDomain: false,
   wsURL: null,

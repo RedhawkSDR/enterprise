@@ -21,7 +21,7 @@ variables:
     - mvn -P CFDependencies clean install -B -U
   after_script:
     - mkdir -p output
-    - mkdir site
+    - mkdir site/images
     - cp docs/target/asciidoc/html/index.html site/index.html #Docs artifacts
     - cp -r docs/target/asciidoc/html/images/* site/images/ #Make sure images are available for site
     - tar zcvf site.tar.gz site; cp site.tar.gz output/

@@ -78,7 +78,7 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 	<bean id="redhawkEventChannelResource" class="redhawk.rest.endpoints.RedhawkEventChannelResource">
 		<property name="redhawkManager" ref="redhawkManagerBean" />
 	</bean>
-	    			
+	
 	<jaxrs:server id="rsServer" address="/redhawk">
 		<jaxrs:serviceBeans>
 			<ref component-id="redhawkDomainResource" />
@@ -102,6 +102,14 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 			<bean class="redhawk.rest.exceptions.ResourceNotFoundExceptionMapper" />
 			<bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter" >
 				<!--<property name="allowOrigins" value="#{systemProperties['origins'] != null ? systemProperties['origins'].split(',') : null}"> </property>--> 
+				<!-- TODO Make this dynamic -->
+				<!--
+				<property name="allowOrigins">
+					<list>
+						<value>localhost</value>
+					</list>
+				</property>
+				-->
 			</bean>		
 		</jaxrs:providers>	
 	</jaxrs:server>

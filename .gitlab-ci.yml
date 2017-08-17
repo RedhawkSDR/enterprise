@@ -249,9 +249,8 @@ pages:
   stage: deploy
   script:
     - mkdir .public
-    - mkdir .tmp
-    - if [ -f output/site.tar.gz ]; then echo "Found site.tar.gz"; cp output/site.tar.gz .tmp/; tar -xvf .tmp/site.tar.gz; mv .tmp/site/* .public; fi
-    - rm -rf .tmp
+    - if [ -f output/site.tar.gz ]; then echo "Found site.tar.gz"; cp output/site.tar.gz .; tar -xvf site.tar.gz; mv site/* .public; fi
+    - rm -rf site
     - mv .public public
   artifacts:
     paths:

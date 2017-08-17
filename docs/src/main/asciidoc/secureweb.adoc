@@ -4,7 +4,7 @@ The web endpoints <<REDHAWK REST>> and websocket endpoints <<REDHAWK WebSocket>>
 
 ==== Pax Web Config
 
-The `org.ops4j.pax.web.cfg` has the parameters necessary for Pax to configure your Jetty server in the OSGi (Karaf in our case) environment. Using Pax Web to manage your Jetty instance enables hot deployment(e.g allowing you to update the Pax Web configuration and the changes take place without restarting your Karaf). By default, SSL is setup through Pax Web. For more information, refer to the https://ops4j1.jira.com/wiki/display/paxweb/SSL+Configuration[SSL Configuration] section of Pax Web documentation.
+The `org.ops4j.pax.web.cfg` has the parameters necessary for Pax to configure your Jetty server in the OSGi (Karaf in our case) environment. Using Pax Web to manage your Jetty instance enables hot deployment (allowing you to update the Pax Web configuration and the changes take place without restarting your Karaf). By default, SSL is setup through Pax Web. For more information, refer to the https://ops4j1.jira.com/wiki/display/paxweb/SSL+Configuration[SSL Configuration] section of Pax Web documentation.
 
 ===== Certificates
 

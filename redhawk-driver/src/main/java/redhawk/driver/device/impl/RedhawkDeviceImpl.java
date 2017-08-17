@@ -1,5 +1,5 @@
 /*
- * This file is protected by Copyright. Please refer to the COPYRIGHT file
+g * This file is protected by Copyright. Please refer to the COPYRIGHT file
  * distributed with this source distribution.
  *
  * This file is part of REDHAWK __REDHAWK_PROJECT__.
@@ -33,19 +33,23 @@ import org.omg.CORBA.TRANSIENT;
 import CF.DataType;
 import CF.Device;
 import CF.DeviceHelper;
+import CF.DevicePackage.AdminType;
 import CF.DevicePackage.InsufficientCapacity;
 import CF.DevicePackage.InvalidCapacity;
 import CF.DevicePackage.InvalidState;
 import CF.LifeCyclePackage.ReleaseError;
 import CF.ResourcePackage.StartError;
 import CF.ResourcePackage.StopError;
-import redhawk.driver.RedhawkLogLevel;
 import redhawk.driver.RedhawkUtils;
 import redhawk.driver.base.impl.PortBackedObjectImpl;
+import redhawk.driver.device.AdminState;
+import redhawk.driver.device.OperationalState;
 import redhawk.driver.device.RedhawkDevice;
+import redhawk.driver.device.UsageState;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.driver.logging.RedhawkLogLevel;
 import redhawk.driver.properties.RedhawkStruct;
 import redhawk.driver.properties.RedhawkStructSequence;
 
@@ -205,8 +209,7 @@ public class RedhawkDeviceImpl extends PortBackedObjectImpl<Device> implements R
 		deallocate("FRONTEND::tuner_allocation", allocation);
 	}
 	
-	String getAllocId(RedhawkStruct s) {
-		//return (String) s.toMap().get("FRONTEND::tuner_status::allocation_id");
+	public String getAllocId(RedhawkStruct s) {
 		List<String> allocIds = getAllocIds(s);
 		
 		if(allocIds.isEmpty()){
@@ -222,16 +225,28 @@ public class RedhawkDeviceImpl extends PortBackedObjectImpl<Device> implements R
 	 * @param s
 	 * @return
 	 */
-	List<String> getAllocIds(RedhawkStruct s) {
-		String allocIdCsv = (String) s.toMap().get("FRONTEND::tuner_status::allocation_id_csv");
-		if (allocIdCsv == null)
-			return null;
+	public List<String> getAllocIds(RedhawkStruct s) {
 		ArrayList<String> allocIds = new ArrayList<String>();
-		if (allocIdCsv.isEmpty())
+		String allocIdCsv = (String) s.toMap().get("FRONTEND::tuner_status::allocation_id_csv");
+		
+		if (allocIdCsv == null || allocIdCsv.isEmpty())
 			return allocIds;
+		
 		for (String tunerAlloc : allocIdCsv.split(",")) {
 			allocIds.add(tunerAlloc.trim());
 		}
+		
+		return allocIds;
+	}
+	
+	public List<String> getAllocIds(){
+		List<String> allocIds = new ArrayList<String>();
+		
+		List<RedhawkStruct> structs = this.getStatus();
+		for(RedhawkStruct struct : structs){
+			allocIds.addAll(this.getAllocIds(struct));
+		}
+		
 		return allocIds;
 	}
 	
@@ -299,6 +314,31 @@ public class RedhawkDeviceImpl extends PortBackedObjectImpl<Device> implements R
 	@Override
 	public void setLogLevel(RedhawkLogLevel level) {
 		getCorbaObject().log_level(level.getValue());		
+	}
+
+	@Override
+	public AdminState adminState() {
+		return AdminState.reverseLookup(getCorbaObject().adminState().value());
+	}
+
+	@Override
+	public void adminState(AdminState state) {
+		getCorbaObject().adminState(AdminType.from_int(state.getValue()));
+	}
+
+	@Override
+	public OperationalState operationalState() {
+		return OperationalState.reverseLookup(getCorbaObject().operationalState().value());
+	}
+
+	@Override
+	public UsageState usageState() {
+		return UsageState.reverseLookup(getCorbaObject().usageState().value());
+	}
+
+	@Override
+	public String getImplementation() {
+		return deviceManager.getCorbaObject().getComponentImplementationId(this.getIdentifier());
 	}
 
 	

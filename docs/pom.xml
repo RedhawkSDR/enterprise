@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>redhawk</groupId>
 		<artifactId>redhawk-enterprise-integration</artifactId>
-		<version>2.1.1-SNAPSHOT</version>
+		<version>2.1.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>redhawk-enterprise-integration-docs</artifactId>
 	<name>REDHAWK :: ENTERPRISE INTEGRATION :: DOCUMENTATION</name>
@@ -13,236 +13,367 @@
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>MM-dd-yyyy</maven.build.timestamp.format>
 	</properties>
-	<build>
-		<resources>
-			<resource>
-				<directory>${project.build.directory}/asciidoc/html</directory>
-				<filtering>false</filtering>
-			</resource>
-		</resources>
-		<plugins>
-			<!-- Using resources plugin to get everything in the propery directory
-				structure to build one user manual. This will also rely on projects ahead
-				of it that need to generate resources to atleast have gone through compile
-				phase. -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>copy-resources</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
+	<profiles>
+		<profile>
+			<id>localIT</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>${project.parent.groupId}</groupId>
+					<artifactId>redhawk-driver</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>${project.parent.groupId}</groupId>
+					<artifactId>redhawk-rest</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>${project.parent.groupId}</groupId>
+					<artifactId>redhawk-websocket</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>${project.parent.groupId}</groupId>
+					<artifactId>camel-redhawk</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>2.19.1</version>
 						<configuration>
-							<encoding>UTF-8</encoding>
-							<outputDirectory>${project.build.directory}/asciidoc-workspace</outputDirectory>
-							<overwrite>true</overwrite>
-							<resources>
-								<resource>
-									<directory>src/main/asciidoc</directory>
-									<filtering>true</filtering><!-- Variable replacement -->
-								</resource>
-								<!-- Take the necessary adoc files from redhawk-driver -->
-								<resource>
-									<directory>${project.parent.basedir}/redhawk-driver/target/asciidoc-workspace</directory>
-									<targetPath>driver</targetPath>
-									<excludes>
-										<exclude>index.adoc</exclude>
-									</excludes>
-								</resource>
-								<!-- Take the necessary adoc files from redhawk-rest -->
-								<resource>
-									<directory>${project.parent.basedir}/redhawk-rest/target/asciidoc</directory>
-									<targetPath>${project.build.directory}/asciidoc-workspace/rest</targetPath>
-									<includes>
-										<include>overview.adoc</include>
-										<include>paths.adoc</include>
-										<include>definitions.adoc</include>
-									</includes>
-								</resource>
-								<!-- Take the necessary adoc files from redhawk-connector -->
-								<resource>
-									<directory>${project.parent.basedir}/redhawk-connector/src/main/asciidoc</directory>
-									<targetPath>${project.build.directory}/asciidoc-workspace/connector</targetPath>
-								</resource>
-								<!-- Take the necessary adoc files from redhawk-websocket -->
-								<resource>
-									<directory>${project.parent.basedir}/redhawk-websocket/src/main/asciidoc</directory>
-									<targetPath>websocket</targetPath>
-								</resource>
-								<!-- Take the necessary adoc files from the demo projects -->
-								<resource>
-									<directory>${project.parent.basedir}/demo/camel-event-channel</directory>
-									<targetPath>demo</targetPath>
-									<includes>
-										<include>README.adoc</include>
-									</includes>
-								</resource>
-								<resource>
-									<directory>${project.parent.basedir}/demo/redhawk-webapp</directory>
-									<targetPath>demo</targetPath>
-									<includes>
-										<include>redhawk-demo-webapp.adoc</include>
-									</includes>
-								</resource>
-								<resource>
-									<directory>${project.parent.basedir}/redhawk-camel/src/main/asciidoc</directory>
-									<targetPath>camel</targetPath>
-								</resource>
-								<!-- Get web screenshot -->
-								<resource>
-									<directory>${project.parent.basedir}/demo/redhawk-webapp</directory>
-									<targetPath>images</targetPath>
-									<includes>
-										<include>demo-webscreenshot.png</include>
-									</includes>
-								</resource>
-							</resources>
+							<!-- Jacoco prepare-agent builds some command-line params without -->
+							<!-- which jacoco will not instrument. Hence it is important to add -->
+							<!-- those command-line params here (${argLine} holds those params) -->
+							<argLine>${argLine} -Xms256m -Xmx2048m</argLine>
+							<forkCount>1</forkCount>
+							<runOrder>random</runOrder>
 						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.asciidoctor</groupId>
-				<artifactId>asciidoctor-maven-plugin</artifactId>
-				<version>1.5.3</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.asciidoctor</groupId>
-						<artifactId>asciidoctorj-pdf</artifactId>
-						<version>1.5.0-alpha.11</version>
-					</dependency>
-					<!-- Comment this section to use the default jruby artifact provided
-						by the plugin -->
-					<dependency>
-						<groupId>org.jruby</groupId>
-						<artifactId>jruby-complete</artifactId>
-						<version>1.7.21</version>
-					</dependency>
-					<!-- Comment this section to use the default AsciidoctorJ artifact provided
-						by the plugin -->
-					<dependency>
-						<groupId>org.asciidoctor</groupId>
-						<artifactId>asciidoctorj</artifactId>
-						<version>1.5.4.1</version>
-					</dependency>
-				</dependencies>
-				<!-- TODO: may move asciidoc stuff to default location -->
-				<configuration>
-					<sourceDirectory>${project.build.directory}/asciidoc-workspace</sourceDirectory>
-					<sourceDocumentName>index.adoc</sourceDocumentName>
-				        <attributes>
-				            <project-version>${project.version}</project-version>
-					    <timestamp>${timestamp}</timestamp>
-				        </attributes>    
-                                </configuration>
-				<executions>
-					<execution>
-						<id>output-html</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>process-asciidoc</goal>
-						</goals>
+					</plugin>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
 						<configuration>
-							<outputDirectory>${project.build.directory}/asciidoc/html</outputDirectory>
-							<sourceHighlighter>coderay</sourceHighlighter>
-							<backend>html5</backend>
-							<doctype>book</doctype>
+							<excludes>
+								<!-- Excluding generated classes from xsd -->
+								<exclude>redhawk/driver/xml/**</exclude>
+								<!-- Excluding jsr356 classes. This is good code to have still because 
+									we should look into implementing jsr356 so the websocket is more generic 
+									and not jetty based. -->
+								<exclude>redhawk/driver/xml/**</exclude>
+							</excludes>
+						</configuration>
+						<executions>
+							<execution>
+								<id>report-aggregate</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>report-aggregate</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+			<reporting>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-project-info-reports-plugin</artifactId>
+						<version>2.6</version>
+						<reportSets>
+							<reportSet>
+								<reports><!-- select reports -->
+									<report>index</report>
+								</reports>
+							</reportSet>
+						</reportSets>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-report-plugin</artifactId>
+						<version>2.20</version>
+						<configuration>
+							<reportsDirectories>
+								<reportsDirectory>${project.parent.basedir}/redhawk-driver/target/surefire-reports</reportsDirectory>
+								<reportsDirectory>${project.parent.basedir}/redhawk-driver/target/failsafe-reports</reportsDirectory>
+								<reportsDirectory>${project.parent.basedir}/redhawk-rest/target/failsafe-reports</reportsDirectory>
+								<reportsDirectory>${project.parent.basedir}/redhawk-websocket/target/surefire-reports</reportsDirectory>
+								<reportsDirectory>${project.parent.basedir}/redhawk-websocket/target/failsafe-reports</reportsDirectory>
+								<reportsDirectory>${project.parent.basedir}/redhawk-camel/target/failsafe-reports</reportsDirectory>
+							</reportsDirectories>
+						</configuration>
+						<reportSets>
+							<reportSet>
+								<reports>
+									<report>report-only</report>
+								</reports>
+							</reportSet>
+						</reportSets>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jxr-plugin</artifactId>
+						<version>2.1</version>
+					</plugin>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<configuration>
+							<excludes>
+								<!-- Excluding generated classes from xsd -->
+								<exclude>redhawk/driver/xml/**</exclude>
+								<!-- Excluding jsr356 classes. This is good code to have still because 
+									we should look into implementing jsr356 so the websocket is more generic 
+									and not jetty based. -->
+								<exclude>redhawk/driver/xml/**</exclude>
+							</excludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</reporting>
+		</profile>
+		<profile>
+			<id>docs</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<resources>
+					<resource>
+						<directory>${project.build.directory}/asciidoc/html</directory>
+						<filtering>false</filtering>
+					</resource>
+				</resources>
+				<plugins>
+					<!-- Using resources plugin to get everything in the propery directory 
+						structure to build one user manual. This will also rely on projects ahead 
+						of it that need to generate resources to atleast have gone through compile 
+						phase. -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-resources</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<encoding>UTF-8</encoding>
+									<outputDirectory>${project.build.directory}/asciidoc-workspace</outputDirectory>
+									<overwrite>true</overwrite>
+									<resources>
+										<resource>
+											<directory>src/main/asciidoc</directory>
+											<filtering>true</filtering><!-- Variable replacement -->
+										</resource>
+										<!-- Take the necessary adoc files from redhawk-driver -->
+										<resource>
+											<directory>${project.parent.basedir}/redhawk-driver/target/asciidoc-workspace</directory>
+											<targetPath>driver</targetPath>
+											<excludes>
+												<exclude>index.adoc</exclude>
+											</excludes>
+										</resource>
+										<!-- Take the necessary adoc files from redhawk-rest -->
+										<resource>
+											<directory>${project.parent.basedir}/redhawk-rest/target/asciidoc</directory>
+											<targetPath>${project.build.directory}/asciidoc-workspace/rest</targetPath>
+											<excludes>
+                                                                                                <exclude>index.adoc</exclude>
+                                                                                        </excludes>										
+										</resource>
+										<!-- Take the necessary adoc files from redhawk-connector -->
+										<resource>
+											<directory>${project.parent.basedir}/redhawk-connector/src/main/asciidoc</directory>
+											<targetPath>${project.build.directory}/asciidoc-workspace/connector</targetPath>
+										</resource>
+										<!-- Take the necessary adoc files from redhawk-websocket -->
+										<resource>
+											<directory>${project.parent.basedir}/redhawk-websocket/src/main/asciidoc</directory>
+											<targetPath>websocket</targetPath>
+										</resource>
+										<!-- Take the necessary adoc files from the demo projects -->
+										<resource>
+											<directory>${project.parent.basedir}/demo/camel-event-channel</directory>
+											<targetPath>demo</targetPath>
+											<includes>
+												<include>README.adoc</include>
+											</includes>
+										</resource>
+										<resource>
+											<directory>${project.parent.basedir}/demo/redhawk-webapp</directory>
+											<targetPath>demo</targetPath>
+											<includes>
+												<include>redhawk-demo-webapp.adoc</include>
+											</includes>
+										</resource>
+										<resource>
+											<directory>${project.parent.basedir}/redhawk-camel/src/main/asciidoc</directory>
+											<targetPath>camel</targetPath>
+										</resource>
+										<!-- Get web screenshot -->
+										<resource>
+											<directory>${project.parent.basedir}/demo/redhawk-webapp</directory>
+											<targetPath>images</targetPath>
+											<includes>
+												<include>demo-webscreenshot.png</include>
+											</includes>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.asciidoctor</groupId>
+						<artifactId>asciidoctor-maven-plugin</artifactId>
+						<version>1.5.3</version>
+						<dependencies>
+							<dependency>
+								<groupId>org.asciidoctor</groupId>
+								<artifactId>asciidoctorj-pdf</artifactId>
+								<version>1.5.0-alpha.11</version>
+							</dependency>
+							<!-- Comment this section to use the default jruby artifact provided 
+								by the plugin -->
+							<dependency>
+								<groupId>org.jruby</groupId>
+								<artifactId>jruby-complete</artifactId>
+								<version>1.7.21</version>
+							</dependency>
+							<!-- Comment this section to use the default AsciidoctorJ artifact 
+								provided by the plugin -->
+							<dependency>
+								<groupId>org.asciidoctor</groupId>
+								<artifactId>asciidoctorj</artifactId>
+								<version>1.5.4.1</version>
+							</dependency>
+						</dependencies>
+						<!-- TODO: may move asciidoc stuff to default location -->
+						<configuration>
+							<sourceDirectory>${project.build.directory}/asciidoc-workspace</sourceDirectory>
+							<sourceDocumentName>index.adoc</sourceDocumentName>
 							<attributes>
-								<toc>left</toc>
-								<linkcss>false</linkcss>
+								<project-version>${project.version}</project-version>
+								<timestamp>${timestamp}</timestamp>
 							</attributes>
 						</configuration>
-					</execution>
-					<execution>
-						<id>generate-pdf-doc</id>
-						<phase>generate-resources</phase>
-						<goals>
-							<goal>process-asciidoc</goal>
-						</goals>
+						<executions>
+							<execution>
+								<id>output-html</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.build.directory}/asciidoc/html</outputDirectory>
+									<sourceHighlighter>coderay</sourceHighlighter>
+									<backend>html5</backend>
+									<doctype>book</doctype>
+									<attributes>
+										<toc>left</toc>
+										<linkcss>false</linkcss>
+									</attributes>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-pdf-doc</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>${project.build.directory}/asciidoc/pdf</outputDirectory>
+									<backend>pdf</backend>
+									<doctype>book</doctype>
+									<!-- Since 1.5.0-alpha.9 PDF back-end can use 'rouge' as well as 
+										'coderay' source highlighting -->
+									<sourceHighlighter>coderay</sourceHighlighter>
+									<attributes>
+										<pdf-stylesdir>${project.basedir}/src/theme</pdf-stylesdir>
+										<pdf-style>custom</pdf-style>
+										<imagesdir>${project.build.directory}/asciidoc-workspace/images</imagesdir>
+										<icons />
+										<!-- To do: Look into adding icons for admonitions -->
+										<pagenums />
+										<toc />
+										<toclevels>3</toclevels>
+										<sectnums>true</sectnums>
+										<sectnumlevels>3</sectnumlevels>
+										<idprefix />
+										<idseparator>-</idseparator>
+									</attributes>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<!-- Make html docs a deployable bundle -->
+					<plugin>
+						<groupId>org.apache.felix</groupId>
+						<artifactId>maven-bundle-plugin</artifactId>
+						<extensions>true</extensions>
 						<configuration>
-							<outputDirectory>${project.build.directory}/asciidoc/pdf</outputDirectory>
-							<backend>pdf</backend>
-							<doctype>book</doctype>
-							<!-- Since 1.5.0-alpha.9 PDF back-end can use 'rouge' as well as 'coderay'
-								source highlighting -->
-							<sourceHighlighter>coderay</sourceHighlighter>
-							<attributes>
-							 	<pdf-stylesdir>${project.basedir}/src/theme</pdf-stylesdir>
-								<pdf-style>custom</pdf-style>
-								<imagesdir>${project.build.directory}/asciidoc-workspace/images</imagesdir>
-								<icons />
-                            <!-- To do: Look into adding icons for admonitions -->
-								<pagenums />
-								<toc />
-								<toclevels>3</toclevels>
-								<sectnums>true</sectnums>
-								<sectnumlevels>3</sectnumlevels>
-								<idprefix />
-								<idseparator>-</idseparator>
-							</attributes>
+							<instructions>
+								<Web-ContextPath>/docs</Web-ContextPath>
+								<_removeheaders>Built-By,Ignore-Package,Private-Package,Embed-Dependency</_removeheaders>
+							</instructions>
 						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<!-- Make html docs a deployable bundle -->
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Web-ContextPath>/docs</Web-ContextPath>
-						<_removeheaders>Built-By,Ignore-Package,Private-Package,Embed-Dependency</_removeheaders>
-					</instructions>
-				</configuration>
-			</plugin>
-			<!-- RPM to install docs -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>rpm-maven-plugin</artifactId>
-				<version>2.1.5</version>
-				<extensions>true</extensions>
-				<executions>
-					<execution>
-						<id>attached-rpm</id>
-						<goals>
-							<goal>attached-rpm</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<license>LGPLv3</license>
-					<group>REDHAWK Enterprise Integration</group>
-					<release>${release}</release>
-					<requires>
-						<require>redhawk-enterprise-integration-dist</require>
-					</requires>
-					<defaultUsername>root</defaultUsername>
-					<defaultGroupname>redhawk</defaultGroupname>
-					<defaultFilemode>755</defaultFilemode>
-					<mappings>
-						<mapping>
-							<directory>${docs.directory}</directory>
-							<sources>
-								<source>
-									<location>${project.build.directory}/asciidoc/pdf/index.pdf</location>
-								</source>
-							</sources>
-						</mapping>
-						<mapping>
-							<directory>${runtime.basedir}/karaf-${karaf.version}/deploy</directory>
-							<sources>
-								<source>
-									<location>${project.build.directory}/${project.artifactId}-${project.version}.jar</location>
-								</source>
-							</sources>
-						</mapping>
-					</mappings>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+					</plugin>
+					<!-- RPM to install docs -->
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>rpm-maven-plugin</artifactId>
+						<version>2.1.5</version>
+						<extensions>true</extensions>
+						<executions>
+							<execution>
+								<id>attached-rpm</id>
+								<goals>
+									<goal>attached-rpm</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<license>LGPLv3</license>
+							<group>REDHAWK Enterprise Integration</group>
+							<release>${release}</release>
+							<requires>
+								<require>redhawk-enterprise-integration-dist</require>
+							</requires>
+							<defaultUsername>root</defaultUsername>
+							<defaultGroupname>redhawk</defaultGroupname>
+							<defaultFilemode>755</defaultFilemode>
+							<mappings>
+								<mapping>
+									<directory>${docs.directory}</directory>
+									<sources>
+										<source>
+											<location>${project.build.directory}/asciidoc/pdf/index.pdf</location>
+										</source>
+									</sources>
+								</mapping>
+								<mapping>
+									<directory>${runtime.basedir}/karaf-${karaf.version}/deploy</directory>
+									<sources>
+										<source>
+											<location>${project.build.directory}/${project.artifactId}-${project.version}.jar</location>
+										</source>
+									</sources>
+								</mapping>
+							</mappings>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

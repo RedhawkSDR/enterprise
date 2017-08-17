@@ -1,11 +1,57 @@
 == `RedhawkPort` Code Examples
 
-Below are code examples for using the `RedhawkPort` interface.
+The following code examples explain how to use the `RedhawkPort` interface.
 
 === Consuming Messages from a REDHAWK Port
 
 [source,java,indent=0]
 .`MessageConsumerPortIT.java`
 ----
-include::snippets/MessageConsumerPortIT.java[lines=104..129]
+include::snippets/MessageConsumerPortIT.java[lines=102..127]
+----
+
+=== Retrieving Metadata from a REDHAWK Port
+
+The following code examples explain how to retrieve the following metadata from a REDHAWK Port object:
+
+* statistics
+* state
+* connections
+* activeSRI
+
+==== Get Port Statistics from a Uses/Provides Port
+
+[source,java,indent=0]
+.`RedhawkPortImplIT`
+----
+include::snippets/RedhawkPortImplIT.java[lines=61..64]
+----
+
+[source,java,indent=0]
+----
+include::snippets/RedhawkPortImplIT.java[lines=75..78]
+----
+
+==== Get ActiveSRI from a Provides Port
+
+[source,java,indent=0]
+.`RedhawkPortImplIT`
+----
+include::snippets/RedhawkPortImplIT.java[lines=88..91]
+----
+
+==== Get Port State from a Provides Port
+
+[source,java,indent=0]
+.`RedhawkPortImplIT`
+----
+include::snippets/RedhawkPortImplIT.java[lines=115..118]
+----
+ 
+==== Get Port Connections and Disconnect by Connection Id
+
+[source,java,indent=0]
+.`RedhawkPortImplIT`
+----
+include::snippets/RedhawkPortImplIT.java[lines=187..199]
 ----

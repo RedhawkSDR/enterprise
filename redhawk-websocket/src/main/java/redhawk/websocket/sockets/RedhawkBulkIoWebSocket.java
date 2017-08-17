@@ -115,13 +115,9 @@ public class RedhawkBulkIoWebSocket extends RedhawkEventAdminWebSocket {
             port.disconnect();
         } catch (PortException e) {
         	logger.log(Level.SEVERE, e.getMessage());
-        } catch (InvalidPort e) {
-        	logger.log(Level.SEVERE, e.getMessage());
         } finally {
-
-            if (this.isNewDriverInstance()) {
-                this.getRedhawk().disconnect();
-            }
+        	//On close disconnect should always occur
+        	this.getRedhawk().disconnect();
         }
     }
 

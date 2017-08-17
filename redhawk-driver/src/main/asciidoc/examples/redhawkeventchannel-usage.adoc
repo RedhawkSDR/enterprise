@@ -1,0 +1,47 @@
+== `RedhawkEventChannel` Code Examples
+
+The following code examples explain how to use the `RedhawkEventChannel` interface.
+
+=== Create an Event Channel Listener 
+
+The `REDHAWKDriver` has abstract classes that provide base functionality for the different event types provided in REDHAWK. Users may extend one of the Helper abstract classes as shown in the following example. If a Helper abstract class is extended, then the `onMessage` function must be implemented.
+
+[source,java,indent=0]
+.`RedhawkEventChannelIT.java`
+----
+include::snippets/RedhawkEventChannelIT.java[lines=136..150]
+----
+
+=== Subscribe and Unsubscribe to an Event Channel
+
+Using the Listener defined in the previous example, use the follwing code to subscribe to an Event Channel. 
+
+[source,java,indent=0]
+.`RedhawkEventChannelIT.java`
+----
+include::snippets/RedhawkEventChannelIT.java[lines=100..105]
+----
+
+Using the Listener defined in the previous example, use the following code to unsubscribe to and Event Channel: 
+
+[source,java,indent=0]
+.`RedhawkEventChannelIT.java`
+----
+include::snippets/RedhawkEventChannelIT.java[lines=115]
+----
+
+=== Interacting with Event Channel Registrants
+
+Every time a user subscribes or produces data to an Event Channel, a Registrant is created. The following code can be used to display the list of registrants and unsubscribe particular registrants. 
+
+[source,java,indent=0]
+.`RedhawkEventChannelIT.java`
+----
+include::snippets/RedhawkEventChannelIT.java[lines=66..70]
+----
+
+[source,java,indent=0]
+.`RedhawkEventChannelIT.java`
+----
+include::snippets/RedhawkEventChannelIT.java[lines=84..85]
+----

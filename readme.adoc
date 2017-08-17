@@ -1,15 +1,5 @@
 = Redhawk Enterprise Integration
 
-////
-Release notes:
-
-1. To release update the release number property in the parent pom. 
-
-2. mvn -P CFDependencies,docs,default,jaxb-generation release:prepare -Darguments=-Djava.io.tmpdir=./
-
-3. mvn release:perform -Darguments=-Djava.io.tmpdir=./
-////
-
 This repository provides a suite of assets for interacting with REDHAWK from a JRE. Below are the main assets and a brief description: 
 
 * link:redhawk-driver/readme.adoc[REDHAWK Driver]: Provides simplified access to REDHAWK via standard Java interfaces. This Asset shields all interaction with the underlying REDHAWK Components and provides a simplified API for Java developers interacting with a REDHAWK Domain. The REDHAWK Driver can be leveraged as a standalone Java Archive (JAR) file.
@@ -24,7 +14,7 @@ This repository provides a suite of assets for interacting with REDHAWK from a J
 
 == Demo Assets
 
-* link:camel-event-channel/README.md[Camel Event Channel Demo]
+* link:demo/camel-event-channel/README.adoc[Camel Event Channel Demo]
 
 * link:demo/redhawk-webapp/README.md[REDHAWK Webapp Demo]
 
@@ -65,7 +55,7 @@ mvn clean install
 Each individual project has it's own readme defining how to build it's docs. If you'd like to build the full user manual. Run this profile: 
 
 ----
-mvn -P jaxb-generation,docs compile
+mvn -P jaxb-generation,docs install
 ----
 
 == Build All Artifacts
@@ -101,7 +91,13 @@ If you run into this error building the docs
 You'll need to specify the java.io.tmpdir with your maven command. So your command will end up looking like this:
 
 ----
-mvn -P -Djava.io.tmpdir=./ -P jaxb-generation,docs compile
+mvn -Djava.io.tmpdir=./ -P jaxb-generation,docs install
+----
+
+The build uses the frontend-maven-plugin for doing the node and npm portions of the build. The plugin enables developers to only need maven for the build instead of worrying about installing node/npm as well. The frontend-maven-plugin relies on being able to talk to npm and node repos to get node and & npm. If you're behind a proxy and need to do the full build run the following command:
+
+----
+mvn clean install -P default,docs,jaxb-generation,proxy
 ----
 
 == Copyright 

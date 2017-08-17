@@ -19,20 +19,59 @@
  */
 package redhawk.driver.devicemanager.impl;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 import org.junit.Test;
 
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
+import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.testutils.RedhawkTestBase;
 
-public class RedhawkDeviceManagerImplIT extends RedhawkTestBase{
+public class RedhawkDeviceManagerImplIT extends RedhawkTestBase {
 	@Test
-	public void test() throws MultipleResourceException, CORBAException, Exception{
-		//Create a device manager
-		RedhawkDeviceManager manager = driver.getDomain().createDeviceManager("anotherDeviceManager", "/var/redhawk/sdr/dev/", false);
-		
+	public void test() throws MultipleResourceException, CORBAException, Exception {
+		// Create a device manager
+		RedhawkDeviceManager manager = driver.getDomain().createDeviceManager("anotherDeviceManager",
+				"/var/redhawk/sdr/dev/", false);
+
 		Thread.sleep(10000l);
 		manager.shutdown();
+	}
+
+	@Test
+	public void testShutdownOfDeviceManager() {
+		// Create a device manager
+		RedhawkDeviceManager manager;
+		RedhawkDomainManager domMgr = null;
+		try {
+			domMgr = driver.getDomain();
+			manager = domMgr.createDeviceManager("anotherDeviceManager", "/var/redhawk/sdr/dev/", false);
+
+			System.out.println(domMgr.getDriverRegisteredDeviceManagers());
+			manager.shutdown();
+
+			domMgr.unRegisterAllDriverRegisteredDeviceManagers();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testDeviceMethods() {
+		/*
+		 * Generic test for additional device methods
+		 */
+		try {
+			RedhawkDeviceManager devMgr = driver.getDomain().getDeviceManagers().get(0);
+
+			assertNotNull(devMgr.deviceConfigurationProfile());
+			assertNotNull(devMgr.getComponentImplemantation());
+		} catch (MultipleResourceException | CORBAException e) {
+			fail("Test failure "+e.getMessage());
+		}
 	}
 }

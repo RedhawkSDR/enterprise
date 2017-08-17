@@ -34,6 +34,7 @@ import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.exceptions.ResourceNotFoundException;
 
 /**
  * Base test class giving you access to a RedhawkDriver that you 
@@ -111,19 +112,19 @@ public class RedhawkTestBase {
 	}
 	
 	@AfterClass
-	public static void afterClass() throws MultipleResourceException, CORBAException, ApplicationReleaseException{
+	public static void afterClass() throws MultipleResourceException, CORBAException, ApplicationReleaseException, ResourceNotFoundException{
 		//Always make sure you delete waveforms you create
 		//TODO: Clean up this logic
 		try {
-			RedhawkFileManager manager = driver.getDomain().getFileManager();
-			//if(!manager.findDirectories("/waveforms/testWaveform").isEmpty()) //TODO: Look into why this doesn't work 
-				manager.removeDirectory("/waveforms/testWaveform");
-		} catch (ConnectionException | IOException | CORBAException e) {
+			//TODO: Just get rid of everything that's not under RH
+			RedhawkFileManager manager = driver.getDomain(domainName).getFileManager();
+			manager.removeDirectory("/waveforms/testWaveform");
+		} catch (ConnectionException | IOException | CORBAException | ResourceNotFoundException e) {
 			logger.info("Unable to delete wavemform likely cause it doesn't exist.");
 		}
 		
 		if(driver!=null){
-			for(RedhawkApplication application : driver.getDomain().getApplications()){
+			for(RedhawkApplication application : driver.getDomain(domainName).getApplications()){
 				//Clean up applications
 				application.release();
 			}

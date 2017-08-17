@@ -5,14 +5,14 @@
 	<parent>
 		<groupId>redhawk</groupId>
 		<artifactId>redhawk-enterprise-integration</artifactId>
-		<version>2.1.1-SNAPSHOT</version>
+		<version>2.1.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>camel-redhawk</artifactId>
 	<packaging>bundle</packaging>
 
 	<name>REDHAWK :: Camel Component</name>
 	<description>REDHAWK camel component</description>
-	
+
 	<properties>
 		<maven.test.skip>false</maven.test.skip>
 	</properties>
@@ -135,9 +135,9 @@
 			<type>test-jar</type>
 			<version>${project.version}</version>
 			<scope>test</scope>
-		</dependency>						
+		</dependency>
 	</dependencies>
-<profiles>
+	<profiles>
 		<profile>
 			<id>docs</id>
 			<activation>
@@ -215,5 +215,5 @@
 				</plugins>
 			</build>
 		</profile>
-	</profiles>	
+	</profiles>
 </project>

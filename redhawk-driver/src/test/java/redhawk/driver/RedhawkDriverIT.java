@@ -21,19 +21,16 @@ package redhawk.driver;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.util.Map;
-import java.util.Properties;
 import java.util.logging.Logger;
 
-import org.junit.After;
 import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.omg.CORBA.ORBPackage.InvalidName;
 
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
@@ -64,6 +61,17 @@ public class RedhawkDriverIT extends RedhawkTestBase{
 	}
 	
 	@Test
+	public void testDisconnect(){
+		try {
+			driver.getDomain();
+			driver.disconnect();
+		} catch (MultipleResourceException | CORBAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
 	public void testGetDomain(){
 		try {
 			RedhawkDomainManager domain = driver.getDomain(domainName);
@@ -76,6 +84,7 @@ public class RedhawkDriverIT extends RedhawkTestBase{
 	@Test
 	public void testGetDeviceManager() throws ResourceNotFoundException, CORBAException, MultipleResourceException{		
 		String deviceManagerName = driver.getDomain("REDHAWK_DEV").getDeviceManagers().get(0).getName();
+		
 		//Path to dev Manager
 		String pathForDevManager = domainName+"/"+deviceManagerName;
 		logger.info(pathForDevManager);
@@ -103,13 +112,38 @@ public class RedhawkDriverIT extends RedhawkTestBase{
 		//Use these utility methods if you only have one REDHAWK Domain/Redhawk Device Manager/Redhawk Device
 		RedhawkDomainManager domainManager = driver.getDomain();
 		
-		RedhawkDeviceManager deviceManager = driver.getDeviceManager();
-		
-		RedhawkDevice device = driver.getDevice();
+		/*
+		 * You'll be running this test in multiple scenarios so you need to make sure 
+		 * when you call this method that there's only one deviceManager and adjust
+		 * the asserts accordingly
+		 */
+		if(driver.getDomain().getDeviceManagers().size()>1){
+			try{
+				driver.getDeviceManager();
+				fail("Exception should've been thrown because there are multiple deviceManagers");
+			}catch(MultipleResourceException ex){
+				assertTrue("Expected exception thrown", true);
+			}
+			
+			try{
+				driver.getDevice();
+				fail("Exception should've been thrown because there are multiple deviceManagers");
+			}catch(MultipleResourceException ex){
+				assertTrue("Expected exception thrown", true);
+			}
+		}else{
+			RedhawkDeviceManager deviceManager = driver.getDeviceManager();
+			
+			RedhawkDevice device = driver.getDevice();
+			
+			//Make sure objects aren't null 
+			assertNotNull(deviceManager);
+			assertNotNull(device);
+		}
+
 		
 		assertNotNull(domainManager);
-		assertNotNull(deviceManager);
-		assertNotNull(device);
+
 		driver.disconnect();
 	}
 	

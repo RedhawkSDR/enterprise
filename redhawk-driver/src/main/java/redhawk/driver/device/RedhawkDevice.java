@@ -128,4 +128,35 @@ public interface RedhawkDevice extends PortBackedObject {
 	 */
 	//TODO: Test this method so you can better document. 
 	void deallocate(Map<String, Object> allocation);
+	
+	
+	/**
+	 * Returns the adminState of a Device 
+	 * @return
+	 */
+	AdminState adminState();
+	
+	/**
+	 * Sets the adminState of a Device
+	 * @param state
+	 */
+	void adminState(AdminState state);
+	
+	/**
+	 * Returns the operationalState of a Device
+	 * @return
+	 */
+	OperationalState operationalState();
+	
+	/**
+	 * Returns the usageState of a Device
+	 * @return
+	 */
+	UsageState usageState();
+	
+	/**
+	 * Returns the type of device Implementation for this device.
+	 * @return
+	 */
+	String getImplementation(); 
 }

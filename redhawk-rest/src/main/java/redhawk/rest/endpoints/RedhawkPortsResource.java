@@ -19,22 +19,24 @@
  */
 package redhawk.rest.endpoints;
 
-import redhawk.rest.RedhawkManager;
-import redhawk.rest.exceptions.ResourceNotFound;
-import redhawk.rest.model.FetchMode;
-import redhawk.rest.model.PortContainer;
+import java.util.logging.Logger;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-
-import java.util.logging.Logger;
+import redhawk.rest.exceptions.ResourceNotFound;
+import redhawk.rest.model.FetchMode;
+import redhawk.rest.model.PortContainer;
+import redhawk.rest.model.PortStatisticsContainer;
+import redhawk.rest.model.SRIContainer;
 
 @Path("/{nameserver}/domains/{domain}/applications/{applicationId}/components/{componentId}/ports")
 @Api(value="/{nameserver}/domains/{domain}/applications/{applicationId}/components/{componentId}/ports")
@@ -80,7 +82,34 @@ public class RedhawkPortsResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET REDHAWK Component Port Statistics"
     		)
-    public Response getPortStatistics(@PathParam("portId") String portName) throws Exception {
-        return Response.ok(redhawkManager.getRhPortStatistics(nameServer, "port", domainName + "/" + applicationId + "/" + componentId + "/" + portName)).build();
+    public PortStatisticsContainer getPortStatistics(@PathParam("portId") String portName) throws Exception {
+        return redhawkManager.getRhPortStatistics(nameServer, "port", domainName + "/" + applicationId + "/" + componentId + "/" + portName);
+    }
+    
+    @GET
+    @Path("/{portId}/sri")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @ApiOperation(
+    		value="GET REDHAWK Component Port SRI"
+    		)
+    public SRIContainer getActiveSRIs(@PathParam("portId") String portName) throws Exception {
+        return redhawkManager.getSRI(nameServer, "port", domainName + "/" + applicationId + "/" + componentId + "/" + portName);
+    }
+    
+    @DELETE
+    @Path("/{portId}/disconnect/{connectionId}")
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @ApiOperation(value = "DELETE a Connection from a Port by connectionId")
+    public Response disconnectPortConnection(
+    		@PathParam("portId") String portName,
+    		@PathParam("connectionId") String connectionId){
+    	String portPath = domainName + "/" + applicationId + "/" + componentId + "/" + portName;
+    	
+    	try {
+			redhawkManager.disconnectConnectionById(nameServer, "port", portPath, connectionId);
+			return Response.ok("Disconnected "+connectionId).build();
+    	} catch (Exception e) {
+			throw new WebApplicationException("Error disconnecting Port", Response.Status.BAD_REQUEST);
+		}
     }
 }

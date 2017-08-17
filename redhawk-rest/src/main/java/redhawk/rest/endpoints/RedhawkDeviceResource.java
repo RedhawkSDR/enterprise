@@ -19,7 +19,6 @@
  */
 package redhawk.rest.endpoints;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -38,6 +37,7 @@ import javax.ws.rs.core.Response;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import redhawk.driver.device.AdminState;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.rest.exceptions.ResourceNotFound;
 import redhawk.rest.model.DeviceContainer;
@@ -165,4 +165,20 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
         redhawkManager.setProperty(property, nameServer, "device", domainName + "/" + devManagerName + "/" + deviceId);
         return Response.ok().build();
     }
+    
+    @PUT
+    @Path("/{deviceId}/adminstate")
+    @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+    @ApiOperation(
+    		value="Set REDHAWK Device AdminState"
+    		)
+    public Response setAdminState(@PathParam("deviceId") String deviceId, String state) throws Exception {
+    	AdminState stateObj = AdminState.valueOf(state);
+    	
+    	redhawkManager.setAdminState(nameServer, domainName+"/"+devManagerName+"/"+deviceId, stateObj);
+    	//TODO: Probably should return the successful tuner::status object
+    	return Response.ok().build();
+    }
 }
+

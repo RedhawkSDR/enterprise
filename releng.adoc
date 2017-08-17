@@ -1,0 +1,42 @@
+= RELEASE Engineering Notes
+
+== How to Release
+
+. update the release number property in the parent pom if this is another RC.
+
+. mvn -P CFDependencies,docs,default,jaxb-generation release:prepare -Darguments=-Djava.io.tmpdir=./
+
+. mvn -P CFDependencies,docs,default,jaxb-generation release:perform -Darguments=-Djava.io.tmpdir=./
+
+. In case things aren't cleaned up run  mvn release:clean -P CFDependencies,default,docs
+
+== Merging Forward
+
+gitattributes should be able to accomplish this but it will fastforward if you've previously done merges on a particular file. 
+
+=== Manual Way
+
+Keep track of files you don't want to automagically merge forward and manually reset them: 
+
+----
+git merge --no-commit <merge-branch>
+git reset HEAD myfile.txt
+git checkout -- myfile.txt
+git commit -m "merged <merge-branch>"
+----
+
+https://stackoverflow.com/questions/15232000/git-ignore-files-during-merge
+
+== Poms
+
+The poms should mainly stay the same between develop and develop-2.X. Unless you've made updates to the pom that need to get merged. 
+
+* Finding all poms
+
+----
+find . -name pom.xml
+----
+
+== Logging Updates between 2.0.X and 2.1.X
+
+2.1.X has more logging capabilities so you need to be careful when merging those files forward. 

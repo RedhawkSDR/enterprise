@@ -1,7 +1,7 @@
-version: '2'
+version: '2.1'
 services:
   redhawk:
-    image: ${docker_registry}redhawk/redhawk:${redhawk_version}-${dist}-${arch}
+    image: ${docker_registry}redhawk/redhawk:${redhawk_version}-assets-${dist}-${arch}
     container_name: redhawk_${dist}_${arch}_${CI_JOB_ID}
   rei:
     image: ${docker_registry}redbus/maven:3-jdk-8
@@ -11,4 +11,5 @@ services:
       - .:/usr/src/app
       - ${m2cache}/repository:/root/.m2/repository:rw
     working_dir: /usr/src/app
-    command: bash -c "mvn -P CFDependencies clean install -B -U && mvn clean install -PlocalIT -DfailIfNoTests=false -DdomainHost=redhawk_${dist}_${arch}_${CI_JOB_ID} -DtestProps=`pwd`/docker_test.properties"
+    command: ${maven_command}
+#    command: bash -c "mvn -P CFDependencies clean install -B -U && mvn clean install site -P localIT -DfailIfNoTests=false -DdomainHost=redhawk_${dist}_${arch}_${CI_JOB_ID} -DtestProps=`pwd`/docker_test.properties"

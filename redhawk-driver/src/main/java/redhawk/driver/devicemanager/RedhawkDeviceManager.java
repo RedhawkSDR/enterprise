@@ -127,4 +127,19 @@ public interface RedhawkDeviceManager extends QueryableResource {
      * Shutdown Device Manager. 
      */
     void shutdown();
+    
+    /**
+     * The deviceConfigurationProfile attribute contains the DeviceManager's profile, 
+     * a profile element with a file reference to the DeviceManager's Device Configuration Descriptor (DCD) 
+     * profile.
+     * @return
+     */
+    String deviceConfigurationProfile();
+    
+    /**
+     * returns the SPD implementation ID that the DeviceManager interface used to create a device
+     * @return
+     * @throws MultipleResourceException 
+     */
+    String getComponentImplemantation() throws MultipleResourceException;
 }

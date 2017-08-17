@@ -82,6 +82,8 @@ public class RedhawkConnector implements ManagedServiceFactory {
 		if (port == null) {
 			throw new ConfigurationException(PORT_NAME_PROPERTY, "Port is Required");
 		}
+	
+		String domainManagerName = dynamicPropertyConversion(properties.get(DOMAIN_MANAGER_PROPERTY), String.class);
 
 		try {
 			logger.fine("Checking for a pre-existing REDHAWK connection with the connectionName of: " + connectionName);
@@ -89,20 +91,28 @@ public class RedhawkConnector implements ManagedServiceFactory {
 					null);
 
 			if (existingRHConnection != null) {
-				String servicePid = (String) existingRHConnection[0].getProperty("service.pid");
-				String curConnectionName = (String) existingRHConnection[0].getProperty(CONNECTION_NAME_PROPERTY);
+				/*
+				 * Loop through all existing RH Connections and ensure user is 
+				 * not attempting to create a duplicate
+				 */
+				for(int i=0; i<existingRHConnection.length; i++){
+					String servicePid = (String) existingRHConnection[i].getProperty("service.pid");
+					String curConnectionName = (String) existingRHConnection[i].getProperty(CONNECTION_NAME_PROPERTY);
 
-				if (!pid.equalsIgnoreCase(servicePid) && connectionName.equalsIgnoreCase(curConnectionName)) {
-					throw new ConfigurationException(CONNECTION_NAME_PROPERTY,
-							"A redhawk connection with this name already exists");
-				}
-				
-				String curHost = dynamicPropertyConversion(existingRHConnection[0].getProperty(HOST_NAME_PROPERTY), String.class);
-				long curPort = dynamicPropertyConversion(existingRHConnection[0].getProperty(PORT_NAME_PROPERTY), Long.class);
-
-				if (!pid.equalsIgnoreCase(servicePid) && curHost.equalsIgnoreCase(host) && curPort == port) {
-					throw new ConfigurationException(CONNECTION_NAME_PROPERTY,
-							"A connection has already been established with this REDHAWK Domain from this Karaf Instance");
+					if (!pid.equalsIgnoreCase(servicePid) && connectionName.equalsIgnoreCase(curConnectionName)) {
+						throw new ConfigurationException(CONNECTION_NAME_PROPERTY,
+								"A redhawk connection with this name already exists");
+					}
+					
+					String curHost = dynamicPropertyConversion(existingRHConnection[i].getProperty(HOST_NAME_PROPERTY), String.class);
+					long curPort = dynamicPropertyConversion(existingRHConnection[i].getProperty(PORT_NAME_PROPERTY), Long.class);
+					
+					String domainManager = dynamicPropertyConversion(existingRHConnection[i].getProperty(DOMAIN_MANAGER_PROPERTY), String.class);
+					
+					if (!pid.equalsIgnoreCase(servicePid) && curHost.equalsIgnoreCase(host) && curPort == port && domainManager.equalsIgnoreCase(domainManagerName)) {
+						throw new ConfigurationException(CONNECTION_NAME_PROPERTY,
+								"A connection has already been established with this REDHAWK Domain, Port, and Host combination from this Karaf Instance");
+					}					
 				}
 			}
 		} catch (InvalidSyntaxException e) {
@@ -125,7 +135,6 @@ public class RedhawkConnector implements ManagedServiceFactory {
 
 		// Domain Manager is optional. If its specified, connect and register a
 		// device manager.
-		String domainManagerName = dynamicPropertyConversion(properties.get(DOMAIN_MANAGER_PROPERTY), String.class);
 		String deviceManagerName = dynamicPropertyConversion(properties.get(DEVICE_MANAGER_NAME_PROPERTY), String.class);
 
 		Redhawk redhawkDriver = new RedhawkDriver(host, port.intValue());

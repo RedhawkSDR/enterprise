@@ -122,8 +122,6 @@ public class RedhawkBulkIoWebSocket {
         		port.disconnect();
         	} catch (PortException e) {
         		logger.severe(e.getMessage());
-        	} catch (InvalidPort e) {
-        		logger.severe(e.getMessage());
         	} finally {
 //        		if (this.isNewDriverInstance()) {
 //        			this.getRedhawk().disconnect();

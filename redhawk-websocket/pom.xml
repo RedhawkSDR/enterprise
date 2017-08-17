@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>redhawk</groupId>
 		<artifactId>redhawk-enterprise-integration</artifactId>
-		<version>2.1.1-SNAPSHOT</version>
+		<version>2.1.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>redhawk-websocket</artifactId>
 	<packaging>bundle</packaging>
@@ -92,17 +92,6 @@
 						</reports>
 					</reportSet>
 				</reportSets>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>cobertura-maven-plugin</artifactId>
-				<version>2.7</version>
-				<configuration>
-					<formats>
-						<format>html</format>
-						<format>xml</format>
-					</formats>
-				</configuration>
 			</plugin>
 		</plugins>
 	</reporting>

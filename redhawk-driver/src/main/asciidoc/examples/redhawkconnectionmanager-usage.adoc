@@ -1,0 +1,35 @@
+== `RedhawkConnectionManager` Code Examples
+
+The following code examples explain how to use the `RedhawkConnectionManager` interface.
+
+=== Get the ConnectionManager
+
+[source,java,indent=0]
+.`RedhawkConnectionManagerIT.java`
+----
+include::snippets/RedhawkConnectionManagerIT.java[lines=63]
+----
+
+=== Connect a Device Port to an Application Port
+
+[source,java,indent=0]
+.`RedhawkConnectionManagerIT.java`
+----
+include::snippets/RedhawkConnectionManagerIT.java[lines=78..102]
+----
+
+=== Connect Two Application Ports 
+
+[source,java,indent=0]
+.`RedhawkConnectionManagerIT.java`
+----
+include::snippets/RedhawkConnectionManagerIT.java[lines=118..138]
+----
+
+=== Connect Application Port to an Event Channel 
+
+[source,java,indent=0]
+.`RedhawkConnectionManagerIT.java`
+----
+include::snippets/RedhawkConnectionManagerIT.java[lines=162..183]
+----

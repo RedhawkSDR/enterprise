@@ -2,12 +2,12 @@
 
 The following code examples explain how to use the `RedhawkApplication` interface. 
 
-=== Managing your Application's Lifecycle
+=== Managing Your Application's Lifecycle
 
 [source,java,indent=0]
 .`RedhawkApplicationImplIT.java`
 ----
-include::snippets/RedhawkApplicationImplIT.java[lines=105..115]
+include::snippets/RedhawkApplicationImplIT.java[lines=102..113]
 ----
 
 === Interacting with Components from Your Application
@@ -15,7 +15,14 @@ include::snippets/RedhawkApplicationImplIT.java[lines=105..115]
 [source,java,indent=0]
 .`RedhawkApplicationImplIT.java`
 ----
-include::snippets/RedhawkApplicationImplIT.java[lines=97..101]
+include::snippets/RedhawkApplicationImplIT.java[lines=94..99]
 ----
 
+=== Example of How to Get and Set the Log Level of an Application 
+
+[source,java,indent=0]
+.`RedhawkLoggingIT.java`	
+----
+include::snippets/RedhawkLoggingIT.java[lines=73..77]
+----
 

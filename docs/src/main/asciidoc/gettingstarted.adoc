@@ -41,20 +41,68 @@ More example commands can be found in the <<redhawk-driver-code-examples>> secti
 
 === Working with Karaf
 
-. To start Karaf, in the bin directory for Karaf, run the start script:
+. To start Karaf, in the `bin`
+ directory for Karaf, run the start script:
 +
 ----
  ./start
 ----
 
-. To access the Karaf console, in the bin directory for Karaf, run the client script:
+. To access the Karaf console, in the `bin` directory for Karaf, run the client script:
 +
 ----
  ./client
 ----
 
-. Once logged in, run the command 'list' to display the REDHAWK Assets that have been preinstalled. Each asset includes documentation. Refer to the appropriate section in the online documentation for information about interacting with the individual assets. For more details on Karaf, refer to  https://karaf.apache.org/manual/latest/[Apache Karaf documentation]. 
+. Once logged in, run the command `list` to display the REDHAWK Assets that have been preinstalled. Each asset includes documentation. Refer to the appropriate section in the online documentation for information about interacting with the individual assets. For more details on Karaf, refer to  https://karaf.apache.org/manual/latest/[Apache Karaf documentation]. 
 
 . Begin using the bundles provided to interact with REDHAWK or write your own applications that leverage the REDHAWK Enterprise Integration bundles to interact with REDHAWK.
 
+=== Configuring JacORB w/ Karaf
 
+To configure the REDHAWK Driver running inside of Karaf to use JacORB instead of Sun ORB, perform the following steps:
+
+. Update the `${karaf.base}/etc/system.properties` file to include the system properties necessary for JacORB.
++
+----
+#Jacorb configuration
+org.omg.CORBA.ORBSingletonClass=org.jacorb.orb.ORBSingleton
+org.omg.PortableInterceptor.ORBInitializerClass.standard_init=org.jacorb.orb.standardInterceptors.IORInterceptorInitializer
+org.omg.CORBA.ORBClass=org.jacorb.orb.ORB
+----
++
+
+. Copy the `jacorb-deps` into `${karaf.base}/lib/ext` directory. 
+
+. If Karaf was started previously, restart it. 
+
+==== Configure JacORB logging w/ Karaf
+
+
+To prevent JacORB logging from filling the general `karaf.log` file, add the following lines to the bottom of your `org.ops4j.pax.logging.cfg`, which is located in the `${karaf.base}/etc` directory:
+
+----
+# Jacorb Logging
+log4j.logger.org.jacorb=INFO, jacorb
+
+# Jacorb appender
+log4j.appender.jacorb=org.apache.log4j.RollingFileAppender
+log4j.appender.jacorb.layout=org.apache.log4j.PatternLayout
+log4j.appender.jacorb.layout.ConversionPattern=%d{ISO8601} | %-5.5p | %-16.16t | %-32.32c{1} | %X{bundle.id} - %X{bundle.name} - %X{bundle.version} | %m%n
+log4j.appender.jacorb.file=${karaf.data}/jacorb/jacorb.log
+log4j.appender.jacorb.append=true
+log4j.appender.jacorb.maxFileSize=1MB
+log4j.appender.jacorb.maxBackupIndex=10
+----
+
+==== Additional JacORB Configuration
+
+To specify specific properties, add a `jacorb.properties` file to `${karaf.base}`. For example, if you want to control the number of `ClientMessageReceptor` threads created by JacORB and manage the `Idle` threads, add the following `jacorb.properties` file:
+
+----
+#Jacorb Properties
+jacorb.connection.client.max_idle_receptor_threads=5
+jacorb.connection.client.max_receptor_threads=100
+---- 
+
+For additional JacORB information, refer to the JacORB http://www.jacorb.org/documentation.html[Official Documentation]. 

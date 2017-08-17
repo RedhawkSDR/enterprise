@@ -2,11 +2,13 @@
 
 === Overview
 
-Provides an HTML5-compliant WebSocket implementation that enables the ability to stream data from any REDHAWK BulkIO-enabled Port or Event Channel. 
+Provides an HTML5-compliant WebSocket implementation that enables the ability to stream data from any REDHAWK BulkIO-enabled Port or Event Channel.
+
+As long as HTTPS is enabled, Jetty will host each of the following endpoints in the `wss` (WebSocket Secure) protocol as well. 
 
 === Connecting to the REDHAWK WebSocket
 
-The WebSocket servlet resides at `ws://{hostname}:8181/redhawk`. 
+The WebSocket servlet resides at `ws://{hostname}:8181/redhawk`.
 
 * To connect to a specific REDHAWK installation, provide the hostname/address along with the Port of the REDHAWK Name Server.
 
@@ -14,20 +16,20 @@ The WebSocket servlet resides at `ws://{hostname}:8181/redhawk`.
 ws://localhost:8181/redhawk/localhost:2809
 ----
 
-* If you are using the REDHAWK Connector, you can replace the address and Port with the connection name you specified when you created the connection.
+* If you are using the <<REDHAWK Connector>>, you can replace the address and Port with the connection name you specified when you created the connection.
 
 ----
-ws://localhost:8181/redhawk/redhawk-connect-name
+ws://localhost:8181/redhawk/redhawk-connection-name
 ----
 
 === REDHAWK Component Port Connection
 
-To connect to a Component Port, use this syntax: 
+To connect to a Component Port, use this syntax:
 ----
 application/{applicationName}/components/{componentName}/ports/{portName}
 ----
 
-The `applicationName`, `componentName` and `portName` variables all support matching on regular expressions. The following example is a complete Component Port url: 
+The `applicationName`, `componentName` and `portName` variables all support matching on regular expressions. The following example is a complete Component Port url:
 
 ----
 ws://localhost:8181/redhawk/localRH/domains/REDHAWK_DEV/applications/myApplication/components/SigGen.*/ports/dataFloat_out.json
@@ -35,7 +37,7 @@ ws://localhost:8181/redhawk/localRH/domains/REDHAWK_DEV/applications/myApplicati
 
 === REDHAWK Device Port Connection
 
-To connect to a Device Port, use this syntax: 
+To connect to a Device Port, use this syntax:
 
 ----
 devicemanagers/{deviceManagerName}/devices/{deviceLabel}/ports/{portName}
@@ -43,15 +45,15 @@ devicemanagers/{deviceManagerName}/devices/{deviceLabel}/ports/{portName}
 
 The `deviceManagerName`, `deviceLabel`, `portName` variables all support matching on regular expressions.
 
-=== REDHAWK Event Channel Connection 
+=== REDHAWK Event Channel Connection
 
-To connect to an Event Channel, use this syntax: `eventchannels/{eventChannelName}`. The following example is a complete url for an Event Channel: 
+To connect to an Event Channel, use this syntax: `eventchannels/{eventChannelName}`. The following example is a complete url for an Event Channel:
 
 ----
 ws://localhost:8181/redhawk/localRH/domains/REDHAWK_DEV/eventchannels/ODM_Channel
 ----
 
-=== Code Example 
+=== Code Example
 
 The following example is a complete javascript example to connect to a REDHAWK Websocket:
 

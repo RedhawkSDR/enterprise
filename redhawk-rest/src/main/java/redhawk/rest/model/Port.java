@@ -19,37 +19,69 @@
  */
 package redhawk.rest.model;
 
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
+@JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)//TODO: Upgrade this to @JsonInclude(Include.NON_NULL)
 public class Port {
-
 	private String name;
+	
 	private String type;
+	
 	private String repId;
+	
+	private String state;
+	
+    @XmlElementWrapper(name="connectionIds")
+    @XmlElement(name="id")
+	List<String> connectionIds;
+	
 	public String getName() {
 		return name;
 	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 	public String getType() {
 		return type;
 	}
+	
 	public void setType(String type) {
 		this.type = type;
 	}
+	
 	public String getRepId() {
 		return repId;
 	}
+	
 	public void setRepId(String repId) {
 		this.repId = repId;
 	}
-	
-	
-	
-	
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
+	public List<String> getConnectionIds() {
+		return connectionIds;
+	}
+
+	public void setConnectionIds(List<String> connectionIds) {
+		this.connectionIds = connectionIds;
+	}
 }

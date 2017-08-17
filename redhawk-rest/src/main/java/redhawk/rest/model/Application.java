@@ -34,6 +34,7 @@ public class Application {
     private String identifier;
     private String name;
     private boolean started;
+    private boolean aware;
     
     @XmlElementWrapper(name="components")
     @XmlElement(name="component")
@@ -46,6 +47,8 @@ public class Application {
     @XmlElementWrapper(name="properties")
     @XmlElement(name="property")
     private List<Property> properties;
+    
+    public Application(){}
     
     public String getIdentifier() {
         return identifier;
@@ -83,6 +86,12 @@ public class Application {
 	public void setProperties(List<Property> properties) {
 		this.properties = properties;
 	}
-    
 
+	public boolean isAware() {
+		return aware;
+	}
+
+	public void setAware(boolean aware) {
+		this.aware = aware;
+	}
 }

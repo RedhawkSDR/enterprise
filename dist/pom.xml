@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>redhawk</groupId>
 		<artifactId>redhawk-enterprise-integration</artifactId>
-		<version>2.1.1-SNAPSHOT</version>
+		<version>2.1.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>redhawk-enterprise-integration-dist</artifactId>
 	<packaging>karaf-assembly</packaging>
@@ -152,6 +152,36 @@
 							</resources>
 						</configuration>
 					</execution>
+					<execution>
+						<id>copy-certs</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/karaf-${karaf.version}/certs</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/certs</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-additional-configuration</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/karaf-${karaf.version}/etc</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/etc</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 			<!-- Download deps for any other functionality -->
@@ -226,6 +256,45 @@
 							</artifactItems>
 						</configuration>
 					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<!-- Concatenate additional params to default configuration propertires -->
+					<execution>
+						<id>cat-system.properties</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<concat destfile="${project.build.directory}/${runtime.dir}/karaf-${karaf.version}/etc/system.properties" append="true">
+					 				<fileset dir="src/main/additions">
+					 					<include name="system.properties.additions" />
+					 				</fileset>								
+								</concat>
+							</target>
+						</configuration>
+					</execution>
+					<execution>
+						<id>cat-logging.properties</id>
+						<phase>package</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<concat destfile="${project.build.directory}/${runtime.dir}/karaf-${karaf.version}/etc/org.ops4j.pax.logging.cfg" append="true">
+					 				<fileset dir="src/main/additions">
+					 					<include name="logging.additions" />
+					 				</fileset>								
+								</concat>
+							</target>
+						</configuration>
+					</execution>					
 				</executions>
 			</plugin>
 			<plugin>

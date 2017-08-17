@@ -19,34 +19,32 @@
  */
 package redhawk.driver.application.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
-import redhawk.driver.RedhawkDriver;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
+import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.ApplicationStartException;
 import redhawk.driver.exceptions.ApplicationStopException;
 import redhawk.driver.exceptions.CORBAException;
-import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.driver.port.RedhawkPort;
+import redhawk.driver.port.RedhawkPortStatistics;
 import redhawk.driver.port.impl.RedhawkExternalPortImpl;
-import redhawk.driver.properties.RedhawkProperty;
 import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkApplicationImplIT extends RedhawkTestBase {
@@ -123,7 +121,7 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 
 	// Test retrieving external ports
 	@Test
-	public void testGetExternalPorts() throws ResourceNotFoundException, ApplicationCreationException, CORBAException,
+	public void testGetExternalPortsAndStats() throws ResourceNotFoundException, ApplicationCreationException, CORBAException,
 			MultipleResourceException, IOException {
 		RedhawkApplication extApplication = null; 
 		try {
@@ -134,13 +132,26 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 					new File("src/test/resources/waveforms/ExternalPropPortExample/ExternalPropPortExample.sad.xml"));
 
 			// Should be two external ports
-			assertEquals("Should be two external ports in this waveform", 3, extApplication.getPorts().size());
+			assertEquals("Should be two external ports in this waveform", 4, extApplication.getPorts().size());
 			logger.info(application.getPorts().toString());
 			// Ensure you properly get properties related to external ports
 			RedhawkExternalPortImpl externalPort = (RedhawkExternalPortImpl) extApplication.getPort("sigGenPort");
 
 			assertNotNull(externalPort);
 			assertNotNull(externalPort.getDescription());
+			
+			/*
+			 * Test retrieving each ports stats
+			 */
+			for(RedhawkPort port : extApplication.getPorts()){
+				assertNotNull(port.getPortStatistics());
+			}
+			
+			/*
+			 * Test retrieving a ports stats
+			 */
+			List<RedhawkPortStatistics> stats = extApplication.getPort("hardLimitPort").getPortStatistics();
+			System.out.println(stats);
 		} finally {
 			if (extApplication != null) {
 				try {
@@ -181,5 +192,48 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 				}
 			}
 		}		
+	}
+	
+	@Test
+	public void testAware(){
+		try{
+			//Just test whether you can successfully call the method
+			Boolean isAware = application.isAware();
+			logger.info("Aware "+isAware);
+		}catch(Exception ex){
+			fail("Unable to call aware method"+ex.getMessage());
+		}
+	}
+	
+	@Test
+	public void testComponentDevices(){
+		Map<String, RedhawkDevice> compToDeviceMap = application.getComponentDevices();
+		
+		//Map has stuff in it
+		assertTrue(!compToDeviceMap.isEmpty());
+		assertEquals("Should be 2 entries", 2, compToDeviceMap.size());
+	}
+	
+	@Test
+	public void testComponentProcessIds(){
+		Map<String, Integer> compToProcess = application.getComponentProcessIds();
+		
+		//Map has stuff in it
+		assertTrue(!compToProcess.isEmpty());
+		assertEquals("Should be 2 entries", 2, compToProcess.size());
+	}
+	
+	@Test
+	public void testComponentImplementation() {
+		Map<String, String> compImpl = application.getComponentImplementations();
+		
+		//Map has stuff in it
+		assertTrue(!compImpl.isEmpty());
+		assertEquals("Should be 2 entries", 2, compImpl.size());
+		
+		//All values should be cpp
+		for(String impl : compImpl.values()) {
+			assertEquals("cpp", impl);
+		}
 	}
 }

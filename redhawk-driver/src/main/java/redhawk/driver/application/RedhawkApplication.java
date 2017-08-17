@@ -26,6 +26,7 @@ import java.util.Map;
 import CF.Application;
 import redhawk.driver.base.QueryableResource;
 import redhawk.driver.component.RedhawkComponent;
+import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.ApplicationStartException;
@@ -139,4 +140,29 @@ public interface RedhawkApplication extends QueryableResource {
      * 
      */
     Map<String, RedhawkProperty> getExternalProperties();
+    
+    
+    /** 
+     * This boolean attribute contains the aware state of Application. 
+     * This attribute shows whether the Components in the Application are given a pointer to the Application and Domain Manager. 
+     **/
+    boolean isAware();
+    
+    /**
+     * Return a map of Components in your application to the Device they're launched on. 
+     * @return
+     */
+    Map<String, RedhawkDevice> getComponentDevices(); 
+    
+    /**
+     * Return a map of Component->ProcessId
+     * @return
+     */
+    Map<String, Integer> getComponentProcessIds();
+    
+    /**
+     * Map of each Component -> Implementation type(i.e. cpp, java, python)
+     * @return
+     */
+    Map<String, String> getComponentImplementations();
 }

@@ -2,6 +2,7 @@ package redhawk.rest;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -19,10 +20,12 @@ import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.rest.model.Application;
+import redhawk.rest.model.ApplicationContainer;
+import redhawk.rest.model.Domain;
 import redhawk.rest.model.ExternalPort;
 import redhawk.rest.model.FetchMode;
-import redhawk.rest.model.Port;
 import redhawk.rest.model.PropertyContainer;
+import redhawk.rest.utils.TestUtils;
 import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkManagerIT extends RedhawkTestBase{
@@ -33,11 +36,15 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 	private static String applicationName = "ExternalPropsApp";
 	
 	private static String noExternalPropsPortsApp = "basicApp";
+	
+	private static String nameServer;
 
 	@BeforeClass
 	public static void setup(){
 		//Launch app 
 		try {
+			nameServer = domainHost+":"+domainPort;
+			
 			externalApplication = driver.getDomain().createApplication(applicationName, 
 					new File("../redhawk-driver/src/test/resources/waveforms/ExternalPropPortExample/ExternalPropPortExample.sad.xml"));
 			basicApplication = driver.getDomain().createApplication(noExternalPropsPortsApp, 
@@ -45,6 +52,17 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 		} catch (MultipleResourceException | ApplicationCreationException | CORBAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			fail("Unable to launch applications required for the test "+e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testGetDomain(){
+		try {
+			List<Domain> domains = manager.getAll(domainHost+":2809", "domain", null, FetchMode.EAGER);
+			assertNotNull(domains);
+		} catch (Exception e) {
+			fail("Unable to get domains "+e.getMessage());
 		}
 	}
 	
@@ -66,6 +84,21 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testGetApplicationWithIdvsName(){
+		try{
+			Application appFromName = manager.get(domainHost+":2809", "application", domainName+"/"+basicApplication.getIdentifier());
+			Application appFromId = manager.get(domainHost+":2809", "application", domainName+"/"+basicApplication.getName());
+			
+			String xmlForAppFromName = TestUtils.getStringFromJAXB(appFromName);
+			String xmlForAppFromId = TestUtils.getStringFromJAXB(appFromId);
+			
+			assertEquals("XML should be the same whether app from name and app from Id ", xmlForAppFromName, xmlForAppFromId);
+		}catch(Exception ex){
+			fail("Unable to retrieve application "+ex.getMessage());
 		}
 	}
 	
@@ -94,9 +127,23 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 		}
 	}
 	
+	@Test
+	public void testGetAll(){
+		try {
+			List<Application> applications = manager.getAll(nameServer, "application", domainName, FetchMode.EAGER);
+			
+			assertTrue("Applications should have data", !applications.isEmpty());
+		
+			String xml = TestUtils.getStringFromJAXB(new ApplicationContainer(applications));
+			logger.info(xml);
+		} catch (Exception e) {
+			fail("Test failure "+e.getLocalizedMessage());
+		}
+	}
+	
 	private void externalApplicationAsserts(Application application){
 		assertEquals("Properties should be here", true, !application.getProperties().isEmpty());
-		assertEquals("Should be three external ports", 3, application.getExternalPorts().size());
+		assertEquals("Should be four external ports", 4, application.getExternalPorts().size());
 	
 		//Make sure external ports contain the externalname
 		List<ExternalPort> ports = application.getExternalPorts();

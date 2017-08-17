@@ -27,12 +27,11 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import redhawk.driver.RedhawkDriver;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.eventchannel.RedhawkEventChannel;
 import redhawk.driver.eventchannel.RedhawkEventChannelManager;
 import redhawk.driver.exceptions.CORBAException;
-import redhawk.driver.exceptions.EventChannelCreationException;
+import redhawk.driver.exceptions.EventChannelException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.testutils.RedhawkTestBase;
@@ -58,7 +57,14 @@ public class RedhawkEventChannelManagerIT extends RedhawkTestBase{
 	}
 	
 	@Test
-	public void testEventChannelManagement() throws EventChannelCreationException, MultipleResourceException, ResourceNotFoundException{
+	public void testDomainIsAvailable(){
+		//When event channel manager was initialized from the DomainManager. EC 
+		//Should have access to DomainManager object
+		assertNotNull(((RedhawkEventChannelManagerImpl)eventChannelManager).getDomainManager());
+	}
+	
+	@Test
+	public void testEventChannelManagement() throws EventChannelException, MultipleResourceException, ResourceNotFoundException{
 		String eventChannelName = "MyEventChannel";
 		Integer initialChannelCount = eventChannelManager.getEventChannels().size();
 		eventChannelManager.createEventChannel(eventChannelName);
@@ -68,7 +74,7 @@ public class RedhawkEventChannelManagerIT extends RedhawkTestBase{
 	}
 	
 	@Test
-	public void snippets() throws MultipleResourceException, CORBAException, EventChannelCreationException, ResourceNotFoundException{
+	public void snippets() throws MultipleResourceException, CORBAException, EventChannelException, ResourceNotFoundException{
 		RedhawkEventChannelManager ecManager = driver.getDomain().getEventChannelManager();
 		
 		//Get the event channels in your domain

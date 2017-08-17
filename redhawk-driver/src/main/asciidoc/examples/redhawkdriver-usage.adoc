@@ -8,7 +8,7 @@ The following code examples explain how to use the `RedhawkDriver` class.
 [source,java,indent=0]
 .`RedhawkDriverIT.java`
 ----
-include::snippets/RedhawkDriverIT.java[lines=69]
+include::snippets/RedhawkDriverIT.java[lines=77]
 ----
 
 === Get a REDHAWK Device Manager  
@@ -16,7 +16,7 @@ include::snippets/RedhawkDriverIT.java[lines=69]
 [source,java,indent=0]
 .`RedhawkDriverIT.java`
 ----
-include::snippets/RedhawkDriverIT.java[lines=80..83]
+include::snippets/RedhawkDriverIT.java[lines=88..92]
 ----
 
 === Get a REDHAWK Device  
@@ -24,7 +24,7 @@ include::snippets/RedhawkDriverIT.java[lines=80..83]
 [source,java,indent=0]
 .`RedhawkDriverIT.java`
 ----
-include::snippets/RedhawkDriverIT.java[lines=93..97]
+include::snippets/RedhawkDriverIT.java[lines=102..106]
 ----
 
 === Get a REDHAWK Application 
@@ -32,7 +32,7 @@ include::snippets/RedhawkDriverIT.java[lines=93..97]
 [source,java,indent=0]
 .`RedhawkDriverIT.java`
 ----
-include::snippets/RedhawkDriverIT.java[lines=138]
+include::snippets/RedhawkDriverIT.java[lines=171..172]
 ----
 
 === Get a REDHAWK Component 
@@ -40,7 +40,7 @@ include::snippets/RedhawkDriverIT.java[lines=138]
 [source,java,indent=0]
 .`RedhawkDriverIT.java`
 ----
-include::snippets/RedhawkDriverIT.java[lines=143]
+include::snippets/RedhawkDriverIT.java[lines=177]
 ----
 
 === Get a REDHAWK Component's Port
@@ -48,7 +48,7 @@ include::snippets/RedhawkDriverIT.java[lines=143]
 [source,java,indent=0]
 .`RedhawkDriverIT.java`
 ----
-include::snippets/RedhawkDriverIT.java[lines=147]
+include::snippets/RedhawkDriverIT.java[lines=181]
 ----
 
 === Helper Utility Examples 
@@ -58,6 +58,12 @@ The `RedhawkDriver` includes helper utilities to enable users to easily access t
 [source,java,indent=0]
 .`RedhawkDriverIT.java`
 ----
-include::snippets/RedhawkDriverIT.java[lines=103..108]
+include::snippets/RedhawkDriverIT.java[lines=112..114]
 ----
+[source,java,indent=0]
+----
+include::snippets/RedhawkDriverIT.java[lines=135..137]
+----
+
+
 

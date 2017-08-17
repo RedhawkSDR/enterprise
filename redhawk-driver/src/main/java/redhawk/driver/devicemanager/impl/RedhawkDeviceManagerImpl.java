@@ -47,7 +47,6 @@ import CF.DeviceManagerHelper;
 import CF.InvalidObjectReference;
 import CF.Resource;
 import CF.ResourceHelper;
-import redhawk.driver.RedhawkLogLevel;
 import redhawk.driver.base.impl.QueryableResourceImpl;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.device.impl.RedhawkDeviceImpl;
@@ -59,6 +58,7 @@ import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.exceptions.ServiceRegistrationException;
+import redhawk.driver.logging.RedhawkLogLevel;
 import redhawk.driver.properties.RedhawkSimple;
 
 public class RedhawkDeviceManagerImpl extends QueryableResourceImpl<DeviceManager> implements RedhawkDeviceManager  {
@@ -74,6 +74,17 @@ public class RedhawkDeviceManagerImpl extends QueryableResourceImpl<DeviceManage
     }
     
     public void shutdown() {
+		/*
+		 * Check to see if this was a driver registered device manager. 
+		 * If so remove from the driver list
+		 */
+		String key = domainManager.getName()+":"+this.getName();
+		
+		//If key exist remove from list
+		if(domainManager.getDriverRegisteredDeviceManagers().containsKey(key)){
+			domainManager.getDriverRegisteredDeviceManagers().remove(key);
+		}
+		
 		this.getCorbaObject().shutdown();
     }
     
@@ -254,5 +265,25 @@ public class RedhawkDeviceManagerImpl extends QueryableResourceImpl<DeviceManage
 	@Override
 	public void setLogLevel(RedhawkLogLevel level) {
 		throw new UnsupportedOperationException("DeviceManager does not implement the CORBA Logging interface.");		
+	}
+
+	@Override
+	public String deviceConfigurationProfile() {
+		return this.getCorbaObject().deviceConfigurationProfile();
+	}
+
+	@Override
+	public String getComponentImplemantation() throws MultipleResourceException {
+		//Should only be one device per deviceManager
+		RedhawkDevice rhDevice = null;
+		for(RedhawkDevice device : this.getDevices()) {
+			if(rhDevice==null)
+				rhDevice = device;
+			else
+				throw new MultipleResourceException("Get Implementation from specific device since multipe devices are "
+						+ "available for this DeviceManager");
+		}
+		
+		return this.getCorbaObject().getComponentImplementationId(rhDevice.getIdentifier());
 	}
 }

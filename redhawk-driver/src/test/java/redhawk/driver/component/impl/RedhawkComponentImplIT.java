@@ -116,6 +116,27 @@ public class RedhawkComponentImplIT extends RedhawkTestBase{
 		}
 	}
 	
+	@Test
+	public void testComponentProcessId() {
+		for(RedhawkComponent component : components) {
+			assertNotNull(component.getProcessId());
+		}
+	}
+	
+	@Test
+	public void testComponentImplementation() {
+		for(RedhawkComponent component : components) {
+			assertNotNull(component.getComponentImplementation());
+		}
+	}
+	
+	@Test
+	public void testComponentDevice() {
+		for(RedhawkComponent component : components) {
+			assertNotNull(component.getComponentDevice());
+		}
+	}
+	
 	@After
 	public void shutdown() throws ApplicationReleaseException, ConnectionException, ResourceNotFoundException, IOException, CORBAException{
 		//Release application and clean it up from $SDRROOT

@@ -1,0 +1,22 @@
+[NOTE]
+====
+`nameserver` is the host/IP and the port of the omniNames server. This configuration is found in your
+`omniORB.cfg` file, and the line specifying the configuration is similar to the following:
+
+----
+InitRef = NameService=corbaname::127.0.0.1:2809
+----
+
+Use that host and port combination for the `nameserver` parameter in your URL. Below is the structure of a base
+URL for the REDHAWK REST endpoints:
+
+----
+http://{host}:8181/cxf/redhawk/{nameserver host}:{nameserver port}
+----
+
+If you are using the REDHAWK Connector, you can replace `nameserver` and `port` with the connection name you specified when you created the connection. Refer to the <<REDHAWK Connector>> chapter for more details.
+
+----
+http://{host}:8181/cxf/redhawk/{redhawk-connect-name}
+----
+====

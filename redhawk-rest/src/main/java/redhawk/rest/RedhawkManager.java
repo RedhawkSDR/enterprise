@@ -38,21 +38,23 @@ import redhawk.driver.RedhawkDriver;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.base.QueryableResource;
 import redhawk.driver.component.RedhawkComponent;
+import redhawk.driver.device.AdminState;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.device.impl.RedhawkDeviceImpl;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.domain.RedhawkDomainManager;
+import redhawk.driver.domain.impl.RedhawkDomainManagerImpl;
 import redhawk.driver.eventchannel.impl.RedhawkEventRegistrant;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ApplicationStartException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
-import redhawk.driver.exceptions.EventChannelCreationException;
 import redhawk.driver.exceptions.EventChannelException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.port.RedhawkPortStatistics;
+import redhawk.driver.port.RedhawkStreamSRI;
 import redhawk.driver.properties.RedhawkProperty;
 import redhawk.driver.properties.RedhawkSimple;
 import redhawk.driver.properties.RedhawkSimpleSequence;
@@ -66,11 +68,12 @@ import redhawk.rest.model.FullProperty;
 import redhawk.rest.model.PortStatisticsContainer;
 import redhawk.rest.model.Property;
 import redhawk.rest.model.PropertyContainer;
+import redhawk.rest.model.RegisterRemoteDomain;
+import redhawk.rest.model.SRIContainer;
 import redhawk.rest.model.TunerMode;
 import redhawk.rest.model.WaveformInfo;
 
 public class RedhawkManager {
-
 	private static Log logger = LogFactory.getLog(RedhawkManager.class);
 
 	private List<ServiceReference<Redhawk>> redhawkDriverServices;
@@ -95,16 +98,50 @@ public class RedhawkManager {
 			}
 		}
 	}
-
+	
 	public <T> T get(String nameServer, String type, String... location) throws ResourceNotFoundException, Exception {
-		Redhawk redhawk = getDriverInstance(nameServer);
-		return (T) converter.convert(type, internalGet(redhawk, type, location));
+		Redhawk redhawk = null;
+		try {
+			redhawk = getDriverInstance(nameServer);
+			return (T) converter.convert(type, internalGet(redhawk, type, location));	
+		}finally{
+			if(redhawk!=null)
+				redhawk.disconnect();
+		}
 	}
 
+	public void registerRemoteDomain(String nameServer, String type, String location, RegisterRemoteDomain registerRequest) throws Exception {
+		Redhawk redhawk;
+		try {
+			redhawk = getDriverInstance(nameServer);
+			
+			RedhawkDomainManager dom = internalGet(redhawk, type, location);
+			
+			dom.registerRemoteDomainManager(registerRequest.getDomainName(), registerRequest.getNameServerHost(), 
+					registerRequest.getNameServerPort());
+		} catch (Exception e) {
+			throw new Exception("Unable to register remote domain manager "+e.getMessage());
+		}
+	}
+	
+	public void unregisterRemoteDomain(String nameServer, String type, String location, String remoteDomainName) throws Exception {
+		Redhawk redhawk;
+		try {
+			redhawk = getDriverInstance(nameServer);
+			
+			RedhawkDomainManager dom = internalGet(redhawk, type, location);
+			
+			dom.unregisterRemoteDomainManager(remoteDomainName);
+		} catch (Exception e) {
+			throw new Exception("Unable to unregister remote domain manager "+e.getMessage());
+		}
+	}
+	
 	public <T> PortStatisticsContainer getRhPortStatistics(String nameServer, String type, String location)
 			throws Exception {
 		Redhawk redhawk = getDriverInstance(nameServer);
-		T port = internalGet(redhawk, type, location);
+		String[] locationArray = location.split("/");
+		T port = internalGet(redhawk, type, locationArray);
 		List<RedhawkPortStatistics> stats = new ArrayList<>();
 
 		if (port instanceof RedhawkPort) {
@@ -112,6 +149,38 @@ public class RedhawkManager {
 			stats.addAll(rhPort.getPortStatistics());
 		}
 		return new PortStatisticsContainer(stats);
+	}
+	
+	public <T> SRIContainer getSRI(String nameServer, String type, String location)
+			throws Exception {
+		Redhawk redhawk = getDriverInstance(nameServer);
+		String[] locationArray = location.split("/");
+		T port = internalGet(redhawk, type, locationArray);
+		List<RedhawkStreamSRI> sri = new ArrayList<>();
+
+		if (port instanceof RedhawkPort) {
+			RedhawkPort rhPort = (RedhawkPort) port;
+			sri.addAll(rhPort.getActiveSRIs());
+		}
+		
+		return new SRIContainer(sri);
+	}
+	
+	public <T> void disconnectConnectionById(String nameServer, String type, String portLocation, String connectionId) throws Exception {
+		try {
+			Redhawk redhawk = getDriverInstance(nameServer);
+			
+			String[] locationArray = portLocation.split("/");
+			
+			T port = internalGet(redhawk, type, locationArray);
+			if(port instanceof RedhawkPort){
+				RedhawkPort rhPort = (RedhawkPort) port;
+				rhPort.disconnect(connectionId);
+			}
+		} catch (Exception e) {
+			logger.error("Error disconnecting port "+e.getMessage());
+			throw new Exception("Error disconnecting port", e);
+		}
 	}
 
 	public void deleteEventChannel(String nameServer, String domainName, String eventChannelName) {
@@ -142,7 +211,7 @@ public class RedhawkManager {
 		} catch (ResourceNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (EventChannelCreationException e) {
+		} catch (EventChannelException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
@@ -180,7 +249,7 @@ public class RedhawkManager {
 		} catch (ResourceNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (EventChannelCreationException e) {
+		} catch (EventChannelException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
@@ -462,6 +531,40 @@ public class RedhawkManager {
 			}
 		}
 	}
+	
+	public void setAdminState(String nameServer, String deviceLocation, AdminState state) throws Exception {
+		// TODO: Refactor to clean this code up
+		Redhawk redhawk = null;
+		boolean createdNewInstance = false;
+
+		try {
+			if (redhawkDrivers.get(nameServer) != null) {
+				redhawk = redhawkDrivers.get(nameServer);
+			} else {
+				if (nameServer.contains(":")) {
+					String[] hostAndPort = nameServer.split(":");
+					redhawk = new RedhawkDriver(hostAndPort[0], Integer.parseInt(hostAndPort[1]));
+					createdNewInstance = true;
+				} else {
+					throw new ResourceNotFoundException(
+							"You did not specify a valid host and port to the REDHAWK name server. An example of a valid url is: localhost:2809");
+				}
+			}
+
+			try {
+				RedhawkDevice device = redhawk.getDevice(deviceLocation);
+
+				device.adminState(state);
+			} catch (ResourceNotFoundException | MultipleResourceException | CORBAException ex) {
+				logger.debug("Issue allocating Device at this location: " + deviceLocation);
+				throw new Exception("Unable allocate Device", ex);
+			}
+		} finally {
+			if (redhawk != null && createdNewInstance) {
+				redhawk.disconnect();
+			}
+		}
+	}
 
 	public List<Map<String, Object>> getTuners(String nameServer, String deviceLocation, TunerMode mode)
 			throws Exception {
@@ -556,7 +659,6 @@ public class RedhawkManager {
 	public <T> List<T> getAll(String nameServer, String type, String location, FetchMode fetchMode)
 			throws ResourceNotFoundException, Exception {
 		Redhawk redhawk = null;
-		boolean createdNewInstance = false;
 
 		try {
 			if (redhawkDrivers.get(nameServer) != null) {
@@ -565,7 +667,6 @@ public class RedhawkManager {
 				if (nameServer.contains(":")) {
 					String[] hostAndPort = nameServer.split(":");
 					redhawk = new RedhawkDriver(hostAndPort[0], Integer.parseInt(hostAndPort[1]));
-					createdNewInstance = true;
 				} else {
 					throw new ResourceNotFoundException(
 							"You did not specify a valid host and port to the REDHAWK name server. An example of a valid url is: localhost:2809");
@@ -575,7 +676,7 @@ public class RedhawkManager {
 			return (List<T>) converter.convertAll(type, internalGetAll(redhawk, type, location), fetchMode);
 
 		} finally {
-			if (redhawk != null && createdNewInstance) {
+			if (redhawk != null) {
 				redhawk.disconnect();
 			}
 		}
@@ -696,18 +797,32 @@ public class RedhawkManager {
 			}
 		});
 	}
-
+	
 	private <T> T internalGet(Redhawk redhawk, String type, String... location)
 			throws ResourceNotFoundException, Exception {
 		switch (type) {
 		case "domain":
-			return (T) redhawk.getDomain(location[0]);
+			RedhawkDomainManager domain = null;
+			try {
+				domain = redhawk.getDomain(location[0]);
+			}catch(Exception ex) {
+				//Try get the domain as a remote domain
+				logger.warn("Can't find domain name on local nameserver. Attempting to get remote domain. Note:"
+						+" This will only work w/ REST if remote Domain was registered via the REDHAWK Driver.");
+				RedhawkDomainManagerImpl impl = (RedhawkDomainManagerImpl) domain;
+				if(impl.getDriverRegisteredRemoteDomainManager().containsKey(location[0])) {
+					domain = impl;
+				}else {
+					throw new ResourceNotFoundException("Issue finding resource "+location[0]);
+				}
+			}
+			return (T) domain;
 		case "application":
 			return (T) redhawk.getApplication(location[0]);
 		case "applicationport":
-			// Get location
-			String appAddress = location[0];
-			String portName = location[1];
+			// Location array should be of this for <Domain Name>/<application>/<port>
+			String appAddress = location[0]+"/"+location[1];
+			String portName = location[2];
 			return (T) redhawk.getApplication(appAddress).getPort(portName);
 		case "devicemanager":
 			return (T) redhawk.getDeviceManager(location[0]);
@@ -918,6 +1033,5 @@ public class RedhawkManager {
 			}
 		}).collect(Collectors.toList());
 		return newValues.toArray();
-	}
-
+	}	
 }

@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>redhawk</groupId>
 		<artifactId>redhawk-enterprise-integration</artifactId>
-		<version>2.1.1-SNAPSHOT</version>
+		<version>2.1.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>redhawk-driver</artifactId>
 	<packaging>bundle</packaging>
@@ -29,14 +29,23 @@
 			</resource>
 		</resources>
 		<plugins>
-			<!-- Having issues building with 1.8 due to JAVADOC errors adding this 
-				for now -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<!-- Excluding generated classes from xsd -->
+						<exclude>redhawk/driver/xml/**</exclude>
+					</excludes>
+				</configuration>
+			</plugin>	
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.10.4</version>
 				<configuration>
 					<failOnError>false</failOnError>
+					<additionalparam>-Xdoclint:none</additionalparam>
 				</configuration>
 				<executions>
 					<execution>
@@ -131,8 +140,8 @@
 						</goals>
 						<configuration>
 							<includes>
-         						<include>**/testutils/**</include>
-        					</includes>
+								<include>**/testutils/**</include>
+							</includes>
 						</configuration>
 					</execution>
 				</executions>
@@ -320,7 +329,7 @@
 											<directory>src/test/java/redhawk/driver/device/impl</directory>
 											<targetPath>examples/snippets</targetPath>
 											<includes>
-												<include>RedhawkDeviceImplMT.java</include>
+												<include>RedhawkDeviceImplIT.java</include>
 											</includes>
 										</resource>
 										<resource>
@@ -328,6 +337,41 @@
 											<targetPath>examples/snippets</targetPath>
 											<includes>
 												<include>MessageConsumerPortIT.java</include>
+											</includes>
+										</resource>
+										<resource>
+											<directory>src/test/java/redhawk/driver/port/impl</directory>
+											<targetPath>examples/snippets</targetPath>
+											<includes>
+												<include>RedhawkPortImplIT.java</include>
+											</includes>
+										</resource>										
+										<resource>
+											<directory>src/test/java/redhawk/driver/logging</directory>
+											<targetPath>examples/snippets</targetPath>
+											<includes>
+												<include>RedhawkLoggingIT.java</include>
+											</includes>
+										</resource>
+										<resource>
+											<directory>src/test/java/redhawk/driver/allocationmanager</directory>
+											<targetPath>examples/snippets</targetPath>
+											<includes>
+												<include>RedhawkAllocationManagerIT.java</include>
+											</includes>
+										</resource>
+										<resource>
+											<directory>src/test/java/redhawk/driver/connectionmanager</directory>
+											<targetPath>examples/snippets</targetPath>
+											<includes>
+												<include>RedhawkConnectionManagerIT.java</include>
+											</includes>
+										</resource>
+										<resource>
+											<directory>src/test/java/redhawk/driver/eventchannel/impl</directory>
+											<targetPath>examples/snippets</targetPath>
+											<includes>
+												<include>RedhawkEventChannelIT.java</include>
 											</includes>
 										</resource>
 										<resource>
@@ -339,13 +383,6 @@
 							</execution>
 						</executions>
 					</plugin>
-					<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-site-plugin</artifactId> 
-						<configuration> <asciidoc> <baseDir>${project.basedir}</baseDir> <sourceDir>src/test/java</sourceDir> 
-						<attributes> <source-highlighter>coderay</source-highlighter> <coderay-css>style</coderay-css> 
-						</attributes> </asciidoc> </configuration> <dependencies> <dependency> <groupId>org.apache.maven.doxia</groupId> 
-						<artifactId>doxia-module-markdown</artifactId> <version>1.7</version> </dependency> 
-						<dependency> <groupId>org.asciidoctor</groupId> <artifactId>asciidoctor-maven-plugin</artifactId> 
-						<version>1.5.3</version> </dependency> </dependencies> </plugin> -->
 					<plugin>
 						<groupId>org.asciidoctor</groupId>
 						<artifactId>asciidoctor-maven-plugin</artifactId>
@@ -420,16 +457,6 @@
 					</plugin>
 				</plugins>
 			</build>
-			<!-- <reporting> <plugins> <plugin> <groupId>org.apache.maven.plugins</groupId> 
-				<artifactId>maven-project-info-reports-plugin</artifactId> <version>2.9</version> 
-				<reportSets> <reportSet> <reports> <report>dependency-info</report> <report>summary</report> 
-				</reports> </reportSet> </reportSets> </plugin> <plugin> <groupId>org.apache.maven.plugins</groupId> 
-				<artifactId>maven-javadoc-plugin</artifactId> <version>2.10.4</version> <configuration> 
-				<failOnError>false</failOnError> </configuration> <reportSets> <reportSet> 
-				<id>default</id> <reports> <report>javadoc</report> </reports> </reportSet> 
-				</reportSets> </plugin> <plugin> <groupId>org.jacoco</groupId> <artifactId>jacoco-maven-plugin</artifactId> 
-				<reportSets> <reportSet> <reports> <report>report</report> </reports> </reportSet> 
-				</reportSets> </plugin> </plugins> </reporting> -->
 		</profile>
 		<profile>
 			<id>jacorb-tests</id>

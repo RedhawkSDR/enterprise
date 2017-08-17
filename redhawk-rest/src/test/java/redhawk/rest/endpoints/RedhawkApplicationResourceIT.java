@@ -63,9 +63,23 @@ public class RedhawkApplicationResourceIT extends RedhawkResourceTestBase{
 	}
 	
 	@Test
+	public void testGetApplicationsStress() throws InterruptedException{
+		/*
+		 * Stress test the applications.json endpoint since GUI is giving you 
+		 * NPE that seems to work just fine on first hit. 
+		 */
+		for(int i=0; i<10; i++){
+			WebTarget target = client.target(baseURI+"/"+domainName+"/applications");
+			Response response = target.request().accept(MediaType.APPLICATION_XML).get();
+			assertEquals(200, response.getStatus());	
+		}
+	}
+	
+	@Test
 	public void testGetApplication(){
 		WebTarget target = client.target(baseURI+"/"+domainName+"/applications/"+applicationName);
 		Response response = target.request().accept(MediaType.APPLICATION_XML).get();
+		
 		assertEquals(200, response.getStatus());
 	}
 	
@@ -116,9 +130,18 @@ public class RedhawkApplicationResourceIT extends RedhawkResourceTestBase{
 			
 			WebTarget target = client.target(baseURI+"/"+domainName+"/applications/"+exApplicationName+"/properties");
 			
-			Response response = target.request().accept(MediaType.APPLICATION_XML).get();
-
+			Response appPropertiesResponse = target.request().accept(MediaType.APPLICATION_XML).get();
 			
+			//Test properties response
+			assertEquals(200, appPropertiesResponse.getStatus());
+			
+			target = client.target(baseURI+"/"+domainName+"/applications/"+exApplicationName+"/ports/hardLimitPort");
+			Response appPortResponse = target.request(MediaType.APPLICATION_XML).get();
+			assertEquals(200, appPortResponse.getStatus());
+			
+			target = client.target(baseURI+"/"+domainName+"/applications/"+exApplicationName+"/ports/hardLimitPort/statistics");
+			Response appPortStatisticsResponse = target.request(MediaType.APPLICATION_XML).get();
+			assertEquals(200, appPortStatisticsResponse.getStatus());
 		} catch (MultipleResourceException | ApplicationCreationException | CORBAException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -134,9 +157,8 @@ public class RedhawkApplicationResourceIT extends RedhawkResourceTestBase{
 				}				
 			}
 		}
-
 	}
-	
+
 	@Test
 	@Ignore("Temporarily ignore until you figure out why provider is not working in Integration Tests w/ JSON but works on deployed asset")
 	public void testLaunchAndReleaseApplicationJSON(){

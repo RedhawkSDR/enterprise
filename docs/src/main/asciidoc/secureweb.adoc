@@ -1,0 +1,168 @@
+=== Web Server Configuration
+
+The web endpoints <<REDHAWK REST>> and websocket endpoints <<REDHAWK WebSocket>> are all hosted by a http://www.eclipse.org/jetty/documentation/[Jetty] server running inside of your Karaf container. Karaf uses https://ops4j1.jira.com/wiki/display/paxweb/Pax+Web[Pax Web] to manage your Jetty instance in an OSGi environment. 
+
+==== Pax Web Config
+
+The `org.ops4j.pax.web.cfg` has the parameters necessary for Pax to configure your Jetty server in the OSGi (Karaf in our case) environment. Using Pax Web to manage your Jetty instance enables hot deployment (allowing you to update the Pax Web configuration and the changes take place without restarting your Karaf). By default, SSL is setup through Pax Web. For more information, refer to the https://ops4j1.jira.com/wiki/display/paxweb/SSL+Configuration[SSL Configuration] section of Pax Web documentation.
+
+===== Certificates
+
+The keystore and truststore information is contained in `systems.properties`, and standard `javax.net.ssl.*` properties are used to set them. This is useful because if you have other bundles that need keystore or truststore information, it can be retrieved in this one location. 
+
+* `javax.net.ssl.keyStore`: Path to your key store.
+* `javax.net.ssl.keyStorePassword`: Password for your key store.
+* `javax.net.ssl.keyStoreType`: Type for your key store. 
+* `javax.net.ssl.trustStore`: Path to your trust store.
+* `javax.net.ssl.trustStorePassword`: Password for your trust store.
+* `javax.net.ssl.trustStoreType`: Type for your trust store.
+
+===== Update HTTP Port
+
+To change your http port, update the `org.osgi.service.http.port` property. By default, this is 8181.
+
+===== Update HTTPS Port
+
+To change your https port, update the `org.osgi.service.http.port.secure` property. By default, this is 8182. 
+
+===== Disable HTTP
+
+To disable http, set `org.osgi.service.http.enabled` to false instead of true.
+
+===== Disable HTTPS
+
+To disable https, set `org.osgi.service.http.secure.enabled` to false instead of true.
+
+===== Cipher Suites and other Security Configs
+
+You can enable and disable numerous cipher suites via your `org.ops4j.pax.web.cfg/jetty.xml` file. The available ciphers are dependent on the version of the JRE/JDK, browser type/version, and the security posture applicable to your situation. Because of this variation, cipher suites have not been included/excluded in the default configuration. 
+
+* `org.ops4j.pax.web.ssl.ciphersuites.included`: Included SSL/TLS Cipher Suites Regex.
+* `org.ops4j.pax.web.ssl.ciphersuites.excluded`: Excluded SSL/TLS Cipher Suites Regex.
+* `org.ops4j.pax.web.ssl.protocols.included`: Included SSL/TLS Protocols.
+* `org.ops4j.pax.web.ssl.protocols.excluded`: Excluded SSL/TLS Protocols.
+* `org.ops4j.pax.web.ssl.renegotiationAllowed`: SSL Renegotiation allowed, is defaulted to true. 
+
+Additional Info:
+
+* http://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html#InstallationAndCustomization[Customizing JSSE]
+* https://typesafehub.github.io/ssl-config/CipherSuites.html[More Cipher Details]
+* JDK/JRE security properties file is located in `${JAVA_HOME}/lib/security/java.security`.
+
+===== Logging
+
+Pax Web logs have been preconfigured to go in the `${karaf.data}/pax-web/pax-web.log` file. You can find the log configuration in `org.ops4j.pax.logging.cfg`. If you need to see additional logs, update the logger `log4j.logger.org.eclipse.pax.web` to your desired state. 
+
+===== Additional Pax Web Information
+
+To set up additional Jetty configuration information (for example, login modules, connectors, and so forth), use an external `jetty.xml` file. This property is set via:
+
+* `org.ops4j.pax.web.config.file`: By default, this file is in `${karaf.base}/etc/jetty.xml`. 
+
+For more information, refer to https://ops4j1.jira.com/wiki/spaces/paxweb/pages/12059279/Advanced+Jetty+Configuration[Advanced Jetty Configuration]. Pax Web can also be configured via the web using the `Pax Web Runtime` configuration available in your `system/console/configMgr` endpoint provided by Karaf. 
+
+==== Jetty Configuration
+
+Jetty configuration can be found in `${karaf.base}/etc/jetty.xml`. The jetty configuration sets up the login modules for your HTTP server. For more information about Jetty and JAAS support, refer to the http://www.eclipse.org/jetty/documentation/9.4.x/jaas-support.html[JAAS Support] section of the Jetty docs. For information on the Login Service that is preconfigured in your container, refer to the http://www.eclipse.org/jetty/documentation/9.4.x/jaas-support.html#_a_closer_look_at_jaasloginservice[JAASLoginService] section.
+
+As previously mentioned, SSL/TLS params can be configured via the `org.ops4j.pax.web.cfg`; however, you can configure everything via the `jetty.xml` file. For more information, refer to the https://www.eclipse.org/jetty/documentation/9.4.6.v20170531/configuring-ssl.html[Configuring SSL/TLS] section of the Jetty documentation.
+
+===== SSL Configuration via Jetty
+
+If you prefer to use Jetty to configure your SSL, you can add the following to the `jetty.xml` for a minimum SSL/TLS configuration. 
+
+[source,xml]
+-----
+<!-- =========================================================== -->
+	<!-- SSL Configuration below -->
+	<!-- Set up sslContext Factory with standard javax properties -->
+	<!-- Latest docs: https://www.eclipse.org/jetty/documentation/9.4.x/configuring-ssl.html, remember to 
+		use docs relevant to jetty available in your karaf instance
+	 -->
+	<New id="sslContextFactory" class="org.eclipse.jetty.util.ssl.SslContextFactory">
+		<Set name="KeyStorePath"><SystemProperty name="javax.net.ssl.keyStore" /></Set>
+		<Set name="KeyStorePassword"><SystemProperty name="javax.net.ssl.keyStorePassword" /></Set>
+		<Set name="KeyManagerPassword"><SystemProperty name="javax.net.ssl.keyStorePassword" /></Set>
+		<Set name="TrustStorePath"><SystemProperty name="javax.net.ssl.keyStore" /></Set>
+		<Set name="TrustStorePassword"><SystemProperty name="javax.net.ssl.keyStorePassword" /></Set>
+		<Set name="renegotiationAllowed">FALSE</Set>		
+	</New>
+	
+	<New id="httpsConnector" class="org.eclipse.jetty.server.ServerConnector">
+		<Arg name="server"><Ref refid="Server"/></Arg>
+		<Arg name="factories">
+			<Array type="org.eclipse.jetty.server.ConnectionFactory">
+              <Item>
+                <New class="org.eclipse.jetty.server.SslConnectionFactory">
+                  <Arg name="next">http/1.1</Arg>
+                  <Arg name="sslContextFactory"><Ref refid="sslContextFactory"/></Arg>
+                </New>
+              </Item>
+              <Item>
+                <New class="org.eclipse.jetty.server.HttpConnectionFactory">
+                  <Arg name="config"><Ref refid="httpConfig"/></Arg>
+                </New>
+              </Item>
+       		</Array>		
+		</Arg>
+		<Set name="name">redhawkHTTPS</Set>
+	</New>
+	
+	<Call name="addConnector">
+		<Arg>
+			<Ref refid="httpsConnector"/>
+		</Arg>
+	</Call>
+-----
+
+===== JAASLoginService
+
+By default, a `JAASLoginService` has been configured for you in the `jetty.xml` file:
+
+[source,xml]
+-----
+	<Call name="addBean">
+		<Arg>
+			<New class="org.eclipse.jetty.jaas.JAASLoginService">
+				<Set name="name">karaf</Set>
+				<Set name="loginModuleName">karaf</Set>
+				<Set name="roleClassNames">
+					<Array type="java.lang.String">
+						<Item>org.apache.karaf.jaas.boot.principal.RolePrincipal
+						</Item>
+					</Array>
+				</Set>
+			</New>
+		</Arg>
+	</Call>
+	<Call name="addBean">
+		<Arg>
+			<New class="org.eclipse.jetty.jaas.JAASLoginService">
+				<Set name="name">default</Set>
+				<Set name="loginModuleName">karaf</Set>
+				<Set name="roleClassNames">
+					<Array type="java.lang.String">
+						<Item>org.apache.karaf.jaas.boot.principal.RolePrincipal
+						</Item>
+					</Array>
+				</Set>
+			</New>
+		</Arg>
+	</Call>
+-----
+
+The configuration above configures Jetty to have a login module using the default `karaf` user. For more information on Karaf Security (such as updating user passwords, protecting the console, and so forth), refer to the https://karaf.apache.org/manual/latest/security[console security] and https://karaf.apache.org/manual/latest/#_security[Karaf security] sections of the Karaf manual. 
+
+===== Cipher Suites
+
+For information about adding/excluding ciphers, refer to the https://www.eclipse.org/jetty/documentation/9.4.6.v20170531/configuring-ssl.html#configuring-sslcontextfactory-cipherSuites[Disabling/Endabling Specific Cipher Suites] section of the Jetty documentation.
+
+===== Password Obfuscation
+
+By default, the passwords for your keystore/truststore are stored in plain text. If you want to obfuscate the passwords, Jetty provides utilities to do so. For more information, refer to the http://www.eclipse.org/jetty/documentation/9.4.x/configuring-security-secure-passwords.html[Secure Password Obfuscation]. The jar necessary for generating the obsfucated password can be found in `${karaf.base}/system/org/eclipse/jetty/jetty-util/{jetty.version}/jetty-util-{jetty.version}`.jar. 
+
+===== Logging
+
+Jetty logs have been preconfigured to go in the `${karaf.data}/jetty/jetty.log` file. The log configuration is in `org.ops4j.pax.logging.cfg`. If you need to see additional logs, update the logger `log4j.logger.org.eclipse.jetty` to your desired state.
+
+*Note: There are many versions of Jetty. Make sure you are accessing the documentation for the version of Jetty found in your Karaf container.* 

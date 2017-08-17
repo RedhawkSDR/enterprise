@@ -23,7 +23,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -34,6 +36,9 @@ import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
 
 import BULKIO.PrecisionUTCTime;
+import BULKIO.UsesPortStatistics;
+import BULKIO.UsesPortStatisticsProvider;
+import BULKIO.UsesPortStatisticsProviderHelper;
 import BULKIO.dataChar;
 import BULKIO.dataDouble;
 import BULKIO.dataFile;
@@ -66,16 +71,33 @@ public class RedhawkPortImpl implements RedhawkPort {
 	private static Logger logger = Logger.getLogger(RedhawkPortImpl.class.getName());
 
 	private static final long serialVersionUID = 1L;
-    private Object port;
+    
+	/**
+     * CORBA Object representing port  
+     */
+	private Object port;
+    
+	/**
+	 * CORBA Object representing port being connected too 
+	 */
+	private CF.Port remotePort;
+	
     private ORB orb; 
     private String connectionId;
     private String repId;
     private String portName;
     private String portType;
-    private DataTypeFactory factory; 
-    private List<String> connectionIds = new ArrayList<String>();
-    private List<BulkIOData> dataConnections = new ArrayList<BulkIOData>();
-	private static List<DataTypes> dataTypeList = new ArrayList<DataTypes>();
+    private DataTypeFactory factory;
+    
+    //TODO: connectionId should be mapping to a data connection refactor
+    //private List<String> connectionIds = new ArrayList<String>();
+    //private List<BulkIOData> dataConnections = new ArrayList<BulkIOData>();
+	/**
+	 * Connections that are managed via the driver. 
+	 */
+    private Map<String, BulkIOData> driverManagedConnections = new HashMap<>();
+	
+    private static List<DataTypes> dataTypeList = new ArrayList<DataTypes>();
 	
     static {
     	dataTypeList.add(DataTypes.DATA_FLOAT);
@@ -125,8 +147,8 @@ public class RedhawkPortImpl implements RedhawkPort {
 	
 	public <T> void send(Packet<T> packet) throws Exception {
 		
-		if(portType.equalsIgnoreCase(RedhawkPort.PORT_TYPE_PROVIDES)){
-			throw new PortException("Provides ports do not implement send()");		
+		if(portType.equalsIgnoreCase(RedhawkPort.PORT_TYPE_USES)){
+			throw new PortException("Uses ports do not implement send()");		
 		}
 		
 		boolean endOfDataStream = packet.isEndOfStream(); 
@@ -254,6 +276,8 @@ public class RedhawkPortImpl implements RedhawkPort {
         java.lang.Object poaTie = null;
         Method meth = null;
         
+        //TODO: At this point we should have the info to know exactly which dataType the port is 
+        //So why do we go through this list...
         for(DataTypes dataType : dataTypeList){
 	        c = Class.forName(dataType.poaTieClass, true, classloader).getConstructor(Class.forName(dataType.operationsClass, true, classloader));
 	        BulkIOData dataConnection = new BulkIOData(portListener);
@@ -261,17 +285,17 @@ public class RedhawkPortImpl implements RedhawkPort {
 	        meth = poaTie.getClass().getSuperclass().getMethod("_this", ORB.class);
 	        org.omg.CORBA.Object pipeline = (Object)meth.invoke(poaTie, orb);    	
 	        
-	    	String connectionId = UUID.randomUUID().toString();
+	    	String connectionId = "REI_"+UUID.randomUUID().toString();
 	    	try {
 	    		if(portType.equalsIgnoreCase("provides")){
 	    			throw new UnsupportedOperationException("You cannot connect to an input (provides) port.  Only output (uses) ports are allowed.");
 	    		}
-				Port remotePort = PortHelper.narrow(port);
+				remotePort = PortHelper.narrow(port);
 				remotePort.connectPort(pipeline, connectionId);
 				
 	    		foundValidPort = true;
-	    		dataConnections.add(dataConnection);
-	    		connectionIds.add(connectionId);
+	    		
+	    		driverManagedConnections.put(connectionId, dataConnection);
 	    		break;
 	    	} catch(BAD_PARAM e){
 	    		logger.fine("PROB with: " + dataType.poaTieClass);
@@ -289,44 +313,77 @@ public class RedhawkPortImpl implements RedhawkPort {
         if(!foundValidPort){
         	throw new Exception("Could Not Locate a Valid BULKIO Data Type for this Port.");
         }
-        
+                
     }
     
+	@Override
     public void disconnect() throws PortException {
 		if(portType.equalsIgnoreCase(RedhawkPort.PORT_TYPE_PROVIDES)){
 			throw new PortException("Provides ports do not implement disconnect()");		
 		}    	
     	
-    	for(BulkIOData data : dataConnections){
-    		data.disconnect();
+		/*
+		 * Disconnection any driver managed connections
+		 */
+    	for(String connectionId : driverManagedConnections.keySet()){
+    		this.disconnect(connectionId);
     	}
     	
-    	for(String connectionId : connectionIds){
-    		try {
-    			
-	    		if(portType.equalsIgnoreCase("provides")){
-	    			throw new UnsupportedOperationException("You cannot disconnect to an input (provides) port.  Only output (uses) ports are allowed.");
-	    		}
-	    		
-				Port remotePort = PortHelper.narrow(port);
-				remotePort.disconnectPort(connectionId);
-			} catch (InvalidPort e) {
-				e.printStackTrace();
-			}
-    	}    	
+    	if(remotePort!=null) {
+    		remotePort._release();
+    	}
     }
     
+	@Override
+	public void disconnect(String connectionId) throws PortException {
+		if(portType.equalsIgnoreCase(RedhawkPort.PORT_TYPE_PROVIDES)){
+			throw new PortException("Provides ports do not implement disconnect()");		
+		} 
+		
+		/*
+		 * If it's a driver managed connection make sure to disconnect 
+		 * BulkIOData
+		 */
+		if(driverManagedConnections.containsKey(connectionId)){
+			BulkIOData data = driverManagedConnections.get(connectionId);
+			data.disconnect();
+		}
+		
+		
+		try {
+			if(remotePort==null) 
+				remotePort = PortHelper.narrow(port);
 
-
+			remotePort.disconnectPort(connectionId);
+		} catch (InvalidPort e) {
+			throw new PortException("Error disconnecting from CF.Port", e);
+		}finally {
+			remotePort._release();
+		}
+	}	
 	
 	@Override
 	public List<RedhawkPortStatistics> getPortStatistics() {
 		List<RedhawkPortStatistics> list = new ArrayList<>(); 
-		if(factory.getStatistics()!=null)
-			list.add(new RedhawkPortStatistics(factory.getStatistics()));
+		if(portType.equalsIgnoreCase("uses")){
+			UsesPortStatisticsProvider stats = UsesPortStatisticsProviderHelper.narrow(this.port);
+			for(UsesPortStatistics stat : stats.statistics()){
+				list.add(new RedhawkPortStatistics(stat.connectionId, stat.statistics));
+			}
+		}else{
+			/*
+			 * Already narrowed down to actual port type no need to narrow again w/ 
+			 * ProvidesPortStatisticsProviderHelper. 
+			 * 
+			 * Note: By doing this you miss out on state in the stats. But user can still get 
+			 * state from the actual port object. 
+			 */
+			if(factory.getStatistics()!=null)
+				list.add(new RedhawkPortStatistics(factory.getStatistics()));		
+		}
 		
 		return list; 
-	}	
+	}
 	
 	@Override
 	public String toString() {
@@ -342,6 +399,5 @@ public class RedhawkPortImpl implements RedhawkPort {
 			builder.append("interfaces=").append(Arrays.toString(port.getClass().getInterfaces()));
 		builder.append("]");
 		return builder.toString();
-	}	
-	
+	}
 }

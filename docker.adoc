@@ -21,7 +21,7 @@ Updating dir perms so you can see it:
 
 Example docker command: 
 ----
-docker run -d -t -v /data/mkwyche/.m2:/root/.m2:rw rei/maven:1.0
+docker run -d -t -v /data/tmp/.m2:/root/.m2:rw rei/maven:1.0
 ----
 
 Blah had to set TMP dir to get dockercompose working:

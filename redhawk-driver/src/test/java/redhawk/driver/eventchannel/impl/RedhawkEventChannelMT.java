@@ -20,12 +20,15 @@
 package redhawk.driver.eventchannel.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.util.Map;
+import java.util.UUID;
 
 import org.junit.Test;
+import org.omg.CosEventChannelAdmin.EventChannel;
 
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.eventchannel.listeners.GenericEventListener;
@@ -46,16 +49,26 @@ public class RedhawkEventChannelMT extends RedhawkTestBase{
 		RedhawkEventChannelImpl impl = (RedhawkEventChannelImpl) driver.getDomain().getEventChannelManager().getEventChannel("IDM_Channel");
 		
 		//Should be 2 registrants
-		assertEquals("Should be 2 registrants from the GPP", 2, impl.getRegistrants(1000).size());
+		assertEquals("Should be atleast 2 registrants from the GPP. Could be more if other tests have run and created registrant", true, impl.getRegistrants(1000).size()>=2);
+	}
+	
+	@Test
+	public void testGetCorbaObj() throws MultipleResourceException, ResourceNotFoundException, EventChannelException, CORBAException{
+		EventChannel channel = driver.getDomain().getEventChannelManager().getEventChannel("IDM_Channel").getCorbaObj();
+		assertNotNull(channel);
 	}
 	
 	@Test
 	public void testUnregister(){
 		try {
-			String subscriptionId = "listenHere";
+			String subscriptionId = "listenHere_"+UUID.randomUUID();
 			
+			//Get Event Channel 
 			RedhawkEventChannelImpl impl = (RedhawkEventChannelImpl) driver.getDomain().getEventChannelManager().getEventChannel("IDM_Channel");
-		
+			
+			//Get number of Registrants
+			Integer initialRegistrants = impl.getRegistrants(1000).size();
+			
 			//Register a Listener
 			impl.subscribe(new MessageListener(){
 				@Override
@@ -66,15 +79,15 @@ public class RedhawkEventChannelMT extends RedhawkTestBase{
 			}, subscriptionId);
 			
 			//Should now be three registrants
-			assertEquals("Should now be 3 registrants", 3, impl.getRegistrants(1000).size());
+			assertEquals("Should now be atleast 3 registrants. Could be more if other tests have created registrant", initialRegistrants+1, impl.getRegistrants(1000).size());
 			
 			//Unregister a registrant you added
-			//TODO: Add a helper method at this level user only needs to know Id
 			impl.unsubscribe(new RedhawkEventRegistrant(subscriptionId, impl.getName(), null));
 			
-			assertEquals("Should now be 2 registrants", 2, impl.getRegistrants(1000).size());
+			assertEquals("Should now be "+initialRegistrants+" registrants", initialRegistrants, new Integer(impl.getRegistrants(1000).size()));
 		} catch (MultipleResourceException | ResourceNotFoundException | CORBAException | EventChannelException e) {
-			fail("No exceptions should've been thrown"+e.getMessage());
+			e.printStackTrace();
+			fail("No exceptions should've been thrown "+e.getMessage());
 		}
 	}
 	
@@ -87,6 +100,7 @@ public class RedhawkEventChannelMT extends RedhawkTestBase{
 			RedhawkEventChannelImpl impl = (RedhawkEventChannelImpl) driver.getDomain().getEventChannelManager().getEventChannel("ODM_Channel");
 			
 			MyMessageListener testMessageListener = new MyMessageListener(); 
+			
 			//Register a listener and do stuff on events 
 			impl.subscribe(testMessageListener);
 			
@@ -128,6 +142,7 @@ public class RedhawkEventChannelMT extends RedhawkTestBase{
 
 		@Override
 		public void onMessage(Object message) {
+			//Code for what to do when you have a message. 
 			messageCount++;
 			System.out.println("Received a message "+message);
 			System.out.println("Message count: "+messageCount);

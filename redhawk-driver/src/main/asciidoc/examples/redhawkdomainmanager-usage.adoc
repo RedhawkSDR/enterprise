@@ -9,7 +9,7 @@ Sample code for creating an Application from a Waveform that is already in your 
 [source,java,indent=0]
 .`RedhawkDomainManagerImplIT.java`
 ----
-include::snippets/RedhawkDomainManagerImplIT.java[lines=144..148]
+include::snippets/RedhawkDomainManagerImplIT.java[lines=145..149]
 ----
 
 Sample code for creating an Application from a SAD file on a file system. 
@@ -25,7 +25,7 @@ include::snippets/RedhawkComponentImplIT.java[lines=59]
 [source,java,indent=0]
 .`RedhawkDomainManagerImplIT.java`
 ----
-include::snippets/RedhawkDomainManagerImplIT.java[lines=153..154]
+include::snippets/RedhawkDomainManagerImplIT.java[lines=151..152]
 ----
 
 === Get a Device from a REDHAWK Domain
@@ -33,7 +33,7 @@ include::snippets/RedhawkDomainManagerImplIT.java[lines=153..154]
 [source,java,indent=0]
 .`RedhawkDomainManagerImplIT.java`
 ----
-include::snippets/RedhawkDomainManagerImplIT.java[lines=159..164]
+include::snippets/RedhawkDomainManagerImplIT.java[lines=157..162]
 ----
 
 === Get a Device Manager from a REDHAWK Domain
@@ -41,6 +41,6 @@ include::snippets/RedhawkDomainManagerImplIT.java[lines=159..164]
 [source,java,indent=0]
 .`RedhawkDomainManagerImplIT.java`
 ----
-include::snippets/RedhawkDomainManagerImplIT.java[lines=164..170]
+include::snippets/RedhawkDomainManagerImplIT.java[lines=164..168]
 ----
 

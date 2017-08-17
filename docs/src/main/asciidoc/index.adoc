@@ -23,6 +23,8 @@ include::installation.adoc[]
 
 include::gettingstarted.adoc[]
 
+include::secureweb.adoc[]
+
 //These are coming from REDHAWK Driver
 
 
@@ -44,6 +46,11 @@ include::driver/examples/redhawkdevice-usage.adoc[]
 
 include::driver/examples/redhawkeventchannelmanager-usage.adoc[]
 
+include::driver/examples/redhawkeventchannel-usage.adoc[]
+
+include::driver/examples/redhawkallocationmanager-usage.adoc[]
+
+include::driver/examples/redhawkconnectionmanager-usage.adoc[]
 
 //These are coming coming from Redhawk Connector Module
 
@@ -56,6 +63,8 @@ include::connector/overview.adoc[]
 
 
 include::rest/overview.adoc[]
+
+include::rest/note.adoc[]
 
 include::rest/paths.adoc[]
 

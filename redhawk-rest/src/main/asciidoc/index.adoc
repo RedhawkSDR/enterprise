@@ -1,6 +1,7 @@
 = REDHAWK Rest
 
 include::overview.adoc[]
+include::note.adoc[]
 include::paths.adoc[]
 include::security.adoc[]
 include::definitions.adoc[]

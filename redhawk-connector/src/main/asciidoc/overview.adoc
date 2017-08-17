@@ -37,7 +37,7 @@ Using the REDHAWK Connector to create a Redhawk Connection results in the follow
 | Domain Manager Location
 | domainManager
 | No
-| null
+| REDHAWK_DEV
 | Optional name of the REDHAWK Domain Manager (as found in the CORBA Naming Service). 
 
 | Device Manager Name

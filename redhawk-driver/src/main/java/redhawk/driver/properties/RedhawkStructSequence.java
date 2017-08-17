@@ -54,6 +54,7 @@ public class RedhawkStructSequence extends RedhawkProperty {
         }
     }
     
+    //TODO: Make a better toString()
     public String toString(){
         return sequence.toString();
     }

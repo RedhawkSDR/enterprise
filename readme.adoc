@@ -1,15 +1,5 @@
 = Redhawk Enterprise Integration
 
-////
-Release notes:
-
-1. To release update the release number property in the parent pom. 
-
-2. mvn -P CFDependencies,docs,default,jaxb-generation release:prepare -Darguments=-Djava.io.tmpdir=./
-
-3. mvn release:perform -Darguments=-Djava.io.tmpdir=./
-////
-
 This repository provides a suite of assets for interacting with REDHAWK from a JRE. Below are the main assets and a brief description: 
 
 * link:redhawk-driver/readme.adoc[REDHAWK Driver]: Provides simplified access to REDHAWK via standard Java interfaces. This Asset shields all interaction with the underlying REDHAWK Components and provides a simplified API for Java developers interacting with a REDHAWK Domain. The REDHAWK Driver can be leveraged as a standalone Java Archive (JAR) file.

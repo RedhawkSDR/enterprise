@@ -1,0 +1,14 @@
+= RELEASE Engineering Notes
+
+== How to Release
+
+. Remove SNAPSHOT making it a release
+
+. update the release number property in the parent pom if this is another RC.
+
+. mvn -P CFDependencies,docs,default,jaxb-generation release:prepare -Darguments=-Djava.io.tmpdir=./
+
+. mvn release:perform -Darguments=-Djava.io.tmpdir=./
+
+== Merging Forward
+

@@ -23,7 +23,7 @@ variables:
     - mkdir -p output
     - mkdir site
     - cp docs/target/asciidoc/html/index.html site/index.html #Docs artifacts
-    - cp -r docs/target/assiidoc/html/images site/images #Make sure images are available for site
+    - cp -r docs/target/asciidoc/html/images/* site/images/ #Make sure images are available for site
     - tar zcvf site.tar.gz site; cp site.tar.gz output/
     - cp docs/target/asciidoc/pdf/index.pdf output/REDHAWK_Enterprise_v$enterprise_version.pdf
     - cp docs/target/rpm/redhawk-enterprise-integration-docs/RPMS/noarch/*.rpm output/ #RPM for installing REDHAWK Java Tools Docs in KARAF

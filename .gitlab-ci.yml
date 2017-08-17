@@ -212,8 +212,6 @@ test-jacorb-el6_i386:
     dist: el6
     arch: i686
     maven_command: bash -c "mvn -P CFDependencies clean install -B -U && mvn -pl redhawk-driver clean install site -P localIT -Djacorb=true -DfailIfNoTests=false -DdomainHost=redhawk_${dist}_${arch}_${CI_JOB_ID} -DtestProps=`pwd`/docker_test.properties"
-  except:
-    - develop-2.0
 
 #Trigger a Jenkins job to aggregate artifacts there
 deploy:

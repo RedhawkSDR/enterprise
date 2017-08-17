@@ -7,7 +7,7 @@ The following code examples explain how to use the `RedhawkPort` interface.
 [source,java,indent=0]
 .`MessageConsumerPortIT.java`
 ----
-include::snippets/MessageConsumerPortIT.java[lines=104..129]
+include::snippets/MessageConsumerPortIT.java[lines=102..127]
 ----
 
 === Retrieving Metadata from a REDHAWK Port
@@ -24,12 +24,12 @@ The following code examples explain how to retrieve the following metadata from 
 [source,java,indent=0]
 .`RedhawkPortImplIT`
 ----
-include::snippets/RedhawkPortImplIT.java[lines=57..60]
+include::snippets/RedhawkPortImplIT.java[lines=61..64]
 ----
 
 [source,java,indent=0]
 ----
-include::snippets/RedhawkPortImplIT.java[lines=71..74]
+include::snippets/RedhawkPortImplIT.java[lines=75..78]
 ----
 
 ==== Get ActiveSRI from a Provides Port
@@ -37,7 +37,7 @@ include::snippets/RedhawkPortImplIT.java[lines=71..74]
 [source,java,indent=0]
 .`RedhawkPortImplIT`
 ----
-include::snippets/RedhawkPortImplIT.java[lines=84..87]
+include::snippets/RedhawkPortImplIT.java[lines=88..91]
 ----
 
 ==== Get Port State from a Provides Port
@@ -45,7 +45,7 @@ include::snippets/RedhawkPortImplIT.java[lines=84..87]
 [source,java,indent=0]
 .`RedhawkPortImplIT`
 ----
-include::snippets/RedhawkPortImplIT.java[lines=111..114]
+include::snippets/RedhawkPortImplIT.java[lines=115..118]
 ----
  
 ==== Get Port Connections and Disconnect by Connection Id
@@ -53,5 +53,5 @@ include::snippets/RedhawkPortImplIT.java[lines=111..114]
 [source,java,indent=0]
 .`RedhawkPortImplIT`
 ----
-include::snippets/RedhawkPortImplIT.java[lines=182..194]
+include::snippets/RedhawkPortImplIT.java[lines=187..199]
 ----

@@ -7,7 +7,7 @@ The following code examples explain how to use the `RedhawkApplication` interfac
 [source,java,indent=0]
 .`RedhawkApplicationImplIT.java`
 ----
-include::snippets/RedhawkApplicationImplIT.java[lines=98..109]
+include::snippets/RedhawkApplicationImplIT.java[lines=102..113]
 ----
 
 === Interacting with Components from Your Application
@@ -15,7 +15,7 @@ include::snippets/RedhawkApplicationImplIT.java[lines=98..109]
 [source,java,indent=0]
 .`RedhawkApplicationImplIT.java`
 ----
-include::snippets/RedhawkApplicationImplIT.java[lines=91..95]
+include::snippets/RedhawkApplicationImplIT.java[lines=94..99]
 ----
 
 === Example of How to Get and Set the Log Level of an Application 

@@ -56,6 +56,7 @@ import CF.ApplicationFactoryPackage.CreateApplicationError;
 import CF.ApplicationFactoryPackage.CreateApplicationInsufficientCapacityError;
 import CF.ApplicationFactoryPackage.CreateApplicationRequestError;
 import CF.ApplicationFactoryPackage.InvalidInitConfiguration;
+import CF.DomainManagerPackage.ApplicationInstallationError;
 import CF.DomainManagerPackage.RegisterError;
 import CF.DomainManagerPackage.UnregisterError;
 import redhawk.driver.RedhawkDriver;
@@ -437,7 +438,7 @@ public class RedhawkDomainManagerImpl extends QueryableResourceImpl<DomainManage
 					getOrb().object_to_string(applicationInstance), applicationInstance.identifier());
 			return appToReturn;
 		} catch (CreateApplicationError | CreateApplicationRequestError | CreateApplicationInsufficientCapacityError
-				| InvalidInitConfiguration | InvalidProfile | InvalidFileName e) {
+				| InvalidInitConfiguration | InvalidProfile | InvalidFileName | ApplicationInstallationError e) {
 			throw new ApplicationCreationException(e);
 		}
 	}

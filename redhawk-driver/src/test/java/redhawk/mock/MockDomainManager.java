@@ -386,4 +386,58 @@ public class MockDomainManager implements DomainManager {
 		return null;
 	}
 
+	@Override
+	public LogEvent[] retrieve_records(IntHolder howMany, int startingRecord) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public LogEvent[] retrieve_records_by_date(IntHolder howMany, long to_timeStamp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public LogEvent[] retrieve_records_from_date(IntHolder howMany, long from_timeStamp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int log_level() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void log_level(int newLog_level) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setLogLevel(String logger_id, int newLevel) throws UnknownIdentifier {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getLogConfig() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLogConfig(String config_contents) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setLogConfigURL(String config_url) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

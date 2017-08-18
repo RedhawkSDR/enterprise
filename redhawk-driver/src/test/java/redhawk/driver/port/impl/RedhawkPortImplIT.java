@@ -173,8 +173,21 @@ public class RedhawkPortImplIT extends RedhawkTestBase {
 		
 			RedhawkPort port = driver.getPort("REDHAWK_DEV/" + appName + "/RBDS.*/messageEvent_out");
 			
-			exception.expect(PortException.class);
-			port.getConnectionIds();
+			//TODO: Only happens in 2.0.X 
+			//exception.expect(PortException.class);
+			//port.getConnectionIds();
+			
+			//TODO: This is for 2.1.X
+			assertTrue("Should be atleast 1 connection id", !port.getConnectionIds().isEmpty());
+
+			/*
+			 * Remove connections by connectionId
+			 */
+			for (String connectionId : port.getConnectionIds()) {
+				port.disconnect(connectionId);
+			}
+
+			assertTrue("Should no longer be any connections", port.getConnectionIds().isEmpty());
 		} catch (MultipleResourceException | ApplicationCreationException | CORBAException | ResourceNotFoundException e) {
 			fail("Test failure "+e.getMessage());
 		}

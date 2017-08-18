@@ -143,6 +143,10 @@ export const showWaveformController = (state, obj) => {
   state.showWaveformController = true
 }
 
+export const showEventChannelModal = (state, show) => {
+  state.showEventChannelModal = show
+}
+
 export const closeWaveformController = state => {
   state.showWaveformController = false
 }

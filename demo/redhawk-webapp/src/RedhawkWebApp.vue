@@ -37,6 +37,8 @@
 		</launchwaveform>
 		<editrest v-if="showEditRESTModal">
 		</editrest>
+		<eventchannelcreate v-if="showEventChannelModal">
+		</eventchannelcreate>
 	</div>
 </template>
 
@@ -48,6 +50,7 @@ import WaveformController from './components/WaveformController'
 import LaunchWaveformModal from './components/LaunchWaveformModal'
 import DomainMenu from './components/DomainMenu.vue'
 import EditREST from './components/EditRestConfig.vue'
+import EventChannelModal from './components/EventChannelModal.vue'
 
 export default {
 	name: 'redhawkwebapp',
@@ -77,6 +80,9 @@ export default {
 		},
 		availableWaveforms(){
 			return this.$store.getters.availableWaveforms
+		},
+		showEventChannelModal(){
+			return this.$store.getters.showEventChannelModal
 		}
 	},
 	components: {
@@ -86,7 +92,8 @@ export default {
 		'waveformcontroller' : WaveformController,
 		'launchwaveform' : LaunchWaveformModal,
 		'domainmenu': DomainMenu,
-		'editrest' : EditREST
+		'editrest' : EditREST,
+		'eventchannelcreate' : EventChannelModal
 	},
 	methods: {
 		addDomainConfig: function() {

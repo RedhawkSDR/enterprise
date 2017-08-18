@@ -1,7 +1,11 @@
 <template>
 <md-list>
   <md-list-item>
-    <span>Event Channel [ {{ eventchannelCount }} ]</span>
+    <span>Event Channel [ {{ eventchannelCount }} ]
+      <md-button class="md-icon-button md-accent"  @click.native="addEventChannel">
+        <md-icon>add</md-icon>
+      </md-button>
+    </span>
     <md-list-expand>
         <md-list-item
           class="md-inset"
@@ -54,6 +58,10 @@ export default{
     deleteChannel(index){
       console.log("Deleteing name: "+this.eventchannels[index].name)
       this.$store.dispatch('deleteEventChannel', this.eventchannels[index].name)
+    },
+    addEventChannel(){
+      console.log("Add event channel")
+      this.$store.dispatch('showEventChannelModal', true)
     }
   }
 }

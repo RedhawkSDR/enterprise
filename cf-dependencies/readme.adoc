@@ -1,0 +1,4 @@
+= Core Framework Dependencies
+
+These are the jar files from Core Framework that REDHAWK Driver depends on. The jars can be found in
+/usr/local/redhawk/lib

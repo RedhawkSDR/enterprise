@@ -247,6 +247,7 @@ export const updateDomainStateAfterWaveformRelease = ({ commit }, name) => commi
 export const showLaunchWaveformModal = ({ commit }, waveform) => commit('showLaunchWaveformModal', waveform)
 export const closeLaunchWaveformModal = ({ commit }) => commit('closeLaunchWaveformModal')
 
+//Launch Waveform
 export const launchWaveform = ({ commit, getters }, waveformToLaunch) => {
   var launchWaveformURL = getters.baseURI+'/applications/'+waveformToLaunch.name
 
@@ -268,6 +269,37 @@ export const launchWaveform = ({ commit, getters }, waveformToLaunch) => {
     })
   })
 }
+
+//Show Event Channel Controls
+export const showEventChannelModal = ({ commit }, show) => commit('showEventChannelModal', show)
+
+//Create Event Channel
+export const createEventChannel = ({ commit, getters }, channelName) => {
+    var createEventChannelURL = getters.baseURI+'/eventchannels/'+channelName
+
+    axios.put(createEventChannelURL, channelName,
+    {
+      headers: { 'Content-Type' : 'application/json'}
+    })
+    .then(function(response){
+      //At this point you need to update the eventchannels
+      getEventChannels(getters.baseURI+'/eventchannels.json')
+      .then(function(response){
+        var obj = new Object();
+        obj.eventchannels = response.data.eventChannels
+        obj.deletedName = name
+
+        commit('updateEventChannels', obj)
+      })
+      .catch(function(error){
+        console.log(error)
+      })
+  })
+  .catch(function(error){
+    console.log(error)
+  })
+}
+
 //export const updateLaunchedWaveforms = ({ commit }) => commit('updateLaunchedWaveforms')
 
 export const plotPortData = ({ commit }, port) => commit('plotPortData', port)

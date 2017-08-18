@@ -22,6 +22,7 @@ package redhawk.driver.devicemanager.impl;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
@@ -45,8 +46,6 @@ import CF.Device;
 import CF.DeviceManager;
 import CF.DeviceManagerHelper;
 import CF.InvalidObjectReference;
-import CF.Resource;
-import CF.ResourceHelper;
 import redhawk.driver.base.impl.QueryableResourceImpl;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.device.impl.RedhawkDeviceImpl;
@@ -113,8 +112,33 @@ public class RedhawkDeviceManagerImpl extends QueryableResourceImpl<DeviceManage
     }
     
 	public List<RedhawkDevice> getDevices(){
-		return Arrays.stream(getCorbaObject().registeredDevices()).map(device -> createRedhawkDevice(device, this, getOrb().object_to_string(device), device.identifier())).collect(Collectors.toList());
-    }
+		//return Arrays.stream(getCorbaObject().registeredDevices()).map(device -> createRedhawkDevice(device, this, getOrb().object_to_string(device), device.identifier())).collect(Collectors.toList());
+		List<RedhawkDevice> devices = new ArrayList<>(); 
+		
+		for(CF.Device device : getCorbaObject().registeredDevices()) {
+			RedhawkDevice myRHDevice = null; 
+			
+			try {
+				myRHDevice = createRedhawkDevice(device, this, getOrb().object_to_string(device), device.identifier());
+			}catch(Exception ex) {
+				if(getOrb()==null)
+					logger.info("ORB is null");
+				
+				if(device==null)
+					logger.info("Device is null");
+				
+				//logger.info(getOrb());
+				logger.log(Level.SEVERE, "WTH", ex);
+			}
+			
+			if(myRHDevice!=null)
+				devices.add(myRHDevice);
+			else
+				logger.log(Level.SEVERE, "This should never happen");
+		}
+		
+		return devices;
+	}
 
 	@Override
 	protected DeviceManager locateCorbaObject() throws ResourceNotFoundException {

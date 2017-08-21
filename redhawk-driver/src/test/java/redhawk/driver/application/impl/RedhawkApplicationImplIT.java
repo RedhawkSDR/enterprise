@@ -328,7 +328,7 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 			assertEquals("Should only be 1 entry", 1, metrics.size());
 			
 			//Attributes should match filter
-			assertEquals("Make sure keys are correct", expectedComponentKeys, metrics.get(compFilter).keySet());
+			assertEquals("Make sure keys are correct", expectedComponentKeys, metrics.get(compFilter[0].toString()).keySet());
 		} catch (ApplicationStartException | ApplicationException e) {
 			fail("Exception thrown during test"+e.getMessage());
 		}

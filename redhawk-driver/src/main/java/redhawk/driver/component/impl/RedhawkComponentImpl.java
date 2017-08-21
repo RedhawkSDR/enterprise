@@ -66,6 +66,7 @@ public class RedhawkComponentImpl extends PortBackedObjectImpl<ComponentType> im
 	}
 
 	public String getName(){
+		//TODO: Should bring back the actual component name and not the <app>:<comp name>
         return component.identifier;
     }
     

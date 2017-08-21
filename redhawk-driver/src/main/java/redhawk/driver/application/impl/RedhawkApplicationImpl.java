@@ -31,11 +31,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.ossie.properties.AnyUtils;
+
 import CF.Application;
 import CF.ApplicationHelper;
+import CF.DataType;
 import CF.DeviceAssignmentType;
 import CF.ApplicationPackage.ComponentElementType;
 import CF.ApplicationPackage.ComponentProcessIdType;
+import CF.ApplicationPackage.InvalidMetric;
 import CF.LifeCyclePackage.ReleaseError;
 import CF.ResourcePackage.StartError;
 import CF.ResourcePackage.StopError;
@@ -46,6 +50,7 @@ import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.component.impl.RedhawkComponentImpl;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.domain.RedhawkDomainManager;
+import redhawk.driver.exceptions.ApplicationException;
 import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.ApplicationStartException;
 import redhawk.driver.exceptions.ApplicationStopException;
@@ -160,7 +165,8 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 				try {
 					RedhawkPortImpl myPort = (RedhawkPortImpl) getComponentByName(compName + ".*").getPort(portName);
 
-					return new RedhawkExternalPortImpl(myPort, port.getDescription(), port.getExternalname(), port.getComponentinstantiationref().getRefid());
+					return new RedhawkExternalPortImpl(myPort, port.getDescription(), port.getExternalname(),
+							port.getComponentinstantiationref().getRefid());
 				} catch (MultipleResourceException e) {
 					logger.severe(e.getMessage());
 				} catch (Exception e) {
@@ -190,7 +196,7 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 					exPort.setExternalName(port.getExternalname());
 					exPort.setDescription(port.getDescription());
 					exPort.setComponentReferenceId(port.getComponentinstantiationref().getRefid());
-					
+
 					externalPorts.add(exPort);
 				} catch (MultipleResourceException e) {
 					logger.severe(e.getMessage());
@@ -209,23 +215,23 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 	public Map<String, RedhawkProperty> getExternalProperties() {
 		Map<String, RedhawkProperty> propMap = new HashMap<>();
 		List<String> exPropIds = new ArrayList<>();
-		
+
 		// Only return properties that are external
 		try {
 			Externalproperties exProps = getAssembly().getExternalproperties();
-			if(exProps!=null){
-				for(Property prop : exProps.getProperties())
+			if (exProps != null) {
+				for (Property prop : exProps.getProperties())
 					exPropIds.add(prop.getExternalpropid());
-				
-				propMap = super.getProperty(exPropIds.toArray(new String[exPropIds.size()]));				
+
+				propMap = super.getProperty(exPropIds.toArray(new String[exPropIds.size()]));
 			}
 		} catch (IOException e) {
 			logger.severe(e.getMessage());
 		}
-		
+
 		return propMap;
 	}
-	
+
 	@Override
 	public void start() throws ApplicationStartException {
 		if (!isStarted()) {
@@ -263,7 +269,7 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 
 	@Override
 	public RedhawkLogLevel getLogLevel() {
-		return RedhawkLogLevel.reverseLookup(getCorbaObject().log_level());		
+		return RedhawkLogLevel.reverseLookup(getCorbaObject().log_level());
 	}
 
 	@Override
@@ -278,45 +284,78 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 
 	@Override
 	public Map<String, RedhawkDevice> getComponentDevices() {
-		Map<String, RedhawkDevice> compToDevice = new HashMap<>(); 
-		Map<String, RedhawkDevice> devCache = new HashMap<>(); 
-		
-		for(DeviceAssignmentType devAss : this.getCorbaObject().componentDevices()){
-			if(!devCache.containsKey(devAss.assignedDeviceId)){
+		Map<String, RedhawkDevice> compToDevice = new HashMap<>();
+		Map<String, RedhawkDevice> devCache = new HashMap<>();
+
+		for (DeviceAssignmentType devAss : this.getCorbaObject().componentDevices()) {
+			if (!devCache.containsKey(devAss.assignedDeviceId)) {
 				RedhawkDevice dev = domainManager.getDeviceByIdentifier(devAss.assignedDeviceId);
-				
-				//Add Device to component map
+
+				// Add Device to component map
 				compToDevice.put(devAss.componentId, dev);
-				
-				//Update cache
+
+				// Update cache
 				devCache.put(devAss.assignedDeviceId, dev);
-			}else{
+			} else {
 				compToDevice.put(devAss.componentId, devCache.get(devAss.assignedDeviceId));
 			}
 		}
-		
+
 		return compToDevice;
 	}
 
 	@Override
 	public Map<String, Integer> getComponentProcessIds() {
 		Map<String, Integer> compToProcess = new HashMap<>();
-		
-		for(ComponentProcessIdType id : this.getCorbaObject().componentProcessIds()) {
+
+		for (ComponentProcessIdType id : this.getCorbaObject().componentProcessIds()) {
 			compToProcess.put(id.componentId, id.processId);
 		}
-		
+
 		return compToProcess;
 	}
 
 	@Override
 	public Map<String, String> getComponentImplementations() {
 		Map<String, String> compToImpl = new HashMap<>();
-		
-		for(ComponentElementType id : this.getCorbaObject().componentImplementations()) {
+
+		for (ComponentElementType id : this.getCorbaObject().componentImplementations()) {
 			compToImpl.put(id.componentId, id.elementId);
 		}
-		
+
 		return compToImpl;
+	}
+
+	@Override
+	public Map<String, Map<String, Object>> getMetrics() throws ApplicationException {
+		String[] components = new String[0];
+		String[] attributes = new String[0];
+
+		return this.getMetrics(components, attributes);
+	}
+
+	@Override
+	public Map<String, Map<String, Object>> getMetrics(String[] components, String[] attributes) throws ApplicationException {
+		CF.DataType[] metrics;
+
+		Map<String, Map<String, Object>> appMetrics = new HashMap<>();
+
+		try {
+			metrics = getCorbaObj().metrics(components, attributes);
+
+			for (DataType type : metrics) {
+				String key = type.id;
+				DataType[] test = (DataType[]) AnyUtils.convertAny(type.value);
+				Map<String, Object> metricsValue = new HashMap<>();
+				for (DataType t : test) {
+					metricsValue.put(t.id, AnyUtils.convertAny(t.value));
+				}
+				appMetrics.put(key, metricsValue);
+			}
+
+			return appMetrics;
+		} catch (InvalidMetric e) {
+			throw new ApplicationException("Unable to retrieve application metrics for " + this.getName(), e);
+		}
 	}
 }

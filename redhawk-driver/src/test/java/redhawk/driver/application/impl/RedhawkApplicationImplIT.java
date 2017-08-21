@@ -26,16 +26,28 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.ossie.properties.AnyUtils;
 
+import com.gargoylesoftware.htmlunit.javascript.host.Set;
+
+import CF.DataType;
+import CF.ApplicationPackage.InvalidMetric;
+import redhawk.driver.RedhawkUtils;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.exceptions.ApplicationCreationException;
+import redhawk.driver.exceptions.ApplicationException;
 import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.ApplicationStartException;
 import redhawk.driver.exceptions.ApplicationStopException;
@@ -234,6 +246,97 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 		//All values should be cpp
 		for(String impl : compImpl.values()) {
 			assertEquals("cpp", impl);
+		}
+	}
+	
+	@Test
+	public void testWaveformMetrics() throws InterruptedException {
+		String[] components = new String[0];
+		String[] attributes = new String[0];
+		HashSet<String> expectedComponentKeys = new HashSet<String>(Arrays.asList("valid", "shared", "processes", "cores", "memory", "threads", "files", "componenthost"));
+		HashSet<String> expectedApplicationKeys = new HashSet<String>(Arrays.asList("valid", "processes", "cores", "memory", "threads", "files"));
+
+		//Expecting three keys 
+		try {
+			application.start();
+			
+			//Needs time to start up
+			Thread.sleep(1000l);
+			
+			Map<String, Map<String, Object>> metrics = application.getMetrics();
+			
+			//Ensure expeceted number of entries in map
+			assertEquals("Should be 3 entries in map", 3, metrics.keySet().size());
+			
+			//
+			for(Map.Entry<String, Map<String, Object>> entry : metrics.entrySet()) {
+				if(entry.getValue().size()==expectedComponentKeys.size()) {
+					assertEquals(expectedComponentKeys, entry.getValue().keySet());
+				}else {
+					assertEquals(expectedApplicationKeys, entry.getValue().keySet());
+				}
+				
+				//Make sure no null values 
+				this.noNullValues(entry.getValue());
+			}
+		} catch (ApplicationStartException | ApplicationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testWaveformMetricsWithFilters() throws InterruptedException {
+		String[] components = new String[0];
+		String[] attributes = new String[]{"valid", "shared", "processes", "cores", "memory", "files", "componenthost"};
+		
+		//Removed threads from expected list
+		HashSet<String> expectedComponentKeys = new HashSet<String>(Arrays.asList("valid", "shared", "processes", "cores", "memory", "files", "componenthost"));
+		HashSet<String> expectedApplicationKeys = new HashSet<String>(Arrays.asList("valid", "processes", "cores", "memory", "files"));
+		
+		try {
+			application.start();
+			
+			//Needs time to start up
+			Thread.sleep(1000l);
+			
+			Map<String, Map<String, Object>> metrics = application.getMetrics(components, attributes);
+			
+			//Ensure expeceted number of entries in map
+			assertEquals("Should be 3 entries in map", 3, metrics.keySet().size());
+			
+			/*
+			 * Filter by attribute
+			 */
+			for(Map.Entry<String, Map<String, Object>> entry : metrics.entrySet()) {
+				if(entry.getValue().size()==expectedComponentKeys.size()) {
+					assertEquals(expectedComponentKeys, entry.getValue().keySet());
+				}else {
+					assertEquals(expectedApplicationKeys, entry.getValue().keySet());
+				}
+				
+				//Make sure no null values 
+				this.noNullValues(entry.getValue());
+			}
+			
+			//Filter by component
+			//TODO: Shouldn't need to split should minimum be a helper method here.
+			String[] compFilter = new String[] {application.getComponents().get(0).getName().split(":")[0]};
+			
+			metrics = application.getMetrics(compFilter, attributes);
+
+			assertEquals("Should only be 1 entry", 1, metrics.size());
+			
+			//Attributes should match filter
+			assertEquals("Make sure keys are correct", expectedComponentKeys, metrics.get(compFilter).keySet());
+		} catch (ApplicationStartException | ApplicationException e) {
+			fail("Exception thrown during test"+e.getMessage());
+		}
+	}
+	
+	private void noNullValues(Map<String, Object> map) {
+		for(Object key : map.values()) {
+			assertNotNull("No values in the map should be null", key);
 		}
 	}
 }

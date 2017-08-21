@@ -28,6 +28,7 @@ import redhawk.driver.base.QueryableResource;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.domain.RedhawkDomainManager;
+import redhawk.driver.exceptions.ApplicationException;
 import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.ApplicationStartException;
 import redhawk.driver.exceptions.ApplicationStopException;
@@ -165,4 +166,31 @@ public interface RedhawkApplication extends QueryableResource {
      * @return
      */
     Map<String, String> getComponentImplementations();
+    
+    /**
+     * Returns a list containing the metrics for an application
+     * @return
+     * @throws ApplicationException 
+     */
+    Map<String, Map<String, Object>> getMetrics() throws ApplicationException;
+    
+    /**
+     * Returns a list containing the metrics for an application
+     * 
+     * @param components
+     * 	Component Names/Component Ids to get metrics for
+     * @param attributes
+     * 	Attributes to include in response. Possible attributes:
+     * 	- valid
+     * 	- shared(component only)
+     * 	- processes
+     * 	- cores
+     * 	- memory
+     * 	- threads
+     * 	- files
+     * 	- componenthosts(component only)
+     * @return
+     * @throws ApplicationException 
+     */
+    Map<String, Map<String, Object>> getMetrics(String[] components, String[] attributes) throws ApplicationException;
 }

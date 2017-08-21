@@ -84,7 +84,7 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
         	throw new WebApplicationException(e.getMessage(), Response.Status.NOT_FOUND);
         }
     }
-
+    
     @GET
     @Path("/{domain}/properties")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})

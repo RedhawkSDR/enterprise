@@ -61,6 +61,8 @@ public class RedhawkTestBase {
 	
 	public static Integer domainPort = 2809;
 	
+	public static String nameServer = domainHost+":"+domainPort;
+	
 	static String propFileLocation = "src/test/resources/test.properties";
 	
 	public RedhawkTestBase(){
@@ -83,6 +85,7 @@ public class RedhawkTestBase {
 				domainName = buildProps.getProperty("domainName");
 				domainHost = buildProps.getProperty("domainHost");
 				domainPort = Integer.parseInt(buildProps.getProperty("domainPort"));
+				nameServer = domainHost+":"+domainPort;
 			}
 			
 			//Add ability to override domainHost 

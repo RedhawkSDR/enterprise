@@ -83,7 +83,7 @@ public class RedhawkManager {
 	private DomainConverter converter = new DomainConverter();
 	private BundleContext context;
 
-	private Redhawk getDriverInstance(String nameServer) throws ResourceNotFoundException {
+	public Redhawk getDriverInstance(String nameServer) throws ResourceNotFoundException {
 		Redhawk redhawk = null;
 		if (redhawkDrivers.get(nameServer) != null) {
 			return redhawkDrivers.get(nameServer);

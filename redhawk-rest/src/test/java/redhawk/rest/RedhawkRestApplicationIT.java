@@ -6,12 +6,15 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
-import org.apache.log4j.Level;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import redhawk.driver.RedhawkDriver;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ApplicationReleaseException;
@@ -19,6 +22,7 @@ import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.rest.model.Application;
+import redhawk.rest.model.ApplicationMetricFilter;
 import redhawk.rest.model.ExternalPort;
 import redhawk.rest.model.PortStatisticsContainer;
 import redhawk.rest.model.SRIContainer;
@@ -134,6 +138,21 @@ public class RedhawkRestApplicationIT extends RedhawkTestBase{
 			e.printStackTrace();
 			fail("Test failure "+e.getMessage());
 		}		
+	}
+	
+	@Test
+	public void testGetMetrics() {
+		try {
+			Map<String, Map<String,Object>> t = basicApplication.getMetrics();
+			basicApplication.start();
+			Thread.sleep(1000);
+			Map<String, Map<String, Object>> metrics = manager.getMetrics(nameServer, "application", domainName+"/"+basicApplication.getName(), new ApplicationMetricFilter());
+			
+			assertNotNull(metrics);
+		}catch(Exception ex) {
+			ex.printStackTrace();
+			fail("Test failure "+ex.getMessage());
+		}
 	}
 	
 	@AfterClass

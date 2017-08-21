@@ -72,6 +72,7 @@ import redhawk.rest.model.RegisterRemoteDomain;
 import redhawk.rest.model.SRIContainer;
 import redhawk.rest.model.TunerMode;
 import redhawk.rest.model.WaveformInfo;
+import redhawk.rest.model.ApplicationMetricFilter;
 
 public class RedhawkManager {
 	private static Log logger = LogFactory.getLog(RedhawkManager.class);
@@ -164,6 +165,19 @@ public class RedhawkManager {
 		}
 		
 		return new SRIContainer(sri);
+	}
+	
+	public <T> Map<String, Map<String, Object>> getMetrics(String nameServer, String type, String location, ApplicationMetricFilter filter) throws Exception{
+		try {
+			Redhawk redhawk  = getDriverInstance(nameServer);
+			//String[] locationArray = location.split("/");
+			
+			RedhawkApplication application = internalGet(redhawk, type, location);
+			
+			return application.getMetrics(filter.getComponents(), filter.getAttributes());
+		} catch (Exception e) {
+			throw new Exception("Issue retrieving metrics!", e);
+		}
 	}
 	
 	public <T> void disconnectConnectionById(String nameServer, String type, String portLocation, String connectionId) throws Exception {

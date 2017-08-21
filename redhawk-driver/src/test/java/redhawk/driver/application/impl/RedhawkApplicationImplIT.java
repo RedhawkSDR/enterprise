@@ -27,22 +27,13 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.ossie.properties.AnyUtils;
 
-import com.gargoylesoftware.htmlunit.javascript.host.Set;
-
-import CF.DataType;
-import CF.ApplicationPackage.InvalidMetric;
-import redhawk.driver.RedhawkUtils;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.device.RedhawkDevice;

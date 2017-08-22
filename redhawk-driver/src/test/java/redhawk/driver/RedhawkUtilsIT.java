@@ -19,7 +19,12 @@
  */
 package redhawk.driver;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Assert;
@@ -27,17 +32,21 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.omg.CORBA.Any;
 
-import redhawk.driver.eventchannel.listeners.PropertyChange;
 import BULKIO.StreamSRI;
 import CF.DataType;
 import CF.PropertiesHelper;
+import redhawk.driver.device.RedhawkDevice;
+import redhawk.driver.eventchannel.listeners.PropertyChange;
+import redhawk.driver.exceptions.CORBAException;
+import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.exceptions.ResourceNotFoundException;
 
 public class RedhawkUtilsIT {
 	private static StreamSRI sri1;
 	
 	private static StreamSRI sri2;
 	
-	private static Redhawk redhawk; 
+	private static RedhawkDriver redhawk; 
 
 	@BeforeClass
 	public static void setup() {
@@ -278,5 +287,20 @@ public class RedhawkUtilsIT {
 		change.setProperties(properties);
 		Map<String, Object> propertiesMap = RedhawkUtils.convertAny(change);
 		Assert.assertTrue(propertiesMap.size() == 3);	
+	}
+	
+	@Test
+	public void testProperyNamesToIdMap() {
+		try {
+			RedhawkDevice device = redhawk.getDomain().getDeviceByName("GPP.*");
+			
+			Map<String, List<String>> map = RedhawkUtils.getPropertyNameToId(device.getPropertyConfiguration());
+		
+			assertTrue("Map should not be empty", !map.isEmpty());
+			assertEquals("Should be 47 properties for GPP", 47, map.size());
+		} catch (MultipleResourceException | CORBAException | ResourceNotFoundException e) {
+			fail("Test failure "+e.getMessage());
+		}
+
 	}
 }

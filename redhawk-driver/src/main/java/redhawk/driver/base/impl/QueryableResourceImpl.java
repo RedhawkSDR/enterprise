@@ -143,9 +143,9 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
 					}
 					
 					//If newPropNames were found search now by ids
-					if(newPropNames.isEmpty() && properties!=null) {
+					if(!newPropNames.isEmpty() && properties!=null) {
 						ph = createPropertiesHolderFromList(newPropNames.toArray(new String[newPropNames.size()]));
-			        	properties.query(ph);
+						properties.query(ph);
 					}
             	} catch (ResourceNotFoundException | UnknownProperties e1) {
 					return null;

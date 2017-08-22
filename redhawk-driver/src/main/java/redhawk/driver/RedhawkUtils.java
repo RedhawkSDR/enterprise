@@ -42,6 +42,11 @@ import CF.PropertiesHelper;
 import redhawk.driver.eventchannel.listeners.PropertyChange;
 import redhawk.driver.properties.RedhawkStructSequence;
 import redhawk.driver.xml.ScaXmlProcessor;
+import redhawk.driver.xml.model.sca.prf.Properties;
+import redhawk.driver.xml.model.sca.prf.Simple;
+import redhawk.driver.xml.model.sca.prf.SimpleSequence;
+import redhawk.driver.xml.model.sca.prf.Struct;
+import redhawk.driver.xml.model.sca.prf.StructSequence;
 import redhawk.driver.xml.model.sca.sad.Softwareassembly;
 
 /**
@@ -49,6 +54,18 @@ import redhawk.driver.xml.model.sca.sad.Softwareassembly;
  */
 public class RedhawkUtils {
 	private static Logger logger = Logger.getLogger(RedhawkUtils.class.getName());
+	
+	/**
+	 * Class name for struct
+	 */
+	public static final String structClassSimpleName = Struct.class.getSimpleName();
+	
+	public static final String structsequenceClassSimpleName = StructSequence.class.getSimpleName();
+	
+	public static final String simpleClassSimpleName = Simple.class.getSimpleName();
+	
+	public static final String simplesequenceClassSimpleName = SimpleSequence.class.getSimpleName();
+
 	
 	/**
 	 * Pass in an {@link java.io.InputStream} for your Software Assembly Descriptor(SAD) file and get back a POJO 
@@ -273,6 +290,72 @@ public class RedhawkUtils {
         return properties;
 	}
 	
+	/**
+	 * Constructs a map of all property names to their Id's. If the name is null, 
+	 * then the id is used as the key & value for the map
+	 * 
+	 * @param props
+	 * @return
+	 */
+	public static Map<String, List<String>> getPropertyNameToId(Properties props){
+		Map<String, List<String>> propToNameMap = new HashMap<>();
+		
+		for(Object prop : props.getSimplesAndSimplesequencesAndTests()) {
+			String simpleName = prop.getClass().getSimpleName();
+			
+			if(simpleName.equals(simpleClassSimpleName)) {
+				Simple simple = getPropertyFromObject(prop);
+				updatePropMap(propToNameMap, simple.getName(), simple.getId());
+			}else if(simpleName.equals(simplesequenceClassSimpleName)) {
+				SimpleSequence seq = getPropertyFromObject(prop);
+				updatePropMap(propToNameMap, seq.getName(), seq.getId());
+			}else if(simpleName.equals(structClassSimpleName)) {
+				Struct struct = getPropertyFromObject(prop);
+				updatePropMap(propToNameMap, struct.getName(), struct.getId());
+			}else if(simpleName.equals(structsequenceClassSimpleName)) {
+				StructSequence seq = getPropertyFromObject(prop);
+				updatePropMap(propToNameMap, seq.getName(), seq.getId());
+			}
+		}
+		
+		return propToNameMap;
+	}
 	
+	private static void updatePropMap(Map<String, List<String>> propMap, String name, String id) {
+		//Logic to make sure no null keys
+		if(name==null)
+			name = id;
+		
+		if(propMap.containsKey(name)) {
+			propMap.get(name).add(id);
+		}else {
+			List<String> list = new ArrayList<>();
+			list.add(id);
+			propMap.put(name, list);
+		}
+	}
 	
+	public static <T> T getPropertyFromObject(Object prop) {
+		String simpleName = prop.getClass().getSimpleName();
+
+		if(simpleName.equals(simpleClassSimpleName)) {
+			Simple simple = (Simple) prop;
+			
+			return (T) simple;
+		}else if(simpleName.equals(simplesequenceClassSimpleName)) {
+			SimpleSequence seq = (SimpleSequence) prop;
+			
+			return (T) seq;
+		}else if(simpleName.equals(structClassSimpleName)) {
+			Struct struct = (Struct) prop;
+			
+			return (T) struct;
+		}else if(simpleName.equals(structsequenceClassSimpleName)) {
+			StructSequence seq = (StructSequence) prop;
+			
+			return (T) seq;
+		}else {
+			throw new IllegalArgumentException("Object not Struct/Simple/SimpleSequence/StructSequence type, "+prop.getClass().getSimpleName());
+		}
+	}
 }

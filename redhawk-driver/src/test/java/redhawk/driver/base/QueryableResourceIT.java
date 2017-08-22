@@ -19,6 +19,54 @@
  */
 package redhawk.driver.base;
 
-public class QueryableResourceIT {
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.Map;
+
+import javax.xml.stream.FactoryConfigurationError;
+
+import org.junit.Test;
+
+import redhawk.driver.device.RedhawkDevice;
+import redhawk.driver.exceptions.CORBAException;
+import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.properties.RedhawkProperty;
+import redhawk.testutils.RedhawkTestBase;
+
+public class QueryableResourceIT extends RedhawkTestBase{
+	@Test
+	public void testQueryDeviceProperties() {
+		try {
+			RedhawkDevice device = driver.getDomain().getDeviceByName("GPP.*");
+			
+			String[] propNames = new String[] {"device_kind", "loadAverage"};
+			Map<String, RedhawkProperty> prop = device.getProperty(propNames);
+			
+			assertTrue("Properties should not be empty", !prop.isEmpty());
+			assertEquals("Should be 2 elements", 2, prop.size());
+		} catch (MultipleResourceException | CORBAException | FactoryConfigurationError e) {
+			e.printStackTrace();
+			fail("Test failure "+e.getMessage());
+		}
+	}
 	
+	@Test
+	public void testQueryDevicePropertiesKnown() {
+		RedhawkDevice device;
+		try {
+			device = driver.getDomain().getDeviceByName("GPP.*");
+		
+			String[] propNames = new String[] {"utilization", "nic_interfaces"};
+			
+			Map<String, RedhawkProperty> prop = device.getProperty(propNames);
+
+			assertTrue("Properties should not be empty", !prop.isEmpty());
+			assertEquals("Should be 2 elements", 2, prop.size());
+		} catch (MultipleResourceException | CORBAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

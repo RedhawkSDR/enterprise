@@ -1,3 +1,22 @@
+/*
+ * This file is protected by Copyright. Please refer to the COPYRIGHT file
+ * distributed with this source distribution.
+ *
+ * This file is part of REDHAWK __REDHAWK_PROJECT__.
+ *
+ * REDHAWK __REDHAWK_PROJECT__ is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * REDHAWK __REDHAWK_PROJECT__ is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see http://www.gnu.org/licenses/.
+ */
 package redhawk.rest.converter;
 
 import static org.junit.Assert.assertNotNull;
@@ -87,7 +106,8 @@ public class MetricConverterIT extends RedhawkTestBase{
 	@Test
 	public void testHelloWorld() throws MultipleResourceException, CORBAException {
 		RedhawkDevice device =  driver.getDevice();
-		Object property = device.getProperty("DCE:cdc5ee18-7ceb-4ae6-bf4c-31f983179b4d");
+		String propName = "utilization";
+		Object property = device.getProperty(propName);
 		
 		//Native
 		System.out.println("Returned: "+property);
@@ -96,7 +116,7 @@ public class MetricConverterIT extends RedhawkTestBase{
     	PropertySetOperations properties = PropertySetHelper.narrow(device.getCorbaObj());
         PropertiesHolder ph = new PropertiesHolder();
     	//String[] propNames = new String[] {"device_kind"};
-    	String[] propNames = new String[] {"utilization"};
+    	String[] propNames = new String[] {propName};
         ph.value = this.stringToDTArray(propNames);
     	
     	try {

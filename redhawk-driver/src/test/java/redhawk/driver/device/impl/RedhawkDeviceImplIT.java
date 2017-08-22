@@ -205,4 +205,5 @@ public class RedhawkDeviceImplIT extends RedhawkDeviceTestBase {
 			e.printStackTrace();
 		}
 	}
+	
 }

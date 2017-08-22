@@ -9,7 +9,8 @@ import javax.xml.bind.Marshaller;
 public class TestUtils {
 	public static String getStringFromJAXB(Object obj) throws JAXBException{
         StringWriter stringWriter = new StringWriter();			
-		try {
+		
+        try {
 			JAXBContext jc = JAXBContext.newInstance(new Class[]{obj.getClass()});
 			
 			Marshaller m = jc.createMarshaller();
@@ -17,6 +18,7 @@ public class TestUtils {
 			m.marshal(obj, stringWriter);
 			
 		} catch (JAXBException e) {
+			
 			throw new JAXBException("Issue getting String ", e);
 		}
 		return stringWriter.toString();

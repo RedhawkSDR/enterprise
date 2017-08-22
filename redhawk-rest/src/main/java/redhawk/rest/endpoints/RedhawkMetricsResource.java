@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import redhawk.rest.converter.MetricsConverter;
 import redhawk.rest.model.ApplicationMetrics;
+import redhawk.rest.model.GPPMetrics;
 import redhawk.rest.model.RedhawkMetrics;
 import redhawk.rest.utils.MetricTypes;
 
@@ -53,4 +54,13 @@ public class RedhawkMetricsResource extends RedhawkBaseResource{
 	public List<ApplicationMetrics> portMetrics(){
 		return MetricsConverter.getMetricByType(redhawkManager, nameServer, domainName, MetricTypes.PORT);
 	}
+	
+	@GET
+	@Path("/gpp")
+	@Produces({ MediaType.APPLICATION_JSON })
+	@ApiOperation(value = "GET all Application Metrics for a Domain")
+	public List<GPPMetrics> gppMetrics(){
+		return MetricsConverter.getMetricByType(redhawkManager, nameServer, domainName, MetricTypes.GPP);
+	}
+	
 }

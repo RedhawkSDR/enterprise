@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 public class GPPMetrics {
+	private String deviceName; 
+
 	private List<Map<String, Object>> component_monitor;
 	
 	//TODO: Might need to make this a list
@@ -50,4 +52,18 @@ public class GPPMetrics {
 	public void setNic_metrics(List<Map<String, Object>> nic_metrics) {
 		this.nic_metrics = nic_metrics;
 	}	
+	
+	public String getDeviceName() {
+		return deviceName;
+	}
+
+	public void setDeviceName(String deviceName) {
+		this.deviceName = deviceName;
+	}
+
+	@Override
+	public String toString() {
+		return "GPPMetrics [deviceName=" + deviceName + ", component_monitor=" + component_monitor + ", utilization="
+				+ utilization + ", sys_limits=" + sys_limits + ", nic_metrics=" + nic_metrics + "]";
+	}
 }

@@ -185,8 +185,12 @@ public class MetricsConverter {
 				// Loop over a components ports
 				try {
 					for (RedhawkPort port : comp.getPorts()) {
-						List<RedhawkPortStatistics> stats = port.getPortStatistics();
-						metrics.add(new PortMetrics(appName, componentName, stats));
+						try {
+							List<RedhawkPortStatistics> stats = port.getPortStatistics();
+							metrics.add(new PortMetrics(appName, componentName, stats));
+						}catch(NullPointerException ex) {
+							logger.error("Unable to query port "+port.getName());
+						}
 					}
 				} catch (ResourceNotFoundException e) {
 					throw new WebApplicationException(e);
@@ -217,7 +221,8 @@ public class MetricsConverter {
 			 * Only doing this for GPP
 			 */
 			if (deviceKind!=null && deviceKind.getValue().equals("GPP")) {
-				
+				//Set name
+				gppMetric.setDeviceName(device.getName());
 				/*
 				 * Loop over the accepted keys and add to response
 				 */
@@ -263,13 +268,14 @@ public class MetricsConverter {
 						gppMetric.setSys_limits(sysLimit);
 					} else {
 						logger.error("Unhandled tpye");
-					}
-					
-					metrics.add(gppMetric);
+					}					
 				}
+				
+				//Add metric
+				metrics.add(gppMetric);
 			}
 		}
-		
+
 		return metrics;
 	}
 

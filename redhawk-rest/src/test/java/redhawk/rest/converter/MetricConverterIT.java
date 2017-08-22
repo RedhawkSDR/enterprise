@@ -101,6 +101,10 @@ public class MetricConverterIT extends RedhawkTestBase{
 		List<GPPMetrics> metrics = MetricsConverter.getMetricByType(manager, nameServer, domainName, MetricTypes.GPP);
 	
 		assertTrue("Metrics should not be empty", !metrics.isEmpty());
+		
+		for(GPPMetrics metric : metrics) {
+			assertNotNull(metric.getDeviceName());
+		}
 	}
 	
 	@Test

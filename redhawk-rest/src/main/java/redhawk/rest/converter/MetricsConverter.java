@@ -41,6 +41,7 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.port.RedhawkPortStatistics;
 import redhawk.driver.properties.RedhawkProperty;
+import redhawk.driver.properties.RedhawkSimple;
 import redhawk.driver.properties.RedhawkStruct;
 import redhawk.driver.properties.RedhawkStructSequence;
 import redhawk.rest.RedhawkManager;
@@ -209,13 +210,13 @@ public class MetricsConverter {
 		 * Loop through devices and ones that are GPP
 		 */
 		for (RedhawkDevice device : devices) {
-			String deviceKind = device.getProperty("device_kind");
+			RedhawkSimple deviceKind = device.getProperty("device_kind");
 			GPPMetrics gppMetric = new GPPMetrics();
 			
 			/*
 			 * Only doing this for GPP
 			 */
-			if (deviceKind!=null && deviceKind.equals("GPP")) {
+			if (deviceKind!=null && deviceKind.getValue().equals("GPP")) {
 				
 				/*
 				 * Loop over the accepted keys and add to response

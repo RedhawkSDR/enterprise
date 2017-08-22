@@ -6,6 +6,8 @@ public class RedhawkMetrics {
 	private List<ApplicationMetrics> applicationMetrics;
 	
 	private List<PortMetrics> portStatistics;
+	
+	private List<GPPMetrics> gppMetrics; 
 
 	public RedhawkMetrics() {
 		
@@ -31,5 +33,13 @@ public class RedhawkMetrics {
 
 	public void setPortStatistics(List<PortMetrics> portStatistics) {
 		this.portStatistics = portStatistics;
+	}
+
+	public List<GPPMetrics> getGppMetrics() {
+		return gppMetrics;
+	}
+
+	public void setGppMetrics(List<GPPMetrics> gppMetrics) {
+		this.gppMetrics = gppMetrics;
 	} 
 }

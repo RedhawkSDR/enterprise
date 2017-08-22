@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -114,12 +115,12 @@
 			<version>1.4.0</version>
 			<scope>provided</scope>
 		</dependency>
- 		<dependency>
-            		<groupId>org.apache.aries.blueprint</groupId>
-            		<artifactId>org.apache.aries.blueprint.noosgi</artifactId>
-            		<version>1.1.2</version>
-            		<scope>test</scope>
-        	</dependency>
+		<dependency>
+			<groupId>org.apache.aries.blueprint</groupId>
+			<artifactId>org.apache.aries.blueprint.noosgi</artifactId>
+			<version>1.1.2</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
@@ -179,7 +180,7 @@
 			<type>test-jar</type>
 			<version>${project.version}</version>
 			<scope>test</scope>
-		</dependency>		
+		</dependency>
 		<!-- End Test Dependencies -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.jaxrs</groupId>
@@ -239,14 +240,8 @@
 			<scope>test</scope>
 		</dependency>
 		<!-- https://mvnrepository.com/artifact/org.apache.aries.blueprint/org.apache.aries.blueprint.core -->
-		<!--
-		<dependency>
-    		<groupId>org.apache.aries.blueprint</groupId>
-    		<artifactId>org.apache.aries.blueprint.core</artifactId>
-    		<version>1.8.0</version>
-    		<scope>test</scope>
-		</dependency>
-		-->
+		<!-- <dependency> <groupId>org.apache.aries.blueprint</groupId> <artifactId>org.apache.aries.blueprint.core</artifactId> 
+			<version>1.8.0</version> <scope>test</scope> </dependency> -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -293,7 +288,7 @@
 								<apiSource>
 									<locations>redhawk.rest.endpoints</locations>
 									<basePath>cxf/redhawk</basePath>
-                					<schemes>http,https</schemes>									
+									<schemes>http,https</schemes>
 									<host>127.0.0.1</host>
 									<info>
 										<title>REDHAWK REST</title>
@@ -388,7 +383,7 @@
 								</configuration>
 							</execution>
 						</executions>
-					</plugin>				
+					</plugin>
 				</plugins>
 			</build>
 		</profile>

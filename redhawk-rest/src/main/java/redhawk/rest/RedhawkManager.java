@@ -764,7 +764,7 @@ public class RedhawkManager {
 
 			// Now Add any additional External Props
 			if(exProps!=null){
-			for (redhawk.driver.xml.model.sca.sad.Property prop : exProps.getProperties()) {
+				for (redhawk.driver.xml.model.sca.sad.Property prop : exProps.getProperties()) {
 					Property exProp = this.getProperty(prop.getPropid(), nameServer, "component",
 						location[0] + "/" + prop.getComprefid() + ".*");
 

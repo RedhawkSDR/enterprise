@@ -1,20 +1,32 @@
 package redhawk.rest.converter;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.ws.rs.WebApplicationException;
+
+import org.apache.log4j.Logger;
 
 import redhawk.driver.Redhawk;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
+import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.ApplicationException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.port.RedhawkPortStatistics;
+import redhawk.driver.properties.RedhawkProperty;
+import redhawk.driver.properties.RedhawkStruct;
+import redhawk.driver.properties.RedhawkStructSequence;
 import redhawk.rest.RedhawkManager;
 import redhawk.rest.model.ApplicationMetrics;
+import redhawk.rest.model.GPPMetrics;
 import redhawk.rest.model.PortMetrics;
 import redhawk.rest.model.RedhawkMetrics;
 import redhawk.rest.utils.MetricTypes;
@@ -23,8 +35,11 @@ import redhawk.rest.utils.MetricTypes;
  * Utility class for converting rest metric calls to Responses for client
  */
 public class MetricsConverter {
-	public static RedhawkMetrics getMetrics(RedhawkManager manager, String nameServer, String domainName) throws WebApplicationException{
-		Redhawk driver = null; 
+	static Logger logger = Logger.getLogger(MetricsConverter.class);
+	
+	public static RedhawkMetrics getMetrics(RedhawkManager manager, String nameServer, String domainName)
+			throws WebApplicationException {
+		Redhawk driver = null;
 		RedhawkMetrics metrics = new RedhawkMetrics();
 
 		try {
@@ -43,42 +58,57 @@ public class MetricsConverter {
 				case APPLICATION:
 					metrics.setApplicationMetrics(convertApplicationMetrics(domain.getApplications()));
 					break;
+				case GPP:
+					metrics.setGppMetrics(convertGPPMetrics(domain.getDevices()));
+					break;
 				}
 			}
 		} catch (Exception ex) {
 			throw new WebApplicationException(ex);
-		}finally {
-			if(driver!=null)
+		} finally {
+			if (driver != null)
 				driver.disconnect();
 		}
 
 		return metrics;
 	}
 
-	public static <T> T getMetricByType(RedhawkManager manager, String nameServer, String domainName, MetricTypes type){
-		Redhawk driver = null; 
+	/**
+	 * Returns metrics based upon the type you pass in.
+	 * 
+	 * @param manager
+	 * @param nameServer
+	 * @param domainName
+	 * @param type
+	 * @return
+	 */
+	public static <T> T getMetricByType(RedhawkManager manager, String nameServer, String domainName,
+			MetricTypes type) {
+		Redhawk driver = null;
 
 		try {
 			driver = manager.getDriverInstance(nameServer);
 			RedhawkDomainManager domain = driver.getDomain(domainName);
-			
-			switch(type) {
-			case APPLICATION: 
-				//Get the Application Metrics
+
+			switch (type) {
+			case APPLICATION:
+				// Get the Application Metrics
 				List<ApplicationMetrics> appMetrics = convertApplicationMetrics(domain.getApplications());
 				return (T) appMetrics;
 			case PORT:
-				//Get the Port Metrics
+				// Get the Port Metrics
 				List<PortMetrics> portMetrics = convertPortMetrics(domain.getApplications());
 				return (T) portMetrics;
+			case GPP:
+				Collection<RedhawkDevice> devices = domain.devices().values();
+				return (T) convertGPPMetrics(devices);
 			default:
-				//TODO: 
-				return null;
+				throw new WebApplicationException("Unhandled Metric Type");
 			}
-		}catch(Exception ex) {
+		} catch (Exception ex) {
 			throw new WebApplicationException(ex);
-		}finally {
-			if(driver!=null)
+		} finally {
+			if (driver != null)
 				driver.disconnect();
 		}
 	}
@@ -111,8 +141,8 @@ public class MetricsConverter {
 	}
 
 	/**
-	 * Helper method to convert all port metrics into the appropriate 
-	 * response object
+	 * Helper method to convert all port metrics into the appropriate response
+	 * object
 	 * 
 	 * @param applications
 	 * @return
@@ -145,5 +175,110 @@ public class MetricsConverter {
 		}
 
 		return metrics;
+	}
+	
+	/**
+	 * Convert GPP Metrics from Device list
+	 * @param devices
+	 * @return
+	 */
+	public static List<GPPMetrics> convertGPPMetrics(Collection<RedhawkDevice> devices) {
+		List<GPPMetrics> metrics = new ArrayList<>();
+		String[] metricKeys = new String[] { "component_monitor", "utilization", "sys_limits", "nic_metrics" };
+
+		/*
+		 * Loop through devices and ones that are GPP
+		 */
+		for (RedhawkDevice device : devices) {
+			String deviceKind = device.getProperty("device_kind");
+			GPPMetrics gppMetric = new GPPMetrics();
+			
+			/*
+			 * Only doing this for GPP
+			 */
+			if (deviceKind!=null && deviceKind.equals("GPP")) {
+				
+				/*
+				 * Loop over the accepted keys and add to response
+				 */
+				for (String metricKey : metricKeys) {
+					RedhawkProperty property = device.getProperties().get(metricKey);
+					if (property instanceof RedhawkStructSequence) {
+						RedhawkStructSequence propToConvert = (RedhawkStructSequence) property;
+
+						switch (metricKey) {
+						case "component_monitor":
+							String stripBeginning = "component_monitor::component_monitor::";
+							List<Map<String, Object>> cmMetrics = structToNormalizedCollection(stripBeginning,
+									propToConvert.toListOfMaps());
+
+							gppMetric.setComponent_monitor(cmMetrics);
+							break;
+						case "utilization":
+							for (Map<String, Object> componentMonitor : propToConvert.toListOfMaps()) {
+								// TODO: This might need to be a list
+								gppMetric.setUtilization(componentMonitor);
+								break;
+							}
+							break;
+						case "nic_metrics":
+							String nicStrip = "nic_metrics::";
+							List<Map<String, Object>> normalizedNicMetrics = structToNormalizedCollection(nicStrip,
+									propToConvert.toListOfMaps());
+							gppMetric.setNic_metrics(normalizedNicMetrics);
+							break;
+						default:
+							System.err.println("Unhandled Key: " + metricKey);
+						}
+					} else if (property instanceof RedhawkStruct) {
+						RedhawkStruct struct = (RedhawkStruct) property;
+						String sysLimitStrip = "sys_limits::";
+						Map<String, Object> sysLimit = new HashMap<>();
+
+						for (Entry<String, Object> sEntry : struct.entrySet()) {
+							String key = sEntry.getKey().replaceAll(sysLimitStrip, "");
+							sysLimit.put(key, sEntry.getValue());
+						}
+
+						gppMetric.setSys_limits(sysLimit);
+					} else {
+						logger.error("Unhandled tpye");
+					}
+					
+					metrics.add(gppMetric);
+				}
+			}
+		}
+		
+		return metrics;
+	}
+
+	/**
+	 * Clean up unnecessary padding on key values
+	 * 
+	 * @return
+	 */
+	private static List<Map<String, Object>> structToNormalizedCollection(String strip,
+			List<Map<String, Object>> structAttributes) {
+		List<Map<String, Object>> normalizedStructMetrics = new ArrayList<>();
+
+		/*
+		 * Loop through component_monitor entries
+		 */
+		for (Map<String, Object> structAttribute : structAttributes) {
+			/*
+			 * Remove unncessary key padding
+			 */
+			Map<String, Object> normalizedStructEntry = new HashMap<>();
+			for (Map.Entry<String, Object> cmEntry : structAttribute.entrySet()) {
+				String key = cmEntry.getKey().replaceAll(strip, "");
+				normalizedStructEntry.put(key, cmEntry.getValue());
+			}
+
+			// Add to list
+			normalizedStructMetrics.add(normalizedStructEntry);
+		}
+
+		return normalizedStructMetrics;
 	}
 }

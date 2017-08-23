@@ -6,17 +6,39 @@
     <md-input v-model="appMetricsURL"></md-input>
   </md-input-container>
   <md-button class="md-primary md-raised"  v-on:click="getAppMetrics">Get App Metrics</md-button>
-  <md-list>
-    <md-list-item
-      v-for="(component, index) in appMetricKeys"
-      v-bind:key="component"
-      v-bind:index="index">
-      {{ component }}
-      <md-button v-on:click="loadInTable(component)">
-        View
-      </md-button>
-    </md-list-item>
-  </md-list>
+  <md-layout md-gutter>
+    <md-layout md-flex="30">
+      <span class="md-title">App Metrics</span>
+      <md-list>
+        <md-list-item
+          v-for="(component, index) in appMetricsKeys"
+          v-bind:key="component"
+          v-bind:index="index">
+          {{ component }}
+          <md-button v-on:click="loadInTable(component)">
+            View
+          </md-button>
+        </md-list-item>
+      </md-list>
+    </md-layout>
+    <md-layout md-flex>
+      <md-table>
+        <md-table-header>
+          <md-table-row>
+            <md-table-head>Metric Name</md-table-head>
+            <md-table-head md-numeric>Value</md-table-head>
+          </md-table-row>
+        </md-table-header>
+
+        <md-table-body>
+          <md-table-row v-for="(row, index) in Object.keys(appMetricsToView)" :key="index">
+            <md-table-cell>{{ row }}</md-table-cell>
+            <md-table-cell>{{ appMetricsToView[row]}}</md-table-cell>
+          </md-table-row>
+        </md-table-body>
+      </md-table>
+    </md-layout>
+  </md-layout>
 </div>
 </template>
 
@@ -32,8 +54,11 @@ export default {
     appMetrics(){
       return this.$store.getters.appMetrics
     },
-    appMetricKeys(){
+    appMetricsKeys(){
       return this.$store.getters.appMetricsKeys
+    },
+    appMetricsToView(){
+      return this.$store.getters.appMetricsToView
     }
   },
   methods: {
@@ -44,7 +69,7 @@ export default {
       this.$store.dispatch("getAppMetrics", this.appMetricsURL)
     },
     loadInTable(loadMe){
-      console.log(loadMe)
+      this.$store.dispatch("getAppMetricsByType", loadMe)
     }
   }
 }

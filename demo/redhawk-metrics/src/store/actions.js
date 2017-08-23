@@ -51,3 +51,35 @@ export const getAppMetrics = ({ commit, getters }) => {
     console.log(error)
   })
 }
+
+/*
+* GET a specific application metric
+*/
+export const getAppMetricsByType = ({ commit, getters}, metricsName) => {
+  var url = getters.appMetricsURL
+
+  //Create JSON
+  var obj = new Object()
+  obj.components = [metricsName]
+  obj.attributes = []
+
+  axios.post(url, JSON.stringify(obj),
+  {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(function(response){
+      var obj = new Object()
+      obj.key = "appMetricsToView"
+      obj.metricsName = Object.keys(response.data)[0]
+
+      //Don't need the key at this point
+      obj.value = response.data[obj.metricsName]
+      console.log(obj)
+      commit('updateIndex', obj)
+  })
+  .catch(function(error){
+      console.log(error)
+  })
+}

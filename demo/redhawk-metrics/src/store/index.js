@@ -13,7 +13,9 @@ const state = {
   available : {},
   appMetrics: {},
   appMetricsURL: '',
-  appMetricsKeys: []
+  appMetricsKeys: [],
+  appMetricsToView: {},
+  appMetricsType: ''
 }
 
 const store = new Vuex.Store({

@@ -13,6 +13,9 @@ export const updateIndex = (state, obj) => {
     //Update appMetrics and Keys
     state.appMetrics = obj.value
     state.appMetricsKeys = Object.keys(obj.value.metrics)
+  }else if(obj.key=='appMetricsToView'){
+    state.appMetricsToView = obj.value
+    state.appMetricsType = obj.metricsName
   }else{
     console.log("Unknown key "+obj.key)
   }

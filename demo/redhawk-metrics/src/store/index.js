@@ -10,7 +10,10 @@ const state = {
   baseURL: 'http://localhost:8181/cxf/redhawk',
   nameServer: 'localhost:2809',
   domainName: 'REDHAWK_DEV',
-  available : {}
+  available : {},
+  appMetrics: {},
+  appMetricsURL: '',
+  appMetricsKeys: []
 }
 
 const store = new Vuex.Store({

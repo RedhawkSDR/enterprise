@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button v-on:click="getAvailable">Available</button>
+    <md-button class="md-primary md-raised" v-on:click="getAvailable">Available</md-button>
     <tree-view :data="available" :options="{maxDepth: 7, rootObjectKey: 'metrics'}"></tree-view>
   </div>
 </template>
@@ -18,6 +18,6 @@ export default {
       console.log("Making it to available")
       this.$store.dispatch("getAvailableMetrics")
     }
-  }  
+  }
 }
 </script>

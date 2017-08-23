@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -16,6 +18,7 @@ import io.swagger.annotations.ApiParam;
 import redhawk.rest.converter.MetricsConverter;
 import redhawk.rest.model.ApplicationMetrics;
 import redhawk.rest.model.GPPMetrics;
+import redhawk.rest.model.MetricFilter;
 import redhawk.rest.model.RedhawkMetrics;
 import redhawk.rest.utils.MetricTypes;
 
@@ -54,6 +57,15 @@ public class RedhawkMetricsResource extends RedhawkBaseResource{
 	@ApiOperation(value = "GET an Applications metrics")
 	public List<ApplicationMetrics> getApplicationMetric(@ApiParam(value = "regex/application name") @PathParam("applicationFilter") String applicationFilter) {
 		return MetricsConverter.getMetricsByTypeAndFilter(redhawkManager, nameServer, domainName, MetricTypes.APPLICATION, applicationFilter);
+	}
+	
+	@POST
+	@Path("/application/{applicationName}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_JSON })
+	@ApiOperation(value = "Retrieve a specific application metric based on a filter")
+	public Map<String, Map<String, Object>> getApplicationMetricByMetricType(@ApiParam(value = "application name") @PathParam("applicationName") String applicationName, MetricFilter filter){
+		return MetricsConverter.getAppMetricsByMetricType(redhawkManager, nameServer, domainName, applicationName, filter);
 	}
 	
 	@GET

@@ -7,7 +7,7 @@
       <md-layout md-flex="30">
         <availablemetrics/>
       </md-layout>
-      <md-layout>
+      <md-layout md-flex>
         <appmetrics/>
       </md-layout>
     </md-layout>
@@ -29,8 +29,4 @@ export default {
 
 
 <style>
-/* Root node should not be indented */
-.tree-view-item-root {
-  margin-left: 0;
-}
 </style>

@@ -49,6 +49,7 @@ import redhawk.driver.properties.RedhawkStructSequence;
 import redhawk.rest.RedhawkManager;
 import redhawk.rest.model.ApplicationMetrics;
 import redhawk.rest.model.GPPMetrics;
+import redhawk.rest.model.MetricFilter;
 import redhawk.rest.model.PortMetrics;
 import redhawk.rest.model.RedhawkMetrics;
 import redhawk.rest.utils.MetricTypes;
@@ -134,6 +135,22 @@ public class MetricsConverter {
 			throw new WebApplicationException(ex);
 		} finally {
 			if (driver != null)
+				driver.disconnect();
+		}
+	}
+	
+	public static <T> T getAppMetricsByMetricType(RedhawkManager manager, String nameServer, String domainName, String applicationName, MetricFilter filter) {
+		Redhawk driver = null;
+
+		try {
+			driver = manager.getDriverInstance(nameServer);
+			RedhawkDomainManager domain = driver.getDomain(domainName);
+			
+			return (T) domain.getApplicationByName(applicationName).getMetrics(filter.getComponents(), filter.getAttributes());
+		}catch(Exception ex) {
+			throw new WebApplicationException(ex);
+		}finally {
+			if(driver!=null)
 				driver.disconnect();
 		}
 	}
@@ -380,7 +397,7 @@ public class MetricsConverter {
 								metrics.add(new PortMetrics(appName, componentName, stats));
 							else 
 								logger.debug("Not reporting stats for port with empty statistics "+port.getName());
-						}catch(NullPointerException ex) {
+						}catch(Exception ex) {
 							logger.error("Unable to query port "+port.getName());
 						}
 					}

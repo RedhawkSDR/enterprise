@@ -1,11 +1,13 @@
 <template>
-  <h1>Hello World</h1>
   <div>
-    <tree-view :data="sampleData" :options="{maxDepth: 3}"></tree-view>
+    <h1>Hello World</h1>
+    <tree-view :data="sampleData" max-depth="7"></tree-view>
   </div>
 </template>
 
 <script>
+import TreeView from "vue-json-tree-view"
+
 export default {
   name: 'redhawkmetrics',
   data(){

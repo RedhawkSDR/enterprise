@@ -4,7 +4,6 @@
 export const updateIndex = (state, obj) => {
   //TODO: Should be able to do below
   //console.log(state[key])
-  console.log(obj)
   if(obj.key=='available'){
     state.available = obj.value
   }else if(obj.key=='appMetricsURL'){

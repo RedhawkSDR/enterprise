@@ -76,7 +76,6 @@ export const getAppMetricsByType = ({ commit, getters}, metricsName) => {
 
       //Don't need the key at this point
       obj.value = response.data[obj.metricsName]
-      console.log(obj)
       commit('updateIndex', obj)
   })
   .catch(function(error){

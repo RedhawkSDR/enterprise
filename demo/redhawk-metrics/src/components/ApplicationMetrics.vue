@@ -48,6 +48,8 @@ export default {
   data() {
     return {
       appMetricsURL: '',
+      interval: null,
+      metricType: null
     }
   },
   computed: {
@@ -69,7 +71,32 @@ export default {
       this.$store.dispatch("getAppMetrics", this.appMetricsURL)
     },
     loadInTable(loadMe){
+      this.metricType = loadMe
       this.$store.dispatch("getAppMetricsByType", loadMe)
+
+      //TODO: Use set interval
+      //this.intervalSetup()
+      if(this.interval==null){
+        this.interval = setTimeout(this.loadInTable, 1000, this.metricType);
+      }else{
+        clearTimeout(this.interval)
+        this.interval = setTimeout(this.loadInTable, 1000, this.metricType);          
+      }
+    },
+    intervalSetup(){
+      console.log("HELLO")
+      if(this.interval==null){
+        self.setInterval(function(){
+          console.log("Trying")
+          console.log(this)
+        }, 1000)
+      }else{
+        clearInterval(this.interval)
+        self.setInterval(function(){
+          console.log("Trying")
+          console.log(this)
+        }, 1000)
+      }
     }
   }
 }

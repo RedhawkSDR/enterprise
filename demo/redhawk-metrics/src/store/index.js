@@ -15,7 +15,8 @@ const state = {
   appMetricsURL: '',
   appMetricsKeys: [],
   appMetricsToView: {},
-  appMetricsType: ''
+  appMetricsType: '',
+  interval: null
 }
 
 const store = new Vuex.Store({

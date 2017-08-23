@@ -37,6 +37,8 @@ import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.ApplicationException;
+import redhawk.driver.exceptions.CORBAException;
+import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.port.RedhawkPortStatistics;
@@ -57,6 +59,15 @@ import redhawk.rest.utils.MetricTypes;
 public class MetricsConverter {
 	static Logger logger = Logger.getLogger(MetricsConverter.class);
 	
+	/**
+	 * Returns metrics of all types(APP, GPP, PORT)
+	 * 
+	 * @param manager
+	 * @param nameServer
+	 * @param domainName
+	 * @return
+	 * @throws WebApplicationException
+	 */
 	public static RedhawkMetrics getMetrics(RedhawkManager manager, String nameServer, String domainName)
 			throws WebApplicationException {
 		Redhawk driver = null;
@@ -132,6 +143,150 @@ public class MetricsConverter {
 				driver.disconnect();
 		}
 	}
+	
+	public static <T> T getAvailableMetrics(RedhawkManager manager, String nameServer, String domainName) {
+		Redhawk driver = null;
+
+		try {
+			driver = manager.getDriverInstance(nameServer);
+			RedhawkDomainManager domain = driver.getDomain(domainName);
+			Map<String, Object> json = new HashMap<>();
+			List<RedhawkApplication> applications = null; 
+			
+			for (MetricTypes type : MetricTypes.values()) {
+				switch (type) {
+				case APPLICATION:
+					if(applications==null)
+						applications = domain.getApplications();
+					
+					List<String> applicationNames = new ArrayList<>();
+					for (RedhawkApplication app : applications) {
+						applicationNames.add(app.getName());
+					}
+					json.put(MetricTypes.APPLICATION.toString(), applicationNames);
+					break;
+				case GPP:
+					//TODO: Should go by device kind
+					List<RedhawkDevice> devices = domain.getDevicesByName("GPP.*");
+					List<String> names = new ArrayList<>();
+					
+					for(RedhawkDevice dev : devices) {
+						names.add(dev.getName());
+					}
+					
+					json.put(MetricTypes.GPP.toString(), names);
+					break;
+				case PORT:					
+					if(applications==null)
+						applications = domain.getApplications();
+									
+					/*
+					 * Time to create a tree
+					 * PORT
+					 * +-APPLICATION
+					 * +--<APP NAME>
+					 * +---COMPONENTS
+					 * +----<COMPONENT NAME>
+					 * +-----PORTS
+					 * +------<PORT NAMES>
+					 */
+					Map<String, Map<String, Map<String, Map<String, Map<String, List<String>>>>>> portTree = new HashMap<>();
+
+					for(RedhawkApplication application : applications) {
+						String appName = application.getName();
+						
+						/*
+						 * COMPONENTS
+						 * +-<Component Name>
+						 * +--PORTS
+						 * +---<PORT Name>
+						 */
+						Map<String, Map<String, Map<String, List<String>>>> appComponents = new HashMap<>();
+						//Loop through components 
+						for(RedhawkComponent comp : application.getComponents()) {
+							String componentName = comp.getName();
+							
+							//Loop through ports and add names for ports that have stats
+							List<RedhawkPort> ports;
+							try {
+								ports = comp.getPorts();
+								
+								List<String> portNames = new ArrayList<>();
+								for(RedhawkPort port : ports) {
+									try {
+									if(!port.getPortStatistics().isEmpty())
+										portNames.add(port.getName());
+									}catch(Exception ex) {
+										logger.error("Exception trying to get port stats from "+port.getName(), ex);
+									}
+								}
+								
+								//Create port map
+								Map<String, List<String>> portMap = new HashMap<>();
+								portMap.put("PORTS", portNames);
+								
+								//Hold component to port map
+								Map<String, Map<String, List<String>>> compPortMap;
+								//Update component Map
+								if(appComponents.containsKey("COMPONENTS")) {
+									//Retrive current components port map and update
+									compPortMap = (Map<String, Map<String, List<String>>>) appComponents.get("COMPONENTS");
+									
+									compPortMap.put(componentName, portMap);
+								}else {
+									compPortMap = new HashMap<>();
+									Map<String, Map<String, List<String>>> temp = new HashMap<>();
+									
+									temp.put(componentName, portMap);
+									appComponents.put("COMPONENTS", temp);
+								}
+							} catch (ResourceNotFoundException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						
+						/*
+						 * Check if tree is empty if so create initial 
+						 * 
+						 * Underlying output should be 
+						 * APPLICATIONS
+						 * +-<APP NAME>
+						 * +--COMPONENTS
+						 * +---<COMP NAME>
+						 * +----PORTS
+						 * +-----<PORT NAME>
+						 */
+						if(portTree.isEmpty()) {
+							/*
+							 * App name is child
+							 */
+							Map<String, Map<String, Map<String, Map<String, List<String>>>>> temp = new HashMap<>();
+							temp.put(appName, appComponents);
+							portTree.put("APPLICATIONS", temp);
+						}else {
+							//Get applications
+							Map<String, Map<String, Map<String, Map<String, List<String>>>>> temp = portTree.get("APPLICATIONS");
+							
+							temp.put(appName, appComponents);
+						}
+					}
+					
+					json.put(MetricTypes.PORT.toString(), portTree);
+					break;
+				default:
+					logger.error("Unhandled type "+type);
+				}
+			}
+			
+			return (T) json;
+		}catch(Exception ex) {
+			throw new WebApplicationException(ex);
+		}finally {
+			if (driver != null)
+				driver.disconnect();
+		}
+	}
 
 	/**
 	 * Helper method to convert all application metrics into the appropriate
@@ -187,7 +342,10 @@ public class MetricsConverter {
 					for (RedhawkPort port : comp.getPorts()) {
 						try {
 							List<RedhawkPortStatistics> stats = port.getPortStatistics();
-							metrics.add(new PortMetrics(appName, componentName, stats));
+							if(!stats.isEmpty())
+								metrics.add(new PortMetrics(appName, componentName, stats));
+							else 
+								logger.debug("Not reporting stats for port with empty statistics "+port.getName());
 						}catch(NullPointerException ex) {
 							logger.error("Unable to query port "+port.getName());
 						}
@@ -278,7 +436,7 @@ public class MetricsConverter {
 
 		return metrics;
 	}
-
+	
 	/**
 	 * Clean up unnecessary padding on key values
 	 * 

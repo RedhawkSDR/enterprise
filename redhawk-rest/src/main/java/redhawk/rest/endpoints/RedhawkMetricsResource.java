@@ -1,6 +1,7 @@
 package redhawk.rest.endpoints;
 
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.ws.rs.GET;
@@ -45,6 +46,14 @@ public class RedhawkMetricsResource extends RedhawkBaseResource{
 	@ApiOperation(value = "GET all Application Metrics for a Domain")
 	public List<ApplicationMetrics> applicationMetrics(){
 		return MetricsConverter.getMetricByType(redhawkManager, nameServer, domainName, MetricTypes.APPLICATION);
+	}
+	
+	@GET
+	@Path("/available")
+	@Produces({ MediaType.APPLICATION_JSON })
+	@ApiOperation(value = "GET available metrics")
+	public Map<String,Object> available(){
+		return MetricsConverter.getAvailableMetrics(redhawkManager, nameServer, domainName);
 	}
 	
 	@GET

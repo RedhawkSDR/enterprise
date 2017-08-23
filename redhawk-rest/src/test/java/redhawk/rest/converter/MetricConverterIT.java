@@ -94,7 +94,7 @@ public class MetricConverterIT extends RedhawkTestBase {
 
 	@Test
 	public void testGetAppMetrics() {
-		List<ApplicationMetrics> metrics = MetricsConverter.getMetricByType(manager, nameServer, domainName,
+		List<ApplicationMetrics> metrics = MetricsConverter.getMetricsByType(manager, nameServer, domainName,
 				MetricTypes.APPLICATION);
 
 		assertTrue("Metrics should not be empty", !metrics.isEmpty());
@@ -102,14 +102,14 @@ public class MetricConverterIT extends RedhawkTestBase {
 
 	@Test
 	public void testGetPortMetrics() {
-		List<PortMetrics> metrics = MetricsConverter.getMetricByType(manager, nameServer, domainName, MetricTypes.PORT);
+		List<PortMetrics> metrics = MetricsConverter.getMetricsByType(manager, nameServer, domainName, MetricTypes.PORT);
 
 		assertTrue("Metrics should not be empty", !metrics.isEmpty());
 	}
 
 	@Test
 	public void testGetGPPMetrics() {
-		List<GPPMetrics> metrics = MetricsConverter.getMetricByType(manager, nameServer, domainName, MetricTypes.GPP);
+		List<GPPMetrics> metrics = MetricsConverter.getMetricsByType(manager, nameServer, domainName, MetricTypes.GPP);
 
 		assertTrue("Metrics should not be empty", !metrics.isEmpty());
 

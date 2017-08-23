@@ -44,7 +44,7 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.rest.exceptions.ResourceNotFound;
 import redhawk.rest.model.Application;
 import redhawk.rest.model.ApplicationContainer;
-import redhawk.rest.model.ApplicationMetricFilter;
+import redhawk.rest.model.MetricFilter;
 import redhawk.rest.model.ExternalPort;
 import redhawk.rest.model.ExternalPortContainer;
 import redhawk.rest.model.FetchMode;
@@ -129,14 +129,14 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 		String[] comps = new String[0];
 		String[] attr = new String[0];
 		
-		return redhawkManager.getMetrics(nameServer, "application", domainName+"/"+applicationId, new ApplicationMetricFilter(comps, attr));
+		return redhawkManager.getMetrics(nameServer, "application", domainName+"/"+applicationId, new MetricFilter(comps, attr));
 	}
 	
 	@POST
 	@Path("/{applicationId}/metrics")
 	@Produces({ MediaType.APPLICATION_JSON })
 	@ApiOperation(value = "GET Application metrics with a filter")
-	public Map<String, Map<String, Object>> metrics(@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId, @ApiParam(value = "Filter for metrics") ApplicationMetricFilter filter) throws Exception{
+	public Map<String, Map<String, Object>> metrics(@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId, @ApiParam(value = "Filter for metrics") MetricFilter filter) throws Exception{
 		return redhawkManager.getMetrics(nameServer, "application", domainName+"/"+applicationId, filter);
 	}
 	

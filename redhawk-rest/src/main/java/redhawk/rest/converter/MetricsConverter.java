@@ -103,9 +103,43 @@ public class MetricsConverter {
 
 		return metrics;
 	}
-
+	
 	/**
-	 * Returns metrics based upon the type you pass in.
+	 * Returns metrics based on filter param. This can be a 
+	 * @param manager
+	 * @param nameServer
+	 * @param domainName
+	 * @param filter
+	 * @return
+	 */
+	public static <T> T getMetricsByTypeAndFilter(RedhawkManager manager, String nameServer, String domainName, MetricTypes type, String filter) {
+		Redhawk driver = null;
+
+		try {
+			driver = manager.getDriverInstance(nameServer);
+			RedhawkDomainManager domain = driver.getDomain(domainName);
+		
+			switch (type) {
+			case APPLICATION:
+				// Get the Application Metrics
+				List<ApplicationMetrics> appMetrics = convertApplicationMetrics(domain.getApplicationsByName(filter));
+				return (T) appMetrics;
+			case GPP:
+				Collection<RedhawkDevice> devices = domain.getDevicesByName(filter);
+				return (T) convertGPPMetrics(devices);
+			default:
+				throw new WebApplicationException("Unhandled Metric Type");
+			}
+		} catch (Exception ex) {
+			throw new WebApplicationException(ex);
+		} finally {
+			if (driver != null)
+				driver.disconnect();
+		}
+	}
+	
+	/**
+	 * Returns all metrics based upon the type you pass in.
 	 * 
 	 * @param manager
 	 * @param nameServer
@@ -113,7 +147,7 @@ public class MetricsConverter {
 	 * @param type
 	 * @return
 	 */
-	public static <T> T getMetricByType(RedhawkManager manager, String nameServer, String domainName,
+	public static <T> T getMetricsByType(RedhawkManager manager, String nameServer, String domainName,
 			MetricTypes type) {
 		Redhawk driver = null;
 

@@ -3,6 +3,7 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 import TreeView from "vue-json-tree-view"
 
 Vue.config.productionTip = false
@@ -13,6 +14,7 @@ Vue.use(TreeView)
 new Vue({
   el: '#app',
   router,
+  store,
   template: '<App/>',
   components: { App }
 })

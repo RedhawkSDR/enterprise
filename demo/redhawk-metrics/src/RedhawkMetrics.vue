@@ -1,8 +1,10 @@
 <template>
   <div>
-    <h1>Hello World</h1>
+    <md-toolbar>
+      REDHAWK Metrics
+    </md-toolbar>
     <button v-on:click="getAvailable">Available</button>
-    <tree-view :data="available" max-depth="7"></tree-view>
+    <tree-view :data="available" :options="{maxDepth: 7, rootObjectKey: 'metrics'}"></tree-view>
   </div>
 </template>
 
@@ -27,3 +29,11 @@ export default {
   }
 }
 </script>
+
+
+<style>
+/* Root node should not be indented */
+.tree-view-item-root {
+  margin-left: 0;
+}
+</style>

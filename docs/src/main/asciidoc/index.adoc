@@ -81,6 +81,8 @@ include::camel/overview.adoc[]
 
 //End of docs being pulled from other modules....
 
+include::jrepl.adoc[]
+
 //Demo instructions 
 
 :leveloffset: 0

@@ -196,6 +196,10 @@ public class MetricsConverter {
 	}
 	
 	public static <T> T getAvailableMetrics(RedhawkManager manager, String nameServer, String domainName) {
+		return getAvailableMetrics(manager, nameServer, domainName, false);
+	}
+	
+	public static <T> T getAvailableMetrics(RedhawkManager manager, String nameServer, String domainName, Boolean treeFormat) {
 		Redhawk driver = null;
 
 		try {
@@ -230,100 +234,15 @@ public class MetricsConverter {
 				case PORT:					
 					if(applications==null)
 						applications = domain.getApplications();
-									
-					/*
-					 * Time to create a tree
-					 * PORT
-					 * +-APPLICATION
-					 * +--<APP NAME>
-					 * +---COMPONENTS
-					 * +----<COMPONENT NAME>
-					 * +-----PORTS
-					 * +------<PORT NAMES>
-					 */
-					Map<String, Map<String, Map<String, Map<String, Map<String, List<String>>>>>> portTree = new HashMap<>();
-
-					for(RedhawkApplication application : applications) {
-						String appName = application.getName();
-						
-						/*
-						 * COMPONENTS
-						 * +-<Component Name>
-						 * +--PORTS
-						 * +---<PORT Name>
-						 */
-						Map<String, Map<String, Map<String, List<String>>>> appComponents = new HashMap<>();
-						//Loop through components 
-						for(RedhawkComponent comp : application.getComponents()) {
-							String componentName = comp.getName();
-							
-							//Loop through ports and add names for ports that have stats
-							List<RedhawkPort> ports;
-							try {
-								ports = comp.getPorts();
-								
-								List<String> portNames = new ArrayList<>();
-								for(RedhawkPort port : ports) {
-									try {
-									if(!port.getPortStatistics().isEmpty())
-										portNames.add(port.getName());
-									}catch(Exception ex) {
-										logger.error("Exception trying to get port stats from "+port.getName(), ex);
-									}
-								}
-								
-								//Create port map
-								Map<String, List<String>> portMap = new HashMap<>();
-								portMap.put("PORTS", portNames);
-								
-								//Hold component to port map
-								Map<String, Map<String, List<String>>> compPortMap;
-								//Update component Map
-								if(appComponents.containsKey("COMPONENTS")) {
-									//Retrive current components port map and update
-									compPortMap = (Map<String, Map<String, List<String>>>) appComponents.get("COMPONENTS");
-									
-									compPortMap.put(componentName, portMap);
-								}else {
-									compPortMap = new HashMap<>();
-									Map<String, Map<String, List<String>>> temp = new HashMap<>();
-									
-									temp.put(componentName, portMap);
-									appComponents.put("COMPONENTS", temp);
-								}
-							} catch (ResourceNotFoundException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-						
-						/*
-						 * Check if tree is empty if so create initial 
-						 * 
-						 * Underlying output should be 
-						 * APPLICATIONS
-						 * +-<APP NAME>
-						 * +--COMPONENTS
-						 * +---<COMP NAME>
-						 * +----PORTS
-						 * +-----<PORT NAME>
-						 */
-						if(portTree.isEmpty()) {
-							/*
-							 * App name is child
-							 */
-							Map<String, Map<String, Map<String, Map<String, List<String>>>>> temp = new HashMap<>();
-							temp.put(appName, appComponents);
-							portTree.put("APPLICATIONS", temp);
-						}else {
-							//Get applications
-							Map<String, Map<String, Map<String, Map<String, List<String>>>>> temp = portTree.get("APPLICATIONS");
-							
-							temp.put(appName, appComponents);
-						}
-					}
 					
-					json.put(MetricTypes.PORT.toString(), portTree);
+					Object ports;
+					if(treeFormat) {
+						ports = MetricsConverterUtils.getPortsAvailableAsTree(applications);
+					}else {
+						ports = MetricsConverterUtils.getPortsAvailable(applications);
+					}	
+					
+					json.put(MetricTypes.PORT.toString(), ports);
 					break;
 				default:
 					logger.error("Unhandled type "+type);

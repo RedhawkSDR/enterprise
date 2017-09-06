@@ -2,7 +2,7 @@
 
 === Overview
 
-Provides an HTML5-compliant WebSocket implementation that enables the ability to stream data from any REDHAWK BulkIO-enabled Port or Event Channel.
+Provides an HTML5-compliant WebSocket implementation that enables the ability to stream data from any REDHAWK BulkIO Port or Event Channel.
 
 As long as HTTPS is enabled, Jetty will host each of the following endpoints in the `wss` (WebSocket Secure) protocol as well. 
 
@@ -10,7 +10,7 @@ As long as HTTPS is enabled, Jetty will host each of the following endpoints in 
 
 The WebSocket servlet resides at `ws://{hostname}:8181/redhawk`.
 
-* To connect to a specific REDHAWK installation, provide the hostname/address along with the Port of the REDHAWK Name Server.
+* To connect to a specific REDHAWK installation, provide the hostname/address along with the Port of the OmniORB Naming Server.
 
 ----
 ws://localhost:8181/redhawk/localhost:2809

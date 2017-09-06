@@ -113,7 +113,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@ApiOperation(value = "Launch Application")
 	public Response launchApplication(
-			@ApiParam(value = "Name for Application") @PathParam("instanceName") String instanceName, WaveformInfo info)
+			@ApiParam(value = "Name for Application") @PathParam("instanceName") String instanceName, @ApiParam(value="SAD file Location w/ optional Id/name of waveform", required=true) WaveformInfo info)
 			throws ResourceNotFoundException, ApplicationCreationException {
 		redhawkManager.createApplication(nameServer, domainName, instanceName, info);
 		return Response.ok("Success").build();

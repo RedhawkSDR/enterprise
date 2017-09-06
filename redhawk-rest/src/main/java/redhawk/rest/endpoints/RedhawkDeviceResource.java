@@ -37,6 +37,7 @@ import javax.ws.rs.core.Response;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import redhawk.driver.device.AdminState;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.rest.exceptions.ResourceNotFound;
@@ -88,7 +89,7 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="Allocate a REDHAWK Device"
     		)
-    public Response allocateDevice(@PathParam("deviceId") String deviceId, Map<String, Object> allocation) throws Exception{
+    public Response allocateDevice(@PathParam("deviceId") String deviceId, @ApiParam(value="Map representing an allocation", required=true) Map<String, Object> allocation) throws Exception{
     	//TODO: Look into where the appropriate place to fix this is. 
     	redhawkManager.allocateDevice(nameServer, domainName+"/"+devManagerName+"/"+deviceId, allocation);
     	//TODO: Probably should return the successful tuner::status object
@@ -103,7 +104,7 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="Deallocate a REDHAWK Device"
     		)
-    public Response deallocateDevice(@PathParam("deviceId") String deviceId, String allocationId) throws Exception{
+    public Response deallocateDevice(@PathParam("deviceId") String deviceId, @ApiParam(value="Allocation Id to delete", required=true) String allocationId) throws Exception{
     	redhawkManager.deallocateDevice(nameServer, domainName+"/"+devManagerName+"/"+deviceId, allocationId);
     	//TODO: Probably should return the successful tuner::status object
     	return Response.ok().build();
@@ -149,7 +150,7 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="Set REDHAWK Device Properties"
     		)
-    public Response setDeviceProperties(@PathParam("deviceId") String deviceId, List<FullProperty> properties) throws Exception {
+    public Response setDeviceProperties(@PathParam("deviceId") String deviceId, @ApiParam(value="List of properties to update", required=true) List<FullProperty> properties) throws Exception {
         redhawkManager.setProperties(properties, nameServer, "device", domainName + "/" + devManagerName + "/" + deviceId);
         return Response.ok().build();
     }
@@ -161,7 +162,7 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="Set REDHAWK Device Property"
     		)
-    public Response setDeviceProperty(@PathParam("deviceId") String deviceId, @PathParam("propId") String propertyId, FullProperty property) throws Exception {
+    public Response setDeviceProperty(@PathParam("deviceId") String deviceId, @PathParam("propId") String propertyId, @ApiParam(value="Property to update", required=true) FullProperty property) throws Exception {
         redhawkManager.setProperty(property, nameServer, "device", domainName + "/" + devManagerName + "/" + deviceId);
         return Response.ok().build();
     }
@@ -173,7 +174,7 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="Set REDHAWK Device AdminState"
     		)
-    public Response setAdminState(@PathParam("deviceId") String deviceId, String state) throws Exception {
+    public Response setAdminState(@PathParam("deviceId") String deviceId, @ApiParam("AdminState to change Device too(e.g. LOCKED/UNLOCKED)") String state) throws Exception {
     	AdminState stateObj = AdminState.valueOf(state);
     	
     	redhawkManager.setAdminState(nameServer, domainName+"/"+devManagerName+"/"+deviceId, stateObj);

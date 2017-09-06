@@ -101,7 +101,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@ApiOperation(value = "Stop/Start Application")
 	public Response controlApplication(
-			@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId, String control)
+			@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId, @ApiParam(value="Action to take on application start/stop", required=true) String control)
 			throws Exception {
 		redhawkManager.controlApplication(nameServer, domainName, applicationId, control);
 		return Response.ok().build();
@@ -147,7 +147,8 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@ApiOperation(value = "Set Application Property")
 	public Response setApplicationProperty(
 			@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId,
-			@ApiParam(value = "ID/Name for Property") @PathParam("propId") String propertyId, FullProperty property)
+			@ApiParam(value = "ID/Name for Property") @PathParam("propId") String propertyId, 
+			@ApiParam(value = "Updates for property", required=true) FullProperty property)
 			throws Exception {
 		redhawkManager.setProperty(property, nameServer, "application", domainName + "/" + applicationId);
 		return Response.ok().build();

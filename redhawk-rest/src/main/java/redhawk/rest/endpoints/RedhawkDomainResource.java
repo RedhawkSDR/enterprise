@@ -47,7 +47,7 @@ import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.FullProperty;
 import redhawk.rest.model.Property;
 import redhawk.rest.model.PropertyContainer;
-import redhawk.rest.model.RegisterRemoteDomain;
+import redhawk.rest.model.RemoteDomainRegistrar;
 
 @Path("/{nameserver}/domains")
 @Api(value = "/{nameserver}/domains")
@@ -114,7 +114,7 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @ApiOperation(
     		value = "Set Properties on a REDHAWK Domain"
     		)
-    public Response setDomainProperties(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name,@ApiParam(value = "List of Properties to set") List<FullProperty> properties) throws Exception {
+    public Response setDomainProperties(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name, @ApiParam(value = "List of Properties to set") List<FullProperty> properties) throws Exception {
         redhawkManager.setProperties(properties, nameServer, "domain", name);
         return Response.ok().build();
     }
@@ -142,7 +142,7 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     		value = "Set a Property on a REDHAWK Domain"
     		) 
     public Response registerRemoteDomain(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name,
-    		@ApiParam(value = "Remote Domain Information") RegisterRemoteDomain registerRequest) throws Exception {
+    		@ApiParam(value = "Remote Domain Information") RemoteDomainRegistrar registerRequest) throws Exception {
         redhawkManager.registerRemoteDomain(nameServer, "domain", name, registerRequest);
     	return Response.ok().build();
     }

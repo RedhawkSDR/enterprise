@@ -11,6 +11,12 @@ const state = {
   nameServer: 'localhost:2809',
   domainName: 'REDHAWK_DEV',
   available : {},
+  application: {
+    metrics: {},
+    show: false,
+    name: '',
+    url: ''
+  },
   appMetrics: {},
   appMetricsURL: '',
   appMetricsKeys: [],

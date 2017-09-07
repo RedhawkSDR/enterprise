@@ -1,14 +1,12 @@
 <template>
   <div>
-    <md-toolbar>
-      REDHAWK Metrics
-    </md-toolbar>
     <md-layout md-gutter>
       <md-layout md-flex="30">
         <availablemetrics/>
       </md-layout>
       <md-layout md-flex>
-        <appmetrics/>
+        <appmetrics v-if="showAppMetrics">
+        </appmetrics>
       </md-layout>
     </md-layout>
   </div>
@@ -23,6 +21,11 @@ export default {
   components: {
     'availablemetrics' : AvailableMetrics,
     'appmetrics' : ApplicationMetrics
+  },
+  computed: {
+    showAppMetrics(){
+      return this.$store.getters.showAppMetrics
+    }
   }
 }
 </script>

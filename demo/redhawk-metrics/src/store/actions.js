@@ -21,6 +21,35 @@ export const getAvailableMetrics = ({ commit, getters }) => {
   })
 }
 
+/**
+* Setup Metrics for application
+*/
+export const appMetricsView = ({ commit, getters }, appName) => {
+  //Create object with application metadata
+  var obj = new Object()
+  obj.type = "application"
+  obj.name = appName
+  obj.url = getters.baseURL+'/'+getters.nameServer+'/domains/'+getters.domainName+'/metrics/application/'+appName
+
+  //Perform initial REST Query
+  //TODO: Rethink how this is setup
+  axios.get(obj.url)
+  .then(function(response){
+    var obj = new Object()
+    obj.key = "appMetrics"
+
+    //Should only be one entry
+    obj.value = response.data[0]
+
+    commit('updateIndex', obj)
+  })
+  .catch(function(error){
+    console.log(error)
+  })
+
+  commit("showMetricsView", obj)
+}
+
 /*
 * Set the applicationMetric URL
 */

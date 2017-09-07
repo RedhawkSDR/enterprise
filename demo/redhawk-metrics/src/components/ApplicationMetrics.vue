@@ -1,14 +1,9 @@
 <template>
 <div>
-  <h1>testing</h1>
-  <md-input-container>
-    <label>Enter URL</label>
-    <md-input v-model="appMetricsURL"></md-input>
-  </md-input-container>
-  <md-button class="md-primary md-raised"  v-on:click="getAppMetrics">Get App Metrics</md-button>
+  <h1>Application: {{ appName }}</h1>
   <md-layout md-gutter>
     <md-layout md-flex="30">
-      <span class="md-title">App Metrics</span>
+      <span class="md-title">Metrics</span>
       <md-list>
         <md-list-item
           v-for="(component, index) in appMetricsKeys"
@@ -47,12 +42,17 @@ export default {
   name: 'applicationmetrics',
   data() {
     return {
-      appMetricsURL: '',
       interval: null,
       metricType: null
     }
   },
   computed: {
+    appName(){
+      return this.$store.getters.appName
+    },
+    appMetricsURL(){
+      return this.$store.getters.appMetricsURL
+    },
     appMetrics(){
       return this.$store.getters.appMetrics
     },
@@ -80,7 +80,7 @@ export default {
         this.interval = setTimeout(this.loadInTable, 1000, this.metricType);
       }else{
         clearTimeout(this.interval)
-        this.interval = setTimeout(this.loadInTable, 1000, this.metricType);          
+        this.interval = setTimeout(this.loadInTable, 1000, this.metricType);
       }
     },
     intervalSetup(){

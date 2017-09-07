@@ -19,3 +19,15 @@ export const updateIndex = (state, obj) => {
     console.log("Unknown key "+obj.key)
   }
 }
+
+/*
+* Command and control which metrics are being shown
+*/
+export const showMetricsView = (state, obj) => {
+  if(obj.type=='application'){
+    //TODO: Add logic for turning off other metrics
+    state.application.show=true
+    state.application.name=obj.name
+    state.application.url=obj.url
+  }
+}

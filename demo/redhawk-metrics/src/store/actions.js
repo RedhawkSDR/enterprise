@@ -3,7 +3,7 @@ import axios from 'axios'
 /*
 * GET The available metrics
 */
-export const getAvailableMetrics = ({ commit, getters }) => {
+export const getAvailableMetrics = ({ commit, getters }, type) => {
   //Generate baseURL
   var url = getters.baseURL+'/'+getters.nameServer+'/domains/'+getters.domainName+'/metrics/available'
 
@@ -19,6 +19,23 @@ export const getAvailableMetrics = ({ commit, getters }) => {
   .catch(function(error){
     console.log(error)
   })
+
+  if(type == 'application'){
+    commit('closeView', 'configuration')
+    commit('closeView', 'gpp')
+    commit('closeView', 'port')
+    commit('showView', 'application')
+  }else if(type == 'gpp'){
+    commit('closeView', 'configuration')
+    commit('closeView', 'application')
+    commit('closeView', 'port')
+    commit('showView', 'gpp')
+  }else if(type == 'port'){
+    commit('closeView', 'configuration')
+    commit('closeView', 'application')
+    commit('closeView', 'gpp')
+    commit('showView', 'port')      
+  }
 }
 
 /**
@@ -47,13 +64,14 @@ export const appMetricsView = ({ commit, getters }, appName) => {
     console.log(error)
   })
 
-  commit('closeMetricsView', 'port')
-  commit('closeMetricsView', 'gpp')
-  commit("showMetricsView", obj)
+  commit('closeView', 'port')
+  commit('closeView', 'gpp')
+  commit("showView", obj)
 }
 
 export const editDomainConfigNameServer = ({ commit }, nameServer) => commit('editDomainConfigNameServer', nameServer)
 export const editDomainConfigName = ({ commit }, domainName) => commit('editDomainConfigName', domainName)
+export const editBaseURL = ({ commit }, baseURL) => commit('editBaseURL', baseURL)
 
 /**
 * Setup Metrics for GPP
@@ -73,10 +91,25 @@ export const gppMetricsView = ({ commit, getters }, device) => {
     console.log(error)
   })
 
-  commit('closeMetricsView', 'port')
-  commit('closeMetricsView', 'application')
+  commit('closeView', 'port')
+  commit('closeView', 'application')
+
   //Show metrics view
-  commit("showMetricsView", obj)
+  commit("showView", obj)
+}
+
+export const configurationView = ({ commit }) => {
+    commit('closeView', 'application')
+    commit('closeView', 'gpp')
+    commit('closeView', 'port')
+    commit('showView', 'configuration')
+}
+
+export const applicationView = ({ commit }) => {
+  commit('closeView', 'configuration')
+  commit('closeView', 'gpp')
+  commit('closeView', 'port')
+  commit('showView', 'application')
 }
 
 /**
@@ -101,7 +134,7 @@ export const portMetricsView = ({ commit, getters }, port) => {
 
   commit('closeMetricsView', 'application')
   commit('closeMetricsView', 'gpp')
-  commit('showMetricsView', obj)
+  commit('showView', obj)
 }
 
 /*

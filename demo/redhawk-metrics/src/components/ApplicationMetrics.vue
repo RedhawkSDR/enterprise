@@ -1,21 +1,25 @@
 <template>
-<div>
-  <div class="metricslist">
-      <md-toolbar class="logo md-warn">
-        <h2 class="md-title">Applications</h2>
-      </md-toolbar>
-      <md-list>
-        <md-list-item
-          v-for="(application, index) in availableAppMetrics"
-          v-bind:key="application"
-          @click="showApplication(application)">
-          {{ application }}
-        </md-list-item>
-      </md-list>
+<div class="content">
+  <div class="card">
+    <div class="card-header" data-background-color="red">
+      <h4 class="title">Applications</h4>
+      <p class="category">List of application metrics available</p>
+    </div>
+    <div class="card-content">
+        <md-list>
+              <md-list-item
+                v-for="(application, index) in availableAppMetrics"
+                v-bind:key="application"
+                @click="showApplication(application)">
+                {{ application }}
+                <md-divider></md-divider>
+              </md-list-item>
+            </md-list>
+        </div>
+    </div>
   </div>
-  <div>
+</div>
 
-  </div>
   <!--
   <md-layout md-gutter>
     <md-layout md-flex="30">
@@ -51,7 +55,6 @@
     </md-layout>
   </md-layout>
   -->
-</div>
 </template>
 
 <style>

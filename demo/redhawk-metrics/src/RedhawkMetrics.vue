@@ -3,11 +3,11 @@
     <availablemetrics/>
     <div class="main-panel">
       <!-- TODO: Make more like template -->
-      <domainconfig></domainconfig>
+      <domainconfig v-if="showConfiguration"></domainconfig>
       <userprofile v-if="false"></userprofile>
       <appmetrics v-if="showAppMetrics">
       </appmetrics>
-      <gppmetrics v-if="false">
+      <gppmetrics v-if="showGPPMetrics">
       </gppmetrics>
       <portstats v-if="showPortStats">
       </portstats>
@@ -57,6 +57,9 @@ export default {
     },
     showPortStats(){
       return this.$store.getters.showPortStats
+    },
+    showConfiguration(){
+      return this.$store.getters.showConfiguration
     }
   }
 }

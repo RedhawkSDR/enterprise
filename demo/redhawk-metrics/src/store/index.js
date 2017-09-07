@@ -10,6 +10,9 @@ const state = {
   baseURL: 'http://localhost:8181/cxf/redhawk',
   nameServer: 'localhost:2809',
   domainName: 'REDHAWK_DEV',
+  configuration: {
+    show: false
+  },
   available : {},
   application: {
     metrics: {},

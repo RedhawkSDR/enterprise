@@ -20,9 +20,12 @@
             <md-input v-model="nameServer"></md-input>
           </md-input-container>
         </form>
+        <!--
+        TODO: Decide if you want a button
         <md-button class="md-raised md-warn">
           Update
         </md-button>
+        -->
       </div>
     </div>
   </div>
@@ -35,6 +38,9 @@ export default {
     baseURL: {
       get(){
         return this.$store.getters.baseURL
+      },
+      set(value){
+        this.$store.dispatch('editBaseURL', value)
       }
     },
     domainName: {

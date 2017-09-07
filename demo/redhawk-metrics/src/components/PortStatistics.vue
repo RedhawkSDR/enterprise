@@ -1,4 +1,32 @@
 <template>
+  <div class="content">
+    <div class="card">
+      <div class="card-header" data-background-color="red">
+        <h4 class="title">Ports</h4>
+        <p class="category">List of ports with statistics available</p>
+      </div>
+      <div class="card-content">
+        <md-list>
+          <md-list-item
+          class="md-triple-line"
+          v-for="(port, index) in availablePortStats"
+          v-bind:key="port"
+          v-bind:index="index"
+          v-bind:port="port"
+          @click="showPort(port)">
+          <div class="md-list-text-container">
+            <span><b>Port:</b> {{ port.PORT }}</span>
+            <span><b>Comp:</b> {{ port.COMPONENT }}</span>
+            <span><b>App:</b> {{ port.APP }}</span>
+          </div>
+          <md-divider></md-divider>
+        </md-list-item>
+      </md-list>
+    </div>
+  </div>
+</div>
+</div>
+<!--
 <div>
   <div class="metricslist">
       <md-toolbar class="logo md-warn">
@@ -21,6 +49,7 @@
       </md-list>
   </div>
 </div>
+-->
 <!--
 <div>
 <h1>Port: {{ name }}</h1>

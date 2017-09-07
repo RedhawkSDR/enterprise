@@ -153,10 +153,15 @@ export default {
       this.$store.dispatch("getAvailableMetrics")
     },
     displayOption(option){
+      console.log("Option "+option)
       if(option == "Configuration"){
-        console.log("ADD CODE")
-      }else{
-        this.$store.dispatch("getAvailableMetrics")
+        this.$store.dispatch('configurationView')
+      }else if(option == "Application"){
+        this.$store.dispatch("getAvailableMetrics", 'application')
+      }else if(option == "GPP"){
+        this.$store.dispatch("getAvailableMetrics", 'gpp')
+      }else if(option == "Ports"){
+        this.$store.dispatch("getAvailableMetrics", "port")
       }
     },
     showApplication(application){

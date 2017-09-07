@@ -35,7 +35,6 @@ export default{
 				return this.$store.getters.configToEdit.name
 			},
 			set(value){
-				console.log('setttng')
 				this.$store.dispatch('editDomainConfigName', value)
 			}
 		},

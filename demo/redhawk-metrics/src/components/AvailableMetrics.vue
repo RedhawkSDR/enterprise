@@ -1,13 +1,29 @@
 <template>
-  <div :class="sidebar">
-    <md-toolbar>
-      REDAHAWK Metrics
+  <div :class="sidebarClasses"
+    style="background-image: url(static/img/sidebar-3.jpg)">
+    <md-toolbar class="logo">
+      <h2 class="md-title">REDHAWK Metrics</h2>
+      <!--
       <md-button @click="getAvailable" class="md-icon-button md-raised">
         <md-icon>
           refresh
         </md-icon>
       </md-button>
+      -->
     </md-toolbar>
+    <div class="sidebar-wrapper">
+      <!--TODO: Make these router links -->
+      <md-list>
+        <md-list-item
+        v-for="(option, index) in options"
+        @click="displayOption(option)">
+          {{ option }}
+        </md-list-item>
+      </md-list>
+    </div>
+    <div class="sidebar-background" style="background-image: url(static/img/sidebar-3.jpg)"></div>
+  </div>
+    <!--
     <div>
       <md-list>
         <md-list-item>
@@ -65,6 +81,7 @@
 </md-list>
 </div>
 </div>
+-->
 <!--
 <div>
 <md-button class="md-primary md-raised" v-on:click="getAvailable">Available</md-button>
@@ -76,7 +93,54 @@
 <script>
 export default {
   name: 'availablemetrics',
+  props: {
+      type: {
+        type: String,
+        default: 'sidebar',
+        validator: (value) => {
+          let acceptedValues = ['sidebar', 'navbar']
+          return acceptedValues.indexOf(value) !== -1
+        }
+      },
+      backgroundColor: {
+        type: String,
+        default: 'purple',
+        validator: (value) => {
+          let acceptedValues = ['purple', 'black', 'darkblue']
+          return acceptedValues.indexOf(value) !== -1
+        }
+      },
+      activeColor: {
+        type: String,
+        default: 'success',
+        validator: (value) => {
+          let acceptedValues = ['primary', 'info', 'success', 'warning', 'danger']
+          return acceptedValues.indexOf(value) !== -1
+        }
+      },
+      sidebarLinks: {
+        type: Array,
+        default: () => []
+      }
+  },
+  data() {
+    return {
+      options: [
+        'Configuration',
+        'Application',
+        'GPP',
+        'Ports'
+      ]
+    }
+  },
   computed: {
+    sidebarClasses () {
+            if (this.type === 'sidebar') {
+              return 'sidebar'
+            } else {
+              return 'collapse navbar-collapse off-canvas-sidebar'
+            }
+    },
     available(){
       return this.$store.getters.available
     },
@@ -86,8 +150,14 @@ export default {
   },
   methods: {
     getAvailable: function(){
-      console.log("Making it to available")
       this.$store.dispatch("getAvailableMetrics")
+    },
+    displayOption(option){
+      if(option == "Configuration"){
+        console.log("ADD CODE")
+      }else{
+        this.$store.dispatch("getAvailableMetrics")
+      }
     },
     showApplication(application){
       this.$store.dispatch('appMetricsView', application)

@@ -7,11 +7,19 @@ import store from './store'
 import TreeView from "vue-json-tree-view"
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.css'
+import 'bootstrap/dist/css/bootstrap.css'
+
+// Plugins
+import GlobalComponents from './globalComponents'
+import GlobalDirectives from './globalDirectives'
+import GlobalMixins from './globalMixins'
 
 Vue.config.productionTip = false
 
 Vue.use(VueMaterial)
-Vue.use(TreeView)
+Vue.use(GlobalComponents)
+Vue.use(GlobalDirectives)
+Vue.use(GlobalMixins)
 
 //Import styling
 import './assets/sass/material-dashboard.scss'

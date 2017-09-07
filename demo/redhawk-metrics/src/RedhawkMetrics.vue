@@ -1,5 +1,18 @@
 <template>
-  <div>
+  <div class="wrapper">
+    <availablemetrics/>
+    <div class="main-panel">
+      <!-- TODO: Make more like template -->
+      <domainconfig></domainconfig>
+      <userprofile v-if="false"></userprofile>
+      <appmetrics v-if="showAppMetrics">
+      </appmetrics>
+      <gppmetrics v-if="false">
+      </gppmetrics>
+      <portstats v-if="showPortStats">
+      </portstats>
+    </div>
+    <!--
     <md-layout md-gutter>
       <md-layout md-flex="30">
         <availablemetrics/>
@@ -13,6 +26,7 @@
         </portstats>
       </md-layout>
     </md-layout>
+    -->
   </div>
 </template>
 
@@ -21,6 +35,8 @@ import AvailableMetrics from './components/AvailableMetrics.vue'
 import ApplicationMetrics from './components/ApplicationMetrics.vue'
 import GPPMetrics from './components/GPPMetrics.vue'
 import PortStats from './components/PortStatistics.vue'
+import DomainConfig from './components/DomainConfig.vue'
+import UserProfile from './components/UserProfile.vue'
 
 export default {
   name: 'redhawkmetrics',
@@ -28,7 +44,9 @@ export default {
     'availablemetrics' : AvailableMetrics,
     'appmetrics' : ApplicationMetrics,
     'gppmetrics' : GPPMetrics,
-    'portstats' : PortStats
+    'portstats' : PortStats,
+    'domainconfig' : DomainConfig,
+    'userprofile' : UserProfile
   },
   computed: {
     showAppMetrics(){

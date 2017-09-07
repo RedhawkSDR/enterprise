@@ -60,3 +60,11 @@ export const updateGPPMetrics = (state, metrics) => {
 export const updatePortStats = (state, stats) => {
   state.port.statistics = stats
 }
+
+export const editDomainConfigName = (state, name) => {
+  state.domainName = name
+}
+
+export const editDomainConfigNameServer = (state, nameServer) => {
+  state.nameServer = nameServer
+}

@@ -11,4 +11,8 @@ export default {
 </script>
 
 <style>
+.metricslist {
+  width: 260px;
+  position: relative;
+}
 </style>

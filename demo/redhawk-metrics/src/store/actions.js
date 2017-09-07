@@ -52,6 +52,9 @@ export const appMetricsView = ({ commit, getters }, appName) => {
   commit("showMetricsView", obj)
 }
 
+export const editDomainConfigNameServer = ({ commit }, nameServer) => commit('editDomainConfigNameServer', nameServer)
+export const editDomainConfigName = ({ commit }, domainName) => commit('editDomainConfigName', domainName)
+
 /**
 * Setup Metrics for GPP
 */

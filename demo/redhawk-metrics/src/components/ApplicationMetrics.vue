@@ -1,6 +1,22 @@
 <template>
 <div>
-  <h1>Application: {{ appName }}</h1>
+  <div class="metricslist">
+      <md-toolbar class="logo md-warn">
+        <h2 class="md-title">Applications</h2>
+      </md-toolbar>
+      <md-list>
+        <md-list-item
+          v-for="(application, index) in availableAppMetrics"
+          v-bind:key="application"
+          @click="showApplication(application)">
+          {{ application }}
+        </md-list-item>
+      </md-list>
+  </div>
+  <div>
+
+  </div>
+  <!--
   <md-layout md-gutter>
     <md-layout md-flex="30">
       <span class="md-title">Metrics</span>
@@ -24,7 +40,7 @@
             <md-table-head md-numeric>Value</md-table-head>
           </md-table-row>
         </md-table-header>
-        
+
         <md-table-body>
           <md-table-row v-for="(row, index) in Object.keys(appMetricsToView)" :key="index">
             <md-table-cell>{{ row }}</md-table-cell>
@@ -34,8 +50,13 @@
       </md-table>
     </md-layout>
   </md-layout>
+  -->
 </div>
 </template>
+
+<style>
+
+</style>
 
 <script>
 export default {
@@ -47,6 +68,9 @@ export default {
     }
   },
   computed: {
+    availableAppMetrics(){
+      return this.$store.getters.available.APPLICATION
+    },
     appName(){
       return this.$store.getters.appName
     },

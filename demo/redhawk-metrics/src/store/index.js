@@ -17,6 +17,20 @@ const state = {
     name: '',
     url: ''
   },
+  gpp: {
+    metrics: {},
+    show: false,
+    name: '',
+    url: ''
+  },
+  port: {
+    statistics: {},
+    show: false,
+    name: '',
+    componentName : '',
+    applicationName : '',
+    url : ''
+  },
   appMetrics: {},
   appMetricsURL: '',
   appMetricsKeys: [],

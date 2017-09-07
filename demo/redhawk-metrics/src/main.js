@@ -13,6 +13,9 @@ Vue.config.productionTip = false
 Vue.use(VueMaterial)
 Vue.use(TreeView)
 
+//Import styling
+import './assets/sass/material-dashboard.scss'
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

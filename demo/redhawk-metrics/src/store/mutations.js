@@ -29,5 +29,34 @@ export const showMetricsView = (state, obj) => {
     state.application.show=true
     state.application.name=obj.name
     state.application.url=obj.url
+  }else if(obj.type=='gpp'){
+    state.gpp.show = true
+    state.gpp.name = obj.name
+    state.gpp.url = obj.url
+  }else if(obj.type=='port'){
+    console.log(obj)
+    state.port.show = true
+    state.port.name = obj.rep.PORT
+    state.port.applicationName = obj.rep.APP
+    state.port.componentName = obj.rep.COMPONENT
+    state.port.url = obj.url
   }
+}
+
+export const closeMetricsView = (state, obj) => {
+  if(obj=='application'){
+    state.application.show = false
+  }else if(obj=='gpp'){
+    state.gpp.show = false
+  }else if(obj=='port'){
+    state.port.show = false
+  }
+}
+
+export const updateGPPMetrics = (state, metrics) => {
+  state.gpp.metrics = metrics
+}
+
+export const updatePortStats = (state, stats) => {
+  state.port.statistics = stats
 }

@@ -24,7 +24,7 @@
             <md-table-head md-numeric>Value</md-table-head>
           </md-table-row>
         </md-table-header>
-
+        
         <md-table-body>
           <md-table-row v-for="(row, index) in Object.keys(appMetricsToView)" :key="index">
             <md-table-cell>{{ row }}</md-table-cell>

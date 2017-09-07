@@ -19,6 +19,7 @@ import redhawk.rest.converter.MetricsConverter;
 import redhawk.rest.model.ApplicationMetrics;
 import redhawk.rest.model.GPPMetrics;
 import redhawk.rest.model.MetricFilter;
+import redhawk.rest.model.PortMetrics;
 import redhawk.rest.model.RedhawkMetrics;
 import redhawk.rest.utils.MetricTypes;
 
@@ -80,7 +81,7 @@ public class RedhawkMetricsResource extends RedhawkBaseResource{
 	@Path("/port")
 	@Produces({ MediaType.APPLICATION_JSON })
 	@ApiOperation(value = "GET all Port Metrics for a Domain")
-	public List<ApplicationMetrics> portMetrics(){
+	public List<PortMetrics> portMetrics(){
 		return MetricsConverter.getMetricsByType(redhawkManager, nameServer, domainName, MetricTypes.PORT);
 	}
 	

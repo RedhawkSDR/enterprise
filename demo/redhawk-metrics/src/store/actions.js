@@ -47,7 +47,58 @@ export const appMetricsView = ({ commit, getters }, appName) => {
     console.log(error)
   })
 
+  commit('closeMetricsView', 'port')
+  commit('closeMetricsView', 'gpp')
   commit("showMetricsView", obj)
+}
+
+/**
+* Setup Metrics for GPP
+*/
+export const gppMetricsView = ({ commit, getters }, device) => {
+  var obj = new Object()
+  obj.type ="gpp"
+  obj.name = device
+  obj.url = getters.baseURL+'/'+getters.nameServer+'/domains/'+getters.domainName+'/metrics/gpp/'+device
+
+  //Perform initial REST Query
+  axios.get(obj.url)
+  .then(function(response){
+    commit('updateGPPMetrics', response.data[0])
+  })
+  .catch(function(error){
+    console.log(error)
+  })
+
+  commit('closeMetricsView', 'port')
+  commit('closeMetricsView', 'application')
+  //Show metrics view
+  commit("showMetricsView", obj)
+}
+
+/**
+* Setup Port Metrics View
+*/
+export const portMetricsView = ({ commit, getters }, port) => {
+  var obj = new Object()
+  obj.type ="port"
+  obj.rep = port
+
+  //TODO: Use metrics endpoint instead
+  obj.url = getters.baseURL+'/'+getters.nameServer+'/domains/'+getters.domainName+'/applications/'+
+    port.APP+'/components/'+port.COMPONENT+'/ports/'+port.PORT+'/statistics'
+
+  axios.get(obj.url)
+  .then(function(response){
+    commit('updatePortStats', response.data.statistics[0])
+  })
+  .catch(function(error){
+    console.log(error)
+  })
+
+  commit('closeMetricsView', 'application')
+  commit('closeMetricsView', 'gpp')
+  commit('showMetricsView', obj)
 }
 
 /*

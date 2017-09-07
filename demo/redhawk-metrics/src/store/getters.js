@@ -8,6 +8,18 @@ export const showAppMetrics = state => state.application.show
 export const appName = state => state.application.name
 export const appMetricsURL = state => state.application.url
 
+//GPP metric getters
+export const showGPPMetrics = state => state.gpp.show
+export const gppName = state => state.gpp.name
+export const gppMetrics = state => state.gpp.metrics
+
+//Port stats getters
+export const showPortStats = state => state.port.show
+export const portName = state => state.port.name
+export const portComponentName = state => state.port.componentName
+export const portApplicationName = state => state.port.applicationName
+export const portStatistics = state => state.port.statistics
+
 ///
 export const appMetrics = state => state.appMetrics
 export const appMetricsKeys = state => state.appMetricsKeys

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="sidebar">
     <md-toolbar>
       REDAHAWK Metrics
       <md-button @click="getAvailable" class="md-icon-button md-raised">
@@ -34,7 +34,8 @@
           v-for="(device, index) in available.GPP"
           v-bind:key="device"
           v-bind:index="index"
-          v-bind:device="device">
+          v-bind:device="device"
+          @click="showGPP(device)">
           {{ device }}
         </md-list-item>
       </md-list-expand>
@@ -50,12 +51,14 @@
         v-for="(port, index) in available.PORT"
         v-bind:key="port"
         v-bind:index="index"
-        v-bind:port="port">
+        v-bind:port="port"
+        @click="showPort(port)">
         <div class="md-list-text-container">
-          <span><b>Port:</b> {{ port.PORT }}</span></br>
+          <span><b>Port:</b> {{ port.PORT }}</span>
           <span><b>Comp:</b> {{ port.COMPONENT }}</span>
           <span><b>App:</b> {{ port.APP }}</span>
         </div>
+        <md-divider></md-divider>
       </md-list-item>
     </md-list-expand>
   </md-list-item>
@@ -87,8 +90,13 @@ export default {
       this.$store.dispatch("getAvailableMetrics")
     },
     showApplication(application){
-      console.log("Show application "+application)
       this.$store.dispatch('appMetricsView', application)
+    },
+    showGPP(device){
+      this.$store.dispatch('gppMetricsView', device)
+    },
+    showPort(port){
+      this.$store.dispatch('portMetricsView', port)
     }
   }
 }

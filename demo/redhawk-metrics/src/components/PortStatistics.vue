@@ -78,7 +78,10 @@ export default {
     statistics(){
       return this.$store.getters.portStatistics
     }
-  }
+  },
+  mounted(){
+    this.$store.dispatch("getAvailableMetrics", 'application')
+  },
 }
 </script>
 

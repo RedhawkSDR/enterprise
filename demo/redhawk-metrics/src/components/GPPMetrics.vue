@@ -32,6 +32,9 @@ export default {
     availableGPPMetrics(){
       return this.$store.getters.available.GPP
     }
+  },
+  mounted(){
+    this.$store.dispatch("getAvailableMetrics", 'application')
   }
 }
 </script>

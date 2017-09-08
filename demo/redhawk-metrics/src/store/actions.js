@@ -19,32 +19,14 @@ export const getAvailableMetrics = ({ commit, getters }, type) => {
   .catch(function(error){
     console.log(error)
   })
-
-  if(type == 'application'){
-    commit('closeView', 'configuration')
-    commit('closeView', 'gpp')
-    commit('closeView', 'port')
-    commit('showView', 'application')
-  }else if(type == 'gpp'){
-    commit('closeView', 'configuration')
-    commit('closeView', 'application')
-    commit('closeView', 'port')
-    commit('showView', 'gpp')
-  }else if(type == 'port'){
-    commit('closeView', 'configuration')
-    commit('closeView', 'application')
-    commit('closeView', 'gpp')
-    commit('showView', 'port')      
-  }
 }
 
 /**
 * Setup Metrics for application
 */
-export const appMetricsView = ({ commit, getters }, appName) => {
+export const chooseApplication = ({ commit, getters }, appName) => {
   //Create object with application metadata
   var obj = new Object()
-  obj.type = "application"
   obj.name = appName
   obj.url = getters.baseURL+'/'+getters.nameServer+'/domains/'+getters.domainName+'/metrics/application/'+appName
 
@@ -52,21 +34,18 @@ export const appMetricsView = ({ commit, getters }, appName) => {
   //TODO: Rethink how this is setup
   axios.get(obj.url)
   .then(function(response){
-    var obj = new Object()
-    obj.key = "appMetrics"
-
     //Should only be one entry
-    obj.value = response.data[0]
+    obj.metrics = response.data[0]["metrics"]
 
-    commit('updateIndex', obj)
+    commit('updateAppState', obj)
   })
   .catch(function(error){
     console.log(error)
   })
 
-  commit('closeView', 'port')
-  commit('closeView', 'gpp')
-  commit("showView", obj)
+  //commit('closeView', 'port')
+  //commit('closeView', 'gpp')
+  //commit("showView", obj)
 }
 
 export const editDomainConfigNameServer = ({ commit }, nameServer) => commit('editDomainConfigNameServer', nameServer)

@@ -21,6 +21,16 @@ export const updateIndex = (state, obj) => {
 }
 
 /*
+* Update app metrics view
+*/
+export const updateAppState = (state, obj) => {
+  state.application.metrics = obj.metrics
+  state.application.name = obj.name
+  state.application.url = obj.url
+  state.application.keys = Object.keys(obj.metrics)
+}
+
+/*
 * Command and control which metrics are being shown
 */
 export const showView = (state, obj) => {

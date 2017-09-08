@@ -10,6 +10,8 @@ export const showConfiguration = state => state.configuration.show
 export const showAppMetrics = state => state.application.show
 export const appName = state => state.application.name
 export const appMetricsURL = state => state.application.url
+export const appMetrics = state => state.application.metrics
+export const appMetricsKeys = state => state.application.keys
 
 //GPP metric getters
 export const showGPPMetrics = state => state.gpp.show
@@ -24,7 +26,5 @@ export const portApplicationName = state => state.port.applicationName
 export const portStatistics = state => state.port.statistics
 
 ///
-export const appMetrics = state => state.appMetrics
-export const appMetricsKeys = state => state.appMetricsKeys
 export const appMetricsToView = state => state.appMetricsToView
 export const appMetricsType = state => state.appMetricsType

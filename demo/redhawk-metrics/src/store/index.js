@@ -16,6 +16,7 @@ const state = {
   available : {},
   application: {
     metrics: {},
+    keys: [],
     show: false,
     name: '',
     url: ''

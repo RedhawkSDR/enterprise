@@ -17,6 +17,10 @@
             </md-option>
           </md-select>
         </md-input-container>
+        <gppmetrictable
+          :metricType="metricType"
+          >
+        </gppmetrictable>
         <!--
         <md-table>
           <md-table-header>
@@ -38,15 +42,20 @@
 </template>
 
 <script>
+import GPPMetricTable from './GPPMetricTable.vue'
+
 export default {
   name: 'gppmetricsview',
+  components: {
+    'gppmetrictable' : GPPMetricTable
+  },
   data() {
     return {
       interval: null,
       metricTypes: [
         'utilization',
         'sys_limits',
-        'nic_metrics'
+        //'nic_metrics' TODO: Deal with this
       ],
       metricType: 'utilization'
     }

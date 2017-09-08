@@ -17,25 +17,14 @@
             </md-option>
           </md-select>
         </md-input-container>
-        <md-table>
-          <md-table-header>
-            <md-table-row>
-              <md-table-head>Metric Name</md-table-head>
-              <md-table-head md-numeric>Value</md-table-head>
-            </md-table-row>
-          </md-table-header>
-          <md-table-body>
-            <md-table-row v-for="(row, index) in Object.keys(appMetricsToView)" :key="index">
-              <md-table-cell>{{ row }}</md-table-cell>
-              <md-table-cell>{{ appMetricsToView[row]}}</md-table-cell>
-            </md-table-row>
-          </md-table-body>
-        </md-table>
+        <apptable :metricType="metricType"></apptable>
     </div>
   </div>
 </template>
 
 <script>
+import Table from './ApplicationTable.vue'
+
 export default {
   name: 'appmetricsview',
   data() {
@@ -44,6 +33,9 @@ export default {
       showApp: false,
       metricType: 'application utilization'
     }
+  },
+  components: {
+    'apptable' : Table
   },
   mounted(){
     //Get application parameters

@@ -1,4 +1,7 @@
 <template>
+<div>
+  <chart/>
+  <div>
     <div class="card">
       <div class="card-header" data-background-color="green">
         <h4 class="title">Port: {{ name }}</h4>
@@ -8,17 +11,21 @@
       </div>
       <div class="card-content">
         <porttable></porttable>
+      </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
 import Table from './PortStatisticsTable.vue'
+import Chart from './Chart.vue'
 
 export default {
   name: 'portstatisticsview',
   components: {
-    'porttable': Table
+    'porttable': Table,
+    'chart' : Chart
   },
   mounted(){
     console.log("Route Params")

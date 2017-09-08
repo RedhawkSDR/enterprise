@@ -25,12 +25,41 @@ export default {
   props: {
     metricType: ''
   },
+  data(){
+    return {
+      intervalTime : 1000,
+    }
+  },
+  mounted(){
+    this.updateStats()
+  },
+  destroyed(){
+    clearInterval(this.$store.state.interval)
+  },
   computed: {
     metrics(){
       return this.$store.getters.appMetrics[this.metricType]
     },
     metricKeys(){
       return Object.keys(this.$store.getters.appMetrics[this.metricType])
+    },
+    interval(){
+      return this.$store.getters.interval
+    }
+  },
+  methods: {
+    updateStats(){
+      self = this
+      if(this.interval==null){
+        this.$store.state.interval = setInterval(function(){
+          self.$store.dispatch("updateApplicationMetrics")
+        }, self.intervalTime);
+      }else{
+        clearInterval(this.$store.state.interval)
+        this.$store.state.interval = setInterval(function(){
+          self.$store.dispatch("updateApplicationMetrics")
+        }, self.intervalTime);
+      }
     }
   }
 }

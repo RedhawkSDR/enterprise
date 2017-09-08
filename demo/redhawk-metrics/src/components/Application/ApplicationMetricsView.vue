@@ -29,7 +29,6 @@ export default {
   name: 'appmetricsview',
   data() {
     return {
-      interval: null,
       showApp: false,
       metricType: 'application utilization'
     }

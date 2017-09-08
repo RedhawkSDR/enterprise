@@ -50,6 +50,35 @@ export default {
   computed: {
     statistics(){
       return this.$store.getters.portStatistics
+    },
+    interval(){
+      return this.$store.getters.interval
+    }
+  },
+  data(){
+    return {
+      intervalTime : 1000,
+    }
+  },
+  mounted(){
+    this.updateStats()
+  },
+  destroyed(){
+    clearInterval(this.$store.state.interval)
+  },
+  methods: {
+    updateStats(){
+      self = this
+      if(this.interval==null){
+        this.$store.state.interval = setInterval(function(){
+          self.$store.dispatch("updatePortStats")
+        }, self.intervalTime);
+      }else{
+        clearInterval(this.$store.state.interval)
+        this.$store.state.interval = setInterval(function(){
+          self.$store.dispatch("updatePortStats")
+        }, self.intervalTime);
+      }
     }
   }
 }

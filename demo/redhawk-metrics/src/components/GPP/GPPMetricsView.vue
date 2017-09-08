@@ -51,7 +51,6 @@ export default {
   },
   data() {
     return {
-      interval: null,
       metricTypes: [
         'utilization',
         'sys_limits',

@@ -31,6 +31,35 @@ export default {
     },
     metricKeys(){
       return Object.keys(this.$store.getters.gppMetrics[this.metricType])
+    },
+    interval(){
+      return this.$store.getters.interval
+    }
+  },
+  data(){
+    return {
+      intervalTime : 1000,
+    }
+  },
+  mounted(){
+    this.updateStats()
+  },
+  destroyed(){
+    clearInterval(this.$store.state.interval)
+  },
+  methods: {
+    updateStats(){
+      self = this
+      if(this.interval==null){
+        this.$store.state.interval = setInterval(function(){
+          self.$store.dispatch("updateGPPMetrics")
+        }, self.intervalTime);
+      }else{
+        clearInterval(this.$store.state.interval)
+        this.$store.state.interval = setInterval(function(){
+          self.$store.dispatch("updateGPPMetrics")
+        }, self.intervalTime);
+      }
     }
   }
 }

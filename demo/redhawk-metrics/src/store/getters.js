@@ -2,6 +2,7 @@ export const available = state => state.available
 export const nameServer = state => state.nameServer
 export const domainName = state => state.domainName
 export const baseURL = state => state.baseURL
+export const interval = state => state.interval
 
 //Configuration getters
 export const showConfiguration = state => state.configuration.show
@@ -25,6 +26,7 @@ export const portName = state => state.port.name
 export const portComponentName = state => state.port.componentName
 export const portApplicationName = state => state.port.applicationName
 export const portStatistics = state => state.port.statistics
+export const portStatisticsURL = state => state.port.url
 
 ///
 export const appMetricsToView = state => state.appMetricsToView

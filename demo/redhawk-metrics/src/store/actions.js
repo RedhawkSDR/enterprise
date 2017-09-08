@@ -45,6 +45,22 @@ export const chooseApplication = ({ commit, getters }, appName) => {
 }
 
 /*
+* Update Application Metrics
+*/
+export const updateApplicationMetrics = ({ commit, getters }) => {
+  //You already know which port stats need to be updated
+  var url = getters.appMetricsURL
+
+  axios.get(url)
+  .then(function(response){
+    commit('updateApplicationMetrics', response.data[0]["metrics"])
+  })
+  .catch(function(error){
+    console.log(error)
+  })
+}
+
+/*
 * Chose GPP metrics
 */
 export const chooseGPP = ({ commit, getters }, gppName) => {
@@ -61,6 +77,22 @@ export const chooseGPP = ({ commit, getters }, gppName) => {
     obj.metrics = response.data[0]
 
     commit('updateGPPState', obj)
+  })
+  .catch(function(error){
+    console.log(error)
+  })
+}
+
+/*
+* Update GPP Metrics
+*/
+export const updateGPPMetrics = ({ commit, getters }) => {
+  //You already know which port stats need to be updated
+  var url = getters.gppMetricsURL
+
+  axios.get(url)
+  .then(function(response){
+    commit('updateGPPMetrics', response.data[0])
   })
   .catch(function(error){
     console.log(error)
@@ -85,6 +117,24 @@ export const choosePort = ({ commit, getters }, port) => {
   })
   .catch(function(error){
 
+  })
+}
+
+/*
+* Update Port Statistics
+*/
+export const updatePortStats = ({ commit, getters }) => {
+  //You already know which port stats need to be updated
+  var url = getters.portStatisticsURL
+
+  axios.get(url)
+  .then(function(response){
+    console.log("Update stats")
+    console.log(response.data)
+    commit('updatePortStats', response.data.statistics[0])
+  })
+  .catch(function(error){
+    console.log(error)
   })
 }
 

@@ -95,6 +95,10 @@ export const updatePortStats = (state, stats) => {
   state.port.statistics = stats
 }
 
+export const updateApplicationMetrics = (state, metrics) => {
+  state.application.metrics = metrics
+}
+
 export const editDomainConfigName = (state, name) => {
   state.domainName = name
 }

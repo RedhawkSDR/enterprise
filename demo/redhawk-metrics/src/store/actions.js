@@ -42,10 +42,50 @@ export const chooseApplication = ({ commit, getters }, appName) => {
   .catch(function(error){
     console.log(error)
   })
+}
 
-  //commit('closeView', 'port')
-  //commit('closeView', 'gpp')
-  //commit("showView", obj)
+/*
+* Chose GPP metrics
+*/
+export const chooseGPP = ({ commit, getters }, gppName) => {
+  //Create object with GPP metadata
+  var obj = new Object()
+  obj.name = gppName
+  obj.url = getters.baseURL+'/'+getters.nameServer+'/domains/'+getters.domainName+'/metrics/gpp/'+gppName
+
+  //Perform initial REST Query
+  //TODO: Rethink how this is setup
+  axios.get(obj.url)
+  .then(function(response){
+    //Should only be one entry
+    obj.metrics = response.data[0]
+
+    commit('updateGPPState', obj)
+  })
+  .catch(function(error){
+    console.log(error)
+  })
+}
+
+/*
+* Choose Port Statistics
+*/
+export const choosePort = ({ commit, getters }, port) => {
+  //Create object with Port metadata
+  var obj = port
+  obj.url = getters.baseURL+'/'+getters.nameServer+'/domains/'+getters.domainName+'/applications/'+port.application
+    +'/components/'+port.component+'/ports/'+port.port+'/statistics.json'
+
+  axios.get(obj.url)
+  .then(function(response){
+    console.log(response.data)
+    obj.statistics = response.data.statistics[0]
+
+    commit('updatePortState', obj)
+  })
+  .catch(function(error){
+
+  })
 }
 
 export const editDomainConfigNameServer = ({ commit }, nameServer) => commit('editDomainConfigNameServer', nameServer)
@@ -75,20 +115,6 @@ export const gppMetricsView = ({ commit, getters }, device) => {
 
   //Show metrics view
   commit("showView", obj)
-}
-
-export const configurationView = ({ commit }) => {
-    commit('closeView', 'application')
-    commit('closeView', 'gpp')
-    commit('closeView', 'port')
-    commit('showView', 'configuration')
-}
-
-export const applicationView = ({ commit }) => {
-  commit('closeView', 'configuration')
-  commit('closeView', 'gpp')
-  commit('closeView', 'port')
-  commit('showView', 'application')
 }
 
 /**

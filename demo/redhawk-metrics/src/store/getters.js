@@ -17,6 +17,7 @@ export const appMetricsKeys = state => state.application.keys
 export const showGPPMetrics = state => state.gpp.show
 export const gppName = state => state.gpp.name
 export const gppMetrics = state => state.gpp.metrics
+export const gppMetricsURL = state => state.gpp.url
 
 //Port stats getters
 export const showPortStats = state => state.port.show

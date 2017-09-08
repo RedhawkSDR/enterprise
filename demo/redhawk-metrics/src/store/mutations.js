@@ -31,6 +31,27 @@ export const updateAppState = (state, obj) => {
 }
 
 /*
+* Update gpp metrics view
+*/
+export const updateGPPState = (state, obj) => {
+  state.gpp.metrics = obj.metrics
+  state.gpp.name = obj.name
+  state.gpp.url = obj.url
+  state.gpp.keys = Object.keys(obj.metrics)
+}
+
+/*
+* Update Port statistics view
+*/
+export const updatePortState = (state, obj) => {
+  state.port.applicationName = obj.application
+  state.port.componentName = obj.component
+  state.port.name = obj.port
+  state.port.statistics = obj.statistics
+  state.port.url = obj.url
+}
+
+/*
 * Command and control which metrics are being shown
 */
 export const showView = (state, obj) => {

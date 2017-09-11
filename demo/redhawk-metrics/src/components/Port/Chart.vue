@@ -1,78 +1,55 @@
 <template>
   <div class="card">
-    <canvas id="chart0" style="width:512px; height=320px;"></canvas>
+    <!-- Put graph here -->
+    <div class="card-header" data-background-color="black">
+      <chartexample :height="50"></chartexample>
+    </div>
+    <div class="card-content">
+      <md-input-container>
+        <label for="graphmetric">Graph</label>
+        <md-select name="graphmetric" id="graphmetric" v-model="graphmetric">
+          <md-option value="elementsPerSecond">Elements Per Second</md-option>
+          <md-option value="bitsPerSecond">Bits Per Second</md-option>
+          <md-option value="callsPerSecond">Calls Per Second</md-option>
+        </md-select>
+      </md-input-container>
+    </div>
   </div>
 </template>
 
 <script>
-import Chart from 'chart.js';
-
-var samples = 100;
-var speed = 250;
-var values = [];
-var labels = [];
-var charts = [];
-var value = 0;
-
-values.length = samples;
-labels.length = samples;
-values.fill(0);
-labels.fill(0);
-
-function initialize() {
-  charts.push(new Chart(document.getElementById("chart0"), {
-    type: 'line',
-    data: {
-      labels: labels,
-      datasets: [{
-        data: values,
-        backgroundColor: 'rgba(255, 99, 132, 0.1)',
-        borderColor: 'rgb(255, 99, 132)',
-        borderWidth: 2,
-        lineTension: 0.25,
-        pointRadius: 0
-      }]
-    },
-    options: {
-      responsive: false,
-      animation: {
-        duration: speed * 1.5,
-        easing: 'linear'
-      },
-      legend: false,
-      scales: {
-        xAxes: [{
-          display: false
-        }],
-        yAxes: [{
-          ticks: {
-            max: 1,
-            min: -1
-          }
-        }]
-      }
-    }
-  }))
-}
-
-
-function advance() {
-  value = Math.min(Math.max(value + (0.1 - Math.random() / 5), -1), 1);
-
-  values.push(value);
-  values.shift();
-  charts.forEach(function(chart) { chart.update(); });
-
-  setTimeout(function() {
-    requestAnimationFrame(advance);
-  }, speed);
-}
+import ChartExample from './VueChartExample.vue'
 
 export default {
   name: 'portchart',
-  mounted() {
-      initialize()
-      advance()
+  components: {
+    'chartexample': ChartExample
+  },
+  computed: {
+    chartvalue(){
+      return this.$store.getters.portStatistics[this.graphmetric]
+    }
+  },
+  data(){
+    return {
+      graphmetric : 'elementsPerSecond',
+      values: []
+    }
+  },
+  watch: {
+    chartvalue(){
+      this.values.push(this.chartvalue)
+      this.values.shift()
+    }
   }
 }
 </script>
+
+<style>
+.Chart {
+  padding: 20px;
+  box-shadow: 0px 0px 20px 2px rgba(0, 0, 0, .4);
+  border-radius: 20px;
+  margin: 50px 0;
+}
+</style>

@@ -129,8 +129,6 @@ export const updatePortStats = ({ commit, getters }) => {
 
   axios.get(url)
   .then(function(response){
-    console.log("Update stats")
-    console.log(response.data)
     commit('updatePortStats', response.data.statistics[0])
   })
   .catch(function(error){

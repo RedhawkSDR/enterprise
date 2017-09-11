@@ -1,37 +1,49 @@
 <template>
 <div>
-  <chart/>
-  <div>
-    <div class="card">
-      <div class="card-header" data-background-color="green">
-        <h4 class="title">Port: {{ name }}</h4>
-        <h5 class="title">Component: {{ componentName }}</h5>
-        <h6 class="title">Application: {{ applicationName }}</h6>
-        <p class="category">Statistics for port {{ name }}</p>
-      </div>
-      <div class="card-content">
-        <porttable></porttable>
-      </div>
+<!--
+  TODO: Make this work at some point
+  https://github.com/chartjs/Chart.js/pull/3399
+  http://playground.abysscorp.org/chartjs/livecharts/
+http://plnkr.co/edit/Imxwl9OQJuaMepLNy6ly?p=info
+-->
+<chart/>
+<div>
+  <div class="card">
+    <div class="card-header" data-background-color="green">
+      <h4 class="title">Port: {{ name }}</h4>
+      <h5 class="title">Component: {{ componentName }}</h5>
+      <h6 class="title">Application: {{ applicationName }}</h6>
+      <p class="category">Statistics for port {{ name }}</p>
+    </div>
+    <div class="card-content">
+      <porttable></porttable>
     </div>
   </div>
+</div>
 </div>
 </template>
 
 <script>
+import Chartist from 'chartist'
 import Table from './PortStatisticsTable.vue'
 import Chart from './Chart.vue'
+import ChartCard from '../UIComponents/Cards/ChartCard.vue'
+
 
 export default {
   name: 'portstatisticsview',
   components: {
     'porttable': Table,
-    'chart' : Chart
+    'chart' : Chart,
+    ChartCard
   },
   mounted(){
     console.log("Route Params")
     console.log(this.$route.params)
 
     this.$store.dispatch('choosePort', this.$route.params)
+    console.log("Chartist")
+    console.log(this.$Chartist)
   },
   computed: {
     name(){

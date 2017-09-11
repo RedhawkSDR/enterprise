@@ -6,6 +6,7 @@ import router from './router'
 import store from './store'
 import TreeView from "vue-json-tree-view"
 import VueMaterial from 'vue-material'
+import Chartist from 'chartist'
 import 'vue-material/dist/vue-material.css'
 import 'bootstrap/dist/css/bootstrap.css'
 
@@ -24,11 +25,21 @@ Vue.use(GlobalMixins)
 //Import styling
 import './assets/sass/material-dashboard.scss'
 
+// global library setup
+Object.defineProperty(Vue.prototype, '$Chartist', {
+  get () {
+    return this.$root.Chartist
+  }
+})
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   store,
   template: '<App/>',
-  components: { App }
+  components: { App },
+  data: {
+      Chartist: Chartist
+  }
 })

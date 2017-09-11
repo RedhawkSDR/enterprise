@@ -27,10 +27,18 @@ export default {
   },
   computed: {
     metrics(){
-      return this.$store.getters.gppMetrics[this.metricType]
+      if(Object.keys(this.$store.getters.gppMetrics) == 0){
+        return {}
+      }else{
+        return this.$store.getters.gppMetrics[this.metricType]
+      }
     },
     metricKeys(){
-      return Object.keys(this.$store.getters.gppMetrics[this.metricType])
+      if(Object.keys(this.$store.getters.gppMetrics) == 0){
+        return []
+      }else{
+        return Object.keys(this.$store.getters.gppMetrics[this.metricType])
+      }
     },
     interval(){
       return this.$store.getters.interval

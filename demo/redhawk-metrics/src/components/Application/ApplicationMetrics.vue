@@ -13,7 +13,7 @@ import ApplicationMetricsList from './ApplicationMetricsList'
 
 export default {
   name: 'appmetrics',
-  mounted(){
+  created(){
     this.$store.dispatch("getAvailableMetrics", 'application')
   }
 }

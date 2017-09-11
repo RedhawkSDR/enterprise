@@ -38,10 +38,18 @@ export default {
   },
   computed: {
     metrics(){
-      return this.$store.getters.appMetrics[this.metricType]
+      if(Object.keys(this.$store.getters.appMetrics).length == 0){
+        return {}
+      }else{
+        return this.$store.getters.appMetrics[this.metricType]
+      }
     },
     metricKeys(){
-      return Object.keys(this.$store.getters.appMetrics[this.metricType])
+      if(Object.keys(this.$store.getters.appMetrics).length == 0){
+        return []
+      }else{
+        return Object.keys(this.$store.getters.appMetrics[this.metricType])
+      }
     },
     interval(){
       return this.$store.getters.interval

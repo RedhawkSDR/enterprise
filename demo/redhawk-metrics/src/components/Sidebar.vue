@@ -1,16 +1,11 @@
 <template>
   <div :class="sidebarClasses"
     style="background-image: url(static/img/sidebar-3.jpg)">
-    <md-toolbar class="logo">
-      <h2 class="md-title">REDHAWK Metrics</h2>
-      <!--
-      <md-button @click="getAvailable" class="md-icon-button md-raised">
-        <md-icon>
-          refresh
-        </md-icon>
-      </md-button>
-      -->
-    </md-toolbar>
+    <div class="logo">
+      <img src="static/img/logo/RedHawk_Logo.png"
+       style="width:50px;height:50px; float: left;" />
+      <h4>REDHAWK Metrics</h4>
+    </div>
     <div class="sidebar-wrapper">
       <!-- TODO: You can do this exact same thing with md-list-->
       <ul :class="navClasses">

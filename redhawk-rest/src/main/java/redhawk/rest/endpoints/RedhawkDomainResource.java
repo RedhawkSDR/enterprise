@@ -139,7 +139,7 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
-    		value = "Set a Property on a REDHAWK Domain"
+    		value = "Register a Remote REDHAWK Domain"
     		) 
     public Response registerRemoteDomain(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name,
     		@ApiParam(value = "Remote Domain Information", required=true) RemoteDomainRegistrar registerRequest) throws Exception {

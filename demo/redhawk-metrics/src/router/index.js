@@ -12,7 +12,7 @@ import GPPMetricsList from '@/components/GPP/GPPMetricsList'
 import GPPMetricsView from '@/components/GPP/GPPMetricsView'
 import PortStatisticsList from '@/components/Port/PortStatisticsList'
 import PortStatisticsView from '@/components/Port/PortStatisticsView'
-
+import RandomChart from '@/components/Port/RandomChart'
 
 Vue.use(Router)
 
@@ -22,6 +22,11 @@ export default new Router({
       path: '/Hello',
       name: 'Hello',
       component: Hello
+    },
+    {
+      path: '/RandomChart',
+      name: 'RandomChart',
+      component: RandomChart
     },
     {
       path: '/',

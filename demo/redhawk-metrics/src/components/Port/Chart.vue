@@ -2,7 +2,12 @@
   <div class="card">
     <!-- Put graph here -->
     <div class="card-header" data-background-color="black">
-      <chartexample :height="50"></chartexample>
+      <!--<chartexample :height="50"></chartexample>-->
+      <!--<portstatchart></portstatchart>-->
+      <portlinegraph
+      :graphmetric="graphmetric"
+      :chartvalue="chartvalue"
+      :height="200"></portlinegraph>
     </div>
     <div class="card-content">
       <md-input-container>
@@ -19,11 +24,15 @@
 
 <script>
 import ChartExample from './VueChartExample.vue'
+import PortStatisticsChart from './PortStatisticsChart'
+import PortLineGraph from './PortLineGraph.js'
 
 export default {
   name: 'portchart',
   components: {
-    'chartexample': ChartExample
+    'chartexample': ChartExample,
+    'portstatchart' : PortStatisticsChart,
+    'portlinegraph' : PortLineGraph
   },
   computed: {
     chartvalue(){
@@ -39,7 +48,8 @@ export default {
   watch: {
     chartvalue(){
       this.values.push(this.chartvalue)
-      this.values.shift()
+      if(this.values.length>=60)
+        this.values.shift()
     }
   }
 }

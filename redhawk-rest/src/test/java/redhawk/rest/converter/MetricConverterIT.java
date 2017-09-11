@@ -5,13 +5,11 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import CF.DataType;
@@ -24,11 +22,7 @@ import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.CORBAException;
-import redhawk.driver.exceptions.MultipleResourceException;
-import redhawk.driver.exceptions.ResourceNotFoundException;
-import redhawk.driver.properties.RedhawkProperty;
-import redhawk.driver.properties.RedhawkStruct;
-import redhawk.driver.properties.RedhawkStructSequence;
+import redhawk.driver.exceptions.MultipleResourceException;	
 import redhawk.rest.RedhawkManager;
 import redhawk.rest.model.ApplicationMetrics;
 import redhawk.rest.model.GPPMetrics;
@@ -37,6 +31,7 @@ import redhawk.rest.model.RedhawkMetrics;
 import redhawk.rest.utils.MetricTypes;
 import redhawk.testutils.RedhawkTestBase;
 
+@Ignore("This test should be ignored till RI-89 is closed.")
 public class MetricConverterIT extends RedhawkTestBase{
 	private static RedhawkManager manager = new RedhawkManager(); 
 	

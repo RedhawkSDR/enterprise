@@ -174,7 +174,7 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="Set REDHAWK Device AdminState"
     		)
-    public Response setAdminState(@PathParam("deviceId") String deviceId, @ApiParam(value="AdminState to change Device too(e.g. LOCKED/UNLOCKED)", required=true) String state) throws Exception {
+    public Response setAdminState(@PathParam("deviceId") String deviceId, @ApiParam(value="AdminState for the Device(e.g. LOCKED/UNLOCKED)", required=true) String state) throws Exception {
     	AdminState stateObj = AdminState.valueOf(state);
     	
     	redhawkManager.setAdminState(nameServer, domainName+"/"+devManagerName+"/"+deviceId, stateObj);

@@ -565,14 +565,12 @@ public class RedhawkDomainManagerImpl extends QueryableResourceImpl<DomainManage
 
 	@Override
 	public RedhawkLogLevel getLogLevel() {
-		throw new UnsupportedOperationException(
-				"DomainManager does not implemnt the CORBA Logging interface until 2.1.X series.");
+		return RedhawkLogLevel.reverseLookup(getCorbaObject().log_level());
 	}
 
 	@Override
 	public void setLogLevel(RedhawkLogLevel level) {
-		throw new UnsupportedOperationException(
-				"DomainManager does not implemnt the CORBA Logging interface until 2.1.X series.");
+		getCorbaObject().log_level(level.getValue());
 	}
 
 	@Override

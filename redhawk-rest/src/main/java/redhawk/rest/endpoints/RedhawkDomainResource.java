@@ -47,7 +47,7 @@ import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.FullProperty;
 import redhawk.rest.model.Property;
 import redhawk.rest.model.PropertyContainer;
-import redhawk.rest.model.RegisterRemoteDomain;
+import redhawk.rest.model.RemoteDomainRegistrar;
 
 @Path("/{nameserver}/domains")
 @Api(value = "/{nameserver}/domains")

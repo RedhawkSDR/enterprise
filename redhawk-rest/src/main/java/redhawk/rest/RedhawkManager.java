@@ -68,7 +68,7 @@ import redhawk.rest.model.FullProperty;
 import redhawk.rest.model.PortStatisticsContainer;
 import redhawk.rest.model.Property;
 import redhawk.rest.model.PropertyContainer;
-import redhawk.rest.model.RegisterRemoteDomain;
+import redhawk.rest.model.RemoteDomainRegistrar;
 import redhawk.rest.model.SRIContainer;
 import redhawk.rest.model.TunerMode;
 import redhawk.rest.model.WaveformInfo;
@@ -111,7 +111,7 @@ public class RedhawkManager {
 		}
 	}
 
-	public void registerRemoteDomain(String nameServer, String type, String location, RegisterRemoteDomain registerRequest) throws Exception {
+	public void registerRemoteDomain(String nameServer, String type, String location, RemoteDomainRegistrar registerRequest) throws Exception {
 		Redhawk redhawk;
 		try {
 			redhawk = getDriverInstance(nameServer);

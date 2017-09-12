@@ -29,7 +29,7 @@ import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.rest.model.Domain;
-import redhawk.rest.model.RegisterRemoteDomain;
+import redhawk.rest.model.RemoteDomainRegistrar;
 import redhawk.testutils.RedhawkTestBase;
 
 /*
@@ -49,7 +49,7 @@ public class RedhawkRestRemoteDomainManagerMT extends RedhawkTestBase{
 	@Test
 	public void testRegisterRemoteDomain() throws ResourceNotFoundException, CORBAException {
 		String remoteDomainName = "REDHAWK_DEV2";
-		RegisterRemoteDomain remoteDomain = new RegisterRemoteDomain(); 
+		RemoteDomainRegistrar remoteDomain = new RemoteDomainRegistrar(); 
 		remoteDomain.setDomainName(remoteDomainName);
 		
 		try {

@@ -46,7 +46,7 @@ public class RedhawkDeviceTestBase extends RedhawkTestBase{
 				 * Place Dcd in it's proper directory 
 				 */
 				//TODO: Add a way to configure this from a file
-				File file = new File("src/test/resources/node/SimulatorNode");
+				File file = new File("../redhawk-driver/src/test/resources/node/SimulatorNode");
 				
 				nodeDir = new File(deviceManagerHome+"/nodes/SimulatorNode");
 				

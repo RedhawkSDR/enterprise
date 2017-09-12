@@ -1,10 +1,10 @@
 === Web Server Configuration
 
-The web endpoints <<REDHAWK REST>> and websocket endpoints <<REDHAWK WebSocket>> are all hosted by a http://www.eclipse.org/jetty/documentation/[Jetty] server running inside of your Karaf container. Karaf uses https://ops4j1.jira.com/wiki/display/paxweb/Pax+Web[Pax Web] to manage your Jetty instance in an OSGi environment. 
+The web endpoints <<REDHAWK REST>> and websocket endpoints <<REDHAWK WebSocket>> are all hosted by a http://www.eclipse.org/jetty/documentation/[Jetty] server in the OSGi environment. You can configure Jetty by using Pax Web or using a standard Jetty configuration file.
 
-==== Pax Web Config
+==== Using Pax Web to Configure Jetty
 
-The `org.ops4j.pax.web.cfg` has the parameters necessary for Pax to configure your Jetty server in the OSGi (Karaf in our case) environment. Using Pax Web to manage your Jetty instance enables hot deployment (allowing you to update the Pax Web configuration and the changes take place without restarting your Karaf). By default, SSL is setup through Pax Web. For more information, refer to the https://ops4j1.jira.com/wiki/display/paxweb/SSL+Configuration[SSL Configuration] section of Pax Web documentation.
+Using https://ops4j1.jira.com/wiki/display/paxweb/Pax+Web[Pax Web] enables you to dynamically manage the Jetty instance without restarting Karaf. The `${karaf.base}/etc/org.ops4j.pax.web.cfg` file has the parameters necessary for Pax to configure the Jetty server.  By default, SSL is setup through Pax Web. For more information, refer to the https://ops4j1.jira.com/wiki/display/paxweb/SSL+Configuration[SSL Configuration] section of Pax Web documentation.
 
 ===== Certificates
 
@@ -35,7 +35,7 @@ To disable https, set `org.osgi.service.http.secure.enabled` to false instead of
 
 ===== Cipher Suites and other Security Configs
 
-You can enable and disable numerous cipher suites via your `org.ops4j.pax.web.cfg/jetty.xml` file. The available ciphers are dependent on the version of the JRE/JDK, browser type/version, and the security posture applicable to your situation. Because of this variation, cipher suites have not been included/excluded in the default configuration. 
+You can enable and disable numerous cipher suites via the `org.ops4j.pax.web.cfg/jetty.xml` file. The available ciphers are dependent on the version of the JRE/JDK, browser type/version, and the security posture applicable to your situation. Because of this variation, cipher suites have not been included/excluded in the default configuration. 
 
 * `org.ops4j.pax.web.ssl.ciphersuites.included`: Included SSL/TLS Cipher Suites Regex.
 * `org.ops4j.pax.web.ssl.ciphersuites.excluded`: Excluded SSL/TLS Cipher Suites Regex.
@@ -61,7 +61,7 @@ To set up additional Jetty configuration information (for example, login modules
 
 For more information, refer to https://ops4j1.jira.com/wiki/spaces/paxweb/pages/12059279/Advanced+Jetty+Configuration[Advanced Jetty Configuration]. Pax Web can also be configured via the web using the `Pax Web Runtime` configuration available in your `system/console/configMgr` endpoint provided by Karaf. 
 
-==== Jetty Configuration
+==== Using a Jetty Configuration
 
 Jetty configuration can be found in `${karaf.base}/etc/jetty.xml`. The jetty configuration sets up the login modules for your HTTP server. For more information about Jetty and JAAS support, refer to the http://www.eclipse.org/jetty/documentation/9.4.x/jaas-support.html[JAAS Support] section of the Jetty docs. For information on the Login Service that is preconfigured in your container, refer to the http://www.eclipse.org/jetty/documentation/9.4.x/jaas-support.html#_a_closer_look_at_jaasloginservice[JAASLoginService] section.
 

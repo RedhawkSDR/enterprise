@@ -119,7 +119,7 @@ public class RedhawkDeviceManagerResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="Set REDHAWK Device Manager properties"
     		) 
-    public Response setDeviceManagerProperties(@PathParam("devMgrId") String deviceManagerId, List<FullProperty> properties) throws Exception {
+    public Response setDeviceManagerProperties(@PathParam("devMgrId") String deviceManagerId, @ApiParam(value="List of updates to make to DeviceManager properties", required=true) List<FullProperty> properties) throws Exception {
         redhawkManager.setProperties(properties, nameServer, "devicemanager", domainName + "/" + deviceManagerId);
         return Response.ok().build();
     }
@@ -131,7 +131,7 @@ public class RedhawkDeviceManagerResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="Set REDHAWK Device Manager Property"
     		)     
-    public Response setDeviceManagerProperty(@PathParam("devMgrId") String deviceManagerId, @PathParam("propId") String propertyId, FullProperty property) throws Exception {
+    public Response setDeviceManagerProperty(@PathParam("devMgrId") String deviceManagerId, @PathParam("propId") String propertyId,@ApiParam(value="Updates to make to property", required=true) FullProperty property) throws Exception {
         redhawkManager.setProperty(property, nameServer, "devicemanager", domainName + "/" + deviceManagerId);
         return Response.ok().build();
     }

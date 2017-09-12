@@ -95,19 +95,6 @@ public class RedhawkComponentResource extends RedhawkBaseResource {
         return Response.ok(redhawkManager.getProperty(propertyId, nameServer, "component", domainName + "/" + applicationId + "/" + componentId)).build();
     }
 
-//	@GET
-//	@Path("/{id}/properties/{propId}/structsequence")
-//	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
-//	public Response getApplicationProperties1(@PathParam("id") String componentId, @PathParam("propId") String propertyId) throws ResourceNotFound, Exception {
-//		Property prop = redhawkManager.getProperty(propertyId, nameServer, "component", domainName+"/"+applicationId+"/"+componentId);
-//		if(prop.getStructSequence() != null){
-//			return Response.ok(prop.getStructSequence()).build();
-//		} else {
-//			return Response.status(Status.NOT_FOUND).build();
-//		}
-//	}
-
-
     @PUT
     @Path("/{componentId}/properties/{propId}")
     @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -115,9 +102,8 @@ public class RedhawkComponentResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="Set Application Component Property"
     		)   
-    public Response setComponentProperty(@PathParam("componentId") String componentId, @PathParam("propId") String propertyId, FullProperty property) throws Exception {
+    public Response setComponentProperty(@PathParam("componentId") String componentId, @PathParam("propId") String propertyId,@ApiParam(value="Information to update property", required=true) FullProperty property) throws Exception {
         redhawkManager.setProperty(property, nameServer, "component", domainName + "/" + applicationId + "/" + componentId);
         return Response.ok().build();
     }
-
 }

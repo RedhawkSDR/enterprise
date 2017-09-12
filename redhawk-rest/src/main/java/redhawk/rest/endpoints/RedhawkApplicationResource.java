@@ -103,7 +103,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@ApiOperation(value = "Stop/Start Application")
 	public Response controlApplication(
-			@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId, String control)
+			@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId, @ApiParam(value="Action to take on application start/stop", required=true) String control)
 			throws Exception {
 		redhawkManager.controlApplication(nameServer, domainName, applicationId, control);
 		return Response.ok().build();
@@ -115,7 +115,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@ApiOperation(value = "Launch Application")
 	public Response launchApplication(
-			@ApiParam(value = "Name for Application") @PathParam("instanceName") String instanceName, WaveformInfo info)
+			@ApiParam(value = "Name for Application") @PathParam("instanceName") String instanceName, @ApiParam(value="SAD file Location w/ optional Id/name of waveform", required=true) WaveformInfo info)
 			throws ResourceNotFoundException, ApplicationCreationException {
 		redhawkManager.createApplication(nameServer, domainName, instanceName, info);
 		return Response.ok("Success").build();
@@ -168,7 +168,8 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@ApiOperation(value = "Set Application Property")
 	public Response setApplicationProperty(
 			@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId,
-			@ApiParam(value = "ID/Name for Property") @PathParam("propId") String propertyId, FullProperty property)
+			@ApiParam(value = "ID/Name for Property") @PathParam("propId") String propertyId, 
+			@ApiParam(value = "Updates for property", required=true) FullProperty property)
 			throws Exception {
 		redhawkManager.setProperty(property, nameServer, "application", domainName + "/" + applicationId);
 		return Response.ok().build();

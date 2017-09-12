@@ -1,6 +1,7 @@
 <template>
 <div class="card">
   <div class="card-header">
+    <h4 style="text-align:center;">{{name}}</h4>
     <reactivelinegraph
     :values="values"
     :height="200"></reactivelinegraph>
@@ -24,7 +25,7 @@ import ReactiveLineGraph from '../UIComponents/Charts/ReactiveLineGraph.js'
 
 export default {
   name: 'appchartcard',
-  props: ['metricType'],
+  props: ['metricType', 'name'],
   components: {
     'reactivelinegraph' : ReactiveLineGraph
   },
@@ -54,6 +55,10 @@ export default {
         this.values.shift()
     },
     graphmetric(){
+      this.values.fill(0)
+      this.values.push(this.chartvalue)
+    },
+    metricType(){
       this.values.fill(0)
       this.values.push(this.chartvalue)
     }

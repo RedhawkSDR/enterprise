@@ -2,6 +2,7 @@
   <div class="card">
     <!-- TODO: Clean up graph background to make more appealing -->
     <div class="card-header" data-background-color="black">
+      <h4 style="text-align:center;">{{name}}</h4>
       <reactivelinegraph
       :values="values"
       :height="200"></reactivelinegraph>
@@ -24,6 +25,7 @@ import ReactiveLineGraph from '../UIComponents/Charts/ReactiveLineGraph.js'
 
 export default {
   name: 'portchart',
+  props: ['name'],
   components: {
     'reactivelinegraph' : ReactiveLineGraph
   },

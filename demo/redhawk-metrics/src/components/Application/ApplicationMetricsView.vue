@@ -1,6 +1,6 @@
 <template>
   <div>
-    <chartcard :metricType="metricType"></chartcard>
+    <chartcard :name="metricType" :metricType="metricType"></chartcard>
     <div class="card">
       <div class="card-header" data-background-color="green">
         <h4 class="title">{{ appName }} </h4>

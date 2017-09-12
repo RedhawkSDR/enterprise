@@ -1,6 +1,7 @@
 <template>
 <div class="card">
   <div class="card-header">
+    <h4 style="text-align:center;">{{metricType}}</h4>    
     <reactivelinegraph
     :values="values"
     :height="200"></reactivelinegraph>
@@ -65,7 +66,9 @@ export default {
       this.values.fill(0)
     },
     metricType(){
-      console.log("Metric Type changed")
+      this.values.fill(0)
+      this.values.push(this.chartvalue)
+
       //Setting defaults based on metric type
       if(this.metricType=='utilization'){
         this.graphmetric = 'component_load'

@@ -3,6 +3,7 @@
     <!-- Sidebar from template -->
     <sidebar/>
     <div class="main-panel">
+      <!--<topnavbar></topnavbar>-->
       <dashboardcontent/>
     </div>
   </div>
@@ -11,12 +12,14 @@
 <script>
 import Sidebar from './components/Sidebar.vue'
 import Content from './components/Content.vue'
+import TopNavBar from './components/TopNavBar'
 
 export default {
   name: 'redhawkmetrics',
   components: {
     'sidebar' : Sidebar,
-    'dashboardcontent' : Content
+    'dashboardcontent' : Content,
+    'topnavbar' : TopNavBar
   },
   mounted(){
     this.$store.dispatch("getAvailableMetrics", 'application')

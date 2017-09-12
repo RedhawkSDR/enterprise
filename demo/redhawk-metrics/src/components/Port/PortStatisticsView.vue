@@ -1,6 +1,6 @@
 <template>
 <div>
-<chart/>
+<chart :name="name"></chart>
 <div>
   <div class="card">
     <div class="card-header" data-background-color="green">

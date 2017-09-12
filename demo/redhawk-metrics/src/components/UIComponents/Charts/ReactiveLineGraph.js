@@ -18,7 +18,7 @@ export default Line.extend({
         legend: false,
         animation: {
           easing: 'linear'
-        },
+        }
         /*scales: {
           yAxes: [
             {

@@ -27,13 +27,11 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 						http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd">
 
 	<!-- skip json provider flag required to ensure JacksonJsonProvider will be only available option for JSON serialization -->
-	<!--
 	<cxfcore:bus id="redhawk-integration-bus">
 		<cxfcore:properties>
 			<entry key="skip.default.json.provider.registration" value="true"/>
 		</cxfcore:properties>
 	</cxfcore:bus>
-	-->
 							     
      <jaxrs:server id="testRest" address="/redhawk">
         <jaxrs:serviceBeans>
@@ -44,13 +42,19 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 			<ref component-id="redhawkDeviceManagerResource" />
 			<ref component-id="redhawkDeviceResource" />
 			<ref component-id="redhawkWaveformResource" />	
-			<ref component-id="redhawkSoftwareComponentResource" />											        
+			<ref component-id="redhawkSoftwareComponentResource" />
+			<ref component-id="redhawkMetricsResource" />											        
         </jaxrs:serviceBeans>
 		<jaxrs:extensionMappings>
 			<entry key="json" value="application/json" />
 			<entry key="xml" value="application/xml" />
 		</jaxrs:extensionMappings>
-		<jaxrs:providers>							
+		<jaxrs:providers>
+			<!-- 
+				TODO: Figure out how to make this work. 
+				<bean class="com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider" />
+				<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />									
+			-->
 			<bean class="redhawk.rest.exceptions.ResourceNotFoundExceptionMapper" />
 		</jaxrs:providers>		        
      </jaxrs:server>
@@ -86,6 +90,10 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 	</bean>
 	
 	<bean id="redhawkSoftwareComponentResource" class="redhawk.rest.endpoints.RedhawkSoftwareComponentResource">
+		<property name="redhawkManager" ref="redhawkManagerBean" />
+	</bean>
+	
+	<bean id="redhawkMetricsResource" class="redhawk.rest.endpoints.RedhawkMetricsResource">
 		<property name="redhawkManager" ref="redhawkManagerBean" />
 	</bean>
 </blueprint>

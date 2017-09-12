@@ -25,38 +25,24 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import CF.DataType;
-import CF.PropertiesHolder;
-import CF.PropertySetHelper;
-import CF.PropertySetOperations;
-import CF.UnknownProperties;
 import redhawk.driver.application.RedhawkApplication;
-import redhawk.driver.component.RedhawkComponent;
-import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
-import redhawk.driver.exceptions.ResourceNotFoundException;
-import redhawk.driver.port.RedhawkPort;
-import redhawk.driver.properties.RedhawkProperty;
-import redhawk.driver.properties.RedhawkStruct;
-import redhawk.driver.properties.RedhawkStructSequence;
 import redhawk.rest.RedhawkManager;
 import redhawk.rest.model.ApplicationMetrics;
 import redhawk.rest.model.GPPMetrics;
@@ -90,6 +76,7 @@ public class MetricConverterIT extends RedhawkTestBase {
 
 		assertNotNull(metrics.getApplicationMetrics());
 		assertNotNull(metrics.getPortStatistics());
+		assertNotNull(metrics.getGppMetrics());
 	}
 
 	@Test
@@ -116,17 +103,6 @@ public class MetricConverterIT extends RedhawkTestBase {
 		for (GPPMetrics metric : metrics) {
 			assertNotNull(metric.getDeviceName());
 		}
-	}
-
-	@Test
-	public void testJackson() throws JsonProcessingException {
-		Gson gson = new Gson();
-
-		Map<String, String> test = new HashMap<>();
-		test.put("hello", "world");
-		test.put("foo", "bar");
-
-		System.out.println(gson.toJson(test));
 	}
 
 	@Test

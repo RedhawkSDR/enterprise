@@ -293,12 +293,14 @@ public class RedhawkUtilsIT {
 	public void testProperyNamesToIdMap() {
 		try {
 			RedhawkDevice device = redhawk.getDomain().getDeviceByName("GPP.*");
-			
+			System.out.println("======================================");
+			System.out.println(device);
 			Map<String, List<String>> map = RedhawkUtils.getPropertyNameToId(device.getPropertyConfiguration());
 		
 			assertTrue("Map should not be empty", !map.isEmpty());
 			assertEquals("Should be 47 properties for GPP", 47, map.size());
 		} catch (MultipleResourceException | CORBAException | ResourceNotFoundException e) {
+			e.printStackTrace();
 			fail("Test failure "+e.getMessage());
 		}
 

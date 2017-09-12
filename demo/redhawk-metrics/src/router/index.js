@@ -1,33 +1,27 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import RedhawkMetrics from '@/RedhawkMetrics'
-import Hello from '@/components/Hello'
 import DomainConfig from '@/components/DomainConfig'
+
+//APP Components
 import AppMetrics from '@/components/Application/ApplicationMetrics'
 import AppMetricsList from '@/components/Application/ApplicationMetricsList'
 import AppMetricsView from '@/components/Application/ApplicationMetricsView'
-import GPPMetrics from '@/components/GPPMetrics'
-import PortStatistics from '@/components/PortStatistics'
-import GPPMetricsList from '@/components/GPP/GPPMetricsList'
-import GPPMetricsView from '@/components/GPP/GPPMetricsView'
+
+//PORT Components
+import PortStatistics from '@/components/Port/PortStatistics'
 import PortStatisticsList from '@/components/Port/PortStatisticsList'
 import PortStatisticsView from '@/components/Port/PortStatisticsView'
-import RandomChart from '@/components/Port/RandomChart'
+
+//GPP Components
+import GPPMetrics from '@/components/GPP/GPPMetrics'
+import GPPMetricsList from '@/components/GPP/GPPMetricsList'
+import GPPMetricsView from '@/components/GPP/GPPMetricsView'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
-    {
-      path: '/Hello',
-      name: 'Hello',
-      component: Hello
-    },
-    {
-      path: '/RandomChart',
-      name: 'RandomChart',
-      component: RandomChart
-    },
     {
       path: '/',
       name: 'RedhawkMetrics',

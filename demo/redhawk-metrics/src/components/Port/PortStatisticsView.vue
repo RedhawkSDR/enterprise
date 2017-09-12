@@ -1,11 +1,5 @@
 <template>
 <div>
-<!--
-  TODO: Make this work at some point
-  https://github.com/chartjs/Chart.js/pull/3399
-  http://playground.abysscorp.org/chartjs/livecharts/
-http://plnkr.co/edit/Imxwl9OQJuaMepLNy6ly?p=info
--->
 <chart/>
 <div>
   <div class="card">
@@ -24,18 +18,14 @@ http://plnkr.co/edit/Imxwl9OQJuaMepLNy6ly?p=info
 </template>
 
 <script>
-import Chartist from 'chartist'
 import Table from './PortStatisticsTable.vue'
-import Chart from './Chart.vue'
-import ChartCard from '../UIComponents/Cards/ChartCard.vue'
-
+import Chart from './ChartCard.vue'
 
 export default {
   name: 'portstatisticsview',
   components: {
     'porttable': Table,
     'chart' : Chart,
-    ChartCard
   },
   mounted(){
     console.log("Route Params")

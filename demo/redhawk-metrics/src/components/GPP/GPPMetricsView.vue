@@ -1,4 +1,6 @@
 <template>
+  <div>
+    <chartcard :metricType="metricType"></chartcard>
     <div class="card">
       <div class="card-header" data-background-color="green">
         <h4 class="title">{{ gppName }} </h4>
@@ -9,45 +11,32 @@
           <label for="metricType">Metric Type</label>
           <md-select name="metricType" id="metricType" v-model="metricType">
             <md-option
-              v-for="(metricType, index) in metricTypes"
-              v-bind:key="metricType"
-              :value="metricType"
-              >
-              {{ metricType }}
-            </md-option>
-          </md-select>
-        </md-input-container>
-        <gppmetrictable
-          :metricType="metricType"
-          >
-        </gppmetrictable>
-        <!--
-        <md-table>
-          <md-table-header>
-            <md-table-row>
-              <md-table-head>Metric Name</md-table-head>
-              <md-table-head md-numeric>Value</md-table-head>
-            </md-table-row>
-          </md-table-header>
-          <md-table-body>
-            <md-table-row v-for="(row, index) in Object.keys(appMetricsToView)" :key="index">
-              <md-table-cell>{{ row }}</md-table-cell>
-              <md-table-cell>{{ appMetricsToView[row]}}</md-table-cell>
-            </md-table-row>
-          </md-table-body>
-        </md-table>
-        -->
-    </div>
+            v-for="(metricType, index) in metricTypes"
+            v-bind:key="metricType"
+            :value="metricType"
+            >
+            {{ metricType }}
+          </md-option>
+        </md-select>
+      </md-input-container>
+      <gppmetrictable
+      :metricType="metricType"
+      >
+    </gppmetrictable>
   </div>
+</div>
+</div>
 </template>
 
 <script>
 import GPPMetricTable from './GPPMetricTable.vue'
+import ChartCard from './ChartCard.vue'
 
 export default {
   name: 'gppmetricsview',
   components: {
-    'gppmetrictable' : GPPMetricTable
+    'gppmetrictable' : GPPMetricTable,
+    'chartcard' : ChartCard
   },
   data() {
     return {

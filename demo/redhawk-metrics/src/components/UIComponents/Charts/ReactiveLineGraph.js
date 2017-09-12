@@ -1,3 +1,4 @@
+//TODO Just make this a reusable component
 import { Line, mixins} from 'vue-chartjs'
 const { reactiveData } = mixins
 
@@ -5,25 +6,34 @@ const { reactiveData } = mixins
 //import reactiveData from '../mixins/reactiveData'
 export default Line.extend({
   mixins: [reactiveData],
-  props: ['graphmetric', 'chartvalue'],
+  props: ['values'],
   data () {
     return {
       samples: 60,
       speed: 250,
-      values: [],
       labels: [],
-      value: 0,
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        legend: false
+        legend: false,
+        animation: {
+          easing: 'linear'
+        },
+        /*scales: {
+          yAxes: [
+            {
+              scaleLabel: {
+                display: true,
+                labelString: this.metricType
+              }
+            }
+          ]
+        }*/
       }
     }
   },
   created () {
-    this.values.length = this.samples
     this.labels.length = this.samples
-    this.values.fill(0)
     this.labels.fill('')
     this.fillData()
   },
@@ -38,10 +48,6 @@ export default Line.extend({
 
   methods: {
     fillData(){
-      this.values.push(this.chartvalue)
-      if(this.values.length>=60)
-        this.values.shift()
-
       this.chartData = {
         labels: this.labels,
         datasets: [
@@ -51,13 +57,10 @@ export default Line.extend({
             borderColor: 'rgb(255, 99, 132)',
             borderWidth: 2,
             lineTension: 0.25,
-            pointRadius: 0             
+            pointRadius: 0
           }
         ]
       }
-    },
-    getRandomInt () {
-      return this.$store.getters.portStatistics[this.graphmetric]
     }
   }
 })

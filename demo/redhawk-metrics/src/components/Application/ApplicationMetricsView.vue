@@ -1,4 +1,6 @@
 <template>
+  <div>
+    <chartcard :metricType="metricType"></chartcard>
     <div class="card">
       <div class="card-header" data-background-color="green">
         <h4 class="title">{{ appName }} </h4>
@@ -9,21 +11,23 @@
           <label for="metricType">Metric Type</label>
           <md-select name="metricType" id="metricType" v-model="metricType">
             <md-option
-              v-for="(appmetric, index) in appMetricsKeys"
-              v-bind:key="appmetric"
-              :value="appmetric"
-              >
-              {{ appmetric }}
-            </md-option>
-          </md-select>
-        </md-input-container>
-        <apptable :metricType="metricType"></apptable>
+            v-for="(appmetric, index) in appMetricsKeys"
+            v-bind:key="appmetric"
+            :value="appmetric"
+            >
+            {{ appmetric }}
+          </md-option>
+        </md-select>
+      </md-input-container>
+      <apptable :metricType="metricType"></apptable>
     </div>
   </div>
+</div>
 </template>
 
 <script>
 import Table from './ApplicationTable.vue'
+import ChartCard from './ChartCard.vue'
 
 export default {
   name: 'appmetricsview',
@@ -34,7 +38,8 @@ export default {
     }
   },
   components: {
-    'apptable' : Table
+    'apptable' : Table,
+    'chartcard' : ChartCard
   },
   mounted(){
     //Get application parameters

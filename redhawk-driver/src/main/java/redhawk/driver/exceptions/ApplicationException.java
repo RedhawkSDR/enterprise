@@ -19,39 +19,7 @@
  */
 package redhawk.driver.exceptions;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-
-import io.swagger.annotations.ApiModelProperty;
-
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
-public class RemoteDomainRegistrar {
-	@ApiModelProperty(value = "Remote domain name to registrar", required=true)
-	private String domainName; 
-	
-	@ApiModelProperty(value = "omniORB port for the remote domain", required=true)
-	private Integer nameServerPort;
-	
-	@ApiModelProperty(value = "omniORB host for the remote domain", required=true)
-	private String nameServerHost;
-	
-	public RemoteDomainRegistrar() {	
-	}
-
-	public String getDomainName() {
-		return domainName;
-	}
-
-	public void setDomainName(String domainName) {
-		this.domainName = domainName;
-	}
-
-	public Integer getNameServerPort() {
-		return nameServerPort;
-	}
-
+public class ApplicationException extends Exception {
 	public ApplicationException(String message, Throwable cause) {
 		super(message, cause);
 	}

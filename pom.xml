@@ -10,10 +10,9 @@
 
 	<scm>
 		<developerConnection>scm:git:${rei.git}</developerConnection>
-		<tag>redhawk-enterprise-integration-2.0.1</tag>
 	</scm>
 	<properties>
-		<release>1</release><!-- RC number -->
+		<release>2</release><!-- RC number -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>

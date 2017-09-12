@@ -40,24 +40,21 @@ import redhawk.driver.eventchannel.listeners.PropertyChange;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.testutils.RedhawkTestBase;
 
-public class RedhawkUtilsIT {
+public class RedhawkUtilsIT extends RedhawkTestBase{
 	private static StreamSRI sri1;
 	
 	private static StreamSRI sri2;
 	
-	private static RedhawkDriver redhawk; 
-
 	@BeforeClass
-	public static void setup() {
-		redhawk = new RedhawkDriver(); 
-		
+	public static void setup() {		
 		sri1 = new StreamSRI();
 		sri1.streamID = "sri";
 		
 		DataType t = new DataType();
 		t.id = "test";
-		t.value = RedhawkUtils.createAny(redhawk.getOrb(), "value");
+		t.value = RedhawkUtils.createAny(driver.getOrb(), "value");
 		
 		sri1.keywords = new DataType[]{t};
 		sri1.blocking = true;
@@ -105,7 +102,7 @@ public class RedhawkUtilsIT {
 		props.put("map", map);
 		
 		for(Object obj : props.values()){
-			Any any = RedhawkUtils.createAny(redhawk.getOrb(), obj);
+			Any any = RedhawkUtils.createAny(driver.getOrb(), obj);
 			Assert.assertTrue(any != null);
 		}
 	}
@@ -116,7 +113,7 @@ public class RedhawkUtilsIT {
 		props.put("String", "Hola");
 		props.put("Double", 10.0);
 		
-		RedhawkUtils.createAny(redhawk.getOrb(), props);
+		RedhawkUtils.createAny(driver.getOrb(), props);
 	}
 	
 	
@@ -208,7 +205,7 @@ public class RedhawkUtilsIT {
 		
 		DataType t = new DataType();
 		t.id = "different";
-		t.value = RedhawkUtils.createAny(redhawk.getOrb(), "diff");
+		t.value = RedhawkUtils.createAny(driver.getOrb(), "diff");
 		
 		sri1.keywords = new DataType[]{t};
 		Assert.assertFalse(RedhawkUtils.compareStreamSRI(sri1, sri2));
@@ -232,11 +229,11 @@ public class RedhawkUtilsIT {
 	public void testConvertPropertiesAnyToMap() {
 		DataType t = new DataType();
 		t.id = "different";
-		t.value = RedhawkUtils.createAny(redhawk.getOrb(), "diff");
+		t.value = RedhawkUtils.createAny(driver.getOrb(), "diff");
 		
 		DataType[] s = new DataType[]{t};
 		
-		Any any = redhawk.getOrb().create_any();
+		Any any = driver.getOrb().create_any();
 		PropertiesHelper.insert(any, s);
 		
 		DataType q = new DataType();
@@ -245,7 +242,7 @@ public class RedhawkUtilsIT {
 		
 		DataType[] r = new DataType[]{q};
 		
-		Any any2 = redhawk.getOrb().create_any();
+		Any any2 = driver.getOrb().create_any();
 		PropertiesHelper.insert(any2, r);
 		Map<String, Object> propertiesMap = RedhawkUtils.convertPropertiesAnyToMap(any2);
 		
@@ -265,12 +262,12 @@ public class RedhawkUtilsIT {
 		
 		DataType t = new DataType();
 		t.id = "different";
-		t.value = RedhawkUtils.createAny(redhawk.getOrb(), "diff");
+		t.value = RedhawkUtils.createAny(driver.getOrb(), "diff");
 		
 		DataType[] s = new DataType[]{t};
 		properties.put("r", s);
 		
-		Any any = redhawk.getOrb().create_any();
+		Any any = driver.getOrb().create_any();
 		PropertiesHelper.insert(any, s);
 		
 		DataType q = new DataType();
@@ -279,7 +276,7 @@ public class RedhawkUtilsIT {
 		
 		DataType[] r = new DataType[]{q};
 		
-		Any any2 = redhawk.getOrb().create_any();
+		Any any2 = driver.getOrb().create_any();
 		PropertiesHelper.insert(any2, r);		
 		Any[] arr = new Any[]{any2};
 		properties.put("q", arr);
@@ -292,9 +289,7 @@ public class RedhawkUtilsIT {
 	@Test
 	public void testProperyNamesToIdMap() {
 		try {
-			RedhawkDevice device = redhawk.getDomain().getDeviceByName("GPP.*");
-			System.out.println("======================================");
-			System.out.println(device);
+			RedhawkDevice device = driver.getDomain().getDeviceByName("GPP.*");
 			Map<String, List<String>> map = RedhawkUtils.getPropertyNameToId(device.getPropertyConfiguration());
 		
 			assertTrue("Map should not be empty", !map.isEmpty());

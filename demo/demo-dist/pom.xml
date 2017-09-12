@@ -96,6 +96,14 @@
 								</source>
 							</sources>
 						</mapping>
+						<mapping>
+							<directory>${demo.directory}/metrics</directory>
+							<sources>
+								<source>
+									<location>${project.parent.basedir}/redhawk-metrics/target/redhawk-metrics-webapp-${project.version}.jar</location>
+								</source>
+							</sources>
+						</mapping>						
 					</mappings>
 				</configuration>
 			</plugin>

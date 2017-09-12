@@ -19,5 +19,9 @@
 			<source>${project.parent.basedir}/redhawk-webapp/target/redhawk-demo-webapp-${project.version}.jar</source>
 			<outputDirectory>webapp</outputDirectory>
 		</file>
-	</files>
+		<file>
+			<source>${project.parent.basedir}/redhawk-metrics/target/redhawk-metrics-webapp-${project.version}.jar</source>
+			<outputDirectory>metrics</outputDirectory>
+		</file>		
+	</files>	
 </assembly>

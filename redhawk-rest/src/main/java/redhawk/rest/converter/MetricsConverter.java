@@ -182,7 +182,7 @@ public class MetricsConverter {
 				List<PortMetrics> portMetrics = convertPortMetrics(domain.getApplications());
 				return (T) portMetrics;
 			case GPP:
-				Collection<RedhawkDevice> devices = domain.devices().values();
+				Collection<RedhawkDevice> devices = domain.devices().values();		
 				return (T) convertGPPMetrics(devices);
 			default:
 				throw new WebApplicationException("Unhandled Metric Type");
@@ -348,7 +348,9 @@ public class MetricsConverter {
 			/*
 			 * Only doing this for GPP
 			 */
-			if (deviceKind!=null && deviceKind.getValue().equals("GPP")) {
+			//TODO: second logic is a hack to get around not seeing device kind when running with maven
+			if ((deviceKind!=null && deviceKind.getValue().equals("GPP")) || device.getName().contains("GPP")) {
+				System.out.println("Made it in if");
 				//Set name
 				gppMetric.setDeviceName(device.getName());
 				/*

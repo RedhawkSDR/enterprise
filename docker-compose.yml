@@ -11,5 +11,5 @@ services:
       - .:/usr/src/app
       - ${m2cache}/repository:/root/.m2/repository:rw
     working_dir: /usr/src/app
-    command: ${maven_command}
-#    command: bash -c "mvn -P CFDependencies clean install -B -U && mvn clean install -pl redhawk-rest -P localIT -DfailIfNoTests=false -DdomainHost=redhawk_${dist}_${arch}_${CI_JOB_ID} -DtestProps=`pwd`/docker_test.properties"
+    #command: ${maven_command}
+    command: bash -c "mvn -P CFDependencies clean install -B -U && mvn clean install -pl redhawk-driver -P localIT -Dtest=RedhawkUtilsIT#testPropertyNamesToIdMap -DfailIfNoTests=false -DdomainHost=redhawk_${dist}_${arch}_${CI_JOB_ID} -DtestProps=`pwd`/docker_test.properties"

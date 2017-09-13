@@ -1,3 +1,22 @@
+/*
+ * This file is protected by Copyright. Please refer to the COPYRIGHT file
+ * distributed with this source distribution.
+ *
+ * This file is part of REDHAWK __REDHAWK_PROJECT__.
+ *
+ * REDHAWK __REDHAWK_PROJECT__ is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as published by the
+ * Free Software Foundation, either version 3 of the License, or (at your
+ * option) any later version.
+ *
+ * REDHAWK __REDHAWK_PROJECT__ is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License
+ * for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see http://www.gnu.org/licenses/.
+ */
 package redhawk.rest.converter;
 
 import java.util.ArrayList;
@@ -18,15 +37,19 @@ import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.ApplicationException;
+import redhawk.driver.exceptions.CORBAException;
+import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.port.RedhawkPortStatistics;
 import redhawk.driver.properties.RedhawkProperty;
+import redhawk.driver.properties.RedhawkSimple;
 import redhawk.driver.properties.RedhawkStruct;
 import redhawk.driver.properties.RedhawkStructSequence;
 import redhawk.rest.RedhawkManager;
 import redhawk.rest.model.ApplicationMetrics;
 import redhawk.rest.model.GPPMetrics;
+import redhawk.rest.model.MetricFilter;
 import redhawk.rest.model.PortMetrics;
 import redhawk.rest.model.RedhawkMetrics;
 import redhawk.rest.utils.MetricTypes;
@@ -37,6 +60,15 @@ import redhawk.rest.utils.MetricTypes;
 public class MetricsConverter {
 	static Logger logger = Logger.getLogger(MetricsConverter.class);
 	
+	/**
+	 * Returns metrics of all types(APP, GPP, PORT)
+	 * 
+	 * @param manager
+	 * @param nameServer
+	 * @param domainName
+	 * @return
+	 * @throws WebApplicationException
+	 */
 	public static RedhawkMetrics getMetrics(RedhawkManager manager, String nameServer, String domainName)
 			throws WebApplicationException {
 		Redhawk driver = null;
@@ -72,9 +104,59 @@ public class MetricsConverter {
 
 		return metrics;
 	}
-
+	
 	/**
-	 * Returns metrics based upon the type you pass in.
+	 * Returns metrics based on filter param. This can be a 
+	 * @param manager
+	 * @param nameServer
+	 * @param domainName
+	 * @param filter
+	 * @return
+	 */
+	public static <T> T getMetricsByTypeAndFilter(RedhawkManager manager, String nameServer, String domainName, MetricTypes type, String filter) {
+		Redhawk driver = null;
+
+		try {
+			driver = manager.getDriverInstance(nameServer);
+			RedhawkDomainManager domain = driver.getDomain(domainName);
+		
+			switch (type) {
+			case APPLICATION:
+				// Get the Application Metrics
+				List<ApplicationMetrics> appMetrics = convertApplicationMetrics(domain.getApplicationsByName(filter));
+				return (T) appMetrics;
+			case GPP:
+				Collection<RedhawkDevice> devices = domain.getDevicesByName(filter);
+				return (T) convertGPPMetrics(devices);
+			default:
+				throw new WebApplicationException("Unhandled Metric Type");
+			}
+		} catch (Exception ex) {
+			throw new WebApplicationException(ex);
+		} finally {
+			if (driver != null)
+				driver.disconnect();
+		}
+	}
+	
+	public static <T> T getAppMetricsByMetricType(RedhawkManager manager, String nameServer, String domainName, String applicationName, MetricFilter filter) {
+		Redhawk driver = null;
+
+		try {
+			driver = manager.getDriverInstance(nameServer);
+			RedhawkDomainManager domain = driver.getDomain(domainName);
+			
+			return (T) domain.getApplicationByName(applicationName).getMetrics(filter.getComponents(), filter.getAttributes());
+		}catch(Exception ex) {
+			throw new WebApplicationException(ex);
+		}finally {
+			if(driver!=null)
+				driver.disconnect();
+		}
+	}
+	
+	/**
+	 * Returns all metrics based upon the type you pass in.
 	 * 
 	 * @param manager
 	 * @param nameServer
@@ -82,7 +164,7 @@ public class MetricsConverter {
 	 * @param type
 	 * @return
 	 */
-	public static <T> T getMetricByType(RedhawkManager manager, String nameServer, String domainName,
+	public static <T> T getMetricsByType(RedhawkManager manager, String nameServer, String domainName,
 			MetricTypes type) {
 		Redhawk driver = null;
 
@@ -100,7 +182,7 @@ public class MetricsConverter {
 				List<PortMetrics> portMetrics = convertPortMetrics(domain.getApplications());
 				return (T) portMetrics;
 			case GPP:
-				Collection<RedhawkDevice> devices = domain.devices().values();
+				Collection<RedhawkDevice> devices = domain.devices().values();		
 				return (T) convertGPPMetrics(devices);
 			default:
 				throw new WebApplicationException("Unhandled Metric Type");
@@ -108,6 +190,69 @@ public class MetricsConverter {
 		} catch (Exception ex) {
 			throw new WebApplicationException(ex);
 		} finally {
+			if (driver != null)
+				driver.disconnect();
+		}
+	}
+	
+	public static <T> T getAvailableMetrics(RedhawkManager manager, String nameServer, String domainName) {
+		return getAvailableMetrics(manager, nameServer, domainName, false);
+	}
+	
+	public static <T> T getAvailableMetrics(RedhawkManager manager, String nameServer, String domainName, Boolean treeFormat) {
+		Redhawk driver = null;
+
+		try {
+			driver = manager.getDriverInstance(nameServer);
+			RedhawkDomainManager domain = driver.getDomain(domainName);
+			Map<String, Object> json = new HashMap<>();
+			List<RedhawkApplication> applications = null; 
+			
+			for (MetricTypes type : MetricTypes.values()) {
+				switch (type) {
+				case APPLICATION:
+					if(applications==null)
+						applications = domain.getApplications();
+					
+					List<String> applicationNames = new ArrayList<>();
+					for (RedhawkApplication app : applications) {
+						applicationNames.add(app.getName());
+					}
+					json.put(MetricTypes.APPLICATION.toString(), applicationNames);
+					break;
+				case GPP:
+					//TODO: Should go by device kind
+					List<RedhawkDevice> devices = domain.getDevicesByName("GPP.*");
+					List<String> names = new ArrayList<>();
+					
+					for(RedhawkDevice dev : devices) {
+						names.add(dev.getName());
+					}
+					
+					json.put(MetricTypes.GPP.toString(), names);
+					break;
+				case PORT:					
+					if(applications==null)
+						applications = domain.getApplications();
+					
+					Object ports;
+					if(treeFormat) {
+						ports = MetricsConverterUtils.getPortsAvailableAsTree(applications);
+					}else {
+						ports = MetricsConverterUtils.getPortsAvailable(applications);
+					}	
+					
+					json.put(MetricTypes.PORT.toString(), ports);
+					break;
+				default:
+					logger.error("Unhandled type "+type);
+				}
+			}
+			
+			return (T) json;
+		}catch(Exception ex) {
+			throw new WebApplicationException(ex);
+		}finally {
 			if (driver != null)
 				driver.disconnect();
 		}
@@ -131,7 +276,21 @@ public class MetricsConverter {
 		for (RedhawkApplication app : applications) {
 			String appName = app.getName();
 			try {
-				metrics.add(new ApplicationMetrics(appName, app.getMetrics()));
+				/*
+				 * Putting metrics into a list instead of a Map because follow on systems 
+				 * will have an easier time iterating over JSON without dynamic keys that
+				 * come back from the driver. Flattened structure should be easier to handle. 
+				 */
+				List<Map<String, Object>> metricsList = new ArrayList<>();
+				
+				for(Map.Entry<String, Map<String, Object>> entry : app.getMetrics().entrySet()) {
+					Map<String, Object> obj = entry.getValue();
+					obj.put("metricId", entry.getKey());
+					
+					metricsList.add(obj);
+				}
+				
+				metrics.add(new ApplicationMetrics(appName, metricsList));
 			} catch (ApplicationException e) {
 				throw new WebApplicationException(e);
 			}
@@ -165,8 +324,15 @@ public class MetricsConverter {
 				// Loop over a components ports
 				try {
 					for (RedhawkPort port : comp.getPorts()) {
-						List<RedhawkPortStatistics> stats = port.getPortStatistics();
-						metrics.add(new PortMetrics(appName, componentName, stats));
+						try {
+							List<RedhawkPortStatistics> stats = port.getPortStatistics();
+							if(!stats.isEmpty())
+								metrics.add(new PortMetrics(appName, componentName, port.getName(), stats));
+							else 
+								logger.debug("Not reporting stats for port with empty statistics "+port.getName());
+						}catch(Exception ex) {
+							logger.error("Unable to query port "+port.getName());
+						}
 					}
 				} catch (ResourceNotFoundException e) {
 					throw new WebApplicationException(e);
@@ -190,14 +356,17 @@ public class MetricsConverter {
 		 * Loop through devices and ones that are GPP
 		 */
 		for (RedhawkDevice device : devices) {
-			String deviceKind = device.getProperty("device_kind");
+			RedhawkSimple deviceKind = device.getProperty("device_kind");
 			GPPMetrics gppMetric = new GPPMetrics();
 			
 			/*
 			 * Only doing this for GPP
 			 */
-			if (deviceKind!=null && deviceKind.equals("GPP")) {
-				
+			//TODO: second logic is a hack to get around not seeing device kind when running with maven
+			if ((deviceKind!=null && deviceKind.getValue().equals("GPP")) || device.getName().contains("GPP")) {
+				System.out.println("Made it in if");
+				//Set name
+				gppMetric.setDevice(device.getName());
 				/*
 				 * Loop over the accepted keys and add to response
 				 */
@@ -243,16 +412,17 @@ public class MetricsConverter {
 						gppMetric.setSys_limits(sysLimit);
 					} else {
 						logger.error("Unhandled tpye");
-					}
-					
-					metrics.add(gppMetric);
+					}					
 				}
+				
+				//Add metric
+				metrics.add(gppMetric);
 			}
 		}
-		
+
 		return metrics;
 	}
-
+	
 	/**
 	 * Clean up unnecessary padding on key values
 	 * 

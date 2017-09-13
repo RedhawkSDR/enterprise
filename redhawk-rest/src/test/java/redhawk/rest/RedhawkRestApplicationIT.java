@@ -22,7 +22,7 @@ import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.rest.model.Application;
-import redhawk.rest.model.ApplicationMetricFilter;
+import redhawk.rest.model.MetricFilter;
 import redhawk.rest.model.ExternalPort;
 import redhawk.rest.model.PortStatisticsContainer;
 import redhawk.rest.model.SRIContainer;
@@ -146,7 +146,7 @@ public class RedhawkRestApplicationIT extends RedhawkTestBase{
 			Map<String, Map<String,Object>> t = basicApplication.getMetrics();
 			basicApplication.start();
 			Thread.sleep(1000);
-			Map<String, Map<String, Object>> metrics = manager.getMetrics(nameServer, "application", domainName+"/"+basicApplication.getName(), new ApplicationMetricFilter());
+			Map<String, Map<String, Object>> metrics = manager.getMetrics(nameServer, "application", domainName+"/"+basicApplication.getName(), new MetricFilter());
 			
 			assertNotNull(metrics);
 		}catch(Exception ex) {

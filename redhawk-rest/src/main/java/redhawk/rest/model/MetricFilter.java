@@ -1,16 +1,16 @@
 package redhawk.rest.model;
 
-public class ApplicationMetricFilter {
+public class MetricFilter {
 	String[] components;
 	
 	String[] attributes;
 
-	public ApplicationMetricFilter() {
+	public MetricFilter() {
 		this.components = new String[0];
 		this.attributes = new String[0];
 	}
 	
-	public ApplicationMetricFilter(String[] components, String[] attributes) {
+	public MetricFilter(String[] components, String[] attributes) {
 		this.components = components;
 		this.attributes = attributes;
 	}

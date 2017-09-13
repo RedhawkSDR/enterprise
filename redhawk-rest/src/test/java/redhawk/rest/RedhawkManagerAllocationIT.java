@@ -38,7 +38,6 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.Port;
 import redhawk.rest.model.TunerMode;
-import redhawk.testutils.NodeBooterProxy;
 import redhawk.testutils.RedhawkDeviceTestBase;
 
 public class RedhawkManagerAllocationIT extends RedhawkDeviceTestBase{

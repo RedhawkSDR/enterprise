@@ -3,7 +3,9 @@ package redhawk.rest.model;
 import java.util.List;
 import java.util.Map;
 
-public class GPPMetrics {
+public class GPPMetrics extends MetricsBase {
+	private String device; 
+
 	private List<Map<String, Object>> component_monitor;
 	
 	//TODO: Might need to make this a list
@@ -50,4 +52,18 @@ public class GPPMetrics {
 	public void setNic_metrics(List<Map<String, Object>> nic_metrics) {
 		this.nic_metrics = nic_metrics;
 	}	
+	
+	public String getDevice() {
+		return device;
+	}
+
+	public void setDevice(String deviceName) {
+		this.device = deviceName;
+	}
+
+	@Override
+	public String toString() {
+		return "GPPMetrics [deviceName=" + device + ", component_monitor=" + component_monitor + ", utilization="
+				+ utilization + ", sys_limits=" + sys_limits + ", nic_metrics=" + nic_metrics + "]";
+	}
 }

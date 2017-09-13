@@ -197,6 +197,8 @@ test-jacorb-el6_x86_64:
     dist: el6
     arch: x86_64
     maven_command: bash -c "mvn -P CFDependencies clean install -B -U && mvn -pl redhawk-driver clean install site -P localIT -Djacorb=true -DfailIfNoTests=false -DdomainHost=redhawk_${dist}_${arch}_${CI_JOB_ID} -DtestProps=`pwd`/docker_test.properties"
+  except:
+    - RI-89
 
 test-jacorb-el6_i386:
   script:

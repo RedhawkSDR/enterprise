@@ -1,9 +1,12 @@
 package redhawk.rest.endpoints;
 
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -14,6 +17,9 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import redhawk.rest.converter.MetricsConverter;
 import redhawk.rest.model.ApplicationMetrics;
+import redhawk.rest.model.GPPMetrics;
+import redhawk.rest.model.MetricFilter;
+import redhawk.rest.model.PortMetrics;
 import redhawk.rest.model.RedhawkMetrics;
 import redhawk.rest.utils.MetricTypes;
 
@@ -43,14 +49,56 @@ public class RedhawkMetricsResource extends RedhawkBaseResource{
 	@Produces({ MediaType.APPLICATION_JSON })
 	@ApiOperation(value = "GET all Application Metrics for a Domain")
 	public List<ApplicationMetrics> applicationMetrics(){
-		return MetricsConverter.getMetricByType(redhawkManager, nameServer, domainName, MetricTypes.APPLICATION);
+		return MetricsConverter.getMetricsByType(redhawkManager, nameServer, domainName, MetricTypes.APPLICATION);
+	}
+	
+	@GET
+	@Path("/application/{applicationFilter}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	@ApiOperation(value = "GET an Applications metrics")
+	public List<ApplicationMetrics> getApplicationMetric(@ApiParam(value = "regex/application name") @PathParam("applicationFilter") String applicationFilter) {
+		return MetricsConverter.getMetricsByTypeAndFilter(redhawkManager, nameServer, domainName, MetricTypes.APPLICATION, applicationFilter);
+	}
+	
+	@POST
+	@Path("/application/{applicationName}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	@Consumes({ MediaType.APPLICATION_JSON })
+	@ApiOperation(value = "Retrieve a specific application metric based on a filter")
+	public Map<String, Map<String, Object>> getApplicationMetricByMetricType(@ApiParam(value = "application name") @PathParam("applicationName") String applicationName, MetricFilter filter){
+		return MetricsConverter.getAppMetricsByMetricType(redhawkManager, nameServer, domainName, applicationName, filter);
+	}
+	
+	@GET
+	@Path("/available")
+	@Produces({ MediaType.APPLICATION_JSON })
+	@ApiOperation(value = "GET available metrics")
+	public Map<String,Object> available(){
+		return MetricsConverter.getAvailableMetrics(redhawkManager, nameServer, domainName);
 	}
 	
 	@GET
 	@Path("/port")
 	@Produces({ MediaType.APPLICATION_JSON })
-	@ApiOperation(value = "GET all Application Metrics for a Domain")
-	public List<ApplicationMetrics> portMetrics(){
-		return MetricsConverter.getMetricByType(redhawkManager, nameServer, domainName, MetricTypes.PORT);
+	@ApiOperation(value = "GET all Port Metrics for a Domain")
+	public List<PortMetrics> portMetrics(){
+		return MetricsConverter.getMetricsByType(redhawkManager, nameServer, domainName, MetricTypes.PORT);
+	}
+	
+	@GET
+	@Path("/gpp")
+	@Produces({ MediaType.APPLICATION_JSON })
+	@ApiOperation(value = "GET all GPP Metrics for a Domain")
+	public List<GPPMetrics> gppMetrics(){
+		return MetricsConverter.getMetricsByType(redhawkManager, nameServer, domainName, MetricTypes.GPP);
+	}
+	
+	
+	@GET
+	@Path("/gpp/{gppFilter}")
+	@Produces({ MediaType.APPLICATION_JSON })
+	@ApiOperation(value = "GET GPP Metrics for a Domain using a filter")
+	public List<GPPMetrics> filterGPPMetrics(@ApiParam(value = "regex/gpp name") @PathParam("gppFilter") String filter){
+		return MetricsConverter.getMetricsByTypeAndFilter(redhawkManager, nameServer, domainName, MetricTypes.GPP, filter);
 	}
 }

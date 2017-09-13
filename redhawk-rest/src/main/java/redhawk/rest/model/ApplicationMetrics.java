@@ -1,30 +1,32 @@
 package redhawk.rest.model;
 
+import java.util.List;
 import java.util.Map;
 
-public class ApplicationMetrics {
-	private String appName; 
+public class ApplicationMetrics extends MetricsBase{
+	private String application; 
 	
-	private Map<String, Map<String, Object>> metrics;
+	private List<Map<String, Object>> metrics; 
 	
-	public ApplicationMetrics(String appName, Map<String, Map<String, Object>> metrics) {
-		this.appName = appName; 
+	
+	public ApplicationMetrics(String application, List<Map<String, Object>> metrics) {
+		this.application = application; 
 		this.metrics = metrics;
 	}
 
-	public String getAppName() {
-		return appName;
+	public String getApplication() {
+		return application;
 	}
 
-	public void setAppName(String appName) {
-		this.appName = appName;
+	public void setApplication(String appName) {
+		this.application = appName;
 	}
 
-	public Map<String, Map<String, Object>> getMetrics() {
+	public List<Map<String, Object>> getMetrics() {
 		return metrics;
 	}
 
-	public void setMetrics(Map<String, Map<String, Object>> metrics) {
+	public void setMetrics(List<Map<String, Object>> metrics) {
 		this.metrics = metrics;
 	}
 }

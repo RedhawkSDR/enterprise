@@ -5,33 +5,44 @@ import java.util.List;
 import redhawk.driver.port.RedhawkPortStatistics;
 
 public class PortMetrics {
-	private String appName; 
+	private String application; 
 	
-	private String componentName; 
+	private String component; 
 	
+	private String port;
+
 	private List<RedhawkPortStatistics> statistics;
 
-	public PortMetrics(String appName, String componentName, List<RedhawkPortStatistics> statistics) {
+	public PortMetrics(String appName, String componentName, String port, List<RedhawkPortStatistics> statistics) {
 		super();
-		this.appName = appName;
-		this.componentName = componentName;
+		this.application = appName;
+		this.component = componentName;
+		this.port = port;
 		this.statistics = statistics;
 	}
 
-	public String getAppName() {
-		return appName;
+	public String getApplication() {
+		return application;
 	}
 
-	public void setAppName(String appName) {
-		this.appName = appName;
+	public void setApplication(String appName) {
+		this.application = appName;
 	}
 
-	public String getComponentName() {
-		return componentName;
+	public String getComponent() {
+		return component;
 	}
 
-	public void setComponentName(String componentName) {
-		this.componentName = componentName;
+	public void setComponent(String componentName) {
+		this.component = componentName;
+	}
+	
+	public String getPort() {
+		return port;
+	}
+
+	public void setPort(String port) {
+		this.port = port;
 	}
 
 	public List<RedhawkPortStatistics> getStatistics() {

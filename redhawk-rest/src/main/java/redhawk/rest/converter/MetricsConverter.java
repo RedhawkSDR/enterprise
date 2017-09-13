@@ -276,7 +276,21 @@ public class MetricsConverter {
 		for (RedhawkApplication app : applications) {
 			String appName = app.getName();
 			try {
-				metrics.add(new ApplicationMetrics(appName, app.getMetrics()));
+				/*
+				 * Putting metrics into a list instead of a Map because follow on systems 
+				 * will have an easier time iterating over JSON without dynamic keys that
+				 * come back from the driver. Flattened structure should be easier to handle. 
+				 */
+				List<Map<String, Object>> metricsList = new ArrayList<>();
+				
+				for(Map.Entry<String, Map<String, Object>> entry : app.getMetrics().entrySet()) {
+					Map<String, Object> obj = entry.getValue();
+					obj.put("metricId", entry.getKey());
+					
+					metricsList.add(obj);
+				}
+				
+				metrics.add(new ApplicationMetrics(appName, metricsList));
 			} catch (ApplicationException e) {
 				throw new WebApplicationException(e);
 			}
@@ -313,7 +327,7 @@ public class MetricsConverter {
 						try {
 							List<RedhawkPortStatistics> stats = port.getPortStatistics();
 							if(!stats.isEmpty())
-								metrics.add(new PortMetrics(appName, componentName, stats));
+								metrics.add(new PortMetrics(appName, componentName, port.getName(), stats));
 							else 
 								logger.debug("Not reporting stats for port with empty statistics "+port.getName());
 						}catch(Exception ex) {
@@ -352,7 +366,7 @@ public class MetricsConverter {
 			if ((deviceKind!=null && deviceKind.getValue().equals("GPP")) || device.getName().contains("GPP")) {
 				System.out.println("Made it in if");
 				//Set name
-				gppMetric.setDeviceName(device.getName());
+				gppMetric.setDevice(device.getName());
 				/*
 				 * Loop over the accepted keys and add to response
 				 */

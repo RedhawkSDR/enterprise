@@ -101,7 +101,7 @@ public class MetricConverterIT extends RedhawkTestBase {
 		assertTrue("Metrics should not be empty", !metrics.isEmpty());
 
 		for (GPPMetrics metric : metrics) {
-			assertNotNull(metric.getDeviceName());
+			assertNotNull(metric.getDevice());
 		}
 	}
 

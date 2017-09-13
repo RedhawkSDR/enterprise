@@ -12,7 +12,7 @@ The Metric related REST endpoints give users the ability to RESTFully get the fo
 
 Combining the REST Endpoints which produce JSON with a data flow framework(e.g. Apache Camel, Apache NiFi) you can easily get the metrics out of your REDHAWK Domain and into the metrics solution of your choice. An example Camel route for getting metrics from your domain at a specific interval can be seen below:
 
-[source, xml]
+[source, xml, indent=0]
 ----
 include::camel/route.xml
 ----
@@ -27,3 +27,7 @@ If you desire to look back in time at metrics and to have querying features you 
 . Open up your browser to http://{hostname}:{karaf.port}/redhawkmetrics
 . At this point you'll be able to click on `GPP`,`Application`,`PORT` links to visualize each type of metric
 . You can also click on `Configuration` to configure which REST endpoints the webapplication should be using. 
+
+Screenshot:
+
+image::redhawkMetricsScreenshot.png[Screen Shot of Demo Metrics Webapp]

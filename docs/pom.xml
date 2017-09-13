@@ -237,11 +237,19 @@
 											</includes>
 										</resource>
 										<resource>
+											<directory>${project.parent.basedir}/demo/redhawk-metrics/camel</directory>
+											<targetPath>demo/camel</targetPath>
+											<!-- 
+											<includes>
+												<include>redhawk-metrics.adoc</include>
+											</includes>
+											-->
+										</resource>										
+										<resource>
 											<directory>${project.parent.basedir}/demo/redhawk-metrics</directory>
 											<targetPath>demo</targetPath>
 											<includes>
 												<include>redhawk-metrics.adoc</include>
-												<include>camel</include>
 											</includes>
 										</resource>										
 									</resources>

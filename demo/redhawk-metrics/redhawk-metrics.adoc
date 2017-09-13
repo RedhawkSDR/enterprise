@@ -1,0 +1,29 @@
+= REDHAWK Metrics
+
+The Metric related REST endpoints give users the ability to RESTFully get the following metrics: 
+
+* BULKIO Port Statistics [for more details refer to REDHAWK Manual section 5.7.7 on Port Statistics]
+* GPP Metrics
+** component_monitor: Metrics related to each component controlled by the GPP
+** utilization
+** sys_limits
+** nic_metrics
+* Application Metrics //TODO: Reference Manual portion that documents these fields
+
+Combining the REST Endpoints which produce JSON with a data flow framework(e.g. Apache Camel, Apache NiFi) you can easily get the metrics out of your REDHAWK Domain and into the metrics solution of your choice. An example Camel route for getting metrics from your domain at a specific interval can be seen below:
+
+[source, xml]
+----
+include::route.xml
+----
+
+The benefits of doing this with a Data flow framework is the framework will already have components for you to use for `Persistence` like Elastic Search, MongoDB, etc... . Once you've stored the data in a `Persistence` backend there are a plethore of Dashboard GUI utilities like Kibana/Graphana for example for you to customize your own dashboards and write flexible queries against for checking out what's going on with your domain. 
+
+== REDHAWK Metrics Demo Webapp
+
+If you desire to look back in time at metrics and to have querying features you should use the techniques described above for your metrics solution. For just a simple snapshot of what a Domains metrics look like. You can use the demo metrics web application supplied in the `redhawk-demo-dist`(Note: if you did group install `REDHAWK Enterprise Integration` this has already been installed for you). Once you have installed the `redhawk-demo-dist` on your system do the following to launch the application on your karaf instance:
+
+. Copy `demo/redhawk-metrics/redhawk-metrics-webapp-{version}.jar` into the deploy directory of Karaf(${karaf.base}/deploy)
+. Open up your browser to http://{hostname}:{karaf.port}/redhawkmetrics
+. At this point you'll be able to click on `GPP`,`Application`,`PORT` links to visualize each type of metric
+. You can also click on `Configuration` to configure which REST endpoints the webapplication should be using. 

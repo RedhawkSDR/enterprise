@@ -39,7 +39,7 @@ public class RedhawkMetricsResource extends RedhawkBaseResource{
 	@GET
 	@Path("/")
 	@Produces({ MediaType.APPLICATION_JSON })
-	@ApiOperation(value = "GET all Metrics for a Domain")
+	@ApiOperation(value = "GET Metrics for a Domain")
 	public RedhawkMetrics metrics() {
 		return MetricsConverter.getMetrics(redhawkManager, nameServer, domainName);
 	}
@@ -88,7 +88,7 @@ public class RedhawkMetricsResource extends RedhawkBaseResource{
 	@GET
 	@Path("/gpp")
 	@Produces({ MediaType.APPLICATION_JSON })
-	@ApiOperation(value = "GET all GPP Metrics for a Domain")
+	@ApiOperation(value = "GET GPP Metrics for a Domain")
 	public List<GPPMetrics> gppMetrics(){
 		return MetricsConverter.getMetricsByType(redhawkManager, nameServer, domainName, MetricTypes.GPP);
 	}

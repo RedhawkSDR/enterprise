@@ -14,7 +14,7 @@ Combining the REST Endpoints which produce JSON with a data flow framework(e.g. 
 
 [source, xml]
 ----
-include::route.xml
+include::camel/route.xml
 ----
 
 The benefits of doing this with a Data flow framework is the framework will already have components for you to use for `Persistence` like Elastic Search, MongoDB, etc... . Once you've stored the data in a `Persistence` backend there are a plethore of Dashboard GUI utilities like Kibana/Graphana for example for you to customize your own dashboards and write flexible queries against for checking out what's going on with your domain. 

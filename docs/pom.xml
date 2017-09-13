@@ -188,8 +188,8 @@
 											<directory>${project.parent.basedir}/redhawk-rest/target/asciidoc</directory>
 											<targetPath>${project.build.directory}/asciidoc-workspace/rest</targetPath>
 											<excludes>
-                                                                                                <exclude>index.adoc</exclude>
-                                                                                        </excludes>										
+                                            	<exclude>index.adoc</exclude>
+                                          	</excludes>										
 										</resource>
 										<!-- Take the necessary adoc files from redhawk-connector -->
 										<resource>
@@ -228,6 +228,22 @@
 												<include>demo-webscreenshot.png</include>
 											</includes>
 										</resource>
+										<!-- Get Metrics Docs -->
+										<resource>
+											<directory>${project.parent.basedir}/demo/redhawk-metrics</directory>
+											<targetPath>images</targetPath>
+											<includes>
+												<include>redhawkMetricsScreenshot.png</include>
+											</includes>
+										</resource>
+										<resource>
+											<directory>${project.parent.basedir}/demo/redhawk-metrics</directory>
+											<targetPath>demo</targetPath>
+											<includes>
+												<include>redhawk-metrics.adoc</include>
+												<include>camel</include>
+											</includes>
+										</resource>										
 									</resources>
 								</configuration>
 							</execution>

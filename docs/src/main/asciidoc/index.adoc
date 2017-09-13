@@ -93,6 +93,8 @@ include::demo-introduction.adoc[]
 
 include::demo/redhawk-demo-webapp.adoc[]
 
+include::demo/redhawk-metrics.adoc[]
+
 include::demo/README.adoc[]
 
 ifdef::pdf-style[]

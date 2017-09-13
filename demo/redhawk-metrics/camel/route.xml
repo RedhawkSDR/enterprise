@@ -5,7 +5,7 @@
                 <setHeader headerName="CamelHttpMethod">
         			<constant>GET</constant>
    			 	</setHeader>
-    			<to uri="http4://localhost:8181/cxf/redhawk/127.0.0.1:2809/domains/REDHAWK_DEV/metrics"/>
+    			<to uri="http4://localhost:8181/cxf/redhawk/127.0.0.1:2809/domains/REDHAWK_DEV/metrics"/><!-- http://camel.apache.org/http4.html -->
                 <log message="Timer hit ${body}" />
         </route>
     </camelContext>

@@ -27,7 +27,18 @@ export const updateAppState = (state, obj) => {
   state.application.metrics = obj.metrics
   state.application.name = obj.name
   state.application.url = obj.url
-  state.application.keys = Object.keys(obj.metrics)
+  //Create metric index
+  var i;
+  var metricIndex = []
+  //console.log("Metrics Length "+obj.metrics.length)
+  for(i = 0; i<obj.metrics.length; i++){
+    //console.log("Updating index")
+    //var metric = new Object()
+    //metric.id = obj.metrics[i].metricId
+    //metric.index = i
+    metricIndex.push(obj.metrics[i].metricId)
+  }
+  state.application.index = metricIndex
 }
 
 /*
@@ -44,8 +55,8 @@ export const updateGPPState = (state, obj) => {
 * Update Port statistics view
 */
 export const updatePortState = (state, obj) => {
-  state.port.applicationName = obj.application
-  state.port.componentName = obj.component
+  state.port.application = obj.application
+  state.port.component = obj.component
   state.port.name = obj.port
   state.port.statistics = obj.statistics
   state.port.url = obj.url

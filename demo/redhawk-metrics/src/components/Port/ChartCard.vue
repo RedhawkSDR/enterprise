@@ -5,6 +5,7 @@
       <h4 style="text-align:center;">{{name}}</h4>
       <reactivelinegraph
       :values="values"
+      :labels="labels"
       :height="200"></reactivelinegraph>
     </div>
     <div class="card-content">
@@ -37,21 +38,43 @@ export default {
   data(){
     return {
       graphmetric : 'elementsPerSecond',
-      values: []
+      values: [],
+      labels: []
     }
   },
   created(){
+    this.labels.length = 60
+    this.values.fill('')
+
     this.values.length = 60
     this.values.fill(0)
   },
   watch: {
     chartvalue(){
       this.values.push(this.chartvalue)
-      if(this.values.length>=60)
-        this.values.shift()
+      this.values.shift()
+
+      this.labels.push(this.getLabel())
+      this.labels.shift()
     },
     graphmetric(){
       this.values.fill(0)
+
+      this.labels.fill('')
+      this.labels.push(this.getLabel())
+      this.labels.shift()
+    }
+  },
+  methods: {
+    getLabel(){
+      var t = new Date()
+      var label;
+      if(t.getSeconds()<10){
+        label = t.getMinutes()+':0'+t.getSeconds()
+      }else{
+        label = t.getMinutes()+':'+t.getSeconds()
+      }
+      return label
     }
   }
 }

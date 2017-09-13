@@ -15,31 +15,23 @@ const state = {
   },
   available : {},
   application: {
-    metrics: {},
-    keys: [],
-    show: false,
+    metrics: [],
     name: '',
-    url: ''
+    url: '',
+    index: []
   },
   gpp: {
     metrics: {},
-    show: false,
     name: '',
     url: ''
   },
   port: {
     statistics: {},
-    show: false,
     name: '',
-    componentName : '',
-    applicationName : '',
+    component : '',
+    application : '',
     url : ''
   },
-  appMetrics: {},
-  appMetricsURL: '',
-  appMetricsKeys: [],
-  appMetricsToView: {},
-  appMetricsType: '',
   interval: null
 }
 

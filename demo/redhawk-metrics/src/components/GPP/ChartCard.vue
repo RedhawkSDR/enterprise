@@ -1,9 +1,10 @@
 <template>
 <div class="card">
   <div class="card-header">
-    <h4 style="text-align:center;">{{metricType}}</h4>    
+    <h4 style="text-align:center;">{{metricType}}</h4>
     <reactivelinegraph
     :values="values"
+    :labels="labels"
     :height="200"></reactivelinegraph>
   </div>
   <div class="card-content">
@@ -49,25 +50,39 @@ export default {
   data(){
     return {
       graphmetric: 'current_open_files',
-      values: []
+      values: [],
+      labels: []
     }
   },
   created(){
+    this.labels.length = 60
+    this.values.fill('')
+
     this.values.length = 60
     this.values.fill(0)
   },
   watch: {
     chartvalue(){
       this.values.push(this.chartvalue)
-      if(this.values.length>=60)
-        this.values.shift()
+      this.values.shift()
+
+      this.labels.push(this.getLabel())
+      this.labels.shift()
     },
     graphmetric(){
       this.values.fill(0)
+
+      this.labels.fill('')
+      this.labels.push(this.getLabel())
+      this.labels.shift()
     },
     metricType(){
       this.values.fill(0)
       this.values.push(this.chartvalue)
+
+      this.labels.fill('')
+      this.labels.push(this.getLabel())
+      this.labels.shift()
 
       //Setting defaults based on metric type
       if(this.metricType=='utilization'){
@@ -75,6 +90,18 @@ export default {
       }else if(this.metricType=='sys_limits'){
         this.graphmetric = 'current_open_files'
       }
+    }
+  },
+  methods: {
+    getLabel(){
+      var t = new Date()
+      var label;
+      if(t.getSeconds()<10){
+        label = t.getMinutes()+':0'+t.getSeconds()
+      }else{
+        label = t.getMinutes()+':'+t.getSeconds()
+      }
+      return label
     }
   }
 }

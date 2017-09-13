@@ -22,9 +22,7 @@
 <script>
 export default {
   name: 'appmetricstable',
-  props: {
-    metricType: ''
-  },
+  props: ['metricId'],
   data(){
     return {
       intervalTime : 1000,
@@ -41,14 +39,14 @@ export default {
       if(Object.keys(this.$store.getters.appMetrics).length == 0){
         return {}
       }else{
-        return this.$store.getters.appMetrics[this.metricType]
+        return this.$store.getters.appMetrics[this.metricId]
       }
     },
     metricKeys(){
       if(Object.keys(this.$store.getters.appMetrics).length == 0){
-        return []
+        return {}
       }else{
-        return Object.keys(this.$store.getters.appMetrics[this.metricType])
+        return Object.keys(this.$store.getters.appMetrics[this.metricId])
       }
     },
     interval(){

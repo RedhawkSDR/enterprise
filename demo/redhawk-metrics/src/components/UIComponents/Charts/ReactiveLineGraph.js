@@ -6,7 +6,7 @@ const { reactiveData } = mixins
 //import reactiveData from '../mixins/reactiveData'
 export default Line.extend({
   mixins: [reactiveData],
-  props: ['values'],
+  props: ['values', 'labels'],
   data () {
     return {
       samples: 60,
@@ -33,11 +33,11 @@ export default Line.extend({
     }
   },
   created () {
-    this.labels.length = this.samples
-    this.labels.fill('')
+    //this.labels.length = 60
+    //this.labels.fill('')
+
     this.fillData()
   },
-
   mounted () {
     this.renderChart(this.chartData, this.options)
 

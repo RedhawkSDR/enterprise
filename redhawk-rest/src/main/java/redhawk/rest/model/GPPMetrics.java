@@ -3,7 +3,7 @@ package redhawk.rest.model;
 import java.util.List;
 import java.util.Map;
 
-public class GPPMetrics {
+public class GPPMetrics extends MetricsBase {
 	private String device; 
 
 	private List<Map<String, Object>> component_monitor;

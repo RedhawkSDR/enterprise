@@ -4,7 +4,7 @@ import java.util.List;
 
 import redhawk.driver.port.RedhawkPortStatistics;
 
-public class PortMetrics {
+public class PortMetrics extends MetricsBase {
 	private String application; 
 	
 	private String component; 

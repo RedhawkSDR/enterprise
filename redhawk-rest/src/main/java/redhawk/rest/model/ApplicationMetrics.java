@@ -3,7 +3,7 @@ package redhawk.rest.model;
 import java.util.List;
 import java.util.Map;
 
-public class ApplicationMetrics {
+public class ApplicationMetrics extends MetricsBase{
 	private String application; 
 	
 	private List<Map<String, Object>> metrics; 

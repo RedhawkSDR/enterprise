@@ -8,6 +8,12 @@
 
 . mvn release:perform -Darguments=-Djava.io.tmpdir=./
 
+== How to Release RC1<
+
+. update the release number property in the parent pom if this is another RC.
+
+. Tag and push gitlab-ci will do the rest
+
 == Merging Forward
 
 gitattributes should be able to accomplish this but it will fastforward if you've previously done merges on a particular file. 

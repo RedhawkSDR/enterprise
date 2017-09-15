@@ -76,7 +76,7 @@ public abstract class PortBackedObjectImpl<TParsedClass> extends QueryableResour
     		Boolean foundPortMatch = false;
     		RedhawkPort usesPort = null, providesPort = null;
     		
-        	//Get Ports available to for this object 
+        	//Get Ports available for this object 
     		for(RedhawkPort port : this.getPorts()) {
 				String portRepId = port.getRepId();
 				String portType = port.getType();
@@ -99,6 +99,7 @@ public abstract class PortBackedObjectImpl<TParsedClass> extends QueryableResour
 							
 							foundPortMatch = true;
 						}else {
+							//Multiple matches user needs to specify which ports to connect
 							throw new PortException("Multiple ports match with these components specify port names to match");
 						}
 					}

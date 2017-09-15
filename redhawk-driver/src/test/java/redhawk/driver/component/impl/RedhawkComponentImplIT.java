@@ -53,117 +53,149 @@ import redhawk.driver.properties.RedhawkProperty;
 import redhawk.driver.properties.RedhawkSimple;
 import redhawk.testutils.RedhawkTestBase;
 
-public class RedhawkComponentImplIT extends RedhawkTestBase{
-	private String applicationName = "myTestApplication"; 
-	
-	private RedhawkApplication application; 
-	
+public class RedhawkComponentImplIT extends RedhawkTestBase {
+	private String applicationName = "myTestApplication";
+
+	private RedhawkApplication application;
+
 	private List<RedhawkComponent> components;
-	
+
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
-	
+
 	@Before
-	public void setup() throws ResourceNotFoundException, ApplicationCreationException, CORBAException, MultipleResourceException{
-		driver.getDomain("REDHAWK_DEV").createApplication(applicationName, new File("src/test/resources/waveforms/rh/testWaveform.sad.xml"));
-		application = driver.getApplication("REDHAWK_DEV/"+applicationName);
+	public void setup()
+			throws ResourceNotFoundException, ApplicationCreationException, CORBAException, MultipleResourceException {
+		driver.getDomain("REDHAWK_DEV").createApplication(applicationName,
+				new File("src/test/resources/waveforms/rh/testWaveform.sad.xml"));
+		application = driver.getApplication("REDHAWK_DEV/" + applicationName);
 		assertNotNull(application);
 		components = application.getComponents();
 	}
-	
+
 	@Test
-	public void testComponentManagementLifecycle() throws ComponentStartException, ComponentStopException{
-		for(RedhawkComponent component : components){
+	public void testComponentManagementLifecycle() throws ComponentStartException, ComponentStopException {
+		for (RedhawkComponent component : components) {
 			component.start();
 			assertEquals("Component should be started", true, component.started());
 			component.stop();
 			assertEquals("Component should be stopped.", false, component.started());
 		}
 	}
-	
+
 	@Test
-	public void testAccessToComponentPorts() throws ResourceNotFoundException, MultipleResourceException{
-		for(RedhawkComponent component : components){
-			for(RedhawkPort port : component.getPorts()){
+	public void testAccessToComponentPorts() throws ResourceNotFoundException, MultipleResourceException {
+		for (RedhawkComponent component : components) {
+			for (RedhawkPort port : component.getPorts()) {
 				assertNotNull(component.getPort(port.getName()));
 			}
 		}
 	}
-	
+
 	@Test
 	public void testComponentConnetionHelper() {
 		try {
 			RedhawkComponent comp = application.getComponentByName("SigGen.*");
 			RedhawkComponent connectComp = application.getComponentByName("HardLimit.*");
-			
-			//Remove any existing connections
+
+			// Remove any existing connections
 			RedhawkPort port = comp.getPort("dataFloat_out");
 
-			//Disconnect port if connected 
-			for(String id : port.getConnectionIds()) {
+			// Disconnect port if connected
+			for (String id : port.getConnectionIds()) {
 				port.disconnect(id);
 			}
-			
+
 			assertTrue(port.getConnectionIds().isEmpty());
-			
-			//Connect the port again
-			comp.connect(connectComp);	
-			
-			//Components connect
+
+			// Connect the port again
+			comp.connect(connectComp);
+
+			// Components connect
 			assertTrue(!port.getConnectionIds().isEmpty());
-		
-			//Try connecting the other way
-			for(String id : port.getConnectionIds()) {
+
+			// Try connecting the other way
+			for (String id : port.getConnectionIds()) {
 				port.disconnect(id);
 			}
-			
-			//Connect the port again
-			connectComp.connect(comp);	
-			
-			//Components connect
+
+			// Connect the port again
+			connectComp.connect(comp);
+
+			// Components connect
 			assertTrue(!port.getConnectionIds().isEmpty());
 		} catch (MultipleResourceException | ResourceNotFoundException | PortException e) {
-			fail("Unable to run tests "+e.getMessage());
+			fail("Unable to run tests " + e.getMessage());
 		}
 	}
-	
+
 	@Test
 	public void testComponentConnetionHelper2() {
 		try {
 			RedhawkComponent comp = application.getComponentByName("SigGen.*");
 			RedhawkComponent connectComp = application.getComponentByName("HardLimit.*");
-			
-			//Remove any existing connections
+
+			// Remove any existing connections
 			RedhawkPort port = comp.getPort("dataFloat_out");
 
-			//Disconnect port if connected 
-			for(String id : port.getConnectionIds()) {
+			// Disconnect port if connected
+			for (String id : port.getConnectionIds()) {
 				port.disconnect(id);
 			}
-			
+
 			assertTrue(port.getConnectionIds().isEmpty());
-			
-			//Connect the port again
-			comp.connect(connectComp, "aConnection", "dataFloat_in", "dataFloat_out");	
-			
-			//Components connect
+
+			// Connect the port again
+			comp.connect(connectComp, "aConnection", "dataFloat_in", "dataFloat_out");
+
+			// Components connect
 			assertTrue(!port.getConnectionIds().isEmpty());
-		
-			//Try connecting the other way
-			for(String id : port.getConnectionIds()) {
+
+			// Try connecting the other way
+			for (String id : port.getConnectionIds()) {
 				port.disconnect(id);
 			}
-			
-			//Connect the port again
-			connectComp.connect(comp, "bConnection", "dataFloat_in", "dataFloat_out");	
-			
-			//Components connect
+
+			// Connect the port again
+			connectComp.connect(comp, "bConnection", "dataFloat_in", "dataFloat_out");
+
+			// Components connect
 			assertTrue(!port.getConnectionIds().isEmpty());
 		} catch (MultipleResourceException | ResourceNotFoundException | PortException e) {
-			fail("Unable to run tests "+e.getMessage());
+			fail("Unable to run tests " + e.getMessage());
 		}
 	}
-	
+
+	@Test
+	public void testComponentConnetionHelper2Failure() throws PortException {
+		try {
+			RedhawkComponent comp = application.getComponentByName("SigGen.*");
+			RedhawkComponent connectComp = application.getComponentByName("HardLimit.*");
+
+			// Remove any existing connections
+			RedhawkPort port = comp.getPort("dataFloat_out");
+
+			// Disconnect port if connected
+			try {
+
+				for (String id : port.getConnectionIds()) {
+					port.disconnect(id);
+				}
+				
+				assertTrue(port.getConnectionIds().isEmpty());
+			} catch (PortException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			// Connect the port again
+			thrown.expect(PortException.class);
+			comp.connect(connectComp, "aConnection", "Foo", "Bar");
+		} catch (MultipleResourceException | ResourceNotFoundException e) {
+			fail("Unable to run tests " + e.getMessage());
+		}
+	}
+
 	@Test
 	public void testComponentConnectionFailure() throws PortException, ApplicationReleaseException {
 		RedhawkApplication failureApp = null;
@@ -173,20 +205,21 @@ public class RedhawkComponentImplIT extends RedhawkTestBase{
 		try {
 			failureApp = driver.getDomain().createApplication("portTest",
 					new File("src/test/resources/waveforms/PortListenerTest/PortListenerTest.sad.xml"));
-			
-			//Get components to connect 
+
+			// Get components to connect
 			RedhawkComponent component = failureApp.getComponentByName("SigGen.*");
 			RedhawkComponent componentToConnect = failureApp.getComponentByName("DataConverter_1.*");
-			 
-			thrown.expect(PortException.class);	
+
+			thrown.expect(PortException.class);
 			thrown.expectMessage("Multiple ports match with these components specify port names to match");
 			component.connect(componentToConnect);
-		} catch (MultipleResourceException | ApplicationCreationException | CORBAException | ResourceNotFoundException e) {
-			fail("Unable to run tests "+e.getMessage());
+		} catch (MultipleResourceException | ApplicationCreationException | CORBAException
+				| ResourceNotFoundException e) {
+			fail("Unable to run tests " + e.getMessage());
 		} finally {
-			if(failureApp!=null)
+			if (failureApp != null)
 				failureApp.release();
-			
+
 			try {
 				RedhawkFileManager manager = driver.getDomain(domainName).getFileManager();
 				manager.removeDirectory("/waveforms/PortListenerTest");
@@ -197,65 +230,66 @@ public class RedhawkComponentImplIT extends RedhawkTestBase{
 			}
 		}
 	}
-	
-	//TODO: Make this a test
+
+	// TODO: Make this a test
 	@Test
-	public void snippets() throws Exception{
-		//Get your component
+	public void snippets() throws Exception {
+		// Get your component
 		RedhawkComponent component = application.getComponentByName("SigGen.*");
-		
-		//Retrieve properties that are avaiable
+
+		// Retrieve properties that are avaiable
 		Map<String, RedhawkProperty> propertiesMap = component.getProperties();
-		
-		//Change a specific property 
+
+		// Change a specific property
 		String propertyName = "sample_rate";
 		RedhawkSimple simpleProp = (RedhawkSimple) propertiesMap.get(propertyName);
 		simpleProp.setValue(1000);
-		
-		//Stop a component
+
+		// Stop a component
 		component.stop();
-		
-		//Start a component
+
+		// Start a component
 		component.start();
-		
-		//Check if a component is started 
-		if(!component.started())
+
+		// Check if a component is started
+		if (!component.started())
 			component.start();
 	}
-	
+
 	@Test
-	public void testAccessToComponentProperties() throws ResourceNotFoundException, MultipleResourceException{
-		for(RedhawkComponent component : components){
-			for(String propertyName : component.getProperties().keySet()){
+	public void testAccessToComponentProperties() throws ResourceNotFoundException, MultipleResourceException {
+		for (RedhawkComponent component : components) {
+			for (String propertyName : component.getProperties().keySet()) {
 				assertNotNull(component.getProperty(propertyName));
 			}
 		}
 	}
-	
+
 	@Test
 	public void testComponentProcessId() {
-		for(RedhawkComponent component : components) {
+		for (RedhawkComponent component : components) {
 			assertNotNull(component.getProcessId());
 		}
 	}
-	
+
 	@Test
 	public void testComponentImplementation() {
-		for(RedhawkComponent component : components) {
+		for (RedhawkComponent component : components) {
 			assertNotNull(component.getComponentImplementation());
 		}
 	}
-	
+
 	@Test
 	public void testComponentDevice() {
-		for(RedhawkComponent component : components) {
+		for (RedhawkComponent component : components) {
 			assertNotNull(component.getComponentDevice());
 		}
 	}
-	
+
 	@After
-	public void shutdown() throws ApplicationReleaseException, ConnectionException, ResourceNotFoundException, IOException, CORBAException{
-		//Release application and clean it up from $SDRROOT
+	public void shutdown() throws ApplicationReleaseException, ConnectionException, ResourceNotFoundException,
+			IOException, CORBAException {
+		// Release application and clean it up from $SDRROOT
 		application.release();
 		driver.getDomain("REDHAWK_DEV").getFileManager().removeDirectory("/waveforms/testWaveform");
 	}

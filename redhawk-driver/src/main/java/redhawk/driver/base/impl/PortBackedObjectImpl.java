@@ -129,7 +129,8 @@ public abstract class PortBackedObjectImpl<TParsedClass> extends QueryableResour
 				providesPort = this.getPort(providesPortName);
 				usesPort = resource.getPort(usesPortName);
 			} catch (ResourceNotFoundException | MultipleResourceException e1) {
-				throw new PortException("Unable to find connection between these two components.", e1);
+				throw new PortException("Unable to find connection between these two components using port "
+						+ "names provided(uses: "+usesPortName+", provides: "+providesPortName+")", e1);
 			}
 		} catch(MultipleResourceException e) {
 			throw new PortException("Multiple ports found with "+usesPortName, e);

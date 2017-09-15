@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.exceptions.PortException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.xml.model.sca.prf.Properties;
@@ -43,6 +44,21 @@ public interface PortBackedObject extends QueryableResource {
 	 */
     List<RedhawkPort> getPorts() throws ResourceNotFoundException;
     
+	/**
+	 * Connect two REDHAWK Ports.
+	 * 
+	 * @param port
+	 */
+	void connect(PortBackedObject port) throws PortException;
+	
+	/**
+	 * Connect two REDHAWK Ports.
+	 * 
+	 * @param port
+	 * @throws PortException 
+	 */
+	void connect(PortBackedObject port, String connectionId) throws PortException;
+	
     /**
      * @param portName Name of the port to retrieve.
      * @return

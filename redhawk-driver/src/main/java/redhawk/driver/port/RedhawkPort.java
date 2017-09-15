@@ -56,10 +56,21 @@ public interface RedhawkPort {
 	 * @param portListener
 	 *            Object containing logic for what to do when you get data on a
 	 *            port.
+	 * @deprecated use more appropriately name listen method.
+	 * 
 	 * @throws Exception
 	 */
+	@Deprecated
 	public void connect(PortListener<?> portListener) throws Exception;
+	
+	public void connect(RedhawkPort port) throws PortException;
+	
+	public void connect(RedhawkPort port, String connectionId) throws PortException;
+	
 
+	
+	public void listen(PortListener<?> portListener);
+	
 	/**
 	 * Disconnect from a port.
 	 * 

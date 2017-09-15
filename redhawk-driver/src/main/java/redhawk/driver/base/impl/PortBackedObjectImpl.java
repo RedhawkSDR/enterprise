@@ -22,10 +22,8 @@ package redhawk.driver.base.impl;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,13 +37,10 @@ import org.xml.sax.SAXException;
 import CF.ComponentType;
 import CF.Resource;
 import CF.ResourceHelper;
-import CF.PortPackage.InvalidPort;
-import CF.PortPackage.OccupiedPort;
 import CF.PortSupplierPackage.UnknownPort;
 import redhawk.driver.base.PortBackedObject;
 import redhawk.driver.base.RedhawkFileSystem;
 import redhawk.driver.exceptions.MultipleResourceException;
-import redhawk.driver.exceptions.PortException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.port.impl.RedhawkPortImpl;
@@ -65,55 +60,6 @@ public abstract class PortBackedObjectImpl<TParsedClass> extends QueryableResour
 		super(ior, orb);
 		this.fileSystem = fileSystem;
 	}
-    
-	public void connect(PortBackedObject resource) throws PortException{
-		//No Id passed create one 
-		connect(resource, "rhdriver-"+UUID.randomUUID().toString());
-	}
-    
-	public void connect(PortBackedObject resource, String connectionId) throws PortException {
-    	try {
-    		Boolean foundPortMatch = false;
-    		RedhawkPort usesPort = null, providesPort = null;
-    		
-    		//TODO: Make sure one of the ports is uses and the other provides
-        	//Get Ports availabel to for this object 
-    		for(RedhawkPort port : this.getPorts()) {
-				String portName = port.getName().replaceAll("_in", "").replaceAll("_out", "");
-				String portType = port.getType();
-				for(RedhawkPort connectToPort : resource.getPorts()) {
-					String connectPortName = connectToPort.getName().replaceAll("_in", "").replaceAll("_out", "");
-					String connectPortType = connectToPort.getType();
-					
-					//If port types aren't equal and name equavilent make a connection
-					if(!connectPortType.equals(portType) && portName.equals(connectPortName)) {						
-						//If first match found fill in variables for connect
-						if(!foundPortMatch) {
-							if(portType.equals(RedhawkPort.PORT_TYPE_USES)) {
-								usesPort = port;
-								providesPort = connectToPort;
-							}else {
-								usesPort = connectToPort;
-								providesPort = port;
-							}
-								
-						}else {
-							throw new PortException("Multiple ports match with these components specify port names to match");
-						}
-					}
-				}
-			}
-    		
-    		//Connect the matched ports
-    		if(usesPort!=null && providesPort!=null) {
-        		usesPort.connect(providesPort);    			
-    		}else {
-    			throw new PortException("No matching ports within these two components");
-    		}
-    	} catch (ResourceNotFoundException e) {
-			throw new PortException("Unable to connect ports", e);
-		}
-    }
 
     public Map<String, RedhawkPort> ports() throws ResourceNotFoundException {
     	return getPorts().stream().collect(Collectors.toMap(p -> p.getName(), Function.identity()));

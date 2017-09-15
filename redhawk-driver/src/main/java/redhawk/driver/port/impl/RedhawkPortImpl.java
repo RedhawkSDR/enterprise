@@ -55,7 +55,6 @@ import BULKIO.dataXML;
 import CF.Port;
 import CF.PortHelper;
 import CF.PortPackage.InvalidPort;
-import CF.PortPackage.OccupiedPort;
 import redhawk.driver.bulkio.BulkIOData;
 import redhawk.driver.bulkio.DataTypeFactory;
 import redhawk.driver.bulkio.DataTypes;
@@ -72,60 +71,60 @@ public class RedhawkPortImpl implements RedhawkPort {
 	private static Logger logger = Logger.getLogger(RedhawkPortImpl.class.getName());
 
 	private static final long serialVersionUID = 1L;
-
+    
 	/**
-	 * CORBA Object representing port
-	 */
+     * CORBA Object representing port  
+     */
 	private Object port;
-
+    
 	/**
-	 * CORBA Object representing port being connected too
+	 * CORBA Object representing port being connected too 
 	 */
 	private CF.Port remotePort;
-
-	private ORB orb;
-	private String connectionId;
-	private String repId;
-	private String portName;
-	private String portType;
-	private DataTypeFactory factory;
-
-	// TODO: connectionId should be mapping to a data connection refactor
-	// private List<String> connectionIds = new ArrayList<String>();
-	// private List<BulkIOData> dataConnections = new ArrayList<BulkIOData>();
+	
+    private ORB orb; 
+    private String connectionId;
+    private String repId;
+    private String portName;
+    private String portType;
+    private DataTypeFactory factory;
+    
+    //TODO: connectionId should be mapping to a data connection refactor
+    //private List<String> connectionIds = new ArrayList<String>();
+    //private List<BulkIOData> dataConnections = new ArrayList<BulkIOData>();
 	/**
-	 * Connections that are managed via the driver.
+	 * Connections that are managed via the driver. 
 	 */
-	private Map<String, BulkIOData> driverManagedConnections = new HashMap<>();
-
-	private static List<DataTypes> dataTypeList = new ArrayList<DataTypes>();
-
-	static {
-		dataTypeList.add(DataTypes.DATA_FLOAT);
-		dataTypeList.add(DataTypes.DATA_DOUBLE);
-		dataTypeList.add(DataTypes.DATA_CHAR);
-		dataTypeList.add(DataTypes.DATA_SHORT);
-		dataTypeList.add(DataTypes.DATA_ULONG);
-		dataTypeList.add(DataTypes.DATA_LONG);
-		dataTypeList.add(DataTypes.DATA_LONGLONG);
-		dataTypeList.add(DataTypes.DATA_OCTET);
-		dataTypeList.add(DataTypes.DATA_XML);
-		dataTypeList.add(DataTypes.DATA_FILE);
-		dataTypeList.add(DataTypes.DATA_ULONGLONG);
-		dataTypeList.add(DataTypes.DATA_USHORT);
-	}
-
-	public RedhawkPortImpl(Object port, ORB orb, String repId, String portName, String portType) {
-		this.port = port;
-		this.orb = orb;
-		this.repId = repId;
-		this.portName = portName;
-		this.portType = portType;
-		factory = new DataTypeFactory(port);
-	}
-
+    private Map<String, BulkIOData> driverManagedConnections = new HashMap<>();
+	
+    private static List<DataTypes> dataTypeList = new ArrayList<DataTypes>();
+	
+    static {
+    	dataTypeList.add(DataTypes.DATA_FLOAT);
+    	dataTypeList.add(DataTypes.DATA_DOUBLE);
+    	dataTypeList.add(DataTypes.DATA_CHAR);
+    	dataTypeList.add(DataTypes.DATA_SHORT);
+    	dataTypeList.add(DataTypes.DATA_ULONG);
+    	dataTypeList.add(DataTypes.DATA_LONG);
+    	dataTypeList.add(DataTypes.DATA_LONGLONG);
+    	dataTypeList.add(DataTypes.DATA_OCTET);
+    	dataTypeList.add(DataTypes.DATA_XML);
+    	dataTypeList.add(DataTypes.DATA_FILE);
+    	dataTypeList.add(DataTypes.DATA_ULONGLONG);
+    	dataTypeList.add(DataTypes.DATA_USHORT);
+    }
+    
+    public RedhawkPortImpl(Object port, ORB orb, String repId, String portName, String portType){
+        this.port = port;
+        this.orb = orb;
+        this.repId = repId;
+        this.portName = portName;
+        this.portType = portType;
+        factory = new DataTypeFactory(port);
+    }
+    
 	@Override
-	public String getRepId() {
+    public String getRepId() {
 		return repId;
 	}
 
@@ -133,115 +132,117 @@ public class RedhawkPortImpl implements RedhawkPort {
 	public String getName() {
 		return portName;
 	}
-
+	
 	@Override
-	public org.omg.CORBA.Object getCorbaObject() {
+	public org.omg.CORBA.Object getCorbaObject(){
 		return port;
 	}
-
+    
 	@Override
-	public String getType() {
+	public String getType(){
 		return portType;
 	}
-
+    
+    
+	
 	public <T> void send(Packet<T> packet) throws Exception {
-
-		if (portType.equalsIgnoreCase(RedhawkPort.PORT_TYPE_USES)) {
-			throw new PortException("Uses ports do not implement send()");
+		
+		if(portType.equalsIgnoreCase(RedhawkPort.PORT_TYPE_USES)){
+			throw new PortException("Uses ports do not implement send()");		
 		}
-
-		boolean endOfDataStream = packet.isEndOfStream();
-		String id = packet.streamId;
-		PrecisionUTCTime time = packet.getTime();
+		
+		boolean endOfDataStream = packet.isEndOfStream(); 
+		String id = packet.streamId; 
+		PrecisionUTCTime time = packet.getTime(); 
 		T data = packet.getData();
-
-		try {
-			switch (factory.getOperationsType()) {
+		
+		try{
+			switch(factory.getOperationsType()){
 			case DATA_CHAR:
 				dataChar charObj = factory.getDataCharObj();
-				if (packet.getStreamSri() != null)
+				if(packet.getStreamSri()!=null)
 					charObj.pushSRI(packet.getStreamSri());
-
-				charObj.pushPacket((char[]) data, time, endOfDataStream, id);
-				break;
-			case DATA_DOUBLE:
+				
+				charObj.pushPacket((char[])data, time, endOfDataStream, id);
+				break; 
+			case DATA_DOUBLE: 
 				dataDouble doubleObj = factory.getDataDoubleObj();
 
-				if (packet.getStreamSri() != null)
+				if(packet.getStreamSri()!=null)
 					doubleObj.pushSRI(packet.getStreamSri());
-
-				doubleObj.pushPacket((double[]) data, time, endOfDataStream, id);
-				break;
+				
+				doubleObj.pushPacket((double[])data, time, endOfDataStream, id);
+				break; 
 			case DATA_LONG:
 				dataLong longObj = factory.getDataLongObj();
-				if (packet.getStreamSri() != null)
+				if(packet.getStreamSri()!=null)
 					longObj.pushSRI(packet.getStreamSri());
-
-				longObj.pushPacket((int[]) data, time, endOfDataStream, id);
-				break;
+				
+				longObj.pushPacket((int[])data, time, endOfDataStream, id);
+				break; 
 			case DATA_OCTET:
 				dataOctet octObj = factory.getDatOctetObj();
-				if (packet.getStreamSri() != null)
+				if(packet.getStreamSri()!=null)
 					octObj.pushSRI(packet.getStreamSri());
-
-				octObj.pushPacket((byte[]) data, time, endOfDataStream, id);
-				break;
+				
+				octObj.pushPacket((byte[])data, time, endOfDataStream, id);
+				break; 
 			case DATA_SHORT:
 				dataShort shortObj = factory.getDataShortObj();
-				if (packet.getStreamSri() != null)
+				if(packet.getStreamSri()!=null)
 					shortObj.pushSRI(packet.getStreamSri());
-
-				shortObj.pushPacket((short[]) data, time, endOfDataStream, id);
-				break;
+				
+				shortObj.pushPacket((short[])data, time, endOfDataStream, id);
+				break; 
 			case DATA_ULONG:
 				dataUlong ulongObj = factory.getDataULongObj();
-				if (packet.getStreamSri() != null)
+				if(packet.getStreamSri()!=null)
 					ulongObj.pushSRI(packet.getStreamSri());
-
-				ulongObj.pushPacket((int[]) data, time, endOfDataStream, id);
-				break;
-			case DATA_USHORT:
-				dataUshort ushortObj = factory.getDataUShortObj();
-				if (packet.getStreamSri() != null)
+				
+				ulongObj.pushPacket((int[])data, time, endOfDataStream, id);
+				break; 
+			case DATA_USHORT: 
+				dataUshort ushortObj = factory.getDataUShortObj(); 
+				if(packet.getStreamSri()!=null)
 					ushortObj.pushSRI(packet.getStreamSri());
-
-				ushortObj.pushPacket((short[]) data, time, endOfDataStream, id);
-				break;
+				
+				ushortObj.pushPacket((short[])data, time, endOfDataStream, id);
+				break; 
 			case DATA_XML:
 				dataXML xmlObj = factory.getDataXMLObj();
-				if (packet.getStreamSri() != null)
+				if(packet.getStreamSri()!=null)
 					xmlObj.pushSRI(packet.getStreamSri());
-
-				xmlObj.pushPacket((String) data, endOfDataStream, id);
+				
+				xmlObj.pushPacket((String)data, endOfDataStream, id);
 				break;
 			case DATA_FILE:
 				dataFile fileObj = factory.getDataFileObj();
-				if (packet.getStreamSri() != null)
+				if(packet.getStreamSri()!=null)
 					fileObj.pushSRI(packet.getStreamSri());
-
-				fileObj.pushPacket((String) data, time, endOfDataStream, id);
-				break;
+				
+				fileObj.pushPacket((String)data, time, endOfDataStream, id);
+				break; 
 			case DATA_FLOAT:
-				dataFloat floatObj = factory.getDataFloatObj();
-				if (packet.getStreamSri() != null)
+				dataFloat floatObj = factory.getDataFloatObj(); 
+				if(packet.getStreamSri()!=null)
 					floatObj.pushSRI(packet.getStreamSri());
-
-				floatObj.pushPacket((float[]) data, time, endOfDataStream, id);
-				break;
+				
+				floatObj.pushPacket((float[])data, time, endOfDataStream, id);
+				break; 
 			case DATA_ULONGLONG:
 				dataUlongLong uLongLongObj = factory.getDataUlongLongObj();
-				if (packet.getStreamSri() != null)
+				if(packet.getStreamSri()!=null)
 					uLongLongObj.pushSRI(packet.getStreamSri());
-
-				uLongLongObj.pushPacket((long[]) data, time, endOfDataStream, id);
+				
+				uLongLongObj.pushPacket((long[])data, time, endOfDataStream, id);
 				break;
 			case DATA_LONGLONG:
 				dataLongLong longLongObj = factory.getDataLongLongObj();
-				if (packet.getStreamSri() != null)
+				if(packet.getStreamSri()!=null)
 					longLongObj.pushSRI(packet.getStreamSri());
-
-				longLongObj.pushPacket((long[]) data, time, endOfDataStream, id);
-				break;
+				
+				longLongObj.pushPacket((long[])data, time, endOfDataStream, id);
+				break; 
 			case DATA_SDDS:
 				dataSDDS sddsObj = factory.getDataSDDSObj();
 				sddsObj.pushSRI(packet.getStreamSri(), packet.getTime());
@@ -249,138 +250,141 @@ public class RedhawkPortImpl implements RedhawkPort {
 			default:
 				throw new Exception("This port does not have a push packet method");
 			}
-		} catch (Exception e) {
+		}catch(Exception e){
 			throw new Exception(e.getMessage());
-		}
+		}		
 	}
+	
 
+ 
+
+	
 	@Override
-	public void connect(PortListener<?> portListener) throws Exception {
-
-		if (portType.equalsIgnoreCase(RedhawkPort.PORT_TYPE_PROVIDES)) {
-			throw new PortException("Provides ports do not implement connect()");
+    public void connect(PortListener<?> portListener) throws Exception {
+		
+		if(portType.equalsIgnoreCase(RedhawkPort.PORT_TYPE_PROVIDES)){
+			throw new PortException("Provides ports do not implement connect()");		
 		}
-
+		
 		logger.fine("IN Connect");
-		POA rootPOA = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
-		rootPOA.the_POAManager().activate();
-		ClassLoader classloader = this.getClass().getClassLoader();
+    	POA rootPOA = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
+        rootPOA.the_POAManager().activate();   
+        ClassLoader classloader = this.getClass().getClassLoader();
 
-		boolean foundValidPort = false;
-		Constructor<?> c = null;
-		java.lang.Object poaTie = null;
-		Method meth = null;
-
-		// TODO: At this point we should have the info to know exactly which dataType
-		// the port is
-		// So why do we go through this list...
-		for (DataTypes dataType : dataTypeList) {
-			c = Class.forName(dataType.poaTieClass, true, classloader)
-					.getConstructor(Class.forName(dataType.operationsClass, true, classloader));
-			BulkIOData dataConnection = new BulkIOData(portListener);
-			poaTie = (java.lang.Object) c.newInstance(dataConnection);
-			meth = poaTie.getClass().getSuperclass().getMethod("_this", ORB.class);
-			org.omg.CORBA.Object pipeline = (Object) meth.invoke(poaTie, orb);
-
-			String connectionId = "REI_" + UUID.randomUUID().toString();
-			try {
-				if (portType.equalsIgnoreCase("provides")) {
-					throw new UnsupportedOperationException(
-							"You cannot connect to an input (provides) port.  Only output (uses) ports are allowed.");
-				}
+        boolean foundValidPort = false;
+        Constructor<?> c = null;
+        java.lang.Object poaTie = null;
+        Method meth = null;
+        
+        //TODO: At this point we should have the info to know exactly which dataType the port is 
+        //So why do we go through this list...
+        for(DataTypes dataType : dataTypeList){
+	        c = Class.forName(dataType.poaTieClass, true, classloader).getConstructor(Class.forName(dataType.operationsClass, true, classloader));
+	        BulkIOData dataConnection = new BulkIOData(portListener);
+	        poaTie = (java.lang.Object)c.newInstance(dataConnection);
+	        meth = poaTie.getClass().getSuperclass().getMethod("_this", ORB.class);
+	        org.omg.CORBA.Object pipeline = (Object)meth.invoke(poaTie, orb);    	
+	        
+	    	String connectionId = "REI_"+UUID.randomUUID().toString();
+	    	try {
+	    		if(portType.equalsIgnoreCase("provides")){
+	    			throw new UnsupportedOperationException("You cannot connect to an input (provides) port.  Only output (uses) ports are allowed.");
+	    		}
 				remotePort = PortHelper.narrow(port);
 				remotePort.connectPort(pipeline, connectionId);
-
-				foundValidPort = true;
-
-				driverManagedConnections.put(connectionId, dataConnection);
-				break;
-			} catch (BAD_PARAM e) {
-				logger.fine("PROB with: " + dataType.poaTieClass);
-			} catch (InvalidPort p) {
-				logger.fine("PROB with: " + dataType.poaTieClass);
-			} catch (Throwable t) {
-				logger.fine("PROB with: " + dataType.poaTieClass);
-			} finally {
-				if (!foundValidPort) {
-					dataConnection.disconnect();
-				}
-			}
-		}
-
-		if (!foundValidPort) {
-			throw new Exception("Could Not Locate a Valid BULKIO Data Type for this Port.");
-		}
-
-	}
-
+				
+	    		foundValidPort = true;
+	    		
+	    		driverManagedConnections.put(connectionId, dataConnection);
+	    		break;
+	    	} catch(BAD_PARAM e){
+	    		logger.fine("PROB with: " + dataType.poaTieClass);
+	    	} catch(InvalidPort p){
+	    		logger.fine("PROB with: " + dataType.poaTieClass);
+	    	} catch(Throwable t){
+	    		logger.fine("PROB with: " + dataType.poaTieClass);
+	    	}finally{
+	    		if(!foundValidPort){
+	    			dataConnection.disconnect();
+	    		}
+	    	}
+        }
+        
+        if(!foundValidPort){
+        	throw new Exception("Could Not Locate a Valid BULKIO Data Type for this Port.");
+        }
+                
+    }
+    
 	@Override
-	public void disconnect() throws PortException {
-		if (portType.equalsIgnoreCase(RedhawkPort.PORT_TYPE_PROVIDES)) {
-			throw new PortException("Provides ports do not implement disconnect()");
-		}
-
+    public void disconnect() throws PortException {
+		if(portType.equalsIgnoreCase(RedhawkPort.PORT_TYPE_PROVIDES)){
+			throw new PortException("Provides ports do not implement disconnect()");		
+		}    	
+    	
 		/*
 		 * Disconnection any driver managed connections
 		 */
-		for (String connectionId : driverManagedConnections.keySet()) {
-			this.disconnect(connectionId);
-		}
-
-		if (remotePort != null) {
-			remotePort._release();
-		}
-	}
-
+    	for(String connectionId : driverManagedConnections.keySet()){
+    		this.disconnect(connectionId);
+    	}
+    	
+    	if(remotePort!=null) {
+    		remotePort._release();
+    	}
+    }
+    
 	@Override
 	public void disconnect(String connectionId) throws PortException {
-		if (portType.equalsIgnoreCase(RedhawkPort.PORT_TYPE_PROVIDES)) {
-			throw new PortException("Provides ports do not implement disconnect()");
-		}
-
+		if(portType.equalsIgnoreCase(RedhawkPort.PORT_TYPE_PROVIDES)){
+			throw new PortException("Provides ports do not implement disconnect()");		
+		} 
+		
 		/*
-		 * If it's a driver managed connection make sure to disconnect BulkIOData
+		 * If it's a driver managed connection make sure to disconnect 
+		 * BulkIOData
 		 */
-		if (driverManagedConnections.containsKey(connectionId)) {
+		if(driverManagedConnections.containsKey(connectionId)){
 			BulkIOData data = driverManagedConnections.get(connectionId);
 			data.disconnect();
 		}
-
+		
+		
 		try {
-			if (remotePort == null)
+			if(remotePort==null) 
 				remotePort = PortHelper.narrow(port);
 
 			remotePort.disconnectPort(connectionId);
 		} catch (InvalidPort e) {
 			throw new PortException("Error disconnecting from CF.Port", e);
-		} finally {
+		}finally {
 			remotePort._release();
 		}
-	}
-
+	}	
+	
 	@Override
 	public List<RedhawkPortStatistics> getPortStatistics() {
-		List<RedhawkPortStatistics> list = new ArrayList<>();
-		if (portType.equalsIgnoreCase("uses")) {
+		List<RedhawkPortStatistics> list = new ArrayList<>(); 
+		if(portType.equalsIgnoreCase("uses")){
 			UsesPortStatisticsProvider stats = UsesPortStatisticsProviderHelper.narrow(this.port);
-			for (UsesPortStatistics stat : stats.statistics()) {
+			for(UsesPortStatistics stat : stats.statistics()){
 				list.add(new RedhawkPortStatistics(stat.connectionId, stat.statistics));
 			}
-		} else {
+		}else{
 			/*
-			 * Already narrowed down to actual port type no need to narrow again w/
-			 * ProvidesPortStatisticsProviderHelper.
+			 * Already narrowed down to actual port type no need to narrow again w/ 
+			 * ProvidesPortStatisticsProviderHelper. 
 			 * 
-			 * Note: By doing this you miss out on state in the stats. But user can still
-			 * get state from the actual port object.
+			 * Note: By doing this you miss out on state in the stats. But user can still get 
+			 * state from the actual port object. 
 			 */
-			if (factory.getStatistics() != null)
-				list.add(new RedhawkPortStatistics(factory.getStatistics()));
+			if(factory.getStatistics()!=null)
+				list.add(new RedhawkPortStatistics(factory.getStatistics()));		
 		}
-
-		return list;
+		
+		return list; 
 	}
-
+	
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
@@ -395,38 +399,5 @@ public class RedhawkPortImpl implements RedhawkPort {
 			builder.append("interfaces=").append(Arrays.toString(port.getClass().getInterfaces()));
 		builder.append("]");
 		return builder.toString();
-	}
-
-	@Override
-	public void listen(PortListener<?> portListener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void connect(RedhawkPort port) throws PortException {
-		connect(port, "rhdriver_" + UUID.randomUUID());
-	}
-
-	@Override
-	public void connect(RedhawkPort port, String connectionId) throws PortException {
-		// Initial check for type difference
-		if (this.getType().equals(port.getType()))
-			throw new PortException("Cannot connect ports of the same type");
-
-		try {
-
-			CF.Port aPort = null;
-			if (this.getType().equals(RedhawkPort.PORT_TYPE_USES)) {
-				aPort = CF.PortHelper.narrow(this.getCorbaObject());
-
-				aPort.connectPort(port.getCorbaObject(), connectionId);
-			} else {
-				CF.PortHelper.narrow(port.getCorbaObject());
-				aPort.connectPort(this.getCorbaObject(), connectionId);
-			}
-		} catch (InvalidPort | OccupiedPort e) {
-			throw new PortException("Unable to connect ports", e);
-		}
 	}
 }

@@ -33,7 +33,7 @@ public class RedhawkPortInteractionIT extends RedhawkTestBase{
 	}
 
 	@Test
-	public void testListenAndSend() throws ApplicationStopException, ApplicationReleaseException {
+	public void connectAndSend() throws ApplicationStopException, ApplicationReleaseException {
 		String[] portNames = {"dataOctet_out", "dataFloat_out", "dataShort_out", "dataDouble_out", "dataUshort_out"};
 		
 		for(String portName : portNames) {

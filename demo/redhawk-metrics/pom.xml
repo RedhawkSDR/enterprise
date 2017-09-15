@@ -128,7 +128,7 @@
 									<goal>npm</goal>
 								</goals>
 								<configuration>
-									<arguments>install --registry=${npm.proxy} --sass-binary-path=/data/mkwyche/Tools/linux-x64-48_binding.node</arguments>
+									<arguments>install --registry=${npm.proxy}</arguments>
 								</configuration>
 							</execution>
 							<execution>

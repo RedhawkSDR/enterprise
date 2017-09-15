@@ -116,6 +116,32 @@ public abstract class PortBackedObjectImpl<TParsedClass> extends QueryableResour
 			throw new PortException("Unable to connect ports", e);
 		}
     }
+	
+	public void connect(PortBackedObject resource, String connectionId, String usesPortName, String providesPortName) throws PortException {
+		RedhawkPort usesPort = null, providesPort = null;
+		
+		try {
+			usesPort = this.getPort(usesPortName);
+			providesPort = resource.getPort(providesPortName);
+		} catch (ResourceNotFoundException e) {
+			//Try to see if Component has the providesPortName instead
+			try {
+				providesPort = this.getPort(providesPortName);
+				usesPort = resource.getPort(usesPortName);
+			} catch (ResourceNotFoundException | MultipleResourceException e1) {
+				throw new PortException("Unable to find connection between these two components.", e1);
+			}
+		} catch(MultipleResourceException e) {
+			throw new PortException("Multiple ports found with "+usesPortName, e);
+		}
+		
+		//Connect the matched ports
+		if(usesPort!=null && providesPort!=null) {
+    		usesPort.connect(providesPort, connectionId);    			
+		}else {
+			throw new PortException("No matching ports between these two components");
+		}
+	}
 
     public Map<String, RedhawkPort> ports() throws ResourceNotFoundException {
     	return getPorts().stream().collect(Collectors.toMap(p -> p.getName(), Function.identity()));

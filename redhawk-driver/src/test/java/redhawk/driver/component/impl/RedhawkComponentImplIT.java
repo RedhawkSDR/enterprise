@@ -128,6 +128,43 @@ public class RedhawkComponentImplIT extends RedhawkTestBase{
 	}
 	
 	@Test
+	public void testComponentConnetionHelper2() {
+		try {
+			RedhawkComponent comp = application.getComponentByName("SigGen.*");
+			RedhawkComponent connectComp = application.getComponentByName("HardLimit.*");
+			
+			//Remove any existing connections
+			RedhawkPort port = comp.getPort("dataFloat_out");
+
+			//Disconnect port if connected 
+			for(String id : port.getConnectionIds()) {
+				port.disconnect(id);
+			}
+			
+			assertTrue(port.getConnectionIds().isEmpty());
+			
+			//Connect the port again
+			comp.connect(connectComp, "aConnection", "dataFloat_in", "dataFloat_out");	
+			
+			//Components connect
+			assertTrue(!port.getConnectionIds().isEmpty());
+		
+			//Try connecting the other way
+			for(String id : port.getConnectionIds()) {
+				port.disconnect(id);
+			}
+			
+			//Connect the port again
+			connectComp.connect(comp, "bConnection", "dataFloat_in", "dataFloat_out");	
+			
+			//Components connect
+			assertTrue(!port.getConnectionIds().isEmpty());
+		} catch (MultipleResourceException | ResourceNotFoundException | PortException e) {
+			fail("Unable to run tests "+e.getMessage());
+		}
+	}
+	
+	@Test
 	public void testComponentConnectionFailure() throws PortException, ApplicationReleaseException {
 		RedhawkApplication failureApp = null;
 		/*

@@ -59,6 +59,17 @@ public interface PortBackedObject extends QueryableResource {
 	 */
 	void connect(PortBackedObject port, String connectionId) throws PortException;
 	
+	/**
+	 * Specify two ports to connect by their name. 
+	 * 
+	 * @param port
+	 * @param connectionId
+	 * @param usesPortName
+	 * @param providesPortName
+	 * @throws PortException
+	 */
+	void connect(PortBackedObject port, String connectionId, String usesPortName, String providesPortName) throws PortException;
+	
     /**
      * @param portName Name of the port to retrieve.
      * @return

@@ -75,7 +75,6 @@ public interface RedhawkPort {
 			throw new PortException("Cannot connect ports of the same type or w/ non matching interfaces(repId).");
 		
 		try {
-
 			CF.Port aPort = null;
 			if (this.getType().equals(RedhawkPort.PORT_TYPE_USES)) {
 				aPort = CF.PortHelper.narrow(this.getCorbaObject());

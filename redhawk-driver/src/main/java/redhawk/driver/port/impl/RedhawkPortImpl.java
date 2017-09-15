@@ -253,10 +253,15 @@ public class RedhawkPortImpl implements RedhawkPort {
 			throw new Exception(e.getMessage());
 		}
 	}
-
+	
 	@Override
+	@Deprecated
 	public void connect(PortListener<?> portListener) throws Exception {
-
+		this.listen(portListener);
+	}
+	
+	@Override
+	public void listen(PortListener<?> portListener) throws Exception {
 		if (portType.equalsIgnoreCase(RedhawkPort.PORT_TYPE_PROVIDES)) {
 			throw new PortException("Provides ports do not implement connect()");
 		}
@@ -311,7 +316,6 @@ public class RedhawkPortImpl implements RedhawkPort {
 		if (!foundValidPort) {
 			throw new Exception("Could Not Locate a Valid BULKIO Data Type for this Port.");
 		}
-
 	}
 
 	@Override
@@ -395,12 +399,6 @@ public class RedhawkPortImpl implements RedhawkPort {
 			builder.append("interfaces=").append(Arrays.toString(port.getClass().getInterfaces()));
 		builder.append("]");
 		return builder.toString();
-	}
-
-	@Override
-	public void listen(PortListener<?> portListener) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

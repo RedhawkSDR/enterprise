@@ -30,7 +30,6 @@ import BULKIO.updateSRIHelper;
 import ExtendedCF.QueryablePort;
 import ExtendedCF.QueryablePortHelper;
 import ExtendedCF.UsesConnection;
-import redhawk.driver.bulkio.DataTypes;
 import redhawk.driver.bulkio.Packet;
 import redhawk.driver.exceptions.PortException;
 
@@ -69,7 +68,7 @@ public interface RedhawkPort {
 	
 
 	
-	public void listen(PortListener<?> portListener);
+	public void listen(PortListener<?> portListener) throws Exception;
 	
 	/**
 	 * Disconnect from a port.

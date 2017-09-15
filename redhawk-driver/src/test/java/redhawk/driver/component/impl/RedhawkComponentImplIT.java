@@ -21,6 +21,8 @@ package redhawk.driver.component.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,11 +31,14 @@ import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
+import redhawk.driver.domain.RedhawkFileManager;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ApplicationReleaseException;
 import redhawk.driver.exceptions.CORBAException;
@@ -41,6 +46,7 @@ import redhawk.driver.exceptions.ComponentStartException;
 import redhawk.driver.exceptions.ComponentStopException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.exceptions.PortException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.properties.RedhawkProperty;
@@ -48,11 +54,14 @@ import redhawk.driver.properties.RedhawkSimple;
 import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkComponentImplIT extends RedhawkTestBase{
-		private String applicationName = "myTestApplication"; 
+	private String applicationName = "myTestApplication"; 
 	
 	private RedhawkApplication application; 
 	
-	private List<RedhawkComponent> components; 
+	private List<RedhawkComponent> components;
+	
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
 	
 	@Before
 	public void setup() throws ResourceNotFoundException, ApplicationCreationException, CORBAException, MultipleResourceException{
@@ -81,7 +90,78 @@ public class RedhawkComponentImplIT extends RedhawkTestBase{
 		}
 	}
 	
-	//SNIPPET 
+	@Test
+	public void testComponentConnetionHelper() {
+		try {
+			RedhawkComponent comp = application.getComponentByName("SigGen.*");
+			RedhawkComponent connectComp = application.getComponentByName("HardLimit.*");
+			
+			//Remove any existing connections
+			RedhawkPort port = comp.getPort("dataFloat_out");
+
+			//Disconnect port if connected 
+			for(String id : port.getConnectionIds()) {
+				port.disconnect(id);
+			}
+			
+			assertTrue(port.getConnectionIds().isEmpty());
+			
+			//Connect the port again
+			comp.connect(connectComp);	
+			
+			//Components connect
+			assertTrue(!port.getConnectionIds().isEmpty());
+		
+			//Try connecting the other way
+			for(String id : port.getConnectionIds()) {
+				port.disconnect(id);
+			}
+			
+			//Connect the port again
+			connectComp.connect(comp);	
+			
+			//Components connect
+			assertTrue(!port.getConnectionIds().isEmpty());
+		} catch (MultipleResourceException | ResourceNotFoundException | PortException e) {
+			fail("Unable to run tests "+e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testComponentConnectionFailure() throws PortException, ApplicationReleaseException {
+		RedhawkApplication failureApp = null;
+		/*
+		 * Test connecting SigGen_Sine to DataConverter without specifying a port
+		 */
+		try {
+			failureApp = driver.getDomain().createApplication("portTest",
+					new File("src/test/resources/waveforms/PortListenerTest/PortListenerTest.sad.xml"));
+			
+			//Get components to connect 
+			RedhawkComponent component = failureApp.getComponentByName("SigGen.*");
+			RedhawkComponent componentToConnect = failureApp.getComponentByName("DataConverter_1.*");
+			 
+			thrown.expect(PortException.class);	
+			thrown.expectMessage("Multiple ports match with these components specify port names to match");
+			component.connect(componentToConnect);
+		} catch (MultipleResourceException | ApplicationCreationException | CORBAException | ResourceNotFoundException e) {
+			fail("Unable to run tests "+e.getMessage());
+		} finally {
+			if(failureApp!=null)
+				failureApp.release();
+			
+			try {
+				RedhawkFileManager manager = driver.getDomain(domainName).getFileManager();
+				manager.removeDirectory("/waveforms/PortListenerTest");
+			} catch (IOException | ConnectionException | ResourceNotFoundException | CORBAException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				System.err.println("Clean this up eventaully");
+			}
+		}
+	}
+	
+	//TODO: Make this a test
 	@Test
 	public void snippets() throws Exception{
 		//Get your component
@@ -105,7 +185,6 @@ public class RedhawkComponentImplIT extends RedhawkTestBase{
 		if(!component.started())
 			component.start();
 	}
-	//SNIPPET
 	
 	@Test
 	public void testAccessToComponentProperties() throws ResourceNotFoundException, MultipleResourceException{

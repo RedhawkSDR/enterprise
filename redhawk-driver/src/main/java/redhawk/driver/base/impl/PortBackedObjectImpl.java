@@ -76,17 +76,17 @@ public abstract class PortBackedObjectImpl<TParsedClass> extends QueryableResour
     		Boolean foundPortMatch = false;
     		RedhawkPort usesPort = null, providesPort = null;
     		
-    		//TODO: Make sure one of the ports is uses and the other provides
-        	//Get Ports availabel to for this object 
+        	//Get Ports available to for this object 
     		for(RedhawkPort port : this.getPorts()) {
-				String portName = port.getName().replaceAll("_in", "").replaceAll("_out", "");
+				String portRepId = port.getRepId();
 				String portType = port.getType();
+				
 				for(RedhawkPort connectToPort : resource.getPorts()) {
-					String connectPortName = connectToPort.getName().replaceAll("_in", "").replaceAll("_out", "");
+					String connectPortId = connectToPort.getRepId();
 					String connectPortType = connectToPort.getType();
 					
-					//If port types aren't equal and name equavilent make a connection
-					if(!connectPortType.equals(portType) && portName.equals(connectPortName)) {						
+					//If port types aren't equal and interface(repId) make a connection
+					if(!connectPortType.equals(portType) && portRepId.equals(connectPortId)) {						
 						//If first match found fill in variables for connect
 						if(!foundPortMatch) {
 							if(portType.equals(RedhawkPort.PORT_TYPE_USES)) {
@@ -96,7 +96,8 @@ public abstract class PortBackedObjectImpl<TParsedClass> extends QueryableResour
 								usesPort = connectToPort;
 								providesPort = port;
 							}
-								
+							
+							foundPortMatch = true;
 						}else {
 							throw new PortException("Multiple ports match with these components specify port names to match");
 						}
@@ -108,7 +109,7 @@ public abstract class PortBackedObjectImpl<TParsedClass> extends QueryableResour
     		if(usesPort!=null && providesPort!=null) {
         		usesPort.connect(providesPort);    			
     		}else {
-    			throw new PortException("No matching ports within these two components");
+    			throw new PortException("No matching ports between these two components");
     		}
     	} catch (ResourceNotFoundException e) {
 			throw new PortException("Unable to connect ports", e);

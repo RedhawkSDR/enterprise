@@ -400,31 +400,4 @@ public class RedhawkPortImpl implements RedhawkPort {
 		builder.append("]");
 		return builder.toString();
 	}
-
-	@Override
-	public void connect(RedhawkPort port) throws PortException {
-		connect(port, "rhdriver_" + UUID.randomUUID());
-	}
-
-	@Override
-	public void connect(RedhawkPort port, String connectionId) throws PortException {
-		// Initial check for type difference
-		if (this.getType().equals(port.getType()))
-			throw new PortException("Cannot connect ports of the same type");
-
-		try {
-
-			CF.Port aPort = null;
-			if (this.getType().equals(RedhawkPort.PORT_TYPE_USES)) {
-				aPort = CF.PortHelper.narrow(this.getCorbaObject());
-
-				aPort.connectPort(port.getCorbaObject(), connectionId);
-			} else {
-				CF.PortHelper.narrow(port.getCorbaObject());
-				aPort.connectPort(this.getCorbaObject(), connectionId);
-			}
-		} catch (InvalidPort | OccupiedPort e) {
-			throw new PortException("Unable to connect ports", e);
-		}
-	}
 }

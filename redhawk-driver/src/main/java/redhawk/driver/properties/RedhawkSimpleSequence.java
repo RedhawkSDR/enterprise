@@ -49,6 +49,11 @@ public class RedhawkSimpleSequence extends RedhawkProperty {
         }
     }
     
+	@Override
+	public <T> void setValue(T value) throws Exception {
+		
+	}
+    
     public void addValue(Object value) throws Exception {
     	values.add(value);
         Any any = AnyUtils.toAnySequence(values.toArray(), tcKind);
@@ -62,7 +67,7 @@ public class RedhawkSimpleSequence extends RedhawkProperty {
     }
     
     public void addValues(Object[] valuesToAdd) throws Exception{
-        for(Object obj : values){
+        for(Object obj : valuesToAdd){
         	this.values.add(obj);
         }
         Any any = AnyUtils.toAnySequence(values.toArray(), tcKind);
@@ -77,7 +82,6 @@ public class RedhawkSimpleSequence extends RedhawkProperty {
     
     public List<Object> getValues(){
     	return values;
-    }
-    
+    }    
     
 }

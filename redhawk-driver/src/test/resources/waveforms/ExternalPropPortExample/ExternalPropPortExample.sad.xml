@@ -11,6 +11,9 @@
     <componentfile id="psd_5b922e36-0564-420e-8abe-98ad31614cdd" type="SPD">
       <localfile name="/components/rh/psd/psd.spd.xml"/>
     </componentfile>
+    <componentfile id="DataConverter_985b1529-e39a-426b-821e-8ec1f801610d" type="SPD">
+      <localfile name="/components/rh/DataConverter/DataConverter.spd.xml"/>
+    </componentfile>
   </componentfiles>
   <partitioning>
     <componentplacement>
@@ -46,6 +49,15 @@
         <usagename>SigGen_2</usagename>
         <findcomponent>
           <namingservice name="SigGen_2"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
+    <componentplacement>
+      <componentfileref refid="DataConverter_985b1529-e39a-426b-821e-8ec1f801610d"/>
+      <componentinstantiation id="DataConverter_1" startorder="4">
+        <usagename>DataConverter_1</usagename>
+        <findcomponent>
+          <namingservice name="DataConverter_1"/>
         </findcomponent>
       </componentinstantiation>
     </componentplacement>
@@ -93,6 +105,11 @@
     <port externalname="hardLimitPort_in">
       <providesidentifier>dataFloat_in</providesidentifier>
       <componentinstantiationref refid="HardLimit_1"/>
+    </port>
+    <port externalname="dataConverterFloat_in">
+      <description>External Port for pushing in Float data</description>
+      <providesidentifier>dataFloat</providesidentifier>
+      <componentinstantiationref refid="DataConverter_1"/>
     </port>
   </externalports>
   <externalproperties>

@@ -108,7 +108,7 @@ public class CORBAThreadIT extends RedhawkTestBase {
 
 			// TC count should still be same as original
 			assertEquals("Thread count should not have moved up", originalTC, this.getThreadCount());
-		} catch (IOException e) {
+		} catch (ResourceNotFoundException e) {
 			fail("Test failure " + e.getMessage());
 		} finally {
 			driver.disconnect();

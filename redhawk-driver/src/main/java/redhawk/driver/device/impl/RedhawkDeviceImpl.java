@@ -41,7 +41,7 @@ import CF.LifeCyclePackage.ReleaseError;
 import CF.ResourcePackage.StartError;
 import CF.ResourcePackage.StopError;
 import redhawk.driver.RedhawkUtils;
-import redhawk.driver.base.impl.PortBackedObjectImpl;
+import redhawk.driver.base.impl.RedhawkSoftwareComponentImpl;
 import redhawk.driver.device.AdminState;
 import redhawk.driver.device.OperationalState;
 import redhawk.driver.device.RedhawkDevice;
@@ -58,7 +58,7 @@ import redhawk.driver.properties.RedhawkStructSequence;
  * as a user.  
  *
  */
-public class RedhawkDeviceImpl extends PortBackedObjectImpl<Device> implements RedhawkDevice {
+public class RedhawkDeviceImpl extends RedhawkSoftwareComponentImpl<Device> implements RedhawkDevice {
 
 	private static Logger logger = Logger.getLogger(RedhawkDeviceImpl.class.getName());
     private RedhawkDeviceManager deviceManager;

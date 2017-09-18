@@ -41,6 +41,7 @@ import CF.ResourcePackage.StartError;
 import CF.ResourcePackage.StopError;
 import redhawk.driver.RedhawkUtils;
 import redhawk.driver.application.RedhawkApplication;
+import redhawk.driver.base.PortBackedObject;
 import redhawk.driver.base.impl.QueryableResourceImpl;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.component.impl.RedhawkComponentImpl;
@@ -51,17 +52,21 @@ import redhawk.driver.exceptions.ApplicationStartException;
 import redhawk.driver.exceptions.ApplicationStopException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.exceptions.PortException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.logging.RedhawkLogLevel;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.port.impl.RedhawkExternalPortImpl;
 import redhawk.driver.port.impl.RedhawkPortImpl;
 import redhawk.driver.properties.RedhawkProperty;
+import redhawk.driver.xml.model.sca.prf.Properties;
 import redhawk.driver.xml.model.sca.sad.Externalports;
 import redhawk.driver.xml.model.sca.sad.Externalproperties;
 import redhawk.driver.xml.model.sca.sad.Port;
 import redhawk.driver.xml.model.sca.sad.Property;
 import redhawk.driver.xml.model.sca.sad.Softwareassembly;
+import redhawk.driver.xml.model.sca.scd.Softwarecomponent;
+import redhawk.driver.xml.model.sca.spd.Softpkg;
 
 public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> implements RedhawkApplication {
 
@@ -151,53 +156,62 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 	}
 
 	@Override
-	public RedhawkPort getPort(String name) throws ResourceNotFoundException, IOException {
-		for (Port port : getAssembly().getExternalports().getPorts()) {
-			if (port.getExternalname().matches(name)) {
-				String portName = port.getUsesidentifier() != null ? port.getUsesidentifier()
-						: port.getProvidesidentifier();
-				String compName = port.getComponentinstantiationref().getRefid();
-				try {
-					RedhawkPortImpl myPort = (RedhawkPortImpl) getComponentByName(compName + ".*").getPort(portName);
+	public RedhawkPort getPort(String name) throws ResourceNotFoundException {
+		try {
+			for (Port port : getAssembly().getExternalports().getPorts()) {
+				if (port.getExternalname().matches(name)) {
+					String portName = port.getUsesidentifier() != null ? port.getUsesidentifier()
+							: port.getProvidesidentifier();
+					String compName = port.getComponentinstantiationref().getRefid();
+					try {
+						RedhawkPortImpl myPort = (RedhawkPortImpl) getComponentByName(compName + ".*").getPort(portName);
 
-					return new RedhawkExternalPortImpl(myPort, port.getDescription(), port.getExternalname(), port.getComponentinstantiationref().getRefid());
-				} catch (MultipleResourceException e) {
-					logger.severe(e.getMessage());
-				} catch (Exception e) {
-					logger.severe(e.getMessage());
+						return new RedhawkExternalPortImpl(myPort, port.getDescription(), port.getExternalname(), port.getComponentinstantiationref().getRefid());
+					} catch (MultipleResourceException e) {
+						logger.severe(e.getMessage());
+					} catch (Exception e) {
+						logger.severe(e.getMessage());
+					}
 				}
 			}
+		} catch (IOException e) {
+			throw new ResourceNotFoundException("Unable to retrieve external ports", e);
 		}
 
 		throw new ResourceNotFoundException("Could not find the external port specified by: " + name);
 	}
 
 	@Override
-	public List<RedhawkPort> getPorts() throws IOException {
+	public List<RedhawkPort> getPorts() throws ResourceNotFoundException {
 		List<RedhawkPort> externalPorts = new ArrayList<RedhawkPort>();
-		Externalports extPorts = getAssembly().getExternalports();
+		Externalports extPorts;
+		try {
+			extPorts = getAssembly().getExternalports();
+		
+			if (extPorts != null) {
+				for (Port port : extPorts.getPorts()) {
+					String portName = port.getUsesidentifier() != null ? port.getUsesidentifier()
+							: port.getProvidesidentifier();
+					String compName = port.getComponentinstantiationref().getRefid();
+					try {
+						RedhawkPort rhPort = getComponentByName(compName + ".*").getPort(portName);
+						RedhawkExternalPortImpl exPort = new RedhawkExternalPortImpl((RedhawkPortImpl) rhPort);
 
-		if (extPorts != null) {
-			for (Port port : extPorts.getPorts()) {
-				String portName = port.getUsesidentifier() != null ? port.getUsesidentifier()
-						: port.getProvidesidentifier();
-				String compName = port.getComponentinstantiationref().getRefid();
-				try {
-					RedhawkPort rhPort = getComponentByName(compName + ".*").getPort(portName);
-					RedhawkExternalPortImpl exPort = new RedhawkExternalPortImpl((RedhawkPortImpl) rhPort);
-
-					// Adding additional methods.
-					exPort.setExternalName(port.getExternalname());
-					exPort.setDescription(port.getDescription());
-					exPort.setComponentReferenceId(port.getComponentinstantiationref().getRefid());
-					
-					externalPorts.add(exPort);
-				} catch (MultipleResourceException e) {
-					logger.severe(e.getMessage());
-				} catch (Exception e) {
-					logger.severe(e.getMessage());
+						// Adding additional methods.
+						exPort.setExternalName(port.getExternalname());
+						exPort.setDescription(port.getDescription());
+						exPort.setComponentReferenceId(port.getComponentinstantiationref().getRefid());
+						
+						externalPorts.add(exPort);
+					} catch (MultipleResourceException e) {
+						logger.severe(e.getMessage());
+					} catch (Exception e) {
+						logger.severe(e.getMessage());
+					}
 				}
 			}
+		} catch (IOException e1) {
+			throw new ResourceNotFoundException("Unable to access external ports from SAD.xml", e1);
 		}
 
 		return externalPorts;
@@ -318,5 +332,11 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 		}
 		
 		return compToImpl;
+	}
+
+	@Override
+	public Map<String, RedhawkPort> ports() throws ResourceNotFoundException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -236,4 +236,9 @@ public class RedhawkApplicationImplIT extends RedhawkTestBase {
 			assertEquals("cpp", impl);
 		}
 	}
+	
+	@Test
+	public void testConnectApplication() {
+		
+	}
 }

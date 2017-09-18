@@ -21,6 +21,7 @@ package redhawk.driver.base;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.PortException;
@@ -32,35 +33,92 @@ import redhawk.driver.xml.model.sca.spd.Softpkg;
 
 public interface PortBackedObject extends QueryableResource {
 	/**
-	 * @return {@link java.util.Map} with port name as the key and {@link RedhawkPort} as the value. 
+	 * @return {@link java.util.Map} with port name as the key and
+	 *         {@link RedhawkPort} as the value.
 	 * @throws ResourceNotFoundException
 	 */
 	Map<String, RedhawkPort> ports() throws ResourceNotFoundException;
-	
+
 	/**
 	 * All the ports available for this object.
+	 * 
 	 * @return
 	 * @throws ResourceNotFoundException
 	 */
-    List<RedhawkPort> getPorts() throws ResourceNotFoundException;
-    
+	List<RedhawkPort> getPorts() throws ResourceNotFoundException;
+
 	/**
-	 * Connect two REDHAWK Ports.
-	 * 
-	 * @param port
+	 * @param portName
+	 *            Name of the port to retrieve.
+	 * @return A RedhawkPort object.
+	 * @throws ResourceNotFoundException
+	 * @throws MultipleResourceException
 	 */
-	void connect(PortBackedObject port) throws PortException;
+	RedhawkPort getPort(String portName) throws ResourceNotFoundException, MultipleResourceException;
 	
 	/**
-	 * Connect two REDHAWK Ports.
+	 * Connect to another Portbacked object.
+	 * 
+	 * @param resource
+	 */
+	default void connect(PortBackedObject resource) throws PortException {
+		// No Id passed create one
+		connect(resource, "rhdriver-" + UUID.randomUUID().toString());
+	}
+
+	/**
+	 * Connect to another Portbacked object and specify the connectionId
 	 * 
 	 * @param port
-	 * @throws PortException 
+	 * @throws PortException
 	 */
-	void connect(PortBackedObject port, String connectionId) throws PortException;
-	
+	default void connect(PortBackedObject resource, String connectionId) throws PortException {
+		try {
+			Boolean foundPortMatch = false;
+			String usesPortName = null, providesPortName = null;
+
+			for (RedhawkPort port : this.getPorts()) {
+				String portRepId = port.getRepId();
+				String portType = port.getType();
+
+				for (RedhawkPort connectToPort : resource.getPorts()) {
+					String connectPortId = connectToPort.getRepId();
+					String connectPortType = connectToPort.getType();
+					//If port types aren't equal and interface(repId) make a connection
+					if(!connectPortType.equals(portType) && portRepId.equals(connectPortId)) {						
+						//If first match found fill in variables for connect
+						if(!foundPortMatch) {
+							if(portType.equals(RedhawkPort.PORT_TYPE_USES)) {
+								usesPortName = port.getName();
+								providesPortName = connectToPort.getName();
+							}else {
+								usesPortName = connectToPort.getName();
+								providesPortName = port.getName();
+							}
+							
+							foundPortMatch = true;
+						}else {
+							//Multiple matches user needs to specify which ports to connect
+							throw new PortException("Multiple ports match with these components specify port names to match");
+						}
+					}
+				}
+			}
+			
+    		//Connect the matched ports
+    		if(usesPortName!=null && providesPortName!=null) {
+    			connect(resource, connectionId, usesPortName, providesPortName);
+    		}else {
+    			throw new PortException("No matching ports between these two components");
+    		}
+		} catch (ResourceNotFoundException ex) {
+			throw new PortException("Unable to connect ports", ex);
+		}
+	}
+
 	/**
-	 * Specify two ports to connect by their name. 
+	 * Connect to another PortbackedObject object by specifying connectionId,
+	 * and usesPortName and providesPortName. 
 	 * 
 	 * @param port
 	 * @param connectionId
@@ -68,33 +126,31 @@ public interface PortBackedObject extends QueryableResource {
 	 * @param providesPortName
 	 * @throws PortException
 	 */
-	void connect(PortBackedObject port, String connectionId, String usesPortName, String providesPortName) throws PortException;
-	
-    /**
-     * @param portName Name of the port to retrieve.
-     * @return
-     * 	A RedhawkPort object. 
-     * @throws ResourceNotFoundException
-     * @throws MultipleResourceException
-     */
-    RedhawkPort getPort(String portName) throws ResourceNotFoundException, MultipleResourceException;
-	
-    /**
-     * @return The Softwarecomponent for this object. 
-     * @throws ResourceNotFoundException
-     */
-    Softwarecomponent getSoftwareComponent() throws ResourceNotFoundException;
-	
-    /**
-     * @return The Software Package for the object. 
-     * @throws ResourceNotFoundException
-     */
-    Softpkg getComponentAssembly() throws ResourceNotFoundException;
-    
-    /**
-     * 
-     * @return Properties related to this object. 
-     * @throws ResourceNotFoundException
-     */
-	Properties getPropertyConfiguration() throws ResourceNotFoundException;
+	default void connect(PortBackedObject resource, String connectionId, String usesPortName, String providesPortName)
+			throws PortException {
+		RedhawkPort usesPort = null, providesPort = null;
+
+		try {
+			usesPort = this.getPort(usesPortName);
+			providesPort = resource.getPort(providesPortName);
+		} catch (ResourceNotFoundException e) {
+			// Try to see if Component has the providesPortName instead
+			try {
+				providesPort = this.getPort(providesPortName);
+				usesPort = resource.getPort(usesPortName);
+			} catch (ResourceNotFoundException | MultipleResourceException e1) {
+				throw new PortException("Unable to find connection between these two components using port "
+						+ "names provided(uses: " + usesPortName + ", provides: " + providesPortName + ")", e1);
+			}
+		} catch (MultipleResourceException e) {
+			throw new PortException("Multiple ports found with " + usesPortName, e);
+		}
+
+		// Connect the matched ports
+		if (usesPort != null && providesPort != null) {
+			usesPort.connect(providesPort, connectionId);
+		} else {
+			throw new PortException("No matching ports between these two components");
+		}
+	}
 }

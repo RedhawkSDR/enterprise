@@ -100,7 +100,7 @@ public class RedhawkConnectionManagerIT extends RedhawkDeviceTestBase{
 			
 			//Test disconnect
 			this.disconnect();
-		} catch (MultipleResourceException | ApplicationCreationException | CORBAException | ResourceNotFoundException | IOException e) {
+		} catch (MultipleResourceException | ApplicationCreationException | CORBAException | ResourceNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			fail("Unable to run test "+e.getMessage());

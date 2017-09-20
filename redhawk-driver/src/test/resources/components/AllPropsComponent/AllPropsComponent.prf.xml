@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties PUBLIC "-//JTRS//DTD SCA V2.2.2 PRF//EN" "properties.dtd">
+<properties>
+  <simple id="simple_char" mode="readwrite" type="char">
+    <value>a</value>
+    <kind kindtype="property"/>
+    <action type="external"/>
+  </simple>
+  <simple id="simple_double" mode="readwrite" type="double">
+    <value>2.0</value>
+    <kind kindtype="property"/>
+    <action type="external"/>
+  </simple>
+  <simple id="simple_string" mode="readwrite" type="string">
+    <value>World</value>
+    <kind kindtype="property"/>
+    <action type="external"/>
+  </simple>
+  <simple id="simple_float" mode="readwrite" type="float">
+    <value>1.0</value>
+    <kind kindtype="property"/>
+    <action type="external"/>
+  </simple>
+  <simple id="simple_long" mode="readwrite" type="long">
+    <value>1</value>
+    <kind kindtype="property"/>
+    <action type="external"/>
+  </simple>
+  <simple id="simple_longlong" mode="readwrite" type="longlong">
+    <value>20000</value>
+    <kind kindtype="property"/>
+    <action type="external"/>
+  </simple>
+  <simple id="simple_ulong" mode="readwrite" type="ulong">
+    <value>200</value>
+    <kind kindtype="property"/>
+    <action type="external"/>
+  </simple>
+  <simple id="simple_ulonglong" mode="readwrite" type="ulonglong">
+    <value>127</value>
+    <kind kindtype="property"/>
+    <action type="external"/>
+  </simple>
+  <simple id="simple_utctime" mode="readwrite" type="utctime">
+    <kind kindtype="property"/>
+    <action type="external"/>
+  </simple>
+  <simplesequence id="examples" mode="readwrite" type="string">
+    <values>
+      <value>Foo</value>
+      <value>Bar</value>
+      <value>Hello</value>
+      <value>World</value>
+    </values>
+    <kind kindtype="property"/>
+    <action type="external"/>
+  </simplesequence>
+  <struct id="cartoon_character" mode="readwrite">
+    <simple id="age" type="double">
+      <value>10.0</value>
+    </simple>
+    <simple id="name" type="string">
+      <value>SpongeBob</value>
+    </simple>
+    <simple id="friend" type="string">
+      <value>Patrick</value>
+    </simple>
+    <configurationkind kindtype="property"/>
+  </struct>
+  <structsequence id="main_characters" mode="readwrite">
+    <struct id="matrix">
+      <simple id="actor_name" type="string">
+        <value>Keannu Reaves</value>
+      </simple>
+    </struct>
+    <structvalue>
+      <simpleref refid="actor_name" value="Keannu Reaves"/>
+    </structvalue>
+    <structvalue>
+      <simpleref refid="actor_name" value="Laurence Fishburne"/>
+    </structvalue>
+    <structvalue>
+      <simpleref refid="actor_name" value="Carrie-Anne Moss"/>
+    </structvalue>
+    <configurationkind kindtype="property"/>
+  </structsequence>
+</properties>

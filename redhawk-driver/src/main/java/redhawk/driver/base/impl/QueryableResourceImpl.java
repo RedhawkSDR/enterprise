@@ -36,6 +36,7 @@ import CF.PropertiesHolder;
 import CF.PropertySetHelper;
 import CF.PropertySetOperations;
 import CF.UnknownProperties;
+import redhawk.driver.base.QueryableResource;
 import redhawk.driver.properties.RedhawkProperty;
 import redhawk.driver.properties.RedhawkSimple;
 import redhawk.driver.properties.RedhawkSimpleSequence;
@@ -47,7 +48,7 @@ import redhawk.driver.properties.RedhawkStructSequence;
  *
  * @param <TParsedClass>
  */
-public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObject<TParsedClass> {
+public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObject<TParsedClass> implements QueryableResource{
     private static Logger logger = Logger.getLogger(QueryableResourceImpl.class.getName());
     
     /**
@@ -103,9 +104,21 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
         return null;
     }
     
-    //TODO: Add helper method for setting properties user should just 
-    //be able to pass an object and property name. 
+    public void setPropertyValue(String propertyName, Object propertyValue) throws Exception {
+    	RedhawkProperty property = this.getProperty(propertyName);
     
+    	if(property instanceof RedhawkSimple) {
+    		property.setValue(propertyValue);
+    	}else if(property instanceof RedhawkSimpleSequence){
+    		property.setValue(propertyValue);
+    	}else if(property instanceof RedhawkStruct) {
+    		property.setValue(propertyValue);
+    	}else {
+    		System.err.println("Unhandled property type "+property.getClass().toString());
+    	}
+    }
+    
+    //TODO: Properties currently need to redo this code put in one place 
     private PropertiesHolder query(String ... propertyNames){
         PropertiesHolder ph = new PropertiesHolder();
         ph.value = new DataType[]{};
@@ -139,6 +152,7 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
      * 
      */
     private RedhawkProperty getAndCast(DataType property){
+    	//TODO: Is this still necessary
     	ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
     	Object propertyValue = AnyUtils.convertAny(property.value);
@@ -151,7 +165,7 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
         } else if(propertyValue instanceof Object[]){
             return new RedhawkSimpleSequence(getOrb(), getIor(),  property.id, (Object[]) propertyValue, property.value.type());
         } else {
-            return new RedhawkSimple(getOrb(), getIor(),  property.id, propertyValue);
+            return new RedhawkSimple(getOrb(), getIor(),  property);
         }
     }
     

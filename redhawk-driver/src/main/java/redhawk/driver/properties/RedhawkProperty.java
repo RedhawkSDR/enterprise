@@ -38,12 +38,20 @@ import CF.PropertySetPackage.InvalidConfiguration;
 import CF.PropertySetPackage.PartialConfiguration;
 
 //TODO: Make this an abstract class or something...
-public class RedhawkProperty {
+public abstract class RedhawkProperty {
 	private static Logger logger = Logger.getLogger(RedhawkProperty.class.getName());
-
-	protected String parentObject;
+	
+	protected String parentIOR;
+	
 	protected ORB orb;
 
+	/**
+	 * CORBA representation of property so you can always get back to originals typeCode
+	 * or other information you may need. 
+	 * 
+	 */
+	protected DataType corbaProperty; 
+	
 	/**
 	 * Reset the property value for the specified Id.
 	 * 
@@ -51,11 +59,11 @@ public class RedhawkProperty {
 	 * @param propValue
 	 * @throws Exception
 	 */
-	protected void reconfigure(String propertyId, Any propValue) throws Exception {
+	public void reconfigure(String propertyId, Any propValue) throws Exception {
 		DataType[] propertiesToConfigure = new DataType[] { new DataType(propertyId, propValue) };
 
 		try {
-			PropertySet properties = PropertySetHelper.narrow(orb.string_to_object(parentObject));
+			PropertySet properties = PropertySetHelper.narrow(orb.string_to_object(parentIOR));
 			properties.configure(propertiesToConfigure);
 		} catch (InvalidConfiguration e) {
 			throw new InvalidConfiguration();
@@ -63,7 +71,23 @@ public class RedhawkProperty {
 			throw new PartialConfiguration();
 		}
 	}
+	
+	public abstract <T> void setValue(T value) throws Exception;
+	
+    public Object getValue() {
+        return getValue(true);
+    }
 
+    /**
+     * Whether of not to query actual corba object again for property value 
+     * or to use the one already stored in object. 
+     * 
+     * @param requery
+     * @return
+     */
+	public abstract Object getValue(Boolean requery); 
+	
+	//TODO: Why isn't this just using AnyUtils
 	protected Any createAny(Object objectToCreate) {
 		final Any any = orb.create_any();
 		if (objectToCreate instanceof String) {
@@ -115,6 +139,41 @@ public class RedhawkProperty {
 		}
 
 		return any;
+	}
+	
+	protected Any createAny(Object objectToCreate, TCKind kind) {
+		//Should use AnyUtils for everything that's not a collection
+		final Any any = orb.create_any();
+		if(objectToCreate instanceof Object[]) {
+			Object[] objects = (Object[]) objectToCreate;
+
+			if (objects.length < 1) {
+				logger.log(Level.FINE, "Empty array provided, returning empty any");
+				return any;
+			}
+
+			// determining type based on first entry of array
+        	org.omg.CORBA.TypeCode tcElement = orb.get_primitive_tc(getTCKind(objects[0]));
+        	org.omg.CORBA.TypeCode typeCodeForSequence = orb.create_sequence_tc(objects.length, tcElement);
+
+	        return AnyUtils.toAnySequence(objectToCreate, typeCodeForSequence);			
+		}else if(objectToCreate instanceof Map) {
+			Map objMap = (Map) objectToCreate;
+			List<DataType> dataTypesToInsert = new ArrayList<DataType>();
+
+			for (Object key : objMap.keySet()) {
+				DataType dt = new DataType();
+				dt.id = key + "";
+				dt.value = createAny(objMap.get(key));
+				dataTypesToInsert.add(dt);
+			}
+
+			Any anyObject = orb.create_any();
+			PropertiesHelper.insert(anyObject, dataTypesToInsert.toArray(new DataType[dataTypesToInsert.size()]));
+			return anyObject;			
+		}else {
+			return AnyUtils.toAny(objectToCreate, kind);			
+		}
 	}
 
 	protected TCKind getTCKind(Object objectToCreate) {

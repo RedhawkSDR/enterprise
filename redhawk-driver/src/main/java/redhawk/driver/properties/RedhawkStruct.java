@@ -41,15 +41,24 @@ import CF.PropertiesHelper;
  * Wrapper class for interacting with Structs. 
  */
 public class RedhawkStruct extends RedhawkProperty implements Map<String, Object> {
-	
 	private static Logger logger = Logger.getLogger(RedhawkStruct.class.getName());
+	
+	/**
+	 * Properties for this struct
+	 */
     private List<DataType> structProperties = new ArrayList<DataType>();
+    
+    /**
+     * Root Id for struct
+     */
     private String structId;
+    
+    //TODO: Not sure why this would ever be set???
     private RedhawkStructSequence structSequenceParent;
     
     public RedhawkStruct(ORB orb, String parentObject, String structId, DataType[] struct, RedhawkStructSequence structSequenceParent){
         this.orb = orb;
-        this.parentObject = parentObject;
+        this.parentIOR = parentObject;
         this.structId = structId;
         this.structSequenceParent = structSequenceParent;
         
@@ -62,6 +71,8 @@ public class RedhawkStruct extends RedhawkProperty implements Map<String, Object
     	return structProperties.toArray(new DataType[structProperties.size()]);
     }
     
+    //TODO: Need to requery or minimum requery by default and add option to use cached 
+    //value if it's misleading to me it'll be misleading to users 
     public <T> T getValue(String property){
         for(DataType type : structProperties){
             if(type.id.toLowerCase().matches(property.toLowerCase())){
@@ -82,15 +93,28 @@ public class RedhawkStruct extends RedhawkProperty implements Map<String, Object
         return null;
     }
     
+	@Override
+	public <T> void setValue(T value) throws Exception {
+		try {
+		Map<String, Object> obj = (Map<String, Object>) value;
+		this.setValues(obj);
+		}catch(ClassCastException ex) {
+			throw new Exception("Expecting a value castable to Map<String, Object>");
+		}
+	}
     
     public void setValues(Map<String, Object> valuesToChange) throws Exception {
-        Map<String, Object> values = new HashMap<String, Object>();
         
         for(String key : valuesToChange.keySet()){
+        	System.out.println("Key is "+key);
             for(DataType type : structProperties){
+            	System.out.println("\tId: "+type.id);
+            	System.out.println("\tValue: "+ AnyUtils.convertAny(type.value));
+            	System.out.println("\tType Code: "+type.value.type());
                 if(type.id.toLowerCase().matches(key.toLowerCase())){
-                    type.value = createAny(valuesToChange.get(key));
-                    values.put(type.id, valuesToChange.get(key));
+                    type.value = createAny(valuesToChange.get(key), type.value.type().kind());
+                	System.out.println("\tFound match new Value: "+ AnyUtils.convertAny(type.value));
+                    System.out.println("\tFound match replacing with: "+type.value.type());
                 }
             }   
         }
@@ -268,5 +292,4 @@ public class RedhawkStruct extends RedhawkProperty implements Map<String, Object
 		build.append("]");
 		return build.toString();
 	}
-
 }

@@ -38,4 +38,15 @@ public interface QueryableResource extends RedhawkLogging{
      */
     public <T> T getProperty(String ... propertyNames);
     
+    /**
+     * Helper method for setting a property. 
+     * 
+     * @param propertyName
+     * 	Name of the value
+     * @param propertyValue
+     * 	Value representing the property. 
+  	 *  TODO: Add table for simple/simpleseq/struct/structsequence
+     */
+    public void setPropertyValue(String propertyName, Object propertyValue) throws Exception;
+    
 }

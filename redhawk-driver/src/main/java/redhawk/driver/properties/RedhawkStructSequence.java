@@ -44,7 +44,7 @@ public class RedhawkStructSequence extends RedhawkProperty {
     
     public RedhawkStructSequence(ORB orb, String parentObject, String id, Any[] propertyValue) {
         this.sequenceId = id;
-        this.parentObject = parentObject;
+        this.parentIOR = parentObject;
         this.orb = orb;
         for(int i = 0; i < propertyValue.length; i++){
             DataType[] struct = (DataType[]) AnyUtils.convertAny(propertyValue[i]);
@@ -80,7 +80,7 @@ public class RedhawkStructSequence extends RedhawkProperty {
 	        DataType[] ss2I = dataTypesBuilder.toArray(new DataType[dataTypesBuilder.size()]);
 	        PropertiesHelper.insert(structToInsert, ss2I);
 	        corbaSeq.add(structToInsert);
-	        sequence.add(new RedhawkStruct(orb, parentObject, null, ss2I, this));
+	        sequence.add(new RedhawkStruct(orb, parentIOR, null, ss2I, this));
     	}
     	
         reconfigureStructSequence();   
@@ -97,7 +97,7 @@ public class RedhawkStructSequence extends RedhawkProperty {
         DataType[] ss2I = dataTypesBuilder.toArray(new DataType[dataTypesBuilder.size()]);
         PropertiesHelper.insert(structToInsert, ss2I);
         corbaSeq.add(structToInsert);
-        sequence.add(new RedhawkStruct(orb, parentObject, null, ss2I, this));
+        sequence.add(new RedhawkStruct(orb, parentIOR, null, ss2I, this));
         reconfigureStructSequence();   
     }
     
@@ -233,6 +233,10 @@ public class RedhawkStructSequence extends RedhawkProperty {
         Any newAny = AnyUtils.toAny(newSequence, TCKind.tk_any);
         reconfigure(sequenceId, newAny);
     }
-    
-    
+
+	@Override
+	public <T> void setValue(T value) throws Exception {
+		// TODO Auto-generated method stub
+		
+	} 
 }

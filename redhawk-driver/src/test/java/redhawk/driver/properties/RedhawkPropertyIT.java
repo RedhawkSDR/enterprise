@@ -53,8 +53,7 @@ public class RedhawkPropertyIT extends RedhawkTestBase{
 	
 	@Before
 	public void setup() throws ResourceNotFoundException, ApplicationCreationException, CORBAException, MultipleResourceException{
-		driver.getDomain("REDHAWK_DEV").createApplication(applicationName, new File("src/test/resources/waveforms/rh/testWaveform.sad.xml"));
-		application = driver.getApplication("REDHAWK_DEV/"+applicationName);
+		application = driver.getDomain("REDHAWK_DEV").createApplication(applicationName, new File("src/test/resources/waveforms/rh/testWaveform.sad.xml"));
 		assertNotNull(application);
 		components = application.getComponents();
 	}

@@ -216,6 +216,43 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 
 		return externalPorts;
 	}
+	
+	@Override
+	public Map<String, RedhawkPort> ports() throws ResourceNotFoundException {
+		//TODO: Remove code duplication
+		Map<String, RedhawkPort> externalPorts = new HashMap<String, RedhawkPort>();
+		Externalports extPorts;
+		try {
+			extPorts = getAssembly().getExternalports();
+		
+			if (extPorts != null) {
+				for (Port port : extPorts.getPorts()) {
+					String portName = port.getUsesidentifier() != null ? port.getUsesidentifier()
+							: port.getProvidesidentifier();
+					String compName = port.getComponentinstantiationref().getRefid();
+					try {
+						RedhawkPort rhPort = getComponentByName(compName + ".*").getPort(portName);
+						RedhawkExternalPortImpl exPort = new RedhawkExternalPortImpl((RedhawkPortImpl) rhPort);
+
+						// Adding additional methods.
+						exPort.setExternalName(port.getExternalname());
+						exPort.setDescription(port.getDescription());
+						exPort.setComponentReferenceId(port.getComponentinstantiationref().getRefid());
+						
+						externalPorts.put(port.getExternalname(), exPort);
+					} catch (MultipleResourceException e) {
+						logger.severe(e.getMessage());
+					} catch (Exception e) {
+						logger.severe(e.getMessage());
+					}
+				}
+			}
+		} catch (IOException e1) {
+			throw new ResourceNotFoundException("Unable to access external ports from SAD.xml", e1);
+		}
+		
+		return externalPorts;
+	}
 
 	/**
 	 * At this level the only properties that will be returned are external.
@@ -332,11 +369,5 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 		}
 		
 		return compToImpl;
-	}
-
-	@Override
-	public Map<String, RedhawkPort> ports() throws ResourceNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

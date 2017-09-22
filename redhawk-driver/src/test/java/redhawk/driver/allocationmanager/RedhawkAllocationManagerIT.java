@@ -73,7 +73,6 @@ public class RedhawkAllocationManagerIT extends RedhawkDeviceTestBase{
 	}
 	
 	@Test
-	@Ignore("Fix this test")
 	public void testAllocateAndDeallocateADevice(){
 		//Allocate a device
 		this.allocateDevice();

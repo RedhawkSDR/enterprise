@@ -26,7 +26,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import redhawk.driver.device.AdminState;
@@ -37,7 +36,6 @@ import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.testutils.RedhawkDeviceTestBase;
 
-@Ignore
 public class RedhawkDeviceImplIT extends RedhawkDeviceTestBase {
 	@Test
 	public void testAllocate() throws MultipleResourceException, CORBAException, ResourceNotFoundException {

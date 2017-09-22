@@ -22,23 +22,18 @@ package redhawk.driver.properties;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
-import org.omg.CORBA.TCKind;
 import org.ossie.properties.AnyUtils;
 
 import CF.DataType;
-import CF.PropertiesHelper;
 import CF.PropertySet;
 import CF.PropertySetHelper;
 import CF.PropertySetPackage.InvalidConfiguration;
 import CF.PropertySetPackage.PartialConfiguration;
-import redhawk.driver.RedhawkUtils;
 
-//TODO: Make this an abstract class or something...
 public abstract class RedhawkProperty {
 	private static Logger logger = Logger.getLogger(RedhawkProperty.class.getName());
 	
@@ -88,64 +83,27 @@ public abstract class RedhawkProperty {
      */
 	public abstract <T> T getValue(Boolean requery); 
 	
-	protected Any createAny(Object objectToCreate, TCKind kind) {
-		//Should use AnyUtils for everything that's not a collection
-		final Any any = orb.create_any();
-		
-		if(objectToCreate instanceof Object[]) {
-			Object[] objects = (Object[]) objectToCreate;
-
-			if (objects.length < 1) {
-				logger.log(Level.FINE, "Empty array provided, returning empty any");
-				return any;
-			}
-
-			// determining type based on first entry of array
-        	org.omg.CORBA.TypeCode tcElement = orb.get_primitive_tc(getTCKind(objects[0]));
-        	org.omg.CORBA.TypeCode typeCodeForSequence = orb.create_sequence_tc(objects.length, tcElement);
-
-	        return AnyUtils.toAnySequence(objectToCreate, typeCodeForSequence);			
-		}else if(objectToCreate instanceof Map) {
-			Map objMap = (Map) objectToCreate;
-			List<DataType> dataTypesToInsert = new ArrayList<DataType>();
-
-			for (Object key : objMap.keySet()) {
-				DataType dt = new DataType();
-				dt.id = key + "";
-				dt.value = RedhawkUtils.createAny(this.orb, objMap.get(key));
-				dataTypesToInsert.add(dt);
-			}
-
-			Any anyObject = orb.create_any();
-			PropertiesHelper.insert(anyObject, dataTypesToInsert.toArray(new DataType[dataTypesToInsert.size()]));
-			return anyObject;			
-		}else {
-			return AnyUtils.toAny(objectToCreate, kind);			
-		}
+	//TODO: Probably move this over to REHDAWKUtils 
+	protected void dataTypeToJavaObjectConverter(Map<String, Object> struct, DataType type) {
+		Object propertyValue = AnyUtils.convertAny(type.value);
+		if(propertyValue instanceof Object[]) {
+    		List<Object> tempList = new ArrayList<>();
+    		Object[] tempArray = (Object[]) propertyValue;
+    		
+    		if(tempArray[0] instanceof DataType) {
+    			//Use recursion
+    			dataTypeToJavaObjectConverter(struct, (DataType)tempArray[0]);
+    		}else {
+        		for(Object obj : tempArray) {
+        			tempList.add(obj);
+        		}
+        		
+        		struct.put(type.id, tempList);    			
+    		}
+    	}else if(propertyValue instanceof Object) {
+    		struct.put(type.id, propertyValue);
+    	}else {
+    		logger.severe("Not handing Struct types of "+propertyValue.getClass());
+    	}		
 	}
-
-	protected TCKind getTCKind(Object objectToCreate) {
-
-		if (objectToCreate instanceof String) {
-			return TCKind.tk_string;
-		} else if (objectToCreate instanceof Short) {
-			return TCKind.tk_short;
-		} else if (objectToCreate instanceof Boolean) {
-			return TCKind.tk_boolean;
-		} else if (objectToCreate instanceof Long) {
-			return TCKind.tk_longlong;
-		} else if (objectToCreate instanceof Character) {
-			return TCKind.tk_char;
-		} else if (objectToCreate instanceof Double) {
-			return TCKind.tk_double;
-		} else if (objectToCreate instanceof Float) {
-			return TCKind.tk_float;
-		} else if (objectToCreate instanceof Integer) {
-			return TCKind.tk_long;
-		} else if (objectToCreate instanceof Byte) {
-			return TCKind.tk_octet;
-		}
-		return TCKind.tk_any; // TOOO, probably not a good idea
-	}
-
 }

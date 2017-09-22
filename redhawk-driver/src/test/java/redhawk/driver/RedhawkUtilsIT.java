@@ -246,7 +246,6 @@ public class RedhawkUtilsIT {
 	}
 
 	@Test
-	@Ignore
 	public void testConvertAny() {
 		PropertyChange change = new  PropertyChange();
 		change.setSourceId("sourceId");

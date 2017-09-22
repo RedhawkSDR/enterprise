@@ -34,16 +34,128 @@ public abstract class AllPropsComponent_base extends Component {
     public final static Logger logger = Logger.getLogger(AllPropsComponent_base.class.getName());
 
     /**
-     * The property hello
+     * The property simple_char
      * If the meaning of this property isn't clear, a description should be added.
      *
      * @generated
      */
-    public final StringProperty hello =
+    public final CharProperty simple_char =
+        new CharProperty(
+            "simple_char", //id
+            null, //name
+            'a', //default value
+            Mode.READWRITE, //mode
+            Action.EXTERNAL, //action
+            new Kind[] {Kind.PROPERTY}
+            );
+    
+    /**
+     * The property simple_double
+     * If the meaning of this property isn't clear, a description should be added.
+     *
+     * @generated
+     */
+    public final DoubleProperty simple_double =
+        new DoubleProperty(
+            "simple_double", //id
+            null, //name
+            2.0, //default value
+            Mode.READWRITE, //mode
+            Action.EXTERNAL, //action
+            new Kind[] {Kind.PROPERTY}
+            );
+    
+    /**
+     * The property simple_string
+     * If the meaning of this property isn't clear, a description should be added.
+     *
+     * @generated
+     */
+    public final StringProperty simple_string =
         new StringProperty(
-            "hello", //id
+            "simple_string", //id
             null, //name
             "World", //default value
+            Mode.READWRITE, //mode
+            Action.EXTERNAL, //action
+            new Kind[] {Kind.PROPERTY}
+            );
+    
+    /**
+     * The property simple_float
+     * If the meaning of this property isn't clear, a description should be added.
+     *
+     * @generated
+     */
+    public final FloatProperty simple_float =
+        new FloatProperty(
+            "simple_float", //id
+            null, //name
+            1.0F, //default value
+            Mode.READWRITE, //mode
+            Action.EXTERNAL, //action
+            new Kind[] {Kind.PROPERTY}
+            );
+    
+    /**
+     * The property simple_long
+     * If the meaning of this property isn't clear, a description should be added.
+     *
+     * @generated
+     */
+    public final LongProperty simple_long =
+        new LongProperty(
+            "simple_long", //id
+            null, //name
+            1, //default value
+            Mode.READWRITE, //mode
+            Action.EXTERNAL, //action
+            new Kind[] {Kind.PROPERTY}
+            );
+    
+    /**
+     * The property simple_longlong
+     * If the meaning of this property isn't clear, a description should be added.
+     *
+     * @generated
+     */
+    public final LongLongProperty simple_longlong =
+        new LongLongProperty(
+            "simple_longlong", //id
+            null, //name
+            20000L, //default value
+            Mode.READWRITE, //mode
+            Action.EXTERNAL, //action
+            new Kind[] {Kind.PROPERTY}
+            );
+    
+    /**
+     * The property simple_ulong
+     * If the meaning of this property isn't clear, a description should be added.
+     *
+     * @generated
+     */
+    public final ULongProperty simple_ulong =
+        new ULongProperty(
+            "simple_ulong", //id
+            null, //name
+            200, //default value
+            Mode.READWRITE, //mode
+            Action.EXTERNAL, //action
+            new Kind[] {Kind.PROPERTY}
+            );
+    
+    /**
+     * The property simple_ulonglong
+     * If the meaning of this property isn't clear, a description should be added.
+     *
+     * @generated
+     */
+    public final ULongLongProperty simple_ulonglong =
+        new ULongLongProperty(
+            "simple_ulonglong", //id
+            null, //name
+            127L, //default value
             Mode.READWRITE, //mode
             Action.EXTERNAL, //action
             new Kind[] {Kind.PROPERTY}
@@ -182,13 +294,23 @@ public abstract class AllPropsComponent_base extends Component {
                 Action.EXTERNAL, //action
                 new Kind[] {Kind.CONFIGURE}
                 );
+        public final StringProperty actor_country =
+            new StringProperty(
+                "actor_country", //id
+                null, //name
+                "MagicSchoolBus", //default value
+                Mode.READWRITE, //mode
+                Action.EXTERNAL, //action
+                new Kind[] {Kind.CONFIGURE}
+                );
     
         /**
          * @generated
          */
-        public matrix_struct(String actor_name) {
+        public matrix_struct(String actor_name, String actor_country) {
             this();
             this.actor_name.setValue(actor_name);
+            this.actor_country.setValue(actor_country);
         }
     
         /**
@@ -200,12 +322,19 @@ public abstract class AllPropsComponent_base extends Component {
         public String get_actor_name() {
             return this.actor_name.getValue();
         }
+        public void set_actor_country(String actor_country) {
+            this.actor_country.setValue(actor_country);
+        }
+        public String get_actor_country() {
+            return this.actor_country.getValue();
+        }
     
         /**
          * @generated
          */
         public matrix_struct() {
             addElement(this.actor_name);
+            addElement(this.actor_country);
         }
     
         public String getId() {
@@ -219,9 +348,9 @@ public abstract class AllPropsComponent_base extends Component {
             null, //name
             matrix_struct.class, //type
             StructSequenceProperty.asList(
-                new matrix_struct("Keannu Reaves"),
-                            new matrix_struct("Laurence Fishburne"),
-                            new matrix_struct("Carrie-Anne Moss")
+                new matrix_struct("Keannu Reaves", "MagicSchoolBus"),
+                            new matrix_struct("Laurence Fishburne", "MagicSchoolBus"),
+                            new matrix_struct("Carrie-Anne Moss", "MagicSchoolBus")
                 ), //defaultValue
             Mode.READWRITE, //mode
             new Kind[] { Kind.PROPERTY } //kind
@@ -238,7 +367,21 @@ public abstract class AllPropsComponent_base extends Component {
 
 
         // Properties
-        addProperty(hello);
+        addProperty(simple_char);
+
+        addProperty(simple_double);
+
+        addProperty(simple_string);
+
+        addProperty(simple_float);
+
+        addProperty(simple_long);
+
+        addProperty(simple_longlong);
+
+        addProperty(simple_ulong);
+
+        addProperty(simple_ulonglong);
 
         addProperty(examples);
 

@@ -41,10 +41,6 @@
     <kind kindtype="property"/>
     <action type="external"/>
   </simple>
-  <simple id="simple_utctime" mode="readwrite" type="utctime">
-    <kind kindtype="property"/>
-    <action type="external"/>
-  </simple>
   <simplesequence id="examples" mode="readwrite" type="string">
     <values>
       <value>Foo</value>
@@ -72,15 +68,21 @@
       <simple id="actor_name" type="string">
         <value>Keannu Reaves</value>
       </simple>
+      <simple id="actor_country" type="string">
+        <value>MagicSchoolBus</value>
+      </simple>
     </struct>
     <structvalue>
       <simpleref refid="actor_name" value="Keannu Reaves"/>
+      <simpleref refid="actor_country" value="MagicSchoolBus"/>
     </structvalue>
     <structvalue>
       <simpleref refid="actor_name" value="Laurence Fishburne"/>
+      <simpleref refid="actor_country" value="MagicSchoolBus"/>
     </structvalue>
     <structvalue>
       <simpleref refid="actor_name" value="Carrie-Anne Moss"/>
+      <simpleref refid="actor_country" value="MagicSchoolBus"/>
     </structvalue>
     <configurationkind kindtype="property"/>
   </structsequence>

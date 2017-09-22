@@ -57,7 +57,9 @@ public class RedhawkStruct extends RedhawkProperty {
      */
     private String structId;
     
-    //TODO: Not sure why this would ever be set???
+    /**
+     * Available when struct is part of a StructSequence 
+     */
     private RedhawkStructSequence structSequenceParent;
     
     public RedhawkStruct(ORB orb, String ior, DataType corbaRepOfProperty, DataType[] propertyValue) {
@@ -69,20 +71,22 @@ public class RedhawkStruct extends RedhawkProperty {
         for(DataType dataType : propertyValue){
             structProperties.add(dataType);
             
-	    	this.dataTypeToJavaObjectConverter(dataType);
+	    	this.dataTypeToJavaObjectConverter(struct, dataType);
         }	
     }
     
-    @Deprecated
-    public RedhawkStruct(ORB orb, String parentObject, String structId, DataType[] struct, RedhawkStructSequence structSequenceParent){
+    public RedhawkStruct(ORB orb, String ior, DataType corbaRepOfProperty, DataType[] propertyValue, RedhawkStructSequence structSequenceParent) {
         this.orb = orb;
-        this.parentIOR = parentObject;
-        this.structId = structId;
+        this.parentIOR = ior;
+        this.structId = corbaRepOfProperty.id;
+        this.corbaProperty = corbaRepOfProperty;
         this.structSequenceParent = structSequenceParent;
         
-        for(DataType dataType : struct){
+        for(DataType dataType : propertyValue){
             structProperties.add(dataType);
-        }
+            
+	    	this.dataTypeToJavaObjectConverter(struct, dataType);
+        }	
     }
     
     public DataType[] getDataTypeArray() {
@@ -128,40 +132,18 @@ public class RedhawkStruct extends RedhawkProperty {
 			
 	    	for(DataType innerType : typeArray) {
     	    	//This is updating values in the struct directly 
-    			this.dataTypeToJavaObjectConverter(innerType);  	    		
+    			this.dataTypeToJavaObjectConverter(struct, innerType);  	    		
 	    	}
 		}
 	}
 	
-	private void dataTypeToJavaObjectConverter(DataType type) {
-    	Object propertyValue = AnyUtils.convertAny(type.value);
-		if(propertyValue instanceof Object[]) {
-    		List<Object> tempList = new ArrayList<>();
-    		Object[] tempArray = (Object[]) propertyValue;
-    		
-    		if(tempArray[0] instanceof DataType) {
-    			//Use recursion
-    			dataTypeToJavaObjectConverter((DataType)tempArray[0]);
-    		}else {
-        		for(Object obj : tempArray) {
-        			tempList.add(obj);
-        		}
-        		
-        		struct.put(type.id, tempList);    			
-    		}
-    	}else if(propertyValue instanceof Object) {
-    		struct.put(type.id, propertyValue);
-    	}else {
-    		logger.severe("Not handing Struct types of "+propertyValue.getClass());
-    	}		
-	}
 	
-	
+	@Deprecated
     public void setValues(Map<String, Object> valuesToChange) throws Exception {
         for(String key : valuesToChange.keySet()){
             for(DataType type : structProperties){
                 if(type.id.toLowerCase().matches(key.toLowerCase())){
-                    type.value = createAny(valuesToChange.get(key), type.value.type().kind());
+                    type.value = AnyUtils.toAny(valuesToChange.get(key), type.value.type().kind());
                 }
             }   
         }
@@ -184,6 +166,7 @@ public class RedhawkStruct extends RedhawkProperty {
                 type.value = AnyUtils.toAny(value, type.value.type());
                 
                 //if part of struct sequence
+                //TODO: I don't believe this is possible 
                 if(structSequenceParent != null){
                 	logger.fine("FOUND AN UPDATE REQUEST ON A STRUCT SEQUENCE");
                     updatedStruct = structSequenceParent.updateStruct(this, propertyId, value);
@@ -202,7 +185,7 @@ public class RedhawkStruct extends RedhawkProperty {
             }
         }
     }
-
+    
 	@Override
 	public String toString() {
 		StringBuilder build = new StringBuilder();

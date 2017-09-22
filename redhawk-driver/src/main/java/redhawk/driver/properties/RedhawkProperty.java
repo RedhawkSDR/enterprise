@@ -22,6 +22,7 @@ package redhawk.driver.properties;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.omg.CORBA.Any;
@@ -90,15 +91,21 @@ public abstract class RedhawkProperty {
     		List<Object> tempList = new ArrayList<>();
     		Object[] tempArray = (Object[]) propertyValue;
     		
-    		if(tempArray[0] instanceof DataType) {
-    			//Use recursion
-    			dataTypeToJavaObjectConverter(struct, (DataType)tempArray[0]);
+    		if(tempArray.length>0) {
+    			if(tempArray[0] instanceof DataType) {
+        			//Use recursion
+        			dataTypeToJavaObjectConverter(struct, (DataType)tempArray[0]);
+        		}else {
+            		for(Object obj : tempArray) {
+            			tempList.add(obj);
+            		}
+            		
+            		struct.put(type.id, tempList);    			
+        		}	
     		}else {
-        		for(Object obj : tempArray) {
-        			tempList.add(obj);
-        		}
-        		
-        		struct.put(type.id, tempList);    			
+    			logger.log(Level.WARNING, "No property found at key "+type.id+" struct="+struct);
+    			//TODO: Figure out appropriate way to handle this
+    			//struct.put(type.id, type.value);
     		}
     	}else if(propertyValue instanceof Object) {
     		struct.put(type.id, propertyValue);

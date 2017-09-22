@@ -116,8 +116,14 @@ public class DomainConverter {
 					if (propertyClone.get(struct.getId()) != null) {
 						propertyClone.remove(struct.getId());
 					}
-					Property prop = convertStruct(struct.getId(), (RedhawkStruct) rhProp, struct);
-					properties.add(prop);
+					
+					if(rhProp!=null) {
+						Property prop = convertStruct(struct.getId(), (RedhawkStruct) rhProp, struct);
+						properties.add(prop);						
+					}else {
+						logger.warning("Not converting Id: "+struct.getId()+" Struct: "+struct+" RHStruct: "+rhProp);
+					}
+
 					break;
 				}
 				case "StructSequence": {

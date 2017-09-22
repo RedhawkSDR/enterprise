@@ -3,41 +3,44 @@ package redhawk.driver.properties;
 import static org.junit.Assert.assertEquals;
 
 import java.math.BigInteger;
-import java.util.Map;
 
 import org.junit.Test;
 
 public class RedhawkSimpleIT extends RedhawkPropertyTestBase{
 	@Test
 	public void testRedhawkSimple() throws Exception {
-		for(Map.Entry<String, RedhawkProperty> prop : allPropsWaveform.getProperties().entrySet()) {
-			System.out.println("key: "+prop.getKey());
-			System.out.println("\t "+prop.getValue());
-		}
+		//for(Map.Entry<String, RedhawkProperty> prop : allPropsWaveform.getProperties().entrySet()) {
+		//	System.out.println("key: "+prop.getKey());
+		//	System.out.println("\t "+prop.getValue());
+		//}
 		
 		/*
 		 * Set a char value 
 		 */
 		RedhawkSimple simple = allPropsWaveform.getProperty("simple_char");
-		
-		assertEquals('a', simple.getValue());
+		char charProp = simple.getValue();
+		assertEquals('a', charProp);
 		
 		//Update value
 		simple.setValue('b');
-		assertEquals('b', simple.getValue());
+		charProp = simple.getValue();
+		assertEquals('b', charProp);
 		
 		//Make sure cached value was updated post set only need to do this once 
 		//Since all the other methods are going through the same code
-		assertEquals('b', simple.getValue(false));
+		charProp = simple.getValue(false);
+		assertEquals('b', charProp);
 		
 		/*
 		 * Set a double property value 
 		 */
 		simple = allPropsWaveform.getProperty("simple_double");
 		
-		assertEquals(2.0, simple.getValue());
+		double doubleProp = simple.getValue();
+		assertEquals(2.0, doubleProp, 0);
 		simple.setValue(3.0);
-		assertEquals(3.0, simple.getValue());
+		doubleProp = simple.getValue();
+		assertEquals(3.0, doubleProp, 0);
 		
 		/*
 		 * Set a String property value 
@@ -65,9 +68,11 @@ public class RedhawkSimpleIT extends RedhawkPropertyTestBase{
 		simple = allPropsWaveform.getProperty("simple_long");
 		
 		//Long is down converted to an int by Any implementation
-		assertEquals(1, simple.getValue());
+		int intProp = simple.getValue();
+		assertEquals(1, intProp);
 		simple.setValue(1200);
-		assertEquals(1200, simple.getValue());
+		intProp = simple.getValue();
+		assertEquals(1200, intProp);
 		
 		/*
 		 * Set a Long Long property value 

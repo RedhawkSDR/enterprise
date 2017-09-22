@@ -161,11 +161,11 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
 		if(propertyValue instanceof Any[]){
             return new RedhawkStructSequence(getOrb(), getIor(), property.id, (Any[]) propertyValue);
         } else if(propertyValue instanceof DataType[]) {
-            return new RedhawkStruct(getOrb(), getIor(), property.id, (DataType[]) propertyValue, null);
+            return new RedhawkStruct(getOrb(), getIor(), property, (DataType[]) propertyValue);
         } else if(propertyValue instanceof Object[]){
-            return new RedhawkSimpleSequence(getOrb(), getIor(),  property.id, (Object[]) propertyValue, property.value.type());
+            return new RedhawkSimpleSequence(getOrb(), getIor(),  property.id, (Object[]) propertyValue, property);
         } else {
-            return new RedhawkSimple(getOrb(), getIor(),  property);
+            return new RedhawkSimple(getOrb(), getIor(),  property, propertyValue);
         }
     }
     

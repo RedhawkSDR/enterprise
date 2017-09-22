@@ -24,13 +24,14 @@ import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.omg.CORBA.Any;
 
-import redhawk.driver.eventchannel.listeners.PropertyChange;
 import BULKIO.StreamSRI;
 import CF.DataType;
 import CF.PropertiesHelper;
+import redhawk.driver.eventchannel.listeners.PropertyChange;
 
 public class RedhawkUtilsIT {
 	private static StreamSRI sri1;
@@ -245,6 +246,7 @@ public class RedhawkUtilsIT {
 	}
 
 	@Test
+	@Ignore
 	public void testConvertAny() {
 		PropertyChange change = new  PropertyChange();
 		change.setSourceId("sourceId");

@@ -54,12 +54,6 @@ public class RedhawkStructSequence extends RedhawkProperty {
         }
     }
     
-    //TODO: Make a better toString()
-    public String toString(){
-        return sequence.toString();
-    }
-    
-    
     public DataType[] getDataTypeArray() {
 		Any[] newSequence = corbaSeq.toArray(new Any[corbaSeq.size()]);
         Any newAny = AnyUtils.toAny(newSequence, TCKind.tk_any);
@@ -73,7 +67,7 @@ public class RedhawkStructSequence extends RedhawkProperty {
     	for(Map<String,Object> elements : elementsToAdd){
 	    	List<DataType> dataTypesBuilder = new ArrayList<DataType>();
 	        for( Object key : elements.keySet()){
-	            dataTypesBuilder.add(new DataType(key+"", createAny(elements.get(key))));
+	            dataTypesBuilder.add(new DataType(key+"", createAny(elements.get(key), null)));
 	        }
 	        
 	        Any structToInsert = orb.create_any();
@@ -90,7 +84,7 @@ public class RedhawkStructSequence extends RedhawkProperty {
         List<DataType> dataTypesBuilder = new ArrayList<DataType>();
         Map element = (Map) elementToAdd;
         for( Object key : element.keySet()){
-            dataTypesBuilder.add(new DataType(key+"", createAny(element.get(key))));
+            dataTypesBuilder.add(new DataType(key+"", createAny(element, null)));
         }
         
         Any structToInsert = orb.create_any();
@@ -194,7 +188,7 @@ public class RedhawkStructSequence extends RedhawkProperty {
         for(DataType type : actualStruct){
             for(String key : valuesToUpdate.keySet()){
                 if(type.id.toLowerCase().matches(key.toLowerCase())){
-                    type.value = createAny(valuesToUpdate.get(key));
+                    type.value = createAny(valuesToUpdate.get(key), type.value.type().kind());
                     modified = true;
                 }
             }
@@ -221,7 +215,7 @@ public class RedhawkStructSequence extends RedhawkProperty {
     	List<Map<String,Object>> listOfMaps = new ArrayList<Map<String,Object>>();
     	
     	for(RedhawkStruct struct : getStructs()){
-    		listOfMaps.add(struct.toMap());
+    		listOfMaps.add(struct.getValue());
     	}
     	
     	return listOfMaps;
@@ -238,5 +232,16 @@ public class RedhawkStructSequence extends RedhawkProperty {
 	public <T> void setValue(T value) throws Exception {
 		// TODO Auto-generated method stub
 		
-	} 
+	}
+
+	@Override
+	public <T> T getValue(Boolean requery) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+    //TODO: Make a better toString()
+    public String toString(){
+        return sequence.toString();
+    }
 }

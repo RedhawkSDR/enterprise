@@ -43,12 +43,12 @@ public class RedhawkSimple extends RedhawkProperty {
     
 
     
-    public RedhawkSimple(ORB orb, String parentIOR, DataType type) {
+    public RedhawkSimple(ORB orb, String parentIOR, DataType type, Object value) {
     	this.orb = orb;
     	this.parentIOR = parentIOR;
     	this.corbaProperty = type;
     	this.simpleId = type.id;
-    	this.value = AnyUtils.convertAny(type.value, type.value.type());
+    	this.value = value;
     }
     
     /**
@@ -58,6 +58,7 @@ public class RedhawkSimple extends RedhawkProperty {
      * @param simpleId
      * @param value
      */
+    @Deprecated
     public RedhawkSimple(ORB orb, String parentObject, String simpleId, Object value){
         this.orb = orb;
         this.parentIOR = parentObject;
@@ -66,16 +67,13 @@ public class RedhawkSimple extends RedhawkProperty {
     }
     
     public <T> void setValue(T value) throws Exception {
-        //Any any = createAny(value);
-        //System.out.println("Created any code "+any.type());
-        //System.out.println("Actual any code "+this.corbaProperty.value.type());
         Any any = AnyUtils.toAny(value, corbaProperty.value.type());
     	this.value = value;  
         reconfigure(simpleId, any);
     }
     
     @Override
-	public Object getValue(Boolean requery) {
+	public <T> T getValue(Boolean requery) {
     	if(requery) {
     		PropertiesHolder ph = RedhawkUtils.getPropertyFromCORBAObject(this.orb, this.parentIOR, this.simpleId);
     		
@@ -83,7 +81,7 @@ public class RedhawkSimple extends RedhawkProperty {
     		value = AnyUtils.convertAny(ph.value[0].value);
     	}
     	
-    	return value;
+    	return (T)value;
 	} 
 
 	@Override

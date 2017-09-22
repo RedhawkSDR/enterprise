@@ -36,6 +36,7 @@ import CF.PropertySet;
 import CF.PropertySetHelper;
 import CF.PropertySetPackage.InvalidConfiguration;
 import CF.PropertySetPackage.PartialConfiguration;
+import redhawk.driver.RedhawkUtils;
 
 //TODO: Make this an abstract class or something...
 public abstract class RedhawkProperty {
@@ -74,7 +75,7 @@ public abstract class RedhawkProperty {
 	
 	public abstract <T> void setValue(T value) throws Exception;
 	
-    public Object getValue() {
+    public <T> T getValue() {
         return getValue(true);
     }
 
@@ -85,65 +86,12 @@ public abstract class RedhawkProperty {
      * @param requery
      * @return
      */
-	public abstract Object getValue(Boolean requery); 
-	
-	//TODO: Why isn't this just using AnyUtils
-	protected Any createAny(Object objectToCreate) {
-		final Any any = orb.create_any();
-		if (objectToCreate instanceof String) {
-			any.insert_string((String) objectToCreate);
-		} else if (objectToCreate instanceof Short) {
-			any.insert_short((Short) objectToCreate);
-		} else if (objectToCreate instanceof Boolean) {
-			any.insert_boolean((Boolean) objectToCreate);
-		} else if (objectToCreate instanceof Long) {
-			any.insert_longlong((Long) objectToCreate);
-		} else if (objectToCreate instanceof Character) {
-			any.insert_char((Character) objectToCreate);
-		} else if (objectToCreate instanceof Double) {
-			any.insert_double((Double) objectToCreate);
-		} else if (objectToCreate instanceof Float) {
-			any.insert_float((Float) objectToCreate);
-		} else if (objectToCreate instanceof Integer) {
-			any.insert_long((Integer) objectToCreate);
-		} else if (objectToCreate instanceof Byte) {
-			any.insert_octet((Byte) objectToCreate);
-		} else if (objectToCreate instanceof Map) {
-			Map objMap = (Map) objectToCreate;
-			List<DataType> dataTypesToInsert = new ArrayList<DataType>();
-
-			for (Object key : objMap.keySet()) {
-				DataType dt = new DataType();
-				dt.id = key + "";
-				dt.value = createAny(objMap.get(key));
-				dataTypesToInsert.add(dt);
-			}
-
-			Any anyObject = orb.create_any();
-			PropertiesHelper.insert(anyObject, dataTypesToInsert.toArray(new DataType[dataTypesToInsert.size()]));
-			return anyObject;
-
-		} else if (objectToCreate instanceof Object[]) {
-			Object[] objects = (Object[]) objectToCreate;
-
-			if (objects.length < 1) {
-				logger.log(Level.FINE, "Empty array provided, returning empty any");
-				return any;
-			}
-
-			// determining type based on first entry of array
-        	org.omg.CORBA.TypeCode tcElement = orb.get_primitive_tc(getTCKind(objects[0]));
-        	org.omg.CORBA.TypeCode typeCodeForSequence = orb.create_sequence_tc(objects.length, tcElement);
-
-	        return AnyUtils.toAnySequence(objectToCreate, typeCodeForSequence);
-		}
-
-		return any;
-	}
+	public abstract <T> T getValue(Boolean requery); 
 	
 	protected Any createAny(Object objectToCreate, TCKind kind) {
 		//Should use AnyUtils for everything that's not a collection
 		final Any any = orb.create_any();
+		
 		if(objectToCreate instanceof Object[]) {
 			Object[] objects = (Object[]) objectToCreate;
 
@@ -164,7 +112,7 @@ public abstract class RedhawkProperty {
 			for (Object key : objMap.keySet()) {
 				DataType dt = new DataType();
 				dt.id = key + "";
-				dt.value = createAny(objMap.get(key));
+				dt.value = RedhawkUtils.createAny(this.orb, objMap.get(key));
 				dataTypesToInsert.add(dt);
 			}
 

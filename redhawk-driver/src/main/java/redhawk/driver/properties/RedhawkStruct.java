@@ -20,13 +20,9 @@
 package redhawk.driver.properties;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.omg.CORBA.Any;
@@ -35,18 +31,26 @@ import org.ossie.properties.AnyUtils;
 
 import CF.DataType;
 import CF.PropertiesHelper;
+import CF.PropertiesHolder;
+import redhawk.driver.RedhawkUtils;
 
 /**
  * 
- * Wrapper class for interacting with Structs. 
+ * Wrapper class for interacting with Structs. Java representation of a Struct 
+ * is a Map<String, Object> 
  */
-public class RedhawkStruct extends RedhawkProperty implements Map<String, Object> {
+public class RedhawkStruct extends RedhawkProperty {
 	private static Logger logger = Logger.getLogger(RedhawkStruct.class.getName());
 	
 	/**
-	 * Properties for this struct
+	 * Original list structure containing CF.DataType objects for this Struct
 	 */
     private List<DataType> structProperties = new ArrayList<DataType>();
+    
+    /**
+     * Map to represent Struct object
+     */
+    private Map<String, Object> struct = new HashMap<>();
     
     /**
      * Root Id for struct
@@ -56,6 +60,20 @@ public class RedhawkStruct extends RedhawkProperty implements Map<String, Object
     //TODO: Not sure why this would ever be set???
     private RedhawkStructSequence structSequenceParent;
     
+    public RedhawkStruct(ORB orb, String ior, DataType corbaRepOfProperty, DataType[] propertyValue) {
+        this.orb = orb;
+        this.parentIOR = ior;
+        this.structId = corbaRepOfProperty.id;
+        this.corbaProperty = corbaRepOfProperty;
+        
+        for(DataType dataType : propertyValue){
+            structProperties.add(dataType);
+            
+	    	this.dataTypeToJavaObjectConverter(dataType);
+        }	
+    }
+    
+    @Deprecated
     public RedhawkStruct(ORB orb, String parentObject, String structId, DataType[] struct, RedhawkStructSequence structSequenceParent){
         this.orb = orb;
         this.parentIOR = parentObject;
@@ -66,31 +84,9 @@ public class RedhawkStruct extends RedhawkProperty implements Map<String, Object
             structProperties.add(dataType);
         }
     }
-
+    
     public DataType[] getDataTypeArray() {
     	return structProperties.toArray(new DataType[structProperties.size()]);
-    }
-    
-    //TODO: Need to requery or minimum requery by default and add option to use cached 
-    //value if it's misleading to me it'll be misleading to users 
-    public <T> T getValue(String property){
-        for(DataType type : structProperties){
-            if(type.id.toLowerCase().matches(property.toLowerCase())){
-                return (T) AnyUtils.convertAny(type.value);
-            }
-        }
-        
-        return null;
-    }
-
-    public <T> T getValue(String property, Class<T> clazz){
-        for(DataType type : structProperties){
-            if(type.id.toLowerCase().matches(property.toLowerCase())){
-                return (T) AnyUtils.convertAny(type.value);
-            }
-        }
-        
-        return null;
     }
     
 	@Override
@@ -102,19 +98,70 @@ public class RedhawkStruct extends RedhawkProperty implements Map<String, Object
 			throw new Exception("Expecting a value castable to Map<String, Object>");
 		}
 	}
-    
+	
+	@Override
+	public <T> T getValue(Boolean requery) {
+		if(requery) {
+			this.requeryStruct();
+		}
+		
+		return (T) struct;
+	}
+	
+	public <T> T getValue(String key) {
+		return getValue(key, true);
+	}
+	
+	public <T> T getValue(String key, Boolean requery) {
+		if(requery) {
+			this.requeryStruct();
+		}
+		
+		return (T) struct.get(key);
+	}
+	
+	private void requeryStruct() {
+		PropertiesHolder ph = RedhawkUtils.getPropertyFromCORBAObject(this.orb, this.parentIOR, this.structId);
+		
+		for(DataType type : ph.value) { 
+	    	DataType[] typeArray = (DataType[]) AnyUtils.convertAny(type.value);
+			
+	    	for(DataType innerType : typeArray) {
+    	    	//This is updating values in the struct directly 
+    			this.dataTypeToJavaObjectConverter(innerType);  	    		
+	    	}
+		}
+	}
+	
+	private void dataTypeToJavaObjectConverter(DataType type) {
+    	Object propertyValue = AnyUtils.convertAny(type.value);
+		if(propertyValue instanceof Object[]) {
+    		List<Object> tempList = new ArrayList<>();
+    		Object[] tempArray = (Object[]) propertyValue;
+    		
+    		if(tempArray[0] instanceof DataType) {
+    			//Use recursion
+    			dataTypeToJavaObjectConverter((DataType)tempArray[0]);
+    		}else {
+        		for(Object obj : tempArray) {
+        			tempList.add(obj);
+        		}
+        		
+        		struct.put(type.id, tempList);    			
+    		}
+    	}else if(propertyValue instanceof Object) {
+    		struct.put(type.id, propertyValue);
+    	}else {
+    		logger.severe("Not handing Struct types of "+propertyValue.getClass());
+    	}		
+	}
+	
+	
     public void setValues(Map<String, Object> valuesToChange) throws Exception {
-        
         for(String key : valuesToChange.keySet()){
-        	System.out.println("Key is "+key);
             for(DataType type : structProperties){
-            	System.out.println("\tId: "+type.id);
-            	System.out.println("\tValue: "+ AnyUtils.convertAny(type.value));
-            	System.out.println("\tType Code: "+type.value.type());
                 if(type.id.toLowerCase().matches(key.toLowerCase())){
                     type.value = createAny(valuesToChange.get(key), type.value.type().kind());
-                	System.out.println("\tFound match new Value: "+ AnyUtils.convertAny(type.value));
-                    System.out.println("\tFound match replacing with: "+type.value.type());
                 }
             }   
         }
@@ -128,14 +175,13 @@ public class RedhawkStruct extends RedhawkProperty implements Map<String, Object
             PropertiesHelper.insert(structToInsert, structProperties.toArray(new DataType[structProperties.size()]));  
             reconfigure(structId, structToInsert);
         }
-        
     }
     
     public void setValue(String propertyId, Object value) throws Exception {
         DataType[] updatedStruct = null;
         for(DataType type : structProperties){
             if(type.id.toLowerCase().matches(propertyId.toLowerCase())){
-                type.value = createAny(value);
+                type.value = AnyUtils.toAny(value, type.value.type());
                 
                 //if part of struct sequence
                 if(structSequenceParent != null){
@@ -156,129 +202,6 @@ public class RedhawkStruct extends RedhawkProperty implements Map<String, Object
             }
         }
     }
-    
-
-    public Map<String,Object> toMap(){
-        Map<String, Object> returnMap = new HashMap<String, Object>();
-        for(DataType type : structProperties){
-            returnMap.put(type.id, AnyUtils.convertAny(type.value));
-        }
-        
-        return returnMap;
-    }
-
-	@Override
-	public void clear() {
-		throw new UnsupportedOperationException("Currently cannot clear all values in the struct");
-	}
-
-	@Override
-	public boolean containsKey(Object key) {
-		return getValue(key+"") != null;
-	}
-
-	@Override
-	public boolean containsValue(Object value) {
-        for(DataType type : structProperties){
-        	if(AnyUtils.convertAny(type.value).equals(value)){
-        		return true;
-        	}
-        }
-		
-		return false;
-	}
-
-	@Override
-	public Set<java.util.Map.Entry<String, Object>> entrySet() {
-		Set<java.util.Map.Entry<String, Object>> entrySet = new HashSet<>();
-		
-        for(final DataType type : structProperties){
-        	Entry<String, Object> entry = new Entry<String, Object>() {
-        		private DataType t = type;
-        		
-				@Override
-				public String getKey() {
-					return t.id;
-				}
-
-				@Override
-				public Object getValue() {
-					return AnyUtils.convertAny(t.value);
-				}
-
-				@Override
-				public Object setValue(Object obj) {
-					return t.value = createAny(obj);
-				}
-			};
-        	
-			entrySet.add(entry);
-        }
-        
-        return entrySet;
-		
-	}
-
-	@Override
-	public Object get(Object key) {
-		return getValue(key+"");
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return structProperties.isEmpty();
-	}
-
-	@Override
-	public Set<String> keySet() {
-		Set<String> keys = new HashSet<>();
-		for(DataType t : structProperties){
-			keys.add(t.id);
-		}
-		
-		return keys;
-	}
-
-	@Override
-	public Object put(String key, Object value) {
-		try {
-			setValue(key, value);
-			return value;
-		} catch (Exception e) {
-			logger.severe(e.getMessage());
-			return null;
-		}
-	}
-
-	@Override
-	public void putAll(Map<? extends String, ? extends Object> values) {
-		Map<String, Object> valuesToChange = new HashMap<>();
-		
-		for(String key : values.keySet()){
-			valuesToChange.put(key, values.get(key));
-		}
-		
-		try {
-			setValues(valuesToChange);
-		} catch (Exception e) {
-			logger.log(Level.SEVERE, e.getMessage());
-		}
-	}
-
-	@Override
-	public Object remove(Object arg0) {
-		throw new UnsupportedOperationException("Remove is not supported..");
-	}
-
-	@Override
-	public int size() {
-		return toMap().size();
-	}
-
-	@Override
-	public Collection<Object> values() {
-		return toMap().values();
-	}
 
 	@Override
 	public String toString() {

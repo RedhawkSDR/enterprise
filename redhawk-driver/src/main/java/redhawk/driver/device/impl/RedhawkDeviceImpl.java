@@ -227,7 +227,7 @@ public class RedhawkDeviceImpl extends RedhawkSoftwareComponentImpl<Device> impl
 	 */
 	public List<String> getAllocIds(RedhawkStruct s) {
 		ArrayList<String> allocIds = new ArrayList<String>();
-		String allocIdCsv = (String) s.toMap().get("FRONTEND::tuner_status::allocation_id_csv");
+		String allocIdCsv = (String) s.getValue("FRONTEND::tuner_status::allocation_id_csv");
 		
 		if (allocIdCsv == null || allocIdCsv.isEmpty())
 			return allocIds;
@@ -255,7 +255,7 @@ public class RedhawkDeviceImpl extends RedhawkSoftwareComponentImpl<Device> impl
 		
 		List<Map<String,Object>> allTuners = new ArrayList<Map<String,Object>>();
 		for(RedhawkStruct s : getStatus()){
-			allTuners.add(s.toMap());
+			allTuners.add(s.getValue());
 		}
 		
 		return allTuners;
@@ -270,7 +270,7 @@ public class RedhawkDeviceImpl extends RedhawkSoftwareComponentImpl<Device> impl
 		for (RedhawkStruct s : getStatus()) {
 			// if (getAllocIds(s).contains(allocId))  //tuner matches if ANY allocation ids in the csv match
 			if (getAllocIds(s).get(0).equals(allocId))  //tuner matches if FIRST allocation id in the csv matches
-				tuners.add(s.toMap());
+				tuners.add(s.getValue());
 		}
 		if (tuners.size() > 1) {
 			throw new IllegalStateException("More than one tuner exist with allocation id: " + allocId);
@@ -286,7 +286,7 @@ public class RedhawkDeviceImpl extends RedhawkSoftwareComponentImpl<Device> impl
 		for(RedhawkStruct s : getStatus()){
 			List<String> allocIds = getAllocIds(s);
 			if(allocIds == null || allocIds.isEmpty()){
-				tuners.add(s.toMap());
+				tuners.add(s.getValue());
 			}
 		}
 		return tuners;
@@ -299,7 +299,7 @@ public class RedhawkDeviceImpl extends RedhawkSoftwareComponentImpl<Device> impl
 		for(RedhawkStruct s : getStatus()){
 			String allocId = getAllocId(s);
 			if(allocId!=null && !allocId.isEmpty()){
-				tuners.add(s.toMap());
+				tuners.add(s.getValue());
 			}
 		}
 		

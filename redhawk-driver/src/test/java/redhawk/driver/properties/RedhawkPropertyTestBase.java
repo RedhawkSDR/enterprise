@@ -1,5 +1,6 @@
 package redhawk.driver.properties;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.io.File;
@@ -15,6 +16,7 @@ import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.testutils.RedhawkTestBase;
 
 /**
@@ -23,21 +25,24 @@ import redhawk.testutils.RedhawkTestBase;
  *
  */
 public class RedhawkPropertyTestBase extends RedhawkTestBase{
-	static String appName = "myApp";
+	public static String appName = "myApp";
 	
-	static RedhawkApplication allPropsWaveform; 
+	public static RedhawkApplication allPropsWaveform; 
 	
-	static RedhawkComponent component;
+	public static RedhawkComponent component;
 	
-	static RedhawkDomainManager manager;	
+	public static RedhawkDomainManager manager;	
 	
 	@BeforeClass
-	public static void setupRedhawkPropertyTestBase() {
+	public static void setupRedhawkPropertyTestBase() throws ResourceNotFoundException {
 		try {
-			manager = driver.getDomain();
+			manager = driver.getDomain(domainName);
 			allPropsWaveform = manager.createApplication(appName, new File("src/test/resources/waveforms/AllPropsWaveform/AllPropsWaveform.sad.xml"));
 			component = allPropsWaveform.getComponents().get(0);
-		} catch (MultipleResourceException | ApplicationCreationException | CORBAException e) {
+		
+			assertNotNull(allPropsWaveform);
+			assertNotNull(component);
+		} catch (ApplicationCreationException | CORBAException e) {
 			e.printStackTrace();
 			fail("Unable to setup test "+e.getMessage());
 		}

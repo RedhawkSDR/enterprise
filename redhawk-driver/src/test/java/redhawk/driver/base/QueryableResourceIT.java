@@ -8,6 +8,7 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.AfterClass;
@@ -25,27 +26,22 @@ import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.properties.RedhawkProperty;
+import redhawk.driver.properties.RedhawkPropertyTestBase;
 import redhawk.driver.properties.RedhawkSimple;
 import redhawk.driver.properties.RedhawkSimpleSequence;
+import redhawk.driver.properties.RedhawkStruct;
+import redhawk.driver.properties.RedhawkStructSequence;
 import redhawk.testutils.RedhawkTestBase;
 
-public class QueryableResourceIT extends RedhawkTestBase{
-	private static String appName = "myApp", allPropsWave = "allPropsWave";
-	
-	static RedhawkApplication basicComponentDemo, allPropsWaveform;
-	
-	static RedhawkComponent component; 
+public class QueryableResourceIT extends RedhawkPropertyTestBase{	
+	static RedhawkApplication basicComponentDemo;
 	
 	@BeforeClass
 	public static void setupQueryableResourceIT() {
 		try {
 			basicComponentDemo = driver.getDomain(domainName).createApplication(appName, "/waveforms/rh/basic_components_demo/basic_components_demo.sad.xml");
-			allPropsWaveform = driver.getDomain(domainName).createApplication(allPropsWave, new File("src/test/resources/waveforms/AllPropsWaveform/AllPropsWaveform.sad.xml"));
-			
-			component = allPropsWaveform.getComponents().get(0);
-			
+						
 			assertNotNull(basicComponentDemo);
-			assertNotNull(allPropsWaveform);
 		} catch (ApplicationCreationException | CORBAException | ResourceNotFoundException e) {
 			fail("Unable to setup test "+e.getMessage());
 		}		
@@ -58,29 +54,33 @@ public class QueryableResourceIT extends RedhawkTestBase{
 			RedhawkDomainManager manager = driver.getDomain();
 			
 			manager.setPropertyValue("COMPONENT_BINDING_TIMEOUT", 120);
-			//TODO: Get rid of this casting nonsense
-			assertEquals(new Long(120), ((RedhawkSimple)manager.getProperty("COMPONENT_BINDING_TIMEOUT")).getValue());
+			RedhawkSimple simple = manager.getProperty("COMPONENT_BINDING_TIMEOUT");
+			assertEquals(new Long(120), simple.getValue());
 			
 			//Set simple property on a DeviceManager
 			//System.out.println(manager.getDevice);
 			RedhawkDeviceManager deviceManager = manager.getDeviceManagerByName("DevMgr.*");
 			deviceManager.setPropertyValue("CLIENT_WAIT_TIME", 12000);
-			assertEquals(new Long(12000), ((RedhawkSimple)deviceManager.getProperty("CLIENT_WAIT_TIME")).getValue());
+			simple = deviceManager.getProperty("CLIENT_WAIT_TIME");
+			assertEquals(new Long(12000), simple.getValue());
 			
 			//Set simple property on a Device
 			//TODO: Probably need to explicitly get device by name
 			RedhawkDevice device = deviceManager.getDevices().get(0);
 			device.setPropertyValue("reserved_capacity_per_component", .05);
-			assertEquals(new Float(.05), ((RedhawkSimple)device.getProperty("reserved_capacity_per_component")).getValue());			
+			simple = device.getProperty("reserved_capacity_per_component");
+			assertEquals(new Float(.05), simple.getValue());			
 			
 			//Set simple property on a Application
 			basicComponentDemo.setPropertyValue("sample_rate", 14000);
-			assertEquals(new Double(14000), ((RedhawkSimple)basicComponentDemo.getProperty("sample_rate")).getValue());
+			simple = basicComponentDemo.getProperty("sample_rate");
+			assertEquals(new Double(14000), simple.getValue());
 			
 			//Set simple property on a Component
 			RedhawkComponent component = basicComponentDemo.getComponentByName("SigGen_sine.*");
 			component.setPropertyValue("magnitude", 75);
-			assertEquals(new Double(75), ((RedhawkSimple)component.getProperty("magnitude")).getValue());
+			simple = component.getProperty("magnitude");
+			assertEquals(new Double(75), simple.getValue());
 		} catch (MultipleResourceException | CORBAException e) {
 			e.printStackTrace();
 			fail("Unable to run test "+e.getMessage());
@@ -96,31 +96,33 @@ public class QueryableResourceIT extends RedhawkTestBase{
 		assertArrayEquals(simpleSequence, seq.getValues().toArray());
 	}
 	
-	//TODO: Look into this
 	@Test
-	public void testSetStruct() throws Exception {
-		try {
-			RedhawkDomainManager manager = driver.getDomain();
-			
-			Map<String, Object> struct = new HashMap<>();
-			struct.put("client_wait_times::devices", 70000);
-			struct.put("client_wait_times::services", 70000);
-			struct.put("client_wait_times::managers", 70000);
-
-			manager.setPropertyValue("client_wait_times", struct);
-		} catch (MultipleResourceException | CORBAException e) {
-			fail("Unable to run test "+ e.getMessage());
-		}
-
+	public void testSetRedhawkStruct() throws Exception {
+		RedhawkStruct struct = component.getProperty("cartoon_character");
+		
+		Map<String, Object> structValue = struct.getValue();
+		structValue.put("age", new Double(12));
+		structValue.put("friend", "Mr. Krabs");
+		
+		
+		component.setPropertyValue("cartoon_character", structValue);
+		
+		struct = component.getProperty("cartoon_character");
+		assertEquals(structValue, struct.getValue());
 	}
 	
-	@AfterClass
-	public static void cleanupQueryableResourceIT() {
-		try {
-			driver.getDomain().getFileManager().removeDirectory("/waveforms/AllPropsWaveform");
-		} catch (ConnectionException | MultipleResourceException | IOException | CORBAException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}			
+	@Test
+	public void testSetRedhawkStructSequence() throws Exception {
+		RedhawkStructSequence structSeq = component.getProperty("main_characters");
+		
+		List<Map<String, Object>> value = structSeq.getValue();
+		Map<String, Object> obj = new HashMap<>();
+		obj.put("actor_name", "Johnny Depp");
+		obj.put("actor_country", "Clifford");
+		value.add(obj);
+		
+		component.setPropertyValue("main_characters", value);
+		structSeq = component.getProperty("main_characters");
+		assertEquals(value, structSeq.getValue());
 	}
 }

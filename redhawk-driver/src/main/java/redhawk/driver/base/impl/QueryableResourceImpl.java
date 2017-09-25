@@ -113,6 +113,8 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
     		property.setValue(propertyValue);
     	}else if(property instanceof RedhawkStruct) {
     		property.setValue(propertyValue);
+    	}else if(property instanceof RedhawkStructSequence){ 
+    		property.setValue(propertyValue);
     	}else {
     		System.err.println("Unhandled property type "+property.getClass().toString());
     	}

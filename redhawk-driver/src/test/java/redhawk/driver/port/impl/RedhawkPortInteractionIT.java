@@ -155,18 +155,12 @@ public class RedhawkPortInteractionIT extends RedhawkTestBase {
 				// Listen to data on port
 				GenericPortListener pl = new GenericPortListener(sendToPort);
 
-				System.out.println("Made it here");
 				port.listen(pl);
-				System.out.println("Made it to listen");				
 				// Active SRI should be empty because no data has been sent
 				assertTrue(sendToPort.getActiveSRIs().isEmpty());
 
-				if (!app.isStarted()) {
-					System.out.println("Starting app");
+				if (!app.isStarted()) 
 					app.start();
-				}else {
-					System.out.println("App already started");
-				}
 
 				while (pl.getMessagesReceived() < 10) {
 					// Loop can't be empty

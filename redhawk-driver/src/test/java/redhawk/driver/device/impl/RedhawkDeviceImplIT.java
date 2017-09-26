@@ -23,11 +23,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
 
+import redhawk.driver.allocation.AllocationFactory;
 import redhawk.driver.device.AdminState;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
@@ -45,37 +45,19 @@ public class RedhawkDeviceImplIT extends RedhawkDeviceTestBase {
 		//Get Device you want 
 		RedhawkDeviceImpl device = (RedhawkDeviceImpl) deviceManager.getDeviceByName("FmRdsSimulator.*");
 		
-		//Create Allocation Map 
-		Map<String, Object> newAlloc = new HashMap<>();
 				
 		//Section 7.1 REDHAWK Manual for these properties
-		/*Example tuner status. 
-		 * {
-		 * FRONTEND::tuner_status::rf_flow_id=, 
-		 * FRONTEND::tuner_status::bandwidth=2280000.0, 
-		 * FRONTEND::tuner_status::stream_id=MyStreamID, 
-		 * FRONTEND::tuner_status::center_frequency=1.011E8, 
-		 * FRONTEND::tuner_status::group_id=, 
-		 * FRONTEND::tuner_status::gain=0.0, 
-		 * FRONTEND::tuner_status::enabled=true, 
-		 * FRONTEND::tuner_status::sample_rate=285000.0, 
-		 * FRONTEND::tuner_status::allocation_id_csv=default:55d211b1-c35c-44a8-837c-96a7470089f0, 
-		 * FRONTEND::tuner_status::tuner_type=RX_DIGITIZER
-		 * }
-		 * 
-		 * params from IDE:
-		 * 
-		*/
+		//Create Allocation Map 
 		String allocId = "myTestAllocationId";
-		newAlloc.put("FRONTEND::tuner_allocation::allocation_id", allocId);
-		newAlloc.put("FRONTEND::tuner_allocation::tuner_type", "RX_DIGITIZER");
-		newAlloc.put("FRONTEND::tuner_allocation::center_frequency", 101100000d);//101.1e6
-		newAlloc.put("FRONTEND::tuner_allocation::sample_rate", 256000d);//256e3
-		newAlloc.put("FRONTEND::tuner_allocation::bandwidth_tolerance", 20.0);
-		newAlloc.put("FRONTEND::tuner_allocation::sample_rate_tolerance", 20.0);
+		Map<String, Object> allocation = AllocationFactory.createTunerAllocation();
+		allocation.put(AllocationFactory.CENTER_FREQUENCY, 101100000d);
+		allocation.put(AllocationFactory.SAMPLE_RATE, 256000d);
+		allocation.put(AllocationFactory.BANDWIDTH_TOLERANCE, 20.0);
+		allocation.put(AllocationFactory.SAMPLE_RATE_TOLERANCE, 20.0);
+		allocation.put(AllocationFactory.ALLOCATION_ID, allocId);
 		
 		//Allocate Device
-		device.allocate(newAlloc);
+		device.allocate(allocation);
 		
 		//Should now have a used tuner
 		assertEquals(false, device.getUsedTuners().isEmpty());
@@ -103,38 +85,19 @@ public class RedhawkDeviceImplIT extends RedhawkDeviceTestBase {
 		
 		//Get Device you want 
 		RedhawkDeviceImpl device = (RedhawkDeviceImpl) deviceManager.getDeviceByName("FmRdsSimulator.*");
-		
-		//Create Allocation Map 
-		Map<String, Object> newAlloc = new HashMap<>();
-				
+						
 		//Section 7.1 REDHAWK Manual for these properties
-		/*Example tuner status. 
-		 * {
-		 * FRONTEND::tuner_status::rf_flow_id=, 
-		 * FRONTEND::tuner_status::bandwidth=2280000.0, 
-		 * FRONTEND::tuner_status::stream_id=MyStreamID, 
-		 * FRONTEND::tuner_status::center_frequency=1.011E8, 
-		 * FRONTEND::tuner_status::group_id=, 
-		 * FRONTEND::tuner_status::gain=0.0, 
-		 * FRONTEND::tuner_status::enabled=true, 
-		 * FRONTEND::tuner_status::sample_rate=285000.0, 
-		 * FRONTEND::tuner_status::allocation_id_csv=default:55d211b1-c35c-44a8-837c-96a7470089f0, 
-		 * FRONTEND::tuner_status::tuner_type=RX_DIGITIZER
-		 * }
-		 * 
-		 * params from IDE:
-		 * 
-		*/
+		//Create Allocation Map 
 		String allocId = "myTestAllocationId";
-		newAlloc.put("FRONTEND::tuner_allocation::allocation_id", allocId);
-		newAlloc.put("FRONTEND::tuner_allocation::tuner_type", "RX_DIGITIZER");
-		newAlloc.put("FRONTEND::tuner_allocation::center_frequency", 101100000);//101.1e6
-		newAlloc.put("FRONTEND::tuner_allocation::sample_rate", 256000);//256e3
-		newAlloc.put("FRONTEND::tuner_allocation::bandwidth_tolerance", 20);
-		newAlloc.put("FRONTEND::tuner_allocation::sample_rate_tolerance", 20);
+		Map<String, Object> allocation = AllocationFactory.createTunerAllocation();
+		allocation.put(AllocationFactory.CENTER_FREQUENCY, 101100000d);
+		allocation.put(AllocationFactory.SAMPLE_RATE, 256000d);
+		allocation.put(AllocationFactory.BANDWIDTH_TOLERANCE, 20.0);
+		allocation.put(AllocationFactory.SAMPLE_RATE_TOLERANCE, 20.0);
+		allocation.put(AllocationFactory.ALLOCATION_ID, allocId);
 		
 		//Allocate Device
-		device.allocate(newAlloc);
+		device.allocate(allocation);
 		
 		//Should now have an allocation Id
 		assertEquals("Should now have one allocation.", 1, device.getAllocIds().size());

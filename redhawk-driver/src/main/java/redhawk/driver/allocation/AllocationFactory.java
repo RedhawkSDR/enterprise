@@ -8,8 +8,12 @@ public class AllocationFactory {
 	private static final String FRONTEND = "FRONTEND::";
 	
 	private static final String TUNER_ALLOCATION = "tuner_allocation::";
-	
+		
 	private static final String LISTENER_ALLOCATION = "listener_allocation::";
+	
+	public static final String TUNER_ALLOCATION_TYPE = FRONTEND+"tuner_allocation";
+	
+	public static final String LISTENER_ALLOCATION_TYPE = FRONTEND+"listener_allocation";
 	
 	public static final String SAMPLE_RATE = FRONTEND+TUNER_ALLOCATION+"sample_rate";
 	

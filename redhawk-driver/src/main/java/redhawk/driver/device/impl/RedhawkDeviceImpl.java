@@ -50,7 +50,6 @@ import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.logging.RedhawkLogLevel;
-import redhawk.driver.properties.RedhawkStruct;
 import redhawk.driver.properties.RedhawkStructSequence;
 
 /**
@@ -262,7 +261,7 @@ public class RedhawkDeviceImpl extends RedhawkSoftwareComponentImpl<Device> impl
 	}
 
 	protected List<Map<String, Object>> getStatus() {
-		return ((RedhawkStructSequence) getProperty("FRONTEND::tuner_status")).getStructs();
+		return ((RedhawkStructSequence) getProperty("FRONTEND::tuner_status")).getValue();
 	}
 
 	public Map<String, Object> getTunerById(String allocId) {

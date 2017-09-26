@@ -104,7 +104,7 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
         return null;
     }
     
-    public void setPropertyValue(String propertyName, Object propertyValue) throws Exception {
+    public void setProperty(String propertyName, Object propertyValue) throws Exception {
     	RedhawkProperty property = this.getProperty(propertyName);
     
     	if(property instanceof RedhawkSimple) {

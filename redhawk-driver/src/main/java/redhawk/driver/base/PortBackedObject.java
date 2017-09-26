@@ -27,9 +27,6 @@ import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.PortException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
-import redhawk.driver.xml.model.sca.prf.Properties;
-import redhawk.driver.xml.model.sca.scd.Softwarecomponent;
-import redhawk.driver.xml.model.sca.spd.Softpkg;
 
 public interface PortBackedObject extends QueryableResource {
 	/**

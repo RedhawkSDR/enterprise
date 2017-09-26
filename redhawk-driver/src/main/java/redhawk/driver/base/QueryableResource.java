@@ -47,6 +47,6 @@ public interface QueryableResource extends RedhawkLogging{
      * 	Value representing the property. 
   	 *  TODO: Add table for simple/simpleseq/struct/structsequence
      */
-    public void setPropertyValue(String propertyName, Object propertyValue) throws Exception;
+    public void setProperty(String propertyName, Object propertyValue) throws Exception;
     
 }

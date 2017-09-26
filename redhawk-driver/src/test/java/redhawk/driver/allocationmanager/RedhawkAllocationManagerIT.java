@@ -32,6 +32,7 @@ import java.util.Map;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import redhawk.driver.allocation.AllocationFactory;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.exceptions.AllocationException;
 import redhawk.driver.exceptions.CORBAException;
@@ -126,18 +127,16 @@ public class RedhawkAllocationManagerIT extends RedhawkDeviceTestBase{
 	}
 	
 	
-	private Map<String, Object> getAllocationProperties(){
-		Map<String, Object> newAlloc = new HashMap<>();
-		
+	private Map<String, Object> getAllocationProperties(){		
 		String allocId = "myTestAllocationId";
-		newAlloc.put("FRONTEND::tuner_allocation::allocation_id", allocId);
-		newAlloc.put("FRONTEND::tuner_allocation::tuner_type", "RX_DIGITIZER");
-		newAlloc.put("FRONTEND::tuner_allocation::center_frequency", 101100000d);//101.1e6
-		newAlloc.put("FRONTEND::tuner_allocation::sample_rate", 256000d);//256e3
-		newAlloc.put("FRONTEND::tuner_allocation::bandwidth_tolerance", 20.0);
-		newAlloc.put("FRONTEND::tuner_allocation::sample_rate_tolerance", 20.0);		
+		Map<String, Object> allocation = AllocationFactory.createTunerAllocation();
+		allocation.put(AllocationFactory.CENTER_FREQUENCY, 101100000d);
+		allocation.put(AllocationFactory.SAMPLE_RATE, 256000d);
+		allocation.put(AllocationFactory.BANDWIDTH_TOLERANCE, 20.0);
+		allocation.put(AllocationFactory.SAMPLE_RATE_TOLERANCE, 20.0);
+		allocation.put(AllocationFactory.ALLOCATION_ID, allocId);
 	
-		return newAlloc;
+		return allocation;
 	}
 	
 	

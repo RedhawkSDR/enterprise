@@ -27,7 +27,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +35,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import redhawk.driver.RedhawkDriver;
 import redhawk.driver.RedhawkUtils;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.device.RedhawkDevice;
@@ -154,7 +152,7 @@ public class RedhawkDomainManagerImplIT extends RedhawkTestBase{
 		//Retrieve all devices in a domain
 		List<RedhawkDevice> devices = domainManager.getDevices();
 		
-		//Retrieve a group of devices by regez 
+		//Retrieve a group of devices by regex
 		devices = domainManager.getDevicesByName("GPP.*");
 		
 		//Retrieve a device by name 

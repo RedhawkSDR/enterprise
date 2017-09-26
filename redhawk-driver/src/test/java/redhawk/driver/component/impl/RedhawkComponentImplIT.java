@@ -35,7 +35,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import redhawk.driver.RedhawkDriver;
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.domain.RedhawkFileManager;
@@ -64,10 +63,8 @@ public class RedhawkComponentImplIT extends RedhawkTestBase {
 	public ExpectedException thrown = ExpectedException.none();
 
 	@Before
-	public void setup()
-			throws ResourceNotFoundException, ApplicationCreationException, CORBAException, MultipleResourceException {
-		driver.getDomain("REDHAWK_DEV").createApplication(applicationName,
-				new File("src/test/resources/waveforms/rh/testWaveform.sad.xml"));
+	public void setup() throws ResourceNotFoundException, ApplicationCreationException, CORBAException, MultipleResourceException {
+		driver.getDomain("REDHAWK_DEV").createApplication(applicationName, new File("src/test/resources/waveforms/rh/testWaveform.sad.xml"));
 		application = driver.getApplication("REDHAWK_DEV/" + applicationName);
 		assertNotNull(application);
 		components = application.getComponents();
@@ -162,14 +159,13 @@ public class RedhawkComponentImplIT extends RedhawkTestBase {
 	public void snippets() throws Exception {
 		// Get your component
 		RedhawkComponent component = application.getComponentByName("SigGen.*");
-
-		// Retrieve properties that are avaiable
-		Map<String, RedhawkProperty> propertiesMap = component.getProperties();
-
-		// Change a specific property
-		String propertyName = "sample_rate";
-		RedhawkSimple simpleProp = (RedhawkSimple) propertiesMap.get(propertyName);
-		simpleProp.setValue(1000);
+		
+		//Set the desired property on the compenent
+		component.setProperty("sample_rate", 1000);
+		
+		//Confirm property set
+		RedhawkSimple simple = component.getProperty("sample_rate");
+		assertEquals(new Double(1000), simple.getValue());
 
 		// Stop a component
 		component.stop();

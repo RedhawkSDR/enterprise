@@ -53,32 +53,32 @@ public class QueryableResourceIT extends RedhawkPropertyTestBase{
 			//Set simple property on a DomainManager
 			RedhawkDomainManager manager = driver.getDomain();
 			
-			manager.setPropertyValue("COMPONENT_BINDING_TIMEOUT", 120);
+			manager.setProperty("COMPONENT_BINDING_TIMEOUT", 120);
 			RedhawkSimple simple = manager.getProperty("COMPONENT_BINDING_TIMEOUT");
 			assertEquals(new Long(120), simple.getValue());
 			
 			//Set simple property on a DeviceManager
 			//System.out.println(manager.getDevice);
 			RedhawkDeviceManager deviceManager = manager.getDeviceManagerByName("DevMgr.*");
-			deviceManager.setPropertyValue("CLIENT_WAIT_TIME", 12000);
+			deviceManager.setProperty("CLIENT_WAIT_TIME", 12000);
 			simple = deviceManager.getProperty("CLIENT_WAIT_TIME");
 			assertEquals(new Long(12000), simple.getValue());
 			
 			//Set simple property on a Device
 			//TODO: Probably need to explicitly get device by name
 			RedhawkDevice device = deviceManager.getDevices().get(0);
-			device.setPropertyValue("reserved_capacity_per_component", .05);
+			device.setProperty("reserved_capacity_per_component", .05);
 			simple = device.getProperty("reserved_capacity_per_component");
 			assertEquals(new Float(.05), simple.getValue());			
 			
 			//Set simple property on a Application
-			basicComponentDemo.setPropertyValue("sample_rate", 14000);
+			basicComponentDemo.setProperty("sample_rate", 14000);
 			simple = basicComponentDemo.getProperty("sample_rate");
 			assertEquals(new Double(14000), simple.getValue());
 			
 			//Set simple property on a Component
 			RedhawkComponent component = basicComponentDemo.getComponentByName("SigGen_sine.*");
-			component.setPropertyValue("magnitude", 75);
+			component.setProperty("magnitude", 75);
 			simple = component.getProperty("magnitude");
 			assertEquals(new Double(75), simple.getValue());
 		} catch (MultipleResourceException | CORBAException e) {
@@ -90,7 +90,7 @@ public class QueryableResourceIT extends RedhawkPropertyTestBase{
 	@Test
 	public void testSetRedhawkSimpleSequence() throws Exception {
 		String[] simpleSequence = new String[] {"please", "excuse", "my", "dear", "aunt", "sally"};
-		component.setPropertyValue("examples", simpleSequence);
+		component.setProperty("examples", simpleSequence);
 		
 		RedhawkSimpleSequence seq = component.getProperty("examples");
 		assertArrayEquals(simpleSequence, seq.getValues().toArray());
@@ -105,7 +105,7 @@ public class QueryableResourceIT extends RedhawkPropertyTestBase{
 		structValue.put("friend", "Mr. Krabs");
 		
 		
-		component.setPropertyValue("cartoon_character", structValue);
+		component.setProperty("cartoon_character", structValue);
 		
 		struct = component.getProperty("cartoon_character");
 		assertEquals(structValue, struct.getValue());
@@ -121,7 +121,7 @@ public class QueryableResourceIT extends RedhawkPropertyTestBase{
 		obj.put("actor_country", "Clifford");
 		value.add(obj);
 		
-		component.setPropertyValue("main_characters", value);
+		component.setProperty("main_characters", value);
 		structSeq = component.getProperty("main_characters");
 		assertEquals(value, structSeq.getValue());
 	}

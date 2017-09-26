@@ -1,15 +1,15 @@
 package redhawk.driver.port.impl;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.IOException;
 
+import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -29,6 +29,8 @@ import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkPortInteractionIT extends RedhawkTestBase {
 	private static RedhawkApplication app;
+	
+	private static String applicationName = "portTest";
 
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
@@ -36,8 +38,21 @@ public class RedhawkPortInteractionIT extends RedhawkTestBase {
 	@BeforeClass
 	public static void setup() throws MultipleResourceException, ApplicationCreationException, CORBAException {
 		// Launch App
-		app = driver.getDomain().createApplication("portTest",
+		app = driver.getDomain().createApplication(applicationName,
 				new File("src/test/resources/waveforms/PortListenerTest/PortListenerTest.sad.xml"));
+	}
+	
+	@Before
+	public void setupRedhawkPortInteraction() throws MultipleResourceException, ApplicationCreationException, CORBAException {
+		app = driver.getDomain().createApplication(applicationName, "/waveforms/PortListenerTest/PortListenerTest.sad.xml");
+	}
+	
+	@After
+	public void cleanup() throws ApplicationReleaseException {
+		if(app!=null) {
+			app.release();
+			app = null;
+		}
 	}
 
 	@Test
@@ -125,7 +140,6 @@ public class RedhawkPortInteractionIT extends RedhawkTestBase {
 	}
 
 	@Test
-	@Ignore
 	public void testListenAndSend() throws ApplicationStopException, ApplicationReleaseException {
 		String[] portNames = { "dataOctet_out", "dataFloat_out", "dataShort_out", "dataDouble_out", "dataUshort_out" };
 
@@ -141,20 +155,27 @@ public class RedhawkPortInteractionIT extends RedhawkTestBase {
 				// Listen to data on port
 				GenericPortListener pl = new GenericPortListener(sendToPort);
 
+				System.out.println("Made it here");
 				port.listen(pl);
+				System.out.println("Made it to listen");				
 				// Active SRI should be empty because no data has been sent
 				assertTrue(sendToPort.getActiveSRIs().isEmpty());
 
-				if (!app.isStarted())
+				if (!app.isStarted()) {
+					System.out.println("Starting app");
 					app.start();
+				}else {
+					System.out.println("App already started");
+				}
 
 				while (pl.getMessagesReceived() < 10) {
 					// Loop can't be empty
 					Thread.sleep(1);
 
 					// Send data out
-					if (pl.receivedData)
+					if (pl.receivedData) {
 						sendToPort.send(pl.getPacket());
+					}
 				}
 
 				port.disconnect();

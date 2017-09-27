@@ -125,12 +125,7 @@ test-install:
   stage: test
   script:
     - yum install -y `find output -name '*.rpm'`
-<<<<<<< HEAD
-  except:
-    - RI-119
-=======
   <<: *skip
->>>>>>> e76751ce81cb5db8276f532b425b50be9abb8d5b
 
 test-el7-x86_64:
   <<: *compose-test-artifacts

@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 
 import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
-import org.omg.CORBA.TypeCode;
 import org.ossie.properties.AnyUtils;
 
 import CF.DataType;
@@ -38,6 +37,8 @@ import CF.PropertySetOperations;
 import CF.UnknownProperties;
 import redhawk.driver.RedhawkUtils;
 import redhawk.driver.base.PortBackedObject;
+import redhawk.driver.base.QueryableResource;
+import redhawk.driver.base.RedhawkSoftwareComponent;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.properties.RedhawkProperty;
 import redhawk.driver.properties.RedhawkSimple;
@@ -51,7 +52,7 @@ import redhawk.driver.xml.model.sca.prf.Properties;
  *
  * @param <TParsedClass>
  */
-public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObject<TParsedClass> {
+public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObject<TParsedClass> implements QueryableResource{
     private static Logger logger = Logger.getLogger(QueryableResourceImpl.class.getName());
     
     /**
@@ -107,9 +108,23 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
         return null;
     }
     
-    //TODO: Add helper method for setting properties user should just 
-    //be able to pass an object and property name. 
+    public void setProperty(String propertyName, Object propertyValue) throws Exception {
+    	RedhawkProperty property = this.getProperty(propertyName);
     
+    	if(property instanceof RedhawkSimple) {
+    		property.setValue(propertyValue);
+    	}else if(property instanceof RedhawkSimpleSequence){
+    		property.setValue(propertyValue);
+    	}else if(property instanceof RedhawkStruct) {
+    		property.setValue(propertyValue);
+    	}else if(property instanceof RedhawkStructSequence){ 
+    		property.setValue(propertyValue);
+    	}else {
+    		System.err.println("Unhandled property type "+property.getClass().toString());
+    	}
+    }
+    
+    //TODO: Properties currently need to redo this code put in one place 
     private PropertiesHolder query(String ... propertyNames){
         PropertiesHolder ph = new PropertiesHolder();
         PropertySetOperations properties = null;
@@ -128,9 +143,9 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
             /*
              * Help user by retrieving property if it's name is associated with an Id
              */
-            if(this instanceof PortBackedObject) {
+            if(this instanceof RedhawkSoftwareComponent) {
             	try {
-					Properties props = ((PortBackedObject)this).getPropertyConfiguration();
+					Properties props = ((RedhawkSoftwareComponent)this).getPropertyConfiguration();
 					
 					Map<String, List<String>> propToId = RedhawkUtils.getPropertyNameToId(props);
 					List<String> newPropNames = new ArrayList<>();
@@ -180,6 +195,7 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
      * 
      */
     private RedhawkProperty getAndCast(DataType property){
+    	//TODO: Is this still necessary
     	ClassLoader cl = Thread.currentThread().getContextClassLoader();
 		Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
     	Object propertyValue = AnyUtils.convertAny(property.value);
@@ -188,11 +204,11 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
 		if(propertyValue instanceof Any[]){
             return new RedhawkStructSequence(getOrb(), getIor(), property.id, (Any[]) propertyValue);
         } else if(propertyValue instanceof DataType[]) {
-            return new RedhawkStruct(getOrb(), getIor(), property.id, (DataType[]) propertyValue, null);
+            return new RedhawkStruct(getOrb(), getIor(), property, (DataType[]) propertyValue);
         } else if(propertyValue instanceof Object[]){
-            return new RedhawkSimpleSequence(getOrb(), getIor(),  property.id, (Object[]) propertyValue, property.value.type());
+            return new RedhawkSimpleSequence(getOrb(), getIor(),  property.id, (Object[]) propertyValue, property);
         } else {
-            return new RedhawkSimple(getOrb(), getIor(),  property.id, propertyValue);
+            return new RedhawkSimple(getOrb(), getIor(),  property, propertyValue);
         }
     }
     

@@ -29,7 +29,7 @@ import CF.ResourceHelper;
 import CF.ResourcePackage.StartError;
 import CF.ResourcePackage.StopError;
 import redhawk.driver.application.RedhawkApplication;
-import redhawk.driver.base.impl.PortBackedObjectImpl;
+import redhawk.driver.base.impl.RedhawkSoftwareComponentImpl;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.exceptions.ComponentStartException;
@@ -37,7 +37,7 @@ import redhawk.driver.exceptions.ComponentStopException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.logging.RedhawkLogLevel;
 
-public class RedhawkComponentImpl extends PortBackedObjectImpl<ComponentType> implements RedhawkComponent {
+public class RedhawkComponentImpl extends RedhawkSoftwareComponentImpl<ComponentType> implements RedhawkComponent {
 
     private static Logger logger = Logger.getLogger(RedhawkComponentImpl.class.getName());
     

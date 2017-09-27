@@ -27,23 +27,28 @@ import java.util.logging.Logger;
 
 import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
-import org.omg.CORBA.TCKind;
 import org.ossie.properties.AnyUtils;
 
 import CF.DataType;
-import CF.PropertiesHelper;
 import CF.PropertySet;
 import CF.PropertySetHelper;
 import CF.PropertySetPackage.InvalidConfiguration;
 import CF.PropertySetPackage.PartialConfiguration;
 
-//TODO: Make this an abstract class or something...
-public class RedhawkProperty {
+public abstract class RedhawkProperty {
 	private static Logger logger = Logger.getLogger(RedhawkProperty.class.getName());
-
-	protected String parentObject;
+	
+	protected String parentIOR;
+	
 	protected ORB orb;
 
+	/**
+	 * CORBA representation of property so you can always get back to originals typeCode
+	 * or other information you may need. 
+	 * 
+	 */
+	protected DataType corbaProperty; 
+	
 	/**
 	 * Reset the property value for the specified Id.
 	 * 
@@ -51,11 +56,11 @@ public class RedhawkProperty {
 	 * @param propValue
 	 * @throws Exception
 	 */
-	protected void reconfigure(String propertyId, Any propValue) throws Exception {
+	public void reconfigure(String propertyId, Any propValue) throws Exception {
 		DataType[] propertiesToConfigure = new DataType[] { new DataType(propertyId, propValue) };
 
 		try {
-			PropertySet properties = PropertySetHelper.narrow(orb.string_to_object(parentObject));
+			PropertySet properties = PropertySetHelper.narrow(orb.string_to_object(parentIOR));
 			properties.configure(propertiesToConfigure);
 		} catch (InvalidConfiguration e) {
 			throw new InvalidConfiguration();
@@ -63,82 +68,49 @@ public class RedhawkProperty {
 			throw new PartialConfiguration();
 		}
 	}
+	
+	public abstract <T> void setValue(T value) throws Exception;
+	
+    public <T> T getValue() {
+        return getValue(true);
+    }
 
-	protected Any createAny(Object objectToCreate) {
-		final Any any = orb.create_any();
-		if (objectToCreate instanceof String) {
-			any.insert_string((String) objectToCreate);
-		} else if (objectToCreate instanceof Short) {
-			any.insert_short((Short) objectToCreate);
-		} else if (objectToCreate instanceof Boolean) {
-			any.insert_boolean((Boolean) objectToCreate);
-		} else if (objectToCreate instanceof Long) {
-			any.insert_longlong((Long) objectToCreate);
-		} else if (objectToCreate instanceof Character) {
-			any.insert_char((Character) objectToCreate);
-		} else if (objectToCreate instanceof Double) {
-			any.insert_double((Double) objectToCreate);
-		} else if (objectToCreate instanceof Float) {
-			any.insert_float((Float) objectToCreate);
-		} else if (objectToCreate instanceof Integer) {
-			any.insert_long((Integer) objectToCreate);
-		} else if (objectToCreate instanceof Byte) {
-			any.insert_octet((Byte) objectToCreate);
-		} else if (objectToCreate instanceof Map) {
-			Map objMap = (Map) objectToCreate;
-			List<DataType> dataTypesToInsert = new ArrayList<DataType>();
-
-			for (Object key : objMap.keySet()) {
-				DataType dt = new DataType();
-				dt.id = key + "";
-				dt.value = createAny(objMap.get(key));
-				dataTypesToInsert.add(dt);
-			}
-
-			Any anyObject = orb.create_any();
-			PropertiesHelper.insert(anyObject, dataTypesToInsert.toArray(new DataType[dataTypesToInsert.size()]));
-			return anyObject;
-
-		} else if (objectToCreate instanceof Object[]) {
-			Object[] objects = (Object[]) objectToCreate;
-
-			if (objects.length < 1) {
-				logger.log(Level.FINE, "Empty array provided, returning empty any");
-				return any;
-			}
-
-			// determining type based on first entry of array
-        	org.omg.CORBA.TypeCode tcElement = orb.get_primitive_tc(getTCKind(objects[0]));
-        	org.omg.CORBA.TypeCode typeCodeForSequence = orb.create_sequence_tc(objects.length, tcElement);
-
-	        return AnyUtils.toAnySequence(objectToCreate, typeCodeForSequence);
-		}
-
-		return any;
+    /**
+     * Whether of not to query actual corba object again for property value 
+     * or to use the one already stored in object. 
+     * 
+     * @param requery
+     * @return
+     */
+	public abstract <T> T getValue(Boolean requery); 
+	
+	//TODO: Probably move this over to REHDAWKUtils 
+	protected void dataTypeToJavaObjectConverter(Map<String, Object> struct, DataType type) {
+		Object propertyValue = AnyUtils.convertAny(type.value);
+		if(propertyValue instanceof Object[]) {
+    		List<Object> tempList = new ArrayList<>();
+    		Object[] tempArray = (Object[]) propertyValue;
+    		
+    		if(tempArray.length>0) {
+    			if(tempArray[0] instanceof DataType) {
+        			//Use recursion
+        			dataTypeToJavaObjectConverter(struct, (DataType)tempArray[0]);
+        		}else {
+            		for(Object obj : tempArray) {
+            			tempList.add(obj);
+            		}
+            		
+            		struct.put(type.id, tempList);    			
+        		}	
+    		}else {
+    			logger.log(Level.WARNING, "No property found at key "+type.id+" struct="+struct);
+    			//TODO: Figure out appropriate way to handle this
+    			//struct.put(type.id, type.value);
+    		}
+    	}else if(propertyValue instanceof Object) {
+    		struct.put(type.id, propertyValue);
+    	}else {
+    		logger.severe("Not handing Struct types of "+propertyValue.getClass());
+    	}		
 	}
-
-	protected TCKind getTCKind(Object objectToCreate) {
-
-		if (objectToCreate instanceof String) {
-			return TCKind.tk_string;
-		} else if (objectToCreate instanceof Short) {
-			return TCKind.tk_short;
-		} else if (objectToCreate instanceof Boolean) {
-			return TCKind.tk_boolean;
-		} else if (objectToCreate instanceof Long) {
-			return TCKind.tk_longlong;
-		} else if (objectToCreate instanceof Character) {
-			return TCKind.tk_char;
-		} else if (objectToCreate instanceof Double) {
-			return TCKind.tk_double;
-		} else if (objectToCreate instanceof Float) {
-			return TCKind.tk_float;
-		} else if (objectToCreate instanceof Integer) {
-			return TCKind.tk_long;
-		} else if (objectToCreate instanceof Byte) {
-			return TCKind.tk_octet;
-		}
-		return TCKind.tk_any; // TOOO, probably not a good idea
-	}
-
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE softwareassembly PUBLIC "-//JTRS//DTD SCA V2.2.2 SAD//EN" "softwareassembly.dtd">
+<softwareassembly id="DCE:33c5cb01-d8ad-4c91-952d-1b2da14742b1" name="AllPropsWaveform">
+  <componentfiles>
+    <componentfile id="AllPropsComponent_aaff9d23-ee52-4393-9883-b31588691170" type="SPD">
+      <localfile name="/components/AllPropsComponent/AllPropsComponent.spd.xml"/>
+    </componentfile>
+  </componentfiles>
+  <partitioning>
+    <componentplacement>
+      <componentfileref refid="AllPropsComponent_aaff9d23-ee52-4393-9883-b31588691170"/>
+      <componentinstantiation id="AllPropsComponent_1" startorder="0">
+        <usagename>AllPropsComponent_1</usagename>
+        <findcomponent>
+          <namingservice name="AllPropsComponent_1"/>
+        </findcomponent>
+      </componentinstantiation>
+    </componentplacement>
+  </partitioning>
+  <assemblycontroller>
+    <componentinstantiationref refid="AllPropsComponent_1"/>
+  </assemblycontroller>
+</softwareassembly>

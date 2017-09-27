@@ -403,8 +403,8 @@ public class MetricsConverter {
 						RedhawkStruct struct = (RedhawkStruct) property;
 						String sysLimitStrip = "sys_limits::";
 						Map<String, Object> sysLimit = new HashMap<>();
-
-						for (Entry<String, Object> sEntry : struct.entrySet()) {
+						Map<String, Object> value = struct.getValue();
+						for (Entry<String, Object> sEntry : value.entrySet()) {
 							String key = sEntry.getKey().replaceAll(sysLimitStrip, "");
 							sysLimit.put(key, sEntry.getValue());
 						}

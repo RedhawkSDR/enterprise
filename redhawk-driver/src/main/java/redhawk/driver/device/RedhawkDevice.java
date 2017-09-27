@@ -25,11 +25,11 @@ import CF.Device;
 import CF.LifeCyclePackage.ReleaseError;
 import CF.ResourcePackage.StartError;
 import CF.ResourcePackage.StopError;
-import redhawk.driver.base.PortBackedObject;
+import redhawk.driver.base.RedhawkSoftwareComponent;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.exceptions.ConnectionException;
 
-public interface RedhawkDevice extends PortBackedObject {
+public interface RedhawkDevice extends RedhawkSoftwareComponent {
 	/**
 	 * @return CORBA object representing a Device. 
 	 */

@@ -24,12 +24,12 @@ The following code examples explain how to retrieve the following metadata from 
 [source,java,indent=0]
 .`RedhawkPortImplIT`
 ----
-include::snippets/RedhawkPortImplIT.java[lines=61..64]
+include::snippets/RedhawkPortImplIT.java[lines=62..65]
 ----
 
 [source,java,indent=0]
 ----
-include::snippets/RedhawkPortImplIT.java[lines=75..78]
+include::snippets/RedhawkPortImplIT.java[lines=76..79]
 ----
 
 ==== Get ActiveSRI from a Provides Port
@@ -37,7 +37,7 @@ include::snippets/RedhawkPortImplIT.java[lines=75..78]
 [source,java,indent=0]
 .`RedhawkPortImplIT`
 ----
-include::snippets/RedhawkPortImplIT.java[lines=88..91]
+include::snippets/RedhawkPortImplIT.java[lines=89..92]
 ----
 
 ==== Get Port State from a Provides Port
@@ -45,7 +45,7 @@ include::snippets/RedhawkPortImplIT.java[lines=88..91]
 [source,java,indent=0]
 .`RedhawkPortImplIT`
 ----
-include::snippets/RedhawkPortImplIT.java[lines=115..118]
+include::snippets/RedhawkPortImplIT.java[lines=116..119]
 ----
  
 ==== Get Port Connections and Disconnect by Connection Id
@@ -53,5 +53,5 @@ include::snippets/RedhawkPortImplIT.java[lines=115..118]
 [source,java,indent=0]
 .`RedhawkPortImplIT`
 ----
-include::snippets/RedhawkPortImplIT.java[lines=187..199]
+include::snippets/RedhawkPortImplIT.java[lines=189..201]
 ----

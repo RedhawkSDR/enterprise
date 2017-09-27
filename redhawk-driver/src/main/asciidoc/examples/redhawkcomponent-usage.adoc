@@ -7,7 +7,7 @@ The following code examples explain how to use the `RedhawkComponent` interface.
 [source,java,indent=0]
 .`RedhawkComponentImplIT.java`
 ----
-include::snippets/RedhawkComponentImplIT.java[lines=99..106]
+include::snippets/RedhawkComponentImplIT.java[lines=171..178]
 ----
 
 === Interacting with Component Properties on Your Component
@@ -15,7 +15,7 @@ include::snippets/RedhawkComponentImplIT.java[lines=99..106]
 [source,java,indent=0]
 .`RedhawkComponentImplIT.java`
 ----
-include::snippets/RedhawkComponentImplIT.java[lines=88..96]
+include::snippets/RedhawkComponentImplIT.java[lines=160..164]
 ----
 
 === Example of How to Get and Set the Log Level of a Component

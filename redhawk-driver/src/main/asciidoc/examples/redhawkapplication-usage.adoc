@@ -18,6 +18,14 @@ include::snippets/RedhawkApplicationImplIT.java[lines=102..113]
 include::snippets/RedhawkApplicationImplIT.java[lines=94..99]
 ----
 
+=== Example of how to Get metrics from Your Application
+
+[source,java,indent=0]
+.`RedhawkApplicationImplIT.java`
+----
+include::snippets/RedhawkApplicationImplIT.java[lines=257]
+----
+
 === Example of How to Get and Set the Log Level of an Application 
 
 [source,java,indent=0]

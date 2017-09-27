@@ -62,6 +62,7 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 			List<Domain> domains = manager.getAll(domainHost+":2809", "domain", null, FetchMode.EAGER);
 			assertNotNull(domains);
 		} catch (Exception e) {
+			e.printStackTrace();
 			fail("Unable to get domains "+e.getMessage());
 		}
 	}
@@ -143,7 +144,7 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 	
 	private void externalApplicationAsserts(Application application){
 		assertEquals("Properties should be here", true, !application.getProperties().isEmpty());
-		assertEquals("Should be four external ports", 4, application.getExternalPorts().size());
+		assertEquals("Should be four external ports", 5, application.getExternalPorts().size());
 	
 		//Make sure external ports contain the externalname
 		List<ExternalPort> ports = application.getExternalPorts();

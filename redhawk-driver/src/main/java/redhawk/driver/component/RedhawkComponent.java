@@ -21,11 +21,12 @@ package redhawk.driver.component;
 
 import CF.ComponentType;
 import redhawk.driver.base.PortBackedObject;
+import redhawk.driver.base.RedhawkSoftwareComponent;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.exceptions.ComponentStartException;
 import redhawk.driver.exceptions.ComponentStopException;
 
-public interface RedhawkComponent extends PortBackedObject {
+public interface RedhawkComponent extends RedhawkSoftwareComponent {
     /**
      * @return Name of the component. 
      */

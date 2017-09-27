@@ -21,14 +21,35 @@ package redhawk.driver.properties;
 
 import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
+import org.ossie.properties.AnyUtils;
+
+import CF.DataType;
+import CF.PropertiesHolder;
+import redhawk.driver.RedhawkUtils;
 
 /**
  * POJO wrapping interaction with Simple properties. 
  */
 public class RedhawkSimple extends RedhawkProperty {
-
+	/**
+	 * Simple Id for Property
+	 */
     private String simpleId;
+    
+    /**
+     * Java representation of value 
+     */
     private Object value; 
+    
+
+    
+    public RedhawkSimple(ORB orb, String parentIOR, DataType type, Object value) {
+    	this.orb = orb;
+    	this.parentIOR = parentIOR;
+    	this.corbaProperty = type;
+    	this.simpleId = type.id;
+    	this.value = value;
+    }
     
     /**
      * 
@@ -37,28 +58,34 @@ public class RedhawkSimple extends RedhawkProperty {
      * @param simpleId
      * @param value
      */
+    @Deprecated
     public RedhawkSimple(ORB orb, String parentObject, String simpleId, Object value){
         this.orb = orb;
-        this.parentObject = parentObject;
+        this.parentIOR = parentObject;
         this.simpleId = simpleId;
         this.value = value;
     }
     
-    public void setValue(Object value) throws Exception {
-        Any any = createAny(value);
-        this.value = value;  
+    public <T> void setValue(T value) throws Exception {
+        Any any = AnyUtils.toAny(value, corbaProperty.value.type());
+    	this.value = value;  
         reconfigure(simpleId, any);
     }
     
-
-    public Object getValue() {
-        return value;  
-    }
+    @Override
+	public <T> T getValue(Boolean requery) {
+    	if(requery) {
+    		PropertiesHolder ph = RedhawkUtils.getPropertyFromCORBAObject(this.orb, this.parentIOR, this.simpleId);
+    		
+    		//Should always only be one value in this structure
+    		value = AnyUtils.convertAny(ph.value[0].value);
+    	}
+    	
+    	return (T)value;
+	} 
 
 	@Override
 	public String toString() {
 		return String.format("RedhawkSimple [simpleId=%s, value=%s]", simpleId, value);
-	}
-    
-    
+	}   
 }

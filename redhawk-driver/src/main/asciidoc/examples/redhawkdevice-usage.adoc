@@ -9,7 +9,7 @@ Sample code for allocating and deallocating a FrontEnd Device.
 [source,java,indent=0]
 .`RedhawkDeviceImplIT.java`
 ----
-include::snippets/RedhawkDeviceImplIT.java[lines=42..96]
+include::snippets/RedhawkDeviceImplIT.java[lines=42..72]
 ----
 
 === Example of How to Get and Set the Log Level of a Device 

@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import CF.Application;
+import redhawk.driver.base.PortBackedObject;
 import redhawk.driver.base.QueryableResource;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.device.RedhawkDevice;
@@ -41,7 +42,7 @@ import redhawk.driver.xml.model.sca.sad.Softwareassembly;
 /**
  * POJO representing a Redhawk Application
  */
-public interface RedhawkApplication extends QueryableResource {
+public interface RedhawkApplication extends PortBackedObject {
     /**
      * @return A {@link java.util.List} with {@link RedhawkComponent} objects. 
      */
@@ -111,24 +112,6 @@ public interface RedhawkApplication extends QueryableResource {
      * @throws ApplicationReleaseException
      */
     void release() throws ApplicationReleaseException;
-    
-    /**
-     * Use this method to get a specific ExternalPort for your application. 
-     * @param name
-     * 	Name of the External Port. 
-     * @return
-     * @throws ResourceNotFoundException
-     * @throws IOException
-     */
-    RedhawkPort getPort(String name) throws ResourceNotFoundException, IOException;
-    
-    /**
-     * Use this method to get all ExternalPorts for an Application. 
-     * 
-     * @return
-     * @throws IOException
-     */
-    List<RedhawkPort> getPorts() throws IOException;
     
     /**
      * Utility method to figure out if an application is started or not. 

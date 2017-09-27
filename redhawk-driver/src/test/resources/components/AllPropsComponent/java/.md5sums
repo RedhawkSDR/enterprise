@@ -1,0 +1,6 @@
+61415f7baaa87d602aea47cfa94b77e3  startJava.sh
+8bfcd22353c3a57fee561ad86ee2a56b  reconf
+27f33ab51245c1e59c24b484c9499f43  src/allPropsComponent/java/AllPropsComponent_base.java
+48b59a8dcfb8c2b004ff720a7463e2d6  configure.ac
+f4197488efb4be7050a930d188b2aeeb  src/allPropsComponent/java/AllPropsComponent.java
+ee4e0055afee1d4eb9be542a644d5cf7  Makefile.am

@@ -34,6 +34,7 @@ import CF.DeviceLocationIteratorHolder;
 import CF.DeviceManager;
 import CF.AllocationManagerPackage.AllocationError;
 import CF.AllocationManagerPackage.AllocationRequestType;
+import CF.AllocationManagerPackage.AllocationResponseType;
 import CF.AllocationManagerPackage.AllocationStatusType;
 import CF.AllocationManagerPackage.DeviceLocationSequenceHolder;
 import CF.AllocationManagerPackage.DeviceLocationType;
@@ -111,7 +112,13 @@ public class RedhawkAllocationManagerImpl extends CorbaBackedObject<AllocationMa
 		
 		allocations[0] = type;
 		try {
-			allocationManager.allocate(allocations);
+			//TODO: Return allocation response information
+			AllocationResponseType[] allocResponse = allocationManager.allocate(allocations);
+			/*System.out.println("Alloc Response: "+allocResponse.length);
+			
+			for(AllocationResponseType t : allocResponse) {
+				System.out.println("AllocationId: "+t.allocationID);
+			}*/
 		} catch (AllocationError e) {
 			throw new AllocationException("Exception allocating device "+deviceId+" with these properties: "+allocation, e);
 		}

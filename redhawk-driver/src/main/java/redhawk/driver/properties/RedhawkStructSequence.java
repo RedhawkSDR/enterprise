@@ -28,10 +28,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.omg.CORBA.Any;
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.TCKind;
+import org.omg.CORBA.TypeCode;
 import org.ossie.properties.AnyUtils;
 
 import CF.DataType;
 import CF.PropertiesHelper;
+import CF.PropertiesHolder;
+import redhawk.driver.RedhawkUtils;
 
 /**
  * Wrapper class for interacting with Struct Sequences. 
@@ -39,26 +42,45 @@ import CF.PropertiesHelper;
 public class RedhawkStructSequence extends RedhawkProperty {
 
     private String sequenceId;
+    //TODO: Why do we need copy on write??
     private List<Any> corbaSeq = new CopyOnWriteArrayList<Any>();
-    protected List<RedhawkStruct> sequence = new CopyOnWriteArrayList<RedhawkStruct>();
+    private List<Map<String, Object>> sequence = new CopyOnWriteArrayList<Map<String, Object>>();
+    private Map<String, TypeCode> keyToTypeCode = new HashMap<>();
     
     public RedhawkStructSequence(ORB orb, String parentObject, String id, Any[] propertyValue) {
         this.sequenceId = id;
-        this.parentObject = parentObject;
+        this.parentIOR = parentObject;
         this.orb = orb;
+        
+        /*
+         * Loop through Any's and convert to RedhawkStruct objects
+         * CORBA should be :
+         * DataType[DataType[]]
+         */
         for(int i = 0; i < propertyValue.length; i++){
-            DataType[] struct = (DataType[]) AnyUtils.convertAny(propertyValue[i]);
-            RedhawkStruct rhStruct = new RedhawkStruct(orb, parentObject, null, struct, this);
+            DataType[] structArray = (DataType[]) AnyUtils.convertAny(propertyValue[i]);
+        	
+            //Add any to corba sequence
             corbaSeq.add(propertyValue[i]);
-            sequence.add(rhStruct);
+        	
+        	/*
+        	 * Convert DataType[] to java representation of a struct 
+        	 * Map<String, Object>()
+        	 */
+        	Map<String, Object> structRep = new HashMap<>();
+        	for(DataType dt : structArray) {
+                /*
+                 * Need a key to typeCode cache to be able to easily manipulate 
+                 * incoming maps from user
+                 */
+        		keyToTypeCode.put(dt.id, dt.value.type());
+        		this.dataTypeToJavaObjectConverter(structRep, dt);
+        	}
+        	
+        	//Add Struct Rep to sequence
+        	sequence.add(structRep);
         }
     }
-    
-    //TODO: Make a better toString()
-    public String toString(){
-        return sequence.toString();
-    }
-    
     
     public DataType[] getDataTypeArray() {
 		Any[] newSequence = corbaSeq.toArray(new Any[corbaSeq.size()]);
@@ -69,45 +91,70 @@ public class RedhawkStructSequence extends RedhawkProperty {
     }
     
     public void addStructsToSequence(List<Map<String,Object>> elementsToAdd) throws Exception {
-        
+		//TODO: Add checks to make sure user is adding appropriate key value pairs
+    	
+    	/*
+		 * Loop through provided new elements and add them to current 
+		 * struct. 
+		 */
     	for(Map<String,Object> elements : elementsToAdd){
 	    	List<DataType> dataTypesBuilder = new ArrayList<DataType>();
-	        for( Object key : elements.keySet()){
-	            dataTypesBuilder.add(new DataType(key+"", createAny(elements.get(key))));
-	        }
+	        
+	    	Any any = createAnyFromMap(elements);
+            dataTypesBuilder.add(new DataType(this.sequenceId, any));
 	        
 	        Any structToInsert = orb.create_any();
-	        DataType[] ss2I = dataTypesBuilder.toArray(new DataType[dataTypesBuilder.size()]);
+	        DataType[] ss2I = dataTypesBuilder.toArray(new DataType[dataTypesBuilder.size()]);	        
 	        PropertiesHelper.insert(structToInsert, ss2I);
-	        corbaSeq.add(structToInsert);
-	        sequence.add(new RedhawkStruct(orb, parentObject, null, ss2I, this));
+	        
+	        for(DataType typeArray : ss2I) {
+	        	Object propertyValue = AnyUtils.convertAny(typeArray.value);
+	        	DataType[] type2Array = (DataType[]) propertyValue; 
+	        	corbaSeq.add(typeArray.value);
+	        	sequence.add(dataTypeArrayToMap(type2Array));
+	        }
     	}
     	
         reconfigureStructSequence();   
     }
     
-    public void addStructToSequence(Map<String,Object> elementToAdd) throws Exception {
-        List<DataType> dataTypesBuilder = new ArrayList<DataType>();
-        Map element = (Map) elementToAdd;
-        for( Object key : element.keySet()){
-            dataTypesBuilder.add(new DataType(key+"", createAny(element.get(key))));
-        }
-        
-        Any structToInsert = orb.create_any();
-        DataType[] ss2I = dataTypesBuilder.toArray(new DataType[dataTypesBuilder.size()]);
-        PropertiesHelper.insert(structToInsert, ss2I);
-        corbaSeq.add(structToInsert);
-        sequence.add(new RedhawkStruct(orb, parentObject, null, ss2I, this));
-        reconfigureStructSequence();   
+    /**
+     * Uses keyToTypeCode map to assist in converting 
+     * Map to an Any. 
+     * 
+     * @param map
+     * @return
+     */
+    private Any createAnyFromMap(Map<String, Object> map) {
+		List<DataType> dataTypesToInsert = new ArrayList<DataType>();
+
+		for (Map.Entry<String, Object> entry : map.entrySet()) {
+			DataType dt = new DataType();
+			dt.id = entry.getKey();
+			dt.value = AnyUtils.toAny(entry.getValue(), keyToTypeCode.get(entry.getKey()));
+			dataTypesToInsert.add(dt);
+		}
+
+		Any anyObject = orb.create_any();
+		PropertiesHelper.insert(anyObject, dataTypesToInsert.toArray(new DataType[dataTypesToInsert.size()]));
+		return anyObject;
     }
     
-    public List<RedhawkStruct> getStructs(){
+    public void addStructToSequence(Map<String,Object> elementToAdd) throws Exception {
+    	List<Map<String, Object>> elementsToAdd = new ArrayList<>();
+    	elementsToAdd.add(elementToAdd);
+    	
+    	this.addStructsToSequence(elementsToAdd);
+    }
+    
+    @Deprecated
+    public List<Map<String, Object>> getStructs(){
         return sequence;
     }
     
-    public RedhawkStruct findStructWithPropertyThatMatches(String property, Object valueToMatch){
-        for(RedhawkStruct struct : sequence){
-            Object propVal = struct.getValue(property);
+    public Map<String, Object> findStructWithPropertyThatMatches(String property, Object valueToMatch){
+        for(Map<String, Object> struct : sequence){
+            Object propVal = struct.get(property);
             if(propVal != null && propVal.equals(valueToMatch)){
                 return struct;
             }
@@ -123,8 +170,8 @@ public class RedhawkStructSequence extends RedhawkProperty {
     
     
     public void removeStructsWithPropertyThatMatches(String property, List<Object> valuesToMatch) throws Exception {
-        for(RedhawkStruct struct : sequence){
-            Object propVal = struct.getValue(property);
+        for(Map<String, Object> struct : sequence){
+            Object propVal = struct.get(property);
             
             for(Object obj : valuesToMatch){
 	            if(propVal != null && propVal.equals(obj)){
@@ -142,8 +189,8 @@ public class RedhawkStructSequence extends RedhawkProperty {
     
     
     public void removeStructWithPropertyThatMatches(String property, Object valueToMatch) throws Exception {
-        for(RedhawkStruct struct : sequence){
-            Object propVal = struct.getValue(property);
+        for(Map<String, Object> struct : sequence){
+            Object propVal = struct.get(property);
             if(propVal != null && propVal.equals(valueToMatch)){
                 int structIndex = sequence.indexOf(struct);
                 corbaSeq.remove(structIndex);
@@ -153,9 +200,9 @@ public class RedhawkStructSequence extends RedhawkProperty {
         }
     }
     
-    public RedhawkStruct getStructByPropertyAndValue(String propertyId, Object valueToMatch){
-        for(RedhawkStruct struct : sequence){
-            Object propVal = struct.getValue(propertyId);
+    public Map<String, Object> getStructByPropertyAndValue(String propertyId, Object valueToMatch){
+        for(Map<String, Object> struct : sequence){
+            Object propVal = struct.get(propertyId);
             if(propVal != null && propVal.equals(valueToMatch)){
                 return struct;
             }
@@ -165,10 +212,10 @@ public class RedhawkStructSequence extends RedhawkProperty {
     }
     
     
-    public List<RedhawkStruct> getStructsByPropertyAndValue(String propertyId, Object valueToMatch){
-        List<RedhawkStruct> structsToReturn = new ArrayList<RedhawkStruct>();
-        for(RedhawkStruct struct : sequence){
-            Object propVal = struct.getValue(propertyId);
+    public List<Map<String, Object>> getStructsByPropertyAndValue(String propertyId, Object valueToMatch){
+        List<Map<String, Object>> structsToReturn = new ArrayList<Map<String, Object>>();
+        for(Map<String, Object> struct : sequence){
+            Object propVal = struct.get(propertyId);
             if(propVal != null && propVal.equals(valueToMatch)){
                 structsToReturn.add(struct);
             }
@@ -177,7 +224,7 @@ public class RedhawkStructSequence extends RedhawkProperty {
         return structsToReturn;
     }    
     
-    
+    //TODO: Get rid of these I believe this use case is invalid
     protected DataType[] updateStruct(RedhawkStruct structToUpdate, String propertyId, Object value) throws Exception {
         Map<String, Object> valuesToUpdate = new HashMap<String, Object>();
         valuesToUpdate.put(propertyId, value);
@@ -194,7 +241,7 @@ public class RedhawkStructSequence extends RedhawkProperty {
         for(DataType type : actualStruct){
             for(String key : valuesToUpdate.keySet()){
                 if(type.id.toLowerCase().matches(key.toLowerCase())){
-                    type.value = createAny(valuesToUpdate.get(key));
+                    type.value = AnyUtils.toAny(valuesToUpdate.get(key), type.value.type().kind());
                     modified = true;
                 }
             }
@@ -206,8 +253,13 @@ public class RedhawkStructSequence extends RedhawkProperty {
             PropertiesHelper.insert(updatedStruct, actualStruct);
             corbaSeq.remove(structIndex);
             corbaSeq.add(structIndex, updatedStruct);
+            
+            //updated struct should become a DataType[] 
+        	Object propertyValue = AnyUtils.convertAny(updatedStruct);
+        	DataType[] type2Array = (DataType[]) propertyValue; 
+        	
             sequence.remove(structIndex);
-            sequence.add(structIndex, newStruct);
+            sequence.add(structIndex, this.dataTypeArrayToMap(type2Array));
         }
         
         
@@ -217,22 +269,96 @@ public class RedhawkStructSequence extends RedhawkProperty {
     
     
     
+    /**
+     * Returns a list of maps
+     * @return
+     */
+    @Deprecated
     public List<Map<String, Object>> toListOfMaps(){
-    	List<Map<String,Object>> listOfMaps = new ArrayList<Map<String,Object>>();
-    	
-    	for(RedhawkStruct struct : getStructs()){
-    		listOfMaps.add(struct.toMap());
-    	}
-    	
-    	return listOfMaps;
+    	return this.getValue(false);
     }
     
+	@Override
+	public <T> void setValue(T value) throws Exception {
+		try {
+			List<Map<String, Object>> obj = (List<Map<String, Object>>) value;
+			
+			//Clear out old values from corbaSeq & sequence then reuse add logic 
+			corbaSeq.clear();
+			sequence.clear();
+			
+			this.addStructsToSequence(obj);
+		}catch(ClassCastException ex) {
+			throw new Exception("Expecting a value castable to List<Map<String, Object>>");
+		}
+	}
+
+	@Override
+	public <T> T getValue(Boolean requery) {
+		if(requery) {
+			//Query for sequence
+			PropertiesHolder ph = RedhawkUtils.getPropertyFromCORBAObject(this.orb, this.parentIOR, this.sequenceId);
+			
+			//Reinitialize list for latest values
+			corbaSeq.clear();
+			sequence.clear();
+			for(DataType property : ph.value) {
+		    	Any[] propertyValue = (Any[])AnyUtils.convertAny(property.value);
+		        
+		        for(int i = 0; i < propertyValue.length; i++){
+		            DataType[] structArray = (DataType[]) AnyUtils.convertAny(propertyValue[i]);
+		        	
+		            //Add any to corba sequence
+		            corbaSeq.add(propertyValue[i]);
+		        	
+		        	/*
+		        	 * Convert DataType[] to java representation of a struct 
+		        	 * Map<String, Object>()
+		        	 */
+		        	Map<String, Object> structRep = new HashMap<>();
+		        	for(DataType dt : structArray) {
+		        		this.dataTypeToJavaObjectConverter(structRep, dt);
+		        	}
+		        	
+		        	//Add Struct Rep to sequence
+		        	sequence.add(structRep);
+		        }
+			}
+		}
+		
+		return (T) sequence;
+	}
+	
+	/**
+	 * Helper method for converting Struct(DataType[]) to Java representation 
+	 * of a struct Map<String, Object>()
+	 * 
+	 * @param array
+	 * 
+	 * @return
+	 */
+	private Map<String, Object> dataTypeArrayToMap(DataType[] array){
+    	Map<String, Object> structRep = new HashMap<>();
+    	for(DataType dt : array) {
+    		this.dataTypeToJavaObjectConverter(structRep, dt);
+    	}
+    	
+    	return structRep;
+	}
     
     private void reconfigureStructSequence() throws Exception {
         Any[] newSequence = corbaSeq.toArray(new Any[corbaSeq.size()]);
         Any newAny = AnyUtils.toAny(newSequence, TCKind.tk_any);
         reconfigure(sequenceId, newAny);
     }
-    
-    
+	
+	@Override
+	public String toString(){
+    	StringBuilder build = new StringBuilder();
+    	build.append("RedhawkStructSequence: [sequenceId ="+this.sequenceId+"\n");
+    	build.append("Structs: \n");
+    	build.append(sequence.toString());
+    	
+    	return build.toString();
+    }
 }

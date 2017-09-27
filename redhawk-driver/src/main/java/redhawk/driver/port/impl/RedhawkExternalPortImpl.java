@@ -132,4 +132,9 @@ public class RedhawkExternalPortImpl implements RedhawkPort {
 		return "RedhawkExternalPortImpl [description=" + description + ", externalName=" + externalName + ", port="
 				+ port + "]";
 	}
+
+	@Override
+	public void listen(PortListener<?> portListener) throws Exception {
+		port.connect(portListener);
+	}
 }

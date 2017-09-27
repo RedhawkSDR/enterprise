@@ -37,7 +37,7 @@ public class RedhawkTunerImpl implements RedhawkTuner {
 //	protected String allocId;
 	
 	protected String getAllocId(RedhawkStruct s) {
-		String allocIdCsv = (String) s.toMap().get("FRONTEND::tuner_status::allocation_id_csv");
+		String allocIdCsv = (String) s.getValue("FRONTEND::tuner_status::allocation_id_csv");
 		if (allocIdCsv == null)
 			return null;
 		ArrayList<String> allocIds = new ArrayList<String>();

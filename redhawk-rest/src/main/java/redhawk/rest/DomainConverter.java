@@ -116,8 +116,14 @@ public class DomainConverter {
 					if (propertyClone.get(struct.getId()) != null) {
 						propertyClone.remove(struct.getId());
 					}
-					Property prop = convertStruct(struct.getId(), (RedhawkStruct) rhProp, struct);
-					properties.add(prop);
+					
+					if(rhProp!=null) {
+						Property prop = convertStruct(struct.getId(), (RedhawkStruct) rhProp, struct);
+						properties.add(prop);						
+					}else {
+						logger.warning("Not converting Id: "+struct.getId()+" Struct: "+struct+" RHStruct: "+rhProp);
+					}
+
 					break;
 				}
 				case "StructSequence": {
@@ -190,8 +196,13 @@ public class DomainConverter {
 		
 		return prop;
 	}
-
+	
 	private Property convertStruct(String id, RedhawkStruct rhProp, Struct original) {
+		Map<String, Object> object = rhProp.getValue();
+		return convertStruct(id, object, original);
+	}
+	
+	private Property convertStruct(String id, Map<String, Object> rhProp, Struct original) {
 		StructRep destination = new StructRep();
 		destination.setType("struct");
 		destination.setDescription(original.getDescription());
@@ -200,14 +211,14 @@ public class DomainConverter {
 		destination.setName(original.getName());
 
 		List<Property> attributes = new ArrayList<>();
-
+		Map<String, Object> rhStructVal = rhProp;
 		for (Object o : original.getSimplesAndSimplesequences()) {
 			switch (o.getClass().getSimpleName()) {
 			case "Simple": {
 				Simple simple = (Simple) o;
 				SimpleRep s = convertSimple(simple.getId(), null, simple);
-				if (rhProp != null && rhProp.size() > 0) {
-					Object obj = rhProp.get(simple.getId());
+				if (rhProp != null && rhStructVal.size() > 0) {
+					Object obj = rhStructVal.get(simple.getId());
 					if (obj != null) {
 						s.setValue(obj + "");
 						s.setDataType(obj.getClass().getName());
@@ -220,8 +231,8 @@ public class DomainConverter {
 			case "SimpleSequence": {
 				SimpleSequence simple = (SimpleSequence) o;
 				SimpleSequenceRep s = convertSimpleSequence(simple.getId(), null, simple);
-				if (rhProp != null && rhProp.size() > 0) {
-					Object obj = rhProp.get(simple.getId());
+				if (rhStructVal.size() > 0) {
+					Object obj = rhStructVal.get(simple.getId());
 					if (obj != null) {
 						s.setValues(Arrays.asList(obj));
 						s.setDataType(obj.getClass().getName());
@@ -306,9 +317,10 @@ public class DomainConverter {
 		destination.setId(propertyId);
 
 		List<Property> structs = new ArrayList<>();
-
-		if (redhawkProperty != null && redhawkProperty.getStructs() != null) {
-			for (RedhawkStruct struct : redhawkProperty.getStructs()) {
+		
+		if (redhawkProperty != null && redhawkProperty.getValue()!=null) {
+			List<Map<String, Object>> structSequnce = redhawkProperty.getValue();
+			for (Map<String, Object> struct : structSequnce) {
 				Property s = convertStruct(original.getStruct().getId(), struct, original.getStruct());
 				structs.add(s);
 			}

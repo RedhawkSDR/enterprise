@@ -39,6 +39,10 @@ import org.xml.sax.SAXException;
 import BULKIO.StreamSRI;
 import CF.DataType;
 import CF.PropertiesHelper;
+import CF.PropertiesHolder;
+import CF.PropertySetHelper;
+import CF.PropertySetOperations;
+import CF.UnknownProperties;
 import redhawk.driver.eventchannel.listeners.PropertyChange;
 import redhawk.driver.properties.RedhawkStructSequence;
 import redhawk.driver.xml.ScaXmlProcessor;
@@ -333,6 +337,37 @@ public class RedhawkUtils {
 			list.add(id);
 			propMap.put(name, list);
 		}
+	}
+	
+	/**
+	 * Helper method for querying property(s) based on it's IOR, name and the given orb. 
+	 * @param orb
+	 * @param ior
+	 * @param propertyNames
+	 * @return
+	 */
+	public static PropertiesHolder getPropertyFromCORBAObject(ORB orb, String ior, String... propertyNames) {
+		PropertiesHolder ph = new PropertiesHolder();
+		ph.value = new DataType[] {};
+
+		if (propertyNames != null) {
+			List<DataType> dataTypes = new ArrayList<DataType>();
+			for (String propertyName : propertyNames) {
+				dataTypes.add(new DataType(propertyName, orb.create_any()));
+			}
+
+			ph.value = dataTypes.toArray(new DataType[dataTypes.size()]);
+		}
+
+		try {
+			PropertySetOperations properties = PropertySetHelper.narrow(orb.string_to_object(ior));
+			properties.query(ph);
+		} catch (UnknownProperties e) {
+			logger.log(Level.FINE, "Could not find property: " + propertyNames, e);
+			return null;
+		}
+
+		return ph;
 	}
 	
 	public static <T> T getPropertyFromObject(Object prop) {

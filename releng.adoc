@@ -10,9 +10,25 @@
 
 . In case things aren't cleaned up run  mvn release:clean -P CFDependencies,default,docs
 
+== How to Release RC1<
+
+. update the release number property in the parent pom if this is another RC.
+
+. Tag and push gitlab-ci will do the rest
+
 == Merging Forward
 
 gitattributes should be able to accomplish this but it will fastforward if you've previously done merges on a particular file. 
+
+=== Cherry Picking
+
+Use cherry-pick to merge specific commits forward. 
+
+----
+git cherry-pick --no-commit <hash>
+----
+
+The `no-commit` allows you to see the changes that would happen before it commits.
 
 === Manual Way
 

@@ -82,7 +82,7 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 	<bean id="redhawkMetricsResource" class="redhawk.rest.endpoints.RedhawkMetricsResource">
 		<property name="redhawkManager" ref="redhawkManagerBean" />
 	</bean>
-	
+
 	<jaxrs:server id="rsServer" address="/redhawk">
 		<jaxrs:serviceBeans>
 			<ref component-id="redhawkDomainResource" />

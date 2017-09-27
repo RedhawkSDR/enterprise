@@ -21,16 +21,18 @@ package redhawk.driver.port;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import BULKIO.ProvidesPortStatisticsProvider;
 import BULKIO.ProvidesPortStatisticsProviderHelper;
 import BULKIO.StreamSRI;
 import BULKIO.updateSRI;
 import BULKIO.updateSRIHelper;
+import CF.PortPackage.InvalidPort;
+import CF.PortPackage.OccupiedPort;
 import ExtendedCF.QueryablePort;
 import ExtendedCF.QueryablePortHelper;
 import ExtendedCF.UsesConnection;
-import redhawk.driver.bulkio.DataTypes;
 import redhawk.driver.bulkio.Packet;
 import redhawk.driver.exceptions.PortException;
 
@@ -56,10 +58,41 @@ public interface RedhawkPort {
 	 * @param portListener
 	 *            Object containing logic for what to do when you get data on a
 	 *            port.
+	 * @deprecated use more appropriately name listen method.
+	 * 
 	 * @throws Exception
 	 */
+	@Deprecated
 	public void connect(PortListener<?> portListener) throws Exception;
+	
+	default void connect(RedhawkPort port) throws PortException {
+		connect(port, "rhdriver_" + UUID.randomUUID());
+	}
+	
+	default void connect(RedhawkPort port, String connectionId) throws PortException {
+		// Initial check for type difference
+		if (this.getType().equals(port.getType()) || !this.getRepId().equals(port.getRepId()))
+			throw new PortException("Cannot connect ports of the same type or w/ non matching interfaces(repId).");
+		
+		try {
+			CF.Port aPort = null;
+			if (this.getType().equals(RedhawkPort.PORT_TYPE_USES)) {
+				aPort = CF.PortHelper.narrow(this.getCorbaObject());
 
+				aPort.connectPort(port.getCorbaObject(), connectionId);
+			} else {
+				aPort = CF.PortHelper.narrow(port.getCorbaObject());
+				aPort.connectPort(this.getCorbaObject(), connectionId);
+			}
+		} catch (InvalidPort | OccupiedPort e) {
+			throw new PortException("Unable to connect ports", e);
+		}
+	}
+	
+
+	
+	public void listen(PortListener<?> portListener) throws Exception;
+	
 	/**
 	 * Disconnect from a port.
 	 * 

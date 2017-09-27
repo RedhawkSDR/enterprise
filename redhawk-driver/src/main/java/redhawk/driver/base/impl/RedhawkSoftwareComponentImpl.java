@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,7 +41,9 @@ import CF.ResourceHelper;
 import CF.PortSupplierPackage.UnknownPort;
 import redhawk.driver.base.PortBackedObject;
 import redhawk.driver.base.RedhawkFileSystem;
+import redhawk.driver.base.RedhawkSoftwareComponent;
 import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.exceptions.PortException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.port.impl.RedhawkPortImpl;
@@ -51,16 +54,16 @@ import redhawk.driver.xml.model.sca.scd.Softwarecomponent;
 import redhawk.driver.xml.model.sca.scd.Uses;
 import redhawk.driver.xml.model.sca.spd.Softpkg;
 
-public abstract class PortBackedObjectImpl<TParsedClass> extends QueryableResourceImpl<TParsedClass> implements PortBackedObject {
+public abstract class RedhawkSoftwareComponentImpl<TParsedClass> extends QueryableResourceImpl<TParsedClass> implements RedhawkSoftwareComponent {
 
-	private Logger logger = Logger.getLogger(PortBackedObjectImpl.class.getName());
+	private Logger logger = Logger.getLogger(RedhawkSoftwareComponentImpl.class.getName());
 	private RedhawkFileSystem fileSystem;
 	
-	protected PortBackedObjectImpl(String ior, ORB orb, RedhawkFileSystem fileSystem){
+	protected RedhawkSoftwareComponentImpl(String ior, ORB orb, RedhawkFileSystem fileSystem){
 		super(ior, orb);
 		this.fileSystem = fileSystem;
 	}
-
+    
     public Map<String, RedhawkPort> ports() throws ResourceNotFoundException {
     	return getPorts().stream().collect(Collectors.toMap(p -> p.getName(), Function.identity()));
     }

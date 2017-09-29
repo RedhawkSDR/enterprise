@@ -1,32 +1,36 @@
 == REDHAWK Metrics
 
-The Metric related REST endpoints give users the ability to RESTFully get the following metrics: 
+The metric-related REST endpoints provide the option to RESTFully get the following metrics: 
 
-* BULKIO Port Statistics [for more details refer to REDHAWK Manual section 5.7.7 on Port Statistics]
+* BulkIO Port Statistics 
 * GPP Metrics
 ** component_monitor: Metrics related to each component controlled by the GPP
 ** utilization
 ** sys_limits
 ** nic_metrics
-* Application Metrics //TODO: Reference Manual portion that documents these fields
+* Application Metrics
 
-Combining the REST Endpoints which produce JSON with a data flow framework(e.g. Apache Camel, Apache NiFi) you can easily get the metrics out of your REDHAWK Domain and into the metrics solution of your choice. An example Camel route for getting metrics from your domain at a specific interval can be seen below:
+For more information about BulkIO Port statistics, GPP metrics, or Application metrics, refer to the REDHAWK Manual.
+
+By combining the REST Endpoints, which produce JSON with a data flow framework (for example: Apache Camel, Apache NiFi), metrics can be retrieved from a REDHAWK Domain and put in a desired metrics solution. The following example provides a Camel route for getting metrics from a Domain at a specific interval:
 
 [source, xml, indent=0]
 ----
 include::camel/route.xml[]
 ----
 
-The benefits of doing this with a Data flow framework is the framework will already have components for you to use for `Persistence` like https://www.elastic.co/products/elasticsearch[Elastic Search], https://www.mongodb.com/[MongoDB], etc... . Once you've stored the data in a `Persistence` backend there are a plethore of Dashboard GUI utilities like https://www.elastic.co/products/kibana[Kibana], https://grafana.com/[Grafana] for example for you to customize your own dashboards and write flexible queries against for checking out what's going on with your domain. 
+The data flow framework provides components for you to use for `Persistence`, such as https://www.elastic.co/products/elasticsearch[Elastic Search] and https://www.mongodb.com/[MongoDB]. Once the data is stored in a `Persistence` backend, Dashboard GUI utilities, such as https://www.elastic.co/products/kibana[Kibana] and https://grafana.com/[Grafana], may be used to customize dashboards and write flexible queries against, which provides details about the domain. 
 
 === REDHAWK Metrics Demo Webapp
 
-If you desire to look back in time at metrics and to have querying features you should use the techniques described above for your metrics solution. For just a simple snapshot of what a Domains metrics look like. You can use the demo metrics web application supplied in the `redhawk-demo-dist`(Note: if you did group install `REDHAWK Enterprise Integration` this has already been installed for you). Once you have installed the `redhawk-demo-dist` on your system do the following to launch the application on your karaf instance:
+To view metrics from the past and have the option to set up queries, use the techniques described in <<REDHAWK Metrics>>. To view a simple snapshot of a Domain's metrics, use the demo metrics web application supplied in the `redhawk-demo-dist`.
 
-. Copy `demo/redhawk-metrics/redhawk-metrics-webapp-{version}.jar` into the deploy directory of Karaf(${karaf.base}/deploy)
-. Open up your browser to http://{hostname}:{karaf.port}/redhawkmetrics
-. At this point you'll be able to click on `GPP`,`Application`,`PORT` links to visualize each type of metric
-. You can also click on `Configuration` to configure which REST endpoints the webapplication should be using. 
+If you performed a group install, `REDHAWK Enterprise Integration`, the demo metrics web application was installed then. Otherwise, you need to install the `redhawk-demo-dist` on your system before performing the following steps to launch the application on your karaf instance.
+
+. Copy `demo/redhawk-metrics/redhawk-metrics-webapp-{version}.jar` into the deploy directory of Karaf(${karaf.base}/deploy).
+. Open the browser to http://{hostname}:{karaf.port}/redhawkmetrics.
+. Click the `GPP`, `Application`, `PORT` links to visualize each type of metric.
+. Click `Configuration` to configure the REST endpoints the webapplication should be using. 
 
 Screenshot:
 

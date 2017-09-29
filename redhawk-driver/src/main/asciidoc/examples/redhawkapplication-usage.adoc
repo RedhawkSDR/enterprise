@@ -2,7 +2,7 @@
 
 The following code examples explain how to use the `RedhawkApplication` interface. 
 
-=== Managing Your Application's Lifecycle
+=== Managing an Application's Lifecycle
 
 [source,java,indent=0]
 .`RedhawkApplicationImplIT.java`
@@ -10,7 +10,7 @@ The following code examples explain how to use the `RedhawkApplication` interfac
 include::snippets/RedhawkApplicationImplIT.java[lines=102..113]
 ----
 
-=== Interacting with Components from Your Application
+=== Interacting with Components in an Application
 
 [source,java,indent=0]
 .`RedhawkApplicationImplIT.java`
@@ -18,7 +18,7 @@ include::snippets/RedhawkApplicationImplIT.java[lines=102..113]
 include::snippets/RedhawkApplicationImplIT.java[lines=94..99]
 ----
 
-=== Example of how to Get metrics from Your Application
+=== Example of How to Get Metrics from an Application
 
 [source,java,indent=0]
 .`RedhawkApplicationImplIT.java`

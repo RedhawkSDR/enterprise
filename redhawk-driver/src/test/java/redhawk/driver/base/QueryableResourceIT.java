@@ -47,8 +47,11 @@ public class QueryableResourceIT extends RedhawkPropertyTestBase{
 		}		
 	}
 	
+	/*
+	 * Test getting a property by it's optional(name) ensure that mapping from name to id is being done. 
+	 */
 	@Test
-	public void testPropertyId() {
+	public void testGetPropertyByName() {
 		List<RedhawkDeviceManager> deviceManagers = manager.getDeviceManagers();
 	
 		for(RedhawkDeviceManager devManager : deviceManagers) {

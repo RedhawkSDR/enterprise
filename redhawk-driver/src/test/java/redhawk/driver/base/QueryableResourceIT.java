@@ -25,13 +25,10 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -42,7 +39,6 @@ import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.CORBAException;
-import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.properties.RedhawkProperty;
@@ -51,7 +47,6 @@ import redhawk.driver.properties.RedhawkSimple;
 import redhawk.driver.properties.RedhawkSimpleSequence;
 import redhawk.driver.properties.RedhawkStruct;
 import redhawk.driver.properties.RedhawkStructSequence;
-import redhawk.testutils.RedhawkTestBase;
 
 public class QueryableResourceIT extends RedhawkPropertyTestBase{	
 	static RedhawkApplication basicComponentDemo;
@@ -67,8 +62,11 @@ public class QueryableResourceIT extends RedhawkPropertyTestBase{
 		}		
 	}
 	
+	/*
+	 * Test getting a property by it's optional(name) ensure that mapping from name to id is being done. 
+	 */
 	@Test
-	public void testPropertyId() {
+	public void testGetPropertyByName() {
 		List<RedhawkDeviceManager> deviceManagers = manager.getDeviceManagers();
 	
 		for(RedhawkDeviceManager devManager : deviceManagers) {

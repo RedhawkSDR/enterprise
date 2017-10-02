@@ -36,12 +36,16 @@ import CF.PropertiesHolder;
 import CF.PropertySetHelper;
 import CF.PropertySetOperations;
 import CF.UnknownProperties;
+import redhawk.driver.RedhawkUtils;
 import redhawk.driver.base.QueryableResource;
+import redhawk.driver.base.RedhawkSoftwareComponent;
+import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.properties.RedhawkProperty;
 import redhawk.driver.properties.RedhawkSimple;
 import redhawk.driver.properties.RedhawkSimpleSequence;
 import redhawk.driver.properties.RedhawkStruct;
 import redhawk.driver.properties.RedhawkStructSequence;
+import redhawk.driver.xml.model.sca.prf.Properties;
 
 /**
  * Helper methods for retrieving Properties from CORBA backed REDHAWK objects. 
@@ -124,6 +128,7 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
     private PropertiesHolder query(String ... propertyNames){
         PropertiesHolder ph = new PropertiesHolder();
         ph.value = new DataType[]{};
+        PropertySetOperations properties = null;
 
         if(propertyNames != null){
             List<DataType> dataTypes = new ArrayList<DataType>();
@@ -135,17 +140,58 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
         }
 
         try {
-        	PropertySetOperations properties = PropertySetHelper.narrow(getOrb().string_to_object(getIor()));
+        	properties = PropertySetHelper.narrow(getOrb().string_to_object(getIor()));
         	properties.query(ph);
         } catch (UnknownProperties e) {
-            logger.log(Level.FINE, "Could not find property: " + propertyNames, e);
-            return null;
+        	logger.log(Level.FINE, "Could not find property: " + propertyNames, e);
+            //TODO: Clean up this error handling
+            /*
+             * Help user by retrieving property if it's name is associated with an Id
+             */
+            if(this instanceof RedhawkSoftwareComponent) {
+            	try {
+					Properties props = ((RedhawkSoftwareComponent)this).getPropertyConfiguration();
+					
+					Map<String, List<String>> propToId = RedhawkUtils.getPropertyNameToId(props);
+					List<String> newPropNames = new ArrayList<>();
+					
+					//Look up each supplied name in map
+					for(String suppliedName : propertyNames) {
+						if(propToId.containsKey(suppliedName)) {
+							newPropNames.addAll(propToId.get(suppliedName));
+						}
+					}
+					
+					//If newPropNames were found search now by ids
+					if(!newPropNames.isEmpty() && properties!=null) {
+						ph = createPropertiesHolderFromList(newPropNames.toArray(new String[newPropNames.size()]));
+						properties.query(ph);
+					}
+            	} catch (ResourceNotFoundException | UnknownProperties e1) {
+					return null;
+				}
+            }else {
+            	return null;
+            }
         }        
      
         return ph;
     }
     
-    
+
+    private PropertiesHolder createPropertiesHolderFromList(String[] names) {
+        PropertiesHolder ph = new PropertiesHolder();
+        
+        List<DataType> dataTypes = new ArrayList<DataType>();
+        for(String propertyName : names){
+            dataTypes.add(new DataType(propertyName, getOrb().create_any()));
+        }
+        
+        ph.value = dataTypes.toArray(new DataType[dataTypes.size()]);
+        
+        return ph;
+    }
+
     /**
      * Return a DataType property object as a POJO
      * 

@@ -369,7 +369,7 @@ public class RedhawkUtils {
 
 		return ph;
 	}
-	
+
 	public static <T> T getPropertyFromObject(Object prop) {
 		String simpleName = prop.getClass().getSimpleName();
 

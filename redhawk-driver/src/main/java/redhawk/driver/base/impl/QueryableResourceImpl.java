@@ -36,7 +36,6 @@ import CF.PropertySetHelper;
 import CF.PropertySetOperations;
 import CF.UnknownProperties;
 import redhawk.driver.RedhawkUtils;
-import redhawk.driver.base.PortBackedObject;
 import redhawk.driver.base.QueryableResource;
 import redhawk.driver.base.RedhawkSoftwareComponent;
 import redhawk.driver.exceptions.ResourceNotFoundException;
@@ -138,7 +137,7 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
         	properties = PropertySetHelper.narrow(getOrb().string_to_object(getIor()));
         	properties.query(ph);
         } catch (UnknownProperties e) {
-            logger.log(Level.FINE, "Could not find property: " + propertyNames, e);
+        	logger.log(Level.FINE, "Could not find property: " + propertyNames, e);
             //TODO: Clean up this error handling
             /*
              * Help user by retrieving property if it's name is associated with an Id
@@ -185,8 +184,7 @@ public abstract class QueryableResourceImpl<TParsedClass> extends CorbaBackedObj
         
         return ph;
     }
-    
-    
+
     /**
      * Return a DataType property object as a POJO
      * 

@@ -41,6 +41,7 @@ public class RedhawkResourceTestBase extends RedhawkTestBase{
 		
 	@BeforeClass
 	public static void setup() throws Exception{
+		//TODO: This shouldn't be hard coded make port and host system props with the hardcoded defaults
 		baseURI = "http://localhost:8080/redhawk/"+domainHost+":"+domainPort+"/domains";
 		server = new Server(8080);
 		WebAppContext webapp = new WebAppContext();

@@ -44,7 +44,7 @@ public class RedhawkResourceTestBase extends RedhawkTestBase{
 		baseURI = "http://localhost:8080/redhawk/"+domainHost+":"+domainPort+"/domains";
 		server = new Server(8080);
 		WebAppContext webapp = new WebAppContext();
-		webapp.setResourceBase("src/test/resources/webapp");
+		webapp.setResourceBase("src/main/webapp");
 		server.setHandler(webapp);
 		System.out.println("Starting embedded Jetty");
 		server.start();

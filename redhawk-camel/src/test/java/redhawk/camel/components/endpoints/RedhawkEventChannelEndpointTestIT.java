@@ -31,10 +31,11 @@ import org.apache.camel.ProducerTemplate;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.component.mock.MockEndpoint;
 import org.apache.camel.test.junit4.CamelTestSupport;
-import org.apache.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import redhawk.driver.RedhawkDriver;
 import redhawk.driver.application.RedhawkApplication;
@@ -49,7 +50,7 @@ import redhawk.testutils.RedhawkTestBase;
 import redhawk.testutils.RedhawkTestUtils;
 
 public class RedhawkEventChannelEndpointTestIT extends CamelTestSupport{
-    private static Logger logger = Logger.getLogger(RedhawkEventChannelEndpointTestIT.class);
+    private static Logger logger = LoggerFactory.getLogger(RedhawkEventChannelEndpointTestIT.class);
     
 	@EndpointInject(uri = "mock:result")
     protected MockEndpoint resultEndpoint;

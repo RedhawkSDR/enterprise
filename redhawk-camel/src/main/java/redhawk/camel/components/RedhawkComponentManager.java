@@ -25,11 +25,11 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.camel.spi.ComponentResolver;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import redhawk.driver.RedhawkDriver;
 
@@ -41,7 +41,7 @@ public class RedhawkComponentManager {
     
     private List<ServiceReference> redhawkConnectionList;
     
-    private static Log logger = LogFactory.getLog(RedhawkComponentManager.class);
+    private static Logger logger = LoggerFactory.getLogger(RedhawkComponentManager.class);
     
     private static final String CONNECTION_NAME_PROPERTY = "connectionName";
     private static final String SERVICE_PID_PROPERTY = "service.pid";

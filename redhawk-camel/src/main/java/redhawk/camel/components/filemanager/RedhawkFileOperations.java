@@ -41,9 +41,9 @@ import org.apache.camel.component.file.GenericFileOperationFailedException;
 import org.apache.camel.component.file.GenericFileOperations;
 import org.apache.camel.util.IOHelper;
 import org.apache.camel.util.ObjectHelper;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.ossie.properties.AnyUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import CF.DataType;
 import CF.File;
@@ -59,8 +59,7 @@ import redhawk.camel.components.endpoints.RedhawkFileEndpoint;
  *
  */
 public class RedhawkFileOperations implements GenericFileOperations<RedhawkFileContainer>{
-
-    private static final transient Log logger = LogFactory.getLog(RedhawkFileOperations.class);
+    private static final transient Logger logger = LoggerFactory.getLogger(RedhawkFileOperations.class);
 
     private FileSystem fileManager;
     private RedhawkFileEndpoint endpoint;

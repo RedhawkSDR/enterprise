@@ -21,8 +21,8 @@ package redhawk.camel.components.filereader;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import redhawk.camel.components.RedhawkComponent;
 import redhawk.driver.domain.RedhawkDomainManager;
@@ -35,7 +35,7 @@ public class RedhawkFileReader implements Processor {
     
     
     @SuppressWarnings("unused")
-    private static Log logger = LogFactory.getLog(RedhawkFileReader.class);
+    private static Logger logger = LoggerFactory.getLogger(RedhawkFileReader.class);
 
     
     public RedhawkFileReader(RedhawkComponent component){

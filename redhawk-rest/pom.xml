@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
@@ -73,22 +74,24 @@
 					</includes>
 				</configuration>
 			</plugin>
+			<!-- Adding section to create a proper war -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>make-war</id>
+						<phase>package</phase>
+						<goals>
+							<goal>war</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
 	<dependencies>
-		<dependency>
-			<groupId>org.apache.cxf</groupId>
-			<artifactId>cxf-rt-rs-extension-providers</artifactId>
-			<version>3.1.9</version>
-		</dependency>
 		<!-- Test Dependencies -->
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
@@ -114,12 +117,12 @@
 			<version>1.4.0</version>
 			<scope>provided</scope>
 		</dependency>
- 		<dependency>
-            		<groupId>org.apache.aries.blueprint</groupId>
-            		<artifactId>org.apache.aries.blueprint.noosgi</artifactId>
-            		<version>1.1.2</version>
-            		<scope>test</scope>
-        	</dependency>
+		<dependency>
+			<groupId>org.apache.aries.blueprint</groupId>
+			<artifactId>org.apache.aries.blueprint.noosgi</artifactId>
+			<version>1.1.2</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
@@ -174,36 +177,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>redhawk</groupId>
-			<artifactId>redhawk-driver</artifactId>
-			<type>test-jar</type>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>		
-		<!-- End Test Dependencies -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.jaxrs</groupId>
-			<artifactId>jackson-jaxrs-json-provider</artifactId>
-			<version>2.6.6</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-annotations</artifactId>
-			<version>2.6.6</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.jaxrs</groupId>
-			<artifactId>jackson-jaxrs-xml-provider</artifactId>
-			<version>2.6.6</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.osgi</groupId>
-			<artifactId>org.osgi.core</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
@@ -211,11 +184,46 @@
 		<dependency>
 			<groupId>redhawk</groupId>
 			<artifactId>redhawk-driver</artifactId>
+			<type>test-jar</type>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- End Test Dependencies -->
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-rs-extension-providers</artifactId>
+			<version>${cxf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.jaxrs</groupId>
+			<artifactId>jackson-jaxrs-json-provider</artifactId>
+			<version>${jackson.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-annotations</artifactId>
+			<version>${jackson.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.jaxrs</groupId>
+			<artifactId>jackson-jaxrs-xml-provider</artifactId>
+			<version>${jackson.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>redhawk</groupId>
+			<artifactId>redhawk-driver</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
@@ -236,17 +244,8 @@
 			<groupId>org.apache.cxf</groupId>
 			<artifactId>cxf-core</artifactId>
 			<version>${cxf.version}</version>
-			<scope>test</scope>
+			<!--<scope>test</scope> -->
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.apache.aries.blueprint/org.apache.aries.blueprint.core -->
-		<!--
-		<dependency>
-    		<groupId>org.apache.aries.blueprint</groupId>
-    		<artifactId>org.apache.aries.blueprint.core</artifactId>
-    		<version>1.8.0</version>
-    		<scope>test</scope>
-		</dependency>
-		-->
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
@@ -293,7 +292,7 @@
 								<apiSource>
 									<locations>redhawk.rest.endpoints</locations>
 									<basePath>cxf/redhawk</basePath>
-                					<schemes>http,https</schemes>									
+									<schemes>http,https</schemes>
 									<host>127.0.0.1</host>
 									<info>
 										<title>REDHAWK REST</title>
@@ -388,7 +387,7 @@
 								</configuration>
 							</execution>
 						</executions>
-					</plugin>				
+					</plugin>
 				</plugins>
 			</build>
 		</profile>

@@ -40,7 +40,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import redhawk.driver.device.AdminState;
 import redhawk.driver.exceptions.ResourceNotFoundException;
-import redhawk.rest.exceptions.ResourceNotFound;
 import redhawk.rest.model.DeviceContainer;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.FullProperty;
@@ -67,7 +66,7 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET REDHAWK Devices"
     		)
-    public Response getDevices(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws ResourceNotFound, Exception {
+    public Response getDevices(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws Exception {
         return Response.ok(new DeviceContainer(redhawkManager.getAll(nameServer, "device", domainName + "/" + devManagerName, fetchMode))).build();
     }
 
@@ -77,7 +76,7 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET REDHAWK Device"
     		)
-    public Response getDevice(@PathParam("deviceId") String deviceId) throws ResourceNotFound, Exception {
+    public Response getDevice(@PathParam("deviceId") String deviceId) throws Exception {
         return Response.ok(redhawkManager.get(nameServer, "device", domainName + "/" + devManagerName + "/" + deviceId)).build();
     }
     
@@ -129,7 +128,7 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET REDHAWK Device Properties"
     		)
-    public Response getDeviceProperties(@PathParam("deviceId") String deviceId) throws ResourceNotFound, ResourceNotFoundException, Exception {
+    public Response getDeviceProperties(@PathParam("deviceId") String deviceId) throws Exception {
         return Response.ok(redhawkManager.getProperties(nameServer, "device", domainName + "/" + devManagerName + "/" + deviceId)).build();
     }
 
@@ -139,7 +138,7 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET REDHAWK Device Property"
     		)
-    public Response getDeviceProperty(@PathParam("deviceId") String deviceId, @PathParam("propId") String propertyId) throws ResourceNotFound, Exception {
+    public Response getDeviceProperty(@PathParam("deviceId") String deviceId, @PathParam("propId") String propertyId) throws Exception {
         return Response.ok(redhawkManager.getProperty(propertyId, nameServer, "device", domainName + "/" + devManagerName + "/" + deviceId)).build();
     }
 

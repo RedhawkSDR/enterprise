@@ -28,6 +28,10 @@ import redhawk.rest.RedhawkManager;
 public class RedhawkBaseResource {
 	public RedhawkManager redhawkManager;
 	
+	public RedhawkBaseResource() {
+		redhawkManager = new RedhawkManager();
+	}
+	
 	@OPTIONS
 	public Response getOptions() {
 		return addCors(Response.ok()).build();

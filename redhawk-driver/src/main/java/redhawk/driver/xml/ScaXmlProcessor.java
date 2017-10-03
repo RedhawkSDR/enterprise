@@ -27,6 +27,7 @@ import java.io.StringWriter;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
+import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
@@ -58,7 +59,7 @@ public class ScaXmlProcessor {
 		String schemaFileName = type.getSchemaFile();
 		String schemaContextPath = schemaClass.getPackage().getName();
 		JAXBContext context = JAXBContextCacheUtil.getInstance().getContext(schemaContextPath);
-		SchemaFactory sf = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+		SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 		Schema schema = sf.newSchema(new StreamSource(ScaXmlProcessor.class.getClassLoader().getResourceAsStream(schemaFileName)));
 		
 		try {

@@ -19,16 +19,10 @@
  */
 package redhawk.websocket.sockets;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.WebSocketAdapter;
-import org.osgi.framework.BundleContext;
-import org.osgi.service.event.Event;
-import org.osgi.service.event.EventAdmin;
 
 import redhawk.driver.Redhawk;
 

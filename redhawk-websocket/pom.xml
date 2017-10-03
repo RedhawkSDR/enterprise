@@ -57,6 +57,24 @@
 					</execution>
 				</executions>
 			</plugin>
+			<!-- Adding section to create a proper war -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>make-war</id>
+						<phase>package</phase>
+						<goals>
+							<goal>war</goal>
+						</goals>
+						<configuration>
+							<packagingExcludes>OSGI-INF/*</packagingExcludes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>			
 		</plugins>
 	</build>
 	<reporting>
@@ -96,6 +114,12 @@
 		</plugins>
 	</reporting>
 	<dependencies>
+		<!-- SLF4J implementation will be provided by Jetty/Karaf -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<scope>provided</scope>
+		</dependency>	
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
@@ -116,31 +140,22 @@
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.core</artifactId>
-			<scope>provided</scope>
+			<!--<scope>provided</scope>-->
 		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.compendium</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<scope>provided</scope>
+			<!--<scope>provided</scope>-->
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.websocket</groupId>
-			<artifactId>javax.websocket-api</artifactId>
-			<version>1.1</version>
+			<!--<scope>provided</scope>-->
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.geronimo.specs</groupId>
@@ -169,11 +184,13 @@
 			<version>2.2.12</version>
 			<scope>test</scope>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>javax.ws.rs</groupId>
 			<artifactId>javax.ws.rs-api</artifactId>
-			<version>2.0.1</version>
+			<version>2.1</version>
 		</dependency>
+		-->
 		<!-- End of test websocket depends -->
 		<dependency>
 			<groupId>org.eclipse.jetty.websocket</groupId>

@@ -1,0 +1,4 @@
+<Configure class="org.eclipse.jetty.webapp.WebAppContext">
+	<Set name="war"><Property name="jetty.webapps" default="." />/redhawk-websocket.war</Set>
+	<Set name="configurationDiscovered">true</Set>
+</Configure>

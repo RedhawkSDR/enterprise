@@ -58,11 +58,13 @@
 									<groupId>redhawk</groupId>
 									<artifactId>redhawk-rest</artifactId>
 									<version>${project.version}</version>
+                   					<destFileName>redhawk-rest.war</destFileName>									
 									<type>war</type>
 								</artifactItem>
 								<artifactItem>
 									<groupId>redhawk</groupId>
 									<artifactId>redhawk-websocket</artifactId>
+                   					<destFileName>redhawk-websocket.war</destFileName>																		
 									<version>${project.version}</version>
 									<type>war</type>
 								</artifactItem>
@@ -126,7 +128,6 @@
 							<resources>
 								<resource>
 									<directory>src/main/jetty/</directory>
-									<filtering>true</filtering>
 									<includes>
 										<include>start.ini</include>
 									</includes>
@@ -146,7 +147,6 @@
 							<resources>
 								<resource>
 									<directory>src/main/jetty/resources</directory>
-									<filtering>true</filtering>
 								</resource>
 							</resources>
 						</configuration>
@@ -163,7 +163,6 @@
 							<resources>
 								<resource>
 									<directory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/lib/ext</directory>
-									<filtering>true</filtering>
 								</resource>
 							</resources>
 						</configuration>
@@ -186,7 +185,23 @@
 								</resource>
 							</resources>
 						</configuration>
-					</execution>					
+					</execution>
+					<execution>
+						<!-- Copy key store to etc directory so https can work -->
+						<id>copy-war-xml-configurations</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/webapps/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/jetty/webapps</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>									
 				</executions>
 			</plugin>
 		</plugins>

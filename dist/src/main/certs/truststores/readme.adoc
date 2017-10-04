@@ -1,4 +1,0 @@
-= Truststore Directory 
-
-Default location to put any truststore you'd like configured to run with jetty.xml. This can be configured in 
-the $karaf.base/etc/jetty.xml file. See manual for more details. 

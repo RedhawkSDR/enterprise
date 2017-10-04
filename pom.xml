@@ -190,8 +190,8 @@
 				<module>redhawk-websocket</module>
 				<module>redhawk-camel</module>
 				<module>feature</module>
-				<module>demo</module>
-				<module>dist</module>
+				<module>demos</module>
+				<module>dists</module>
 			</modules>
 		</profile>
 		<profile>
@@ -204,7 +204,7 @@
 				<module>redhawk-connector</module>
 				<module>redhawk-rest</module>
 				<module>redhawk-websocket</module>
-				<module>demo</module>
+				<module>demos</module>
 				<module>docs</module>
 			</modules>
 		</profile>

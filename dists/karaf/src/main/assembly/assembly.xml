@@ -27,7 +27,7 @@
 	</fileSets>
 	<files>
 		<file>
-			<source>${project.parent.basedir}/LICENSE</source>
+			<source>${project.parent.parent.basedir}/LICENSE</source>
 			<outputDirectory>/</outputDirectory>
 			<filtered>true</filtered>
 		</file>

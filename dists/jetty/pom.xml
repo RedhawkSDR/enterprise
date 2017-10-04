@@ -3,14 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>redhawk</groupId>
-		<artifactId>redhawk-enterprise-integration</artifactId>
+		<groupId>redhawk.dists</groupId>
+		<artifactId>parent</artifactId>
 		<version>2.0.2-SNAPSHOT</version>
-		<relativePath>../../pom.xml</relativePath>
 	</parent>
-	<artifactId>redhawk-enterprise-integration-dist</artifactId>
+	<artifactId>rei-jetty</artifactId>
 	<packaging>pom</packaging>
-	<name>REDHAWK :: ENTERPRISE INTEGRATION :: ASSETS</name>
+	<name>REDHAWK :: ENTERPRISE INTEGRATION :: ECLIPSE JETTY</name>
 	<description>
 	RPM and Tar.gz that contains a Jetty container preconfigured to work with REDHAWK REST and REDHAWK Wedsocket Assets. Included as well
 	are necessary dependencies for Jacord.
@@ -37,11 +36,13 @@
 							<artifactItems>
 								<artifactItem>
 									<groupId>org.eclipse.jetty</groupId>
+									<!-- TODO: Investigate using jetty-home -->
 									<artifactId>jetty-home</artifactId>
 									<version>${jetty.version}</version>
 									<type>zip</type>
 								</artifactItem>
 							</artifactItems>
+							<excludes>demo-base/**</excludes>
 							<outputDirectory>${project.build.directory}/${runtime.dir}</outputDirectory>
 						</configuration>
 					</execution>
@@ -64,11 +65,128 @@
 									<artifactId>redhawk-websocket</artifactId>
 									<version>${project.version}</version>
 									<type>war</type>
-								</artifactItem>								
+								</artifactItem>
 							</artifactItems>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/webapps</outputDirectory>							
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/webapps</outputDirectory>
 						</configuration>
 					</execution>
+					<execution>
+						<id>slf4j-assets</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.slf4j</groupId>
+									<artifactId>slf4j-api</artifactId>
+									<version>${slf4j.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.slf4j</groupId>
+									<artifactId>slf4j-log4j12</artifactId>
+									<version>${slf4j.version}</version>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/lib/ext</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>log4j</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>log4j</groupId>
+									<artifactId>log4j</artifactId>
+									<version>1.2.17</version>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/lib/log4j</outputDirectory>							
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-start.ini</id>
+						<!-- here the phase you need -->
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/jetty/</directory>
+									<filtering>true</filtering>
+									<includes>
+										<include>start.ini</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-jetty-resources</id>
+						<!-- here the phase you need -->
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/resources</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/jetty/resources</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<!-- Moving slf4j deps to expected location -->
+						<id>copy-slf4j-deps</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/lib/slf4j</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/lib/ext</directory>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<!-- Copy key store to etc directory so https can work -->
+						<id>copy-default-keystore</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/etc/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/modules/ssl</directory>
+									<includes>
+										<include>keystore</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>					
 				</executions>
 			</plugin>
 		</plugins>

@@ -16,7 +16,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<redhawk.version>2.0.7</redhawk.version>
+		<redhawk.version>2.0.8</redhawk.version>
+		<slf4j.version>1.7.25</slf4j.version>
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<jetty.version>9.2.19.v20160908</jetty.version>
 		<osgi.version>5.0.0</osgi.version>
@@ -57,7 +58,7 @@
 			<dependency>
     			<groupId>org.slf4j</groupId>
     			<artifactId>slf4j-api</artifactId>
-    			<version>1.7.25</version>
+    			<version>${slf4j.version}</version>
 			</dependency>
 			<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
 			<dependency>

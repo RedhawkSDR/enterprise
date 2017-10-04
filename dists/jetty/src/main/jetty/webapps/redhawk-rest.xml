@@ -1,5 +1,22 @@
 <Configure class="org.eclipse.jetty.webapp.WebAppContext">
-	<Set name="contextPath">/cxf</Set>
+	<Set name="contextPath">/rest</Set>
 	<Set name="war"><Property name="jetty.webapps" default="." />/redhawk-rest.war</Set>
 	<Set name="configurationDiscovered">true</Set>
+	  	<!-- Set up the path to the custom override descriptor,
+  	relative to your $(jetty.home) directory or to the current directory -->
+  	<Set name="overrideDescriptor"><Property name="jetty.home" default="." />/etc/jaas_override-web.xml</Set>
+  
+	<!-- 
+		JAAS Login Service
+	 -->
+  	<Set name="securityHandler">
+    	<New class="org.eclipse.jetty.security.ConstraintSecurityHandler">
+     		<Set name="loginService">
+       			<New class="org.eclipse.jetty.jaas.JAASLoginService">
+         			<Set name="name">REDHAWK_JAAS_REALM</Set>
+         			<Set name="loginModuleName">xyz</Set>
+       			</New>
+     		</Set>
+    	</New>
+  	</Set>	 
 </Configure>

@@ -8,14 +8,14 @@
   <display-name>REDHAWK WebSockets</display-name>
    
   <servlet>
-    <servlet-name>REDHAWKBulkIO</servlet-name>
+    <servlet-name>REDHAWKWebSocket</servlet-name>
     <!--<servlet-class>redhawk.websocket.sockets.WebSocketChatServlet</servlet-class>-->
     <servlet-class>redhawk.websocket.RedhawkWebSocketServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
   
    <servlet-mapping>
-    <servlet-name>REDHAWKBulkIO</servlet-name>
-    <url-pattern>/ws/*</url-pattern>
+    <servlet-name>REDHAWKWebSocket</servlet-name>
+    <url-pattern>/*</url-pattern>
   </servlet-mapping>
 </web-app>

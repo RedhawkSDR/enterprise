@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>redhawk</groupId>
+		<artifactId>redhawk-enterprise-integration</artifactId>
+		<version>2.0.2-SNAPSHOT</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+	<artifactId>redhawk-enterprise-integration-dist</artifactId>
+	<packaging>pom</packaging>
+	<name>REDHAWK :: ENTERPRISE INTEGRATION :: ASSETS</name>
+	<description>
+	RPM and Tar.gz that contains a Jetty container preconfigured to work with REDHAWK REST and REDHAWK Wedsocket Assets. Included as well
+	are necessary dependencies for Jacord.
+	</description>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<jacorb.version>3.8</jacorb.version>
+		<jetty.version>9.4.7.v20170914</jetty.version>
+	</properties>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>jetty-home</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.eclipse.jetty</groupId>
+									<artifactId>jetty-home</artifactId>
+									<version>${jetty.version}</version>
+									<type>zip</type>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/${runtime.dir}</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>redhawk-assets</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>redhawk</groupId>
+									<artifactId>redhawk-rest</artifactId>
+									<version>${project.version}</version>
+									<type>war</type>
+								</artifactItem>
+								<artifactItem>
+									<groupId>redhawk</groupId>
+									<artifactId>redhawk-websocket</artifactId>
+									<version>${project.version}</version>
+									<type>war</type>
+								</artifactItem>								
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/webapps</outputDirectory>							
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

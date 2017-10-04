@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>redhawk.dists</groupId>
+		<groupId>redhawk.enterprise.integration.dists</groupId>
 		<artifactId>parent</artifactId>
 		<version>2.0.2-SNAPSHOT</version>
 	</parent>
@@ -271,10 +272,12 @@
 						</goals>
 						<configuration>
 							<target>
-								<concat destfile="${project.build.directory}/${runtime.dir}/karaf-${karaf.version}/etc/system.properties" append="true">
-					 				<fileset dir="src/main/additions">
-					 					<include name="system.properties.additions" />
-					 				</fileset>								
+								<concat
+									destfile="${project.build.directory}/${runtime.dir}/karaf-${karaf.version}/etc/system.properties"
+									append="true">
+									<fileset dir="src/main/additions">
+										<include name="system.properties.additions" />
+									</fileset>
 								</concat>
 							</target>
 						</configuration>
@@ -287,14 +290,16 @@
 						</goals>
 						<configuration>
 							<target>
-								<concat destfile="${project.build.directory}/${runtime.dir}/karaf-${karaf.version}/etc/org.ops4j.pax.logging.cfg" append="true">
-					 				<fileset dir="src/main/additions">
-					 					<include name="logging.additions" />
-					 				</fileset>								
+								<concat
+									destfile="${project.build.directory}/${runtime.dir}/karaf-${karaf.version}/etc/org.ops4j.pax.logging.cfg"
+									append="true">
+									<fileset dir="src/main/additions">
+										<include name="logging.additions" />
+									</fileset>
 								</concat>
 							</target>
 						</configuration>
-					</execution>					
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>

@@ -94,6 +94,11 @@
 									<file>${project.build.directory}/${project.artifactId}-${project.version}.war</file>
 									<type>war</type>
 								</artifact>
+								<!-- TODO: apparently overriding the helper plugin screws default jar deployment of bundle -->
+								<artifact>
+									<file>${project.build.directory}/${project.artifactId}-${project.version}.jar</file>
+									<type>jar</type>
+								</artifact>									
 							</artifacts>
 						</configuration>
 					</execution>
@@ -144,16 +149,17 @@
 			<artifactId>slf4j-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<!--
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
 			<version>2.52.0</version>
 			<scope>test</scope>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -164,17 +170,14 @@
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.core</artifactId>
-			<!--<scope>provided</scope> -->
 		</dependency>
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.compendium</artifactId>
-			<!--<scope>provided</scope> -->
 		</dependency>
 		<dependency>
 			<groupId>commons-lang</groupId>
 			<artifactId>commons-lang</artifactId>
-			<!--<scope>provided</scope> -->
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>

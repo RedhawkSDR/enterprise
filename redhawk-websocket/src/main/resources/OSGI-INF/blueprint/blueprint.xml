@@ -46,7 +46,7 @@ with this program.  If not, see http://www.gnu.org/licenses/.
     
     <service ref="redhawkWebSocketServlet" interface="javax.servlet.Servlet">
          <service-properties>
-                 <entry key="alias" value="/redhawk" />
+                 <entry key="alias" value="/ws/redhawk" />
          </service-properties>
     </service>
 </blueprint>

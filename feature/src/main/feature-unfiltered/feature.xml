@@ -35,19 +35,11 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 	
 	<feature name="${artifactId}-rest" version="${project.version}">
 		<feature version="${project.version}">${artifactId}-connector</feature>
-		<feature version="${cxf.version}">cxf-core</feature>
+		<feature version="${cxf.version}">cxf-jaxrs</feature>
 		<feature version="${cxf.version}">cxf-rs-security-cors</feature>
 		<feature version="${cxf.version}">cxf-rs-description-swagger2</feature>
-		<!-- CXF 3.1.10 has a bug where you can't install the CXF feature -->
-		<bundle>mvn:org.yaml/snakeyaml/${snakeyaml.version}</bundle>
-		<!-- JACKSON -->
+		<!-- JACKSON XML Deps-->
 		<bundle>mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-xml/${jackson.version}</bundle>
-		<bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/${jackson.version}</bundle>
-		<bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/${jackson.version}</bundle>
-		<bundle>mvn:com.fasterxml.jackson.core/jackson-core/${jackson.version}</bundle>
-		<bundle>mvn:com.fasterxml.jackson.core/jackson-databind/${jackson.version}</bundle>
-		<bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${jackson.version}</bundle>
-		<bundle>mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/${jackson.version}</bundle>								
 		<bundle>mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-xml-provider/${jackson.version}</bundle>										
 		<!-- End of Jackson Deps -->
 		<bundle>mvn:commons-lang/commons-lang/${commons.lang.version}</bundle>
@@ -57,11 +49,6 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 	<feature name="${artifactId}-websocket" version="${project.version}">
 		<feature version="${project.version}">${artifactId}-connector</feature>
 		<bundle>wrap:mvn:com.google.code.gson/gson/${gson.version}</bundle>
-		<!--
-		<bundle>mvn:commons-collections/commons-collections/${commons.collection.version}</bundle>
-		<bundle>mvn:commons-beanutils/commons-beanutils/${beanutils.version}</bundle>
-		-->
-		<!-- End of commons-osgi feature -->
 		<bundle>mvn:redhawk/redhawk-websocket/${project.version}</bundle>
 	</feature>
 	

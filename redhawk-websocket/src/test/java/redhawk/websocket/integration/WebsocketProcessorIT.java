@@ -28,8 +28,6 @@ import java.net.URI;
 import java.util.concurrent.Future;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
@@ -37,8 +35,8 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.websocket.test.util.RedhawkTestUtil;
@@ -46,11 +44,9 @@ import redhawk.websocket.test.util.RedhawkWebSocketTestUtil;
 
 @Ignore
 public class WebsocketProcessorIT {
-    private static Log logger = LogFactory.getLog(WebsocketProcessorIT.class);
+    private static Logger logger = LoggerFactory.getLogger(WebsocketProcessorIT.class);
 
 	private static RedhawkApplication application;
-
-	private static WebDriver driver;
 		
 	private final File webPage = new File(
 			"src/test/resources/webapp/wstest.html");
@@ -160,12 +156,12 @@ public class WebsocketProcessorIT {
 		removeProcessor();
 		
 		// Clear the
-		if(driver!=null)
-			driver.close();
+		//if(driver!=null)
+		//	driver.close();
 	}
 	
 	public static void clear(){
-		driver.findElement(By.id("clear_component_ports")).click();
+		//driver.findElement(By.id("clear_component_ports")).click();
 	}
 	
 	public static void deployProcessor() throws IOException{

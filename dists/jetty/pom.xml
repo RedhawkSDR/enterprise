@@ -139,6 +139,38 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<executions>
 					<execution>
+						<id>copy-assembly</id>
+						<!-- Copying filtered assembly into target directory. here the phase 
+							you need -->
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/assembly</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/assembly</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-resources-scripts</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/scripts</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/scripts</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
 						<id>copy-start.ini</id>
 						<!-- here the phase you need -->
 						<phase>generate-resources</phase>
@@ -242,6 +274,75 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>REDHAWK Jetty Dist</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<finalName>${runtime.dir}-jetty</finalName>
+							<descriptors>
+								<descriptor>${project.build.directory}/assembly/assembly.xml</descriptor>
+							</descriptors>
+							<appendAssemblyId>false</appendAssemblyId>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!--
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>rpm-maven-plugin</artifactId>
+				<version>2.1.5</version>
+				<extensions>true</extensions>
+				<executions>
+					<execution>
+						<id>attach-rpm</id>
+						<goals>
+							<goal>attached-rpm</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<group>REDHAWK Enterprise Integration</group>
+					<license>LGPLv3</license>
+					<release>${release}</release>
+					<prefix>${redhawk.user.home}</prefix>
+					<requires>
+						<require>java-1.8.0-openjdk</require>
+					</requires>
+					<mappings>
+						<mapping>
+							<directory>${runtime.basedir}</directory>
+							<username>root</username>
+							<groupname>redhawk</groupname>
+							<filemode>755</filemode>
+							<sources>
+								<source>
+									<location>${project.build.directory}/${runtime.dir}</location>
+								</source>
+							</sources>
+						</mapping>
+					</mappings>
+					<preinstallScriptlet>
+						<scriptFile>${project.build.directory}/scripts/preinstall.sh</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</preinstallScriptlet>
+					<preremoveScriptlet>
+						<scriptFile>${project.build.directory}/scripts/preremove.sh</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</preremoveScriptlet>
+					<postremoveScriptlet>
+						<scriptFile>${project.build.directory}/scripts/postremove.sh</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</postremoveScriptlet>
+				</configuration>
+			</plugin>
+			-->
 		</plugins>
 	</build>
 </project>

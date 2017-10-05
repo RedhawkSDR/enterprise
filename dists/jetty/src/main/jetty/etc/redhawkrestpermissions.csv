@@ -1,0 +1,3 @@
+URL,Method,Role
+rest/redhawk/.*/domains,,read;admin
+rest/redhawk/.*/domains/*/applications,,admin

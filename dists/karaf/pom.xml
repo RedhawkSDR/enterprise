@@ -120,7 +120,10 @@
 					</execution>
 					<execution>
 						<id>copy-assembly</id>
-						<!-- here the phase you need -->
+						<!--
+							Copying filtered assembly into target directory.  
+							here the phase you need 
+						-->
 						<phase>validate</phase>
 						<goals>
 							<goal>copy-resources</goal>
@@ -302,7 +305,7 @@
 			<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>REDAWK_JAVA_TOOLS_DIST</id>
+						<id>REDHAWK Custom Karaf</id>
 						<phase>package</phase>
 						<goals>
 							<goal>single</goal>

@@ -101,7 +101,7 @@ public class RedhawkEventChannelEndpointTestIT extends CamelTestSupport{
 		}
 		
 		//Deploy application
-		rhApplication = driver.getDomain().createApplication("spitToChannel", new File("../demo/camel-event-channel/src/main/resources/SpitToChannel/SpitToChannel.sad.xml"));
+		rhApplication = driver.getDomain().createApplication("spitToChannel", new File("../demos/camel-event-channel/src/main/resources/SpitToChannel/SpitToChannel.sad.xml"));
 		rhApplication.start();
 	}
     

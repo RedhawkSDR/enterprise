@@ -97,10 +97,22 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 			<entry key="xml" value="application/xml" />
 		</jaxrs:extensionMappings>
 		<jaxrs:providers>
+       	 	<ref component-id="authenticationFilter"/>
 			<bean class="com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider" />
 			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />						
 			<bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter" >
 			</bean>		
-		</jaxrs:providers>	
+		</jaxrs:providers>
 	</jaxrs:server>
+	
+	<!-- Details: http://cxf.apache.org/docs/secure-jax-rs-services.html -->
+	<bean id="authenticationFilter" class="org.apache.cxf.jaxrs.security.JAASAuthenticationFilter">
+    	<!-- Name of the JAAS Context -->
+    	<property name="contextName" value="karaf"/>
+    	<!-- Hint to the filter on how to have Principals representing users and roles separated 
+         	while initializing a SecurityContext 
+    	<property name="rolePrefix" value="ROLE_"/>     
+    	<property name="redirectURI" value="/login.jsp"/>
+    	-->
+	</bean>
 </blueprint>

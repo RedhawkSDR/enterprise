@@ -95,6 +95,28 @@
 						</configuration>
 					</execution>
 					<execution>
+						<id>redhawk-jaxrs-assets</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>redhawk</groupId>
+									<artifactId>redhawk-jaxrs-security</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+								<artifactItem>
+									<groupId>javax.ws.rs</groupId>
+									<artifactId>javax.ws.rs-api</artifactId>
+									<version>2.1</version>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/lib/ext</outputDirectory>
+						</configuration>
+					</execution>
+					<execution>
 						<id>log4j</id>
 						<phase>generate-resources</phase>
 						<goals>

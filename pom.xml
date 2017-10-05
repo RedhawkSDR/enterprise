@@ -360,4 +360,7 @@
 			<url>${distributionManagement.snapshotRepository.url}</url>
 		</snapshotRepository>
 	</distributionManagement>
+  <modules>
+    <module>redhawk-jaxrs-security</module>
+  </modules>
 </project>

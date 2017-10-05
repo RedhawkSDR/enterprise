@@ -3,7 +3,7 @@
 	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
 	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
-	
+
 	<!-- Security -->
 	<!-- This forces the login -->
 	<security-constraint>
@@ -15,13 +15,25 @@
 			<role-name>**</role-name>
 		</auth-constraint>
 	</security-constraint>
-	
+
 	<login-config>
 		<auth-method>BASIC</auth-method>
-		<realm-name>REDHAWK_JAAS_REALM</realm-name>		
+		<realm-name>REDHAWK_JAAS_REALM</realm-name>
 	</login-config>
-	
+
 	<security-role>
 		<role-name>**</role-name>
 	</security-role>
+
+	<servlet>
+		<servlet-name>redhawkREST</servlet-name>
+		<init-param>
+			<param-name>jaxrs.providers</param-name>
+			<param-value>
+				redhawk.jaxrs.filter.RoleBasedAuthorizationFilter,
+				com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider,
+				com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider
+			</param-value>
+		</init-param>
+	</servlet>
 </web-app>

@@ -1,0 +1,3 @@
+URL,Method,Role
+hello,,read;admin
+hello/world,,admin

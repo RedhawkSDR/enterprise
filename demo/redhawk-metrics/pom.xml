@@ -128,7 +128,7 @@
 									<goal>npm</goal>
 								</goals>
 								<configuration>
-									<arguments>install --registry=${npm.proxy} --sass-binary-path=./sass-binary/linux-x64-48_binding.node</arguments>
+									<arguments>install --registry=${npm.proxy} --sass-binary-path=${project.basedir}/sass-binary/linux-x64-48_binding.node</arguments>
 								</configuration>
 							</execution>
 							<execution>
@@ -137,7 +137,7 @@
 									<goal>npm</goal>
 								</goals>
 								<configuration>
-									<arguments>run build --sass-binary-path=./sass-binary/linux-x64-48_binding.node</arguments>
+									<arguments>run build --sass-binary-path=${project.basedir}/sass-binary/linux-x64-48_binding.node</arguments>
 								</configuration>
 							</execution>
 						</executions>

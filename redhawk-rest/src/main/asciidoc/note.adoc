@@ -17,6 +17,6 @@ http://{host}:8181/cxf/redhawk/{nameserver host}:{nameserver port}
 If you are using the REDHAWK Connector, you can replace `nameserver` and `port` with the connection name you specified when you created the connection. Refer to the <<REDHAWK Connector>> chapter for more details.
 
 ----
-http://{host}:8181/cxf/redhawk/{redhawk-connect-name}
+http://{host}:8181/cxf/redhawk/{redhawk-connection-name}
 ----
 ====

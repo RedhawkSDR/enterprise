@@ -21,9 +21,5 @@ echo "Untaring ${project.name}"
 cd ${HOME}
 %{__tar} -zxphf ${runtime.dir}.tar.gz --same-owner
 
-#Update Permissions 
-%{__chown} -R root:redhawk ${runtime.dir}
-%{__chmod} -R 775 ${runtime.dir}
-
 #Post Install Instructions 
 %{__rm} -f ${runtime.dir}.tar.gz

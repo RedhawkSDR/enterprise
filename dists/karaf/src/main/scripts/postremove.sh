@@ -1,4 +1,4 @@
 #!/bin/sh -e
 
 #Once everything has been removed ensure there is no leftovers by doing this
-rm -rf ${runtime.basedir} 
+rm -rf ${runtime.basedir}/karaf-${karaf.version} 

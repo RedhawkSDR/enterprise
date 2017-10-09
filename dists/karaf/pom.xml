@@ -109,7 +109,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/jacorb-deps</outputDirectory>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/karaf-${karaf.version}/jacorb-deps</outputDirectory>
 							<resources>
 								<resource>
 									<directory>${project.parent.basedir}/src/main/jacorb</directory>
@@ -117,6 +117,21 @@
 							</resources>
 						</configuration>
 					</execution>
+					<execution>
+						<id>copy-jacorb-deps</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/karaf-${karaf.version}/jacorb-deps</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.build.directory}/jacorb-deps</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>					
 					<execution>
 						<id>copy-assembly</id>
 						<!--
@@ -132,6 +147,7 @@
 							<resources>
 								<resource>
 									<directory>src/main/assembly</directory>
+									<filtering>true</filtering>									
 								</resource>
 							</resources>
 						</configuration>
@@ -147,6 +163,7 @@
 							<resources>
 								<resource>
 									<directory>src/main/scripts</directory>
+									<filtering>true</filtering>
 								</resource>
 							</resources>
 						</configuration>

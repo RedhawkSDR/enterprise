@@ -18,7 +18,6 @@
 		<module>karaf</module>
 		<module>jetty</module>
 	</modules>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -29,12 +28,12 @@
 					<!-- Download all the stuff jacorb needs -->
 					<execution>
 						<id>jacorb-deps</id>
-						<phase>package</phase>
+						<phase>generate-sources</phase>
 						<goals>
 							<goal>copy</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/jacorb-deps</outputDirectory>
+							<outputDirectory>${project.build.directory}/jacorb-deps</outputDirectory>
 							<artifactItems>
 								<artfactItem>
 									<groupId>org.jacorb</groupId>

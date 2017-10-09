@@ -8,7 +8,7 @@
 		<version>2.0.2-SNAPSHOT</version>
 	</parent>
 	<groupId>redhawk.enterprise.integration.dists</groupId>
-	<artifactId>parent</artifactId>
+	<artifactId>dists-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>REDHAWK :: ENTERPRISE INTEGRATION :: DISTS</name>
 	<properties>
@@ -17,6 +17,7 @@
 	<modules>
 		<module>karaf</module>
 		<module>jetty</module>
+		<module>shell</module>
 	</modules>
 	<build>
 		<plugins>

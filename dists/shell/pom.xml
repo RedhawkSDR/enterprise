@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>redhawk.enterprise.integration.dists</groupId>
+		<artifactId>dists-parent</artifactId>
+		<version>2.0.2-SNAPSHOT</version>
+	</parent>
+	<artifactId>redhawk-enterprise-integration-dist-shell</artifactId>
+	<name>REDHAWK :: ENTERPRISE INTEGRATION :: SHELL </name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<jrepl.version>428</jrepl.version>
+		<jrepl.home>${runtime.basedir}/shell</jrepl.home>
+	</properties>
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-shell-resources</id>
+						<!-- here the phase you need -->
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/shell</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/shell</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-jacorb-deps</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/shell/jacorb-deps</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.build.directory}/jacorb-deps</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Download deps for any other functionality -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>shell-deps</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/shell/lib</outputDirectory>
+							<artifactItems>
+								<!-- https://github.com/albertlatacz/java-repl -->
+								<artfactItem>
+									<groupId>com.javarepl</groupId>
+									<artifactId>javarepl</artifactId>
+									<version>${jrepl.version}</version>
+								</artfactItem>
+								<artifactItem>
+									<groupId>redhawk</groupId>
+									<artifactId>redhawk-driver</artifactId>
+									<version>${project.version}</version>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

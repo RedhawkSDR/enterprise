@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>redhawk.enterprise.integration.dists</groupId>
-		<artifactId>parent</artifactId>
+		<artifactId>dists-parent</artifactId>
 		<version>2.0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>redhawk-enterprise-integration-dist-jetty</artifactId>
@@ -184,7 +184,7 @@
 								</resource>
 							</resources>
 						</configuration>
-					</execution>										
+					</execution>
 					<execution>
 						<id>copy-resources-scripts</id>
 						<phase>validate</phase>
@@ -342,10 +342,10 @@
 					<license>LGPLv3</license>
 					<release>${release}</release>
 					<prefix>${redhawk.user.home}</prefix>
-    				<!-- Solution here: http://winzter143.blogspot.com/2011/11/linux-arch-dependent-binaries-in-noarch.html -->
-    				<defineStatements>
-      					<defineStatement>_binaries_in_noarch_packages_terminate_build   0</defineStatement>
-    				</defineStatements>					
+					<!-- Solution here: http://winzter143.blogspot.com/2011/11/linux-arch-dependent-binaries-in-noarch.html -->
+					<defineStatements>
+						<defineStatement>_binaries_in_noarch_packages_terminate_build 0</defineStatement>
+					</defineStatements>
 					<requires>
 						<require>java-1.8.0-openjdk</require>
 					</requires>

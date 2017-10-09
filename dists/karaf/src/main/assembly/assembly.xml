@@ -11,19 +11,7 @@
 			<outputDirectory>karaf-${karaf.version}</outputDirectory>
 			<fileMode>0775</fileMode>
 			<directoryMode>0775</directoryMode>
-		</fileSet>
-		<fileSet>
-			<directory>${project.build.directory}/${runtime.dir}/jacorb-deps</directory>
-			<outputDirectory>jacorb-deps</outputDirectory>
-			<fileMode>0775</fileMode>
-			<directoryMode>0775</directoryMode>
-		</fileSet>
-		<fileSet>
-			<directory>${project.build.directory}/${runtime.dir}/shell</directory>
-			<outputDirectory>shell</outputDirectory>
-			<fileMode>0775</fileMode>
-			<directoryMode>0775</directoryMode>
-		</fileSet>		
+		</fileSet>	
 	</fileSets>
 	<files>
 		<file>

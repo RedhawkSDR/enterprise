@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>redhawk.enterprise.integration.dists</groupId>
-		<artifactId>parent</artifactId>
+		<artifactId>dists-parent</artifactId>
 		<version>2.0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>redhawk-enterprise-integration-dist-karaf</artifactId>
@@ -17,8 +17,6 @@
 	<url>http://maven.apache.org</url>
 	<properties>
 		<karaf.home>${runtime.basedir}/karaf</karaf.home>
-		<jrepl.home>${runtime.basedir}/shell</jrepl.home>
-		<jrepl.version>428</jrepl.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -86,22 +84,6 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>copy-shell-resources</id>
-						<!-- here the phase you need -->
-						<phase>validate</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/shell</outputDirectory>
-							<resources>
-								<resource>
-									<directory>src/main/shell</directory>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-					<execution>
 						<id>copy-jacorb-resources</id>
 						<!-- here the phase you need -->
 						<phase>validate</phase>
@@ -131,13 +113,11 @@
 								</resource>
 							</resources>
 						</configuration>
-					</execution>					
+					</execution>
 					<execution>
 						<id>copy-assembly</id>
-						<!--
-							Copying filtered assembly into target directory.  
-							here the phase you need 
-						-->
+						<!-- Copying filtered assembly into target directory. here the phase 
+							you need -->
 						<phase>validate</phase>
 						<goals>
 							<goal>copy-resources</goal>
@@ -147,7 +127,7 @@
 							<resources>
 								<resource>
 									<directory>src/main/assembly</directory>
-									<filtering>true</filtering>									
+									<filtering>true</filtering>
 								</resource>
 							</resources>
 						</configuration>
@@ -200,37 +180,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!-- Download deps for any other functionality -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>3.0.0</version>
-				<executions>
-					<execution>
-						<id>shell-deps</id>
-						<phase>package</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/shell/lib</outputDirectory>
-							<artifactItems>
-								<!-- https://github.com/albertlatacz/java-repl -->
-								<artfactItem>
-									<groupId>com.javarepl</groupId>
-									<artifactId>javarepl</artifactId>
-									<version>${jrepl.version}</version>
-								</artfactItem>
-								<artifactItem>
-									<groupId>redhawk</groupId>
-									<artifactId>redhawk-driver</artifactId>
-									<version>${project.version}</version>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<version>1.8</version>
@@ -275,7 +224,7 @@
 				</executions>
 			</plugin>
 			<plugin>
-			<artifactId>maven-assembly-plugin</artifactId>
+				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
 					<execution>
 						<id>REDHAWK Custom Karaf</id>

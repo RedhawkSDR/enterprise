@@ -311,6 +311,10 @@
 					<license>LGPLv3</license>
 					<release>${release}</release>
 					<prefix>${redhawk.user.home}</prefix>
+    				<!-- Solution here: http://winzter143.blogspot.com/2011/11/linux-arch-dependent-binaries-in-noarch.html -->
+    				<defineStatements>
+      					<defineStatement>_binaries_in_noarch_packages_terminate_build   0</defineStatement>
+    				</defineStatements>					
 					<requires>
 						<require>java-1.8.0-openjdk</require>
 					</requires>

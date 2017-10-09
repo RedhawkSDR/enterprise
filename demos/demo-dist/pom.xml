@@ -73,9 +73,6 @@
 					<license>LGPLv3</license>
 					<release>${release}</release>
 					<group>REDHAWK Enterprise Integration</group>
-					<requires>
-						<require>redhawk-enterprise-integration-dist</require>
-					</requires>
 					<defaultUsername>root</defaultUsername>
 					<defaultGroupname>redhawk</defaultGroupname>
 					<defaultFilemode>755</defaultFilemode>

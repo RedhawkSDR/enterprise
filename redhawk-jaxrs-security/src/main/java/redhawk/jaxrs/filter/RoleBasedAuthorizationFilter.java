@@ -52,7 +52,7 @@ public class RoleBasedAuthorizationFilter implements ContainerRequestFilter {
 				this.doRoleBasedFilter = false;
 			}
 		}else {
-			logger.debug("No valid role based filter filter file will bypass filter");
+			logger.debug("No valid role based filter file will bypass filter");
 			this.doRoleBasedFilter = false;
 		}
 	}
@@ -66,13 +66,13 @@ public class RoleBasedAuthorizationFilter implements ContainerRequestFilter {
 				// TODO: Do absolute path as well
 				RestMethodAuthorizationMapper heimdall = mapper.get(requestContext.getUriInfo().getPath());
 
-				logger.info("===================================");
-				logger.info("Principal: " + principal);
-				logger.info("Is user in admin role: " + sc.isUserInRole("admin"));
-				logger.info("Method: " + requestContext.getMethod());
-				logger.info("Path: " + requestContext.getUriInfo().getPath());
-				logger.info("Absolute Path: " + requestContext.getUriInfo().getPath());
-				logger.info("===================================");
+				logger.debug("===================================");
+				logger.debug("Principal: " + principal);
+				logger.debug("Is user in admin role: " + sc.isUserInRole("admin"));
+				logger.debug("Method: " + requestContext.getMethod());
+				logger.debug("Path: " + requestContext.getUriInfo().getPath());
+				logger.debug("Absolute Path: " + requestContext.getUriInfo().getPath());
+				logger.debug("===================================");
 				Boolean permitted = heimdall.permitted(requestContext.getMethod(), sc);
 
 				// Throw exception if user is not permitted

@@ -106,13 +106,6 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 	</jaxrs:server>
 	
 	<!-- Details: http://cxf.apache.org/docs/secure-jax-rs-services.html -->
-	<bean id="authenticationFilter" class="org.apache.cxf.jaxrs.security.JAASAuthenticationFilter">
-    	<!-- Name of the JAAS Context -->
-    	<property name="contextName" value="karaf"/>
-    	<!-- Hint to the filter on how to have Principals representing users and roles separated 
-         	while initializing a SecurityContext 
-    	<property name="rolePrefix" value="ROLE_"/>     
-    	<property name="redirectURI" value="/login.jsp"/>
-    	-->
+	<bean id="authenticationFilter" class="redhawk.jaxrs.filter.RoleBasedAuthorizationFilter">
 	</bean>
 </blueprint>

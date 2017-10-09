@@ -156,6 +156,22 @@
 						</configuration>
 					</execution>
 					<execution>
+						<id>copy-jacorb-resources</id>
+						<!-- here the phase you need -->
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jacorb-deps</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.parent.basedir}/src/main/jacorb</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>					
+					<execution>
 						<id>copy-resources-scripts</id>
 						<phase>validate</phase>
 						<goals>

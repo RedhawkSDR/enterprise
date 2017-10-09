@@ -18,7 +18,6 @@
 	<properties>
 		<karaf.home>${runtime.basedir}/karaf</karaf.home>
 		<jrepl.home>${runtime.basedir}/shell</jrepl.home>
-		<jacorb.version>3.8</jacorb.version>
 		<jrepl.version>428</jrepl.version>
 	</properties>
 	<dependencies>
@@ -113,7 +112,7 @@
 							<outputDirectory>${project.build.directory}/${runtime.dir}/jacorb-deps</outputDirectory>
 							<resources>
 								<resource>
-									<directory>src/main/jacorb</directory>
+									<directory>${project.parent.basedir}/src/main/jacorb</directory>
 								</resource>
 							</resources>
 						</configuration>
@@ -209,49 +208,6 @@
 									<groupId>redhawk</groupId>
 									<artifactId>redhawk-driver</artifactId>
 									<version>${project.version}</version>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
-					<!-- Download all the stuff jacorb needs -->
-					<execution>
-						<id>jacorb-deps</id>
-						<phase>package</phase>
-						<goals>
-							<goal>copy</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/jacorb-deps</outputDirectory>
-							<artifactItems>
-								<artfactItem>
-									<groupId>org.jacorb</groupId>
-									<artifactId>jacorb</artifactId>
-									<version>${jacorb.version}</version>
-								</artfactItem>
-								<artfactItem>
-									<groupId>org.jacorb</groupId>
-									<artifactId>jacorb-omgapi</artifactId>
-									<version>${jacorb.version}</version>
-								</artfactItem>
-								<artfactItem>
-									<groupId>org.jacorb</groupId>
-									<artifactId>jacorb-idl-compiler</artifactId>
-									<version>${jacorb.version}</version>
-								</artfactItem>
-								<artfactItem>
-									<groupId>org.jacorb</groupId>
-									<artifactId>jacorb-services</artifactId>
-									<version>${jacorb.version}</version>
-								</artfactItem>
-								<artifactItem>
-									<groupId>org.slf4j</groupId>
-									<artifactId>slf4j-api</artifactId>
-									<version>1.7.14</version><!-- TODO: There are newer versions out -->
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.slf4j</groupId>
-									<artifactId>slf4j-jdk14</artifactId>
-									<version>1.7.14</version><!-- TODO: There are newer versions out -->
 								</artifactItem>
 							</artifactItems>
 						</configuration>

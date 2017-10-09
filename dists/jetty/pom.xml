@@ -293,7 +293,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			<!--
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>rpm-maven-plugin</artifactId>
@@ -342,7 +341,6 @@
 					</postremoveScriptlet>
 				</configuration>
 			</plugin>
-			-->
 		</plugins>
 	</build>
 </project>

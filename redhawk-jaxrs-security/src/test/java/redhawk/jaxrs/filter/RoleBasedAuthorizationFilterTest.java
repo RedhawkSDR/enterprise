@@ -7,6 +7,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.net.URI;
 import java.security.Principal;
 
 import javax.ws.rs.WebApplicationException;
@@ -61,13 +62,15 @@ public class RoleBasedAuthorizationFilterTest {
 		SecurityContext sc = mock(SecurityContext.class);
 		Principal principal = mock(Principal.class);
 		UriInfo uriInfo = mock(UriInfo.class);
+		URI uri = mock(URI.class);
 		
 		/*
 		 * Mock the returns for the expected use case
 		 * user with admin permissions accessing /hello
 		 */
 		when(rc.getSecurityContext()).thenReturn(sc);
-		when(uriInfo.getPath()).thenReturn("/hello");
+		when(uriInfo.getAbsolutePath()).thenReturn(uri);
+		when(uri.getPath()).thenReturn("/hello");
 		when(sc.getUserPrincipal()).thenReturn(principal);
 		when(sc.isUserInRole("admin")).thenReturn(true);
 		when(rc.getUriInfo()).thenReturn(uriInfo);
@@ -83,7 +86,7 @@ public class RoleBasedAuthorizationFilterTest {
 		 * Mock use case where user tries to hit hello/world 
 		 * logged in as guest
 		 */
-		when(uriInfo.getPath()).thenReturn("/hello/world");
+		when(uri.getPath()).thenReturn("/hello/world");
 		when(sc.isUserInRole("admin")).thenReturn(false);
 		try {
 			filter.filter(rc);
@@ -101,6 +104,7 @@ public class RoleBasedAuthorizationFilterTest {
 		SecurityContext sc = mock(SecurityContext.class);
 		Principal principal = mock(Principal.class);
 		UriInfo uriInfo = mock(UriInfo.class);
+		URI uri = mock(URI.class);
 		
 		/*
 		 * Mock the returns for the expected use case
@@ -108,7 +112,8 @@ public class RoleBasedAuthorizationFilterTest {
 		 * as a GET request
 		 */
 		when(rc.getSecurityContext()).thenReturn(sc);
-		when(uriInfo.getPath()).thenReturn("/redhawk/localhost:2809/domains");
+		when(uriInfo.getAbsolutePath()).thenReturn(uri);
+		when(uri.getPath()).thenReturn("/rest/redhawk/localhost:2809/domains");
 		when(sc.getUserPrincipal()).thenReturn(principal);
 		when(sc.isUserInRole("admin")).thenReturn(true);
 		when(rc.getUriInfo()).thenReturn(uriInfo);
@@ -165,6 +170,8 @@ public class RoleBasedAuthorizationFilterTest {
 		SecurityContext sc = mock(SecurityContext.class);
 		Principal principal = mock(Principal.class);
 		UriInfo uriInfo = mock(UriInfo.class);
+		URI uri = mock(URI.class);
+
 		
 		/*
 		 * Mock the returns for the expected use case
@@ -172,14 +179,15 @@ public class RoleBasedAuthorizationFilterTest {
 		 * as a GET request
 		 */
 		when(rc.getSecurityContext()).thenReturn(sc);
-		when(uriInfo.getPath()).thenReturn("/redhawk/localhost:2809/domains");
+		when(uriInfo.getAbsolutePath()).thenReturn(uri);
+		when(uri.getPath()).thenReturn("/rest/redhawk/localhost:2809/domains");
 		when(sc.getUserPrincipal()).thenReturn(principal);
 		when(sc.isUserInRole("admin")).thenReturn(true);
 		when(rc.getUriInfo()).thenReturn(uriInfo);
 				
 		try {
 			//Make sure this is matching the appropriate entry in props file
-			assertEquals("/redhawk.*", filter.getPathRoleMatchKey("/redhawk/localhost:2809/domains"));
+			assertEquals("/rest/redhawk.*", filter.getPathRoleMatchKey("/rest/redhawk/localhost:2809/domains"));
 			when(rc.getMethod()).thenReturn("GET");
 			filter.filter(rc);
 			
@@ -203,7 +211,7 @@ public class RoleBasedAuthorizationFilterTest {
 		
 		try {
 			//Make sure this is matching the appropriate entry in props file
-			assertEquals("/redhawk/customhost:2809.*", filter.getPathRoleMatchKey("/redhawk/customhost:2809/domains"));
+			assertEquals("/rest/redhawk/customhost:2809.*", filter.getPathRoleMatchKey("/rest/redhawk/customhost:2809/domains"));
 			when(rc.getMethod()).thenReturn("GET");
 			filter.filter(rc);
 			
@@ -234,7 +242,7 @@ public class RoleBasedAuthorizationFilterTest {
 		/*
 		 * Now mock a user accessing /redhawk/customhost:2809/domains/SpecialSnowFlake
 		 */
-		when(uriInfo.getPath()).thenReturn("/redhawk/customhost:2809/domains/SpecialSnowFlake");
+		when(uriInfo.getPath()).thenReturn("/rest/redhawk/customhost:2809/domains/SpecialSnowFlake");
 
 		try {
 			when(sc.isUserInRole("special")).thenReturn(false);
@@ -251,7 +259,7 @@ public class RoleBasedAuthorizationFilterTest {
 
 		try {
 			//Make sure this is matching the appropriate entry in props file
-			assertEquals("/redhawk/customhost:2809/domains/SpecialSnowFlake.*", filter.getPathRoleMatchKey("/redhawk/customhost:2809/domains/SpecialSnowFlake"));
+			assertEquals("/rest/redhawk/customhost:2809/domains/SpecialSnowFlake.*", filter.getPathRoleMatchKey("/rest/redhawk/customhost:2809/domains/SpecialSnowFlake"));
 			when(rc.getMethod()).thenReturn("GET");
 			filter.filter(rc);
 			

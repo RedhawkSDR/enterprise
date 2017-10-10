@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,18 +37,24 @@ public class RoleBasedAuthorizationFilter implements ContainerRequestFilter {
 	private Boolean doRoleBasedFilter = true;
 	
 	private Boolean strictPermissions = false;
+	
+	private final static String REST_PERMISSION_FILELOCATION = "redhawk.jaxrs.permissions.file";
+
+	private final static String REST_PERMISSION_STRICT = "redhawk.jaxrs.permissions.strict";
 
 	public RoleBasedAuthorizationFilter() {
-		this(System.getProperty("redhawk.jaxrs.permissions.file"), Boolean.valueOf(System.getProperty("redhawk.jaxrs.permissions.strict", "false")));
+		this(System.getProperty(REST_PERMISSION_FILELOCATION), Boolean.valueOf(System.getProperty(REST_PERMISSION_STRICT, "false")));
 	}
 	
 	public RoleBasedAuthorizationFilter(String path) {
-		this(path, Boolean.valueOf(System.getProperty("redhawk.jaxrs.permissions.strict", "false")));
+		this(path, Boolean.valueOf(System.getProperty(REST_PERMISSION_STRICT, "false")));
 	}
 	
 	public RoleBasedAuthorizationFilter(String filterFile, Boolean strictPermissions) {
 		this.restPermissionFileLocation = filterFile;
 		this.strictPermissions = strictPermissions;
+		//Setup allows access via Env/JNDI
+		setup();
 		logger.debug("Permissions file: " + this.restPermissionFileLocation);
 		if (this.restPermissionFileLocation != null) {
 			try {
@@ -70,19 +77,30 @@ public class RoleBasedAuthorizationFilter implements ContainerRequestFilter {
 			this.doRoleBasedFilter = false;
 		}
 	}
+	
+	public void setup() {
+		logger.info("System Props: ");
+		for(Entry<Object, Object> entry : System.getProperties().entrySet()) {
+			logger.info("\t Key: "+entry.getKey()+" Value: "+entry.getValue());
+		}
+		logger.info("System Env: ");
+		for(Entry<String, String> envEntry : System.getenv().entrySet()) {
+			logger.info("\t Key: "+envEntry.getKey()+" Value: "+envEntry.getValue());	
+		}
+	}
 
 	public void filter(ContainerRequestContext requestContext) throws IOException {
 		SecurityContext sc = requestContext.getSecurityContext();
 		Principal principal = sc.getUserPrincipal();
 		
 		if(this.doRoleBasedFilter) {
-			RestMethodAuthorizationMapper heimdall = mapper.get(getPathRoleMatchKey(requestContext.getUriInfo().getPath()));
+			RestMethodAuthorizationMapper heimdall = mapper.get(getPathRoleMatchKey(requestContext.getUriInfo().getAbsolutePath().getPath()));
 			if (principal != null && heimdall !=null) {
 
 				logger.debug("===================================");
 				logger.debug("Principal: " + principal);
 				logger.debug("Method: " + requestContext.getMethod());
-				logger.debug("Path: " + requestContext.getUriInfo().getPath());
+				logger.debug("Path: " + requestContext.getUriInfo().getAbsolutePath());
 				logger.debug("===================================");
 				Boolean permitted = heimdall.permitted(requestContext.getMethod(), sc);
 
@@ -103,6 +121,7 @@ public class RoleBasedAuthorizationFilter implements ContainerRequestFilter {
 		/*
 		 * Find all matched keys by regex
 		 */
+		logger.debug("Path: "+incomingPath);
 		Set<String> matchedKeys = mapper.keySet()
 			.stream()
 			.filter(entry -> incomingPath.matches(entry))
@@ -112,7 +131,9 @@ public class RoleBasedAuthorizationFilter implements ContainerRequestFilter {
 		 * Take the longest length key out for the set
 		 */
 		logger.debug("Matched keys "+matchedKeys);
-		String max = Collections.max(matchedKeys, Comparator.comparing(s -> s.length()));
+		String max = null; 
+		if(!matchedKeys.isEmpty())
+			max = Collections.max(matchedKeys, Comparator.comparing(s -> s.length()));
 		
 		return max;
 	}

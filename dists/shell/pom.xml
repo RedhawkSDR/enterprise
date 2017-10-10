@@ -81,7 +81,7 @@
 				<executions>
 					<execution>
 						<id>shell-deps</id>
-						<phase>package</phase>
+						<phase>generate-resources</phase>
 						<goals>
 							<goal>copy</goal>
 						</goals>
@@ -153,10 +153,10 @@
 						<scriptFile>${project.build.directory}/scripts/preinstall.sh</scriptFile>
 						<fileEncoding>utf-8</fileEncoding>
 					</preinstallScriptlet>
-					<postremoveScriptlet>
-						<scriptFile>${project.build.directory}/scripts/postremove.sh</scriptFile>
+					<preremoveScriptlet>
+						<scriptFile>${project.build.directory}/scripts/prels -remove.sh</scriptFile>
 						<fileEncoding>utf-8</fileEncoding>
-					</postremoveScriptlet>
+					</preremoveScriptlet>
 				</configuration>
 			</plugin>			
 		</plugins>

@@ -2,8 +2,12 @@ package redhawk.jaxrs.filter;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -30,19 +34,29 @@ public class RoleBasedAuthorizationFilter implements ContainerRequestFilter {
 	private String restPermissionFileLocation;
 
 	private Boolean doRoleBasedFilter = true;
+	
+	private Boolean strictPermissions = false;
 
 	public RoleBasedAuthorizationFilter() {
-		// TODO: Why doesn't this work??
-		this.restPermissionFileLocation = System.getProperty("redhawk.jaxrs.permissions");
+		this(System.getProperty("redhawk.jaxrs.permissions.file"), Boolean.valueOf(System.getProperty("redhawk.jaxrs.permissions.strict", "false")));
+	}
+	
+	public RoleBasedAuthorizationFilter(String path) {
+		this(path, Boolean.valueOf(System.getProperty("redhawk.jaxrs.permissions.strict", "false")));
+	}
+	
+	public RoleBasedAuthorizationFilter(String filterFile, Boolean strictPermissions) {
+		this.restPermissionFileLocation = filterFile;
+		this.strictPermissions = strictPermissions;
 		logger.debug("Permissions file: " + this.restPermissionFileLocation);
 		if (this.restPermissionFileLocation != null) {
 			try {
-				mapper = reader.readRestFile(this.restPermissionFileLocation);
+				mapper = reader.readRestFile(this.restPermissionFileLocation, this.strictPermissions);
 
 				logger.info("Map: " + mapper);
 				if (mapper != null) {
 					for (Map.Entry<String, RestMethodAuthorizationMapper> entry : mapper.entrySet()) {
-						logger.info("\t Key " + entry.getKey() + " Value: " + entry.getValue());
+						logger.debug("\t Key " + entry.getKey() + " Value: " + entry.getValue());
 					}
 				} else {
 					logger.error("Mapper is null??? " + mapper.toString());
@@ -60,18 +74,15 @@ public class RoleBasedAuthorizationFilter implements ContainerRequestFilter {
 	public void filter(ContainerRequestContext requestContext) throws IOException {
 		SecurityContext sc = requestContext.getSecurityContext();
 		Principal principal = sc.getUserPrincipal();
-
+		
 		if(this.doRoleBasedFilter) {
-			if (principal != null) {
-				// TODO: Do absolute path as well
-				RestMethodAuthorizationMapper heimdall = mapper.get(requestContext.getUriInfo().getPath());
+			RestMethodAuthorizationMapper heimdall = mapper.get(getPathRoleMatchKey(requestContext.getUriInfo().getPath()));
+			if (principal != null && heimdall !=null) {
 
 				logger.debug("===================================");
 				logger.debug("Principal: " + principal);
-				logger.debug("Is user in admin role: " + sc.isUserInRole("admin"));
 				logger.debug("Method: " + requestContext.getMethod());
 				logger.debug("Path: " + requestContext.getUriInfo().getPath());
-				logger.debug("Absolute Path: " + requestContext.getUriInfo().getPath());
 				logger.debug("===================================");
 				Boolean permitted = heimdall.permitted(requestContext.getMethod(), sc);
 
@@ -79,9 +90,30 @@ public class RoleBasedAuthorizationFilter implements ContainerRequestFilter {
 				if (!permitted)
 					throw new WebApplicationException("User does not have appropriate permissions to access this endpoint",
 							403);
-			} else {
+			}else if(heimdall==null) { 
+				logger.warn("Path "+requestContext.getUriInfo().getPath()+" letting request through without role check. "
+						+ "Update "+this.restPermissionFileLocation+" file if you'd like this path to be checked");
+			}else {
 				throw new WebApplicationException("User principal required to access this endpoint", 403);
 			}			
 		}
+	}
+	
+	public String getPathRoleMatchKey(String incomingPath) {
+		/*
+		 * Find all matched keys by regex
+		 */
+		Set<String> matchedKeys = mapper.keySet()
+			.stream()
+			.filter(entry -> incomingPath.matches(entry))
+			.collect(Collectors.toSet());
+	
+		/*
+		 * Take the longest length key out for the set
+		 */
+		logger.debug("Matched keys "+matchedKeys);
+		String max = Collections.max(matchedKeys, Comparator.comparing(s -> s.length()));
+		
+		return max;
 	}
 }

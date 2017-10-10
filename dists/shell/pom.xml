@@ -9,6 +9,7 @@
 		<version>2.0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>redhawk-enterprise-integration-dist-shell</artifactId>
+	<packaging>rpm</packaging>
 	<name>REDHAWK :: ENTERPRISE INTEGRATION :: SHELL </name>
 	<url>http://maven.apache.org</url>
 	<properties>
@@ -21,6 +22,23 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<executions>
 					<execution>
+						<id>copy-assembly</id>
+						<!-- Copying filtered assembly into target directory. here the phase 
+							you need -->
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/assembly</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/assembly</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
 						<id>copy-shell-resources</id>
 						<!-- here the phase you need -->
 						<phase>validate</phase>
@@ -32,25 +50,27 @@
 							<resources>
 								<resource>
 									<directory>src/main/shell</directory>
+									<filtering>true</filtering>
 								</resource>
 							</resources>
 						</configuration>
 					</execution>
 					<execution>
-						<id>copy-jacorb-deps</id>
-						<phase>generate-resources</phase>
+						<id>copy-resources-scripts</id>
+						<phase>validate</phase>
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/shell/jacorb-deps</outputDirectory>
+							<outputDirectory>${project.build.directory}/scripts</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${project.build.directory}/jacorb-deps</directory>
+									<directory>src/main/scripts</directory>
+									<filtering>true</filtering>
 								</resource>
 							</resources>
 						</configuration>
-					</execution>
+					</execution>					
 				</executions>
 			</plugin>
 			<!-- Download deps for any other functionality -->
@@ -84,6 +104,61 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>REDHAWK JREPL Shell Dist</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<finalName>${runtime.dir}-shell</finalName>
+							<descriptors>
+								<descriptor>${project.build.directory}/assembly/assembly.xml</descriptor>
+							</descriptors>
+							<appendAssemblyId>false</appendAssemblyId>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>rpm-maven-plugin</artifactId>
+				<version>2.1.5</version>
+				<extensions>true</extensions>
+				<configuration>
+					<group>REDHAWK Enterprise Integration</group>
+					<license>LGPLv3</license>
+					<release>${release}</release>
+					<prefix>${redhawk.user.home}</prefix>
+					<requires>
+						<require>java-1.8.0-openjdk</require>
+					</requires>
+					<mappings>
+						<mapping>
+							<directory>${runtime.basedir}</directory>
+							<username>root</username>
+							<groupname>redhawk</groupname>
+							<filemode>774</filemode>
+							<sources>
+								<source>
+									<location>${project.build.directory}/${runtime.dir}</location>
+								</source>
+							</sources>
+						</mapping>
+					</mappings>
+					<preinstallScriptlet>
+						<scriptFile>${project.build.directory}/scripts/preinstall.sh</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</preinstallScriptlet>
+					<postremoveScriptlet>
+						<scriptFile>${project.build.directory}/scripts/postremove.sh</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+					</postremoveScriptlet>
+				</configuration>
+			</plugin>			
 		</plugins>
 	</build>
 </project>

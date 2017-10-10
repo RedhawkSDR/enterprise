@@ -1,0 +1,3 @@
+= JREPL 
+
+Java Read-Execute-Print-Loop that allows you to integrate with the REDHAWK Driver from a shell. This is mainly used for debugging redhawk driver calls. If you'd like a fully featured shell use the python redhawk utilities. 

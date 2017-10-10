@@ -354,7 +354,7 @@
 							<directory>${runtime.basedir}</directory>
 							<username>root</username>
 							<groupname>redhawk</groupname>
-							<filemode>755</filemode>
+							<filemode>774</filemode>
 							<sources>
 								<source>
 									<location>${project.build.directory}/${runtime.dir}</location>

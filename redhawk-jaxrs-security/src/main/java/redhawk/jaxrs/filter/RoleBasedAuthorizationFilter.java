@@ -104,11 +104,11 @@ public class RoleBasedAuthorizationFilter implements ContainerRequestFilter {
 			RestMethodAuthorizationMapper heimdall = mapper.get(getPathRoleMatchKey(requestContext.getUriInfo().getAbsolutePath().getPath()));
 			if (principal != null && heimdall !=null) {
 
-				logger.debug("===================================");
-				logger.debug("Principal: " + principal);
-				logger.debug("Method: " + requestContext.getMethod());
-				logger.debug("Path: " + requestContext.getUriInfo().getAbsolutePath());
-				logger.debug("===================================");
+				logger.info("===================================");
+				logger.info("Principal: " + principal);
+				logger.info("Method: " + requestContext.getMethod());
+				logger.info("Path: " + requestContext.getUriInfo().getAbsolutePath());
+				logger.info("===================================");
 				Boolean permitted = heimdall.permitted(requestContext.getMethod(), sc);
 
 				// Throw exception if user is not permitted

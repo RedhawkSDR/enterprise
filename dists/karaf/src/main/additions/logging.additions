@@ -3,44 +3,44 @@
 # Additional Logging Configuration 
 #############################################
 #Jetty and Pax Web Logging
-log4j.logger.org.ops4j.pax.web=INFO,pax.web
-log4j.logger.org.eclipse.jetty=INFO,jetty
-log4j.logger.redhawk.jaxrs=INFO,redhawk.jaxrs
+#log4j.logger.org.ops4j.pax.web=INFO,pax.web
+#log4j.logger.org.eclipse.jetty=INFO,jetty
+#log4j.logger.redhawk.jaxrs=INFO,redhawk.jaxrs
 
 # Jetty appender
-log4j.appender.jetty=org.apache.log4j.RollingFileAppender
-log4j.appender.jetty.layout=org.apache.log4j.PatternLayout
-log4j.appender.jetty.layout.ConversionPattern=%d{ISO8601} | %-5.5p | %-16.16t | %-32.32c{1} | %X{bundle.id} - %X{bundle.name} - %X{bundle.version} | %m%n
-log4j.appender.jetty.file=${karaf.data}/jetty/jetty.log
-log4j.appender.jetty.append=true
-log4j.appender.jetty.maxFileSize=1MB
-log4j.appender.jetty.maxBackupIndex=10
+#log4j.appender.jetty=org.apache.log4j.RollingFileAppender
+#log4j.appender.jetty.layout=org.apache.log4j.PatternLayout
+#log4j.appender.jetty.layout.ConversionPattern=%d{ISO8601} | %-5.5p | %-16.16t | %-32.32c{1} | %X{bundle.id} - %X{bundle.name} - %X{bundle.version} | %m%n
+#log4j.appender.jetty.file=${karaf.data}/jetty/jetty.log
+#log4j.appender.jetty.append=true
+#log4j.appender.jetty.maxFileSize=1MB
+#log4j.appender.jetty.maxBackupIndex=10
 
 # Pax Web appender
-log4j.appender.pax.web=org.apache.log4j.RollingFileAppender
-log4j.appender.pax.web.layout=org.apache.log4j.PatternLayout
-log4j.appender.pax.web.layout.ConversionPattern=%d{ISO8601} | %-5.5p | %-16.16t | %-32.32c{1} | %X{bundle.id} - %X{bundle.name} - %X{bundle.version} | %m%n
-log4j.appender.pax.web.file=${karaf.data}/pax-web/pax-web.log
-log4j.appender.pax.web.append=true
-log4j.appender.pax.web.maxFileSize=1MB
-log4j.appender.pax.web.maxBackupIndex=10
+#log4j.appender.pax.web=org.apache.log4j.RollingFileAppender
+#log4j.appender.pax.web.layout=org.apache.log4j.PatternLayout
+#log4j.appender.pax.web.layout.ConversionPattern=%d{ISO8601} | %-5.5p | %-16.16t | %-32.32c{1} | %X{bundle.id} - %X{bundle.name} - %X{bundle.version} | %m%n
+#log4j.appender.pax.web.file=${karaf.data}/pax-web/pax-web.log
+#log4j.appender.pax.web.append=true
+#log4j.appender.pax.web.maxFileSize=1MB
+#log4j.appender.pax.web.maxBackupIndex=10
 
 # REDHAWK REST Appender
-log4j.logger.redhawk.rest=INFO,redhawk.rest
-log4j.appender.redhawk.rest=org.apache.log4j.RollingFileAppender
-log4j.appender.redhawk.rest.layout=org.apache.log4j.PatternLayout
-log4j.appender.redhawk.rest.layout.ConversionPattern=%d{ISO8601} | %-5.5p | %-16.16t | %-32.32c{1} | %X{bundle.id} - %X{bundle.name} - %X{bundle.version} | %m%n
-log4j.appender.redhawk.rest.file=${karaf.data}/redhawk-rest/redhawk-rest.log
-log4j.appender.redhawk.rest.append=true
-log4j.appender.redhawk.rest.maxFileSize=1MB
-log4j.appender.redhawk.rest.maxBackupIndex=10
+#log4j.logger.redhawk.rest=INFO,redhawk.rest
+#log4j.appender.redhawk.rest=org.apache.log4j.RollingFileAppender
+#log4j.appender.redhawk.rest.layout=org.apache.log4j.PatternLayout
+#log4j.appender.redhawk.rest.layout.ConversionPattern=%d{ISO8601} | %-5.5p | %-16.16t | %-32.32c{1} | %X{bundle.id} - %X{bundle.name} - %X{bundle.version} | %m%n
+#log4j.appender.redhawk.rest.file=${karaf.data}/redhawk-rest/redhawk-rest.log
+#log4j.appender.redhawk.rest.append=true
+#log4j.appender.redhawk.rest.maxFileSize=1MB
+#log4j.appender.redhawk.rest.maxBackupIndex=10
 
-# REDHAWK Jaxrs Appender
-log4j.logger.redhawk.jaxrs=INFO,redhawk.jaxrs
-log4j.appender.redhawk.jaxrs=org.apache.log4j.RollingFileAppender
-log4j.appender.redhawk.jaxrs.layout=org.apache.log4j.PatternLayout
-log4j.appender.redhawk.jaxrs.layout.ConversionPattern=%d{ISO8601} | %-5.5p | %-16.16t | %-32.32c{1} | %X{bundle.id} - %X{bundle.name} - %X{bundle.version} | %m%n
-log4j.appender.redhawk.jaxrs.file=${karaf.data}/redhawk-jaxrs/redhawk-jaxrs.log
-log4j.appender.redhawk.jaxrs.append=true
-log4j.appender.redhawk.jaxrs.maxFileSize=1MB
-log4j.appender.redhawk.jaxrs.maxBackupIndex=10
+# REDHAWK Jaxrs Ap/pender
+#log4j.logger.redhawk.jaxrs=INFO,redhawk.jaxrs
+#log4j.appender.redhawk.jaxrs=org.apache.log4j.RollingFileAppender
+#log4j.appender.redhawk.jaxrs.layout=org.apache.log4j.PatternLayout
+#log4j.appender.redhawk.jaxrs.layout.ConversionPattern=%d{ISO8601} | %-5.5p | %-16.16t | %-32.32c{1} | %X{bundle.id} - %X{bundle.name} - %X{bundle.version} | %m%n
+#log4j.appender.redhawk.jaxrs.file=${karaf.data}/redhawk-jaxrs/redhawk-jaxrs.log
+#log4j.appender.redhawk.jaxrs.append=true
+#log4j.appender.redhawk.jaxrs.maxFileSize=1MB
+#log4j.appender.redhawk.jaxrs.maxBackupIndex=10

@@ -101,7 +101,7 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 		</jaxrs:extensionMappings>
 		<jaxrs:providers>
 			<ref component-id="authenticationFilter" />		
-			<!--<ref component-id="authorizationFilter" />-->
+			<ref component-id="authorizationFilter" />
 			<bean class="com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider" />
 			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />						
 			<bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter" >

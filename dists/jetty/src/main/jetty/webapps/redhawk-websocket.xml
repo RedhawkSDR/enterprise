@@ -20,4 +20,11 @@
     	</New>
   	</Set>	 	
 	
+	<!--
+	<New id="jaxrsperms" class="org.eclipse.jetty.plus.jndi.EnvEntry">
+  		<Arg>redhawk.jaxrs.permissions.file</Arg>
+  		<Arg type="java.lang.String"><Property name="jetty.home" default="." />/etc/redhawk.jaxrs.permissions.csv</Arg>
+  		<Arg type="boolean">true</Arg>
+	</New>
+	--> 
 </Configure>

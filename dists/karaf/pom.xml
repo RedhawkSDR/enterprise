@@ -265,13 +265,13 @@
 					</requires>
 					<mappings>
 						<mapping>
-							<directory>${runtime.basedir}</directory>
-							<username>root</username>
+							<directory>${runtime.basedir}/karaf-${karaf.version}</directory>
+							<username>redhawk</username>
 							<groupname>redhawk</groupname>
-							<filemode>774</filemode>
+							<filemode>755</filemode>
 							<sources>
 								<source>
-									<location>${project.build.directory}/${runtime.dir}</location>
+									<location>${project.build.directory}/${runtime.dir}/karaf-${karaf.version}</location>
 								</source>
 							</sources>
 						</mapping>
@@ -284,10 +284,6 @@
 						<scriptFile>${project.build.directory}/scripts/preremove.sh</scriptFile>
 						<fileEncoding>utf-8</fileEncoding>
 					</preremoveScriptlet>
-					<postremoveScriptlet>
-						<scriptFile>${project.build.directory}/scripts/postremove.sh</scriptFile>
-						<fileEncoding>utf-8</fileEncoding>
-					</postremoveScriptlet>
 				</configuration>
 			</plugin>
 		</plugins>

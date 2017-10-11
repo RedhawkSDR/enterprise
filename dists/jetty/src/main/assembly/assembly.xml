@@ -7,8 +7,8 @@
 	</formats>
 	<fileSets>
 		<fileSet>
-			<directory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}</directory>
-			<outputDirectory>${runtime.dir}/jetty-home-${jetty.version}</outputDirectory>
+			<directory>${project.build.directory}/${runtime.dir}/jetty-distribution-${jetty.version}</directory>
+			<outputDirectory>${runtime.dir}/jetty-distribution-${jetty.version}</outputDirectory>
 			<fileMode>0775</fileMode>
 			<directoryMode>0775</directoryMode>
 		</fileSet>

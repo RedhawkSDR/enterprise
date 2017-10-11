@@ -10,3 +10,6 @@ javax.net.ssl.keyStorePassword=redhawk
 #javax.net.ssl.trustStore=
 #javax.net.ssl.trustStorePassword=
 #javax.net.ssl.trustStoreType=
+
+#Properties file containing permissions for accessing REST/WS resources
+redhawk.jaxrs.permissions.file=${karaf.base}/etc/redhawk.jaxrs.permissions.csv

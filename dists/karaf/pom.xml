@@ -165,15 +165,31 @@
 					</execution>
 					<execution>
 						<id>copy-additional-configuration</id>
-						<phase>validate</phase>
+						<phase>compile</phase>
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
 							<outputDirectory>${project.build.directory}/${runtime.dir}/karaf-${karaf.version}/etc</outputDirectory>
+							<overwrite>true</overwrite>
 							<resources>
 								<resource>
 									<directory>src/main/etc</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-jaxrs-permissions-file</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/karaf-${karaf.version}/etc/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.parent.basedir}/src/main/conf/jaxrs</directory>
 								</resource>
 							</resources>
 						</configuration>

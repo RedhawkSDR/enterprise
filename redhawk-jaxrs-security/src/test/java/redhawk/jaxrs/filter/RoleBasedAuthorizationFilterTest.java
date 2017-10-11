@@ -207,7 +207,7 @@ public class RoleBasedAuthorizationFilterTest {
 		/*
 		 * Now mock a user accessing /redhawk/customhost:2809/domains
 		 */
-		when(uriInfo.getPath()).thenReturn("/redhawk/customhost:2809/domains");
+		when(uri.getPath()).thenReturn("/rest/redhawk/customhost:2809/domains");
 		
 		try {
 			//Make sure this is matching the appropriate entry in props file
@@ -242,7 +242,7 @@ public class RoleBasedAuthorizationFilterTest {
 		/*
 		 * Now mock a user accessing /redhawk/customhost:2809/domains/SpecialSnowFlake
 		 */
-		when(uriInfo.getPath()).thenReturn("/rest/redhawk/customhost:2809/domains/SpecialSnowFlake");
+		when(uri.getPath()).thenReturn("/rest/redhawk/customhost:2809/domains/SpecialSnowFlake");
 
 		try {
 			when(sc.isUserInRole("special")).thenReturn(false);

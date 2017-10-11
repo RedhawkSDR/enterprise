@@ -10,6 +10,9 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
@@ -54,7 +57,7 @@ public class RoleBasedAuthorizationFilter implements ContainerRequestFilter {
 		this.restPermissionFileLocation = filterFile;
 		this.strictPermissions = strictPermissions;
 		//Setup allows access via Env/JNDI
-		//setup();
+		setup();
 		logger.debug("Permissions file: " + this.restPermissionFileLocation);
 		if (this.restPermissionFileLocation != null) {
 			try {
@@ -79,13 +82,18 @@ public class RoleBasedAuthorizationFilter implements ContainerRequestFilter {
 	}
 	
 	public void setup() {
-		logger.debug("System Props: ");
-		for(Entry<Object, Object> entry : System.getProperties().entrySet()) {
-			logger.debug("\t Key: "+entry.getKey()+" Value: "+entry.getValue());
-		}
-		logger.info("System Env: ");
-		for(Entry<String, String> envEntry : System.getenv().entrySet()) {
-			logger.debug("\t Key: "+envEntry.getKey()+" Value: "+envEntry.getValue());	
+		try {
+		    Context ctx = new InitialContext();
+		    Context env = (Context) ctx.lookup("java:comp/env");
+		    Object obj = env.lookup(REST_PERMISSION_FILELOCATION);
+			if(obj!=null && this.restPermissionFileLocation==null) {
+				logger.debug("Updates permission file location with information from web.xml");
+				this.restPermissionFileLocation = obj.toString();
+			}else if(obj!=null) {
+				logger.debug("Found property but using System property");
+			}
+		} catch (NamingException e) {
+			logger.warn("Unable to get properties via jndi env");
 		}
 	}
 

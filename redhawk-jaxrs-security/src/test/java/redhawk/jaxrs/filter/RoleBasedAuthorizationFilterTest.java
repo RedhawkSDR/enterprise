@@ -56,7 +56,7 @@ public class RoleBasedAuthorizationFilterTest {
 	
 	@Test
 	public void testRoleBasedAuthorizationFilter() {
-		RoleBasedAuthorizationFilter filter = new RoleBasedAuthorizationFilter("src/test/resources/rest-permissions.properties");
+		RoleBasedAuthorizationFilter filter = new RoleBasedAuthorizationFilter("src/test/resources/rest-permissions.csv");
 		
 		ContainerRequestContext rc = mock(ContainerRequestContext.class);
 		SecurityContext sc = mock(SecurityContext.class);
@@ -98,7 +98,7 @@ public class RoleBasedAuthorizationFilterTest {
 	
 	@Test
 	public void testRoleBasedAuthorizationFilterRegex() {
-		RoleBasedAuthorizationFilter filter = new RoleBasedAuthorizationFilter("src/test/resources/redhawk-rest-permissions.properties");
+		RoleBasedAuthorizationFilter filter = new RoleBasedAuthorizationFilter("src/test/resources/redhawk-rest-permissions.csv");
 		
 		ContainerRequestContext rc = mock(ContainerRequestContext.class);
 		SecurityContext sc = mock(SecurityContext.class);
@@ -164,7 +164,7 @@ public class RoleBasedAuthorizationFilterTest {
 	
 	@Test
 	public void testRoleBasedAuthorizationFilterRegexComplex() {
-		RoleBasedAuthorizationFilter filter = new RoleBasedAuthorizationFilter("src/test/resources/customredhawk-rest-permissions.properties");
+		RoleBasedAuthorizationFilter filter = new RoleBasedAuthorizationFilter("src/test/resources/customredhawk-rest-permissions.csv");
 		
 		ContainerRequestContext rc = mock(ContainerRequestContext.class);
 		SecurityContext sc = mock(SecurityContext.class);

@@ -1,0 +1,3 @@
+/rest/redhawk.*,,"guest,admin"
+/rest/redhawk/customhost:2809.*,,admin
+/rest/redhawk/customhost:2809/domains/SpecialSnowFlake.*,,special

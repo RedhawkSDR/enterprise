@@ -11,14 +11,18 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RESTPermissionReaderTest {
+	private Logger logger = LoggerFactory.getLogger(RESTPermissionReaderTest.class);
+	
 	private RESTPermissionsReader reader = new RESTPermissionsReader(); 
 	
 	@Test
 	public void testReadPermFile() {		
 		try {
-			Map<String, RestMethodAuthorizationMapper> test = reader.readRestFile("src/test/resources/rest-permissions.properties", false);
+			Map<String, RestMethodAuthorizationMapper> test = reader.readRestFile("src/test/resources/rest-permissions.csv", false);
 		
 			//Check for expected values
 			assertEquals("Should be two keys", 2, test.size());
@@ -55,8 +59,22 @@ public class RESTPermissionReaderTest {
 				}
 			}
 		} catch (IOException e) {
+			fail("File should exist!!!"+e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testAdminOnly() {
+		try {
+			Map<String, RestMethodAuthorizationMapper> test = reader.readRestFile("src/test/resources/admin-only.properties", false);
+			
+			for(Map.Entry<String, RestMethodAuthorizationMapper> entry : test.entrySet()) {
+				logger.info("Key: "+entry.getKey()+" Value: "+entry.getValue());
+			}
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	}
 }

@@ -54,7 +54,7 @@ public class RoleBasedAuthorizationFilter implements ContainerRequestFilter {
 		this.restPermissionFileLocation = filterFile;
 		this.strictPermissions = strictPermissions;
 		//Setup allows access via Env/JNDI
-		setup();
+		//setup();
 		logger.debug("Permissions file: " + this.restPermissionFileLocation);
 		if (this.restPermissionFileLocation != null) {
 			try {
@@ -79,13 +79,13 @@ public class RoleBasedAuthorizationFilter implements ContainerRequestFilter {
 	}
 	
 	public void setup() {
-		logger.info("System Props: ");
+		logger.debug("System Props: ");
 		for(Entry<Object, Object> entry : System.getProperties().entrySet()) {
-			logger.info("\t Key: "+entry.getKey()+" Value: "+entry.getValue());
+			logger.debug("\t Key: "+entry.getKey()+" Value: "+entry.getValue());
 		}
 		logger.info("System Env: ");
 		for(Entry<String, String> envEntry : System.getenv().entrySet()) {
-			logger.info("\t Key: "+envEntry.getKey()+" Value: "+envEntry.getValue());	
+			logger.debug("\t Key: "+envEntry.getKey()+" Value: "+envEntry.getValue());	
 		}
 	}
 

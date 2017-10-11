@@ -11,7 +11,7 @@ If starting from scratch(jetty-home) these are the addional modules:
 * requestlog
 * jaas
 * logging-slf4j
-* slf4j-log4j
+* slf4j-log4j2
 
 == Trouble Shooting
 

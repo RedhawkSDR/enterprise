@@ -27,7 +27,7 @@
 				<version>3.0.0</version>
 				<executions>
 					<execution>
-						<id>jetty-home</id>
+						<id>jetty-distribution</id>
 						<phase>generate-resources</phase>
 						<goals>
 							<goal>unpack</goal>
@@ -37,7 +37,7 @@
 								<artifactItem>
 									<groupId>org.eclipse.jetty</groupId>
 									<!-- TODO: Investigate using jetty-home -->
-									<artifactId>jetty-home</artifactId>
+									<artifactId>jetty-distribution</artifactId>
 									<version>${jetty.version}</version>
 									<type>zip</type>
 								</artifactItem>
@@ -69,7 +69,7 @@
 									<type>war</type>
 								</artifactItem>
 							</artifactItems>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/webapps</outputDirectory>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-distribution-${jetty.version}/webapps</outputDirectory>
 						</configuration>
 					</execution>
 					<execution>
@@ -91,7 +91,7 @@
 									<version>${slf4j.version}</version>
 								</artifactItem>
 							</artifactItems>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/lib/ext</outputDirectory>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-distribution-${jetty.version}/lib/ext</outputDirectory>
 						</configuration>
 					</execution>
 					<execution>
@@ -113,7 +113,7 @@
 									<version>2.1</version>
 								</artifactItem>
 							</artifactItems>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/lib/ext</outputDirectory>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-distribution-${jetty.version}/lib/ext</outputDirectory>
 						</configuration>
 					</execution>
 					<execution>
@@ -130,7 +130,7 @@
 									<version>1.2.17</version>
 								</artifactItem>
 							</artifactItems>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/lib/log4j</outputDirectory>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-distribution-${jetty.version}/lib/log4j</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>
@@ -162,7 +162,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/jacorb-deps</outputDirectory>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-distribution-${jetty.version}/jacorb-deps</outputDirectory>
 							<resources>
 								<resource>
 									<directory>${project.parent.basedir}/src/main/jacorb</directory>
@@ -177,7 +177,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/jacorb-deps</outputDirectory>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-distribution-${jetty.version}/jacorb-deps</outputDirectory>
 							<resources>
 								<resource>
 									<directory>${project.build.directory}/jacorb-deps</directory>
@@ -201,15 +201,15 @@
 							</resources>
 						</configuration>
 					</execution>
+					<!--
 					<execution>
 						<id>copy-start.ini</id>
-						<!-- here the phase you need -->
 						<phase>generate-resources</phase>
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/</outputDirectory>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-distribution-${jetty.version}/</outputDirectory>
 							<resources>
 								<resource>
 									<directory>src/main/jetty/</directory>
@@ -220,15 +220,15 @@
 							</resources>
 						</configuration>
 					</execution>
+					-->
 					<execution>
 						<id>copy-jetty-resources</id>
-						<!-- here the phase you need -->
 						<phase>generate-resources</phase>
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/resources</outputDirectory>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-distribution-${jetty.version}/resources</outputDirectory>
 							<resources>
 								<resource>
 									<directory>src/main/jetty/resources</directory>
@@ -244,10 +244,10 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/lib/slf4j</outputDirectory>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-distribution-${jetty.version}/lib/slf4j</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/lib/ext</directory>
+									<directory>${project.build.directory}/${runtime.dir}/jetty-distribution-${jetty.version}/lib/ext</directory>
 								</resource>
 							</resources>
 						</configuration>
@@ -260,10 +260,10 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/etc/</outputDirectory>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-distribution-${jetty.version}/etc/</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/modules/ssl</directory>
+									<directory>${project.build.directory}/${runtime.dir}/jetty-distribution-${jetty.version}/modules/ssl</directory>
 									<includes>
 										<include>keystore</include>
 									</includes>
@@ -279,7 +279,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/webapps/</outputDirectory>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-distribution-${jetty.version}/webapps/</outputDirectory>
 							<resources>
 								<resource>
 									<directory>src/main/jetty/webapps</directory>
@@ -294,7 +294,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/etc/</outputDirectory>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-distribution-${jetty.version}/etc/</outputDirectory>
 							<resources>
 								<resource>
 									<directory>src/main/jetty/etc</directory>
@@ -309,7 +309,7 @@
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/etc/</outputDirectory>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-distribution-${jetty.version}/etc/</outputDirectory>
 							<resources>
 								<resource>
 									<directory>${project.parent.basedir}/src/main/conf/jaxrs</directory>

@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,11 +30,11 @@ public class RESTPermissionsReader {
 			CsvParserSettings settings = new CsvParserSettings();
 			settings.getFormat().setLineSeparator("\n");
 			CsvParser parser = new CsvParser(settings);
-			
-			List<String[]> allRows = parser.parseAll(new FileReader(file));
+			URI uri = new URI(file);
+			List<String[]> allRows = parser.parseAll(new FileReader(uri.getPath()));
 
 			return this.process(allRows, strictPermissions);
-		} catch (RuntimeException | IOException e) {
+		} catch (RuntimeException | IOException | URISyntaxException e) {
 			logger.error("Error reading REST permission file.", e);
 			throw new IOException("Unable to read permission file: " + file, e);
 		}

@@ -201,7 +201,6 @@
 							</resources>
 						</configuration>
 					</execution>
-					<!--
 					<execution>
 						<id>copy-start.ini</id>
 						<phase>generate-resources</phase>
@@ -220,7 +219,6 @@
 							</resources>
 						</configuration>
 					</execution>
-					-->
 					<execution>
 						<id>copy-jetty-resources</id>
 						<phase>generate-resources</phase>

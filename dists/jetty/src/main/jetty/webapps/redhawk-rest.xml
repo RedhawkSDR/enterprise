@@ -4,7 +4,7 @@
 	<Set name="configurationDiscovered">true</Set>
 	  	<!-- Set up the path to the custom override descriptor,
   	relative to your $(jetty.home) directory or to the current directory -->
-  	<Set name="overrideDescriptor"><Property name="jetty.home" default="." />/etc/jaas_override-web.xml</Set>
+  	<Set name="overrideDescriptor"><Property name="jetty.home" default="." />/etc/rest_jaas_override-web.xml</Set>
   
 	<!-- 
 		JAAS Login Service

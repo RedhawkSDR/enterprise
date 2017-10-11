@@ -288,8 +288,7 @@
 						</configuration>
 					</execution>
 					<execution>
-						<!-- Copy key store to etc directory so https can work -->
-						<id>copy-jaas-xml-configurations</id>
+						<id>copy-jaas-configurations</id>
 						<phase>generate-resources</phase>
 						<goals>
 							<goal>copy-resources</goal>
@@ -303,6 +302,21 @@
 							</resources>
 						</configuration>
 					</execution>
+					<execution>
+						<id>copy-jaxrs-permissions-file</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-home-${jetty.version}/etc/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.parent.basedir}/src/main/conf/jaxrs</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>					
 				</executions>
 			</plugin>
 			<plugin>

@@ -102,10 +102,9 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 		<jaxrs:providers>
 			<ref component-id="authenticationFilter" />		
 			<ref component-id="authorizationFilter" />
+			<ref component-id="cors-filter" />
 			<bean class="com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider" />
-			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />						
-			<bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter" >
-			</bean>		
+			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />
 		</jaxrs:providers>
 	</jaxrs:server>
 	
@@ -117,4 +116,18 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 	<bean id="authenticationFilter" class="org.apache.cxf.jaxrs.security.JAASAuthenticationFilter">
 		<property name="contextName" value="karaf"/>		
 	</bean>
+	
+	<!-- CORS -->
+	<bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter" >
+		<property name="allowOrigins" value="*" />
+		<property name="allowCredentials" value="true" />
+		<property name="allowHeaders">
+			<list>
+				<value>Origin</value>
+				<value>Content-Type</value>
+				<value>Accept</value>
+				<value>Authorization</value>			
+			</list>
+		</property>
+	</bean>			
 </blueprint>

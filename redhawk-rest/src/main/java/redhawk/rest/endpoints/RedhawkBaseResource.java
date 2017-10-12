@@ -39,7 +39,7 @@ public class RedhawkBaseResource {
 	
 	protected ResponseBuilder addCors(ResponseBuilder responseBuilder) {
 		responseBuilder.header("Access-Control-Allow-Origin", "*");
-		responseBuilder.header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
+		responseBuilder.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization");
 		responseBuilder.header("Access-Control-Allow-Credentials", "true");
 		responseBuilder.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
 		return responseBuilder;

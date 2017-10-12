@@ -33,7 +33,7 @@ const state = {
   showWaveformComponents: false,
   showComponentProperties: false,
   propertyUpdate: 0,
-  redhawkRESTRoot: 'http://127.0.0.1:8181/cxf/redhawk/',
+  redhawkRESTRoot: 'http://127.0.0.1:8181/rest/redhawk/',
   showEditRESTModal: false,
   showApplication: false,
   showDeviceManager: false,

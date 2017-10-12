@@ -13,6 +13,7 @@
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		<jetty.version>9.4.7.v20170914</jetty.version>
 	</properties>
 	<dependencies>
 		<!-- JACKSON Stuff -->
@@ -70,6 +71,19 @@
 			<version>${cxf.version}</version>
 		</dependency>
 		<!-- END CXF Stuff -->
+		<!-- CORS Nonsense -->
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-rs-security-cors</artifactId>
+			<version>${cxf.version}</version>
+			<scope>provided</scope>
+		</dependency>		
+		<dependency>
+    		<groupId>org.eclipse.jetty</groupId>
+    		<artifactId>jetty-servlets</artifactId>
+    		<version>${jetty.version}</version>
+		</dependency>
+		<!-- End CORS Nonsense -->
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.core</artifactId>
@@ -165,11 +179,12 @@
 									<file>${project.build.directory}/${project.artifactId}-${project.version}.war</file>
 									<type>war</type>
 								</artifact>
-								<!-- TODO: apparently overriding the helper plugin screws default jar deployment of bundle -->
+								<!-- TODO: apparently overriding the helper plugin screws default 
+									jar deployment of bundle -->
 								<artifact>
 									<file>${project.build.directory}/${project.artifactId}-${project.version}.jar</file>
 									<type>jar</type>
-								</artifact>								
+								</artifact>
 							</artifacts>
 						</configuration>
 					</execution>

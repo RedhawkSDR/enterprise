@@ -217,7 +217,7 @@
 							<apiSources>
 								<apiSource>
 									<locations>redhawk.rest.endpoints</locations>
-									<basePath>cxf/redhawk</basePath>
+									<basePath>rest/redhawk</basePath>
 									<schemes>http,https</schemes>
 									<host>127.0.0.1</host>
 									<info>

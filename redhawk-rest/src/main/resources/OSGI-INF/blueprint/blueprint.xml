@@ -82,7 +82,7 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 		<property name="redhawkManager" ref="redhawkManagerBean" />
 	</bean>
 	
-	<jaxrs:server id="rsServer" address="/rest/redhawk">
+	<jaxrs:server id="rsServer" address="/redhawk">
 		<jaxrs:serviceBeans>
 			<ref component-id="redhawkDomainResource" />
 			<ref component-id="redhawkApplicationResource" />

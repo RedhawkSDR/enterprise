@@ -1,5 +1,8 @@
 [NOTE]
 ====
+If using the KARAF distribution see the ${karaf.home}/etc/users.properties file for username and password information. 
+If using the Jetty distribution see the ${jetty.home}/etc/login.properties file for username and password information. 
+ 
 `nameserver` is the host/IP and the port of the omniNames server. This configuration is found in your
 `omniORB.cfg` file, and the line specifying the configuration is similar to the following:
 
@@ -11,12 +14,12 @@ Use that host and port combination for the `nameserver` parameter in your URL. B
 URL for the REDHAWK REST endpoints:
 
 ----
-http://{host}:8181/cxf/redhawk/{nameserver host}:{nameserver port}
+http://{host}:8181/rest/redhawk/{nameserver host}:{nameserver port}
 ----
 
 If you are using the REDHAWK Connector, you can replace `nameserver` and `port` with the connection name you specified when you created the connection. Refer to the <<REDHAWK Connector>> chapter for more details.
 
 ----
-http://{host}:8181/cxf/redhawk/{redhawk-connect-name}
+http://{host}:8181/rest/redhawk/{redhawk-connect-name}
 ----
 ====

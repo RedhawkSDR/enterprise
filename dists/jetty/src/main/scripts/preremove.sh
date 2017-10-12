@@ -19,7 +19,7 @@ fi
 
 echo "Stopping Jetty if it's still running" 
 cd ${HOME}
-${runtime.basedir}/jetty-home-${jetty.version}/bin/jetty.sh stop
+${runtime.basedir}/jetty-distribution-${jetty.version}/bin/jetty.sh stop
 
 #Need to either ensure last command will have 0 status code(purpose of echo) or 
 #Add in logic to determine if it's necessary to stop jetty. May need to submit a 

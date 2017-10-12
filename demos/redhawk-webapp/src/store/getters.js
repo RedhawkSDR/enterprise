@@ -38,3 +38,5 @@ export const showDeviceProperties = state => state.showDeviceProperties
 export const eventchannels = state => state.eventchannels
 export const eventchannel = state => state.eventchannel
 export const showEventChannel = state => state.showEventChannel
+export const userName = state => state.userName
+export const password = state => state.password

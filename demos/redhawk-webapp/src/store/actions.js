@@ -1,5 +1,11 @@
 //Axios is asnyc so all axios calls should really occur in this class
 import axios from 'axios'
+var AUTH_TOKEN = "Basic "+btoa("redhawk:redhawk")
+axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+console.log("Auth token "+AUTH_TOKEN)
+//var config = {
+//  headers : {'Authorization' : AUTH_TOKEN}
+//}
 
 //Helper functions
 function getUsedTuners(getters, deviceLabel){
@@ -67,6 +73,7 @@ export const viewDomainConfig = ({ commit, getters }, index) => {
   var config = getters.domainConfigs[index]
   var baseURI = getters.redhawkRESTRoot+config.nameServer+'/domains/'+config.domainName
 
+  console.log(axios.defaults)
   axios.all([getWaveforms(baseURI+'/waveforms.json'), getApplications(baseURI+'/applications.json'),
   getDeviceManagers(baseURI+'/devicemanagers.json'), getEventChannels(baseURI+'/eventchannels.json')])
   .then(axios.spread(function(waveforms, applications, deviceManagers, eventchannels){

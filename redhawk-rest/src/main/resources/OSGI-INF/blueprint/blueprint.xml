@@ -119,7 +119,11 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 	
 	<!-- CORS -->
 	<bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter" >
-		<property name="allowOrigins" value="*" />
+		<property name="allowOrigins">
+			<list>
+				<value>*</value>
+			</list>
+		</property>
 		<property name="allowCredentials" value="true" />
 		<property name="allowHeaders">
 			<list>

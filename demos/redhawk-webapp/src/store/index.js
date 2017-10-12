@@ -34,6 +34,8 @@ const state = {
   showComponentProperties: false,
   propertyUpdate: 0,
   redhawkRESTRoot: 'http://127.0.0.1:8181/rest/redhawk/',
+  userName: 'redhawk',
+  password: 'redhawk',
   showEditRESTModal: false,
   showApplication: false,
   showDeviceManager: false,

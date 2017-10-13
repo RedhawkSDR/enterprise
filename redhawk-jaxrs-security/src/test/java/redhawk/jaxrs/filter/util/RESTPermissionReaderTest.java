@@ -66,7 +66,7 @@ public class RESTPermissionReaderTest {
 	@Test
 	public void testAdminOnly() {
 		try {
-			Map<String, RestMethodAuthorizationMapper> test = reader.readRestFile("src/test/resources/admin-only.properties", false);
+			Map<String, RestMethodAuthorizationMapper> test = reader.readRestFile("src/test/resources/admin-only.csv", false);
 			
 			for(Map.Entry<String, RestMethodAuthorizationMapper> entry : test.entrySet()) {
 				logger.info("Key: "+entry.getKey()+" Value: "+entry.getValue());

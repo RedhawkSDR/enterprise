@@ -102,7 +102,7 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 		<jaxrs:providers>
 			<ref component-id="cors-filter" />
 			<!--
-			Demos don't work cause of below in karaf
+			Demos don't work cause of authentication below in karaf
 			-->
 			<ref component-id="authenticationFilter" />		
 			<ref component-id="authorizationFilter" />

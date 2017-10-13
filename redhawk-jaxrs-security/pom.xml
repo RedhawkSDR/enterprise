@@ -23,7 +23,7 @@
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
 			<version>${jetty.version}</version>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>com.univocity</groupId>
 			<artifactId>univocity-parsers</artifactId>
@@ -72,6 +72,12 @@
 			<version>2.26</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
+			<version>${cxf.version}</version>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -81,7 +87,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Embed-Dependency>univocity-parsers;inline=true</Embed-Dependency>					
+						<Embed-Dependency>univocity-parsers;inline=true</Embed-Dependency>
 					</instructions>
 				</configuration>
 			</plugin>

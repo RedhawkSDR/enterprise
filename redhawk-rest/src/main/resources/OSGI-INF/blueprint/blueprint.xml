@@ -100,9 +100,9 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 			<entry key="xml" value="application/xml" />
 		</jaxrs:extensionMappings>
 		<jaxrs:providers>
+			<ref component-id="cors-filter" />
 			<ref component-id="authenticationFilter" />		
 			<ref component-id="authorizationFilter" />
-			<ref component-id="cors-filter" />
 			<bean class="com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider" />
 			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />
 		</jaxrs:providers>
@@ -117,6 +117,12 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 		<property name="contextName" value="karaf"/>		
 	</bean>
 	
+	<!--
+	<bean id="jetty-cors" class="org.eclipse.jetty.servlets.CrossOriginFilter">
+		<property name="allowedMethods" value="GET,POST,PUT,DELETE,OPTIONS,HEAD"/>
+		<property name="allowedHeaders" value="X-Requested-With,Content-Type,Accept,Origin,Authorization" />
+	</bean>
+	-->
 	<!-- CORS -->
 	<bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter" >
 		<property name="allowOrigins">
@@ -124,13 +130,22 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 				<value>*</value>
 			</list>
 		</property>
+		<property name="preflightErrorStatus" value="401" />
 		<property name="allowCredentials" value="true" />
 		<property name="allowHeaders">
 			<list>
 				<value>Origin</value>
 				<value>Content-Type</value>
 				<value>Accept</value>
-				<value>Authorization</value>			
+				<value>Authorization</value>
+				<value>Accept</value>
+				<value>Accept-Encoding</value>
+				<value>Accept-Language</value>
+				<value>Referer</value>
+				<value>User-Agent</value>
+				<value>Host</value>
+				<value>Access-Control-Request-Headers</value>
+				<value>Access-Control-Request-Method</value>		
 			</list>
 		</property>
 	</bean>			

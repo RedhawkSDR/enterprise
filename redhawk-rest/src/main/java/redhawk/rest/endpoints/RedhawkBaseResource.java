@@ -40,7 +40,7 @@ public class RedhawkBaseResource {
 	}
 	
 	/*@OPTIONS
-	@Path("/")
+	@Path("{id:.*}")
 	@LocalPreflight	
 	public Response getOptions() {
 		return addCors(Response.ok()).build();
@@ -52,9 +52,9 @@ public class RedhawkBaseResource {
 		responseBuilder.header("Access-Control-Allow-Credentials", "true");
 		responseBuilder.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
 		
-		logger.info("Do I even hit this!!!!!!");
 		return responseBuilder;
-	}*/
+	}
+	*/
 	
 	
 	public RedhawkManager getRedhawkManager() {

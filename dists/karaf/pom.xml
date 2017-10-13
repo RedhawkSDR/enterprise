@@ -282,7 +282,7 @@
 					<mappings>
 						<mapping>
 							<directory>${runtime.basedir}/karaf-${karaf.version}</directory>
-							<username>redhawk</username>
+							<username>root</username>
 							<groupname>redhawk</groupname>
 							<filemode>755</filemode>
 							<sources>

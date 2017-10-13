@@ -382,7 +382,7 @@
 					<mappings>
 						<mapping>
 							<directory>${runtime.basedir}/jetty-distribution-${jetty.version}</directory>
-							<username>redhawk</username>
+							<username>root</username>
 							<groupname>redhawk</groupname>
 							<filemode>755</filemode>
 							<sources>

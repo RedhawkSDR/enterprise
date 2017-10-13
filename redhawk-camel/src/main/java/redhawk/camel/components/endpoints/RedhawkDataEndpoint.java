@@ -23,15 +23,15 @@ import org.apache.camel.Consumer;
 import org.apache.camel.Processor;
 import org.apache.camel.Producer;
 import org.apache.camel.impl.DefaultEndpoint;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import redhawk.camel.components.RedhawkComponent;
 import redhawk.camel.components.data.RedhawkDataConsumer;
 
 public class RedhawkDataEndpoint extends DefaultEndpoint {
 
-	private static Log logger = LogFactory.getLog(RedhawkDataEndpoint.class);
+	private static Logger logger = LoggerFactory.getLogger(RedhawkDataEndpoint.class);
 
 	private int bufferSize = 2000;
 	private String componentName;

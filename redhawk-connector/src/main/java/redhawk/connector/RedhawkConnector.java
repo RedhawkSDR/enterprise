@@ -24,8 +24,6 @@ import java.lang.reflect.Method;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -33,6 +31,8 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedServiceFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import redhawk.driver.Redhawk;
 import redhawk.driver.RedhawkDriver;
@@ -40,7 +40,7 @@ import redhawk.driver.domain.RedhawkDomainManager;
 
 public class RedhawkConnector implements ManagedServiceFactory {
 
-	private static Logger logger = Logger.getLogger(RedhawkConnector.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(RedhawkConnector.class.getName());
 
 	private BundleContext bundleContext;
 	private Map<String, ServiceRegistration<Redhawk>> redhawkRegistrationEntries = new HashMap<>();
@@ -75,7 +75,7 @@ public class RedhawkConnector implements ManagedServiceFactory {
 			try {
 				port = Long.parseLong((String) properties.get(PORT_NAME_PROPERTY));
 			} catch (NumberFormatException e1) {
-				logger.severe(e.getMessage());
+				logger.error(e.getMessage());
 			}
 		}
 
@@ -86,7 +86,7 @@ public class RedhawkConnector implements ManagedServiceFactory {
 		String domainManagerName = dynamicPropertyConversion(properties.get(DOMAIN_MANAGER_PROPERTY), String.class);
 
 		try {
-			logger.fine("Checking for a pre-existing REDHAWK connection with the connectionName of: " + connectionName);
+			logger.debug("Checking for a pre-existing REDHAWK connection with the connectionName of: " + connectionName);
 			ServiceReference<?>[] existingRHConnection = bundleContext.getAllServiceReferences(Redhawk.class.getName(),
 					null);
 
@@ -116,12 +116,12 @@ public class RedhawkConnector implements ManagedServiceFactory {
 				}
 			}
 		} catch (InvalidSyntaxException e) {
-			logger.log(Level.SEVERE, "An InvalidSyntaxException has occurred", e);
+			logger.error("An InvalidSyntaxException has occurred", e);
 			throw new ConfigurationException("InvalidSyntaxException", e.getMessage());
 		}
 
 		if (connectionName.equalsIgnoreCase("redhawk")) {
-			logger.warning(
+			logger.warn(
 					"Connection Name is redhawk. This will conflict with the REDHAWK Camel Component if it is installed. "
 							+ "Appending host name to the connectionName for uniqueness");
 			connectionName = connectionName + "-" + host.replaceAll("\\.", "_");
@@ -139,7 +139,7 @@ public class RedhawkConnector implements ManagedServiceFactory {
 
 		Redhawk redhawkDriver = new RedhawkDriver(host, port.intValue());
 
-		logger.fine("domainManagerName : " + domainManagerName);
+		logger.debug("domainManagerName : " + domainManagerName);
 		if (!domainManagerName.isEmpty() && !isEmpty(deviceManagerName)) {
 			try {
 				RedhawkDomainManager domMgr = redhawkDriver.getDomain(domainManagerName);
@@ -152,8 +152,7 @@ public class RedhawkConnector implements ManagedServiceFactory {
 				domMgr.createDeviceManager(deviceManagerName, deviceManagerFileSystemRoot, true);
 				redhawkDomainManagers.put(pid, domMgr);
 			} catch (Exception e) {
-				logger.log(Level.SEVERE,
-						"There was a problem attempting to create the device manager.  The device manager will not be created at this time. Please update your configuration file.",
+				logger.error("There was a problem attempting to create the device manager.  The device manager will not be created at this time. Please update your configuration file.",
 						e);
 				return;
 			}
@@ -240,7 +239,7 @@ public class RedhawkConnector implements ManagedServiceFactory {
 				throw new ConfigurationException(name, "Unable to get property "+property+" likely bad formatting.", e.getCause());
 			}			
 		}else{
-			logger.warning("Received Null for one of the properties being checked");
+			logger.warn("Received Null for one of the properties being checked");
 			return null;
 		}
 	}

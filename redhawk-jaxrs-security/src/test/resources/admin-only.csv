@@ -1,0 +1,3 @@
+/rest/redhawk.*,GET,admin
+/rest/redhawk.*,"POST,PUT,DELETE",admin
+/ws/redhawk.*,,"guest,admin"

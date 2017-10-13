@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
@@ -13,7 +14,7 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 
 public class MetricsConverterUtils {
-	private static Logger logger = Logger.getLogger(MetricsConverterUtils.class);
+	private static Logger logger = LoggerFactory.getLogger(MetricsConverterUtils.class);
 
 	public static List<Map<String, String>> getPortsAvailable(List<RedhawkApplication> applications) {
 		List<Map<String, String>> ports = new ArrayList<>();

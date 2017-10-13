@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>redhawk</groupId>
+		<artifactId>redhawk-enterprise-integration</artifactId>
+		<version>2.1.2-SNAPSHOT</version>
+	</parent>
+	<groupId>redhawk.enterprise.integration.dists</groupId>
+	<artifactId>dists-parent</artifactId>
+	<packaging>pom</packaging>
+	<name>REDHAWK :: ENTERPRISE INTEGRATION :: DISTS</name>
+	<properties>
+		<jacorb.version>3.8</jacorb.version>
+	</properties>
+	<modules>
+		<module>karaf</module>
+		<module>jetty</module>
+		<module>shell</module>
+	</modules>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<!-- Download all the stuff jacorb needs -->
+					<execution>
+						<id>jacorb-deps</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/jacorb-deps</outputDirectory>
+							<artifactItems>
+								<artfactItem>
+									<groupId>org.jacorb</groupId>
+									<artifactId>jacorb</artifactId>
+									<version>${jacorb.version}</version>
+								</artfactItem>
+								<artfactItem>
+									<groupId>org.jacorb</groupId>
+									<artifactId>jacorb-omgapi</artifactId>
+									<version>${jacorb.version}</version>
+								</artfactItem>
+								<artfactItem>
+									<groupId>org.jacorb</groupId>
+									<artifactId>jacorb-idl-compiler</artifactId>
+									<version>${jacorb.version}</version>
+								</artfactItem>
+								<artfactItem>
+									<groupId>org.jacorb</groupId>
+									<artifactId>jacorb-services</artifactId>
+									<version>${jacorb.version}</version>
+								</artfactItem>
+								<artifactItem>
+									<groupId>org.slf4j</groupId>
+									<artifactId>slf4j-api</artifactId>
+									<version>1.7.14</version><!-- TODO: There are newer versions out -->
+								</artifactItem>
+								<artifactItem>
+									<groupId>org.slf4j</groupId>
+									<artifactId>slf4j-jdk14</artifactId>
+									<version>1.7.14</version><!-- TODO: There are newer versions out -->
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

@@ -39,8 +39,8 @@ import org.apache.camel.util.EndpointHelper;
 import org.apache.camel.util.ObjectHelper;
 import org.apache.camel.util.StringHelper;
 import org.apache.commons.lang.Validate;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import redhawk.camel.components.endpoints.RedhawkDataEndpoint;
 import redhawk.camel.components.endpoints.RedhawkDataXmlEndpoint;
@@ -49,13 +49,14 @@ import redhawk.camel.components.endpoints.RedhawkFileEndpoint;
 import redhawk.camel.components.endpoints.RedhawkFileReaderEndpoint;
 import redhawk.camel.components.filereader.RedhawkFileReader;
 import redhawk.driver.RedhawkDriver;
+import redhawk.driver.connectionmanager.impl.RedhawkEndpoint;
 
 /**
  * Represents the component that manages {@link RedhawkEndpoint}.
  */
 public class RedhawkComponent extends DefaultComponent {
 
-    protected static Log logger = LogFactory.getLog(RedhawkComponent.class);
+    protected static Logger logger = LoggerFactory.getLogger(RedhawkComponent.class);
     
     private static final String DATA_SERVICE = "data";
     private static final String DATA_XML_SERVICE = "dataxml";

@@ -20,26 +20,41 @@
 package redhawk.rest.endpoints;
 
 import javax.ws.rs.OPTIONS;
+import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
+
+import org.apache.cxf.rs.security.cors.LocalPreflight;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import redhawk.rest.RedhawkManager;
 
 public class RedhawkBaseResource {
+	private Logger logger = LoggerFactory.getLogger(RedhawkBaseResource.class);
+	
 	public RedhawkManager redhawkManager;
 	
-	@OPTIONS
+	public RedhawkBaseResource() {
+		redhawkManager = new RedhawkManager();
+	}
+	
+	/*@OPTIONS
+	@Path("{id:.*}")
+	@LocalPreflight	
 	public Response getOptions() {
 		return addCors(Response.ok()).build();
 	}
 	
 	protected ResponseBuilder addCors(ResponseBuilder responseBuilder) {
 		responseBuilder.header("Access-Control-Allow-Origin", "*");
-		responseBuilder.header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
+		responseBuilder.header("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization");
 		responseBuilder.header("Access-Control-Allow-Credentials", "true");
 		responseBuilder.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
+		
 		return responseBuilder;
 	}
+	*/
 	
 	
 	public RedhawkManager getRedhawkManager() {

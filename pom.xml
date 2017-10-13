@@ -12,11 +12,12 @@
 		<developerConnection>scm:git:${rei.git}</developerConnection>
 	</scm>
 	<properties>
-		<release>2</release><!-- RC number -->
+		<release>1</release><!-- RC number -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<redhawk.version>2.1.2-SNAPSHOT</redhawk.version>
+		<slf4j.version>1.7.25</slf4j.version>
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<jetty.version>9.2.19.v20160908</jetty.version>
 		<osgi.version>5.0.0</osgi.version>
@@ -25,10 +26,10 @@
 		<commons.lang.version>2.6</commons.lang.version>
 		<beanutils.version>1.9.2</beanutils.version>
 		<commons.collection.version>3.2.2</commons.collection.version>
-		<cxf.version>3.1.10</cxf.version>
+		<cxf.version>3.2.0</cxf.version>
 		<snakeyaml.version>1.17</snakeyaml.version>
-		<karaf.version>4.0.8</karaf.version>
-		<jackson.version>2.8.3</jackson.version>
+		<karaf.version>4.1.2</karaf.version>
+		<jackson.version>2.8.10</jackson.version>
 		<karaf.maven.plugin.version>4.0.7</karaf.maven.plugin.version>
 		<redhawk.user.home>/usr/local/redhawk</redhawk.user.home>
 		<runtime.dir>redhawk-enterprise-integration</runtime.dir>
@@ -53,11 +54,18 @@
 				<artifactId>log4j-core</artifactId>
 				<version>2.7</version>
 			</dependency>
+			<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
 			<dependency>
-				<groupId>commons-logging</groupId>
-				<artifactId>commons-logging</artifactId>
-				<version>1.2</version>
+    			<groupId>org.slf4j</groupId>
+    			<artifactId>slf4j-api</artifactId>
+    			<version>${slf4j.version}</version>
 			</dependency>
+			<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+			<dependency>
+    			<groupId>commons-io</groupId>
+    			<artifactId>commons-io</artifactId>
+    			<version>2.5</version>
+			</dependency>			
 			<dependency>
 				<groupId>org.osgi</groupId>
 				<artifactId>org.osgi.core</artifactId>
@@ -106,7 +114,7 @@
 			<dependency>
 				<groupId>org.apache.karaf</groupId>
 				<artifactId>karaf</artifactId>
-				<version>4.0.8</version>
+				<version>${karaf.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -179,12 +187,13 @@
 			<modules>
 				<module>redhawk-driver</module>
 				<module>redhawk-connector</module>
+				<module>redhawk-jaxrs-security</module>
 				<module>redhawk-rest</module>
 				<module>redhawk-websocket</module>
 				<module>redhawk-camel</module>
 				<module>feature</module>
-				<module>demo</module>
-				<module>dist</module>
+				<module>demos</module>
+				<module>dists</module>
 			</modules>
 		</profile>
 		<profile>
@@ -197,7 +206,7 @@
 				<module>redhawk-connector</module>
 				<module>redhawk-rest</module>
 				<module>redhawk-websocket</module>
-				<!--<module>demo</module>-->
+				<module>demos</module>
 				<module>docs</module>
 			</modules>
 		</profile>
@@ -309,13 +318,11 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>2.10.4</version>
-				<!-- <executions> <execution> <id>attach-javadocs</id> <goals> <goal>jar</goal> 
-					</goals> <configuration> <additionalparam>-Xdoclint:none</additionalparam> 
-					</configuration> </execution> </executions> -->
 			</plugin>
 			<plugin>
 				<groupId>org.apache.felix</groupId>
 				<artifactId>maven-bundle-plugin</artifactId>
+				<version>3.3.0</version>
 				<extensions>true</extensions>
 			</plugin>
 			<plugin>

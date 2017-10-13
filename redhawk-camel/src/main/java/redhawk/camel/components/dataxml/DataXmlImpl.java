@@ -20,7 +20,6 @@
 package redhawk.camel.components.dataxml;
 
 
-import java.util.Date;
 import java.util.UUID;
 
 import org.apache.camel.Endpoint;
@@ -28,9 +27,9 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.spi.ExceptionHandler;
 import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.omg.CORBA.ORB;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import BULKIO.PortStatistics;
 import BULKIO.PortUsageType;
@@ -39,7 +38,7 @@ import BULKIO.dataXMLPOA;
 
 public class DataXmlImpl extends dataXMLPOA {
 
-    private static Log logger = LogFactory.getLog(DataXmlImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(DataXmlImpl.class);
     
     private ORB orb;
     

@@ -91,11 +91,11 @@ include::demo-introduction.adoc[]
 
 :leveloffset: +1
 
-include::demo/redhawk-demo-webapp.adoc[]
+include::demos/redhawk-demo-webapp.adoc[]
 
-include::demo/redhawk-metrics.adoc[]
+include::demos/redhawk-metrics.adoc[]
 
-include::demo/README.adoc[]
+include::demos/README.adoc[]
 
 ifdef::pdf-style[]
 = Copyright

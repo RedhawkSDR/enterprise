@@ -22,7 +22,7 @@
 			<plugin>
 				<groupId>org.apache.karaf.tooling</groupId>
 				<artifactId>karaf-maven-plugin</artifactId>
-				<version>4.0.7</version><!-- TODO: Move this whole def up to parent pom -->
+				<version>${karaf.version}</version><!-- TODO: Move this whole def up to parent pom -->
 				<extensions>true</extensions>
 			</plugin>
 			<plugin>

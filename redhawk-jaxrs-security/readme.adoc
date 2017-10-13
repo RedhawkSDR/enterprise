@@ -1,0 +1,19 @@
+= REDHAWK Jaxrs Authorization Filter
+
+== Notes
+
+CXF has just about implemented this but it's method based insterad of URL based and lots of it's methods are private so hard to reuse the code. Also underlying methods don't necessary map well from a user standpoint of a REST url. 
+  
+[source, xml]
+---- 
+	<dependency>
+		<groupId>org.apache.cxf</groupId>
+	    <artifactId>cxf-core</artifactId>
+		<version>${cxf.version}</version>	
+	</dependency>  
+	<dependency>
+		<groupId>org.apache.cxf</groupId>
+	    <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+		<version>${cxf.version}</version>	
+	</dependency>
+----

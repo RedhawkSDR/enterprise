@@ -101,6 +101,9 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 		</jaxrs:extensionMappings>
 		<jaxrs:providers>
 			<ref component-id="cors-filter" />
+			<!--
+			Demos don't work cause of below in karaf
+			-->
 			<ref component-id="authenticationFilter" />		
 			<ref component-id="authorizationFilter" />
 			<bean class="com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider" />

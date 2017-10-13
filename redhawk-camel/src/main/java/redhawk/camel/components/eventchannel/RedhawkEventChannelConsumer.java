@@ -22,9 +22,9 @@ package redhawk.camel.components.eventchannel;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.omg.CORBA.Any;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import CF.LogEvent;
 import redhawk.camel.components.RedhawkComponent;
@@ -40,7 +40,7 @@ import redhawk.driver.eventchannel.listeners.PropertyChangeListener;
 public class RedhawkEventChannelConsumer extends DefaultConsumer {
     private final RedhawkEventChannelEndpoint endpoint;
 
-    private static Log logger = LogFactory.getLog(RedhawkEventChannelConsumer.class);
+    private static Logger logger = LoggerFactory.getLogger(RedhawkEventChannelConsumer.class);
 
     private static final String PROPERTY_SOURCE_ID = "PROPERTY_SOURCE_ID";
     private static final String PROPERTY_SOURCE_NAME = "PROPERTY_SOURCE_NAME";
@@ -182,7 +182,7 @@ public class RedhawkEventChannelConsumer extends DefaultConsumer {
                         	eventChannel = null;
                             Thread.currentThread().sleep(10000);
                         } catch (InterruptedException e1) {
-                            logger.error(e);
+                            logger.error(e.getMessage(), e);
                         }
                     }
                 }

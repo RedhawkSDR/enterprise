@@ -22,8 +22,8 @@ package redhawk.camel.components.data;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import redhawk.camel.components.RedhawkComponent;
 import redhawk.camel.components.endpoints.RedhawkDataEndpoint;
@@ -36,7 +36,7 @@ import redhawk.driver.port.RedhawkPort;
 
 public class RedhawkDataConsumer extends DefaultConsumer {
 
-    private static Log logger = LogFactory.getLog(RedhawkDataConsumer.class);
+    private static Logger logger = LoggerFactory.getLogger(RedhawkDataConsumer.class);
 
     private RedhawkPort port;
     private RedhawkDataEndpoint endpoint;

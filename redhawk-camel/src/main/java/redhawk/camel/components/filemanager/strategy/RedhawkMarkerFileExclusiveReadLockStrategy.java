@@ -29,15 +29,15 @@ import org.apache.camel.component.file.GenericFile;
 import org.apache.camel.component.file.GenericFileEndpoint;
 import org.apache.camel.component.file.GenericFileExclusiveReadLockStrategy;
 import org.apache.camel.component.file.GenericFileOperations;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import redhawk.camel.components.filemanager.RedhawkFileContainer;
 import redhawk.camel.components.filemanager.RedhawkFileOperations;
 
 public class RedhawkMarkerFileExclusiveReadLockStrategy implements GenericFileExclusiveReadLockStrategy<RedhawkFileContainer>{
 
-    private static final transient Log LOG = LogFactory.getLog(RedhawkMarkerFileExclusiveReadLockStrategy.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(RedhawkMarkerFileExclusiveReadLockStrategy.class);
     
     public void prepareOnStartup(GenericFileOperations<RedhawkFileContainer> operations, GenericFileEndpoint<RedhawkFileContainer> endpoint) {
         String dir = endpoint.getConfiguration().getDirectory();

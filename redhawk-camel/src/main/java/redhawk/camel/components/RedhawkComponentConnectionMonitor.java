@@ -23,17 +23,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
 
-import org.apache.camel.Endpoint;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
-import redhawk.camel.components.endpoints.RedhawkDataXmlEndpoint;
-import CF.DeviceManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RedhawkComponentConnectionMonitor extends TimerTask {
 
     private RedhawkComponent component;
-    private static Log logger = LogFactory.getLog(RedhawkComponentConnectionMonitor.class);
+    private static Logger logger = LoggerFactory.getLogger(RedhawkComponentConnectionMonitor.class);
     
     private boolean timerDisabledEndpoints = false;
     private List<String> stoppedEndpoints = new ArrayList<String>();

@@ -18,6 +18,8 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jaxrs="http://cxf.apache.org/blueprint/jaxrs"
 	xmlns:cxf="http://camel.apache.org/schema/blueprint/cxf"
 	xmlns:cxfcore="http://cxf.apache.org/blueprint/core"
+	xmlns:jaas="http://karaf.apache.org/xmlns/jaas/v1.0.0"
+    xmlns:ext="http://aries.apache.org/blueprint/xmlns/blueprint-ext/v1.0.0"
 	xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd 
 						http://cxf.apache.org/blueprint/jaxrs http://cxf.apache.org/schemas/blueprint/jaxrs.xsd
 						http://cxf.apache.org/blueprint/core http://cxf.apache.org/schemas/blueprint/core.xsd">
@@ -28,6 +30,7 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 		<cxfcore:properties>
 			<entry key="skip.default.json.provider.registration" value="true"/>
 		</cxfcore:properties>
+		<!-- Option for JAAS CXF Feature https://github.com/bertramn/jaas-auth-rest-example -->
 	</cxfcore:bus>
 	    
     <reference-list id="redhawkServicesList" interface="redhawk.driver.Redhawk" member-type="service-reference" availability="optional">
@@ -97,20 +100,56 @@ with this program.  If not, see http://www.gnu.org/licenses/.
 			<entry key="xml" value="application/xml" />
 		</jaxrs:extensionMappings>
 		<jaxrs:providers>
+			<ref component-id="cors-filter" />
+			<!--
+			Demos don't work cause of authentication below in karaf
+			-->
+			<ref component-id="authenticationFilter" />		
+			<ref component-id="authorizationFilter" />
 			<bean class="com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider" />
-			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />						
-			<bean class="redhawk.rest.exceptions.ResourceNotFoundExceptionMapper" />
-			<bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter" >
-				<!--<property name="allowOrigins" value="#{systemProperties['origins'] != null ? systemProperties['origins'].split(',') : null}"> </property>--> 
-				<!-- TODO Make this dynamic -->
-				<!--
-				<property name="allowOrigins">
-					<list>
-						<value>localhost</value>
-					</list>
-				</property>
-				-->
-			</bean>		
-		</jaxrs:providers>	
+			<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" />
+		</jaxrs:providers>
 	</jaxrs:server>
+	
+	<!-- Details: http://cxf.apache.org/docs/secure-jax-rs-services.html -->
+	<bean id="authorizationFilter" class="redhawk.jaxrs.filter.RoleBasedAuthorizationFilter">
+	</bean>
+	
+	<!-- More JAAS https://access.redhat.com/documentation/en-US/Fuse_MQ_Enterprise/7.0/html/Managing_and_Monitoring_a_Broker/files/ESBSecureJAASRealmDef.html -->
+	<bean id="authenticationFilter" class="org.apache.cxf.jaxrs.security.JAASAuthenticationFilter">
+		<property name="contextName" value="karaf"/>		
+	</bean>
+	
+	<!--
+	<bean id="jetty-cors" class="org.eclipse.jetty.servlets.CrossOriginFilter">
+		<property name="allowedMethods" value="GET,POST,PUT,DELETE,OPTIONS,HEAD"/>
+		<property name="allowedHeaders" value="X-Requested-With,Content-Type,Accept,Origin,Authorization" />
+	</bean>
+	-->
+	<!-- CORS -->
+	<bean id="cors-filter" class="org.apache.cxf.rs.security.cors.CrossOriginResourceSharingFilter" >
+		<property name="allowOrigins">
+			<list>
+				<value>*</value>
+			</list>
+		</property>
+		<property name="preflightErrorStatus" value="401" />
+		<property name="allowCredentials" value="true" />
+		<property name="allowHeaders">
+			<list>
+				<value>Origin</value>
+				<value>Content-Type</value>
+				<value>Accept</value>
+				<value>Authorization</value>
+				<value>Accept</value>
+				<value>Accept-Encoding</value>
+				<value>Accept-Language</value>
+				<value>Referer</value>
+				<value>User-Agent</value>
+				<value>Host</value>
+				<value>Access-Control-Request-Headers</value>
+				<value>Access-Control-Request-Method</value>		
+			</list>
+		</property>
+	</bean>			
 </blueprint>

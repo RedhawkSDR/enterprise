@@ -1,0 +1,15 @@
+
+##############################################################
+# SSL Cert Configuration
+##############################################################
+#Adding SSL configuration using standard javax.net.* properties
+javax.net.ssl.keyStore=${karaf.base}/certs/keystores/default.jks
+javax.net.ssl.keyStorePassword=redhawk
+#javax.net.ssl.keyStoreType=JKS
+
+#javax.net.ssl.trustStore=
+#javax.net.ssl.trustStorePassword=
+#javax.net.ssl.trustStoreType=
+
+#Properties file containing permissions for accessing REST/WS resources
+#redhawk.jaxrs.permissions.file=${karaf.base}/etc/redhawk.jaxrs.permissions.csv

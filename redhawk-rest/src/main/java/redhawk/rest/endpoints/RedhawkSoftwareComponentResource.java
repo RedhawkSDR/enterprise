@@ -30,7 +30,6 @@ import javax.ws.rs.core.Response;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import redhawk.rest.exceptions.ResourceNotFound;
 
 @Path("/{nameserver}/domains/{domain}/applications/{applicationId}/components/{componentId}/softwarecomponent")
 @Api(value="/{nameserver}/domains/{domain}/applications/{applicationId}/components/{componentId}/softwarecomponent")
@@ -55,7 +54,7 @@ public class RedhawkSoftwareComponentResource extends RedhawkBaseResource{
     @ApiOperation(
     		value="GET SCD for REDHAWK Component"
     		)	
-	public Response getSoftwareComponent() throws ResourceNotFound, Exception {
+	public Response getSoftwareComponent() throws Exception {
 		return Response.ok(redhawkManager.get(nameServer,
 						"softwarecomponent", domainName + "/" + applicationId
 								+ "/" + componentId)).build();

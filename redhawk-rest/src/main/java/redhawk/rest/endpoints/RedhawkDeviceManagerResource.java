@@ -39,7 +39,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import redhawk.driver.exceptions.ResourceNotFoundException;
-import redhawk.rest.exceptions.ResourceNotFound;
 import redhawk.rest.model.DeviceManager;
 import redhawk.rest.model.DeviceManagerContainer;
 import redhawk.rest.model.FetchMode;
@@ -66,7 +65,7 @@ public class RedhawkDeviceManagerResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET REDHAWK Device Managers"
     		)
-    public DeviceManagerContainer getDeviceManagers(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws ResourceNotFound, Exception {
+    public DeviceManagerContainer getDeviceManagers(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws Exception {
         return new DeviceManagerContainer(redhawkManager.getAll(nameServer, "devicemanager", domainName, fetchMode));
     }
 
@@ -76,7 +75,7 @@ public class RedhawkDeviceManagerResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET REDHAWK Device Manager"
     		)    
-    public DeviceManager getDeviceManager(@PathParam("devMgrId") String deviceManagerId) throws ResourceNotFound, Exception {
+    public DeviceManager getDeviceManager(@PathParam("devMgrId") String deviceManagerId) throws Exception {
         return redhawkManager.get(nameServer, "devicemanager", domainName + "/" + deviceManagerId);
     }
     
@@ -86,7 +85,7 @@ public class RedhawkDeviceManagerResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="DELETE REDHAWK Device Manager"
     		)    
-    public Response shutDownDeviceManager(@PathParam("devMgrId") String deviceManagerId) throws ResourceNotFound, Exception {
+    public Response shutDownDeviceManager(@PathParam("devMgrId") String deviceManagerId) throws Exception {
         redhawkManager.shutdownDeviceManager(nameServer, domainName+"/"+deviceManagerId);
         
         return Response.ok().build();
@@ -98,7 +97,7 @@ public class RedhawkDeviceManagerResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET REDHAWK Device Manager Properties"
     		)    
-    public Response getDeviceManagerProperties(@PathParam("devMgrId") String deviceManagerId) throws ResourceNotFound, ResourceNotFoundException, Exception {
+    public Response getDeviceManagerProperties(@PathParam("devMgrId") String deviceManagerId) throws ResourceNotFoundException, Exception {
         return Response.ok(redhawkManager.getProperties(nameServer, "devicemanager", domainName + "/" + deviceManagerId)).build();
     }
 
@@ -108,7 +107,7 @@ public class RedhawkDeviceManagerResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET REDHAWK Device Manager Property"
     		) 
-    public Response getDeviceManagerProperty(@PathParam("devMgrId") String deviceManagerId, @PathParam("propId") String propertyId) throws ResourceNotFound, Exception {
+    public Response getDeviceManagerProperty(@PathParam("devMgrId") String deviceManagerId, @PathParam("propId") String propertyId) throws Exception {
         return Response.ok(redhawkManager.getProperty(propertyId, nameServer, "devicemanager", domainName + "/" + deviceManagerId)).build();
     }
 

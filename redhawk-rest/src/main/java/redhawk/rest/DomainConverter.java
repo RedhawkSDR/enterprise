@@ -19,33 +19,58 @@
  */
 package redhawk.rest;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import redhawk.driver.application.RedhawkApplication;
 import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.device.RedhawkDevice;
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.eventchannel.RedhawkEventChannel;
-import redhawk.driver.eventchannel.RedhawkEventChannelManager;
 import redhawk.driver.eventchannel.impl.RedhawkEventRegistrant;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.PortException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
 import redhawk.driver.port.impl.RedhawkExternalPortImpl;
-import redhawk.driver.properties.*;
+import redhawk.driver.properties.RedhawkProperty;
+import redhawk.driver.properties.RedhawkSimple;
+import redhawk.driver.properties.RedhawkSimpleSequence;
+import redhawk.driver.properties.RedhawkStruct;
+import redhawk.driver.properties.RedhawkStructSequence;
 import redhawk.driver.xml.model.sca.prf.Properties;
-import redhawk.driver.xml.model.sca.prf.*;
-import redhawk.rest.model.*;
-
-import java.io.IOException;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
+import redhawk.driver.xml.model.sca.prf.Simple;
+import redhawk.driver.xml.model.sca.prf.SimpleSequence;
+import redhawk.driver.xml.model.sca.prf.Struct;
+import redhawk.driver.xml.model.sca.prf.StructSequence;
+import redhawk.driver.xml.model.sca.prf.Values;
+import redhawk.rest.model.Application;
+import redhawk.rest.model.Component;
+import redhawk.rest.model.Device;
+import redhawk.rest.model.DeviceManager;
+import redhawk.rest.model.Domain;
+import redhawk.rest.model.EventChannel;
+import redhawk.rest.model.ExternalPort;
+import redhawk.rest.model.FetchMode;
+import redhawk.rest.model.Port;
+import redhawk.rest.model.Property;
+import redhawk.rest.model.Service;
+import redhawk.rest.model.SimpleRep;
+import redhawk.rest.model.SimpleSequenceRep;
+import redhawk.rest.model.StructRep;
+import redhawk.rest.model.StructSequenceRep;
 
 public class DomainConverter {
-
-	private static Logger logger = Logger.getLogger(DomainConverter.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(DomainConverter.class);
 
 	protected Domain convertDomain(RedhawkDomainManager domainManager) {
 		return convertDomain(domainManager, FetchMode.EAGER);
@@ -121,7 +146,7 @@ public class DomainConverter {
 						Property prop = convertStruct(struct.getId(), (RedhawkStruct) rhProp, struct);
 						properties.add(prop);						
 					}else {
-						logger.warning("Not converting Id: "+struct.getId()+" Struct: "+struct+" RHStruct: "+rhProp);
+						logger.warn("Not converting Id: "+struct.getId()+" Struct: "+struct+" RHStruct: "+rhProp);
 					}
 
 					break;
@@ -189,7 +214,7 @@ public class DomainConverter {
 			break;
 		}
 		default: {
-			logger.warning("Unhandled Redhawk Property type " + o);
+			logger.warn("Unhandled Redhawk Property type " + o);
 			break;
 		}
 		}
@@ -420,7 +445,7 @@ public class DomainConverter {
 
 				app.setExternalPorts(obj.getPorts().stream().map(this::convertExternalPort).collect(Collectors.toList()));
 			} catch (IOException | MultipleResourceException | ResourceNotFoundException e) {
-				logger.log(Level.WARNING, e.getMessage(), e);
+				logger.error("Issue converting application "+e.getMessage(), e);
 			}
 
 			app.setComponents(
@@ -446,20 +471,20 @@ public class DomainConverter {
 			try {
 				comp.setProperties(convertProperties(obj.getProperties(), obj.getPropertyConfiguration()));
 			} catch (ResourceNotFoundException e) {
-				logger.log(Level.WARNING, "Could not find prf file for component:" + obj.getName(), e);
+				logger.warn("Could not find prf file for component:" + obj.getName(), e);
 				comp.setProperties(new ArrayList<>());
 			}
 
 			try {
 				comp.setSoftwareComponent(obj.getSoftwareComponent());
 			} catch (ResourceNotFoundException e) {
-				logger.log(Level.WARNING, "Could not find scd file for component:" + obj.getName(), e);
+				logger.warn("Could not find scd file for component:" + obj.getName(), e);
 			}
 
 			try {
 				comp.setPorts(obj.getPorts().parallelStream().map(this::convertPort).collect(Collectors.toList()));
 			} catch (ResourceNotFoundException e) {
-				logger.log(Level.WARNING, "Could not find scd file for component:" + obj.getName(), e);
+				logger.warn("Could not find scd file for component:" + obj.getName(), e);
 			}
 		}
 		return comp;
@@ -506,7 +531,7 @@ public class DomainConverter {
 			try {
 				device.setProperties(convertProperties(obj.getProperties(), obj.getPropertyConfiguration()));
 			} catch (ResourceNotFoundException e) {
-				logger.log(Level.WARNING, "Could not find prf file for device: " + obj.getName(), e);
+				logger.warn("Could not find prf file for device: " + obj.getName(), e);
 				device.setProperties(new ArrayList<Property>());
 			}
 		}
@@ -545,7 +570,7 @@ public class DomainConverter {
 			try {
 				p.setState(obj.getPortState().toString());
 			} catch (PortException e) {
-				logger.fine("Unable to get state of port "+e.getMessage());
+				logger.debug("Unable to get state of port "+e.getMessage());
 			}
 		}
 		
@@ -553,7 +578,7 @@ public class DomainConverter {
 			try {
 				p.setConnectionIds(obj.getConnectionIds());
 			} catch (PortException e) {
-				logger.fine("Unable to get connectionIds of port "+e.getMessage());
+				logger.debug("Unable to get connectionIds of port "+e.getMessage());
 			}
 		}
 
@@ -593,7 +618,7 @@ public class DomainConverter {
 			return domainManager.getEventChannelManager().getEventChannels().stream().map(e -> e.getName())
 					.collect(Collectors.toList());
 		} catch (Exception e) {
-			logger.log(Level.SEVERE, "Could not get Event Channels: ", e);
+			logger.error("Could not get Event Channels: ", e);
 			return new ArrayList<String>();
 		}
 	}
@@ -632,7 +657,7 @@ public class DomainConverter {
 				if (obj instanceof Simple) {
 					Simple simple = (Simple) obj;
 					if (simple.getId().equals(id)) {
-						logger.fine("Matched on this propertyId " + id);
+						logger.debug("Matched on this propertyId " + id);
 						return simple;
 					}
 				}
@@ -642,7 +667,7 @@ public class DomainConverter {
 					SimpleSequence simpleSequence = (SimpleSequence) obj;
 
 					if (simpleSequence.getId().equals(id)) {
-						logger.fine("Matched on this propertyId " + id);
+						logger.debug("Matched on this propertyId " + id);
 						return simpleSequence;
 					}
 				}
@@ -652,7 +677,7 @@ public class DomainConverter {
 					Struct struct = (Struct) obj;
 
 					if (struct.getId().equals(id)) {
-						logger.fine("Matched on this propertyId " + id);
+						logger.debug("Matched on this propertyId " + id);
 						return struct;
 					}
 				}
@@ -662,13 +687,13 @@ public class DomainConverter {
 					StructSequence structSequence = (StructSequence) obj;
 
 					if (structSequence.getId().equals(id)) {
-						logger.fine("Matched on this propertyId " + id);
+						logger.debug("Matched on this propertyId " + id);
 						return structSequence;
 					}
 				}
 				break;
 			default:
-				logger.severe("Undefined " + obj.getClass().getSimpleName() + " Property Id: " + id);
+				logger.error("Undefined " + obj.getClass().getSimpleName() + " Property Id: " + id);
 				break;
 			}
 		}

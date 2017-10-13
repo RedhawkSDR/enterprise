@@ -8,18 +8,18 @@ As long as HTTPS is enabled, Jetty will host each of the following endpoints in 
 
 === Connecting to the REDHAWK WebSocket
 
-The WebSocket servlet resides at `ws://{hostname}:8181/redhawk`.
+The WebSocket servlet resides at `ws://{hostname}:8181/ws/redhawk`.
 
 * To connect to a specific REDHAWK installation, provide the hostname/address along with the Port of the OmniORB Naming Server.
 
 ----
-ws://localhost:8181/redhawk/localhost:2809
+ws://localhost:8181/ws/redhawk/localhost:2809
 ----
 
 * If you are using the <<REDHAWK Connector>>, you can replace the address and Port with the connection name you specified when you created the connection.
 
 ----
-ws://localhost:8181/redhawk/redhawk-connection-name
+ws://localhost:8181/ws/redhawk/redhawk-connection-name
 ----
 
 === REDHAWK Component Port Connection
@@ -32,7 +32,7 @@ application/{applicationName}/components/{componentName}/ports/{portName}
 The `applicationName`, `componentName` and `portName` variables all support matching on regular expressions. The following example is a complete Component Port url:
 
 ----
-ws://localhost:8181/redhawk/localRH/domains/REDHAWK_DEV/applications/myApplication/components/SigGen.*/ports/dataFloat_out.json
+ws://localhost:8181/ws/redhawk/localRH/domains/REDHAWK_DEV/applications/myApplication/components/SigGen.*/ports/dataFloat_out.json
 ----
 
 === REDHAWK Device Port Connection
@@ -50,7 +50,7 @@ The `deviceManagerName`, `deviceLabel`, `portName` variables all support matchin
 To connect to an Event Channel, use this syntax: `eventchannels/{eventChannelName}`. The following example is a complete url for an Event Channel:
 
 ----
-ws://localhost:8181/redhawk/localRH/domains/REDHAWK_DEV/eventchannels/ODM_Channel
+ws://localhost:8181/ws/redhawk/localRH/domains/REDHAWK_DEV/eventchannels/ODM_Channel
 ----
 
 === Code Example
@@ -59,7 +59,7 @@ The following example is a complete javascript example to connect to a REDHAWK W
 
 [source,javascript]
 ----
-var webSocket = new WebSocket('ws://localhost:8181/redhawk/localRH/domains/REDHAWK_DEV/applications/myApplication/components/SigGen.*/ports/dataFloat_out.json')
+var webSocket = new WebSocket('ws://localhost:8181/ws/redhawk/localRH/domains/REDHAWK_DEV/applications/myApplication/components/SigGen.*/ports/dataFloat_out.json')
 
 webSocket.onopen = function(evt){ console.log('connected');}
 webSocket.onmessage = function(evt){ console.log('message received '+evt.data);}

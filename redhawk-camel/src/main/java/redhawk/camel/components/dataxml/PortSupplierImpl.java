@@ -23,14 +23,14 @@ package redhawk.camel.components.dataxml;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.omg.CORBA.ORB;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.Servant;
 import org.omg.PortableServer.POAPackage.ObjectNotActive;
 import org.omg.PortableServer.POAPackage.ServantAlreadyActive;
 import org.omg.PortableServer.POAPackage.WrongPolicy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import CF.PortSupplierPOA;
 import CF.LifeCyclePackage.InitializeError;
@@ -38,7 +38,7 @@ import CF.PortSupplierPackage.UnknownPort;
 
 public class PortSupplierImpl implements RedhawkOperations {
 
-    private static Log logger = LogFactory.getLog(PortSupplierImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(PortSupplierImpl.class);
     
     protected org.omg.CORBA.ORB orb = null;
     /**
@@ -110,7 +110,7 @@ public class PortSupplierImpl implements RedhawkOperations {
         // the Ports_var maps are kept different (they could be made into one)
         // because it's less confusing this way
 
-        logger.info(this.ports);
+        logger.info(""+this.ports);
         
         
         org.omg.CORBA.Object p = this.ports.get(name);

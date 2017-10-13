@@ -27,12 +27,12 @@ import java.util.concurrent.Future;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.client.WebSocketClient;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
@@ -42,7 +42,7 @@ import redhawk.websocket.test.util.RedhawkTestUtil;
 import redhawk.websocket.test.util.RedhawkWebSocketTestUtil;
 
 public class RedhawkWebsocketIT extends RedhawkWebsocketTestBase {
-	private static Log logger = LogFactory.getLog(RedhawkWebsocketIT.class);
+	private static Logger logger = LoggerFactory.getLogger(RedhawkWebsocketIT.class);
 
 	private final String jsonRegex = ".*[{\\[].*[\\]}]";
 

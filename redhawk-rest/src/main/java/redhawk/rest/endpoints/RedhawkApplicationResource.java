@@ -19,8 +19,6 @@
  */
 package redhawk.rest.endpoints;
 
-import java.util.logging.Logger;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
@@ -35,12 +33,14 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
-import redhawk.rest.exceptions.ResourceNotFound;
 import redhawk.rest.model.Application;
 import redhawk.rest.model.ApplicationContainer;
 import redhawk.rest.model.ExternalPort;
@@ -56,8 +56,7 @@ import redhawk.rest.model.WaveformInfo;
 @Path("/{nameserver}/domains/{domain}/applications")
 @Api(value = "/{nameserver}/domains/{domain}/applications")
 public class RedhawkApplicationResource extends RedhawkBaseResource {
-
-	private static Logger logger = Logger.getLogger(RedhawkApplicationResource.class.getName());
+	private static Logger logger = LoggerFactory.getLogger(RedhawkApplicationResource.class.getName());
 
 	@ApiParam(value = "url for your name server", required = true)
 	@PathParam("nameserver")
@@ -72,7 +71,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@ApiOperation(value = "GET Applications for a REDHAWK Domain")
 	public ApplicationContainer getApplications(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode)
-			throws ResourceNotFound, Exception {
+			throws Exception {
 		return new ApplicationContainer(redhawkManager.getAll(nameServer, "application", domainName, fetchMode));
 	}
 
@@ -81,7 +80,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@ApiOperation(value = "GET Application for a REDHAWK Domain")
 	public Application getApplication(@PathParam("applicationId") String applicationId)
-			throws ResourceNotFound, Exception {
+			throws Exception {
 		return redhawkManager.get(nameServer, "application", domainName + "/" + applicationId);
 	}
 
@@ -91,7 +90,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@ApiOperation(value = "Release Application from a REDHAWK Domain")
 	public Response releaseApplication(
 			@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId)
-			throws ResourceNotFound, Exception {
+			throws Exception {
 		redhawkManager.releaseApplication(nameServer, domainName, applicationId);
 		return Response.ok().build();
 	}
@@ -125,7 +124,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@ApiOperation(value = "GET Application Properties")
 	public PropertyContainer getApplicationProperties(
 			@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId)
-			throws ResourceNotFound, ResourceNotFoundException, Exception {
+			throws ResourceNotFoundException, Exception {
 		return redhawkManager.getProperties(nameServer, "application", domainName + "/" + applicationId);
 	}
 
@@ -136,7 +135,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	public Property getApplicationProperty(
 			@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId,
 			@ApiParam(value = "ID/Name for Property") @PathParam("propId") String propertyId)
-			throws ResourceNotFound, Exception {
+			throws Exception {
 		return redhawkManager.getProperty(propertyId, nameServer, "application", domainName + "/" + applicationId);
 	}
 
@@ -172,7 +171,7 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	public ExternalPort getApplicationPort(
 			@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId,
 			@ApiParam(value = "External name for Port") @PathParam("portId") String portName)
-			throws ResourceNotFound, Exception {
+			throws Exception {
 		//TODO: Clean this call up it's inconsistent and not easily understandably either pass in an array or pass in a 
 		//String that's handled downstream. 
 		ExternalPort port = redhawkManager.get(nameServer, "applicationport", domainName, applicationId, portName);

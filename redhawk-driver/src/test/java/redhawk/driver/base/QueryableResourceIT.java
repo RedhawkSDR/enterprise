@@ -64,6 +64,19 @@ public class QueryableResourceIT extends RedhawkPropertyTestBase{
 	}
 	
 	@Test
+	public void testPropertyId() {
+		List<RedhawkDeviceManager> deviceManagers = manager.getDeviceManagers();
+	
+		for(RedhawkDeviceManager devManager : deviceManagers) {
+			RedhawkDevice device = devManager.getDevices().get(0);
+			RedhawkProperty prop = device.getProperty("device_kind");
+			
+			//Making sure device_kind defaults to id
+			assertNotNull(prop);
+		}
+	}
+	
+	@Test
 	public void testSetRedhawkSimple() throws Exception {
 		try {
 			//Set simple property on a DomainManager

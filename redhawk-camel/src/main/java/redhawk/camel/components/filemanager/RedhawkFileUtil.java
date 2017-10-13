@@ -19,26 +19,20 @@
  */
 package redhawk.camel.components.filemanager;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.channels.FileChannel;
 import java.util.Iterator;
-import java.util.Random;
 import java.util.Stack;
 
 import org.apache.camel.util.FileUtil;
-import org.apache.camel.util.IOHelper;
 import org.apache.camel.util.ObjectHelper;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class RedhawkFileUtil {
 
     public static final int BUFFER_SIZE = 128 * 1024;
 
-    private static final transient Log LOG = LogFactory.getLog(RedhawkFileUtil.class);
+    private static final transient Logger LOG = LoggerFactory.getLogger(RedhawkFileUtil.class);
     private static final int RETRY_SLEEP_MILLIS = 10;
     private static File defaultTempDir;
 

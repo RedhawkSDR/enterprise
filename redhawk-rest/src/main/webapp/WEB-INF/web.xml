@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee 
+	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<display-name>REDHAWK REST</display-name>
+	<servlet>
+		<servlet-name>redhawkREST</servlet-name>
+		<servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
+		<!-- Name of the resource -->
+		<init-param>
+			<param-name>jaxrs.serviceClasses</param-name>
+			<param-value>
+				redhawk.rest.endpoints.RedhawkDomainResource,
+				redhawk.rest.endpoints.RedhawkApplicationResource,
+				redhawk.rest.endpoints.RedhawkDeviceResource,
+				redhawk.rest.endpoints.RedhawkDeviceManagerResource,
+				redhawk.rest.endpoints.RedhawkComponentResource,
+				redhawk.rest.endpoints.RedhawkDevicePortsResource,
+				redhawk.rest.endpoints.RedhawkDeviceResource,
+				redhawk.rest.endpoints.RedhawkEventChannelResource,
+				redhawk.rest.endpoints.RedhawkPortsResource,
+				redhawk.rest.endpoints.RedhawkSoftwareComponentResource,
+				redhawk.rest.endpoints.RedhawkWaveformResource
+  			</param-value>
+		</init-param>
+		<init-param>
+			<param-name>jaxrs.providers</param-name>
+			<param-value>
+				com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider,
+				com.fasterxml.jackson.jaxrs.xml.JacksonJaxbXMLProvider,
+			</param-value>
+		</init-param>
+		<!-- registers extension mappings -->
+		<init-param>
+			<param-name>jaxrs.extensions</param-name>
+			<param-value>
+    			xml=application/xml
+    			json=application/json
+ 			</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<filter>
+        <filter-name>cross-origin</filter-name>
+        <filter-class>org.eclipse.jetty.servlets.CrossOriginFilter</filter-class>
+        <init-param>
+    		<param-name>allowedOrigins</param-name>
+    		<param-value>*</param-value>    
+        </init-param>
+        <init-param>
+        	<param-name>allowedMethods</param-name>
+        	<param-value>GET,POST,PUT,DELETE,OPTIONS,HEAD</param-value>
+        </init-param>
+        <init-param>
+        	<param-name>allowedHeaders</param-name>
+        	<param-value>X-Requested-With,Content-Type,Accept,Origin,Authorization</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>cross-origin</filter-name>
+        <url-pattern>/redhawk/*</url-pattern>
+    </filter-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>redhawkREST</servlet-name>
+		<url-pattern>/redhawk/*</url-pattern>
+	</servlet-mapping>
+</web-app>

@@ -3,8 +3,7 @@ package redhawk.websocket.integration;
 import java.io.File;
 
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -15,7 +14,6 @@ import redhawk.driver.exceptions.ApplicationStartException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.testutils.RedhawkTestBase;
-import redhawk.websocket.RedhawkWebSocketServlet;
 import redhawk.websocket.test.util.JettySupport;
 
 public class RedhawkWebsocketTestBase extends RedhawkTestBase{
@@ -40,17 +38,22 @@ public class RedhawkWebsocketTestBase extends RedhawkTestBase{
 		server = JettySupport.setupJettyServer();
 	}
 	
-	private void setupJettyServlet(){
+	private void setupJettyServlet() throws Exception{
 		//TODO: Clean up ports
 		server = new Server(8080);
 		
-		ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+		WebAppContext webapp = new WebAppContext();
+		webapp.setResourceBase("src/main/webapp");
+		server.setHandler(webapp);
+		System.out.println("Starting embedded Jetty");
+		server.start();
+		//ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 		
 		//Set up path
-		context.setContextPath("/");
-		context.addServlet(new ServletHolder(new RedhawkWebSocketServlet()), "/redhawk/*");
+		//context.setContextPath("/");
+		//context.addServlet(new ServletHolder(new RedhawkWebSocketServlet()), "/redhawk/*");
 		
-		server.setHandler(context);
+		//server.setHandler(context);
 	}
 	
 	@AfterClass

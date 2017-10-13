@@ -28,10 +28,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import redhawk.driver.Redhawk;
 import redhawk.driver.RedhawkDriver;
@@ -74,7 +74,7 @@ import redhawk.rest.model.TunerMode;
 import redhawk.rest.model.WaveformInfo;
 
 public class RedhawkManager {
-	private static Log logger = LogFactory.getLog(RedhawkManager.class);
+	private static Logger logger = LoggerFactory.getLogger(RedhawkManager.class);
 
 	private List<ServiceReference<Redhawk>> redhawkDriverServices;
 	private Map<String, Redhawk> redhawkDrivers = new ConcurrentHashMap<String, Redhawk>();

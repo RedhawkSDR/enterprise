@@ -24,9 +24,10 @@ import java.util.Map;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.impl.DefaultProducer;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+
 import org.omg.CORBA.Any;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import redhawk.camel.components.RedhawkComponent;
 import redhawk.camel.components.endpoints.RedhawkEventChannelEndpoint;
@@ -39,7 +40,7 @@ public class RedhawkEventChannelProducer extends DefaultProducer {
 
 	private final RedhawkEventChannelEndpoint endpoint;
 
-	private static Log logger = LogFactory.getLog(RedhawkEventChannelProducer.class);
+	private static Logger logger = LoggerFactory.getLogger(RedhawkEventChannelProducer.class);
 
 	private String domainName;
 	private RedhawkEventChannel eventChannel;

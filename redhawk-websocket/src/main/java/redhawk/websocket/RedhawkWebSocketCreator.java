@@ -21,13 +21,13 @@ package redhawk.websocket;
 
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 import org.osgi.framework.ServiceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import redhawk.driver.Redhawk;
 import redhawk.driver.RedhawkDriver;
@@ -47,7 +47,7 @@ import redhawk.websocket.sockets.RedhawkEventChannelWebSocket;
  */
 public class RedhawkWebSocketCreator implements WebSocketCreator {
 
-    private static Logger logger = Logger.getLogger(RedhawkWebSocketCreator.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(RedhawkWebSocketCreator.class.getName());
 
     private List<ServiceReference<Redhawk>> redhawkDriverServices;
     private List<WebSocketProcessor> webSocketProcessorServices;
@@ -97,7 +97,7 @@ public class RedhawkWebSocketCreator implements WebSocketCreator {
     	logger.info("Attempting to Connect to the web socket");
 
         if (!this.manageRequestPath(req.getRequestPath(), req.getQueryString())) {
-            logger.warning("Path is not valid: " + path);
+            logger.error("Path is not valid: " + path);
             return null;
         }
 
@@ -132,7 +132,7 @@ public class RedhawkWebSocketCreator implements WebSocketCreator {
                     return new RedhawkBulkIoWebSocket(newDriverInstance, redhawkConnection, port, binary, alwaysSendSri, webSocketProcessors, path);
                 case "eventchannels":
                     for (String eventChannel : redhawkConnection.getDomain(domainName).getEventChannelManager().eventChannels().keySet()) {
-                        logger.fine("EVENT CHANNEL: " + eventChannel);
+                        logger.debug("EVENT CHANNEL: " + eventChannel);
                         if (eventChannel.equalsIgnoreCase(pathArray[4])) {
                             MessageType type = MessageType.UNKNOWN;
                         	//TODO There's a cleaner way to do this just ripping the string once
@@ -143,22 +143,22 @@ public class RedhawkWebSocketCreator implements WebSocketCreator {
                             }else if(standardEvent){
                             	type = MessageType.STANDARD_EVENT;
                             }else{
-                            	logger.warning("Not handling this "+req.getQueryString());
+                            	logger.warn("Not handling this "+req.getQueryString());
                             }
-                            logger.fine("MessageType is: "+type);
+                            logger.warn("MessageType is: "+type);
                             return new RedhawkEventChannelWebSocket(newDriverInstance, redhawkConnection, redhawkConnection.getDomain(domainName), eventChannel, type, path);
                         }
                     }
                     break;
             }
         } catch (NullPointerException npe) {
-            logger.severe("Could not locate REDHAWK resource at: " + path);
+            logger.error("Could not locate REDHAWK resource at: " + path);
             return null;
         } catch (ConnectionException e) {
-            logger.log(Level.SEVERE, "Error connecting to REDHAWK", e);
+            logger.error("Error connecting to REDHAWK", e);
             return null;
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "A general exception has occured.", e);
+            logger.error("A general exception has occured.", e);
             return null;
         }
 
@@ -169,11 +169,18 @@ public class RedhawkWebSocketCreator implements WebSocketCreator {
         String path = requestPath.replaceFirst("/", "");
         
         binary=true;
+        //TODO: This path check is janky fix
         if (path.startsWith("redhawk/")) {
             path = path.replaceFirst("redhawk/", "");
         }
-        logger.fine("PATH: " + path);
-        logger.fine("Request Query String: "+queryString);
+        
+        if(path.startsWith("ws/redhawk/")) {
+            path = path.replaceFirst("ws/redhawk/", "");
+        }
+        //END TODO
+        
+        logger.info("PATH: " + path);
+        logger.info("Request Query String: "+queryString);
 
         alwaysSendSri = (queryString + "").contains("sriFrequency=always");
 
@@ -187,16 +194,14 @@ public class RedhawkWebSocketCreator implements WebSocketCreator {
         latestPathVald = false;
         if (pathArray.length == 9) {
         	latestPathVald = true;
-        }
-        if ((pathArray.length == 5) && pathArray[3].equals("eventchannels")) {
+        }else if ((pathArray.length == 5) && pathArray[3].equals("eventchannels")) {
         	latestPathVald = true;
-        }
-        if ((pathArray.length == 7) && (pathArray[3].equals("applications")) && (pathArray[5].equals("ports"))) {
+        }else if ((pathArray.length == 7) && (pathArray[3].equals("applications")) && (pathArray[5].equals("ports"))) {
         	latestPathVald = true;
         }
 
         if (!latestPathVald) {
-            logger.warning("Path is not valid: " + path);
+            logger.warn("Path is not valid: " + path);
             return false;
         }
 

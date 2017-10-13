@@ -30,7 +30,6 @@ import javax.ws.rs.core.Response;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import redhawk.rest.exceptions.ResourceNotFound;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.PortContainer;
 
@@ -57,7 +56,7 @@ public class RedhawkDevicePortsResource extends RedhawkBaseResource{
     @ApiOperation(
     		value="GET REDHAWK Device Ports"
     		)
-    public Response getPorts() throws ResourceNotFound, Exception {
+    public Response getPorts() throws Exception {
         return Response.ok(new PortContainer(redhawkManager.getAll(nameServer, "deviceport", domainName + "/" + devManagerName + "/" + deviceId, FetchMode.EAGER))).build();
     }
 
@@ -67,7 +66,7 @@ public class RedhawkDevicePortsResource extends RedhawkBaseResource{
     @ApiOperation(
     		value="GET REDHAWK Device Port"
     		)
-    public Response getPort(@PathParam("portId") String portName) throws ResourceNotFound, Exception {
+    public Response getPort(@PathParam("portId") String portName) throws Exception {
         return Response.ok(redhawkManager.get(nameServer, "deviceport", domainName + "/" + devManagerName + "/" + deviceId + "/" + portName)).build();
     }
 

@@ -29,7 +29,8 @@ import java.util.Set;
 
 import javax.ws.rs.WebApplicationException;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import redhawk.driver.Redhawk;
 import redhawk.driver.application.RedhawkApplication;
@@ -58,7 +59,7 @@ import redhawk.rest.utils.MetricTypes;
  * Utility class for converting rest metric calls to Responses for client
  */
 public class MetricsConverter {
-	static Logger logger = Logger.getLogger(MetricsConverter.class);
+	static Logger logger = LoggerFactory.getLogger(MetricsConverter.class);
 	
 	/**
 	 * Returns metrics of all types(APP, GPP, PORT)

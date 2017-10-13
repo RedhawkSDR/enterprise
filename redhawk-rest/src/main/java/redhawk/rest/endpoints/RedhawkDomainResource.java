@@ -40,7 +40,6 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import redhawk.rest.exceptions.ResourceOperationFailed;
 import redhawk.rest.model.Domain;
 import redhawk.rest.model.DomainContainer;
 import redhawk.rest.model.FetchMode;
@@ -52,7 +51,6 @@ import redhawk.rest.model.RemoteDomainRegistrar;
 @Path("/{nameserver}/domains")
 @Api(value = "/{nameserver}/domains")
 public class RedhawkDomainResource extends RedhawkBaseResource {
-
     private static Logger logger = Logger.getLogger(RedhawkDomainResource.class.getName());
     
     @ApiParam(value = "url for your name server", required = true)
@@ -65,7 +63,7 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @ApiOperation(
     		value = "GET REDHAWK Domains"
     		)
-    public DomainContainer getDomains(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws ResourceOperationFailed, Exception {
+    public DomainContainer getDomains(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws Exception {
         List<Domain> domains = redhawkManager.getAll(nameServer, "domain", null, fetchMode);
         return new DomainContainer(domains);
     }

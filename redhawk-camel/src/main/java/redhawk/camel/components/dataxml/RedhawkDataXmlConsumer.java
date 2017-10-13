@@ -22,10 +22,10 @@ package redhawk.camel.components.dataxml;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.impl.DefaultConsumer;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import BULKIO.dataXML;
 import BULKIO.dataXMLPOATie;
@@ -40,7 +40,7 @@ import redhawk.driver.port.PortListener;
 @Deprecated
 public class RedhawkDataXmlConsumer extends DefaultConsumer {
     
-    private static Log logger = LogFactory.getLog(RedhawkDataXmlConsumer.class);
+    private static Logger logger = LoggerFactory.getLogger(RedhawkDataXmlConsumer.class);
     
     private dataXML pipeline;
     private RedhawkDataXmlEndpoint endpoint;

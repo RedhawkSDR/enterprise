@@ -19,27 +19,36 @@
  */
 package redhawk.rest.endpoints;
 
-import redhawk.driver.exceptions.ResourceNotFoundException;
-import redhawk.rest.exceptions.ResourceNotFound;
-import redhawk.rest.model.ComponentContainer;
-import redhawk.rest.model.FetchMode;
-import redhawk.rest.model.FullProperty;
-
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-
-import java.util.logging.Logger;
+import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.rest.model.Component;
+import redhawk.rest.model.ComponentContainer;
+import redhawk.rest.model.FetchMode;
+import redhawk.rest.model.FullProperty;
+import redhawk.rest.model.Property;
+import redhawk.rest.model.PropertyContainer;
 
 @Path("/{nameserver}/domains/{domain}/applications/{applicationId}/components")
 @Api(value = "/{nameserver}/domains/{domain}/applications/{applicationId}/components")
 public class RedhawkComponentResource extends RedhawkBaseResource {
 
-    private static Logger logger = Logger.getLogger(RedhawkComponentResource.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(RedhawkComponentResource.class.getName());
     
     @ApiParam(value = "url for your name server")
     @PathParam("nameserver")
@@ -59,8 +68,8 @@ public class RedhawkComponentResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET Application Components"
     		)    
-    public Response getComponents(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws ResourceNotFound, Exception {
-        return Response.ok(new ComponentContainer(redhawkManager.getAll(nameServer, "component", domainName + "/" + applicationId, fetchMode))).build();
+    public ComponentContainer getComponents(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws Exception {
+        return new ComponentContainer(redhawkManager.getAll(nameServer, "component", domainName + "/" + applicationId, fetchMode));
     }
 
     @GET
@@ -69,9 +78,9 @@ public class RedhawkComponentResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET Application Component"
     		)     
-    public Response getComponent(@ApiParam(value = "Name of Component")
-    	@PathParam("componentId") String componentId) throws ResourceNotFound, Exception {
-        return Response.ok(redhawkManager.get(nameServer, "component", domainName + "/" + applicationId + "/" + componentId)).build();
+    public Component getComponent(@ApiParam(value = "Name of Component")
+    	@PathParam("componentId") String componentId) throws Exception {
+        return redhawkManager.get(nameServer, "component", domainName + "/" + applicationId + "/" + componentId);
     }
 
     @GET
@@ -80,8 +89,8 @@ public class RedhawkComponentResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET Application Component Properties"
     		)    
-    public Response getComponentProperties(@PathParam("componentId") String componentId) throws ResourceNotFound, ResourceNotFoundException, Exception {
-        return Response.ok(redhawkManager.getProperties(nameServer, "component", domainName + "/" + applicationId + "/" + componentId)).build();
+    public PropertyContainer getComponentProperties(@PathParam("componentId") String componentId) throws ResourceNotFoundException, Exception {
+        return redhawkManager.getProperties(nameServer, "component", domainName + "/" + applicationId + "/" + componentId);
     }
 
     @GET
@@ -90,9 +99,9 @@ public class RedhawkComponentResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET Application Component Property"
     		)     
-    public Response getComponentProperty(@ApiParam(value = "Name of Component") @PathParam("componentId") String componentId, 
-    		@ApiParam(value = "Name of Property") @PathParam("propId") String propertyId) throws ResourceNotFound, Exception {
-        return Response.ok(redhawkManager.getProperty(propertyId, nameServer, "component", domainName + "/" + applicationId + "/" + componentId)).build();
+    public Property getComponentProperty(@ApiParam(value = "Name of Component") @PathParam("componentId") String componentId, 
+    		@ApiParam(value = "Name of Property") @PathParam("propId") String propertyId) throws Exception {
+        return redhawkManager.getProperty(propertyId, nameServer, "component", domainName + "/" + applicationId + "/" + componentId);
     }
 
     @PUT

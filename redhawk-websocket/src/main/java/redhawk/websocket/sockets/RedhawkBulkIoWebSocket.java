@@ -25,16 +25,15 @@ import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.eclipse.jetty.websocket.api.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
-import CF.PortPackage.InvalidPort;
 import redhawk.driver.Redhawk;
 import redhawk.driver.bulkio.Packet;
 import redhawk.driver.exceptions.PortException;
@@ -45,8 +44,7 @@ import redhawk.websocket.WebSocketProcessor;
 import redhawk.websocket.utils.ByteBufferUtil;
 
 public class RedhawkBulkIoWebSocket extends RedhawkEventAdminWebSocket {
-
-    private static Logger logger = Logger.getLogger(RedhawkBulkIoWebSocket.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(RedhawkBulkIoWebSocket.class.getName());
     private RedhawkPort port;
     private boolean binary;
     private Gson gson;
@@ -73,7 +71,7 @@ public class RedhawkBulkIoWebSocket extends RedhawkEventAdminWebSocket {
         super.onWebSocketConnect(session);
 
         try {
-            port.connect(new PortListener() {
+            port.listen(new PortListener() {
                 @Override
                 public void onReceive(Packet packet) {
 
@@ -82,7 +80,7 @@ public class RedhawkBulkIoWebSocket extends RedhawkEventAdminWebSocket {
                         if (wsProcessor != null) {
                             packet = wsProcessor.process(packet, processor.getProcessorConfiguration());
                         } else {
-                            logger.warning("Web Socket Processor with name: " + processor.getProcessorName() + " does not exist in the Service Registry");
+                            logger.warn("Web Socket Processor with name: " + processor.getProcessorName() + " does not exist in the Service Registry");
                         }
                     }
 
@@ -101,7 +99,7 @@ public class RedhawkBulkIoWebSocket extends RedhawkEventAdminWebSocket {
                 }
             });
         } catch (Exception e) {
-            logger.log(Level.SEVERE, e.getMessage());
+            logger.error("ERROR connecting to port "+e.getMessage());
         }
     }
     
@@ -114,7 +112,7 @@ public class RedhawkBulkIoWebSocket extends RedhawkEventAdminWebSocket {
         try {
             port.disconnect();
         } catch (PortException e) {
-        	logger.log(Level.SEVERE, e.getMessage());
+        	logger.error("Unable to properly close port connection "+e.getMessage());
         } finally {
         	//On close disconnect should always occur
         	this.getRedhawk().disconnect();
@@ -123,7 +121,7 @@ public class RedhawkBulkIoWebSocket extends RedhawkEventAdminWebSocket {
 
     @Override
     public void onWebSocketBinary(byte[] data, int offset, int length) {
-        logger.severe("onWebSocketBinary() invoked......" + data);
+        logger.error("Not currently handling onWebSocketBinary() invoked......" + data);
     }
     
     /**
@@ -132,7 +130,7 @@ public class RedhawkBulkIoWebSocket extends RedhawkEventAdminWebSocket {
     @Override
     public void onWebSocketText(String data) {
 
-        logger.fine("onMessage() Invoked......" + data);
+        logger.debug("onMessage() Invoked......" + data);
 
         if (data.equals("clearProcessors")) {
             processorChain.clear();
@@ -142,22 +140,22 @@ public class RedhawkBulkIoWebSocket extends RedhawkEventAdminWebSocket {
                 removeProcessor(split[1]);
             }
         } else if (data.startsWith("processors:")) {
-            logger.fine("ADDING PROCESSORS");
+            logger.debug("ADDING PROCESSORS");
             data = data.replaceAll("processors\\:", "");
             addOrUpdateProcessors(data);
         } else if (data.equals("getProcessors")) {
             try {
                 getRemote().sendString(gson.toJson(processorChain));
             } catch (IOException e) {
-                logger.severe(e.getMessage());
+                logger.error(e.getMessage());
             }
         } else if (data.equals("listAvailableProcessors")) {
             try {
             	if(webSocketProcessorServices!=null)
-            		logger.fine("Available processors: "+webSocketProcessorServices.keySet());
+            		logger.debug("Available processors: "+webSocketProcessorServices.keySet());
                 getRemote().sendString(gson.toJson(webSocketProcessorServices.keySet()));
             } catch (IOException e) {
-            	logger.severe(e.getMessage());
+            	logger.error(e.getMessage());
             }
         }
 
@@ -171,9 +169,9 @@ public class RedhawkBulkIoWebSocket extends RedhawkEventAdminWebSocket {
         try {
             getRemote().sendString(gson.toJson(packet));
         } catch (IOException e) {
-        	logger.severe(e.getMessage());
+        	logger.error(e.getMessage());
         } catch (NullPointerException npe) {
-            logger.warning("Received a null packet, not sending.");
+            logger.warn("Received a null packet, not sending.");
         }
     }
 
@@ -188,9 +186,9 @@ public class RedhawkBulkIoWebSocket extends RedhawkEventAdminWebSocket {
                 getRemote().sendBytes(data);
             }
         } catch (IOException e) {
-        	logger.severe(e.getMessage());
+        	logger.error(e.getMessage());
         } catch (NullPointerException npe) {
-            logger.warning("Received a null packet, not sending.");
+            logger.warn("Received a null packet, not sending.");
         }
     }
     
@@ -202,9 +200,9 @@ public class RedhawkBulkIoWebSocket extends RedhawkEventAdminWebSocket {
         try {
             getRemote().sendString(gson.toJson(packet.getData()));
         } catch (IOException e) {
-        	logger.severe(e.getMessage());
+        	logger.error(e.getMessage());
         }  catch (NullPointerException npe) {
-            logger.warning("Received a null packet, not sending.");
+            logger.warn("Received a null packet, not sending.");
         }
     }
     
@@ -227,20 +225,20 @@ public class RedhawkBulkIoWebSocket extends RedhawkEventAdminWebSocket {
      */
     private void addOrUpdateProcessors(String data) {
         try {
-            logger.fine("IN addorupdateprocessors()");
+            logger.debug("IN addorupdateprocessors()");
 
-            logger.fine("DATA IS: " + data);
+            logger.debug("DATA IS: " + data);
 
             ProcessorObject[] pobjects = gson.fromJson(data, ProcessorObject[].class);
-            logger.fine("Created objects from data: "+pobjects.length);
-            logger.fine("Current processor chain: "+processorChain);
-            logger.fine("WebSocketProcessorServices??? "+webSocketProcessorServices);
+            logger.debug("Created objects from data: "+pobjects.length);
+            logger.debug("Current processor chain: "+processorChain);
+            logger.debug("WebSocketProcessorServices??? "+webSocketProcessorServices);
             for (ProcessorObject pobj : pobjects) {
                 if (!webSocketProcessorServices.containsKey(pobj.getProcessorName().toLowerCase()) && !processorChain.contains(pobj)) {
-            		logger.fine("addOrUpdateProcessors: ADDING PROCESSOR");
+            		logger.debug("addOrUpdateProcessors: ADDING PROCESSOR");
                     int index = processorChain.indexOf(pobj);
                     if(index!=-1){
-                    	logger.fine("Updating processor by that name");
+                    	logger.debug("Updating processor by that name");
                     	processorChain.add(index, pobj);
                     }else{
                         processorChain.add(pobj);                    	
@@ -257,9 +255,9 @@ public class RedhawkBulkIoWebSocket extends RedhawkEventAdminWebSocket {
                 }
             }
         } catch (JsonSyntaxException e) {
-            logger.log(Level.FINE, "Message is not a processor object", e);
+            logger.error("Message is not a redhawk.websocket.ProcessorObject", e);
         } catch (Exception e) {
-            logger.log(Level.FINE, "Caught a general exception in redhawk web socket: ", e);
+            logger.error("Caught a general exception in redhawk web socket: ", e);
         }
     }
     

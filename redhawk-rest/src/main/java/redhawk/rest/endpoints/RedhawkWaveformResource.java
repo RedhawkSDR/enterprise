@@ -36,7 +36,6 @@ import javax.ws.rs.core.Response.Status;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import redhawk.driver.xml.model.sca.sad.Softwareassembly;
-import redhawk.rest.exceptions.ResourceNotFound;
 import redhawk.rest.model.WaveformContainer;
 import redhawk.rest.model.WaveformInfo;
 
@@ -58,7 +57,7 @@ public class RedhawkWaveformResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET Waveforms in a REDHAWK Domain"
     		)	
-	public Response getApplications() throws ResourceNotFound, Exception {
+	public Response getApplications() throws Exception {
 		Map<String, Softwareassembly> applications = redhawkManager.getWaveforms(nameServer, domainName);
 
 		List<WaveformInfo> waveforms = new ArrayList<WaveformInfo>();
@@ -80,7 +79,7 @@ public class RedhawkWaveformResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="Returns a Specific Waveform in a REDHAWK Domain"
     		)		
-	public Response getApplications(@PathParam("waveformId") String waveformId) throws ResourceNotFound, Exception {
+	public Response getApplications(@PathParam("waveformId") String waveformId) throws Exception {
 		Map<String, Softwareassembly> applications = redhawkManager.getWaveforms(nameServer, domainName);
 
 		Optional<Softwareassembly> assembly = applications.values().stream().filter(v -> {

@@ -203,15 +203,15 @@
 										</resource>
 										<!-- Take the necessary adoc files from the demo projects -->
 										<resource>
-											<directory>${project.parent.basedir}/demo/camel-event-channel</directory>
-											<targetPath>demo</targetPath>
+											<directory>${project.parent.basedir}/demos/camel-event-channel</directory>
+											<targetPath>demos</targetPath>
 											<includes>
 												<include>README.adoc</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>${project.parent.basedir}/demo/redhawk-webapp</directory>
-											<targetPath>demo</targetPath>
+											<directory>${project.parent.basedir}/demos/redhawk-webapp</directory>
+											<targetPath>demos</targetPath>
 											<includes>
 												<include>redhawk-demo-webapp.adoc</include>
 											</includes>
@@ -222,7 +222,7 @@
 										</resource>
 										<!-- Get web screenshot -->
 										<resource>
-											<directory>${project.parent.basedir}/demo/redhawk-webapp</directory>
+											<directory>${project.parent.basedir}/demos/redhawk-webapp</directory>
 											<targetPath>images</targetPath>
 											<includes>
 												<include>demo-webscreenshot.png</include>
@@ -370,9 +370,6 @@
 							<license>LGPLv3</license>
 							<group>REDHAWK Enterprise Integration</group>
 							<release>${release}</release>
-							<requires>
-								<require>redhawk-enterprise-integration-dist</require>
-							</requires>
 							<defaultUsername>root</defaultUsername>
 							<defaultGroupname>redhawk</defaultGroupname>
 							<defaultFilemode>755</defaultFilemode>

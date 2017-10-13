@@ -34,8 +34,8 @@ import org.apache.camel.util.LRUCache;
 import org.apache.camel.util.ObjectHelper;
 import org.apache.camel.util.ServiceHelper;
 import org.apache.camel.util.StringHelper;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import CF.DeviceManager;
 import CF.DomainManager;
@@ -45,7 +45,7 @@ import redhawk.camel.components.endpoints.RedhawkFileEndpoint;
 
 public class RedhawkFileProducer extends GenericFileProducer<RedhawkFileContainer> {
 
-    protected static Log loger = LogFactory.getLog(RedhawkFileProducer.class);
+    protected static Logger loger = LoggerFactory.getLogger(RedhawkFileProducer.class);
     protected final RedhawkFileEndpoint endpoint;
     protected RedhawkFileOperations operations;
     

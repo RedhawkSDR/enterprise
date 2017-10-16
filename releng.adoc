@@ -4,6 +4,8 @@
 
 . update the release number property in the parent pom if this is another RC.
 
+. update redhawk.version property in parent pom.
+
 . mvn -P CFDependencies,docs,default,jaxb-generation release:prepare -Darguments=-Djava.io.tmpdir=./
 
 . mvn -P CFDependencies,docs,default,jaxb-generation release:perform -Darguments=-Djava.io.tmpdir=./

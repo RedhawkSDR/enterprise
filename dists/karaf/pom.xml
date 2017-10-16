@@ -249,7 +249,7 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<finalName>${runtime.dir}</finalName>
+							<finalName>${runtime.dir}-karaf</finalName>
 							<descriptors>
 								<descriptor>${project.build.directory}/assembly/assembly.xml</descriptor>
 							</descriptors>

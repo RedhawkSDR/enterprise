@@ -2,13 +2,15 @@
 	<Set name="contextPath">/rest</Set>
 	<Set name="war"><Property name="jetty.webapps" default="." />/redhawk-rest.war</Set>
 	<Set name="configurationDiscovered">true</Set>
-	  	<!-- Set up the path to the custom override descriptor,
+	<!-- Set up the path to the custom override descriptor,
   	relative to your $(jetty.home) directory or to the current directory -->
-  	<Set name="overrideDescriptor"><Property name="jetty.home" default="." />/etc/rest_jaas_override-web.xml</Set>
+  	<!--<Set name="overrideDescriptor"><Property name="jetty.home" default="." />/etc/rest_jaas_override-web.xml</Set>-->
   
 	<!-- 
-		JAAS Login Service
+		JAAS Login Service:
+			Uncomment XML below to enable JAAS Authentication
 	 -->
+  	<!--
   	<Set name="securityHandler">
     	<New class="org.eclipse.jetty.security.ConstraintSecurityHandler">
      		<Set name="loginService">
@@ -19,6 +21,7 @@
      		</Set>
     	</New>
   	</Set>
+  	-->
   	
   	<!-- 
 		Use JNDI to set location of the REST permissions file

@@ -32,12 +32,12 @@ variables:
     - tar zcvf site.tar.gz site; cp site.tar.gz output/
     - cp docs/target/asciidoc/pdf/index.pdf output/REDHAWK_Enterprise_v$enterprise_version.pdf
     - cp docs/target/rpm/redhawk-enterprise-integration-docs/RPMS/noarch/*.rpm output/ #RPM for installing REDHAWK Java Tools Docs in KARAF
-    - cp dist/karaf/target/redhawk-enterprise-integration-karaf.tar.gz output/ #Tar of karaf distribution
-    - cp dist/karaf/target/rpm/redhawk-enterprise-integration-dist-karaf/RPMS/noarch/*.rpm output/ #RPM for karaf distribution
-    - cp dist/jetty/target/redhawk-enterprise-integration-jetty.tar.gz output/ #Tar of jetty distribution
-    - cp dist/jetty/target/rpm/redhawk-enterprise-integration-dist-jetty/RPMS/noarch/*.rpm output/ #RPM for jetty distribution
-    - cp dist/shell/target/redhawk-enterprise-integration-shell.tar.gz output/ #Tar of shell distribution
-    - cp dist/shell/target/rpm/redhawk-enterprise-integration-dist-shell/RPMS/noarch/*.rpm output/ #RPM for shell distribution
+    - cp dists/karaf/target/redhawk-enterprise-integration-karaf.tar.gz output/ #Tar of karaf distribution
+    - cp dists/karaf/target/rpm/redhawk-enterprise-integration-dist-karaf/RPMS/noarch/*.rpm output/ #RPM for karaf distribution
+    - cp dists/jetty/target/redhawk-enterprise-integration-jetty.tar.gz output/ #Tar of jetty distribution
+    - cp dists/jetty/target/rpm/redhawk-enterprise-integration-dist-jetty/RPMS/noarch/*.rpm output/ #RPM for jetty distribution
+    - cp dists/shell/target/redhawk-enterprise-integration-shell.tar.gz output/ #Tar of shell distribution
+    - cp dists/shell/target/rpm/redhawk-enterprise-integration-dist-shell/RPMS/noarch/*.rpm output/ #RPM for shell distribution
     - cp demos/demo-dist/target/rpm/redhawk-enterprise-integration-demo-dist/RPMS/noarch/*.rpm output/ #RPM for deploying demos
     - cp demos/demo-dist/target/redhawk-enterprise-integration-demo-dist.tar.gz output/ #tar for deploying demos
     - tar zcvf output.tar.gz output/

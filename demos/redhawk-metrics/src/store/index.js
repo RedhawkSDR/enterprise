@@ -7,7 +7,7 @@ import * as mutations from './mutations'
 Vue.use(Vuex)
 
 const state = {
-  baseURL: 'http://localhost:8181/cxf/redhawk',
+  baseURL: 'http://localhost:8181/rest/redhawk',
   nameServer: 'localhost:2809',
   domainName: 'REDHAWK_DEV',
   configuration: {

@@ -21,7 +21,7 @@
 				redhawk.rest.endpoints.RedhawkEventChannelResource,
 				redhawk.rest.endpoints.RedhawkPortsResource,
 				redhawk.rest.endpoints.RedhawkSoftwareComponentResource,
-				redhawk.rest.endpoints.RedhawkWaveformResource
+				redhawk.rest.endpoints.RedhawkWaveformResource,
 				redhawk.rest.endpoints.RedhawkMetricsResource
   			</param-value>
 		</init-param>

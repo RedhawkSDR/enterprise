@@ -52,7 +52,7 @@ export const viewDomainConfig = (state, domain) => {
   for(var i=0; i < state.eventchannels.length; i++){
     //Get url here as well
     var url = new URL(state.baseURI)
-    var eventChannelWsURL = 'ws://'+url.hostname+':'+url.port+'/redhawk/'+state.configToView.nameServer
+    var eventChannelWsURL = 'ws://'+url.hostname+':'+url.port+'/ws/redhawk/'+state.configToView.nameServer
       +'/domains/'+state.configToView.domainName+'/eventchannels/'+state.eventchannels[i].name
 
     state.eventchannels[i].wsurl = eventChannelWsURL
@@ -97,14 +97,14 @@ export const subscribeToEventChannel = (state, sub) => {
 }
 
 export const updateEventChannels = (state, obj) => {
-  //Update EventChannel list
+  //Update EventChannel listws
   state.eventchannels = obj.eventchannels
 
   //Add more data to each event channel object to make state more flexible
   for(var i=0; i < state.eventchannels.length; i++){
     //Get url here as well
     var url = new URL(state.baseURI)
-    var eventChannelWsURL = 'ws://'+url.hostname+':'+url.port+'/redhawk/'+state.configToView.nameServer
+    var eventChannelWsURL = 'ws://'+url.hostname+':'+url.port+'/ws/redhawk/'+state.configToView.nameServer
       +'/domains/'+state.configToView.domainName+'/eventchannels/'+state.eventchannels[i].name
 
     state.eventchannels[i].wsurl = eventChannelWsURL
@@ -186,17 +186,17 @@ export const plotPortData = (state, port) => {
   console.log('Plot port data '+port)
   var url = new URL(state.baseURI)
 
-  console.log(port)
+  //console.log(port)
   if(port.portType=='component'){
-    var wsURL = 'ws://'+url.hostname+':'+url.port+'/redhawk/'+state.configToView.nameServer+'/domains/'+state.configToView.domainName
+    var wsURL = 'ws://'+url.hostname+':'+url.port+'/ws/redhawk/'+state.configToView.nameServer+'/domains/'+state.configToView.domainName
     +'/applications/'+state.applicationName+'/components/'+state.portsComponentName+'/ports/'+port.port.name
 
     //Update wsURL
     state.wsURL = wsURL
     state.portToDisplayName = port.port.name
   }else{
-    console.log("Display Device port data")
-    var wsURL = 'ws://'+url.hostname+':'+url.port+'/redhawk/'+state.configToView.nameServer+'/domains/'+state.configToView.domainName
+    //console.log("Display Device port data")
+    var wsURL = 'ws://'+url.hostname+':'+url.port+'/ws/redhawk/'+state.configToView.nameServer+'/domains/'+state.configToView.domainName
     +'/devicemanagers/'+state.deviceManager.label+'/devices/'+port.device.label+'/ports/'+port.port.name
 
     state.wsURL = wsURL

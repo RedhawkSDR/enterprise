@@ -20,7 +20,7 @@
 			<outputDirectory>webapp</outputDirectory>
 		</file>
 		<file>
-			<source>${project.parent.basedir}/redhawk-metrics/target/redhawkwebdemo.war</source>
+			<source>${project.parent.basedir}/redhawk-metrics/target/redhawkmetrics.war</source>
 			<outputDirectory>metrics</outputDirectory>
 		</file>		
 	</files>	

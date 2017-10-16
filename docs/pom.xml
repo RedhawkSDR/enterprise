@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>redhawk</groupId>
@@ -7,7 +8,7 @@
 	</parent>
 	<artifactId>redhawk-enterprise-integration-docs</artifactId>
 	<name>REDHAWK :: ENTERPRISE INTEGRATION :: DOCUMENTATION</name>
-	<packaging>bundle</packaging>
+	<packaging>war</packaging>
 	<properties>
 		<docs.directory>${runtime.basedir}/docs</docs.directory>
 		<timestamp>${maven.build.timestamp}</timestamp>
@@ -145,13 +146,16 @@
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<build>
-				<resources>
-					<resource>
-						<directory>${project.build.directory}/asciidoc/html</directory>
-						<filtering>false</filtering>
-					</resource>
-				</resources>
+				<finalName>docs</finalName>
 				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>3.1.0</version>
+						<configuration>
+							<webappDirectory>${project.build.directory}/asciidoc/html</webappDirectory>
+						</configuration>
+					</plugin>
 					<!-- Using resources plugin to get everything in the propery directory 
 						structure to build one user manual. This will also rely on projects ahead 
 						of it that need to generate resources to atleast have gone through compile 
@@ -188,8 +192,8 @@
 											<directory>${project.parent.basedir}/redhawk-rest/target/asciidoc</directory>
 											<targetPath>${project.build.directory}/asciidoc-workspace/rest</targetPath>
 											<excludes>
-                                                                                                <exclude>index.adoc</exclude>
-                                                                                        </excludes>										
+												<exclude>index.adoc</exclude>
+											</excludes>
 										</resource>
 										<!-- Take the necessary adoc files from redhawk-connector -->
 										<resource>
@@ -316,18 +320,6 @@
 							</execution>
 						</executions>
 					</plugin>
-					<!-- Make html docs a deployable bundle -->
-					<plugin>
-						<groupId>org.apache.felix</groupId>
-						<artifactId>maven-bundle-plugin</artifactId>
-						<extensions>true</extensions>
-						<configuration>
-							<instructions>
-								<Web-ContextPath>/docs</Web-ContextPath>
-								<_removeheaders>Built-By,Ignore-Package,Private-Package,Embed-Dependency</_removeheaders>
-							</instructions>
-						</configuration>
-					</plugin>
 					<!-- RPM to install docs -->
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
@@ -359,10 +351,10 @@
 									</sources>
 								</mapping>
 								<mapping>
-									<directory>${runtime.basedir}/karaf-${karaf.version}/deploy</directory>
+									<directory>${docs.directory}</directory>
 									<sources>
 										<source>
-											<location>${project.build.directory}/${project.artifactId}-${project.version}.jar</location>
+											<location>${project.build.directory}/docs.war</location>
 										</source>
 									</sources>
 								</mapping>

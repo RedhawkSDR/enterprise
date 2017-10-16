@@ -97,7 +97,7 @@
 							<directory>${demo.directory}/metrics</directory>
 							<sources>
 								<source>
-									<location>${project.parent.basedir}/redhawk-metrics/target/redhawkwebdemo.war</location>
+									<location>${project.parent.basedir}/redhawk-metrics/target/redhawkmetrics.war</location>
 								</source>
 							</sources>
 						</mapping>						

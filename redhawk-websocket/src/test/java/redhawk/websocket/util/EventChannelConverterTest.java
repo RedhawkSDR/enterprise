@@ -25,6 +25,7 @@ import static org.junit.Assert.fail;
 import java.util.HashMap;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.ossie.properties.AnyUtils;
 

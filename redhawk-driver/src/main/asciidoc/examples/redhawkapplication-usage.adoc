@@ -15,7 +15,7 @@ include::snippets/RedhawkApplicationImplIT.java[lines=102..113]
 [source,java,indent=0]
 .`RedhawkApplicationImplIT.java`
 ----
-include::snippets/RedhawkApplicationImplIT.java[lines=94..99]
+include::snippets/RedhawkApplicationImplIT.java[lines=97..102]
 ----
 
 === Example of How to Get Metrics from an Application
@@ -31,6 +31,6 @@ include::snippets/RedhawkApplicationImplIT.java[lines=257]
 [source,java,indent=0]
 .`RedhawkLoggingIT.java`	
 ----
-include::snippets/RedhawkLoggingIT.java[lines=73..77]
+include::snippets/RedhawkLoggingIT.java[lines=66..72]
 ----
 

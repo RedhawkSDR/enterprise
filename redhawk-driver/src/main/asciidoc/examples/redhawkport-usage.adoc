@@ -53,5 +53,5 @@ include::snippets/RedhawkPortImplIT.java[lines=116..119]
 [source,java,indent=0]
 .`RedhawkPortImplIT`
 ----
-include::snippets/RedhawkPortImplIT.java[lines=189..201]
+include::snippets/RedhawkPortImplIT.java[lines=202..214]
 ----

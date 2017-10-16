@@ -23,5 +23,5 @@ include::snippets/RedhawkComponentImplIT.java[lines=160..164]
 [source,java,indent=0]
 .`RedhawkLoggingIT.java`	
 ----
-include::snippets/RedhawkLoggingIT.java[lines=101..105]
+include::snippets/RedhawkLoggingIT.java[lines=94..101]
 ----

@@ -63,8 +63,7 @@ public class RedhawkLoggingIT extends RedhawkDeviceTestBase {
 		RedhawkApplication application = null;
 
 		try {
-			application = driver.getDomain().createApplication(appName,
-					"/waveforms/rh/basic_components_demo/basic_components_demo.sad.xml");
+			application = driver.getDomain().createApplication(appName, "/waveforms/rh/basic_components_demo/basic_components_demo.sad.xml");
 
 			assertEquals(RedhawkLogLevel.INFO, application.getLogLevel());
 

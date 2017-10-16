@@ -1,8 +1,8 @@
 //Axios is asnyc so all axios calls should really occur in this class
 import axios from 'axios'
-var AUTH_TOKEN = "Basic "+btoa("redhawk:redhawk")
-axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-console.log("Auth token "+AUTH_TOKEN)
+//var AUTH_TOKEN = "Basic "+btoa("redhawk:redhawk")
+//axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+//console.log("Auth token "+AUTH_TOKEN)
 //var config = {
 //  headers : {'Authorization' : AUTH_TOKEN}
 //}

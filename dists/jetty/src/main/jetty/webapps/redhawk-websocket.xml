@@ -4,11 +4,13 @@
 	<Set name="configurationDiscovered">true</Set>
 	<!-- Set up the path to the custom override descriptor,
   	relative to your $(jetty.home) directory or to the current directory -->
-  	<Set name="overrideDescriptor"><Property name="jetty.home" default="." />/etc/ws_jaas_override-web.xml</Set>
+  	<!--<Set name="overrideDescriptor"><Property name="jetty.home" default="." />/etc/ws_jaas_override-web.xml</Set>-->
   
 	<!-- 
-		JAAS Login Service
+		JAAS Login Service:
+			Uncomment XML below to enable JAAS Authentication
 	 -->
+  	<!--
   	<Set name="securityHandler">
     	<New class="org.eclipse.jetty.security.ConstraintSecurityHandler">
      		<Set name="loginService">
@@ -19,6 +21,7 @@
      		</Set>
     	</New>
   	</Set>	 	
+	-->
 	
 	<!--
 	<New id="jaxrsperms" class="org.eclipse.jetty.plus.jndi.EnvEntry">

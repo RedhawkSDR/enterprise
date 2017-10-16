@@ -158,7 +158,6 @@ public class EventChannelConverter {
 			break; 
 		default:
 			category = SourceCategory.UNKNOWN;
-			break;
 		}
 		
 		return category;

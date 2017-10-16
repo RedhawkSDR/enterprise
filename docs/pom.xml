@@ -234,15 +234,15 @@
 										</resource>
 										<!-- Get Metrics Docs -->
 										<resource>
-											<directory>${project.parent.basedir}/demo/redhawk-metrics</directory>
+											<directory>${project.parent.basedir}/demos/redhawk-metrics</directory>
 											<targetPath>images</targetPath>
 											<includes>
 												<include>redhawkMetricsScreenshot.png</include>
 											</includes>
 										</resource>
 										<resource>
-											<directory>${project.parent.basedir}/demo/redhawk-metrics/camel</directory>
-											<targetPath>demo/camel</targetPath>
+											<directory>${project.parent.basedir}/demos/redhawk-metrics/camel</directory>
+											<targetPath>demos/camel</targetPath>
 											<!-- 
 											<includes>
 												<include>redhawk-metrics.adoc</include>
@@ -250,8 +250,8 @@
 											-->
 										</resource>										
 										<resource>
-											<directory>${project.parent.basedir}/demo/redhawk-metrics</directory>
-											<targetPath>demo</targetPath>
+											<directory>${project.parent.basedir}/demos/redhawk-metrics</directory>
+											<targetPath>demos</targetPath>
 											<includes>
 												<include>redhawk-metrics.adoc</include>
 											</includes>

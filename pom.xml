@@ -187,6 +187,7 @@
 			<modules>
 				<module>redhawk-driver</module>
 				<module>redhawk-connector</module>
+    				<module>redhawk-jaxrs-security</module>
 				<module>redhawk-rest</module>
 				<module>redhawk-websocket</module>
 				<module>redhawk-camel</module>
@@ -205,7 +206,7 @@
 				<module>redhawk-connector</module>
 				<module>redhawk-rest</module>
 				<module>redhawk-websocket</module>
-				<module>demos</module>
+				<!--<module>demos</module>-->
 				<module>docs</module>
 			</modules>
 		</profile>
@@ -360,7 +361,4 @@
 			<url>${distributionManagement.snapshotRepository.url}</url>
 		</snapshotRepository>
 	</distributionManagement>
-  <modules>
-    <module>redhawk-jaxrs-security</module>
-  </modules>
 </project>

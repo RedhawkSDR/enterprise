@@ -115,6 +115,8 @@ build:
     - mvn -Djava.io.tmpdir=./ clean install -P docs,jaxb-generation,default -B -U -Drelease=0.$CI_PIPELINE_ID
   only:
     - branches
+  except:
+    - develop-2.1.2
 
 build-release:
   <<: *common
@@ -130,6 +132,8 @@ test-install:
   script:
     - yum install -y `find output -name '*.rpm'`
   <<: *skip
+  except:
+    - develop-2.1.2
 
 test-el7-x86_64:
   <<: *compose-test-artifacts
@@ -238,6 +242,8 @@ deploy:
   <<: *deploy-common
   only:
     - branches
+  except:
+    - develop-2.1.2
 
 deploy-release:
   variables:
@@ -258,3 +264,5 @@ pages:
     paths:
     - public
   <<: *skip
+  except:
+    - develop-2.1.2

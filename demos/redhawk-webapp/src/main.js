@@ -10,17 +10,21 @@ import router from './router'
 import store from './store'
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.css'
+import 'bootstrap/dist/css/bootstrap.css'
 
+// Plugins
+//import GlobalComponents from './globalComponents'
+import GlobalDirectives from './globalDirectives'
+import GlobalMixins from './globalMixins'
+
+//Library imports
+import './assets/sass/material-dashboard.scss'
+
+//Plugin Setup
 Vue.config.productionTip = false
 Vue.use(VueMaterial)
-/*
-Vue.material.registerTheme('default',{
-  primary: 'red',
-  accent: 'black',
-  warn: 'deep-orange',
-  background: 'white'
-})
-*/
+Vue.use(GlobalMixins)
+Vue.use(GlobalDirectives)
 
 /* eslint-disable no-new */
 new Vue({

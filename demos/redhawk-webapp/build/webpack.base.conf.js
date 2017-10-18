@@ -23,6 +23,8 @@ module.exports = {
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
+      'assets' : resolve('src/assets'),
+      'components' : resolve('src/components'),
       sigplot$: path.resolve(__dirname, './sigplot/sigplot-debug.js')
     }
   },

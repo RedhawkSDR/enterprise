@@ -7,6 +7,12 @@ import * as mutations from './mutations'
 Vue.use(Vuex)
 
 const state = {
+  configuration: {
+    baseURL: 'http://127.0.0.1:8181/rest/redhawk/',
+    domainName: 'REDHAWK_DEV',
+    nameServer: '127.0.0.1:2809',
+  },
+  applications: [],
   domainConfigs : [], // List of domain configs
   launchedWaveforms: [], // List of launched waveforms
   domainToEdit: null, //Domain being edited

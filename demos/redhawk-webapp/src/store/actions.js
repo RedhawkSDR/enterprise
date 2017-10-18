@@ -57,7 +57,54 @@ function getDeviceManagers(deviceManagersURL){
 function getEventChannels(eventChannelsURL){
   return axios.get(eventChannelsURL)
 }
+
+function getDomainBaseURL(getters){
+  return getters.baseURL+'/'+getters.nameServer+'/domains/'+getters.domainName
+}
 //End of Helper functions
+
+//Begining of latest actions
+export const getAvailableWaveforms = ({commit, getters}) => {
+  var waveformsURL = getDomainBaseURL(getters)+'/waveforms.json'
+  axios.get(waveformsURL)
+  .then(function(response){
+    commit('setAvailableWaveforms', response.data.domains)
+  })
+  .catch(function(error){
+    //TODO: Actually visually handle this
+    console.log(error)
+  })
+}
+
+//Launch Waveform
+export const launchChoosenWaveform = ({ commit, getters }, waveformToLaunch) => {
+  var launchWaveformURL = getDomainBaseURL(getters)+'/applications/'+waveformToLaunch.name
+
+  axios.put(launchWaveformURL, JSON.stringify(waveformToLaunch),
+  {
+    headers: { 'Content-Type' : 'application/json'}
+  })
+  .then(function(response){
+    console.log("Some indication that launch worked so you can redirect")
+  })
+  .catch(function(error){
+    console.log("Error")
+  })
+}
+
+export const getApplicationsInDomain = ({commit, getters}) => {
+  var applicationsURL = getDomainBaseURL(getters)+'/applications.json'
+
+  axios.get(applicationsURL)
+  .then(function(response){
+    commit('setApplications', response.data.applications)
+  })
+  .catch(function(error){
+    console.log(error)
+  })
+}
+
+//End of latest actions
 
 //Actions for editting domain configuration info.
 export const addDomainConfig = ({ commit }, domainConfig) => commit('addDomainConfig', domainConfig)

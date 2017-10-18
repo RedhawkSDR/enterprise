@@ -1,7 +1,19 @@
+//
+//Configuration Getters
+export const baseURL = state => state.configuration.baseURL
+export const domainName = state => state.configuration.domainName
+export const nameServer = state => state.configuration.nameServer
+
+//Waveform getters
+export const availableWaveforms = state => state.availableWaveforms
+
+//Application getters
+export const applications = state => state.applications
+
+//Previous Exports
 export const domainConfigs = state => state.domainConfigs
 export const launchedWaveforms = state => state.launchedWaveforms
 export const configToEdit = state => state.configToEdit
-export const availableWaveforms = state => state.availableWaveforms
 export const waveformComponents = state => state.waveformComponents
 export const componentPorts = state => state.componentPorts
 export const componentPropertiesToEdit = state => state.componentPropertiesToEdit

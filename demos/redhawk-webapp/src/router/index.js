@@ -14,7 +14,7 @@ import WaveformLaunch from 'components/Latest/waveforms/WaveformLaunch'
 //Waveform Views
 import ApplicationsView from 'components/Latest/applications/ApplicationsView'
 import Applications from 'components/Latest/applications/Applications'
-//import WaveformLaunch from 'components/Latest/waveforms/WaveformLaunch'
+import Application from 'components/Latest/applications/Application'
 
 Vue.use(Router)
 
@@ -57,6 +57,11 @@ export default new Router({
               path: '/',
               name: 'Applications',
               component: Applications
+            },
+            {
+              path: ':applicationName',
+              name: 'Application',
+              component: Application
             }
           ]
         }

@@ -6,6 +6,10 @@ export const setAvailableWaveforms = (state, availableWaveforms) => {
 export const setApplications = (state, applications) => {
   state.applications = applications
 }
+
+export const selectApplication = (state, application) => {
+  state.application = application
+}
 //End of Latest Mutations
 
 //Add a domain configuation to the state.

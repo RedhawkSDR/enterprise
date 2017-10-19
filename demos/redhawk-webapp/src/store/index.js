@@ -13,6 +13,15 @@ const state = {
     nameServer: '127.0.0.1:2809',
   },
   applications: [],
+  application: {
+    identifier: null,
+    name: null,
+    started: false,
+    aware: false,
+    components: [],
+    externalPorts: [],
+    properties: []
+  },
   domainConfigs : [], // List of domain configs
   launchedWaveforms: [], // List of launched waveforms
   domainToEdit: null, //Domain being edited
@@ -23,7 +32,6 @@ const state = {
   waveformComponents: [], //Components for a selected waveform
   componentPorts: [], //Compoent Ports
   applicationName: null, //Name of application you're viewing
-  application: null,
   portsComponentName: null,
   portToDisplayName: null,
   componentPropertiesToEdit: [],

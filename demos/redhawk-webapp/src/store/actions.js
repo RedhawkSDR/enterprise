@@ -93,7 +93,7 @@ export const launchChoosenWaveform = ({ commit, getters }, waveformToLaunch) => 
 }
 
 export const getApplicationsInDomain = ({commit, getters}) => {
-  var applicationsURL = getDomainBaseURL(getters)+'/applications.json'
+  var applicationsURL = getDomainBaseURL(getters)+'/applications.json?fetch=LAZY'
 
   axios.get(applicationsURL)
   .then(function(response){
@@ -104,6 +104,67 @@ export const getApplicationsInDomain = ({commit, getters}) => {
   })
 }
 
+export const controlApplication = ({commit, getters, store}, controlInfo) => {
+  var applicationControlURL = getDomainBaseURL(getters)+'/applications/'+controlInfo.applicationName
+
+  console.log("Application URL "+applicationControlURL)
+  axios.post(applicationControlURL, controlInfo.action,{
+    headers: {
+      'Content-Type':'application/json'
+    }
+  })
+  .then(function(response){
+    //Update applications in domain
+    //TODO: Should be able to just call store.dispatch
+    //store.dispatch(types.UPDATE_SHOW, 'getApplicationsInDomain')
+    var applicationsURL = getDomainBaseURL(getters)+'/applications.json?fetch=LAZY'
+
+    axios.get(applicationsURL)
+    .then(function(response){
+      commit('setApplications', response.data.applications)
+    })
+    .catch(function(error){
+      console.log(error)
+    })
+  })
+  .catch(function(error){
+
+  })
+}
+
+export const releaseApplication = ({getters, commit}, appName) => {
+  var releaseApplicationURL = getDomainBaseURL(getters)+'/applications/'+appName
+  axios.delete(releaseApplicationURL)
+  .then(function(response){
+    //TODO: Should be able to just call store.dispatch
+    //store.dispatch(types.UPDATE_SHOW, 'getApplicationsInDomain')
+    var applicationsURL = getDomainBaseURL(getters)+'/applications.json?fetch=LAZY'
+
+    axios.get(applicationsURL)
+    .then(function(response){
+      commit('setApplications', response.data.applications)
+    })
+    .catch(function(error){
+      console.log(error)
+    })
+  })
+  .catch(function(error){
+
+  })
+}
+
+export const selectApplication = ({getters, commit}, applicationName) => {
+  var applicationURL = getDomainBaseURL(getters)+'/applications/'+applicationName
+
+  axios.get(applicationURL)
+  .then(function(response){
+    commit('selectApplication', response.data)
+  })
+  .catch(function(error){
+    //TODO: Handle error
+    console.log(error)
+  })
+}
 //End of latest actions
 
 //Actions for editting domain configuration info.

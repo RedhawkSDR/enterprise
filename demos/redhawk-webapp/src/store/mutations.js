@@ -10,6 +10,10 @@ export const setApplications = (state, applications) => {
 export const selectApplication = (state, application) => {
   state.application = application
 }
+
+export const selectComponent = (state, component) => {
+  state.component = component
+}
 //End of Latest Mutations
 
 //Add a domain configuation to the state.

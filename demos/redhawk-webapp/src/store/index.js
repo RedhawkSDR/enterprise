@@ -22,6 +22,17 @@ const state = {
     externalPorts: [],
     properties: []
   },
+  component: {
+    started: false,
+    name: '',
+    processId: '',
+    deviceIdentifier: '',
+    implementation: '',
+    properties: [],
+    ports: [],
+    configuration: null,
+    softwareComponent: {}
+  },
   domainConfigs : [], // List of domain configs
   launchedWaveforms: [], // List of launched waveforms
   domainToEdit: null, //Domain being edited

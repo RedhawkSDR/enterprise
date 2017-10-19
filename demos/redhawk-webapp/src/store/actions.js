@@ -165,6 +165,21 @@ export const selectApplication = ({getters, commit}, applicationName) => {
     console.log(error)
   })
 }
+
+export const selectComponent = ({getters, commit}, component) => {
+  var componentURL = getDomainBaseURL(getters)+'/applications/'+component.applicationName+
+    '/components/'+component.name+'.json'
+
+  axios.get(componentURL)
+  .then(function(response){
+    console.log("Successfully got component")
+    console.log(response.data)
+    commit('selectComponent', response.data)
+  })
+  .catch(function(error){
+    console.log("ERROR "+error);
+  })
+}
 //End of latest actions
 
 //Actions for editting domain configuration info.

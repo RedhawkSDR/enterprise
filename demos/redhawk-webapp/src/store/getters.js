@@ -11,6 +11,9 @@ export const availableWaveforms = state => state.availableWaveforms
 export const applications = state => state.applications
 export const application = state => state.application
 
+//Component getters
+export const component = state => state.component
+
 //Previous Exports
 export const domainConfigs = state => state.domainConfigs
 export const launchedWaveforms = state => state.launchedWaveforms

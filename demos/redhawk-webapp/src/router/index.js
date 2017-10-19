@@ -17,6 +17,9 @@ import Applications from 'components/Latest/applications/Applications'
 import Application from 'components/Latest/applications/Application'
 import Component from 'components/Latest/component/Component'
 
+//Port View
+import Port from 'components/Latest/port/Port'
+
 Vue.use(Router)
 
 export default new Router({
@@ -68,6 +71,11 @@ export default new Router({
               path: ':applicationName/components/:componentName',
               name: 'Component',
               component: Component
+            },
+            {
+              path: ':applicationName/components/:componentName/ports/:portName',
+              name: 'Port',
+              component: Port
             }
           ]
         }

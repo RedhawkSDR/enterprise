@@ -6,13 +6,16 @@
   </div>
   <div class="card-content">
     <div>
-      <h6><b>Process Id:</b>{{ component.processId }}</h6>
+      <h6><b>Started: </b>{{ component.started }}</h6>
     </div>
     <div>
-      <h6><b>Device Identifier:</b>{{ component.deviceIdentifier }}</h6>
+      <h6><b>Process Id: </b>{{ component.processId }}</h6>
     </div>
     <div>
-      <h6><b>Implementation:</b>{{ component.implementation }}</h6>
+      <h6><b>Device Identifier: </b>{{ component.deviceIdentifier }}</h6>
+    </div>
+    <div>
+      <h6><b>Implementation: </b>{{ component.implementation }}</h6>
     </div>
   </div>
 </div>

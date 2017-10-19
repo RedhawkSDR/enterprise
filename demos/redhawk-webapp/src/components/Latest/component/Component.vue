@@ -5,6 +5,9 @@
       <metadata :component="component"/>
     </div>
     <div class="row">
+      <ports :component="component"/>
+    </div>
+    <div class="row">
       <properties
         :bgColor="green"
         :id="component.name"
@@ -17,6 +20,7 @@
 <script>
 import ComponentMeta from './components/ComponentMeta.vue'
 import Properties from '../properties/Properties.vue'
+import Ports from './components/PortList.vue'
 
 export default {
   name: 'component',
@@ -28,7 +32,8 @@ export default {
   },
   components: {
     'metadata' : ComponentMeta,
-    'properties' : Properties
+    'properties' : Properties,
+    'ports' : Ports
   },
   computed:{
     component(){

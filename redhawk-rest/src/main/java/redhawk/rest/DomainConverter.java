@@ -80,9 +80,9 @@ public class DomainConverter {
 		Domain domain = new Domain();
 		domain.setIdentifier(domainManager.getIdentifier());
 		domain.setName(domainManager.getName());
-		
-		//Add Remote Domains if available
-		if(!domainManager.remoteDomainManagers().isEmpty()) {
+
+		// Add Remote Domains if available
+		if (!domainManager.remoteDomainManagers().isEmpty()) {
 			domain.setRemoteDomains(domainManager.remoteDomainNames());
 		}
 
@@ -141,12 +141,13 @@ public class DomainConverter {
 					if (propertyClone.get(struct.getId()) != null) {
 						propertyClone.remove(struct.getId());
 					}
-					
-					if(rhProp!=null) {
+
+					if (rhProp != null) {
 						Property prop = convertStruct(struct.getId(), (RedhawkStruct) rhProp, struct);
-						properties.add(prop);						
-					}else {
-						logger.warn("Not converting Id: "+struct.getId()+" Struct: "+struct+" RHStruct: "+rhProp);
+						properties.add(prop);
+					} else {
+						logger.warn(
+								"Not converting Id: " + struct.getId() + " Struct: " + struct + " RHStruct: " + rhProp);
 					}
 
 					break;
@@ -177,40 +178,39 @@ public class DomainConverter {
 	 * @return
 	 */
 	protected Property convertProperty(String propertyId, RedhawkProperty property, Object o) {
-		Property prop = null; 
+		Property prop = null;
 		switch (o.getClass().getSimpleName()) {
 		case "Simple": {
 			Simple simp = (Simple) o;
-			
-			//Make sure propertyId matched 
-			if(simp.getId().equals(propertyId))
+
+			// Make sure propertyId matched
+			if (simp.getId().equals(propertyId))
 				prop = convertSimple(simp.getId(), (RedhawkSimple) property, simp);
-			
+
 			break;
 		}
 		case "SimpleSequence": {
 			SimpleSequence simp = (SimpleSequence) o;
-			
-			if(simp.getId().equals(propertyId))
+
+			if (simp.getId().equals(propertyId))
 				prop = convertSimpleSequence(simp.getId(), (RedhawkSimpleSequence) property, simp);
-			
+
 			break;
 		}
 		case "Struct": {
 			Struct struct = (Struct) o;
-			
-			if(struct.getId().equals(propertyId))
+
+			if (struct.getId().equals(propertyId))
 				prop = convertStruct(struct.getId(), (RedhawkStruct) property, struct);
-			
+
 			break;
 		}
 		case "StructSequence": {
 			StructSequence structSequence = (StructSequence) o;
-			
-			if(structSequence.getId().equals(propertyId))
-				prop = convertStructSequence(structSequence.getId(), (RedhawkStructSequence) property,
-					structSequence);
-			
+
+			if (structSequence.getId().equals(propertyId))
+				prop = convertStructSequence(structSequence.getId(), (RedhawkStructSequence) property, structSequence);
+
 			break;
 		}
 		default: {
@@ -218,15 +218,15 @@ public class DomainConverter {
 			break;
 		}
 		}
-		
+
 		return prop;
 	}
-	
+
 	private Property convertStruct(String id, RedhawkStruct rhProp, Struct original) {
 		Map<String, Object> object = rhProp.getValue();
 		return convertStruct(id, object, original);
 	}
-	
+
 	private Property convertStruct(String id, Map<String, Object> rhProp, Struct original) {
 		StructRep destination = new StructRep();
 		destination.setType("struct");
@@ -342,8 +342,8 @@ public class DomainConverter {
 		destination.setId(propertyId);
 
 		List<Property> structs = new ArrayList<>();
-		
-		if (redhawkProperty != null && redhawkProperty.getValue()!=null) {
+
+		if (redhawkProperty != null && redhawkProperty.getValue() != null) {
 			List<Map<String, Object>> structSequnce = redhawkProperty.getValue();
 			for (Map<String, Object> struct : structSequnce) {
 				Property s = convertStruct(original.getStruct().getId(), struct, original.getStruct());
@@ -385,8 +385,9 @@ public class DomainConverter {
 		case "device": {
 			return list.stream().map(obj -> convertDevice((RedhawkDevice) obj, fetchMode)).collect(Collectors.toList());
 		}
-		case "eventchannel":{
-			return list.stream().map(obj -> convertEventChannel((RedhawkEventChannel)obj)).collect(Collectors.toList());
+		case "eventchannel": {
+			return list.stream().map(obj -> convertEventChannel((RedhawkEventChannel) obj))
+					.collect(Collectors.toList());
 		}
 		case "softwarecomponent": {
 			return list;
@@ -414,38 +415,41 @@ public class DomainConverter {
 			try {
 				// Need to get the properties from the component
 				RedhawkComponent comp = obj.getComponentByName(
-						obj.getAssembly().getAssemblycontroller().getComponentinstantiationref().getRefid()+".*");
+						obj.getAssembly().getAssemblycontroller().getComponentinstantiationref().getRefid() + ".*");
 
 				List<Property> properties = this.convertProperties(comp.getProperties(),
 						comp.getPropertyConfiguration());
-				
-				if(obj.getAssembly().getExternalproperties()!=null){
-					for (redhawk.driver.xml.model.sca.sad.Property exProp : obj.getAssembly().getExternalproperties().getProperties()) {
-						RedhawkComponent component = obj.getComponentByName(exProp.getComprefid()+".*");
+
+				if (obj.getAssembly().getExternalproperties() != null) {
+					for (redhawk.driver.xml.model.sca.sad.Property exProp : obj.getAssembly().getExternalproperties()
+							.getProperties()) {
+						RedhawkComponent component = obj.getComponentByName(exProp.getComprefid() + ".*");
 						String externalPropertyId = exProp.getExternalpropid();
 						String propId = exProp.getPropid();
-						
-						//Get the RedhawkProperty by it's Component propId
+
+						// Get the RedhawkProperty by it's Component propId
 						RedhawkProperty prop = component.getProperty(propId);
-						
-						//Find prop configuration that matches then rollout
-						for(Object rhProp : component.getPropertyConfiguration().getSimplesAndSimplesequencesAndTests()){
+
+						// Find prop configuration that matches then rollout
+						for (Object rhProp : component.getPropertyConfiguration()
+								.getSimplesAndSimplesequencesAndTests()) {
 							Property myExProp = this.convertProperty(propId, prop, rhProp);
-							
-							if(exProp!=null && myExProp!=null){
+
+							if (exProp != null && myExProp != null) {
 								myExProp.setExternalId(externalPropertyId);
 								properties.add(myExProp);
 								break;
 							}
 						}
-					}					
+					}
 				}
 
 				app.setProperties(properties);
 
-				app.setExternalPorts(obj.getPorts().stream().map(this::convertExternalPort).collect(Collectors.toList()));
+				app.setExternalPorts(
+						obj.getPorts().stream().map(this::convertExternalPort).collect(Collectors.toList()));
 			} catch (IOException | MultipleResourceException | ResourceNotFoundException e) {
-				logger.error("Issue converting application "+e.getMessage(), e);
+				logger.error("Issue converting application " + e.getMessage(), e);
 			}
 
 			app.setComponents(
@@ -500,8 +504,13 @@ public class DomainConverter {
 		mgr.setLabel(obj.getName());
 
 		if (fetchMode.equals(FetchMode.EAGER)) {
-			mgr.setProperties(convertProperties(obj.getProperties(), null));
-
+			try {
+				mgr.setProperties(convertProperties(obj.getProperties(), obj.getPropertyConfiguration()));
+			} catch (ResourceNotFoundException e) {
+				logger.warn("Could not find prf file for device: " + obj.getName(), e);
+				mgr.setProperties(new ArrayList<Property>());
+			}
+			
 			mgr.setDevices(obj.getDevices().parallelStream().map(this::convertDevice).collect(Collectors.toList()));
 
 			mgr.setServices(obj.getServices().stream().map(s -> {
@@ -526,7 +535,7 @@ public class DomainConverter {
 		device.setOperationState(obj.operationalState());
 		device.setUsageState(obj.usageState());
 		device.setImplementation(obj.getImplementation());
-		
+
 		if (fetchMode.equals(FetchMode.EAGER)) {
 			try {
 				device.setProperties(convertProperties(obj.getProperties(), obj.getPropertyConfiguration()));
@@ -538,18 +547,18 @@ public class DomainConverter {
 
 		return device;
 	}
-	
-	private EventChannel convertEventChannel(RedhawkEventChannel obj){
-		EventChannel channel = new EventChannel(); 
-		
+
+	private EventChannel convertEventChannel(RedhawkEventChannel obj) {
+		EventChannel channel = new EventChannel();
+
 		channel.setName(obj.getName());
-		
-		//TODO: Registrant number is hidden prob should have a way to set it 
+
+		// TODO: Registrant number is hidden prob should have a way to set it
 		List<String> registrants = new ArrayList<>();
-		for(RedhawkEventRegistrant registrant : obj.getRegistrants(10000)){
+		for (RedhawkEventRegistrant registrant : obj.getRegistrants(10000)) {
 			registrants.add(registrant.getRegistrationId());
 		}
-		
+
 		channel.setRegistrantIds(registrants);
 		return channel;
 	}
@@ -565,53 +574,55 @@ public class DomainConverter {
 		p.setName(obj.getName());
 		p.setRepId(obj.getRepId());
 		p.setType(obj.getType());
-		
-		if(obj.getType().equalsIgnoreCase("provides")){
+
+		if (obj.getType().equalsIgnoreCase("provides")) {
 			try {
 				p.setState(obj.getPortState().toString());
 			} catch (PortException e) {
-				logger.debug("Unable to get state of port "+e.getMessage());
+				logger.debug("Unable to get state of port " + e.getMessage());
 			}
 		}
-		
-		if(obj.getType().equalsIgnoreCase("uses")){
+
+		if (obj.getType().equalsIgnoreCase("uses")) {
 			try {
 				p.setConnectionIds(obj.getConnectionIds());
 			} catch (PortException e) {
-				logger.debug("Unable to get connectionIds of port "+e.getMessage());
+				logger.debug("Unable to get connectionIds of port " + e.getMessage());
 			}
 		}
 
 		return p;
 	}
-	
-	//TODO: Clean this up!!!
-	private ExternalPort convertExternalPort(RedhawkPort obj){
+
+	// TODO: Clean this up!!!
+	private ExternalPort convertExternalPort(RedhawkPort obj) {
 		Port port = this.convertPort(obj);
-		return this.convertExternalPort((RedhawkExternalPortImpl)obj, port);
+		return this.convertExternalPort((RedhawkExternalPortImpl) obj, port);
 	}
-	
-	private ExternalPort convertExternalPort(RedhawkExternalPortImpl obj, Port port){
-		ExternalPort p = new ExternalPort(port); 
+
+	private ExternalPort convertExternalPort(RedhawkExternalPortImpl obj, Port port) {
+		ExternalPort p = new ExternalPort(port);
 		p.setExternalname(obj.getExternalName());
-		p.setComponentRefId(obj.getComponentReferenceId());;
+		p.setComponentRefId(obj.getComponentReferenceId());
+		;
 		p.setDescription(obj.getDescription());
-		
+
 		return p;
 	}
 
-	private List<EventChannel> convertEventChannels(List<RedhawkEventChannel> eventChannels){
-		//TODO: Make this work 
-		//eventChannels.stream().map(e -> convertEventChannel(e)).map(Collectors.toList());
+	private List<EventChannel> convertEventChannels(List<RedhawkEventChannel> eventChannels) {
+		// TODO: Make this work
+		// eventChannels.stream().map(e ->
+		// convertEventChannel(e)).map(Collectors.toList());
 		List<EventChannel> channels = new ArrayList<>();
-		
-		for(RedhawkEventChannel channel : eventChannels){
+
+		for (RedhawkEventChannel channel : eventChannels) {
 			channels.add(convertEventChannel(channel));
 		}
-		
+
 		return channels;
 	}
-	
+
 	@Deprecated
 	private List<String> convertEventChannels(RedhawkDomainManager domainManager) {
 		try {
@@ -634,7 +645,7 @@ public class DomainConverter {
 		case "port":
 			return convertPort((RedhawkPort) object);
 		case "applicationport":
-			return convertExternalPort((RedhawkPort)object);
+			return convertExternalPort((RedhawkPort) object);
 		case "devicemanager":
 			return convertDeviceManager((RedhawkDeviceManager) object);
 		case "device":

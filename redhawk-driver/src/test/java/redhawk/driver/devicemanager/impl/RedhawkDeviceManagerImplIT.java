@@ -20,14 +20,28 @@
 package redhawk.driver.devicemanager.impl;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.List;
+
+import javax.xml.bind.JAXBException;
+
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.properties.RedhawkSimple;
+import redhawk.driver.xml.ScaXmlProcessor;
+import redhawk.driver.xml.model.sca.dcd.Deviceconfiguration;
+import redhawk.driver.xml.model.sca.dmd.Domainmanagerconfiguration;
+import redhawk.driver.xml.model.sca.prf.Properties;
+import redhawk.driver.xml.model.sca.spd.Softpkg;
 import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkDeviceManagerImplIT extends RedhawkTestBase {
@@ -73,5 +87,52 @@ public class RedhawkDeviceManagerImplIT extends RedhawkTestBase {
 		} catch (MultipleResourceException | CORBAException e) {
 			fail("Test failure "+e.getMessage());
 		}
+	}
+	
+	
+	@Test
+	public void testGetDeviceManagerProperties() {
+		try {
+			RedhawkDeviceManager devMgr = driver.getDomain().getDeviceManagers().get(0);
+
+			assertNotNull(devMgr.getProperties());
+			
+			//TODO: Check with CF team make sure this is a safe assumption
+			assertTrue(!devMgr.getProperties().isEmpty());
+		} catch (MultipleResourceException | CORBAException e) {
+			fail("Test failure "+e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testGetDeviceManagerPropertyConfiguration() {
+		try {
+			RedhawkDeviceManager devMgr = driver.getDomain().getDeviceManagers().get(0);
+			
+			RedhawkSimple dcdURI = devMgr.getProperty("DCD_FILE");
+			Deviceconfiguration dcd = unMarshall(devMgr.getFileSystem().getFile(dcdURI.getValue()), Deviceconfiguration.class);
+			String spdURI = dcd.getDevicemanagersoftpkg().getLocalfile().getName();
+			System.out.println(spdURI);
+			Softpkg spd = unMarshall(devMgr.getFileSystem().getFile(spdURI), Softpkg.class);
+			String prf = spd.getPropertyfile().getLocalfile().getName();
+			System.out.println(prf);
+			
+			//TODO: Clean this up
+			String prfURI = devMgr.getFileSystem().findFiles(prf).get(0);
+			Properties properties = unMarshall(devMgr.getFileSystem().getFile(prfURI), Properties.class);
+			
+			System.out.println(properties);
+		} catch (MultipleResourceException | CORBAException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private <T> T unMarshall(byte[] fileInBytes, Class clazz) throws IOException {
+		try {
+			return (T) ScaXmlProcessor.unmarshal(new ByteArrayInputStream(fileInBytes), clazz);
+		} catch (JAXBException | SAXException e) {
+			throw new IOException(e);
+		} 
 	}
 }

@@ -19,6 +19,8 @@
  */
 package redhawk.driver.devicemanager.impl;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -28,6 +30,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+
+import javax.xml.bind.JAXBException;
 
 import org.omg.CORBA.ORB;
 import org.omg.CORBA.Object;
@@ -41,6 +45,7 @@ import org.omg.CosNaming.NamingContextPackage.NotFound;
 import org.omg.PortableServer.POA;
 import org.omg.PortableServer.POAHelper;
 import org.omg.PortableServer.POAManagerPackage.AdapterInactive;
+import org.xml.sax.SAXException;
 
 import CF.Device;
 import CF.DeviceManager;
@@ -59,6 +64,10 @@ import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.exceptions.ServiceRegistrationException;
 import redhawk.driver.logging.RedhawkLogLevel;
 import redhawk.driver.properties.RedhawkSimple;
+import redhawk.driver.xml.ScaXmlProcessor;
+import redhawk.driver.xml.model.sca.dcd.Deviceconfiguration;
+import redhawk.driver.xml.model.sca.prf.Properties;
+import redhawk.driver.xml.model.sca.spd.Softpkg;
 
 public class RedhawkDeviceManagerImpl extends QueryableResourceImpl<DeviceManager> implements RedhawkDeviceManager  {
 
@@ -191,10 +200,16 @@ public class RedhawkDeviceManagerImpl extends QueryableResourceImpl<DeviceManage
     public String getName(){
         return getCorbaObject().label();
     }
-
+    
+    @Deprecated
     public String getUniqueIdentifier(){
-        return getCorbaObject().identifier();
+    	return this.getIdentifier();
     }
+    
+	@Override
+	public String getIdentifier() {
+        return getCorbaObject().identifier();
+	}
     
     public RedhawkDomainManager getDomainManager() {
         return domainManager;
@@ -309,5 +324,33 @@ public class RedhawkDeviceManagerImpl extends QueryableResourceImpl<DeviceManage
 		}
 		
 		return this.getCorbaObject().getComponentImplementationId(rhDevice.getIdentifier());
+	}
+
+	@Override
+	public Properties getPropertyConfiguration() throws ResourceNotFoundException {
+		RedhawkSimple dcdURI = getProperty("DCD_FILE");
+		Deviceconfiguration dcd;
+		try {
+			dcd = unMarshall(getFileSystem().getFile(dcdURI.getValue()), Deviceconfiguration.class);
+			String spdURI = dcd.getDevicemanagersoftpkg().getLocalfile().getName();
+			Softpkg spd = unMarshall(getFileSystem().getFile(spdURI), Softpkg.class);
+			String prf = spd.getPropertyfile().getLocalfile().getName();
+			
+			//TODO: Clean this up
+			String prfURI = getFileSystem().findFiles(prf).get(0);
+			Properties properties = unMarshall(getFileSystem().getFile(prfURI), Properties.class);
+			
+			return properties;
+		} catch (IOException e) {
+			throw new ResourceNotFoundException(e);
+		}
+	}
+	
+	private <T> T unMarshall(byte[] fileInBytes, Class clazz) throws IOException {
+		try {
+			return (T) ScaXmlProcessor.unmarshal(new ByteArrayInputStream(fileInBytes), clazz);
+		} catch (JAXBException | SAXException e) {
+			throw new IOException(e);
+		} 
 	}
 }

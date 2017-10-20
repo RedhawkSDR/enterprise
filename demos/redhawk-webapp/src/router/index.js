@@ -20,6 +20,13 @@ import Component from 'components/Latest/component/Component'
 //Port View
 import Port from 'components/Latest/port/Port'
 
+//DOmain
+import Domain from 'components/Latest/domain/Domain'
+
+//Device Managers
+import DeviceManagerView from 'components/Latest/devicemanagers/DeviceManagerView'
+import DeviceManagers from 'components/Latest/devicemanagers/DeviceManagers'
+
 Vue.use(Router)
 
 export default new Router({
@@ -32,6 +39,24 @@ export default new Router({
           path: 'configuration',
           name: 'REDHAWK Explorer Configuration',
           component: Configuration
+        },
+        {
+          path: 'domain',
+          name: 'REDHAWK Domain Properties',
+          component: Domain
+        },
+        {
+          path: 'devicemanagers',
+          name: 'Device Managers',
+          component: DeviceManagerView,
+          redirect: '/devicemanagers',
+          children: [
+            {
+              path: '/',
+              name: 'Device Managers',
+              component: DeviceManagers
+            }
+          ]
         },
         {
           path: 'waveforms',

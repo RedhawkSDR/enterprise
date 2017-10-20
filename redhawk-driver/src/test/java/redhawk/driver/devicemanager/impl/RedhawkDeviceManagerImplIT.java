@@ -74,4 +74,15 @@ public class RedhawkDeviceManagerImplIT extends RedhawkTestBase {
 			fail("Test failure "+e.getMessage());
 		}
 	}
+	
+	@Test
+	public void testGetDeviceManagerProperties() {
+		try {
+			RedhawkDeviceManager devMgr = driver.getDomain().getDeviceManagers().get(0);
+
+			assertNotNull(devMgr.getProperties());
+		} catch (MultipleResourceException | CORBAException e) {
+			fail("Test failure "+e.getMessage());
+		}
+	}
 }

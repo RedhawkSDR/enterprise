@@ -12,7 +12,6 @@
             <md-table-head>Port Name</md-table-head>
             <md-table-head>Type</md-table-head>
             <md-table-head>Representation Id</md-table-head>
-            <md-table-head>Plot</md-table-head>
           </md-table-row>
         </md-table-header>
         <md-table-body>
@@ -21,16 +20,13 @@
             v-bind:key="index"
           >
             <md-table-cell>
-              {{ port.name }}
+              <router-link :to="{ path: '/applications/'+applicationName+'/components/'+component.name+'/ports/'+port.name}">{{ port.name }}</router-link>
             </md-table-cell>
             <md-table-cell>
               {{ port.type }}
             </md-table-cell>
             <md-table-cell>
               {{ port.repId }}
-            </md-table-cell>
-            <md-table-cell>
-              <button @click="plot(index)" v-if="port.type=='uses'">Plot</button>
             </md-table-cell>
           </md-table-row>
         </md-table-body>

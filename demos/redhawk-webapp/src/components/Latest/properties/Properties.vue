@@ -16,6 +16,9 @@
             <md-table-cell v-if="property.type=='simple'">
               <simple :property="property" />
             </md-table-cell>
+            <md-table-cell v-if="property.type=='struct'">
+              <struct :property="property" />
+            </md-table-cell>
           </md-table-row>
         </md-table-body>
       </md-table>
@@ -34,6 +37,7 @@
 
 <script>
 import SimplePropertyEditor from './components/SimpleEditor.vue'
+import StructPropertyEditor from './components/StructEditor.vue'
 
 export default {
   name: 'properties',
@@ -43,7 +47,8 @@ export default {
     'properties'
   ],
   components: {
-    'simple' : SimplePropertyEditor
+    'simple' : SimplePropertyEditor,
+    'struct' : StructPropertyEditor
   }
 }
 </script>

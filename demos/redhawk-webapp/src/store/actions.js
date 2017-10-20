@@ -180,6 +180,30 @@ export const selectComponent = ({getters, commit}, component) => {
     console.log("ERROR "+error);
   })
 }
+
+export const selectDomainProperties = ({getters, commit}, domainName) => {
+  var domainPropsURL = getDomainBaseURL(getters)+'/properties.json'
+  axios.get(domainPropsURL)
+  .then(function(response){
+    commit('selectDomainProperties', response.data.properties)
+  })
+  .catch(function(error){
+    console.log("ERROR "+error)
+  })
+}
+
+export const getDeviceManagersInDomain = ({commit, getters}) => {
+  var devicemanagersURL = getDomainBaseURL(getters)+'/devicemanagers.json?fetch=LAZY'
+  console.log("Device Manager URL: "+devicemanagersURL)
+  axios.get(devicemanagersURL)
+  .then(function(response){
+    console.log(response.data)
+    commit('setDeviceManagers', response.data.deviceManagers)
+  })
+  .catch(function(error){
+    console.log(error)
+  })
+}
 //End of latest actions
 
 //Actions for editting domain configuration info.

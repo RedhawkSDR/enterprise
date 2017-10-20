@@ -14,6 +14,15 @@ export const selectApplication = (state, application) => {
 export const selectComponent = (state, component) => {
   state.component = component
 }
+
+export const selectDomainProperties = (state, properties) => {
+  state.domain.properties = properties
+}
+
+export const setDeviceManagers = (state, devicemanagers) => {
+  console.log("Made it "+devicemanagers)
+  state.devicemanagers = devicemanagers
+}
 //End of Latest Mutations
 
 //Add a domain configuation to the state.

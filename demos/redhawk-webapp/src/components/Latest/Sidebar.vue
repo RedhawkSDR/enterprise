@@ -13,28 +13,6 @@
       <slot>
 
       </slot>
-      <ul class="nav nav-mobile-menu">
-        <li><a href="#/" class="dropdown-toggle active" data-toggle="dropdown">
-          <i class="material-icons">dashboard</i>
-          <p class="hidden-lg hidden-md">Dashboard</p></a>
-        </li>
-        <drop-down>
-          <a slot="title" data-toggle="dropdown" class="dropdown-toggle">
-            <i class="material-icons">notifications</i>
-            <span class="notification">5</span>
-            <p class="hidden-lg hidden-md">Notifications</p>
-          </a>
-          <li><a href="#">Mike John responded to your email</a></li>
-          <li><a href="#">You have 5 new tasks</a></li>
-          <li><a href="#">You're now friend with Andrew</a></li>
-          <li><a href="#">Another Notification</a></li>
-          <li><a href="#">Another One</a></li>
-        </drop-down>
-        <li>
-          <a href="#" data-toggle="dropdown" class="dropdown-toggle"><i class="material-icons">person</i>
-          <p class="hidden-lg hidden-md">Profile</p></a>
-        </li>
-      </ul>
       <ul :class="navClasses">
         <!--By default vue-router adds an active class to each route link. This way the links are colored when clicked-->
         <router-link v-for="(link,index) in sidebarLinks" :to="link.path" tag="li" :ref="link.name">
@@ -113,6 +91,14 @@
           {
             name: 'Configuration',
             path: '/configuration'
+          },
+          {
+            name: 'Domain',
+            path: '/domain'
+          },
+          {
+            name: 'Device Managers',
+            path: '/devicemanagers'
           },
           {
             name: 'Waveforms',

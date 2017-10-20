@@ -14,6 +14,12 @@ export const application = state => state.application
 //Component getters
 export const component = state => state.component
 
+//domain
+export const domainProperties = state => state.domain.properties
+
+//device managers
+export const devicemanagers = state => state.devicemanagers
+
 //Previous Exports
 export const domainConfigs = state => state.domainConfigs
 export const launchedWaveforms = state => state.launchedWaveforms
@@ -41,7 +47,6 @@ export const propertyUpdate = state => state.propertyUpdate
 export const redhawkRESTRoot = state => state.redhawkRESTRoot
 export const showEditRESTModal = state => state.showEditRESTModal
 export const showApplication = state => state.showApplication
-export const devicemanagers = state => state.devicemanagers
 export const showDeviceManager = state => state.showDeviceManager
 export const deviceManager = state => state.deviceManager
 export const devicePorts = state => state.devicePorts

@@ -12,6 +12,10 @@ const state = {
     domainName: 'REDHAWK_DEV',
     nameServer: '127.0.0.1:2809',
   },
+  domain: {
+    properties : []
+  },
+  devicemanagers: [],
   applications: [],
   application: {
     identifier: null,
@@ -64,7 +68,6 @@ const state = {
   showEditRESTModal: false,
   showApplication: false,
   showDeviceManager: false,
-  devicemanagers: [],
   deviceManager: {}, //Device Manager to show
   devicePorts : {},
   tuners : {},

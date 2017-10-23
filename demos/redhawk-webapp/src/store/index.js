@@ -16,6 +16,13 @@ const state = {
     properties : []
   },
   devicemanagers: [],
+  devicemanager: {
+    label : null,
+    identifier: '',
+    services: [],
+    devices: [],
+    properties: []
+  },
   applications: [],
   application: {
     identifier: null,

@@ -36,15 +36,15 @@ public class StructRep extends Property {
 
     private static Logger logger = Logger.getLogger(StructRep.class.getName());
 
-    protected List<ConfigurationKind> kinds;
+    protected List<ConfigurationKind> configurationKinds;
     protected List<Property> attributes;
     
     
-	public List<ConfigurationKind> getKinds() {
-		return kinds;
+	public List<ConfigurationKind> getConfigurationKinds() {
+		return configurationKinds;
 	}
-	public void setKinds(List<ConfigurationKind> kinds) {
-		this.kinds = kinds;
+	public void setConfigurationKinds(List<ConfigurationKind> kinds) {
+		this.configurationKinds = kinds;
 	}
 	public List<Property> getAttributes() {
 		return attributes;

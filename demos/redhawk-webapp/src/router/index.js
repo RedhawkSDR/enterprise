@@ -26,6 +26,7 @@ import Domain from 'components/Latest/domain/Domain'
 //Device Managers
 import DeviceManagerView from 'components/Latest/devicemanagers/DeviceManagerView'
 import DeviceManagers from 'components/Latest/devicemanagers/DeviceManagers'
+import DeviceManager from 'components/Latest/devicemanagers/DeviceManager'
 
 Vue.use(Router)
 
@@ -55,6 +56,11 @@ export default new Router({
               path: '/',
               name: 'Device Managers',
               component: DeviceManagers
+            },
+            {
+              path: ':devicemanagerName',
+              name: 'Device Manager',
+              component: DeviceManager
             }
           ]
         },

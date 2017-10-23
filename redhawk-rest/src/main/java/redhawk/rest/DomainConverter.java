@@ -234,6 +234,9 @@ public class DomainConverter {
 		destination.setId(original.getId());
 		destination.setMode(original.getMode());
 		destination.setName(original.getName());
+		
+		destination.setConfigurationKinds(original.getConfigurationkinds());
+
 
 		List<Property> attributes = new ArrayList<>();
 		Map<String, Object> rhStructVal = rhProp;
@@ -290,6 +293,11 @@ public class DomainConverter {
 		destination.setPropertyValueType(original.getType());
 		destination.setUnits(original.getUnits());
 		destination.setValue(original.getValue());
+		
+		//TODO: Simple and SimpleSequences both share this clean possibly w/ inheritance or 
+		//minimum only one method to do this 
+		destination.setKinds(original.getKinds());
+		
 
 		if (redhawkProperty != null && redhawkProperty.getValue() != null) {
 			destination.setId(propertyId);
@@ -315,6 +323,10 @@ public class DomainConverter {
 		destination.setOptional(original.getOptional());
 		destination.setComplex(original.getComplex());
 		destination.setId(propertyId);
+		
+		//TODO: Simple and SimpleSequences both share this clean possibly w/ inheritance or 
+		//minimum only one method to do this 
+		destination.setKinds(original.getKinds());
 
 		if (redhawkProperty != null && redhawkProperty.getValues() != null && redhawkProperty.getValues().size() > 0) {
 			destination.setValues(redhawkProperty.getValues());
@@ -340,6 +352,10 @@ public class DomainConverter {
 		destination.setMode(original.getMode());
 		destination.setName(original.getName());
 		destination.setId(propertyId);
+		
+		//TODO: Struct and StructSequences both share this clean possibly w/ inheritance or 
+		//minimum only one method to do this 
+		destination.setConfigurationKinds(original.getConfigurationkinds());
 
 		List<Property> structs = new ArrayList<>();
 

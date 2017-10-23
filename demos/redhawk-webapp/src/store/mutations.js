@@ -23,6 +23,10 @@ export const setDeviceManagers = (state, devicemanagers) => {
   console.log("Made it "+devicemanagers)
   state.devicemanagers = devicemanagers
 }
+
+export const selectDeviceManager = (state, devicemanager) =>{
+  state.devicemanager = devicemanager
+}
 //End of Latest Mutations
 
 //Add a domain configuation to the state.

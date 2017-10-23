@@ -36,6 +36,7 @@ import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.properties.RedhawkSimple;
 import redhawk.driver.xml.ScaXmlProcessor;
 import redhawk.driver.xml.model.sca.dcd.Deviceconfiguration;
@@ -109,30 +110,16 @@ public class RedhawkDeviceManagerImplIT extends RedhawkTestBase {
 		try {
 			RedhawkDeviceManager devMgr = driver.getDomain().getDeviceManagers().get(0);
 			
-			RedhawkSimple dcdURI = devMgr.getProperty("DCD_FILE");
-			Deviceconfiguration dcd = unMarshall(devMgr.getFileSystem().getFile(dcdURI.getValue()), Deviceconfiguration.class);
-			String spdURI = dcd.getDevicemanagersoftpkg().getLocalfile().getName();
-			System.out.println(spdURI);
-			Softpkg spd = unMarshall(devMgr.getFileSystem().getFile(spdURI), Softpkg.class);
-			String prf = spd.getPropertyfile().getLocalfile().getName();
-			System.out.println(prf);
+			//Test retrieving the default configuration file 
+			assertNotNull(devMgr.getPropertyConfiguration());
 			
-			//TODO: Clean this up
-			String prfURI = devMgr.getFileSystem().findFiles(prf).get(0);
-			Properties properties = unMarshall(devMgr.getFileSystem().getFile(prfURI), Properties.class);
-			
-			System.out.println(properties);
-		} catch (MultipleResourceException | CORBAException | IOException e) {
-			// TODO Auto-generated catch block
+			//Test getting the three known profiles
+			assertNotNull(devMgr.getPropertyConfiguration("Linux.armv7l"));
+			assertNotNull(devMgr.getPropertyConfiguration("Linux.x86_64"));
+			assertNotNull(devMgr.getPropertyConfiguration("Linux.x86"));
+		} catch (MultipleResourceException | CORBAException | ResourceNotFoundException e) {
 			e.printStackTrace();
+			fail("Test failure "+e.getMessage());
 		}
-	}
-	
-	private <T> T unMarshall(byte[] fileInBytes, Class clazz) throws IOException {
-		try {
-			return (T) ScaXmlProcessor.unmarshal(new ByteArrayInputStream(fileInBytes), clazz);
-		} catch (JAXBException | SAXException e) {
-			throw new IOException(e);
-		} 
 	}
 }

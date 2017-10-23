@@ -112,6 +112,18 @@ public interface RedhawkDeviceManager extends QueryableResource {
     Properties getPropertyConfiguration() throws ResourceNotFoundException;
     
     /**
+     * Get the Properties for a DeviceManager on a specific platform.
+     * Example platforms are: 
+     * 	- Linux.x86_64
+     * 	- Linux.x86
+     * 	- Linux.armv7l
+     * 
+     * @param platform
+     * @return
+     */
+    Properties getPropertyConfiguration(String platform) throws ResourceNotFoundException;
+    
+    /**
      * @return POJO representing the File System of a Device Manager. 
      */
     //TODO: This and the getFileSystem method may be redundant. 

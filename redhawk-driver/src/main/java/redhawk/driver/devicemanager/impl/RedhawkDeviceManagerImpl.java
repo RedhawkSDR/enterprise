@@ -328,6 +328,11 @@ public class RedhawkDeviceManagerImpl extends QueryableResourceImpl<DeviceManage
 
 	@Override
 	public Properties getPropertyConfiguration() throws ResourceNotFoundException {
+		return this.getPropertyConfiguration("");
+	}
+	
+	@Override
+	public Properties getPropertyConfiguration(String platform) throws ResourceNotFoundException {
 		RedhawkSimple dcdURI = getProperty("DCD_FILE");
 		Deviceconfiguration dcd;
 		try {
@@ -336,8 +341,23 @@ public class RedhawkDeviceManagerImpl extends QueryableResourceImpl<DeviceManage
 			Softpkg spd = unMarshall(getFileSystem().getFile(spdURI), Softpkg.class);
 			String prf = spd.getPropertyfile().getLocalfile().getName();
 			
+			Integer xmlIndex = prf.indexOf(".prf.xml");
+			
+			//Append '.' if user didn't supply it
+			if(platform.equals("") || platform.startsWith("."))
+				prf = prf.substring(0, xmlIndex)+platform+".prf.xml";
+			else
+				prf = prf.substring(0, xmlIndex)+"."+platform+".prf.xml";
+
 			//TODO: Clean this up
-			String prfURI = getFileSystem().findFiles(prf).get(0);
+			List<String> fileLocations = getFileSystem().findFiles(prf);
+			String prfURI;
+			
+			if(!fileLocations.isEmpty())
+				prfURI = fileLocations.get(0);
+			else
+				throw new IOException("Unable find file "+prf);
+			
 			Properties properties = unMarshall(getFileSystem().getFile(prfURI), Properties.class);
 			
 			return properties;

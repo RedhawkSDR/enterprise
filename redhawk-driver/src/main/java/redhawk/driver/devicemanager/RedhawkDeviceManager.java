@@ -29,6 +29,7 @@ import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.exceptions.ServiceRegistrationException;
+import redhawk.driver.xml.model.sca.prf.Properties;
 
 public interface RedhawkDeviceManager extends QueryableResource {
 	/**
@@ -61,8 +62,16 @@ public interface RedhawkDeviceManager extends QueryableResource {
     
     /** 
      * @return Unique identifier for the object..
+     * @deprecated Use getIdentifier
      */
+    @Deprecated
     String getUniqueIdentifier();
+    
+    /**
+     * 
+     * @return Identifier for the DeviceManager
+     */
+    String getIdentifier();
     
     /**
      * @return Domain Manager for this Redhawk Device Manager.
@@ -94,6 +103,25 @@ public interface RedhawkDeviceManager extends QueryableResource {
      * @return CORBA object for a DeviceManager. 
      */
     DeviceManager getCorbaObject();
+    
+    
+    /**
+     * Get the Properties Resource File for a DeviceManger
+     * @return
+     */
+    Properties getPropertyConfiguration() throws ResourceNotFoundException;
+    
+    /**
+     * Get the Properties for a DeviceManager on a specific platform.
+     * Example platforms are: 
+     * 	- Linux.x86_64
+     * 	- Linux.x86
+     * 	- Linux.armv7l
+     * 
+     * @param platform
+     * @return
+     */
+    Properties getPropertyConfiguration(String platform) throws ResourceNotFoundException;
     
     /**
      * @return POJO representing the File System of a Device Manager. 

@@ -51,10 +51,6 @@
 	<classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-api/1.7.22/slf4j-api-1.7.22.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/aries/blueprint/blueprint-parser/1.4.0/blueprint-parser-1.4.0.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/apache/cxf/cxf-rt-rs-client/3.1.10/cxf-rt-rs-client-3.1.10.jar"/>
-	<classpathentry kind="var" path="M2_REPO/redhawk/cfinterfaces/2.0.7/cfinterfaces-2.0.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/redhawk/bulkiointerfaces/2.0.7/bulkiointerfaces-2.0.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/redhawk/ossie/2.0.7/ossie-2.0.7.jar"/>
-	<classpathentry kind="var" path="M2_REPO/redhawk/frontendinterfaces/2.0.7/frontendinterfaces-2.0.7.jar"/>
 	<classpathentry kind="var" path="M2_REPO/commons-lang/commons-lang/2.6/commons-lang-2.6.jar"/>
 	<classpathentry kind="var" path="M2_REPO/commons-io/commons-io/2.5/commons-io-2.5.jar"/>
 	<classpathentry kind="src" path="/redhawk-driver"/>

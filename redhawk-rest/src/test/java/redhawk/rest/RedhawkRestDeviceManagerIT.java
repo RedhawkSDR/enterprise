@@ -1,15 +1,21 @@
 package redhawk.rest;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import redhawk.rest.model.DeviceManager;
 import redhawk.rest.model.DeviceManagerContainer;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.utils.TestUtils;
 import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkRestDeviceManagerIT extends RedhawkTestBase{
+	private Logger logger = LoggerFactory.getLogger(RedhawkRestDeviceManagerIT.class);
+	
 	private static final String NAMESERVER = domainHost+":"+domainPort;
 	
 	private static RedhawkManager manager = new RedhawkManager(); 
@@ -18,7 +24,15 @@ public class RedhawkRestDeviceManagerIT extends RedhawkTestBase{
 	public void testGetDeviceManager() {
 		try {
 			DeviceManagerContainer container = new DeviceManagerContainer(manager.getAll(NAMESERVER, "devicemanager", domainName, FetchMode.EAGER));
-			System.out.println(TestUtils.getStringFromJAXB(container));
+			logger.info(TestUtils.getStringFromJAXB(container));
+			
+			//Ensure something is in container
+			assertTrue(!container.getDeviceManagers().isEmpty());
+			
+			DeviceManager manager = container.getDeviceManagers().get(0);
+			
+			//Make sure properties exist
+			assertTrue(!manager.getProperties().isEmpty());
 		} catch (Exception e) {
 			fail("Test failure: "+e.getMessage());
 		}

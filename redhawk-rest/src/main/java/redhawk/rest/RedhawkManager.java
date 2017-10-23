@@ -737,6 +737,7 @@ public class RedhawkManager {
 		case "devicemanager": {
 			RedhawkDeviceManager devMgr = internalGet(redhawk, type, location);
 			properties = devMgr.getProperties();
+			propConfig = devMgr.getPropertyConfiguration();
 			break;
 		}
 		case "component": {

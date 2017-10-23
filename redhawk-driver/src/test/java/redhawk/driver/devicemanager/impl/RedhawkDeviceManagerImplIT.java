@@ -20,14 +20,29 @@
 package redhawk.driver.devicemanager.impl;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.List;
+
+import javax.xml.bind.JAXBException;
+
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 import redhawk.driver.devicemanager.RedhawkDeviceManager;
 import redhawk.driver.domain.RedhawkDomainManager;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.driver.properties.RedhawkSimple;
+import redhawk.driver.xml.ScaXmlProcessor;
+import redhawk.driver.xml.model.sca.dcd.Deviceconfiguration;
+import redhawk.driver.xml.model.sca.dmd.Domainmanagerconfiguration;
+import redhawk.driver.xml.model.sca.prf.Properties;
+import redhawk.driver.xml.model.sca.spd.Softpkg;
 import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkDeviceManagerImplIT extends RedhawkTestBase {
@@ -71,6 +86,39 @@ public class RedhawkDeviceManagerImplIT extends RedhawkTestBase {
 			assertNotNull(devMgr.deviceConfigurationProfile());
 			assertNotNull(devMgr.getComponentImplemantation());
 		} catch (MultipleResourceException | CORBAException e) {
+			fail("Test failure "+e.getMessage());
+		}
+	}
+	
+	
+	@Test
+	public void testGetDeviceManagerProperties() {
+		try {
+			RedhawkDeviceManager devMgr = driver.getDomain().getDeviceManagers().get(0);
+
+			assertNotNull(devMgr.getProperties());
+			
+			//TODO: Check with CF team make sure this is a safe assumption
+			assertTrue(!devMgr.getProperties().isEmpty());
+		} catch (MultipleResourceException | CORBAException e) {
+			fail("Test failure "+e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testGetDeviceManagerPropertyConfiguration() {
+		try {
+			RedhawkDeviceManager devMgr = driver.getDomain().getDeviceManagers().get(0);
+			
+			//Test retrieving the default configuration file 
+			assertNotNull(devMgr.getPropertyConfiguration());
+			
+			//Test getting the three known profiles
+			assertNotNull(devMgr.getPropertyConfiguration("Linux.armv7l"));
+			assertNotNull(devMgr.getPropertyConfiguration("Linux.x86_64"));
+			assertNotNull(devMgr.getPropertyConfiguration("Linux.x86"));
+		} catch (MultipleResourceException | CORBAException | ResourceNotFoundException e) {
+			e.printStackTrace();
 			fail("Test failure "+e.getMessage());
 		}
 	}

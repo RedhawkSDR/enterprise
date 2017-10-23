@@ -50,5 +50,10 @@ public class RedhawkDeviceManagerResourceIT extends RedhawkResourceTestBase{
 		target = client.target(baseURI+"/"+domainName+"/devicemanagers/"+container.getDeviceManagers().get(0).getLabel());
 		response = target.request().accept(MediaType.APPLICATION_XML).get();
 		assertEquals(200, response.getStatus());		
+	
+		//Get a specific device managers properties
+		target = client.target(baseURI+"/"+domainName+"/devicemanagers/"+container.getDeviceManagers().get(0).getLabel()+"/properties");
+		response = target.request().accept(MediaType.APPLICATION_XML).get();
+		assertEquals(200, response.getStatus());	
 	}
 }

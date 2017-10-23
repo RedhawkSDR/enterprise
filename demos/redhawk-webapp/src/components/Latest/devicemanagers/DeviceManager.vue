@@ -2,7 +2,7 @@
 <div class="content">
   <div class="container-fluid">
     <div class="row">
-
+      <devicetable :devices="devicemanager.devices" />
     </div>
     <div class="row">
       <properties
@@ -16,11 +16,12 @@
 
 <script>
 import Properties from '../properties/Properties.vue'
+import DeviceTable from './components/DeviceTable.vue'
 
 export default {
   name: 'devicemanager',
-  mounted(){
-    this.$store.dispatch('selectDeviceManager', this.$route.params.devicemanagerName)
+  created(){
+    this.$store.dispatch('selectDeviceManager', this.$route.params.devicemanagerLabel)
   },
   computed: {
     devicemanager(){
@@ -28,7 +29,8 @@ export default {
     }
   },
   components: {
-    'properties' : Properties
+    'properties' : Properties,
+    'devicetable' : DeviceTable
   }
 }
 </script>

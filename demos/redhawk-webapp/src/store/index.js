@@ -23,6 +23,17 @@ const state = {
     devices: [],
     properties: []
   },
+  device: {
+    identifier: null,
+    label: null,
+    started: false,
+    adminState: null,
+    usageState: null,
+    operationState : null,
+    implementation: '',
+    properties: [],
+    ports: []
+  },
   applications: [],
   application: {
     identifier: null,

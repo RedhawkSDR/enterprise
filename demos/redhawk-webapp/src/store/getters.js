@@ -20,6 +20,7 @@ export const domainProperties = state => state.domain.properties
 //device managers
 export const devicemanagers = state => state.devicemanagers
 export const devicemanager = state => state.devicemanager
+export const device = state => state.device
 
 //Previous Exports
 export const domainConfigs = state => state.domainConfigs

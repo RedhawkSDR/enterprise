@@ -217,6 +217,21 @@ export const selectDeviceManager = ({commit, getters}, deviceManagerName) => {
     console.log(error)
   })
 }
+
+export const selectDevice = ({getters, commit}, device) => {
+  console.log(device)
+  var componentURL = getDomainBaseURL(getters)+'/devicemanagers/'+device.devicemanagerLabel+
+    '/devices/'+device.label+'.json'
+
+  axios.get(componentURL)
+  .then(function(response){
+    commit('selectDevice', response.data)
+  })
+  .catch(function(error){
+    console.log("ERROR "+error);
+  })
+}
+
 //End of latest actions
 
 //Actions for editting domain configuration info.

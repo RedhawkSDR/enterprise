@@ -551,7 +551,15 @@ public class DomainConverter {
 		device.setOperationState(obj.operationalState());
 		device.setUsageState(obj.usageState());
 		device.setImplementation(obj.getImplementation());
-
+		
+		//
+		try {
+			device.setPorts(obj.getPorts().parallelStream().map(this::convertPort).collect(Collectors.toList()));
+		} catch (ResourceNotFoundException e1) {
+			//device.setPorts(new ArrayList<>());
+			logger.error("Unable to get ports from device"+e1.getMessage());
+		}
+		
 		if (fetchMode.equals(FetchMode.EAGER)) {
 			try {
 				device.setProperties(convertProperties(obj.getProperties(), obj.getPropertyConfiguration()));

@@ -24,6 +24,9 @@ import DeviceManagers from '@/components/devicemanagers/DeviceManagers'
 import DeviceManager from '@/components/devicemanagers/DeviceManager'
 import Device from '@/components/device/Device'
 
+//Port
+import Port from '@/components/port/Port'
+
 
 Vue.use(Router)
 
@@ -82,6 +85,11 @@ export default new Router({
               path: ':applicationName/components/:componentName',
               name: 'Component',
               component: Component
+            },
+            {
+              path: ':applicationName/components/:componentName/ports/:portName',
+              name: 'Port',
+              component: Port
             }
           ]
         },
@@ -106,11 +114,11 @@ export default new Router({
               name: 'Device',
               component: Device
             },
-            /*{
+            {
               path: ':devicemanagerLabel/devices/:deviceLabel/ports/:portName',
               name: 'Port',
               component: Port
-            }*/
+            }
           ]
         }
       ]

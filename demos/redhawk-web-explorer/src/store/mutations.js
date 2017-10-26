@@ -41,3 +41,23 @@ export const setNameServer = (state, value) => {
 export const selectWaveform = (state, value) => {
   state.waveforms.waveformToLaunch = value
 }
+
+export const selectPort = (state, value) => {
+  state.port.name = value.name
+  state.port.type = value.type
+  state.port.repId = value.repId
+
+  if(value.connectionIds)
+    state.port.connectionIds = value.connectionIds
+}
+
+export const setPortWSURL = (state, value) => {
+  //Update WS Base URL
+  var temp = state.configuration.wsBaseURL+state.configuration.nameServer+'/domains/'+state.configuration.domainName
+
+  if(value.type=='Component'){
+    state.port.wsURL=temp+'/applications/'+value.applicationName+'/components/'+value.componentName+'/ports/'+value.name
+  }else{
+    state.port.wsURL=temp+'/devicemanagers/'+value.devicemanagerLabel+'/devices/'+value.deviceLabel+'/ports/'+value.name
+  }
+}

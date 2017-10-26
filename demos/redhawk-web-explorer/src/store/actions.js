@@ -210,3 +210,25 @@ export const selectDevice = ({getters, commit}, device) => {
     console.log("ERROR "+error);
   })
 }
+
+export const selectPort = ({getters, commit}, port) => {
+  var portURL;
+  if(port.type=="Component"){
+    portURL = getDomainBaseURL(getters)+'/applications/'+port.applicationName+
+      '/components/'+port.componentName+'/ports/'+port.name+'.json'
+  }else{
+    portURL = getDomainBaseURL(getters)+'/devicemanagers/'+port.devicemanagerLabel+
+      '/devices/'+port.deviceLabel+'/ports/'+port.name+'.json'
+  }
+
+  axios.get(portURL)
+  .then(function(response){
+    console.log("Queried!!!!")
+    commit('selectPort', response.data)
+  })
+  .catch(function(error){
+    console.log("ERROR "+error);
+  })
+}
+
+export const setPortWSURL = ({commit}, value) => commit('setPortWSURL', value)

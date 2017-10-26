@@ -3,6 +3,12 @@
 		<v-card>
 			<v-toolbar card color="red" prominent>
 				<v-toolbar-title class="body-2 black--text">{{ domainName }} Applications</v-toolbar-title>
+				<v-spacer></v-spacer>
+				<v-btn
+					:to="'/waveforms'"
+					fab color="blue">
+					<v-icon>add</v-icon>
+				</v-btn>
 			</v-toolbar>
 			<v-divider></v-divider>
 			<v-list>

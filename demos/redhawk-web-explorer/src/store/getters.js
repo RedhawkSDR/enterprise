@@ -1,6 +1,7 @@
 //
 //Configuration Getters
 export const baseURL = state => state.configuration.baseURL
+export const wsBaseURL = state => state.configuration.wsBaseURL
 export const domainName = state => state.configuration.domainName
 export const nameServer = state => state.configuration.nameServer
 
@@ -23,3 +24,7 @@ export const domainProperties = state => state.domain.properties
 export const devicemanagers = state => state.devicemanagers
 export const devicemanager = state => state.devicemanager
 export const device = state => state.device
+
+//Port
+export const port = state => state.port
+export const portWSURL = state => state.port.wsURL

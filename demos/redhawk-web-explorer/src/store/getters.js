@@ -2,8 +2,11 @@
 //Configuration Getters
 export const baseURL = state => state.configuration.baseURL
 export const wsBaseURL = state => state.configuration.wsBaseURL
-export const domainName = state => state.configuration.domainName
-export const nameServer = state => state.configuration.nameServer
+
+//dialog
+export const showDialog = state => state.dialog.show
+export const dialogTitle = state => state.dialog.title
+export const dialogMessage = state => state.dialog.message
 
 //Waveform getters
 export const waveformcatalog = state => state.waveforms.catalog
@@ -18,6 +21,8 @@ export const applicationName = state => state.application.name
 export const component = state => state.component
 
 //domain
+export const domainName = state => state.domain.domainName
+export const nameServer = state => state.domain.nameServer
 export const domainProperties = state => state.domain.properties
 
 //device managers

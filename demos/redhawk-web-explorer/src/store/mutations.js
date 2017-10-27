@@ -31,11 +31,28 @@ export const selectDevice = (state, device) =>{
 }
 
 export const setDomainName = (state, value) => {
-  state.configuration.domainName = value
+  state.domain.domainName = value
 }
 
 export const setNameServer = (state, value) => {
-  state.configuration.nameServer = value
+  state.domain.nameServer = value
+}
+
+export const showDialog = (state, value) => {
+  state.dialog.show = value
+}
+
+export const setDialog = (state, value) => {
+  state.dialog.title = value.title
+  state.dialog.message = value.message
+}
+
+export const setBaseURL = (state, value) => {
+  state.configuration.baseURL = value
+}
+
+export const setWsBaseURL = (state, value) => {
+  state.configuration.wsBaseURL = value
 }
 
 export const selectWaveform = (state, value) => {
@@ -53,7 +70,7 @@ export const selectPort = (state, value) => {
 
 export const setPortWSURL = (state, value) => {
   //Update WS Base URL
-  var temp = state.configuration.wsBaseURL+state.configuration.nameServer+'/domains/'+state.configuration.domainName
+  var temp = state.configuration.wsBaseURL+state.domain.nameServer+'/domains/'+state.domain.domainName
 
   if(value.type=='Component'){
     state.port.wsURL=temp+'/applications/'+value.applicationName+'/components/'+value.componentName+'/ports/'+value.name

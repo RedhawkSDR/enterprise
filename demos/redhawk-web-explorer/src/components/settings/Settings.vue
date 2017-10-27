@@ -2,7 +2,7 @@
 <v-flex>
 	<v-card>
           <v-toolbar card color="red" prominent>
-            <v-toolbar-title class="body-2 black--text">REDHAWK Domain</v-toolbar-title>
+            <v-toolbar-title class="body-2 black--text">REDHAWK Web Explorer Settings</v-toolbar-title>
           </v-toolbar>
           <v-divider></v-divider>
 		<v-card-text>
@@ -10,13 +10,13 @@
 				<v-flex>
 					<v-text-field
 					name="input-1"
-					label="Domain Name"
-					v-model="domainName"
+					label="Base URL for REST"
+					v-model="baseURL"
 					></v-text-field>
           <v-text-field
           name="input-1"
-          label="Name Server Address"
-          v-model="nameServer"
+          label="Base URL for Websockets"
+          v-model="wsBaseURL"
           ></v-text-field>
 				</v-flex>
 			</v-layout>
@@ -29,20 +29,20 @@
 	export default {
 		name: 'settings',
     computed: {
-			domainName: {
+			baseURL: {
 				get(){
-					return this.$store.getters.domainName
+					return this.$store.getters.baseURL
 				},
 				set(value){
-					this.$store.dispatch('setDomainName', value)
+					this.$store.dispatch('setBaseURL', value)
 				}
 			},
-      nameServer:{
+      wsBaseURL:{
         get(){
-          return this.$store.getters.nameServer
+          return this.$store.getters.wsBaseURL
         },
         set(value){
-          this.$store.dispatch('setNameServer', value)
+          this.$store.dispatch('setWsBaseURL', value)
         }
       }
 		}

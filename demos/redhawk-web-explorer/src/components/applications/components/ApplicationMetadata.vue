@@ -7,18 +7,29 @@
       <v-divider></v-divider>
       <v-card-text>
         <h6><b>Identifier:</b>{{ application.identifier }}</h6>
+        <h6><b>Started:</b>{{ application.started }}</h6>
         <h6><b>Aware:</b>{{ application.aware }}</h6>
       </v-card-text>
       <v-card-actions>
-        <v-btn fab color="green">
-          <v-icon>play_arrow</v-icon>
-        </v-btn>
-        <v-btn fab color="red">
-          <v-icon>stop</v-icon>
-        </v-btn>
-        <v-btn fab color="blue">
-          <v-icon>delete</v-icon>
-        </v-btn>
+        <v-flex justify-center>
+          <v-btn
+            @click="play()"
+            :disabled="application.started"
+            fab small color="green">
+            <v-icon>play_arrow</v-icon>
+          </v-btn>
+          <v-btn
+            @click="stop()"
+            :disabled="!application.started"
+            fab small color="red">
+            <v-icon>stop</v-icon>
+          </v-btn>
+          <v-btn
+            @click="release()"
+            fab small color="blue">
+            <v-icon>delete</v-icon>
+          </v-btn>
+        </v-flex>
       </v-card-actions>
     </v-card>
   </v-flex>
@@ -27,10 +38,12 @@
 <script>
 export default {
   name: 'applicationMetaData',
-  props: ['application'],
   computed: {
     domainName(){
       return this.$store.getters.domainName
+    },
+    application(){
+      return this.$store.getters.application
     }
   },
   methods: {

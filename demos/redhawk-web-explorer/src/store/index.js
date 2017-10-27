@@ -10,10 +10,15 @@ const state = {
   configuration: {
     baseURL: 'http://127.0.0.1:8181/rest/redhawk/',
     wsBaseURL: 'ws://127.0.0.1:8181/ws/redhawk/',
-    domainName: 'REDHAWK_DEV',
-    nameServer: '127.0.0.1:2809',
+  },
+  dialog : {
+    show: false,
+    title: null,
+    message : null
   },
   domain: {
+    domainName: 'REDHAWK_DEV',
+    nameServer: '127.0.0.1:2809',
     properties : []
   },
   waveforms: {

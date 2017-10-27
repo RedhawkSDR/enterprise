@@ -1,16 +1,57 @@
 <template>
-  <v-flex xs12>
-  	<v-card>
+  <v-container grid-list-md text-xs-center>
+    <v-layout row wrap>
       <v-toolbar card color="red" prominent>
         <v-toolbar-title class="body-2 black--text">{{ portName }} Plot</v-toolbar-title>
+        <v-spacer/>
+        <v-btn
+        @click="showPlotMenu()"
+        icon>
+          <v-icon>menu</v-icon>
+        </v-btn>
       </v-toolbar>
       <v-divider></v-divider>
-      <v-card-text>
-        <v-layout row wrap>
-          <v-flex xs8 id="plot">
+      <v-flex>
+        <v-card>
+          <v-card-media>
+            <v-flex xs10 id="plot">
 
-          </v-flex>
-          <v-flex xs3>
+            </v-flex>
+          </v-card-media>
+          <v-card-actions>
+            <v-layout row wrap>
+              <v-flex xs12>
+               <v-btn-toggle mandatory v-model="toggle_exclusive">
+                 <v-btn>
+                   Real Time
+                 </v-btn>
+                 <v-btn>
+                   Raster
+                 </v-btn>
+                 <v-btn flat>
+                   FFT
+                 </v-btn>
+               </v-btn-toggle>
+             </v-flex>
+             <v-flex xs12 class="py-2">
+               <v-btn
+                 :disabled="connected"
+                 @click="plotData()" color="green">
+                 Connect
+               </v-btn>
+               <v-btn
+                 :disabled="!connected"
+                 @click="stopPlot()" color="red">
+                 Disconnect
+               </v-btn>
+             </v-flex>
+            </v-layout>
+          </v-card-actions>
+        </v-card>
+      </v-flex>
+      <v-flex xs3 v-if="showMenu">
+        <v-card>
+          <v-card-text>
             <v-select
               v-bind:items="cmodes"
               v-model="cmode"
@@ -34,42 +75,11 @@
               dark
               @input="updateColorMap(colormap)"
             ></v-select>
-          </v-flex>
-        </v-layout>
-      </v-card-text>
-      <v-card-action>
-        <v-layout row wrap>
-          <v-flex xs12 sm6 class="py-2">
-           <v-btn-toggle v-model="toggle_exclusive">
-             <v-btn>
-               Real Time
-             </v-btn>
-             <v-btn>
-               Raster
-             </v-btn>
-             <v-btn flat>
-               FFT
-             </v-btn>
-           </v-btn-toggle>
-         </v-flex>
-        </v-layout>
-        <v-layout row>
-          <v-flex xs12 sm6 class="py-2">
-            <v-btn
-              :disabled="connected"
-              @click="plotData()" color="green">
-              Connect
-            </v-btn>
-            <v-btn
-              :disabled="!connected"
-              @click="stopPlot()" color="red">
-              Disconnect
-            </v-btn>
-          </v-flex>
-        </v-layout>
-      </v-card-action>
-    </v-card>
-  </v-flex>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -92,6 +102,7 @@ export default {
     return {
       plot: null,
       websocket : null,
+      showMenu : true,
       sri : {},
       toggle_exclusive: 0,
       connected: false,
@@ -170,6 +181,10 @@ export default {
     }
   },
   methods: {
+    showPlotMenu(){
+      console.log("Made it "+this.showMenu)
+      this.showMenu = !this.showMenu
+    },
     updateCmode(value){
       this.plot.change_settings({
         cmode : value

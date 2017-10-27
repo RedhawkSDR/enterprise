@@ -32,7 +32,7 @@
           {{ props.item.processId }}
         </td>
         <td>
-          {{ props.item.deviceIdentifier }}
+          <router-link :to="{ path: '/devicemanagers/'+props.item.deviceIdentifier}">{{ props.item.deviceIdentifier }}</router-link>
         </td>
       </template>
 			<template slot="pageText" scope="{ pageStart, pageStop }">

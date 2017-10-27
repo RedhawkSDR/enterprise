@@ -39,6 +39,8 @@ function getDomainBaseURL(getters){
   return getters.baseURL+'/'+getters.nameServer+'/domains/'+getters.domainName
 }
 //End of Helper functions
+export const setBaseURL = ({commit}, value) =>  commit('setBaseURL', value)
+export const setWsBaseURL = ({commit}, value) =>  commit('setWsBaseURL', value)
 export const setDomainName = ({commit}, value) =>  commit('setDomainName', value)
 export const setNameServer = ({commit}, value) =>  commit('setNameServer', value)
 export const selectWaveform = ({commit}, value) => commit('selectWaveform', value)
@@ -65,6 +67,11 @@ export const launchChoosenWaveform = ({ commit, getters }, waveformToLaunch) => 
   })
   .then(function(response){
     console.log("Some indication that launch worked so you can redirect")
+    var obj = new Object();
+    obj.message = "SUCCESS"
+    obj.title = "LAUNCH WAVEFORM"
+    commit("setDialog", obj)
+    commit("showDialog", true)
   })
   .catch(function(error){
     console.log("Error")
@@ -101,6 +108,15 @@ export const controlApplication = ({commit, getters, store}, controlInfo) => {
     axios.get(applicationsURL)
     .then(function(response){
       commit('setApplications', response.data.applications)
+
+      //Update passed in application information from applications
+      axios.get(applicationControlURL+'.json')
+      .then(function(response){
+        commit('selectApplication', response.data)
+      })
+      .catch(function(error){
+        console.log(error)
+      })
     })
     .catch(function(error){
       console.log(error)
@@ -167,7 +183,14 @@ export const selectDomainProperties = ({getters, commit}, domainName) => {
     commit('selectDomainProperties', response.data.properties)
   })
   .catch(function(error){
-    console.log("ERROR "+error)
+    //console.log(error)
+    commit('selectDomainProperties', [])
+    var obj = new Object();
+    obj.message = "Error connecting to NameServer with supplied url or Domain by supplied domain name. Check your domain manager properties."
+    +" If those are correct then you check that you can connect to the Domain from the box your running this web application on."
+    obj.title = "ERROR"
+    commit("setDialog", obj)
+    commit("showDialog", true)
   })
 }
 
@@ -232,3 +255,4 @@ export const selectPort = ({getters, commit}, port) => {
 }
 
 export const setPortWSURL = ({commit}, value) => commit('setPortWSURL', value)
+export const showDialog = ({commit}, value) => commit('showDialog', value)

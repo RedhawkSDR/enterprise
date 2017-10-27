@@ -1,48 +1,18 @@
 <template>
-<v-flex>
-    <properties
-      :id="domainName"
-      :properties="properties"
-      />
-</v-flex>
-<!--
- <div class="card-header"
-    :data-background="bgColor">
-    <h4 class="title">Properties</h4>
-    <p class="category">Properties for {{ id }}</p>
-  </div>
-  <div class="card-content">
-    <md-table-card>
-      <md-table>
-        <md-table-body>
-          <md-table-row
-            v-for="(property, index) in properties"
-            v-bind:key="property"
-          >
-            <md-table-cell v-if="property.type=='simple'">
-              <simple :property="property" />
-            </md-table-cell>
-            <md-table-cell v-if="property.type=='struct'">
-              <struct :property="property" />
-            </md-table-cell>
-          </md-table-row>
-        </md-table-body>
-      </md-table>
-      <md-table-pagination
-      md-size="5"
-      :md-total="properties.length"
-      md-page="1"
-      md-separator="of"
-      :md-page-options="[5, 10, 25, 50]"
-      @pagination="onPagination"></md-table-pagination>
-    </md-table-card>
-  </div>
-</div>
--->
+  <v-container grid-list-md text-xs-center>
+    <v-layout row wrap>
+      <settings />
+      <properties
+        :id="domainName"
+        :properties="properties"
+        />
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
 import Properties from '../properties/Properties.vue'
+import Settings from './components/Settings.vue'
 
 export default {
   name: 'domain',
@@ -58,7 +28,8 @@ export default {
     }
   },
   components: {
-    'properties' : Properties
+    'properties' : Properties,
+    'settings' : Settings
   }
 }
 </script>

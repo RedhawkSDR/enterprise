@@ -37,6 +37,7 @@
             <v-list-tile-title>Domain</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        <!--
         <v-list-tile
         :to="'/waveforms'">
           <v-list-tile-action>
@@ -46,6 +47,7 @@
             <v-list-tile-title>Waveforms</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
+        -->
         <v-list-tile
         :to="'/applications'">
           <v-list-tile-action>

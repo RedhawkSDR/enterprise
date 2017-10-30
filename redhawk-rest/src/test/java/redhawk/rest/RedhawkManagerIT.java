@@ -24,6 +24,7 @@ import redhawk.rest.model.ApplicationContainer;
 import redhawk.rest.model.Domain;
 import redhawk.rest.model.ExternalPort;
 import redhawk.rest.model.FetchMode;
+import redhawk.rest.model.Port;
 import redhawk.rest.model.PropertyContainer;
 import redhawk.rest.utils.TestUtils;
 import redhawk.testutils.RedhawkTestBase;
@@ -139,6 +140,16 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 			logger.info(xml);
 		} catch (Exception e) {
 			fail("Test failure "+e.getLocalizedMessage());
+		}
+	}
+	
+	@Test
+	public void testGetDevicePort() {
+		try {
+			Port port = manager.get(nameServer, "deviceport", "REDHAWK_DEV/DevMgr_uwk-88000h/GPP_uwk-88000h/MessageEvent_out");
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Unabled to get device port "+e.getMessage());
 		}
 	}
 	

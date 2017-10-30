@@ -668,6 +668,8 @@ public class DomainConverter {
 			return convertComponent((RedhawkComponent) object);
 		case "port":
 			return convertPort((RedhawkPort) object);
+		case "deviceport":
+			return convertPort((RedhawkPort) object);
 		case "applicationport":
 			return convertExternalPort((RedhawkPort) object);
 		case "devicemanager":

@@ -5,6 +5,7 @@
         <properties
           :id="devicemanager.label"
           :properties="devicemanager.properties"
+          type="DeviceManager"
           />
       </v-layout>
     </v-container>

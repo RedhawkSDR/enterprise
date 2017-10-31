@@ -5,6 +5,7 @@
       <properties
         :id="domainName"
         :properties="properties"
+        type='Domain'
         />
     </v-layout>
   </v-container>

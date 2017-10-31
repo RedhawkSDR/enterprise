@@ -1,26 +1,17 @@
-<template>
-<td>
-  <v-edit-dialog
-            lazy
-          > {{ property }}
-            <v-text-field
-              slot="input"
-              label="Edit"
-              v-model="property.name"
-              single-line
-              counter
-              :rules="[max25chars]"
-            ></v-text-field>
-          </v-edit-dialog>
-</td>
+<template slot="items" scope="props">
+  <tr>
+    <td>
+      <div v-if="props.item.name">{{props.item.name}}</div>
+      <div v-else>{{props.item.id}}</div>
+    </td>
+    <td>
+      {{ props.item.value }}
+    </td>
+  </tr>
 </template>
 
 <script>
 export default {
-  name: 'simpleprop',
-  props: ['property'],
-  data(){
-
-  }
+  name: 'simpleeditor'
 }
 </script>

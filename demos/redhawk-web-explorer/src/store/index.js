@@ -42,7 +42,11 @@ const state = {
     operationState : null,
     implementation: '',
     properties: [],
-    ports: []
+    ports: [],
+  },
+  deviceTuners: {
+    used: [],
+    unused: []
   },
   applications: [],
   application: {

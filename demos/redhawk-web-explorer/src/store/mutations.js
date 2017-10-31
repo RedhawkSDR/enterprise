@@ -78,3 +78,8 @@ export const setPortWSURL = (state, value) => {
     state.port.wsURL=temp+'/devicemanagers/'+value.devicemanagerLabel+'/devices/'+value.deviceLabel+'/ports/'+value.name
   }
 }
+
+export const setDeviceTuners = (state, value) => {
+  state.deviceTuners.used = value.used
+  state.deviceTuners.unused = value.unused
+}

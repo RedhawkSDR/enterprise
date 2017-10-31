@@ -28,7 +28,13 @@ export const domainProperties = state => state.domain.properties
 //device managers
 export const devicemanagers = state => state.devicemanagers
 export const devicemanager = state => state.devicemanager
+
+//Device
 export const device = state => state.device
+
+//Tuners
+export const usedTuners = state => state.deviceTuners.used
+export const unusedTuners = state => state.deviceTuners.unused
 
 //Port
 export const port = state => state.port

@@ -214,7 +214,7 @@ export default {
     },
     plotFFT(){
       //console.log("Made it to plotFFT")
-      var osc1 = new Oscillator(DSP.SINEWAVE, 440, 1, 2048, 44100);
+      var osc1 = new Oscillator(DSP.SINEWAVE, 440, 1, 1024, 44100);
       var hann1 = new WindowFunction(DSP.HANN)
       var fft = new FFT(1024, 44100);
       //osc1.generate();

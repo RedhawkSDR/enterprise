@@ -254,5 +254,113 @@ export const selectPort = ({getters, commit}, port) => {
   })
 }
 
+export const updateProperty = ({getters, commit}, property) => {
+  var url;
+  if(property.type=='Domain'){
+    url = getDomainBaseURL(getters)+'/properties/'+property.property.id
+  }else if(property.type=='Application'){
+    url = getDomainBaseURL(getters)+'/applications/'+getters.applicationName+'/properties/'+property.property.id
+  }else if(property.type=='Component'){
+    url = getDomainBaseURL(getters)+'/applications/'+getters.applicationName+'/components/'+getters.component.name
+      +'/properties/'+property.property.id
+  }else if(property.type=='DeviceManager'){
+    url = getDomainBaseURL(getters)+'/devicemanagers/'+getters.devicemanager.label+'/properties/'+property.property.id
+  }else if(property.type=='Device'){
+    url = getDomainBaseURL(getters)+'/devicemanagers/'+getters.devicemanager.label+'/devices/'+getters.device.label
+      +'/properties/'+property.property.id
+  }
+
+  axios.put(url, JSON.stringify(property.property),
+  {
+    headers: {
+      'Content-Type' : 'application/json'
+    }
+  })
+  .then(function(response){
+    console.log(response.data)
+  })
+  .catch(function(error){
+    console.log(error)
+  })
+}
+
+export const setDeviceTuners = ({getters, commit}) => {
+  var usedTunerURL = getDomainBaseURL(getters)+'/devicemanagers/'+getters.devicemanager.label+'/devices/'+getters.device.label+'/tuners/USED.json'
+  var unusedTunerURL = getDomainBaseURL(getters)+'/devicemanagers/'+getters.devicemanager.label+'/devices/'+getters.device.label+'/tuners/UNUSED.json'
+
+  axios.all([axios.get(usedTunerURL), axios.get(unusedTunerURL)])
+  .then(axios.spread(function(usedTuners, unusedTuners){
+    var obj = new Object();
+    obj.used = usedTuners.data
+    obj.unused = unusedTuners.data
+
+    commit('setDeviceTuners', obj)
+  }))
+  .catch(function(error){
+    console.log(error)
+  })
+}
+
+export const allocate = ({getters, commit}, allocation) => {
+  //Get allocation JSON for post
+  var allocationJSON = getAllocationJson(allocation)
+
+  var allocateURL =  getDomainBaseURL(getters)+'/devicemanagers/'+getters.devicemanager.label+'/devices/'+getters.device.label+'/allocate'
+  var usedTunerURL = getDomainBaseURL(getters)+'/devicemanagers/'+getters.devicemanager.label+'/devices/'+getters.device.label+'/tuners/USED.json'
+  var unusedTunerURL = getDomainBaseURL(getters)+'/devicemanagers/'+getters.devicemanager.label+'/devices/'+getters.device.label+'/tuners/UNUSED.json'
+
+  axios.post(allocateURL, allocationJSON, {
+    headers: {
+      'Content-Type':'application/json'
+    }
+  })
+  .then(function(response){
+    axios.all([axios.get(usedTunerURL), axios.get(unusedTunerURL)])
+    .then(axios.spread(function(usedTuners, unusedTuners){
+      var obj = new Object();
+      obj.used = usedTuners.data
+      obj.unused = unusedTuners.data
+
+      commit('setDeviceTuners', obj)
+    }))
+    .catch(function(error){
+      console.log(error)
+    })
+  })
+  .catch(function(error){
+    //TODO: Handle error
+    console.log(error)
+  })
+}
+
+export const deallocate = ({ commit, getters }, deallocate) => {
+  var deallocateURL =  getDomainBaseURL(getters)+'/devicemanagers/'+getters.devicemanager.label+'/devices/'+getters.device.label+'/deallocate'
+  var usedTunerURL = getDomainBaseURL(getters)+'/devicemanagers/'+getters.devicemanager.label+'/devices/'+getters.device.label+'/tuners/USED.json'
+  var unusedTunerURL = getDomainBaseURL(getters)+'/devicemanagers/'+getters.devicemanager.label+'/devices/'+getters.device.label+'/tuners/UNUSED.json'
+
+  axios.post(deallocateURL, deallocate, {
+    headers: {
+      'Content-Type':'application/json'
+    }
+  })
+  .then(function(response){
+    axios.all([axios.get(usedTunerURL), axios.get(unusedTunerURL)])
+    .then(axios.spread(function(usedTuners, unusedTuners){
+      var obj = new Object();
+      obj.used = usedTuners.data
+      obj.unused = unusedTuners.data
+
+      commit('setDeviceTuners', obj)
+    }))
+    .catch(function(error){
+      console.log(error)
+    })
+  })
+  .catch(function(error){
+    //TODO: Handle error
+    console.log(error)
+  })
+}
+
 export const setPortWSURL = ({commit}, value) => commit('setPortWSURL', value)
 export const showDialog = ({commit}, value) => commit('showDialog', value)

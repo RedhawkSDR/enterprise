@@ -6,6 +6,7 @@
         <properties
           :id="application.name"
           :properties="application.properties"
+          type="Application"
           />
   		</v-layout>
   	</v-container>

@@ -36,6 +36,7 @@ import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
 import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.driver.port.RedhawkPort;
+import redhawk.driver.properties.RedhawkSimple;
 import redhawk.testutils.RedhawkDeviceTestBase;
 
 public class RedhawkDeviceImplIT extends RedhawkDeviceTestBase {
@@ -181,11 +182,26 @@ public class RedhawkDeviceImplIT extends RedhawkDeviceTestBase {
 			List<RedhawkPort> ports = device.getPorts();
 			assertTrue(!ports.isEmpty());
 			
-			System.out.println("HELLO!!!!!!!!! "+device.getCorbaObj().softwareProfile());
 			for(RedhawkPort port : ports) {
 				assertNotNull(device.getPort(port.getName()));
 			}
 		} catch (MultipleResourceException | CORBAException | ResourceNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void testSettingSimpleDeviceProperty() {
+		try {
+			deviceManager = driver.getDomain().getDeviceManagers().get(0);
+		
+			RedhawkDevice device = deviceManager.getDevices().get(0);
+			
+			RedhawkSimple simple = device.getProperty("loadCapacity");
+			System.out.println(simple);
+			device.setProperty("", simple.getValue());
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

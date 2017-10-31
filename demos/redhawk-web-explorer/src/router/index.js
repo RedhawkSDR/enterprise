@@ -23,6 +23,9 @@ import DeviceManagersView from '@/components/devicemanagers/DeviceManagersView'
 import DeviceManagers from '@/components/devicemanagers/DeviceManagers'
 import DeviceManager from '@/components/devicemanagers/DeviceManager'
 import Device from '@/components/device/Device'
+import DeviceAllocation from '@/components/device/components/Allocate'
+import DeviceDeallocation from '@/components/device/components/Deallocate'
+
 
 //Port
 import Port from '@/components/port/Port'
@@ -113,6 +116,16 @@ export default new Router({
               path: ':devicemanagerLabel/devices/:deviceLabel',
               name: 'Device',
               component: Device
+            },
+            {
+              path: ':devicemanagerLabel/devices/:deviceLabel/allocate',
+              name: 'Device Allocation',
+              component: DeviceAllocation
+            },
+            {
+              path: ':devicemanagerLabel/devices/:deviceLabel/deallocate',
+              name: 'Device Deallocation',
+              component: DeviceDeallocation
             },
             {
               path: ':devicemanagerLabel/devices/:deviceLabel/ports/:portName',

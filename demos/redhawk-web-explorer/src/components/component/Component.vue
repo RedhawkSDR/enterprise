@@ -6,6 +6,7 @@
         <properties
           :id="component.name"
           :properties="component.properties"
+          type="Component"
           />
   		</v-layout>
   	</v-container>

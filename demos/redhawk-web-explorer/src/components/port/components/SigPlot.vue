@@ -91,6 +91,16 @@ function getTypeArray(type, data){
     return new Float32Array(data)
   }else if(type=='IDL:BULKIO/dataShort:1.0'){
     return new Int16Array(data)
+  }else if(type=='IDL:BULKIO/dataOctet:1.0'){
+    return new Uint8Array(data)
+  }else if(type=='IDL:BULKIO/dataDouble:1.0'){
+    return new Float64Array(data)
+  }else if(type=='IDL:BULKIO/dataUshort:1.0'){
+    return new Uint16Array(data);
+  }else if(type=='IDL:BULKIO/dataLong:1.0'){
+    return new Int32Array(data);
+  }else if(type=='IDL:BULKIO/dataULong:1.0'){
+    return new UInt32Array(data);
   }else{
     return null;
   }

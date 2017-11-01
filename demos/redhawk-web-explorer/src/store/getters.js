@@ -39,3 +39,7 @@ export const unusedTuners = state => state.deviceTuners.unused
 //Port
 export const port = state => state.port
 export const portWSURL = state => state.port.wsURL
+
+//Event Channels
+export const eventchannels = state => state.eventchannels
+export const eventchannel = state => state.eventchannel

@@ -83,3 +83,17 @@ export const setDeviceTuners = (state, value) => {
   state.deviceTuners.used = value.used
   state.deviceTuners.unused = value.unused
 }
+
+export const setEventChannels = (state, value) => {
+  state.eventchannels = value
+}
+
+export const setEventChannel = (state, value) => {
+  state.eventchannel.name = value.name
+  state.eventchannel.registrantIds = value.registrantIds
+
+  //Set ws url
+  var wsURL = state.configuration.wsBaseURL+state.domain.nameServer+'/domains/'+state.domain.domainName+'/eventchannels/'+value.name
+  console.log(wsURL)
+  state.eventchannel.wsURL = wsURL
+}

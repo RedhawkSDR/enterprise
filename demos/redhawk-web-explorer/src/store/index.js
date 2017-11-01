@@ -75,6 +75,12 @@ const state = {
     repId: '',
     connectionIds: [],
     wsURL : ''
+  },
+  eventchannels: [],
+  eventchannel: {
+    name: '',
+    registrantIds : [],
+    wsURL : ''
   }
 }
 

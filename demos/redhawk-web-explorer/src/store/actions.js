@@ -362,5 +362,87 @@ export const deallocate = ({ commit, getters }, deallocate) => {
   })
 }
 
+export const getEventChannels = ({ commit, getters }) => {
+  var eventchannelsURL = getDomainBaseURL(getters)+'/eventchannels'
+
+  axios.get(eventchannelsURL)
+  .then(function(response){
+      commit('setEventChannels', response.data.eventChannels)
+  })
+  .catch(function(error){
+    console.log(error)
+  })
+}
+
+export const getEventChannel = ({commit, getters}, name) => {
+  var eventchannelURL = getDomainBaseURL(getters)+'/eventchannels/'+name
+
+  axios.get(eventchannelURL)
+  .then(function(response){
+      commit('setEventChannel', response.data)
+  })
+  .catch(function(error){
+    console.log(error)
+  })
+}
+
+export const deleteEventChannel = ({commit, getters}, name) => {
+  var eventchannelsURL = getDomainBaseURL(getters)+'/eventchannels'
+  var releaseEventChannelURL = getDomainBaseURL(getters)+'/eventchannels/'+name
+
+  axios.delete(releaseEventChannelURL)
+  .then(function(response){
+    axios.get(eventchannelsURL)
+    .then(function(response){
+        commit('setEventChannels', response.data.eventChannels)
+    })
+    .catch(function(error){
+      console.log(error)
+    })
+  })
+  .catch(function(error){
+    console.log(error)
+  })
+}
+
+export const createEventChannel = ({commit, getters}, name) => {
+  var eventchannelURL = getDomainBaseURL(getters)+'/eventchannels/'+name
+  var eventchannelsURL = getDomainBaseURL(getters)+'/eventchannels'
+
+  axios.put(eventchannelURL)
+  .then(function(response){
+    axios.get(eventchannelsURL)
+    .then(function(response){
+        commit('setEventChannels', response.data.eventChannels)
+    })
+    .catch(function(error){
+      console.log(error)
+    })
+  })
+  .catch(function(error){
+    console.log(error)
+  })
+}
+
+export const releaseRegistrant = ({ commit, getters }, registrantId) => {
+  var eventchannelURL = getDomainBaseURL(getters)+'/eventchannels/'+getters.eventchannel.name
+  var registrantURL = getDomainBaseURL(getters)+'/eventchannels/'+getters.eventchannel.name+'/registrant/'+registrantId
+
+  axios.delete(registrantURL)
+  .then(function(response){
+    axios.get(eventchannelURL)
+    .then(function(response){
+        commit('setEventChannel', response.data)
+    })
+    .catch(function(error){
+      console.log(error)
+    })
+  })
+  .catch(function(error){
+    console.log(error)
+  })
+}
+
+
 export const setPortWSURL = ({commit}, value) => commit('setPortWSURL', value)
 export const showDialog = ({commit}, value) => commit('showDialog', value)

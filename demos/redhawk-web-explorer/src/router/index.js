@@ -26,10 +26,14 @@ import Device from '@/components/device/Device'
 import DeviceAllocation from '@/components/device/components/Allocate'
 import DeviceDeallocation from '@/components/device/components/Deallocate'
 
-
 //Port
 import Port from '@/components/port/Port'
 
+//Event Channels
+import EventChannelsView from '@/components/eventchannel/EventChannelsView'
+import EventChannels from '@/components/eventchannel/EventChannels'
+import EventChannel from '@/components/eventchannel/EventChannel'
+import EventChannelCreator from '@/components/eventchannel/EventChannelCreator'
 
 Vue.use(Router)
 
@@ -95,6 +99,29 @@ export default new Router({
               component: Port
             }
           ]
+        },
+        {
+          path: 'eventchannels',
+          name: 'Event Channels',
+          component: EventChannelsView,
+          redirect: '/eventchannels',
+          children: [
+            {
+              path: '/',
+              name: 'Event Channels',
+              component: EventChannels
+            },
+            {
+              path: '/eventchannels/:eventchannelName',
+              name: 'Event Channel',
+              component: EventChannel
+            }
+          ]
+        },
+        {
+          path: 'eventchannelcreator',
+          name: 'Create Event Channel',
+          component : EventChannelCreator
         },
         {
           path: 'devicemanagers',

@@ -20,16 +20,24 @@
           </v-card-media>
           <v-card-actions>
             <v-layout row wrap>
-              <v-flex xs12>
+              <!--
+              <v-flex xs6 offset-xs3>
+                  <v-select
+                    v-bind:items="plots"
+                    v-model="e1"
+                    label="Plot"
+                    dark
+                    item-value="text"
+                    ></v-select>
+              </v-flex>
+              -->
+              <v-flex xs12 class="py-2">
                <v-btn-toggle mandatory v-model="toggle_exclusive">
                  <v-btn>
-                   Real Time
+                   Line
                  </v-btn>
                  <v-btn>
                    Raster
-                 </v-btn>
-                 <v-btn flat>
-                   FFT
                  </v-btn>
                </v-btn-toggle>
              </v-flex>
@@ -117,6 +125,9 @@ export default {
       sri : {},
       toggle_exclusive: 0,
       connected: false,
+      plots : [
+        {text : 'Time'},
+      ],
       cmode: { text: 'real' },
       cmodes: [
         {

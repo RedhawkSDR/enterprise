@@ -352,7 +352,10 @@ export default {
             }
           plot.overlay_pipe({
               type: 2000,
-              subsize: signalSubsize,
+              xdelta: sri.xdelta,
+              xunits: 'Frequency',
+              yunits: sri.xunits,
+              subsize: 1000,
               pipesize : 1000000
             });
         }else{
@@ -372,22 +375,22 @@ export default {
       }
 
       //Need to make sure inside of websocket method I still have access to plot
-      var plot = this.plot
       var sri = this.sri
       var port = this.port
       this.websocket = new WebSocket(this.wsURL)
       this.websocket.binaryType = 'arraybuffer'
 
+      this.plot.change_settings({
+        cmode : this.cmode.text,
+        autol: 5,
+      });
+
+      var plot = this.plot
       this.websocket.onopen = function(evt){
         console.log("What do we have here ")
         console.log(evt)
 
         var data_layer = plot.get_layer(0);
-        plot.change_settings({
-          cmode : 3,
-          autol: 5,
-          all: true
-        });
 
         /*
         * Adding in onmessage and onclose logic
@@ -412,7 +415,8 @@ export default {
             */
             overlay_for_plot = plot.overlay_array(null, {
               xdelta: sri.xdelta,
-              xunits: sri.xunits,
+              ydelta: sri.ydelta,
+              xunits: 3,
               yunits: sri.yunits,
               subsize: sri.subsize
             })

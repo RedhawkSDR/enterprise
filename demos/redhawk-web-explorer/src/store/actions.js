@@ -156,6 +156,8 @@ export const releaseApplication = ({getters, commit}, appName) => {
     axios.get(applicationsURL)
     .then(function(response){
       commit('setApplications', response.data.applications)
+
+      router.push('/applications')
     })
     .catch(function(error){
       console.log(error)

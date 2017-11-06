@@ -80,6 +80,9 @@
     <v-toolbar app fixed clipped-left>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>REDHAWK Web Explorer</v-toolbar-title>
+      <v-spacer/>
+      <img src="static/RedHawk_Logo.png"
+        style="width:50px;height:50px; float: left;" />
     </v-toolbar>
     <main>
       <explorercontent />

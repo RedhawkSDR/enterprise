@@ -61,6 +61,8 @@ export default {
     },
     release(){
       this.$store.dispatch('releaseApplication', this.application.name)
+
+      this.$router.go(-1)
     }
   }
 }

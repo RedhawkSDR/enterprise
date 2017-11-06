@@ -94,6 +94,10 @@
 let sigplot = require("sigplot");
 //import { FFT } from './dsp.js'
 
+/*
+* Function to turn typed array to appropriate
+* type. 
+*/
 function getTypeArray(type, data){
   if(type=='IDL:BULKIO/dataFloat:1.0'){
     return new Float32Array(data)
@@ -228,78 +232,9 @@ export default {
         this.plotRT()
       }else if(this.toggle_exclusive==1){
         this.plotRaster()
-      }else if(this.toggle_exclusive==2){
-        this.plotFFT()
       }
+
       this.connected = true
-    },
-    plotFFT(){
-      //console.log("Made it to plotFFT")
-      var osc1 = new Oscillator(DSP.SINEWAVE, 440, 1, 1024, 44100);
-      var hann1 = new WindowFunction(DSP.HANN)
-      var fft = new FFT(1024, 44100);
-      //osc1.generate();
-      //hann1.process(osc1.signal)
-      //fft.forward(osc1.signal);
-      console.log(fft)
-      var spectrum1 = fft.spectrum;
-      var plot = this.plot
-      var port = this.port
-
-      this.websocket = new WebSocket(this.wsURL)
-      this.websocket.binaryType = 'arraybuffer'
-
-      this.websocket.onopen = function(evt){
-        console.log("What do we have here ")
-        console.log(evt)
-
-        var data_layer = plot.get_layer(0);
-        plot.change_settings({
-          cmode : 3,
-          autol: 5,
-          all: true
-        });
-
-        /*
-        * Adding in onmessage and onclose logic
-        */
-        var overlay_for_plot;
-        this.onmessage = function(evt){
-          if(typeof evt.data == "string"){
-            console.log("SRI "+evt.data)
-            var sri = JSON.parse(evt.data)
-            /*
-            * {
-              "endOfStream":false, "streamId":"sineStream",
-              "hversion":1, "xstart":0.0,
-              "xdelta":1.0E-4, "xunits":1,
-              "subsize":0,"ystart":0.0,
-              "ydelta":0.0,"yunits":0,
-              "mode":0,"blocking":true,
-              "keywords":{},"tcmode":1,
-              "tcstatus":1,"tfsec":0.1698589999999999,
-              "toff":0.0,"twsec":1.50887594E9
-              }
-            */
-            overlay_for_plot = plot.overlay_array(null, {
-              xdelta: sri.xdelta,
-              xunits: sri.xunits,
-              yunits: sri.yunits,
-              subsize: sri.subsize
-            })
-          }else{
-            var arr = new getTypeArray(port.repId, evt.data);
-            fft.forward(arr);
-            var spectrum1 = fft.spectrum;
-            plot.reload(0, spectrum1)
-          }
-        }
-
-        this.onclose = function(evt){
-          console.log("Close")
-        }
-      }
-
     },
     stopPlot(){
       if(this.websocket!=null)
@@ -316,15 +251,18 @@ export default {
       var plot = this.plot
       var port = this.port
 
+      this.plot.change_settings({
+        cmode : this.cmode.text,
+        cmap : this.colormap.value,
+        drawmode : this.drawmode.text,
+        autol: 5,
+        all: true
+      });
+
       this.websocket.onopen = function(evt) {
         console.log("On Open")
 
         var data_layer = plot.get_layer(0);
-        plot.change_settings({
-          cmode : 3,
-          autol: 5,
-          all: true
-        });
 
         var overlay_for_plot, sri;
         this.onmessage = function(evt){
@@ -350,16 +288,20 @@ export default {
             }else{
               signalSubsize = sri.subsize
             }
-          plot.overlay_pipe({
-              type: 2000,
-              xdelta: sri.xdelta,
-              xunits: 'Frequency',
-              yunits: sri.xunits,
-              subsize: 1000,
-              pipesize : 1000000
+
+            plot.overlay_pipe({
+              type: 1000,
+              yunits: sri.yunits,
+              subsize: signalSubsize,
+              xunits: sri.xunits,
+              pipesize : 1000000,
+              ystart: sri.ystart,
+              xstart: sri.xstart,
+              xdelta: sri.xdelta
             });
         }else{
           var arr = new getTypeArray(port.repId, evt.data);
+
           plot.push(0, arr)
           }
         }
@@ -382,14 +324,11 @@ export default {
 
       this.plot.change_settings({
         cmode : this.cmode.text,
-        autol: 5,
+        autol: 1,
       });
 
       var plot = this.plot
       this.websocket.onopen = function(evt){
-        console.log("What do we have here ")
-        console.log(evt)
-
         var data_layer = plot.get_layer(0);
 
         /*
@@ -416,13 +355,15 @@ export default {
             overlay_for_plot = plot.overlay_array(null, {
               xdelta: sri.xdelta,
               ydelta: sri.ydelta,
-              xunits: 3,
+              xunits: sri.xunits,
               yunits: sri.yunits,
-              subsize: sri.subsize
+              subsize: sri.subsize,
             })
           }else{
+            console.log("Made it")
             var arr = new getTypeArray(port.repId, evt.data);
             plot.reload(overlay_for_plot, arr)
+            plot.refresh()
           }
         }
 

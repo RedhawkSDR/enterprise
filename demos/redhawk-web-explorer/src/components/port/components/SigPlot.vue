@@ -96,7 +96,7 @@ let sigplot = require("sigplot");
 
 /*
 * Function to turn typed array to appropriate
-* type. 
+* type.
 */
 function getTypeArray(type, data){
   if(type=='IDL:BULKIO/dataFloat:1.0'){
@@ -115,6 +115,36 @@ function getTypeArray(type, data){
     return new UInt32Array(data);
   }else{
     return null;
+  }
+}
+
+/*
+* Predefined XUnits
+*
+const short UNITS_NONE         = 0;  // None / Not Applicable (N/A)
+const short UNITS_TIME         = 1;  // Time (sec)
+const short UNITS_DELAY        = 2;  // Delay (sec)
+const short UNITS_FREQUENCY    = 3;  // Frequency (Hz)
+const short UNITS_TIMECODE     = 4;  // Time code format
+const short UNITS_DISTANCE     = 5;  // Distance (m)
+const short UNITS_VELOCITY     = 6;  // Velocity (m/sec)
+const short UNITS_ACCELERATION = 7;  // Acceleration (m/sec^2)
+const short UNITS_JERK         = 8;  // Jerk (m/sec^3)
+const short UNITS_DOPPLER      = 9;  // Doppler (Hz)
+const short UNITS_DOPPLERRATE  = 10; // Doppler rate (Hz/sec)
+const short UNITS_ENERGY       = 11; // Energy (J)
+const short UNITS_POWER        = 12; // Power (W)
+const short UNITS_MASS         = 13; // Mass (g)
+*/
+function getSigplotMappingToCommonUnitCodes(unit){
+  if(unit == 0){
+    return 'None'
+  }else if(unit == 1){
+    return 'Time(sec)'
+  }else if(unit == 3){
+    return 'Frequency (Hz)'
+  }else{
+    return unit
   }
 }
 
@@ -263,12 +293,10 @@ export default {
         console.log("On Open")
 
         var data_layer = plot.get_layer(0);
-
+        var data_size = null;
         var overlay_for_plot, sri;
         this.onmessage = function(evt){
           if(typeof evt.data == "string"){
-            console.log("SRI "+evt.data)
-            sri = JSON.parse(evt.data)
             /*
             * {
               "endOfStream":false, "streamId":"sineStream",
@@ -282,25 +310,26 @@ export default {
               "toff":0.0,"twsec":1.50887594E9
               }
             */
-            var signalSubsize = 0
-            if(sri.subsize==0){
-              signalSubsize = 2048
-            }else{
-              signalSubsize = sri.subsize
-            }
-
-            plot.overlay_pipe({
-              type: 1000,
-              yunits: sri.yunits,
-              subsize: signalSubsize,
-              xunits: sri.xunits,
-              pipesize : 1000000,
-              ystart: sri.ystart,
-              xstart: sri.xstart,
-              xdelta: sri.xdelta
-            });
+            sri = JSON.parse(evt.data)
         }else{
           var arr = new getTypeArray(port.repId, evt.data);
+
+          if(data_size==null){
+            data_size = arr.length
+            sri.xunits = getSigplotMappingToCommonUnitCodes(sri.xunits)
+            sri.yunits = getSigplotMappingToCommonUnitCodes(sri.yunits)
+
+            var pl =  plot.overlay_pipe({
+                type: 1000,
+                yunits: sri.yunits,
+                xunits: sri.xunits,
+                subsize : data_size,
+                pipesize : 1000000,
+                ystart: sri.ystart,
+                xstart: sri.xstart,
+                xdelta: sri.xdelta
+              });
+          }
 
           plot.push(0, arr)
           }
@@ -319,6 +348,7 @@ export default {
       //Need to make sure inside of websocket method I still have access to plot
       var sri = this.sri
       var port = this.port
+      var data_size = null
       this.websocket = new WebSocket(this.wsURL)
       this.websocket.binaryType = 'arraybuffer'
 
@@ -329,16 +359,12 @@ export default {
 
       var plot = this.plot
       this.websocket.onopen = function(evt){
-        var data_layer = plot.get_layer(0);
-
         /*
         * Adding in onmessage and onclose logic
         */
         var overlay_for_plot;
         this.onmessage = function(evt){
           if(typeof evt.data == "string"){
-            console.log("SRI "+evt.data)
-            sri = JSON.parse(evt.data)
             /*
             * {
               "endOfStream":false, "streamId":"sineStream",
@@ -352,16 +378,25 @@ export default {
               "toff":0.0,"twsec":1.50887594E9
               }
             */
-            overlay_for_plot = plot.overlay_array(null, {
-              xdelta: sri.xdelta,
-              ydelta: sri.ydelta,
-              xunits: sri.xunits,
-              yunits: sri.yunits,
-              subsize: sri.subsize,
-            })
+            sri = JSON.parse(evt.data)
           }else{
-            console.log("Made it")
             var arr = new getTypeArray(port.repId, evt.data);
+
+            if(data_size==null){
+              data_size = arr.length
+              sri.xunits = getSigplotMappingToCommonUnitCodes(sri.xunits)
+              sri.yunits = getSigplotMappingToCommonUnitCodes(sri.yunits)
+              console.log(data_size)
+
+              overlay_for_plot = plot.overlay_array(null, {
+                xdelta: sri.xdelta,
+                ydelta: sri.ydelta,
+                xunits: sri.xunits,
+                yunits: sri.yunits,
+                size: data_size,
+              })
+            }
+
             plot.reload(overlay_for_plot, arr)
             plot.refresh()
           }

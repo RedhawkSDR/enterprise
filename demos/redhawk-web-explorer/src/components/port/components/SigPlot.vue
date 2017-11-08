@@ -225,12 +225,12 @@ export default {
     plotData(){
       this.plot.deoverlay();
       if(this.toggle_exclusive==0){
-        this.plotRT()
+        this.plotFFTLine()
+        //this.plotRT()
       }else if(this.toggle_exclusive==1){
         this.plotRaster()
-      }else if(this.toggle_exclusive==2){
-        this.plotFFT()
       }
+
       this.connected = true
     },
     plotFFT(){
@@ -392,6 +392,63 @@ export default {
 
         var data_layer = plot.get_layer(0);
 
+        /*
+        * Adding in onmessage and onclose logic
+        */
+        var overlay_for_plot;
+        this.onmessage = function(evt){
+          if(typeof evt.data == "string"){
+            console.log("SRI "+evt.data)
+            sri = JSON.parse(evt.data)
+            /*
+            * {
+              "endOfStream":false, "streamId":"sineStream",
+              "hversion":1, "xstart":0.0,
+              "xdelta":1.0E-4, "xunits":1,
+              "subsize":0,"ystart":0.0,
+              "ydelta":0.0,"yunits":0,
+              "mode":0,"blocking":true,
+              "keywords":{},"tcmode":1,
+              "tcstatus":1,"tfsec":0.1698589999999999,
+              "toff":0.0,"twsec":1.50887594E9
+              }
+            */
+            overlay_for_plot = plot.overlay_array(null, {
+              xdelta: sri.xdelta,
+              ydelta: sri.ydelta,
+              xunits: 3,
+              yunits: sri.yunits,
+              subsize: sri.subsize
+            })
+          }else{
+            var arr = new getTypeArray(port.repId, evt.data);
+            plot.reload(overlay_for_plot, arr)
+          }
+        }
+
+        this.onclose = function(evt){
+          console.log("Close")
+        }
+      }
+    },
+    plotFFTLine(){
+      if(this.websocket!=null){
+        this.websocket.close()
+      }
+
+      //Need to make sure inside of websocket method I still have access to plot
+      var sri = this.sri
+      var port = this.port
+      this.websocket = new WebSocket(this.wsURL+'?fft=true')
+      this.websocket.binaryType = 'arraybuffer'
+
+      this.plot.change_settings({
+        cmode : this.cmode.text,
+        autol: 5,
+      });
+
+      var plot = this.plot
+      this.websocket.onopen = function(evt){
         /*
         * Adding in onmessage and onclose logic
         */

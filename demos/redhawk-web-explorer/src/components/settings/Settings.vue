@@ -1,5 +1,5 @@
 <template>
-<v-flex>
+<v-flex xs12>
 	<v-card>
           <v-toolbar card color="red" prominent>
             <v-toolbar-title class="body-2 black--text">REDHAWK Web Explorer Settings</v-toolbar-title>

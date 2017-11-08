@@ -1,5 +1,7 @@
 //Axios is asnyc so all axios calls should really occur in this class
 import axios from 'axios'
+import router from '../router'
+
 //var AUTH_TOKEN = "Basic "+btoa("redhawk:redhawk")
 //axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 //console.log("Auth token "+AUTH_TOKEN)
@@ -8,6 +10,21 @@ import axios from 'axios'
 //}
 
 //Helper functions
+function appendToBaseURL(baseURL, stringToAppend){
+    console.log('BaseURL: '+baseURL)
+    console.log('String To Append: '+stringToAppend)
+
+    var url;
+    if(baseURL.endsWith('/') && stringToAppend.startsWith('/')){
+      url = baseURL+stringToAppend.substring(1, stringToAppend.length)
+    }else {
+      url = baseURL+stringToAppend
+    }
+
+    console.log("URL is "+url)
+    return url
+}
+
 function getUsedTuners(getters, deviceLabel){
   var deviceUsedTuners = getters.baseURI+'/devicemanagers/'+getters.deviceManager.label+'/devices/'+deviceLabel+'/tuners/USED'
 
@@ -36,7 +53,7 @@ function getAllocationJson(allocate){
 }
 
 function getDomainBaseURL(getters){
-  return getters.baseURL+'/'+getters.nameServer+'/domains/'+getters.domainName
+  return appendToBaseURL(getters.baseURL,'/'+getters.nameServer+'/domains/'+getters.domainName)
 }
 //End of Helper functions
 export const setBaseURL = ({commit}, value) =>  commit('setBaseURL', value)
@@ -68,10 +85,11 @@ export const launchChoosenWaveform = ({ commit, getters }, waveformToLaunch) => 
   .then(function(response){
     console.log("Some indication that launch worked so you can redirect")
     var obj = new Object();
-    obj.message = "SUCCESS"
-    obj.title = "LAUNCH WAVEFORM"
+    obj.message = "Succesfully launched application!"
     commit("setDialog", obj)
     commit("showDialog", true)
+    console.log("Making it to router")
+    router.push('/applications')
   })
   .catch(function(error){
     console.log("Error")
@@ -138,6 +156,8 @@ export const releaseApplication = ({getters, commit}, appName) => {
     axios.get(applicationsURL)
     .then(function(response){
       commit('setApplications', response.data.applications)
+
+      router.push('/applications')
     })
     .catch(function(error){
       console.log(error)
@@ -177,7 +197,8 @@ export const selectComponent = ({getters, commit}, component) => {
 }
 
 export const selectDomainProperties = ({getters, commit}, domainName) => {
-  var domainPropsURL = getDomainBaseURL(getters)+'/properties.json'
+  var domainPropsURL = appendToBaseURL(getDomainBaseURL(getters), '/properties.json')
+
   axios.get(domainPropsURL)
   .then(function(response){
     commit('selectDomainProperties', response.data.properties)

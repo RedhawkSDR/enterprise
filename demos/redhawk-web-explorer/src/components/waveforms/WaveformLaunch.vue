@@ -77,6 +77,7 @@ export default {
 			waveformToLaunch.id = this.applicationName
 			waveformToLaunch.sadLocation = this.waveform.sadLocation
 			this.$store.dispatch('launchChoosenWaveform', waveformToLaunch)
+
 			//this.$router.push('/applications')
 			//TODO: On successful launch user should be redirected
 		}

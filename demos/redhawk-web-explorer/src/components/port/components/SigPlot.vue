@@ -383,16 +383,19 @@ export default {
           var arr = new getTypeArray(port.repId, evt.data);
 
           if(data_size==null){
+            console.log(sri)
             data_size = arr.length
             sri.xunits = getSigplotMappingToCommonUnitCodes(sri.xunits)
             sri.yunits = getSigplotMappingToCommonUnitCodes(sri.yunits)
+            // Derived SRI Based on
+            //var derived_xdelta = (sri.xdelta/data_size)/2
+            //Derived From PSD https://github.com/RedhawkSDR/psd/blob/master/cpp/psd.cpp
             var derived_xdelta = 1/(sri.xdelta*data_size)
-
+            var derived_ydelta = sri.xdelts*data_size
             var pl =  plot.overlay_pipe({
                 type: 1000,
-                yunits: sri.yunits,
                 xunits: sri.xunits,
-                xdelta: derived_xdelta/2,
+                xdelta: derived_xdelta,
                 subsize : data_size,
                 pipesize : 1000000,
               });
@@ -408,6 +411,10 @@ export default {
       }
     },
     plotRT(){
+      var fs = 44100;
+      var bufsize = 2048;
+
+      var osc1 = new Oscillator(DSP.SINEWAVE, 440, 1, 2048, fs);
       if(this.websocket!=null){
         this.websocket.close()
       }
@@ -425,6 +432,7 @@ export default {
       });
 
       var plot = this.plot
+      var changeup = 0;
       this.websocket.onopen = function(evt){
         /*
         * Adding in onmessage and onclose logic
@@ -450,6 +458,7 @@ export default {
             var arr = new getTypeArray(port.repId, evt.data);
 
             if(data_size==null){
+              console.log(sri)
               data_size = arr.length
               sri.xunits = getSigplotMappingToCommonUnitCodes(sri.xunits)
               sri.yunits = getSigplotMappingToCommonUnitCodes(sri.yunits)
@@ -464,8 +473,13 @@ export default {
               })
             }
 
-            plot.reload(overlay_for_plot, arr)
-            plot.refresh()
+            changeup++
+            if(changeup%10==0){
+              //TODO: Rotate the array around so it appears to be moving
+              plot.reload(overlay_for_plot, arr)
+            }else{
+              plot.reload(overlay_for_plot, arr)
+            }
           }
         }
 
@@ -522,12 +536,14 @@ export default {
               sri.yunits = getSigplotMappingToCommonUnitCodes(sri.yunits)
               console.log(data_size)
               console.log('XDelta: '+sri.xdelta)
+              // Derived SRI Based on
+              //var derived_xdelta = (sri.xdelta/data_size)/2
+              //Derived From PSD https://github.com/RedhawkSDR/psd/blob/master/cpp/psd.cpp
               var derived_xdelta = 1/(sri.xdelta*data_size)
 
               overlay_for_plot = plot.overlay_array(null, {
                 xunits: sri.xunits,
-                yunits: sri.yunits,
-                xdelta: derived_xdelta/2,
+                xdelta: derived_xdelta,
                 size: data_size,
               })
             }

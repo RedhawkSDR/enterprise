@@ -174,8 +174,8 @@ public class RedhawkFFTBulkIoWebSocket extends RedhawkEventAdminWebSocket {
      */
     private void sendSRI(Packet packet) {
         try {
-        	packet.xunits = 1;
-        	packet.yunits = 3;
+        	packet.xunits = 3;
+        	packet.yunits = 1;
             getRemote().sendString(gson.toJson(packet));
         } catch (IOException e) {
         	logger.error(e.getMessage());
@@ -225,10 +225,12 @@ public class RedhawkFFTBulkIoWebSocket extends RedhawkEventAdminWebSocket {
     		
     		float[] data = (float[]) packet.getData();
     		
-    		if(packet.mode==0)
+    		if(packet.mode==0) {
     			float_FFT1D.realForward(data);
-    		else
+    			data = Arrays.copyOfRange(data, 0, data.length/2);
+    		}else {
     			float_FFT1D.complexForward(data);
+    		}
     		
         	return (T) data;
     	}else {
@@ -238,11 +240,13 @@ public class RedhawkFFTBulkIoWebSocket extends RedhawkEventAdminWebSocket {
         	}
     		
         	double[] data = (double[]) packet.getData();
-        	if(packet.mode==0)
+        	if(packet.mode==0) {
         		double_fft1D.realForward(data);
-        	else
+    			data = Arrays.copyOfRange(data, 0, data.length/2);
+        	}else {
         		double_fft1D.complexForward(data);
-    	
+        	}
+        	
         	return (T) data;
     	}    	
     }
@@ -259,10 +263,12 @@ public class RedhawkFFTBulkIoWebSocket extends RedhawkEventAdminWebSocket {
     		float[] data = (float[]) packet.getData();
     		inputReal = Arrays.copyOf(data, 2*length);
     		
-    		if(packet.mode==0)
+    		if(packet.mode==0) {
     			float_FFT1D.realForwardFull(inputReal);
-    		else
+    			inputReal = Arrays.copyOfRange(inputReal, 0, inputReal.length/2);
+    		}else {
     			float_FFT1D.complexForward(inputReal);
+    		}
     		
         	return (T) inputReal;
     	}else {
@@ -275,10 +281,43 @@ public class RedhawkFFTBulkIoWebSocket extends RedhawkEventAdminWebSocket {
     		double[] data = (double[]) packet.getData();
     		inputReal = Arrays.copyOf(data, 2*length);
     		
-    		if(packet.mode==0)
-        		double_fft1D.realForward(inputReal);
-        	else
+    		if(packet.mode==0) {
+    			double_fft1D.realForwardFull(inputReal);
+    			inputReal = Arrays.copyOfRange(inputReal, 0, inputReal.length/2);
+    		}else {
         		double_fft1D.complexForward(inputReal);
+    		}
+        	
+    		return (T) inputReal;
+    	}    	
+    }
+    
+    private <T> T getFFTDataComplex(Packet packet) {
+    	short mode = packet.mode;
+    	if(port.getRepId().equals("IDL:BULKIO/dataFloat:1.0")){
+	    	int length = Array.getLength(packet.getData());
+    		if(float_FFT1D==null) {
+    	    	float_FFT1D = new FloatFFT_1D(length);
+        	}
+    		
+    		float[] inputReal;
+    		float[] data = (float[]) packet.getData();
+    		inputReal = Arrays.copyOf(data, 2*length);
+    		
+    		float_FFT1D.complexForward(inputReal);
+    		
+        	return (T) inputReal;
+    	}else {
+	    	int length = Array.getLength(packet.getData());
+    		if(double_fft1D==null) {
+        		double_fft1D = new DoubleFFT_1D(length);
+        	}
+    		
+    		double[] inputReal;
+    		double[] data = (double[]) packet.getData();
+    		inputReal = Arrays.copyOf(data, 2*length);
+
+        	double_fft1D.complexForward(inputReal);
     	
         	return (T) inputReal;
     	}    	

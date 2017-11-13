@@ -387,14 +387,26 @@ export default {
             data_size = arr.length
             sri.xunits = getSigplotMappingToCommonUnitCodes(sri.xunits)
             sri.yunits = getSigplotMappingToCommonUnitCodes(sri.yunits)
+            console.log(sri.xdelta)
+            var fs = 1/sri.xdelta
+            var myXend = fs/2
+            var derived_xdelta = fs/(data_size*2)
+            var myXstart = -1*derived_xdelta
+            console.log("Derived Xdelta "+derived_xdelta)
             // Derived SRI Based on
             //var derived_xdelta = (sri.xdelta/data_size)/2
             //Derived From PSD https://github.com/RedhawkSDR/psd/blob/master/cpp/psd.cpp
-            var derived_xdelta = 1/(sri.xdelta*data_size)
-            var derived_ydelta = sri.xdelts*data_size
+            //var derived_xdelta = 1/(sri.xdelta*data_size)
+            // Derived SRI Based on
+            //var derived_xdelta = (sri.xdelta/data_size)/2
+            //Derived From PSD https://github.com/RedhawkSDR/psd/blob/master/cpp/psd.cpp
+            //var derived_xdelta = 1/(sri.xdelta*data_size)
+            //var derived_ydelta = sri.xdelts*data_size
             var pl =  plot.overlay_pipe({
                 type: 1000,
                 xunits: sri.xunits,
+                xstart : myXstart,
+                xend : myXend,
                 xdelta: derived_xdelta,
                 subsize : data_size,
                 pipesize : 1000000,
@@ -534,14 +546,21 @@ export default {
               data_size = arr.length
               sri.xunits = getSigplotMappingToCommonUnitCodes(sri.xunits)
               sri.yunits = getSigplotMappingToCommonUnitCodes(sri.yunits)
-              console.log(data_size)
-              console.log('XDelta: '+sri.xdelta)
+              //Derived after convo with Max
+              console.log(sri.xdelta)
+              var fs = 1/sri.xdelta
+              var myXend = fs/2
+              var derived_xdelta = fs/(data_size*2)
+              var myXstart = -1*derived_xdelta
+              console.log("Derived Xdelta "+derived_xdelta)
               // Derived SRI Based on
               //var derived_xdelta = (sri.xdelta/data_size)/2
               //Derived From PSD https://github.com/RedhawkSDR/psd/blob/master/cpp/psd.cpp
-              var derived_xdelta = 1/(sri.xdelta*data_size)
+              //var derived_xdelta = 1/(sri.xdelta*data_size)
 
               overlay_for_plot = plot.overlay_array(null, {
+                xstart : myXstart,
+                xend : myXend,
                 xunits: sri.xunits,
                 xdelta: derived_xdelta,
                 size: data_size,

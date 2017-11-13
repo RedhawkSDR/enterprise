@@ -217,9 +217,11 @@ public class RedhawkFFTBulkIoWebSocket extends RedhawkEventAdminWebSocket {
     
     private <T> T getFFTData(Packet packet) {
     	short mode = packet.mode;
+    	int length = Array.getLength(packet.getData());
+
     	if(port.getRepId().equals("IDL:BULKIO/dataFloat:1.0")){
+    		logger.info("Inside Float FFT mode "+packet.mode);
     		if(float_FFT1D==null) {
-    	    	int length = Array.getLength(packet.getData());
     	    	float_FFT1D = new FloatFFT_1D(length);
         	}
     		
@@ -227,23 +229,24 @@ public class RedhawkFFTBulkIoWebSocket extends RedhawkEventAdminWebSocket {
     		
     		if(packet.mode==0) {
     			float_FFT1D.realForward(data);
-    			data = Arrays.copyOfRange(data, 0, data.length/2);
+    			//data = Arrays.copyOfRange(data, 0, data.length/2);
     		}else {
+    			data = Arrays.copyOf(data, 2*length);
     			float_FFT1D.complexForward(data);
     		}
     		
         	return (T) data;
     	}else {
     		if(double_fft1D==null) {
-    	    	int length = Array.getLength(packet.getData());
         		double_fft1D = new DoubleFFT_1D(length);
         	}
     		
         	double[] data = (double[]) packet.getData();
         	if(packet.mode==0) {
         		double_fft1D.realForward(data);
-    			data = Arrays.copyOfRange(data, 0, data.length/2);
+    			//data = Arrays.copyOfRange(data, 0, data.length/2);
         	}else {
+    			data = Arrays.copyOf(data, 2*length);
         		double_fft1D.complexForward(data);
         	}
         	

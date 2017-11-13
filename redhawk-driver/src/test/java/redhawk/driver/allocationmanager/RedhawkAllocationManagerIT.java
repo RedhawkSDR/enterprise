@@ -106,7 +106,7 @@ public class RedhawkAllocationManagerIT extends RedhawkDeviceTestBase{
 			String identifier = device.getIdentifier();
 			
 			//Perform allocation
-			allocMgr.allocate(identifier, allocationType, this.getAllocationProperties());
+			allocMgr.allocate(identifier, AllocationFactory.TUNER_ALLOCATION_TYPE, this.getAllocationProperties());
 		} catch (ResourceNotFoundException | MultipleResourceException | CORBAException | AllocationException e) {
 			fail("Issue allocating device "+e.getMessage());
 		}

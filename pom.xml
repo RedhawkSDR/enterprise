@@ -10,10 +10,10 @@
 
 	<scm>
 		<developerConnection>scm:git:${rei.git}</developerConnection>
-	  <tag>2.1.2.RC1</tag>
+	  <tag>2.1.2.RC2</tag>
   </scm>
 	<properties>
-		<release>1</release><!-- RC number -->
+		<release>2</release><!-- RC number -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>

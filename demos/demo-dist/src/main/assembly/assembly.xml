@@ -22,6 +22,10 @@
 		<file>
 			<source>${project.parent.basedir}/redhawk-metrics/target/redhawkmetrics.war</source>
 			<outputDirectory>metrics</outputDirectory>
+		</file>
+		<file>
+			<source>${project.parent.basedir}/redhawk-metrics/camel/route.xml</source>
+			<outputDirectory>metrics</outputDirectory>
 		</file>		
 	</files>	
 </assembly>

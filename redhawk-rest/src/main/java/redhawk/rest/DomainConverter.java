@@ -593,7 +593,7 @@ public class DomainConverter {
 	
 	private ExternalPort convertExternalPort(RedhawkExternalPortImpl obj, Port port){
 		ExternalPort p = new ExternalPort(port); 
-		p.setExternalname(obj.getExternalName());
+		p.setExternalname(obj.getName());
 		p.setComponentRefId(obj.getComponentReferenceId());;
 		p.setDescription(obj.getDescription());
 		

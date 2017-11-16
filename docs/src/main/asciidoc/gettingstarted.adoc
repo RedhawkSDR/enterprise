@@ -2,9 +2,9 @@
 
 After installing REDHAWK Enterprise Integration, the following directories are displayed:
 
+* `jetty-${jetty.version}`: Jetty distribution with <<REDHAWK REST>> and <<REDHAWK Websocket>> pre-installed.
 * `karaf-${karaf.version}`: Directory contains a custom distribution of Karaf prepackaged with all REDHAWK Java Tool assets. 
 * `shell`: Programatic access to REDHAWK Driver via the shell. 
-* `jacorb-deps`: All dependencies needed to configure REDHAWK Driver to use JacORB instead of the default ORB provided by Java.
 
 === Working with the Shell
 
@@ -38,6 +38,17 @@ TIP: For additional instructions and information on trouble shooting, refer to t
  application.release();
 
 More example commands can be found in the <<redhawk-driver-code-examples>> section.
+
+=== Working wit Jetty
+
+. To start Jetty run the `jetty.sh` script located in Jetty's bin directory: 
++
+----
+./jetty.sh start
+----
++
+
+For more details on Jetty refer to Jettys https://www.eclipse.org/jetty/documentation/9.4.x/quick-start.html[quick start quide].
 
 === Working with Karaf
 

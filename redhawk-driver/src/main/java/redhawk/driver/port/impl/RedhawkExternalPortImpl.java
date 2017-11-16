@@ -25,7 +25,7 @@ public class RedhawkExternalPortImpl implements RedhawkPort {
 	/**
 	 * Name for the External port
 	 */
-	private String externalName;
+	private String name;
 	
 	private RedhawkPortImpl port;
 	
@@ -38,7 +38,7 @@ public class RedhawkExternalPortImpl implements RedhawkPort {
 	public RedhawkExternalPortImpl(RedhawkPortImpl impl, String description, String externalName, String componentRefId){
 		this.port = impl; 
 		this.description = description;
-		this.externalName = externalName;
+		this.name = externalName;
 		this.componentReferenceId = componentRefId;
 	}
 	
@@ -58,12 +58,8 @@ public class RedhawkExternalPortImpl implements RedhawkPort {
 	 *
 	 * @return
 	 */
-	public String getExternalName() {
-		return externalName;
-	}
-
-	public void setExternalName(String externalName) {
-		this.externalName = externalName;
+	public String getInternalName() {
+		return port.getName();
 	}
 
 	@Override
@@ -103,7 +99,11 @@ public class RedhawkExternalPortImpl implements RedhawkPort {
 
 	@Override
 	public String getName() {
-		return port.getName();
+		return name;
+	}
+	
+	public void setName(String externalName) {
+		this.name = externalName;
 	}
 
 	@Override
@@ -129,7 +129,7 @@ public class RedhawkExternalPortImpl implements RedhawkPort {
 	
 	@Override
 	public String toString() {
-		return "RedhawkExternalPortImpl [description=" + description + ", externalName=" + externalName + ", port="
+		return "RedhawkExternalPortImpl [description=" + description + ", externalName=" + name + ", port="
 				+ port + "]";
 	}
 

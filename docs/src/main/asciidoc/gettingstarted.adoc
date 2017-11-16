@@ -97,6 +97,8 @@ org.omg.CORBA.ORBClass=org.jacorb.orb.ORB
 
 . If Karaf was started previously, restart it. 
 
+*Note: As of REDHAWK Enterprise Integration release 2.0.1+ & 2.1.2+ JacORB is the default ORB used by Karaf.*
+
 ==== Configure JacORB logging w/ Karaf
 
 

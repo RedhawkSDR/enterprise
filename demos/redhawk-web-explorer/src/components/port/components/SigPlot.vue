@@ -31,8 +31,20 @@
                     ></v-select>
               </v-flex>
               -->
-              <v-flex xs12 class="py-2">
-               <v-btn-toggle mandatory v-model="toggle_exclusive">
+              <v-flex xs6 class="py-2">
+               <p>Plot Port</p>
+               <v-btn-toggle mandatory v-model="plot_port">
+                 <v-btn>
+                   Data
+                 </v-btn>
+                 <v-btn :disabled="!(portRepId=='IDL:BULKIO/dataFloat:1.0' || portRepId=='IDL:BULKIO/dataDouble:1.0')">
+                   FFT
+                 </v-btn>
+               </v-btn-toggle>
+             </v-flex>
+              <v-flex xs6 class="py-2">
+               <p>Plot Port As:</p>
+               <v-btn-toggle mandatory v-model="plot_as">
                  <v-btn>
                    Line
                  </v-btn>
@@ -156,8 +168,10 @@ export default {
       plot: null,
       websocket : null,
       showMenu : true,
+      fftEnabled : false,
       sri : {},
-      toggle_exclusive: 0,
+      plot_port : 0,
+      plot_as : 0,
       connected: false,
       plots : [
         {text : 'Time'},
@@ -229,6 +243,15 @@ export default {
   },
   mounted(){
     this.plot = new sigplot.Plot(document.getElementById('plot'), this.options)
+    console.log("REP ID: "+this.port.repId);
+    /*console.log("Port type: "+repId)
+    if(repId=='IDL:BULKIO/dataFloat:1.0' || repId=='IDL:BULKIO/dataDouble:1.0'){
+      console.log("Making it to enable")
+      return true;
+    }else{
+      console.log("Making it to disable")
+      return false;
+    }*/
   },
   destroyed(){
     if(this.websocket!=null){
@@ -258,10 +281,15 @@ export default {
     },
     plotData(){
       this.plot.deoverlay();
-      if(this.toggle_exclusive==0){
+
+      if(this.plot_port==0 && this.plot_as==0){
         this.plotRT()
-      }else if(this.toggle_exclusive==1){
+      }else if(this.plot_port==0 && this.plot_as==1){
         this.plotRaster()
+      }else if(this.plot_port==1 && this.plot_as==0){
+        this.plotFFTLine()
+      }else{
+        this.plotFFTRaster()
       }
 
       this.connected = true
@@ -340,7 +368,91 @@ export default {
         }
       }
     },
+    plotFFTRaster(){
+      if(this.websocket!=null){
+        this.websocket.close()
+      }
+      this.websocket = new WebSocket(this.wsURL+'?fft=true')
+      this.websocket.binaryType = 'arraybuffer'
+      var plot = this.plot
+      var port = this.port
+
+      this.plot.change_settings({
+        cmode : this.cmode.text,
+        cmap : this.colormap.value,
+        drawmode : this.drawmode.text,
+        autol: 5,
+        all: true
+      });
+
+      this.websocket.onopen = function(evt) {
+        var data_layer = plot.get_layer(0);
+        var data_size = null;
+        var overlay_for_plot, sri;
+        this.onmessage = function(evt){
+          if(typeof evt.data == "string"){
+            /*
+            * {
+              "endOfStream":false, "streamId":"sineStream",
+              "hversion":1, "xstart":0.0,
+              "xdelta":1.0E-4, "xunits":1,
+              "subsize":0,"ystart":0.0,
+              "ydelta":0.0,"yunits":0,
+              "mode":0,"blocking":true,
+              "keywords":{},"tcmode":1,
+              "tcstatus":1,"tfsec":0.1698589999999999,
+              "toff":0.0,"twsec":1.50887594E9
+              }
+            */
+            sri = JSON.parse(evt.data)
+        }else{
+          var arr = new getTypeArray(port.repId, evt.data);
+
+          if(data_size==null){
+            console.log(sri)
+            data_size = arr.length
+            sri.xunits = getSigplotMappingToCommonUnitCodes(sri.xunits)
+            sri.yunits = getSigplotMappingToCommonUnitCodes(sri.yunits)
+            console.log(sri.xdelta)
+            var fs = 1/sri.xdelta
+            var myXend = fs/2
+            var derived_xdelta = fs/(data_size*2)
+            var myXstart = -1*derived_xdelta
+            console.log("Derived Xdelta "+derived_xdelta)
+            // Derived SRI Based on
+            //var derived_xdelta = (sri.xdelta/data_size)/2
+            //Derived From PSD https://github.com/RedhawkSDR/psd/blob/master/cpp/psd.cpp
+            //var derived_xdelta = 1/(sri.xdelta*data_size)
+            // Derived SRI Based on
+            //var derived_xdelta = (sri.xdelta/data_size)/2
+            //Derived From PSD https://github.com/RedhawkSDR/psd/blob/master/cpp/psd.cpp
+            //var derived_xdelta = 1/(sri.xdelta*data_size)
+            //var derived_ydelta = sri.xdelts*data_size
+            var pl =  plot.overlay_pipe({
+                type: 1000,
+                xunits: sri.xunits,
+                xstart : myXstart,
+                xend : myXend,
+                xdelta: derived_xdelta,
+                subsize : data_size,
+                pipesize : 1000000,
+              });
+          }
+
+          plot.push(0, arr)
+          }
+        }
+
+        this.onclose = function(evt){
+          console.log("Close")
+        }
+      }
+    },
     plotRT(){
+      var fs = 44100;
+      var bufsize = 2048;
+
+      var osc1 = new Oscillator(DSP.SINEWAVE, 440, 1, 2048, fs);
       if(this.websocket!=null){
         this.websocket.close()
       }
@@ -350,6 +462,80 @@ export default {
       var port = this.port
       var data_size = null
       this.websocket = new WebSocket(this.wsURL)
+      this.websocket.binaryType = 'arraybuffer'
+
+      this.plot.change_settings({
+        cmode : this.cmode.text,
+        autol: 1,
+      });
+
+      var plot = this.plot
+      var changeup = 0;
+      this.websocket.onopen = function(evt){
+        /*
+        * Adding in onmessage and onclose logic
+        */
+        var overlay_for_plot;
+        this.onmessage = function(evt){
+          if(typeof evt.data == "string"){
+            /*
+            * {
+              "endOfStream":false, "streamId":"sineStream",
+              "hversion":1, "xstart":0.0,
+              "xdelta":1.0E-4, "xunits":1,
+              "subsize":0,"ystart":0.0,
+              "ydelta":0.0,"yunits":0,
+              "mode":0,"blocking":true,
+              "keywords":{},"tcmode":1,
+              "tcstatus":1,"tfsec":0.1698589999999999,
+              "toff":0.0,"twsec":1.50887594E9
+              }
+            */
+            sri = JSON.parse(evt.data)
+          }else{
+            var arr = new getTypeArray(port.repId, evt.data);
+
+            if(data_size==null){
+              console.log(sri)
+              data_size = arr.length
+              sri.xunits = getSigplotMappingToCommonUnitCodes(sri.xunits)
+              sri.yunits = getSigplotMappingToCommonUnitCodes(sri.yunits)
+              console.log(data_size)
+
+              overlay_for_plot = plot.overlay_array(null, {
+                xdelta: sri.xdelta,
+                ydelta: sri.ydelta,
+                xunits: sri.xunits,
+                yunits: sri.yunits,
+                size: data_size,
+              })
+            }
+
+            changeup++
+            if(changeup%10==0){
+              //TODO: Rotate the array around so it appears to be moving
+              plot.reload(overlay_for_plot, arr)
+            }else{
+              plot.reload(overlay_for_plot, arr)
+            }
+          }
+        }
+
+        this.onclose = function(evt){
+          console.log("Close")
+        }
+      }
+    },
+    plotFFTLine(){
+      if(this.websocket!=null){
+        this.websocket.close()
+      }
+
+      //Need to make sure inside of websocket method I still have access to plot
+      var sri = this.sri
+      var port = this.port
+      var data_size = null
+      this.websocket = new WebSocket(this.wsURL+'?fft=true')
       this.websocket.binaryType = 'arraybuffer'
 
       this.plot.change_settings({
@@ -386,13 +572,23 @@ export default {
               data_size = arr.length
               sri.xunits = getSigplotMappingToCommonUnitCodes(sri.xunits)
               sri.yunits = getSigplotMappingToCommonUnitCodes(sri.yunits)
-              console.log(data_size)
+              //Derived after convo with Max
+              console.log(sri.xdelta)
+              var fs = 1/sri.xdelta
+              var myXend = fs/2
+              var derived_xdelta = fs/(data_size*2)
+              var myXstart = -1*derived_xdelta
+              console.log("Derived Xdelta "+derived_xdelta)
+              // Derived SRI Based on
+              //var derived_xdelta = (sri.xdelta/data_size)/2
+              //Derived From PSD https://github.com/RedhawkSDR/psd/blob/master/cpp/psd.cpp
+              //var derived_xdelta = 1/(sri.xdelta*data_size)
 
               overlay_for_plot = plot.overlay_array(null, {
-                xdelta: sri.xdelta,
-                ydelta: sri.ydelta,
+                xstart : myXstart,
+                xend : myXend,
                 xunits: sri.xunits,
-                yunits: sri.yunits,
+                xdelta: derived_xdelta,
                 size: data_size,
               })
             }
@@ -414,6 +610,9 @@ export default {
     },
     wsURL(){
       return this.$store.getters.portWSURL
+    },
+    portRepId(){
+      return this.$store.getters.repId
     }
   }
 }

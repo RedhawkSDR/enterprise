@@ -52,13 +52,13 @@ For more details on Jetty, refer to the Jetty https://www.eclipse.org/jetty/docu
 
 === Configuring JacORB with Jetty
 
-To configure Jetty to use JacORB, add the JacORB jars to Jetty's classpath by running the following command:
+To configure Jetty to use JacORB, add the JacORB jar files to Jetty's classpath by running the following command:
 
 ----
 export JETTY_ARGS='-Xbootclasspath/p:jacorb-deps/jacorb-3.8.jar:jacorb-deps/jacorb-omgapi-3.8.jar:jacorb-deps/jacorb-services-3.8.jar:jacorb-deps/slf4j-api-1.7.14.jar:jacorb-deps/slf4j-jdk14-1.7.14.jar -Dorg.omg.CORBA.ORBClass=org.jacorb.orb.ORB -Dorg.omg.CORBA.ORBSingletonClass=org.jacorb.orb.ORBSingleton'
 ----
 
-Now each time the server is started, the ${JETTY_ARGS} will be picked up by Jetty. 
+Now each time the server is started, the ${JETTY_ARGS} will be used by Jetty. 
 
 === Working with Karaf
 

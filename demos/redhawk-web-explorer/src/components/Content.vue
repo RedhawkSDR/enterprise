@@ -7,7 +7,7 @@
             <v-snackbar
               :timeout="timeout"
               :bottom="y === 'bottom'"
-              multi-line=True
+              multi-line="true"
               v-model="showDialog"
               >
                 {{ message }}
@@ -49,6 +49,7 @@ export default {
   data(){
     return {
       timeout: 6000,
+      y : 'bottom'
     }
   },
   components: {

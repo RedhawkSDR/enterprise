@@ -31,8 +31,20 @@
                     ></v-select>
               </v-flex>
               -->
-              <v-flex xs12 class="py-2">
-               <v-btn-toggle mandatory v-model="toggle_exclusive">
+              <v-flex xs6 class="py-2">
+               <p>Plot Port</p>
+               <v-btn-toggle mandatory v-model="plot_port">
+                 <v-btn>
+                   Data
+                 </v-btn>
+                 <v-btn :disabled="!(portRepId=='IDL:BULKIO/dataFloat:1.0' || portRepId=='IDL:BULKIO/dataDouble:1.0')">
+                   FFT
+                 </v-btn>
+               </v-btn-toggle>
+             </v-flex>
+              <v-flex xs6 class="py-2">
+               <p>Plot Port As:</p>
+               <v-btn-toggle mandatory v-model="plot_as">
                  <v-btn>
                    Line
                  </v-btn>
@@ -156,8 +168,10 @@ export default {
       plot: null,
       websocket : null,
       showMenu : true,
+      fftEnabled : false,
       sri : {},
-      toggle_exclusive: 0,
+      plot_port : 0,
+      plot_as : 0,
       connected: false,
       plots : [
         {text : 'Time'},
@@ -229,6 +243,15 @@ export default {
   },
   mounted(){
     this.plot = new sigplot.Plot(document.getElementById('plot'), this.options)
+    console.log("REP ID: "+this.port.repId);
+    /*console.log("Port type: "+repId)
+    if(repId=='IDL:BULKIO/dataFloat:1.0' || repId=='IDL:BULKIO/dataDouble:1.0'){
+      console.log("Making it to enable")
+      return true;
+    }else{
+      console.log("Making it to disable")
+      return false;
+    }*/
   },
   destroyed(){
     if(this.websocket!=null){
@@ -258,12 +281,15 @@ export default {
     },
     plotData(){
       this.plot.deoverlay();
-      if(this.toggle_exclusive==0){
+
+      if(this.plot_port==0 && this.plot_as==0){
+        this.plotRT()
+      }else if(this.plot_port==0 && this.plot_as==1){
+        this.plotRaster()
+      }else if(this.plot_port==1 && this.plot_as==0){
         this.plotFFTLine()
-        //this.plotRT()
-      }else if(this.toggle_exclusive==1){
+      }else{
         this.plotFFTRaster()
-        //this.plotRaster()
       }
 
       this.connected = true
@@ -584,6 +610,9 @@ export default {
     },
     wsURL(){
       return this.$store.getters.portWSURL
+    },
+    portRepId(){
+      return this.$store.getters.repId
     }
   }
 }

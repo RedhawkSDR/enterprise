@@ -49,15 +49,24 @@ import redhawk.websocket.utils.ByteBufferUtil;
 
 public class RedhawkFFTBulkIoWebSocket extends RedhawkEventAdminWebSocket {
     private static Logger logger = LoggerFactory.getLogger(RedhawkFFTBulkIoWebSocket.class.getName());
+    
     private RedhawkPort port;
+    
     private boolean binary;
+    
     private Gson gson;
+    
     private boolean firstSend = true;
+    
     private boolean alwaysSendSri = false;
+    
     private List<ProcessorObject> processorChain = new CopyOnWriteArrayList<ProcessorObject>();
-	private Map<String, WebSocketProcessor> webSocketProcessorServices;
-	private DoubleFFT_1D double_fft1D = null;
-	private FloatFFT_1D float_FFT1D = null;
+	
+    private Map<String, WebSocketProcessor> webSocketProcessorServices;
+	
+    private DoubleFFT_1D double_fft1D = null;
+	
+    private FloatFFT_1D float_FFT1D = null;
 
     public RedhawkFFTBulkIoWebSocket(boolean newDriverInstance, Redhawk redhawkConnection, RedhawkPort port, boolean binary, boolean alwaysSendSri, Map<String, WebSocketProcessor> webSocketProcessorServices, String path) {
     	super(newDriverInstance, redhawkConnection, path);
@@ -215,7 +224,7 @@ public class RedhawkFFTBulkIoWebSocket extends RedhawkEventAdminWebSocket {
         }
     }
     
-    private <T> T getFFTData(Packet packet) {
+    private <T> T getFFTData(Packet packet) throws IOException {
     	short mode = packet.mode;
     	int length = Array.getLength(packet.getData());
 
@@ -236,7 +245,7 @@ public class RedhawkFFTBulkIoWebSocket extends RedhawkEventAdminWebSocket {
     		}
     		
         	return (T) data;
-    	}else {
+    	}else if(port.getRepId().equals("IDL:BULKIO/dataDouble:1.0")){
     		if(double_fft1D==null) {
         		double_fft1D = new DoubleFFT_1D(length);
         	}
@@ -251,7 +260,21 @@ public class RedhawkFFTBulkIoWebSocket extends RedhawkEventAdminWebSocket {
         	}
         	
         	return (T) data;
-    	}    	
+    	}else{
+    		String message = "Library(JTransform) being used to do FFT only supports Double(IDL:BULKIO/dataDouble:1.0) and Float(IDL:BULKIO/dataFloat:1.0) data.";
+    		logger.error(message);
+    		throw new IOException(message);
+    	}
+    }
+    
+    public float[] convertShortToFloat(short[] data) {
+    	float[] fData = new float[data.length];
+    	
+    	for(int i=0; i<data.length; i++) {
+    		fData[i] = data[i];
+    	}
+    	
+    	return fData;
     }
     
     private <T> T getFFTDataFull(Packet packet) {

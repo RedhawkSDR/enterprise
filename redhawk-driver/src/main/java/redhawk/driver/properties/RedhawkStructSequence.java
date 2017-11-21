@@ -131,7 +131,11 @@ public class RedhawkStructSequence extends RedhawkProperty {
 		for (Map.Entry<String, Object> entry : map.entrySet()) {
 			DataType dt = new DataType();
 			dt.id = entry.getKey();
-			dt.value = AnyUtils.toAny(entry.getValue(), keyToTypeCode.get(entry.getKey()));
+			if(keyToTypeCode.containsKey(entry.getKey())) {
+				dt.value = AnyUtils.toAny(entry.getValue(), keyToTypeCode.get(entry.getKey()));
+			}else {
+				dt.value = AnyUtils.toAny(""+entry.getValue());
+			}
 			dataTypesToInsert.add(dt);
 		}
 

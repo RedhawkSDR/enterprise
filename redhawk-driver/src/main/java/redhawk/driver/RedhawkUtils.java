@@ -294,37 +294,6 @@ public class RedhawkUtils {
 	}
 	
 	/**
-	 * Helper method for querying property(s) based on it's IOR, name and the given orb. 
-	 * @param orb
-	 * @param ior
-	 * @param propertyNames
-	 * @return
-	 */
-	public static PropertiesHolder getPropertyFromCORBAObject(ORB orb, String ior, String... propertyNames) {
-		PropertiesHolder ph = new PropertiesHolder();
-		ph.value = new DataType[] {};
-
-		if (propertyNames != null) {
-			List<DataType> dataTypes = new ArrayList<DataType>();
-			for (String propertyName : propertyNames) {
-				dataTypes.add(new DataType(propertyName, orb.create_any()));
-			}
-
-			ph.value = dataTypes.toArray(new DataType[dataTypes.size()]);
-		}
-
-		try {
-			PropertySetOperations properties = PropertySetHelper.narrow(orb.string_to_object(ior));
-			properties.query(ph);
-		} catch (UnknownProperties e) {
-			logger.log(Level.FINE, "Could not find property: " + propertyNames, e);
-			return null;
-		}
-
-		return ph;
-	}
-	
-	/**
 	 * Constructs a map of all property names to their Id's. If the name is null, 
 	 * then the id is used as the key & value for the map
 	 * 

@@ -143,7 +143,12 @@ public class RedhawkStruct extends RedhawkProperty {
         for(String key : valuesToChange.keySet()){
             for(DataType type : structProperties){
                 if(type.id.toLowerCase().matches(key.toLowerCase())){
-                    type.value = AnyUtils.toAny(valuesToChange.get(key), type.value.type().kind());
+                	try {
+                		type.value = AnyUtils.toAny(valuesToChange.get(key), type.value.type().kind());
+                	}catch(Exception ex) {
+                		//Handle null case
+                		type.value = AnyUtils.toAny(""+valuesToChange.get(key));	
+                	}
                 }
             }   
         }

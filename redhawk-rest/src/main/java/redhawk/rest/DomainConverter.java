@@ -599,12 +599,11 @@ public class DomainConverter {
 		Port port = this.convertPort(obj);
 		return this.convertExternalPort((RedhawkExternalPortImpl) obj, port);
 	}
-
-	private ExternalPort convertExternalPort(RedhawkExternalPortImpl obj, Port port) {
-		ExternalPort p = new ExternalPort(port);
-		p.setExternalname(obj.getExternalName());
-		p.setComponentRefId(obj.getComponentReferenceId());
-		;
+	
+	private ExternalPort convertExternalPort(RedhawkExternalPortImpl obj, Port port){
+		ExternalPort p = new ExternalPort(port); 
+		p.setExternalname(obj.getName());
+		p.setComponentRefId(obj.getComponentReferenceId());;
 		p.setDescription(obj.getDescription());
 
 		return p;

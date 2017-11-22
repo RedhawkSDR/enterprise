@@ -7,7 +7,7 @@
             <v-snackbar
               :timeout="timeout"
               :bottom="y === 'bottom'"
-              multi-line="true"
+              :multi-line = true
               v-model="showDialog"
               >
                 {{ message }}

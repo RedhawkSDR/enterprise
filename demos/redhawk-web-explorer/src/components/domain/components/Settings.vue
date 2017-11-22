@@ -29,14 +29,14 @@
 				</v-flex>
 			</v-layout>
 		</v-card-text>
-    <v-card-action>
+    <v-card-actions>
       <v-btn
       @click="connectToDomain()"
       :disabled="!edit"
       >
         Connect
       </v-btn>
-    </v-card-action>
+    </v-card-actions>
 	</v-card>
 </v-flex>
 </template>

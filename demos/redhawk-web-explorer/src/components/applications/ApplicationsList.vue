@@ -20,6 +20,7 @@
 							<router-link :to="{path:'/applications/'+item.name}">{{ item.name }}</router-link>
 						</v-list-tile-title>
 					</v-list-tile-content>
+					<!-- TODO: Clean this up use an appropriate section -->
 					<v-list-tile-actions>
 						<v-btn
 							@click="play(index)"

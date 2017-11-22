@@ -115,9 +115,12 @@ export default {
 			}
 		},
 		isKindConfigurable(kinds){
-			for(var i = 0; i < kinds.length; i++){
-				if(kinds[i].kindtype=='CONFIGURE')
-					return true;
+			console.log(kinds)
+			if(kinds != undefined){
+				for(var i = 0; i < kinds.length; i++){
+					if(kinds[i].kindtype=='CONFIGURE')
+						return true;
+				}
 			}
 			return false
 		},

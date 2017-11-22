@@ -20,13 +20,13 @@
 							<router-link :to="{path:'/eventchannels/'+item.name}">{{ item.name }}</router-link>
 						</v-list-tile-title>
 					</v-list-tile-content>
-					<v-list-tile-actions>
+					<v-list-tile-action>
 						<v-btn
 							@click="release(index)"
 							fab small color="blue">
 							<v-icon>delete</v-icon>
 						</v-btn>
-					</v-list-tile-actions>
+					</v-list-tile-action>
 				</v-list-tile>
 				<v-divider></v-divider>
 			</template>

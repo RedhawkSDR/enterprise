@@ -157,7 +157,8 @@ public class RedhawkComponentImplIT extends RedhawkTestBase {
 	// TODO: Make this a test
 	@Test
 	public void snippets() throws Exception {
-		// Get your component
+		// Get your component from the application by full name 
+		//or using a regex that matches one component in the application 
 		RedhawkComponent component = application.getComponentByName("SigGen.*");
 		
 		//Set the desired property on the compenent

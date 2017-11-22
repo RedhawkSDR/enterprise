@@ -136,7 +136,7 @@ public interface PortBackedObject extends QueryableResource {
 				providesPort = this.getPort(providesPortName);
 				usesPort = resource.getPort(usesPortName);
 			} catch (ResourceNotFoundException | MultipleResourceException e1) {
-				throw new PortException("Unable to find connection between these two components using port "
+				throw new PortException("Unable to make connection between these two components using port "
 						+ "names provided(uses: " + usesPortName + ", provides: " + providesPortName + ")", e1);
 			}
 		} catch (MultipleResourceException e) {

@@ -58,6 +58,24 @@
 			<type>xml</type>
 			<scope>runtime</scope>
 		</dependency>
+		<!-- 
+		<dependency>
+			<groupId>org.apache.cxf.karaf</groupId>
+			<artifactId>apache-cxf</artifactId>
+			<version>${cxf.version}</version>
+			<classifier>features</classifier>
+			<type>xml</type>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.camel.karaf</groupId>
+			<artifactId>apache-camel</artifactId>
+			<version>${camel.version}</version>
+			<classifier>features</classifier>
+			<type>xml</type>
+			<scope>runtime</scope>
+		</dependency>
+		-->
 	</dependencies>
 	<build>
 		<plugins>

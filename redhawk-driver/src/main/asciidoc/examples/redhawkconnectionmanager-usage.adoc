@@ -10,6 +10,14 @@ The following code examples explain how to use the `RedhawkConnectionManager` in
 include::snippets/RedhawkConnectionManagerIT.java[lines=58]
 ----
 
+=== Create A REDHAWK Endpoint
+
+[source,java,indent=0]
+.`RedhawkConnectionManagerIT.java`
+----
+include::snippets/RedhawkConnectionManagerIT.java[lines=215..217]
+----
+
 === Connect a Device Port to an Application Port
 
 [source,java,indent=0]

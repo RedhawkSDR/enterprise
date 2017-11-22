@@ -34,9 +34,14 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
+<<<<<<< HEAD
 	<classpathentry kind="var" path="M2_REPO/org/jacorb/jacorb/3.8/jacorb-3.8.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-api/1.7.22/slf4j-api-1.7.22.jar"/>
 	<classpathentry kind="var" path="M2_REPO/org/jacorb/jacorb-omgapi/3.8/jacorb-omgapi-3.8.jar"/>
+=======
+	<classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-api/1.7.22/slf4j-api-1.7.22.jar"/>
+	<classpathentry kind="var" path="M2_REPO/org/jacorb/jacorb-omgapi/3.8/jacorb-omgapi-3.8.jar" sourcepath="M2_REPO/org/jacorb/jacorb-omgapi/3.8/jacorb-omgapi-3.8-sources.jar"/>
+>>>>>>> 1d54d70... RI-145 updates to make connect() method work with only two params on the external ports.
 	<classpathentry kind="var" path="M2_REPO/org/slf4j/slf4j-log4j12/1.7.12/slf4j-log4j12-1.7.12.jar"/>
 	<classpathentry kind="var" path="M2_REPO/log4j/log4j/1.2.17/log4j-1.2.17.jar"/>
 	<classpathentry kind="var" path="M2_REPO/commons-lang/commons-lang/2.6/commons-lang-2.6.jar"/>

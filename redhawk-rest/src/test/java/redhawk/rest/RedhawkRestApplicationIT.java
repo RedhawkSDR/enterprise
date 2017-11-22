@@ -87,8 +87,8 @@ public class RedhawkRestApplicationIT extends RedhawkTestBase{
 		
 			assertNotNull(container);
 
-			String xml = TestUtils.getStringFromJAXB(container);
-			logger.info(xml);
+			//String xml = TestUtils.getStringFromJAXB(container);
+			//logger.info(xml);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("Test failure "+e.getMessage());

@@ -42,8 +42,8 @@ public class DeviceManager {
     @XmlElement(name="device")
     private List<Device> devices;
     
-    //@XmlElementWrapper(name="properties")
-    //@XmlElement(name="property")
+    @XmlElementWrapper(name="properties")
+    @XmlElement(name="property")
     private List<Property> properties;
 
     

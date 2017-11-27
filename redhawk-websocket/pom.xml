@@ -30,6 +30,20 @@
 		</resources>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Import-Package>
+							com.sun.xml.internal.ws.encoding.soap;resolution:=optional,
+							*
+						</Import-Package>
+						<Embed-Dependency>JTransforms;inline=true</Embed-Dependency>
+					</instructions>
+				</configuration>
+			</plugin>
+			<plugin>
 				<artifactId>maven-release-plugin</artifactId>
 				<configuration>
 					<useReleaseProfile>false</useReleaseProfile>
@@ -94,11 +108,12 @@
 									<file>${project.build.directory}/${project.artifactId}-${project.version}.war</file>
 									<type>war</type>
 								</artifact>
-								<!-- TODO: apparently overriding the helper plugin screws default jar deployment of bundle -->
+								<!-- TODO: apparently overriding the helper plugin screws default 
+									jar deployment of bundle -->
 								<artifact>
 									<file>${project.build.directory}/${project.artifactId}-${project.version}.jar</file>
 									<type>jar</type>
-								</artifact>									
+								</artifact>
 							</artifacts>
 						</configuration>
 					</execution>
@@ -149,14 +164,8 @@
 			<artifactId>slf4j-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		<!--
-		<dependency>
-			<groupId>org.seleniumhq.selenium</groupId>
-			<artifactId>selenium-java</artifactId>
-			<version>2.52.0</version>
-			<scope>test</scope>
-		</dependency>
-		-->
+		<!-- <dependency> <groupId>org.seleniumhq.selenium</groupId> <artifactId>selenium-java</artifactId> 
+			<version>2.52.0</version> <scope>test</scope> </dependency> -->
 		<dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
@@ -254,6 +263,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>com.github.wendykierp</groupId>
+			<artifactId>JTransforms</artifactId>
+			<version>3.1</version>
+			<classifier>with-dependencies</classifier>
+		</dependency>
+		<dependency>
 			<groupId>redhawk</groupId>
 			<artifactId>cfinterfaces</artifactId>
 			<version>${redhawk.version}</version>
@@ -277,7 +292,7 @@
 			<type>test-jar</type>
 			<version>${project.version}</version>
 			<scope>test</scope>
-		</dependency>		
+		</dependency>
 	</dependencies>
 	<profiles>
 		<profile>

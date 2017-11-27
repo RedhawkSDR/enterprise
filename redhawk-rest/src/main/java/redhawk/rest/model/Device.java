@@ -45,6 +45,10 @@ public class Device {
 	@XmlElementWrapper(name="properties")
     @XmlElement(name="property")
     private List<Property> properties;
+	
+    @XmlElementWrapper(name="ports")
+    @XmlElement(name="port")
+    private List<Port> ports;
     
     //@XmlElement(name="configuration")
     //private Properties configuration; 
@@ -56,6 +60,13 @@ public class Device {
 	//public void setConfiguration(Properties configuration) {
 	//	this.configuration = configuration;
 	//}
+	
+	public List<Port> getPorts() {
+		return ports;
+	}
+	public void setPorts(List<Port> ports) {
+		this.ports = ports;
+	}
 	
 	public String getIdentifier() {
         return identifier;

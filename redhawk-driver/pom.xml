@@ -104,7 +104,7 @@
 							!org.omg.CosEventComm.*,
 							!org.apache.log4j.*,
 							!org.apache.commons.lang,
-							!javax.swing.*
+							!javax.swing.*,
 							*
 						</Import-Package>
 						<DynamicImport-Package>*</DynamicImport-Package>

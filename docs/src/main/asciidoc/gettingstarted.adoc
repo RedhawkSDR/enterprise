@@ -2,9 +2,9 @@
 
 After installing REDHAWK Enterprise Integration, the following directories are displayed:
 
+* `jetty-${jetty.version}`: Jetty distribution with <<REDHAWK REST>> and <<REDHAWK WebSocket>> pre-installed.
 * `karaf-${karaf.version}`: Directory contains a custom distribution of Karaf prepackaged with all REDHAWK Java Tool assets. 
 * `shell`: Programatic access to REDHAWK Driver via the shell. 
-* `jacorb-deps`: All dependencies needed to configure REDHAWK Driver to use JacORB instead of the default ORB provided by Java.
 
 === Working with the Shell
 
@@ -38,6 +38,27 @@ TIP: For additional instructions and information on trouble shooting, refer to t
  application.release();
 
 More example commands can be found in the <<redhawk-driver-code-examples>> section.
+
+=== Working with Jetty
+
+. To start Jetty, run the `jetty.sh` script located in Jetty's bin directory: 
++
+----
+./jetty.sh start
+----
++
+
+For more details on Jetty, refer to the Jetty https://www.eclipse.org/jetty/documentation/9.4.x/quick-start.html[quick start quide].
+
+=== Configuring JacORB with Jetty
+
+To configure Jetty to use JacORB, add the JacORB jar files to Jetty's classpath by running the following command:
+
+----
+export JETTY_ARGS='-Xbootclasspath/p:jacorb-deps/jacorb-3.8.jar:jacorb-deps/jacorb-omgapi-3.8.jar:jacorb-deps/jacorb-services-3.8.jar:jacorb-deps/slf4j-api-1.7.14.jar:jacorb-deps/slf4j-jdk14-1.7.14.jar -Dorg.omg.CORBA.ORBClass=org.jacorb.orb.ORB -Dorg.omg.CORBA.ORBSingletonClass=org.jacorb.orb.ORBSingleton'
+----
+
+Now each time the server is started, the ${JETTY_ARGS} will be used by Jetty. 
 
 === Working with Karaf
 
@@ -75,6 +96,8 @@ org.omg.CORBA.ORBClass=org.jacorb.orb.ORB
 . Copy the `jacorb-deps` into `${karaf.base}/lib/ext` directory. 
 
 . If Karaf was started previously, restart it. 
+
+*Note: As of REDHAWK Enterprise Integration release 2.0.1+ & 2.1.2+ JacORB is the default ORB used by Karaf.*
 
 ==== Configure JacORB logging w/ Karaf
 

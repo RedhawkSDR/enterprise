@@ -16,7 +16,7 @@
 	</fileSets>
 	<files>
 		<file>
-			<source>${project.parent.basedir}/redhawk-webapp/target/redhawkwebdemo.war</source>
+			<source>${project.parent.basedir}/redhawk-web-explorer/target/redhawkwebexplorer.war</source>
 			<outputDirectory>webapp</outputDirectory>
 		</file>
 	</files>

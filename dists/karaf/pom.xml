@@ -119,15 +119,15 @@
 					</execution>
 					<execution>
 						<id>copy-jacorb-deps</id>
-						<phase>generate-resources</phase>
+						<phase>package</phase>
 						<goals>
 							<goal>copy-resources</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.build.directory}/${runtime.dir}/karaf-${karaf.version}/jacorb-deps</outputDirectory>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/karaf-${karaf.version}/lib/ext</outputDirectory>
 							<resources>
 								<resource>
-									<directory>${project.build.directory}/jacorb-deps</directory>
+									<directory>${project.parent.basedir}/target/jacorb-deps</directory>
 								</resource>
 							</resources>
 						</configuration>

@@ -20,19 +20,19 @@ as an example use case for <<REDHAWK REST>>, <<REDHAWK WebSocket>>, and <<REDHAW
 . Update the REST and Websocket settings to point to the appropriate URLs for your system. By default
 the urls are pointed at localhost.
 +
-image::screenshots/settings.png[]
+image::settings.png[]
 +
 . Click on Domain in the side bar and configure the Domain Name(default REDHAWK_DEV) and Name Server(127.0.0.1:2809) locations and
 click `Connect`.
 +
-image::screenshots/domainSettings.png[]
+image::domainSettings.png[]
 +
 . With the above configured you'll now be able to interact with the Domain and Applications, Devices, and Event Channels it manages.
 
 Below are additional screen shots:
 
-image::screenshots/timebasedplot.png[]
+image::timebasedplot.png[]
 
-image::screenshots/fftline.png[]
+image::fftline.png[]
 
-image::screenshots/fftRaster.png[]
+image::fftRaster.png[]

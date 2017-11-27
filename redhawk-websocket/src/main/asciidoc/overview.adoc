@@ -38,6 +38,7 @@ ws://localhost:8181/ws/redhawk/localRH/domains/REDHAWK_DEV/applications/myApplic
 ==== Additional Options
 
 * *fft* : Whether to perform Fast Fourier Transform(FFT), using https://github.com/wendykierp/JTransforms[JTransforms]), on data.
+_Note JTransforms supports doing FFT for double/float data all other port types will not have this functionality via this interface._
 * *alwaysSendSri* : Send SRI information each time data is received instead of just the first time.
 
 === REDHAWK Device Port Connection
@@ -53,6 +54,7 @@ The `deviceManagerName`, `deviceLabel`, `portName` variables all support matchin
 ==== Additional Options
 
 * *fft* : Whether to perform Fast Fourier Transform(FFT), using https://github.com/wendykierp/JTransforms[JTransforms]), on data.
+_Note JTransforms supports doing FFT for double/float data all other port types will not have this functionality via this interface._
 * *alwaysSendSri* : Send SRI information each time data is received instead of just the first time.
 
 === REDHAWK Event Channel Connection

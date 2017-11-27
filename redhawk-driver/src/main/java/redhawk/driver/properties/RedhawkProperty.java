@@ -111,10 +111,6 @@ public abstract class RedhawkProperty {
     		struct.put(type.id, propertyValue);
     	}else {
     		struct.put(type.id, propertyValue);
-<<<<<<< HEAD
-=======
-    		//logger.severe("Not handing Struct types of "+propertyValue.getClass());
->>>>>>> RI-111
     	}		
 	}
 }

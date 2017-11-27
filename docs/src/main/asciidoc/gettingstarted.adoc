@@ -27,7 +27,6 @@ export JETTY_ARGS='-Xbootclasspath/p:jacorb-deps/jacorb-3.8.jar:jacorb-deps/jaco
 
 Now each time the server is started, the ${JETTY_ARGS} will be used by Jetty. 
 
->>>>>>> develop-2.0
 === Working with Karaf
 
 . To start Karaf, in the `bin`

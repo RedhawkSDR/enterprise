@@ -28,6 +28,7 @@ import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.ConnectionException;
 import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.testutils.RedhawkTestBase;
 
 public class RedhawkStructIT extends RedhawkPropertyTestBase{
@@ -86,4 +87,5 @@ public class RedhawkStructIT extends RedhawkPropertyTestBase{
 			e.printStackTrace();
 		}
 	}
+	
 }

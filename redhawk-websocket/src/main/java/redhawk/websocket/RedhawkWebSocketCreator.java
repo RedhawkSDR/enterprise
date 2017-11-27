@@ -37,6 +37,7 @@ import redhawk.driver.port.RedhawkPort;
 import redhawk.websocket.model.MessageType;
 import redhawk.websocket.sockets.RedhawkBulkIoWebSocket;
 import redhawk.websocket.sockets.RedhawkEventChannelWebSocket;
+import redhawk.websocket.sockets.RedhawkFFTBulkIoWebSocket;
 
 /**
  * Class creates a WebSocket endpoint based on the params passed in on the servlet level by the
@@ -83,6 +84,8 @@ public class RedhawkWebSocketCreator implements WebSocketCreator {
     
     private Boolean alwaysSendSri;
     
+    private Boolean fft;
+    
     private String[] pathArray;
     
     public RedhawkWebSocketCreator(List<ServiceReference<Redhawk>> redhawkDriverServices, List<WebSocketProcessor> webSocketProcessorServices, Map<String, WebSocketProcessor> webSocketProcessors, Map<String, Redhawk> redhawkDrivers) {
@@ -121,7 +124,11 @@ public class RedhawkWebSocketCreator implements WebSocketCreator {
             switch (pathArray[3]) {
                 case "devicemanagers":
                     port = redhawkConnection.getDomain(domainName).getDeviceManagerByName(pathArray[4]).getDeviceByName(pathArray[6]).getPort(pathArray[8]);
-                    return new RedhawkBulkIoWebSocket(newDriverInstance, redhawkConnection, port, binary, alwaysSendSri, webSocketProcessors, path);
+                    if(!fft) {
+                    	return new RedhawkBulkIoWebSocket(newDriverInstance, redhawkConnection, port, binary, alwaysSendSri, webSocketProcessors, path);
+                    }else {
+                    	return new RedhawkFFTBulkIoWebSocket(newDriverInstance, redhawkConnection, port, binary, alwaysSendSri, webSocketProcessors, path);
+                    }
                 case "applications":
                     RedhawkApplication app = redhawkConnection.getDomain(domainName).getApplicationByName(pathArray[4]);
                     if (pathArray[5].equals("components")) {
@@ -129,7 +136,12 @@ public class RedhawkWebSocketCreator implements WebSocketCreator {
                     } else if (pathArray[5].equals("ports")) {                        
                         port = app.getPort(pathArray[6]);
                     }
-                    return new RedhawkBulkIoWebSocket(newDriverInstance, redhawkConnection, port, binary, alwaysSendSri, webSocketProcessors, path);
+                    
+                    if(!fft) {
+                        return new RedhawkBulkIoWebSocket(newDriverInstance, redhawkConnection, port, binary, alwaysSendSri, webSocketProcessors, path);                    	
+                    }else {
+                        return new RedhawkFFTBulkIoWebSocket(newDriverInstance, redhawkConnection, port, binary, alwaysSendSri, webSocketProcessors, path);                    	
+                    }
                 case "eventchannels":
                     for (String eventChannel : redhawkConnection.getDomain(domainName).getEventChannelManager().eventChannels().keySet()) {
                         logger.debug("EVENT CHANNEL: " + eventChannel);
@@ -183,6 +195,7 @@ public class RedhawkWebSocketCreator implements WebSocketCreator {
         logger.info("Request Query String: "+queryString);
 
         alwaysSendSri = (queryString + "").contains("sriFrequency=always");
+        fft = (queryString + "").contains("fft=true");
 
         if (requestPath.toString().endsWith(".json")) {
             binary = false;

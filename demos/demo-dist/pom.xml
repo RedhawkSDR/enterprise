@@ -89,7 +89,7 @@
 							<directory>${demo.directory}/webapp</directory>
 							<sources>
 								<source>
-									<location>${project.parent.basedir}/redhawk-webapp/target/redhawkwebdemo.war</location>
+									<location>${project.parent.basedir}/redhawk-web-explorer/target/redhawkwebexplorer.war</location>
 								</source>
 							</sources>
 						</mapping>

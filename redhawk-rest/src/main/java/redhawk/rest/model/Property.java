@@ -34,7 +34,7 @@ import redhawk.driver.xml.model.sca.prf.AccessType;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlSeeAlso(value={SimpleRep.class})
+@XmlSeeAlso(value={SimpleRep.class, SimpleSequenceRep.class, StructRep.class, StructSequenceRep.class})
 @JsonSerialize(include=JsonSerialize.Inclusion.NON_NULL)//TODO: Upgrade this to @JsonInclude(Include.NON_NULL)
 public class Property {
 

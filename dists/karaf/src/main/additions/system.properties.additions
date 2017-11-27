@@ -13,3 +13,8 @@ javax.net.ssl.keyStorePassword=redhawk
 
 #Properties file containing permissions for accessing REST/WS resources
 #redhawk.jaxrs.permissions.file=${karaf.base}/etc/redhawk.jaxrs.permissions.csv
+
+#Jacorb configuration
+org.omg.CORBA.ORBSingletonClass=org.jacorb.orb.ORBSingleton
+org.omg.PortableInterceptor.ORBInitializerClass.standard_init=org.jacorb.orb.standardInterceptors.IORInterceptorInitializer
+org.omg.CORBA.ORBClass=org.jacorb.orb.ORB

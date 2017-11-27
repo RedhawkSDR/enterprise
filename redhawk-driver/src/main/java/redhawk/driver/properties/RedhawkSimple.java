@@ -77,8 +77,14 @@ public class RedhawkSimple extends RedhawkProperty {
     	if(requery) {
     		PropertiesHolder ph = RedhawkUtils.getPropertyFromCORBAObject(this.orb, this.parentIOR, this.simpleId);
     		
-    		//Should always only be one value in this structure
-    		value = AnyUtils.convertAny(ph.value[0].value);
+    		/*
+    		 * If PH is not equal to null will just use property value already set. This could 
+    		 * be because the kindtype is `allocation` and action is `eq`
+    		 * 
+    		 * This also makes sure an NPE is not thrown when a property is not queryable
+    		 */
+    		if(ph!=null)
+    			value = AnyUtils.convertAny(ph.value[0].value);
     	}
     	
     	return (T)value;

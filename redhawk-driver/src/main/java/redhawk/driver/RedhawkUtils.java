@@ -363,7 +363,7 @@ public class RedhawkUtils {
 			PropertySetOperations properties = PropertySetHelper.narrow(orb.string_to_object(ior));
 			properties.query(ph);
 		} catch (UnknownProperties e) {
-			logger.log(Level.FINE, "Could not find property: " + propertyNames, e);
+			logger.log(Level.FINE, "Could not find or query property: " + propertyNames, e);
 			return null;
 		}
 

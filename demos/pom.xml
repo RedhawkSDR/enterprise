@@ -10,8 +10,8 @@
 	<name>REDHAWK :: ENTERPRISE INTEGRATION :: DEMO</name>
 	<modules>
 		<module>camel-event-channel</module>
-		<module>redhawk-webapp</module>
 		<module>redhawk-metrics</module>		
+		<module>redhawk-web-explorer</module>
 		<module>demo-dist</module>
 	</modules>
 </project>

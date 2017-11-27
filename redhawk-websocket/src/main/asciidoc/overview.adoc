@@ -4,7 +4,7 @@
 
 Provides an HTML5-compliant WebSocket implementation that enables the ability to stream data from any REDHAWK BulkIO Port or Event Channel.
 
-As long as HTTPS is enabled, Jetty will host each of the following endpoints in the `wss` (WebSocket Secure) protocol as well. 
+As long as HTTPS is enabled, Jetty will host each of the following endpoints in the `wss` (WebSocket Secure) protocol as well.
 
 === Connecting to the REDHAWK WebSocket
 
@@ -35,6 +35,12 @@ The `applicationName`, `componentName` and `portName` variables all support matc
 ws://localhost:8181/ws/redhawk/localRH/domains/REDHAWK_DEV/applications/myApplication/components/SigGen.*/ports/dataFloat_out.json
 ----
 
+==== Additional Options
+
+* *fft* : Whether to perform Fast Fourier Transform(FFT), using https://github.com/wendykierp/JTransforms[JTransforms]), on data.
+_Note JTransforms supports doing FFT for double/float data all other port types will not have this functionality via this interface._
+* *alwaysSendSri* : Send SRI information each time data is received instead of just the first time.
+
 === REDHAWK Device Port Connection
 
 To connect to a Device Port, use this syntax:
@@ -44,6 +50,12 @@ devicemanagers/{deviceManagerName}/devices/{deviceLabel}/ports/{portName}
 ----
 
 The `deviceManagerName`, `deviceLabel`, `portName` variables all support matching on regular expressions.
+
+==== Additional Options
+
+* *fft* : Whether to perform Fast Fourier Transform(FFT), using https://github.com/wendykierp/JTransforms[JTransforms]), on data.
+_Note JTransforms supports doing FFT for double/float data all other port types will not have this functionality via this interface._
+* *alwaysSendSri* : Send SRI information each time data is received instead of just the first time.
 
 === REDHAWK Event Channel Connection
 

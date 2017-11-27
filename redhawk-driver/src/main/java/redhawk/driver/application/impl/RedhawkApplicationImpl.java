@@ -203,7 +203,7 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 						RedhawkExternalPortImpl exPort = new RedhawkExternalPortImpl((RedhawkPortImpl) rhPort);
 
 						// Adding additional methods.
-						exPort.setExternalName(port.getExternalname());
+						exPort.setName(port.getExternalname());
 						exPort.setDescription(port.getDescription());
 						exPort.setComponentReferenceId(port.getComponentinstantiationref().getRefid());
 						
@@ -240,7 +240,7 @@ public class RedhawkApplicationImpl extends QueryableResourceImpl<Application> i
 						RedhawkExternalPortImpl exPort = new RedhawkExternalPortImpl((RedhawkPortImpl) rhPort);
 
 						// Adding additional methods.
-						exPort.setExternalName(port.getExternalname());
+						exPort.setName(port.getExternalname());
 						exPort.setDescription(port.getDescription());
 						exPort.setComponentReferenceId(port.getComponentinstantiationref().getRefid());
 						

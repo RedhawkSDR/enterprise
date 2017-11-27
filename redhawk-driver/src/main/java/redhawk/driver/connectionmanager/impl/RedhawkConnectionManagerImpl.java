@@ -128,7 +128,7 @@ public class RedhawkConnectionManagerImpl extends CorbaBackedObject<ConnectionMa
 			//Can't give interface too much information either provide object or provide <id and name>
 			//request.objectRef(point.getPort().getCorbaObject());
 			if(portEndpoint.getPort() instanceof RedhawkExternalPortImpl){
-				return new EndpointRequest(request, ((RedhawkExternalPortImpl)portEndpoint.getPort()).getExternalName());
+				return new EndpointRequest(request, ((RedhawkExternalPortImpl)portEndpoint.getPort()).getName());
 			}
 			throw new IOException("ConnectionManager is expecting an External port for your application ");
 		case Device:

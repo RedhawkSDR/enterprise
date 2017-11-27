@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import redhawk.driver.application.RedhawkApplication;
@@ -24,6 +25,7 @@ import redhawk.rest.model.ApplicationContainer;
 import redhawk.rest.model.Domain;
 import redhawk.rest.model.ExternalPort;
 import redhawk.rest.model.FetchMode;
+import redhawk.rest.model.Port;
 import redhawk.rest.model.PropertyContainer;
 import redhawk.rest.utils.TestUtils;
 import redhawk.testutils.RedhawkTestBase;
@@ -139,6 +141,18 @@ public class RedhawkManagerIT extends RedhawkTestBase{
 			logger.info(xml);
 		} catch (Exception e) {
 			fail("Test failure "+e.getLocalizedMessage());
+		}
+	}
+	
+	@Test
+	@Ignore("Until you have this set up to work dynamically")
+	public void testGetDevicePort() {
+		try {
+			//TODO: Do this dynamically 
+			Port port = manager.get(nameServer, "deviceport", "");
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Unabled to get device port "+e.getMessage());
 		}
 	}
 	

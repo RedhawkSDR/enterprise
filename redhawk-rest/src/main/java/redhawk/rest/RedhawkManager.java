@@ -839,6 +839,8 @@ public class RedhawkManager {
 			String appAddress = location[0]+"/"+location[1];
 			String portName = location[2];
 			return (T) redhawk.getApplication(appAddress).getPort(portName);
+		case "deviceport":
+			return (T) redhawk.getPort(Arrays.stream(location).collect(Collectors.joining("/")));
 		case "devicemanager":
 			return (T) redhawk.getDeviceManager(location[0]);
 		case "eventchannel":

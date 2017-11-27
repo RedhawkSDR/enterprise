@@ -234,6 +234,9 @@ public class DomainConverter {
 		destination.setId(original.getId());
 		destination.setMode(original.getMode());
 		destination.setName(original.getName());
+		
+		destination.setConfigurationKinds(original.getConfigurationkinds());
+
 
 		List<Property> attributes = new ArrayList<>();
 		Map<String, Object> rhStructVal = rhProp;
@@ -290,6 +293,11 @@ public class DomainConverter {
 		destination.setPropertyValueType(original.getType());
 		destination.setUnits(original.getUnits());
 		destination.setValue(original.getValue());
+		
+		//TODO: Simple and SimpleSequences both share this clean possibly w/ inheritance or 
+		//minimum only one method to do this 
+		destination.setKinds(original.getKinds());
+		
 
 		if (redhawkProperty != null && redhawkProperty.getValue() != null) {
 			destination.setId(propertyId);
@@ -315,6 +323,10 @@ public class DomainConverter {
 		destination.setOptional(original.getOptional());
 		destination.setComplex(original.getComplex());
 		destination.setId(propertyId);
+		
+		//TODO: Simple and SimpleSequences both share this clean possibly w/ inheritance or 
+		//minimum only one method to do this 
+		destination.setKinds(original.getKinds());
 
 		if (redhawkProperty != null && redhawkProperty.getValues() != null && redhawkProperty.getValues().size() > 0) {
 			destination.setValues(redhawkProperty.getValues());
@@ -340,6 +352,10 @@ public class DomainConverter {
 		destination.setMode(original.getMode());
 		destination.setName(original.getName());
 		destination.setId(propertyId);
+		
+		//TODO: Struct and StructSequences both share this clean possibly w/ inheritance or 
+		//minimum only one method to do this 
+		destination.setConfigurationKinds(original.getConfigurationkinds());
 
 		List<Property> structs = new ArrayList<>();
 
@@ -535,7 +551,15 @@ public class DomainConverter {
 		device.setOperationState(obj.operationalState());
 		device.setUsageState(obj.usageState());
 		device.setImplementation(obj.getImplementation());
-
+		
+		//
+		try {
+			device.setPorts(obj.getPorts().parallelStream().map(this::convertPort).collect(Collectors.toList()));
+		} catch (ResourceNotFoundException e1) {
+			//device.setPorts(new ArrayList<>());
+			logger.error("Unable to get ports from device"+e1.getMessage());
+		}
+		
 		if (fetchMode.equals(FetchMode.EAGER)) {
 			try {
 				device.setProperties(convertProperties(obj.getProperties(), obj.getPropertyConfiguration()));
@@ -599,12 +623,11 @@ public class DomainConverter {
 		Port port = this.convertPort(obj);
 		return this.convertExternalPort((RedhawkExternalPortImpl) obj, port);
 	}
-
-	private ExternalPort convertExternalPort(RedhawkExternalPortImpl obj, Port port) {
-		ExternalPort p = new ExternalPort(port);
-		p.setExternalname(obj.getExternalName());
-		p.setComponentRefId(obj.getComponentReferenceId());
-		;
+	
+	private ExternalPort convertExternalPort(RedhawkExternalPortImpl obj, Port port){
+		ExternalPort p = new ExternalPort(port); 
+		p.setExternalname(obj.getName());
+		p.setComponentRefId(obj.getComponentReferenceId());;
 		p.setDescription(obj.getDescription());
 
 		return p;
@@ -643,6 +666,8 @@ public class DomainConverter {
 		case "component":
 			return convertComponent((RedhawkComponent) object);
 		case "port":
+			return convertPort((RedhawkPort) object);
+		case "deviceport":
 			return convertPort((RedhawkPort) object);
 		case "applicationport":
 			return convertExternalPort((RedhawkPort) object);

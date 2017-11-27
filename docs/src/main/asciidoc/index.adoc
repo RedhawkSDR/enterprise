@@ -91,7 +91,7 @@ include::demo-introduction.adoc[]
 
 :leveloffset: +1
 
-include::demos/redhawk-demo-webapp.adoc[]
+include::demos/redhawk-web-explorer.adoc[]
 
 include::demos/redhawk-metrics.adoc[]
 

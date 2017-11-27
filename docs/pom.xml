@@ -213,10 +213,10 @@
 											</includes>
 										</resource>
 										<resource>
-											<directory>${project.parent.basedir}/demos/redhawk-webapp</directory>
+											<directory>${project.parent.basedir}/demos/redhawk-web-explorer</directory>
 											<targetPath>demos</targetPath>
 											<includes>
-												<include>redhawk-demo-webapp.adoc</include>
+												<include>redhawk-web-explorer.adoc</include>
 											</includes>
 										</resource>
 										<resource>
@@ -225,11 +225,8 @@
 										</resource>
 										<!-- Get web screenshot -->
 										<resource>
-											<directory>${project.parent.basedir}/demos/redhawk-webapp</directory>
+											<directory>${project.parent.basedir}/demos/redhawk-web-explorer/images</directory>
 											<targetPath>images</targetPath>
-											<includes>
-												<include>demo-webscreenshot.png</include>
-											</includes>
 										</resource>
 										<!-- Get Metrics Docs -->
 										<resource>

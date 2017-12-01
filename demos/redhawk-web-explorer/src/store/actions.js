@@ -111,7 +111,6 @@ export const getApplicationsInDomain = ({commit, getters}) => {
 export const controlApplication = ({commit, getters, store}, controlInfo) => {
   var applicationControlURL = getDomainBaseURL(getters)+'/applications/'+controlInfo.applicationName
 
-  console.log("Application URL "+applicationControlURL)
   axios.post(applicationControlURL, controlInfo.action,{
     headers: {
       'Content-Type':'application/json'
@@ -193,6 +192,30 @@ export const selectComponent = ({getters, commit}, component) => {
   })
   .catch(function(error){
     console.log("ERROR "+error);
+  })
+}
+
+export const controlComponent = ({getters, commit}, controlInfo) => {
+  var controlURL = getDomainBaseURL(getters)+'/applications/'+controlInfo.applicationName+
+      '/components/'+controlInfo.componentName+'.json'
+
+  axios.post(controlURL, controlInfo.action,{
+    headers: {
+      'Content-Type':'application/json'
+      }
+  })
+  .then(function(response){
+    //GET updated information
+    axios.get(controlURL)
+    .then(function(response){
+      commit('selectComponent', response.data)
+    })
+    .catch(function(error){
+      console.log("ERROR "+error)
+    })
+  })
+  .catch(function(error){
+    console.log("ERROR "+error)
   })
 }
 

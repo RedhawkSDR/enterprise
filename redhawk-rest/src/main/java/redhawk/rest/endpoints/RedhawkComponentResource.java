@@ -22,6 +22,7 @@ package redhawk.rest.endpoints;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -82,6 +83,18 @@ public class RedhawkComponentResource extends RedhawkBaseResource {
     	@PathParam("componentId") String componentId) throws Exception {
         return redhawkManager.get(nameServer, "component", domainName + "/" + applicationId + "/" + componentId);
     }
+    
+	@POST
+	@Path("/{componentId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@ApiOperation(value = "Stop/Start Application")
+	public Response controlComponent(
+			@ApiParam(value = "Name of Component") @PathParam("componentId") String componentId, @ApiParam(value="Action to take on application start/stop", required=true) String control)
+			throws Exception {
+		redhawkManager.controlComponent(nameServer, control, domainName+'/'+applicationId+'/'+componentId);
+		
+		return Response.ok().build();
+	}
 
     @GET
     @Path("/{componentId}/properties")

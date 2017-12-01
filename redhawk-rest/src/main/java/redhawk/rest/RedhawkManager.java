@@ -28,6 +28,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import javax.ws.rs.WebApplicationException;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.slf4j.Logger;
@@ -387,6 +389,26 @@ public class RedhawkManager {
 				redhawk.disconnect();
 			}
 		}
+	}
+	
+	public void controlComponent(String nameServer, String control, String... location) {
+		Redhawk redhawk;
+		try {
+			redhawk = getDriverInstance(nameServer);
+
+			RedhawkComponent comp = internalGet(redhawk, "component", location);
+			
+			if (control.equalsIgnoreCase("stop")) {
+				comp.stop();
+			} else if (control.equalsIgnoreCase("start")) {
+				comp.start();
+			} else {
+				throw new WebApplicationException(
+						"Unknown control string " + control + " appropriate commands are 'start' or 'stop'", 400);
+			}
+		} catch (Exception e) {
+			throw new WebApplicationException("Unable to stop/start component at location "+Arrays.toString(location));
+		}		
 	}
 
 	public void releaseApplication(String nameServer, String domainName, String appId) throws Exception {

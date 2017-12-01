@@ -391,6 +391,12 @@ public class RedhawkManager {
 		}
 	}
 	
+	/**
+	 * Method to control component 
+	 * @param nameServer
+	 * @param control
+	 * @param location
+	 */
 	public void controlComponent(String nameServer, String control, String... location) {
 		Redhawk redhawk;
 		try {

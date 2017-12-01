@@ -1,5 +1,6 @@
 package redhawk.rest;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -11,9 +12,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import redhawk.driver.application.RedhawkApplication;
+import redhawk.driver.component.RedhawkComponent;
 import redhawk.driver.exceptions.ApplicationCreationException;
 import redhawk.driver.exceptions.CORBAException;
 import redhawk.driver.exceptions.MultipleResourceException;
+import redhawk.driver.exceptions.ResourceNotFoundException;
 import redhawk.rest.model.Component;
 import redhawk.rest.model.FetchMode;
 import redhawk.testutils.RedhawkTestBase;
@@ -38,6 +41,24 @@ public class RedhawkRestComponentIT extends RedhawkTestBase{
 		} catch (MultipleResourceException | ApplicationCreationException | CORBAException e) {
 			e.printStackTrace();
 			fail("Test is not setup properly unable to launch application "+e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testControlComponent() {
+		String componentName = basicApplication.getComponents().get(0).getName();
+		String componentLocation = domainName+'/'+appName+'/'+componentName; 
+		manager.controlComponent(nameServer, "stop", componentLocation);
+		
+		try {
+			RedhawkComponent comp = driver.getComponent(componentLocation);
+			assertEquals("Component should be stopped", false, comp.started());
+			
+			manager.controlComponent(nameServer, "start", componentLocation);
+			assertEquals("Component should be started", true, comp.started());
+		} catch (ResourceNotFoundException | MultipleResourceException | CORBAException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	

@@ -25,6 +25,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.cxf.jaxrs.client.WebClient;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -78,6 +79,42 @@ public class RedhawkComponentsResourceIT extends RedhawkResourceTestBase{
 				assertEquals(200, response.getStatus());
 			}
 			
+		}
+	}
+	
+	@Test
+	public void testControlComponents() {
+		WebTarget target = client.target(baseURI+"/"+domainName+"/applications/"+applicationName+"/components");
+		//System.out.println(baseUri+"/domains/"+domainName+"/applications/"+applicationName+"/components");
+		Response response = target.request().accept(MediaType.APPLICATION_XML).get();
+		ComponentContainer componentContainer = response.readEntity(ComponentContainer.class);
+		assertEquals(200, response.getStatus());
+		
+		
+		//Start and Stop each component
+		for(Component comp : componentContainer.getComponents()){
+			WebClient myClient = WebClient.create(baseURI+"/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName());
+			myClient.type(MediaType.APPLICATION_JSON);
+			myClient.post("stop");
+
+			//Request to make sure the status was updated
+			target = client.target(baseURI+"/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName());
+			response = target.request().accept(MediaType.APPLICATION_XML).get();
+			
+			Component aComp = response.readEntity(Component.class);
+			assertEquals(false, aComp.isStarted());
+			
+			//Now start the component back up
+			myClient.type(MediaType.APPLICATION_JSON);
+			myClient.post("start");
+			assertEquals(200, response.getStatus());
+			
+			//Request to make sure the status was updated
+			target = client.target(baseURI+"/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName());
+			response = target.request().accept(MediaType.APPLICATION_XML).get();
+			
+			aComp = response.readEntity(Component.class);
+			assertEquals(true, aComp.isStarted());	
 		}
 	}
 }

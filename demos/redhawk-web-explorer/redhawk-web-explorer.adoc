@@ -22,7 +22,7 @@ the URLs are pointed at localhost.
 +
 image::settings.png[]
 +
-. In the side bar, click Domain and configure the Domain Name (default REDHAWK_DEV) and Name Server (127.0.0.1:2809) locations and
+. In the side bar, click `Domain` and configure the Domain Name (default is REDHAWK_DEV) and Name Server locations (default is 127.0.0.1:2809) and
 click `Connect`.
 +
 image::domainSettings.png[]

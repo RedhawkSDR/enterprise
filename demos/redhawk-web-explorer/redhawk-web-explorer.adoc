@@ -1,33 +1,33 @@
 == REDHAWK Web Explorer Demo
 
-The REDHAWK Web Explorer demo webapp is an example web application that enables users to interact with a REDHAWK Domain via the web. The web application serves
+The REDHAWK Web Explorer Demo is an example web application that enables users to interact with a REDHAWK Domain via the web. The web application serves
 as an example use case for <<REDHAWK REST>>, <<REDHAWK WebSocket>>, and <<REDHAWK Driver>>.
 
-=== Installation Instructions
+=== Installing the Demo
 
 ==== Jetty
 
-. To use this application copy `redhawkwebexplorer.war` into the `${jetty.home}/webapps` directory
-. Now you can view the application at http:{hostname}:8181/redhawkwebexplorer
+. To use this application, copy `redhawkwebexplorer.war` into the `${jetty.home}/webapps` directory.
+. View the application at http:{hostname}:8181/redhawkwebexplorer.
 
 ==== Karaf
 
-. To use this application copy `redhawkwebexplorer.war` into the `${karaf.base}/deploy` directory
-. Now you can view the application at http:{hostname}:8181/redhawkwebexplorer
+. To use this application, copy `redhawkwebexplorer.war` into the `${karaf.base}/deploy` directory.
+. View the application at http:{hostname}:8181/redhawkwebexplorer.
 
-=== Usage Instructions
+=== Using the Demo
 
-. Update the REST and Websocket settings to point to the appropriate URLs for your system. By default
-the urls are pointed at localhost.
+. Update the REST and Websocket settings to point to the appropriate URLs for your system. By default,
+the URLs are pointed at localhost.
 +
 image::settings.png[]
 +
-. Click on Domain in the side bar and configure the Domain Name(default REDHAWK_DEV) and Name Server(127.0.0.1:2809) locations and
+. In the side bar, click `Domain` and configure the Domain Name (default is REDHAWK_DEV) and Name Server locations (default is 127.0.0.1:2809) and
 click `Connect`.
 +
 image::domainSettings.png[]
 +
-. With the above configured you'll now be able to interact with the Domain and Applications, Devices, and Event Channels it manages.
+. You can now interact with the Domain and the Applications, Devices, and Event Channels it manages.
 
 Below are additional screen shots:
 

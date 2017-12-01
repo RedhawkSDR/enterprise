@@ -40,6 +40,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import redhawk.driver.device.AdminState;
 import redhawk.driver.exceptions.ResourceNotFoundException;
+import redhawk.rest.model.Device;
 import redhawk.rest.model.DeviceContainer;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.FullProperty;
@@ -76,8 +77,21 @@ public class RedhawkDeviceResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET REDHAWK Device"
     		)
-    public Response getDevice(@PathParam("deviceId") String deviceId) throws Exception {
-        return Response.ok(redhawkManager.get(nameServer, "device", domainName + "/" + devManagerName + "/" + deviceId)).build();
+    public Device getDevice(@PathParam("deviceId") String deviceId) throws Exception {
+        return redhawkManager.get(nameServer, "device", domainName + "/" + devManagerName + "/" + deviceId);
+    }
+    
+    @POST
+    @Path("/{deviceId}")
+    @Produces({MediaType.APPLICATION_JSON})
+    @ApiOperation(
+    		value="Stop/Start a Device"
+    		)
+    public Response controlDevice(@PathParam("deviceId") String deviceId,
+    		@ApiParam(value="Action to take on application start/stop", required=true) String control) throws Exception {
+		redhawkManager.controlDevice(nameServer, control, domainName+'/'+devManagerName+'/'+deviceId);
+    
+		return Response.ok().build();
     }
     
     //TODO: Should be a PUT

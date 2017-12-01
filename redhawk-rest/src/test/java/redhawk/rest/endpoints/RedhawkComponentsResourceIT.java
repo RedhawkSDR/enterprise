@@ -96,7 +96,6 @@ public class RedhawkComponentsResourceIT extends RedhawkResourceTestBase{
 			WebClient myClient = WebClient.create(baseURI+"/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName());
 			myClient.type(MediaType.APPLICATION_JSON);
 			myClient.post("stop");
-			assertEquals(200, response.getStatus());
 
 			//Request to make sure the status was updated
 			target = client.target(baseURI+"/"+domainName+"/applications/"+applicationName+"/components/"+comp.getName());

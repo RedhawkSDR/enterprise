@@ -29,6 +29,7 @@ import org.apache.cxf.jaxrs.client.WebClient;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import redhawk.rest.model.Component;
 import redhawk.rest.model.Device;
 import redhawk.rest.model.DeviceManager;
 import redhawk.rest.model.DeviceManagerContainer;
@@ -112,6 +113,34 @@ public class RedhawkDeviceResourceIT extends RedhawkResourceTestBase{
 			
 			assertEquals(200, deviceResponse.getStatus());
 			assertEquals(state, restDevice.getAdminState().toString());
+		}
+	}
+	
+	@Test
+	public void testControlDevice() {
+		for(Device dev : devMgr.getDevices()) {
+			WebClient myClient = WebClient.create(baseURI+"/"+domainName+"/devicemanagers/"+deviceManagerLabel+"/devices/"+dev.getLabel());
+			myClient.type(MediaType.APPLICATION_JSON);
+			myClient.post("stop");
+
+			//Request to make sure the status was updated
+			WebTarget target = client.target(baseURI+"/"+domainName+"/devicemanagers/"+deviceManagerLabel+"/devices/"+dev.getLabel());
+			Response response = target.request().accept(MediaType.APPLICATION_XML).get();
+			
+			Device aDevice = response.readEntity(Device.class);
+			assertEquals(false, aDevice.isStarted());
+			
+			//Now stop the component
+			myClient.type(MediaType.APPLICATION_JSON);
+			Integer status = myClient.post("start").getStatus();
+			assertEquals(200, status.intValue());
+			
+			//Request to make sure the status was updated
+			target = client.target(baseURI+"/"+domainName+"/devicemanagers/"+deviceManagerLabel+"/devices/"+dev.getLabel());
+			response = target.request().accept(MediaType.APPLICATION_XML).get();
+			
+			aDevice = response.readEntity(Device.class);
+			assertEquals(true, aDevice.isStarted());
 		}
 	}
 }

@@ -87,7 +87,7 @@ public class RedhawkComponentResource extends RedhawkBaseResource {
 	@POST
 	@Path("/{componentId}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@ApiOperation(value = "Stop/Start Application")
+	@ApiOperation(value = "Stop/Start a Component")
 	public Response controlComponent(
 			@ApiParam(value = "Name of Component") @PathParam("componentId") String componentId, @ApiParam(value="Action to take on application start/stop", required=true) String control)
 			throws Exception {

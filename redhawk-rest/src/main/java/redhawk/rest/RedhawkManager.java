@@ -416,6 +416,33 @@ public class RedhawkManager {
 			throw new WebApplicationException("Unable to stop/start component at location "+Arrays.toString(location));
 		}		
 	}
+	
+	/**
+	 * Method to control device 
+	 * @param nameServer
+	 * @param control
+	 * @param location
+	 */
+	//TODO: Refactor clean this up a bit
+	public void controlDevice(String nameServer, String control, String... location) {
+		Redhawk redhawk;
+		try {
+			redhawk = getDriverInstance(nameServer);
+
+			RedhawkDevice device = internalGet(redhawk, "device", location);
+			
+			if (control.equalsIgnoreCase("stop")) {
+				device.stop();
+			} else if (control.equalsIgnoreCase("start")) {
+				device.start();
+			} else {
+				throw new WebApplicationException(
+						"Unknown control string " + control + " appropriate commands are 'start' or 'stop'", 400);
+			}
+		} catch (Exception e) {
+			throw new WebApplicationException("Unable to stop/start device at location "+Arrays.toString(location));
+		}		
+	}
 
 	public void releaseApplication(String nameServer, String domainName, String appId) throws Exception {
 		Redhawk redhawk = null;

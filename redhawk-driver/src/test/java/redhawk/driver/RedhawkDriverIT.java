@@ -182,6 +182,18 @@ public class RedhawkDriverIT extends RedhawkTestBase{
 		assertNotNull(port);		
 	}
 	
+	@Test
+	public void testGetDeviceManagerById() throws ResourceNotFoundException, CORBAException, MultipleResourceException{		
+		String deviceManagerId = driver.getDomain("REDHAWK_DEV").getDeviceManagers().get(0).getIdentifier();
+		
+		//Path to dev Manager
+		String pathForDevManager = domainName+"/"+deviceManagerId;
+		logger.info(pathForDevManager);
+		
+		RedhawkDeviceManager deviceManager = driver.getDeviceManager(pathForDevManager);
+		assertNotNull(deviceManager);
+	}
+	
 	@AfterClass
 	public static void tearDownApp() throws MultipleResourceException, ResourceNotFoundException, ApplicationReleaseException, CORBAException{
 		driver.getDomain("REDHAWK_DEV").getApplicationByName(sampleApp).release();

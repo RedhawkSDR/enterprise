@@ -419,7 +419,11 @@ public class RedhawkDriver implements Redhawk {
 			throws ResourceNotFoundException, MultipleResourceException,
 			CORBAException {
 		String[] location = deviceManagerLocation.split("/");
-		return getDomain(location[0]).getDeviceManagerByName(location[1]);
+		try {
+			return getDomain(location[0]).getDeviceManagerByName(location[1]);
+		}catch(ResourceNotFoundException ex) {
+			return getDomain(location[0]).getDeviceManagerByIdentifier(location[1]);
+		}
 	}
 
 	/**

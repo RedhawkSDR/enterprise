@@ -23,3 +23,5 @@ If you are using the REDHAWK Connector, you can replace `nameserver` and `port` 
 http://{host}:8181/rest/redhawk/{redhawk-connection-name}
 ----
 ====
+
+Swagger UI is available with the Jetty version of the distriution at http://localhost:8181/static/swagger/ui/#/ . Swagger UI provides a way to interact with all the endpoints documented below. 

@@ -333,6 +333,28 @@
 							</resources>
 						</configuration>
 					</execution>
+					<execution>
+						<id>copy-static-resources</id>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/${runtime.dir}/jetty-distribution-${jetty.version}/static/</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/jetty/static</directory>
+								</resource>
+								<resource>
+									<targetPath>swagger</targetPath>
+									<directory>${project.parent.parent.basedir}/redhawk-rest/target/swagger</directory>
+									<includes>
+										<include>swagger.json</include>
+									</includes>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 			<plugin>

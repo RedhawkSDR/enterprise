@@ -20,26 +20,20 @@ import redhawk.rest.model.EventChannelContainer;
 import redhawk.rest.model.FetchMode;
 
 @Path("/{nameserver}/domains/{domain}/eventchannels")
-@Api(value="/{nameserver}/domains/{domain}/eventchannels")
+@Api(value="eventchannels")
 public class RedhawkEventChannelResource extends RedhawkBaseResource{
 	private static Logger logger = Logger.getLogger(RedhawkEventChannelResource.class.getName());
-		
-    @ApiParam(value = "url for your name server")
-    @PathParam("nameserver")
-    private String nameServer;
-
-    @ApiParam(value = "Name of REDHAWK Domain")
-    @PathParam("domain")
-    private String domainName;
-    
+	
     @GET
     @Path("/")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
     	value="GET REDHAWK Event Channels"
     )
-    public EventChannelContainer getEventChannels() throws ResourceNotFoundException, Exception{
-    	return new EventChannelContainer(redhawkManager.getAll(nameServer, "eventchannel", domainName, FetchMode.EAGER));
+    public EventChannelContainer getEventChannels(
+    		@ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+     		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain) throws ResourceNotFoundException, Exception{
+    	return new EventChannelContainer(redhawkManager.getAll(nameServer, "eventchannel", domain, FetchMode.EAGER));
     }
     
     @GET
@@ -48,8 +42,11 @@ public class RedhawkEventChannelResource extends RedhawkBaseResource{
     @ApiOperation(
     		value="GET REDHAWK Event Channel"
     		)
-    public EventChannel getEventChannel(@PathParam("eventchannel") String eventChannel) throws ResourceNotFoundException, Exception{
-    	return redhawkManager.get(nameServer, "eventchannel", domainName, eventChannel);
+    public EventChannel getEventChannel(
+    		@ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+     		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
+    		@PathParam("eventchannel") String eventChannel) throws ResourceNotFoundException, Exception{
+    	return redhawkManager.get(nameServer, "eventchannel", domain, eventChannel);
     }
     
     @PUT
@@ -58,8 +55,11 @@ public class RedhawkEventChannelResource extends RedhawkBaseResource{
     @ApiOperation(
     		value="Create REDHAWK Event Channel"
     		)
-    public Response createEventChannel(@PathParam("eventchannel") String eventChannel){
-    	redhawkManager.createEventChannel(nameServer, domainName, eventChannel);
+    public Response createEventChannel(
+    		@ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+     		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
+    		@PathParam("eventchannel") String eventChannel){
+    	redhawkManager.createEventChannel(nameServer, domain, eventChannel);
     	
     	return Response.ok().build();
     }
@@ -70,8 +70,11 @@ public class RedhawkEventChannelResource extends RedhawkBaseResource{
     @ApiOperation(
     		value="DELETE REDHAWK Event Channel"
     		)
-    public Response deleteEventChannel(@PathParam("eventchannel") String eventChannel){
-    	redhawkManager.deleteEventChannel(nameServer, domainName, eventChannel);
+    public Response deleteEventChannel(
+    		@ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+     		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
+    		@PathParam("eventchannel") String eventChannel){
+    	redhawkManager.deleteEventChannel(nameServer, domain, eventChannel);
     	
     	return Response.ok().build();
     }
@@ -82,8 +85,11 @@ public class RedhawkEventChannelResource extends RedhawkBaseResource{
     @ApiOperation(
     		value="DELETE REDHAWK Event Channel Registrant"
     		)
-    public Response deleteEventChannelRegistrant(@PathParam("eventchannel") String eventChannel, @PathParam("id") String id){
-    	redhawkManager.unsubscribeFromEventChannel(nameServer, domainName, eventChannel, id);
+    public Response deleteEventChannelRegistrant(
+    		@ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+     		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
+    		@PathParam("eventchannel") String eventChannel, @PathParam("id") String id){
+    	redhawkManager.unsubscribeFromEventChannel(nameServer, domain, eventChannel, id);
     	
     	return Response.ok().build();
     }

@@ -233,7 +233,7 @@
 							<apiSources>
 								<apiSource>
 									<locations>redhawk.rest.endpoints</locations>
-									<basePath>rest/redhawk</basePath>
+									<basePath>/rest/redhawk</basePath>
 									<schemes>http,https</schemes>
 									<host>127.0.0.1:8181</host>
 									<info>

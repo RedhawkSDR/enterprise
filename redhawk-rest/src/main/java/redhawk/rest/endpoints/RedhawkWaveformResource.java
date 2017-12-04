@@ -29,27 +29,20 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import redhawk.driver.xml.model.sca.sad.Softwareassembly;
 import redhawk.rest.model.WaveformContainer;
 import redhawk.rest.model.WaveformInfo;
 
 @Path("/{nameserver}/domains/{domain}/waveforms")
-@Api("/{nameserver}/domains/{domain}/waveforms")
+@Api(value="waveforms")
 public class RedhawkWaveformResource extends RedhawkBaseResource {
-
 	private static Logger logger = Logger.getLogger(RedhawkWaveformResource.class.getName());
-
-	@PathParam("nameserver")
-	private String nameServer;
-
-	@PathParam("domain")
-	private String domainName;
 
 	@GET
 	@Path("/")
@@ -57,8 +50,11 @@ public class RedhawkWaveformResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET Waveforms in a REDHAWK Domain"
     		)	
-	public Response getApplications() throws Exception {
-		Map<String, Softwareassembly> applications = redhawkManager.getWaveforms(nameServer, domainName);
+	public WaveformContainer getApplications(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain
+			) throws Exception {
+		Map<String, Softwareassembly> applications = redhawkManager.getWaveforms(nameServer, domain);
 
 		List<WaveformInfo> waveforms = new ArrayList<WaveformInfo>();
 
@@ -70,7 +66,7 @@ public class RedhawkWaveformResource extends RedhawkBaseResource {
 			waveforms.add(info);
 		});
 
-		return Response.ok(new WaveformContainer(waveforms)).build();
+		return new WaveformContainer(waveforms);
 	}
 
 	@GET
@@ -79,8 +75,10 @@ public class RedhawkWaveformResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="Returns a Specific Waveform in a REDHAWK Domain"
     		)		
-	public Response getApplications(@PathParam("waveformId") String waveformId) throws Exception {
-		Map<String, Softwareassembly> applications = redhawkManager.getWaveforms(nameServer, domainName);
+	public Softwareassembly getApplications(    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
+			@PathParam("waveformId") String waveformId) throws Exception {
+		Map<String, Softwareassembly> applications = redhawkManager.getWaveforms(nameServer, domain);
 
 		Optional<Softwareassembly> assembly = applications.values().stream().filter(v -> {
 			if (v.getId().equalsIgnoreCase(waveformId)) {
@@ -90,9 +88,9 @@ public class RedhawkWaveformResource extends RedhawkBaseResource {
 		}).findFirst();
 
 		if (assembly.isPresent()) {
-			return Response.ok(assembly.get()).build();
+			return assembly.get();
 		} else {
-			return Response.status(Status.NOT_FOUND).build();
+			throw new WebApplicationException("Unable to find waveform");
 		}
 
 	}

@@ -32,28 +32,17 @@ import javax.ws.rs.core.Response;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import redhawk.rest.model.FetchMode;
+import redhawk.rest.model.Port;
 import redhawk.rest.model.PortContainer;
 import redhawk.rest.model.PortStatisticsContainer;
 import redhawk.rest.model.SRIContainer;
 
 @Path("/{nameserver}/domains/{domain}/applications/{applicationId}/components/{componentId}/ports")
-@Api(value="/{nameserver}/domains/{domain}/applications/{applicationId}/components/{componentId}/ports")
+@Api(value="component ports")
 public class RedhawkPortsResource extends RedhawkBaseResource {
-
     private static Logger logger = Logger.getLogger(RedhawkPortsResource.class.getName());
-
-    @PathParam("nameserver")
-    private String nameServer;
-
-    @PathParam("domain")
-    private String domainName;
-
-    @PathParam("applicationId")
-    private String applicationId;
-
-    @PathParam("componentId")
-    private String componentId;
 
     @GET
     @Path("/")
@@ -61,8 +50,12 @@ public class RedhawkPortsResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET REDHAWK Component Ports"
     		)
-    public Response getPorts() throws Exception {
-        return Response.ok(new PortContainer(redhawkManager.getAll(nameServer, "port", domainName + "/" + applicationId + "/" + componentId, FetchMode.EAGER))).build();
+    public PortContainer getPorts(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
+    		@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId,
+    		@ApiParam(value = "Name of Component") @PathParam("componentId") String componentId) throws Exception {
+        return new PortContainer(redhawkManager.getAll(nameServer, "port", domain + "/" + applicationId + "/" + componentId, FetchMode.EAGER));
     }
 
     @GET
@@ -71,8 +64,13 @@ public class RedhawkPortsResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET REDHAWK Component Port"
     		)
-    public Response getPort(@PathParam("portId") String portName) throws Exception {
-        return Response.ok(redhawkManager.get(nameServer, "port", domainName + "/" + applicationId + "/" + componentId + "/" + portName)).build();
+    public Port getPort(
+    		@ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
+    		@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId,
+    		@ApiParam(value = "Name of Component") @PathParam("componentId") String componentId,
+    		@PathParam("portId") String portName) throws Exception {
+        return redhawkManager.get(nameServer, "port", domain + "/" + applicationId + "/" + componentId + "/" + portName);
     }
 
     @GET
@@ -81,8 +79,13 @@ public class RedhawkPortsResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET REDHAWK Component Port Statistics"
     		)
-    public PortStatisticsContainer getPortStatistics(@PathParam("portId") String portName) throws Exception {
-        return redhawkManager.getRhPortStatistics(nameServer, "port", domainName + "/" + applicationId + "/" + componentId + "/" + portName);
+    public PortStatisticsContainer getPortStatistics(
+    		@ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
+    		@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId,
+    		@ApiParam(value = "Name of Component") @PathParam("componentId") String componentId,
+    		@PathParam("portId") String portName) throws Exception {
+        return redhawkManager.getRhPortStatistics(nameServer, "port", domain + "/" + applicationId + "/" + componentId + "/" + portName);
     }
     
     @GET
@@ -91,8 +94,13 @@ public class RedhawkPortsResource extends RedhawkBaseResource {
     @ApiOperation(
     		value="GET REDHAWK Component Port SRI"
     		)
-    public SRIContainer getActiveSRIs(@PathParam("portId") String portName) throws Exception {
-        return redhawkManager.getSRI(nameServer, "port", domainName + "/" + applicationId + "/" + componentId + "/" + portName);
+    public SRIContainer getActiveSRIs(
+    		@ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
+    		@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId,
+    		@ApiParam(value = "Name of Component") @PathParam("componentId") String componentId,
+    		@PathParam("portId") String portName) throws Exception {
+        return redhawkManager.getSRI(nameServer, "port", domain + "/" + applicationId + "/" + componentId + "/" + portName);
     }
     
     @DELETE
@@ -100,9 +108,13 @@ public class RedhawkPortsResource extends RedhawkBaseResource {
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(value = "DELETE a Connection from a Port by connectionId")
     public Response disconnectPortConnection(
+    		@ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
+    		@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId,
+    		@ApiParam(value = "Name of Component") @PathParam("componentId") String componentId,
     		@PathParam("portId") String portName,
     		@PathParam("connectionId") String connectionId){
-    	String portPath = domainName + "/" + applicationId + "/" + componentId + "/" + portName;
+    	String portPath = domain + "/" + applicationId + "/" + componentId + "/" + portName;
     	
     	try {
 			redhawkManager.disconnectConnectionById(nameServer, "port", portPath, connectionId);

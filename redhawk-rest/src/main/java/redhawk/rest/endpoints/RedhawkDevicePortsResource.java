@@ -30,25 +30,14 @@ import javax.ws.rs.core.Response;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import redhawk.rest.model.FetchMode;
 import redhawk.rest.model.PortContainer;
 
 @Path("/{nameserver}/domains/{domain}/devicemanagers/{devmanager}/devices/{deviceId}/ports")
-@Api(value="/{nameserver}/domains/{domain}/devicemanagers/{devmanager}/devices/{deviceId}/ports")
+@Api(value="device ports")
 public class RedhawkDevicePortsResource extends RedhawkBaseResource{
     private static Logger logger = Logger.getLogger(RedhawkDevicePortsResource.class.getName());
-
-    @PathParam("nameserver")
-    private String nameServer;
-
-    @PathParam("domain")
-    private String domainName;
-
-    @PathParam("devmanager")
-    private String devManagerName;
-    
-    @PathParam("deviceId")
-    private String deviceId;
     
     @GET
     @Path("/")
@@ -56,8 +45,12 @@ public class RedhawkDevicePortsResource extends RedhawkBaseResource{
     @ApiOperation(
     		value="GET REDHAWK Device Ports"
     		)
-    public Response getPorts() throws Exception {
-        return Response.ok(new PortContainer(redhawkManager.getAll(nameServer, "deviceport", domainName + "/" + devManagerName + "/" + deviceId, FetchMode.EAGER))).build();
+    public Response getPorts(
+    		@ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
+    		@ApiParam(value = "Label or Id for Device Manager", required = true) @PathParam("devmanager") String devManager,
+    		@ApiParam(value = "Name or Id for Device", required = true) @PathParam("deviceId") String deviceId) throws Exception {
+        return Response.ok(new PortContainer(redhawkManager.getAll(nameServer, "deviceport", domain + "/" + devManager + "/" + deviceId, FetchMode.EAGER))).build();
     }
 
     @GET
@@ -66,8 +59,13 @@ public class RedhawkDevicePortsResource extends RedhawkBaseResource{
     @ApiOperation(
     		value="GET REDHAWK Device Port"
     		)
-    public Response getPort(@PathParam("portId") String portName) throws Exception {
-        return Response.ok(redhawkManager.get(nameServer, "deviceport", domainName + "/" + devManagerName + "/" + deviceId + "/" + portName)).build();
+    public Response getPort(
+    		@ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
+    		@ApiParam(value = "Label or Id for Device Manager", required = true) @PathParam("devmanager") String devManager,
+    		@ApiParam(value = "Name or Id for Device", required = true) @PathParam("deviceId") String deviceId,
+    		@PathParam("portId") String portName) throws Exception {
+        return Response.ok(redhawkManager.get(nameServer, "deviceport", domain + "/" + devManager + "/" + deviceId + "/" + portName)).build();
     }
 
     @GET
@@ -76,7 +74,12 @@ public class RedhawkDevicePortsResource extends RedhawkBaseResource{
     @ApiOperation(
     		value="GET REDHAWK Port Statistics for a Device"
     		)
-    public Response getPortStatistics(@PathParam("portId") String portName) throws Exception {
-        return Response.ok(redhawkManager.getRhPortStatistics(nameServer, "deviceport", domainName + "/" + devManagerName + "/" + deviceId + "/" + portName)).build();
+    public Response getPortStatistics(
+    		@ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
+    		@ApiParam(value = "Label or Id for Device Manager", required = true) @PathParam("devmanager") String devManager,
+    		@ApiParam(value = "Name or Id for Device", required = true) @PathParam("deviceId") String deviceId,
+    		@ApiParam(value = "Port name/id") @PathParam("portId") String portName) throws Exception {
+        return Response.ok(redhawkManager.getRhPortStatistics(nameServer, "deviceport", domain + "/" + devManager + "/" + deviceId + "/" + portName)).build();
     }
 }

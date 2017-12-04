@@ -54,34 +54,32 @@ import redhawk.rest.model.SRIContainer;
 import redhawk.rest.model.WaveformInfo;
 
 @Path("/{nameserver}/domains/{domain}/applications")
-@Api(value = "/{nameserver}/domains/{domain}/applications")
+@Api(value = "applications")
 public class RedhawkApplicationResource extends RedhawkBaseResource {
 	private static Logger logger = LoggerFactory.getLogger(RedhawkApplicationResource.class.getName());
-
-	@ApiParam(value = "url for your name server", required = true)
-	@PathParam("nameserver")
-	private String nameServer;
-
-	@ApiParam(value = "Name of REDHAWK Domain", required = true)
-	@PathParam("domain")
-	private String domainName;
 
 	@GET
 	@Path("/")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@ApiOperation(value = "GET Applications for a REDHAWK Domain")
-	public ApplicationContainer getApplications(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode)
+	public ApplicationContainer getApplications(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,    	    
+			@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode)
 			throws Exception {
-		return new ApplicationContainer(redhawkManager.getAll(nameServer, "application", domainName, fetchMode));
+		return new ApplicationContainer(redhawkManager.getAll(nameServer, "application", domain, fetchMode));
 	}
 
 	@GET
 	@Path("/{applicationId}")
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@ApiOperation(value = "GET Application for a REDHAWK Domain")
-	public Application getApplication(@PathParam("applicationId") String applicationId)
+	public Application getApplication(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
+    		@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId)
 			throws Exception {
-		return redhawkManager.get(nameServer, "application", domainName + "/" + applicationId);
+		return redhawkManager.get(nameServer, "application", domain + "/" + applicationId);
 	}
 
 	@DELETE
@@ -89,9 +87,11 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@ApiOperation(value = "Release Application from a REDHAWK Domain")
 	public Response releaseApplication(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
 			@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId)
 			throws Exception {
-		redhawkManager.releaseApplication(nameServer, domainName, applicationId);
+		redhawkManager.releaseApplication(nameServer, domain, applicationId);
 		return Response.ok().build();
 	}
 
@@ -100,9 +100,11 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@ApiOperation(value = "Stop/Start Application")
 	public Response controlApplication(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
 			@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId, @ApiParam(value="Action to take on application start/stop", required=true) String control)
 			throws Exception {
-		redhawkManager.controlApplication(nameServer, domainName, applicationId, control);
+		redhawkManager.controlApplication(nameServer, domain, applicationId, control);
 		return Response.ok().build();
 	}
 
@@ -112,9 +114,12 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@ApiOperation(value = "Launch Application")
 	public Response launchApplication(
-			@ApiParam(value = "Name for Application") @PathParam("instanceName") String instanceName, @ApiParam(value="SAD file Location w/ optional Id/name of waveform", required=true) WaveformInfo info)
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
+			@ApiParam(value = "Name for Application") @PathParam("instanceName") String instanceName, 
+			@ApiParam(value="SAD file Location w/ optional Id/name of waveform", required=true) WaveformInfo info)
 			throws ResourceNotFoundException, ApplicationCreationException {
-		redhawkManager.createApplication(nameServer, domainName, instanceName, info);
+		redhawkManager.createApplication(nameServer, domain, instanceName, info);
 		return Response.ok("Success").build();
 	}
 
@@ -123,9 +128,11 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@ApiOperation(value = "GET Application Properties")
 	public PropertyContainer getApplicationProperties(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
 			@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId)
 			throws ResourceNotFoundException, Exception {
-		return redhawkManager.getProperties(nameServer, "application", domainName + "/" + applicationId);
+		return redhawkManager.getProperties(nameServer, "application", domain + "/" + applicationId);
 	}
 
 	@GET
@@ -133,10 +140,12 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@ApiOperation(value = "GET Application Property")
 	public Property getApplicationProperty(
-			@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId,
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
+			@ApiParam(value = "ID/Name for Application", required = true) @PathParam("applicationId") String applicationId,
 			@ApiParam(value = "ID/Name for Property") @PathParam("propId") String propertyId)
 			throws Exception {
-		return redhawkManager.getProperty(propertyId, nameServer, "application", domainName + "/" + applicationId);
+		return redhawkManager.getProperty(propertyId, nameServer, "application", domain + "/" + applicationId);
 	}
 
 	@PUT
@@ -145,11 +154,13 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@ApiOperation(value = "Set Application Property")
 	public Response setApplicationProperty(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
 			@ApiParam(value = "ID for Application") @PathParam("applicationId") String applicationId,
 			@ApiParam(value = "ID/Name for Property") @PathParam("propId") String propertyId, 
 			@ApiParam(value = "Updates for property", required=true) FullProperty property)
 			throws Exception {
-		redhawkManager.setProperty(property, nameServer, "application", domainName + "/" + applicationId);
+		redhawkManager.setProperty(property, nameServer, "application", domain + "/" + applicationId);
 		return Response.ok().build();
 	}
 
@@ -158,10 +169,12 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@ApiOperation(value = "GET Application Ports")
 	public ExternalPortContainer getApplicationPorts(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
 			@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId)
 			throws ResourceNotFoundException, Exception {
 		return new ExternalPortContainer(redhawkManager.getAll(nameServer, "applicationport",
-				domainName + "/" + applicationId, FetchMode.EAGER));
+				domain + "/" + applicationId, FetchMode.EAGER));
 	}
 
 	@GET
@@ -169,12 +182,14 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@ApiOperation(value = "GET Application Port")
 	public ExternalPort getApplicationPort(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
 			@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId,
 			@ApiParam(value = "External name for Port") @PathParam("portId") String portName)
 			throws Exception {
 		//TODO: Clean this call up it's inconsistent and not easily understandably either pass in an array or pass in a 
 		//String that's handled downstream. 
-		ExternalPort port = redhawkManager.get(nameServer, "applicationport", domainName, applicationId, portName);
+		ExternalPort port = redhawkManager.get(nameServer, "applicationport", domain, applicationId, portName);
 		return port;
 	}
 
@@ -183,9 +198,11 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@ApiOperation(value = "GET Application Port Statistics")
 	public PortStatisticsContainer getApplicationPortStatistics(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
 			@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId,
 			@ApiParam(value = "External name for Port") @PathParam("portId") String portName) throws Exception {
-		String applicationPath = domainName+"/"+applicationId+"/"+portName;
+		String applicationPath = domain+"/"+applicationId+"/"+portName;
 		
 		return redhawkManager.getRhPortStatistics(nameServer, "applicationport", applicationPath);
 	}
@@ -195,9 +212,11 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 	@ApiOperation(value = "GET Application Port SRI")
 	public SRIContainer getApplicationSRI(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
 			@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId,
 			@ApiParam(value = "External name for Port") @PathParam("portId") String portName) throws Exception {
-		String applicationPath = domainName+"/"+applicationId+"/"+portName;
+		String applicationPath = domain+"/"+applicationId+"/"+portName;
 		
 		return redhawkManager.getSRI(nameServer, "applicationport", applicationPath);
 	}
@@ -207,10 +226,12 @@ public class RedhawkApplicationResource extends RedhawkBaseResource {
 	@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 	@ApiOperation(value = "DELETE a Connection from a Port by connectionId")
 	public Response disconnectPortConnection(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String domain,
 			@ApiParam(value = "ID/Name for Application") @PathParam("applicationId") String applicationId,
 			@ApiParam(value = "External name for Port") @PathParam("portId") String portName,
 			@PathParam("connectionId") String connectionId){
-		String applicationPath = domainName+"/"+applicationId+"/"+portName;
+		String applicationPath = domain+"/"+applicationId+"/"+portName;
 		
 		try {
 			redhawkManager.disconnectConnectionById(nameServer, "applicationport", applicationPath, connectionId);

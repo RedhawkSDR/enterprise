@@ -49,21 +49,19 @@ import redhawk.rest.model.PropertyContainer;
 import redhawk.rest.model.RemoteDomainRegistrar;
 
 @Path("/{nameserver}/domains")
-@Api(value = "/{nameserver}/domains")
+@Api(value = "domains")
 public class RedhawkDomainResource extends RedhawkBaseResource {
     private static Logger logger = Logger.getLogger(RedhawkDomainResource.class.getName());
     
-    @ApiParam(value = "url for your name server", required = true)
-    @PathParam("nameserver")
-    private String nameServer;
-
-    @GET
+	@GET
     @Path("/")
     @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
     @ApiOperation(
     		value = "GET REDHAWK Domains"
     		)
-    public DomainContainer getDomains(@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws Exception {
+    public DomainContainer getDomains(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@QueryParam("fetch") @DefaultValue("EAGER") FetchMode fetchMode) throws Exception {
         List<Domain> domains = redhawkManager.getAll(nameServer, "domain", null, fetchMode);
         return new DomainContainer(domains);
     }
@@ -74,7 +72,9 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @ApiOperation(
     		value = "GET REDHAWK Domain"
     		)
-    public Domain getDomain(@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String name) {
+    public Domain getDomain(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String name) {
         try {
             Domain domain = redhawkManager.get(nameServer, "domain", name);
             return domain;
@@ -89,7 +89,9 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @ApiOperation(
     		value = "GET REDHAWK Domain Properties"
     		)    
-    public PropertyContainer getDomainProperties(@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String name) throws Exception {
+    public PropertyContainer getDomainProperties(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String name) throws Exception {
         PropertyContainer props = redhawkManager.getProperties(nameServer, "domain", name);
 
         return props;
@@ -101,7 +103,9 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @ApiOperation(
     		value = "GET REDHAWK Domain Property"
     		)    
-    public Property getDomainPropertyById(@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String name,@ApiParam(value = "Property name/ID", required = true) @PathParam("propId") String id) throws Exception {
+    public Property getDomainPropertyById(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain", required = true) @PathParam("domain") String name,@ApiParam(value = "Property name/ID", required = true) @PathParam("propId") String id) throws Exception {
         return redhawkManager.getProperty(id, nameServer, "domain", name);
     }
 
@@ -112,7 +116,9 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @ApiOperation(
     		value = "Set Properties on a REDHAWK Domain"
     		)
-    public Response setDomainProperties(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name, @ApiParam(value = "List of Properties to set", required=true) List<FullProperty> properties) throws Exception {
+    public Response setDomainProperties(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name, @ApiParam(value = "List of Properties to set", required=true) List<FullProperty> properties) throws Exception {
         redhawkManager.setProperties(properties, nameServer, "domain", name);
         return Response.ok().build();
     }
@@ -125,7 +131,9 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @ApiOperation(
     		value = "Set a Property on a REDHAWK Domain"
     		)    
-    public Response setDomainProperty(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name,
+    public Response setDomainProperty(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name,
     		@ApiParam(value = "Property name/ID") @PathParam("propId") String propertyId, 
     		@ApiParam(value = "Property to set", required=true) FullProperty property) throws Exception {
         redhawkManager.setProperty(property, nameServer, "domain", name);
@@ -139,7 +147,9 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @ApiOperation(
     		value = "Register a Remote REDHAWK Domain"
     		) 
-    public Response registerRemoteDomain(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name,
+    public Response registerRemoteDomain(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name,
     		@ApiParam(value = "Remote Domain Information", required=true) RemoteDomainRegistrar registerRequest) throws Exception {
         redhawkManager.registerRemoteDomain(nameServer, "domain", name, registerRequest);
     	return Response.ok().build();
@@ -152,7 +162,9 @@ public class RedhawkDomainResource extends RedhawkBaseResource {
     @ApiOperation(
     		value = "Set a Property on a REDHAWK Domain"
     		) 
-    public Response unregisterRemoteDomain(@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name,
+    public Response unregisterRemoteDomain(
+    	    @ApiParam(value = "url for your name server", required = true) @PathParam("nameserver") String nameServer,
+    		@ApiParam(value = "Name of REDHAWK Domain") @PathParam("domain") String name,
     		@ApiParam(value = "Remote Domain Name", required=true) String remoteDomainName) throws Exception {
         redhawkManager.unregisterRemoteDomain(nameServer, "domain", name, remoteDomainName);
     	return Response.ok().build();

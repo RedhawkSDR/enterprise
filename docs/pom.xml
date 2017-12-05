@@ -193,7 +193,12 @@
 											<targetPath>${project.build.directory}/asciidoc-workspace/rest</targetPath>
 											<excludes>
 												<exclude>index.adoc</exclude>
+												<exclude>swaggerRedhawkRestScreenshot.png</exclude>
 											</excludes>
+										</resource>
+										<resource>
+											<directory>${project.parent.basedir}/redhawk-rest/target/asciidoc/images</directory>
+											<targetPath>images</targetPath>
 										</resource>
 										<!-- Take the necessary adoc files from redhawk-connector -->
 										<resource>

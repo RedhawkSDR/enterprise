@@ -8,9 +8,6 @@
 	<artifactId>redhawk-demo-parent</artifactId>
 	<packaging>pom</packaging>
 	<name>REDHAWK :: ENTERPRISE INTEGRATION :: DEMO</name>
-	<properties>
-                <node.version>v7.9.0</node.version>
-        </properties>
 	<modules>
 		<module>camel-event-channel</module>
 		<module>redhawk-web-explorer</module>

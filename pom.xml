@@ -133,6 +133,7 @@
 				<module>redhawk-rest</module>
 				<module>redhawk-websocket</module>
 				<module>redhawk-camel</module>
+				<module>docs</module><!-- Produces aggregate report on tests that were run -->
 			</modules>
 			<build>
 				<plugins>

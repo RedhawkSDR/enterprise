@@ -15,10 +15,20 @@
 		<jacorb.version>3.8</jacorb.version>
 	</properties>
 	<modules>
-		<module>karaf</module>
 		<module>jetty</module>
 		<module>shell</module>
 	</modules>
+	<profiles>
+		<profile>
+			<id>karaf-dist</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<modules>
+				<module>karaf</module>
+			</modules>
+		</profile>
+	</profiles>
 	<build>
 		<plugins>
 			<plugin>

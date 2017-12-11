@@ -10,8 +10,7 @@
 	<name>REDHAWK :: DEMO :: WEBAPP</name>
 	<description>Example web application with REDHAWK</description>
 	<properties>
-		<node.version>v6.11.2</node.version>
-		<npm.version>4.4.1</npm.version>
+		<node.version>v7.9.0</node.version>
 	</properties>
 	<build>
 		<!--
@@ -58,7 +57,6 @@
 									<!-- See https://nodejs.org/en/download/ for latest node and npm 
 										(lts) versions -->
 									<nodeVersion>${node.version}</nodeVersion>
-									<npmVersion>${npm.version}</npmVersion>
 								</configuration>
 							</execution>
 							<execution>
@@ -110,7 +108,6 @@
 							<!-- See https://nodejs.org/en/download/ for latest node and npm (lts) 
 								versions -->
 							<nodeVersion>${node.version}</nodeVersion>
-							<npmVersion>${npm.version}</npmVersion>
 						</configuration>
 						<executions>
 							<execution>
@@ -119,8 +116,8 @@
 									<goal>install-node-and-npm</goal>
 								</goals>
 								<configuration>
-									<nodeDownloadRoot>${nodeDownloadRoot}</nodeDownloadRoot>
-									<npmDownloadRoot>${npmDownloadRoot}</npmDownloadRoot>
+									<nodeVersion>${nodeVersion}</nodeVersion>
+									<downloadRoot>${nodeDownloadRoot}</downloadRoot>
 								</configuration>
 							</execution>
 							<execution>

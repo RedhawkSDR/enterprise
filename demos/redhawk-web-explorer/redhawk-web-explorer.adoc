@@ -31,8 +31,8 @@ image::domainSettings.png[]
 
 Below are additional screen shots:
 
-image::timebasedplot.png[]
+image::timebasedplot.png[title="Example Time based plot for a Sine Wave."]
 
-image::fftline.png[]
+image::fftline.png[title="Example FFT line plot."]
 
-image::fftRaster.png[]
+image::fftRaster.png[title="Example FFT Raster plot."]

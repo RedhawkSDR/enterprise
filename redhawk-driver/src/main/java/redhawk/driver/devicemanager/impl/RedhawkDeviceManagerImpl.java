@@ -333,10 +333,9 @@ public class RedhawkDeviceManagerImpl extends QueryableResourceImpl<DeviceManage
 	
 	@Override
 	public Properties getPropertyConfiguration(String platform) throws ResourceNotFoundException {
-		RedhawkSimple dcdURI = getProperty("DCD_FILE");
 		Deviceconfiguration dcd;
 		try {
-			dcd = unMarshall(getFileSystem().getFile(dcdURI.getValue()), Deviceconfiguration.class);
+			dcd = unMarshall(getFileSystem().getFile(this.deviceConfigurationProfile()), Deviceconfiguration.class);
 			String spdURI = dcd.getDevicemanagersoftpkg().getLocalfile().getName();
 			Softpkg spd = unMarshall(getFileSystem().getFile(spdURI), Softpkg.class);
 			String prf = spd.getPropertyfile().getLocalfile().getName();

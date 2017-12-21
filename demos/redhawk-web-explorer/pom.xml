@@ -10,7 +10,7 @@
 	<name>REDHAWK :: DEMO :: WEBAPP</name>
 	<description>Example web application with REDHAWK</description>
 	<properties>
-                <node.version>v7.9.0</node.version>
+                <node.version>v6.11.2</node.version>
         </properties>
 	<build>
 		<!--

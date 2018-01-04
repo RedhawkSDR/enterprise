@@ -1,0 +1,59 @@
+= REDHAWK Jaxrs Security Filter
+
+The REDHAWK Jaxrs Security filter provides users a way to dynamically assign role based permissions to their REDHAWK REST and WebSocket endpoints in their environment.
+A feature like this could come in handy when you'd like to make sure a user is a certain Role in order to access an endpoint. For example if you'd only like
+Adminastrative users to be able to Create and Release Waveforms you'd use this feature.
+
+Currently this feature is only supported by the Jetty Distribution of REDHAWK Enterprise Integration and disabled by default. To enable this feature do the following:
+
+. In the `redhawk-rest.xml` file located in ${jetty.home}/webapps there's a section commented out currently. Uncomment that section. See example of
+uncommented section below:
++
+[source,xml]
+----
+  <Set name="overrideDescriptor"><Property name="jetty.home" default="." />/etc/rest_jaas_override-web.xml</Set>
+
+	<!--
+		JAAS Login Service:
+			Uncomment XML below to enable JAAS Authentication
+	 -->
+  	<Set name="securityHandler">
+    	<New class="org.eclipse.jetty.security.ConstraintSecurityHandler">
+     		<Set name="loginService">
+       			<New class="org.eclipse.jetty.jaas.JAASLoginService">
+         			<Set name="name">REDHAWK_JAAS_REALM</Set>
+         			<Set name="loginModuleName">xyz</Set>
+       			</New>
+     		</Set>
+    	</New>
+  	</Set>
+
+  	<!--
+		Use JNDI to set location of the REST permissions file
+	 -->
+	<New id="jaxrsperms" class="org.eclipse.jetty.plus.jndi.EnvEntry">
+  		<Arg>redhawk.jaxrs.permissions.file</Arg>
+  		<Arg type="java.lang.String"><Property name="jetty.home" default="." />/etc/redhawk.jaxrs.permissions.csv</Arg>
+  		<Arg type="boolean">true</Arg>
+	</New>
+----
++
+To enable this for REDHAWK Websocket to just uncomment the section thats in `redhawk-websocket.xml`.
+
+. As soon as you enable this your endpoints will now be using Java Authentication and Authorization Service. So you'll need to
+login to access your endpoints now. All the Security configuration for REDHAWK REST is provided via an overrides file referenced
+in the configuration above at `${jetty.home}/etc/rest_jaas_override-web.xml`. Login information can be found here ${jetty.home}/etc/login.properties file. Login configuration can
+be found at `${jetty.home}/etc/login.conf` . For more information on Security with Jetty refer to the *Configuring Security* section of the https://www.eclipse.org/jetty/documentation/[Jetty's Official Documentation].
+
+. By default users in the `guest` and `admin` roles have permissions set for any endpoints on the REDHAWK REST and WebSocket endpoints.
+In order to change these permissions for endpoints update the `redhawk.jaxrs.permissions.csv` file
+located in the ${jetty.home}/etc . Example permissions:
++
+----
+#PATH, METHOD, Role(s)
+/rest/redhawk.*,GET,"guest,admin"
+/rest/redhawk.*,"POST,PUT,DELETE",admin
+/ws/redhawk.*,,"guest,admin"
+----
++
+Path and Role(s) are mandatory fields, Method field is optional. Edit the permissions to suit your use case.

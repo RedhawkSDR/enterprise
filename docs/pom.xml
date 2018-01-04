@@ -234,6 +234,14 @@
 											<directory>${project.parent.basedir}/demos/redhawk-web-explorer/images</directory>
 											<targetPath>images</targetPath>
 										</resource>
+										<!-- Get Jaxrs Filter docs -->
+										<resource>
+											<directory>${project.parent.basedir}/redhawk-jaxrs-security</directory>
+											<targetPath>jaxrs</targetPath>
+											<includes>
+												<include>rh-jaxrs-security.adoc</include>
+											</includes>
+										</resource>
 									</resources>
 								</configuration>
 							</execution>

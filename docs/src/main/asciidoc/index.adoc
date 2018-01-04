@@ -79,6 +79,8 @@ include::websocket/overview.adoc[]
 
 include::camel/overview.adoc[]
 
+include::jaxrs/rh-jaxrs-security.adoc[]
+
 //End of docs being pulled from other modules....
 
 //Demo instructions 

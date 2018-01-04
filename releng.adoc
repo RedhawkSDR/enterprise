@@ -14,13 +14,41 @@
 
 . Tag and push gitlab-ci will do the rest
 
-== Merging Forward
+== Upgrading Core Framework Dependencies
 
-gitattributes should be able to accomplish this but it will fastforward if you've previously done merges on a particular file. 
+. The Core Framework dependencies are located in the cf-dependencies project. The jars that are located
+in `cf-dependencies/lib` are retrieved from the Core Framework.
+. In order to update the jar dependencies retrieve the latest jar dependencies from Core Framework. You can do this
+from the latest build on source or get them from an RPM install at $OSSIEHOME/lib.
++
+----
+ls -l /usr/local/redhawk/core/lib | grep -i jar
+-rw-r--r--. 1 root    root      261527 Oct 13 13:22 apache-commons-lang-2.4.jar
+-rw-r--r--. 1 root    root      454145 Oct 13 13:33 BULKIOInterfaces.jar
+-rw-r--r--. 1 root    root      305704 Oct 13 13:33 bulkio.jar
+-rw-r--r--. 1 root    root      261221 Oct 13 13:43 BURSTIOInterfaces.jar
+-rw-r--r--. 1 root    root      124218 Oct 13 13:43 burstio.jar
+-rw-r--r--. 1 root    root     2171280 Oct 13 13:22 CFInterfaces.jar
+-rw-r--r--. 1 root    root      325486 Oct 13 13:42 FRONTENDInterfaces.jar
+-rw-r--r--. 1 root    root      100233 Oct 13 13:42 frontend.jar
+-rw-r--r--. 1 root    root      351383 Oct 13 13:22 log4j-1.2.15.jar
+-rw-r--r--. 1 root    root      462417 Oct 13 13:22 ossie.jar
+----
+. Once you've put the correct binaries in place. You also need to update the ${redhawk.version} number
+to the version for the binaries you've just put into `cf-dependencies` project. The ${redhawk.version} is
+managed in the parent pom that can be found at the root of the project.
+. Run `mvn -P CFDependencies` and the new CF deps will be available in your environment. 
+
+
+== Ideas/Developer Notes
+
+=== Merging Forward
+
+gitattributes should be able to accomplish this but it will fastforward if you've previously done merges on a particular file.
 
 === Cherry Picking
 
-Use cherry-pick to merge specific commits forward. 
+Use cherry-pick to merge specific commits forward.
 
 ----
 git cherry-pick --no-commit <hash>
@@ -30,7 +58,7 @@ The `no-commit` allows you to see the changes that would happen before it commit
 
 === Manual Way
 
-Keep track of files you don't want to automagically merge forward and manually reset them: 
+Keep track of files you don't want to automagically merge forward and manually reset them:
 
 ----
 git merge --no-commit <merge-branch>

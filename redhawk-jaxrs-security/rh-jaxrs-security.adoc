@@ -38,7 +38,7 @@ uncommented section below:
 	</New>
 ----
 +
-To enable this for REDHAWK Websocket to just uncomment the section thats in `redhawk-websocket.xml`.
+To enable this for REDHAWK Websocket, just uncomment the section thats in `redhawk-websocket.xml`.
 
 . As soon as you enable this your endpoints will now be using Java Authentication and Authorization Service. So you'll need to
 login to access your endpoints now. All the Security configuration for REDHAWK REST is provided via an overrides file referenced

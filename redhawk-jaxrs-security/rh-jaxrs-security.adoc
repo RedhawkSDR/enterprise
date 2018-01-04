@@ -1,13 +1,15 @@
 = REDHAWK Jaxrs Security Filter
 
-The REDHAWK Jaxrs Security filter provides users a way to dynamically assign role based permissions to their REDHAWK REST and WebSocket endpoints in their environment.
-A feature like this could come in handy when you'd like to make sure a user is a certain Role in order to access an endpoint. For example if you'd only like
-Adminastrative users to be able to Create and Release Waveforms you'd use this feature.
+The REDHAWK Jaxrs Security filter provides the ability to dynamically assign role-based permissions to REDHAWK REST and WebSocket endpoints. 
+For example, this feature may be used to limit the ability to create and release Waveforms to include only users with an administrative role.
 
-Currently this feature is only supported by the Jetty Distribution of REDHAWK Enterprise Integration and disabled by default. To enable this feature do the following:
+Currently, this feature is only supported by the Jetty Distribution of REDHAWK Enterprise Integration and disabled by default. To enable the REDHAWK Jaxrs Security filter feature, use the following procedure:
 
-. In the `redhawk-rest.xml` file located in ${jetty.home}/webapps there's a section commented out currently. Uncomment that section. See example of
-uncommented section below:
+. In `${jetty.home}/webapps`, locate the `redhawk-rest.xml` file, and in this file, locate the section that is currently commented out. 
+
+. Remove the comment markings for `overrideDescriptor` and `jaxrsperms`. 
++
+The following listing displays the modified `redhawk-rest-xml` file.
 +
 [source,xml]
 ----
@@ -38,16 +40,18 @@ uncommented section below:
 	</New>
 ----
 +
-To enable this for REDHAWK Websocket, just uncomment the section thats in `redhawk-websocket.xml`.
+The REDHAWK REST endpoints are now using the Java Authentication and Authorization Service.
 
-. As soon as you enable this your endpoints will now be using Java Authentication and Authorization Service. So you'll need to
-login to access your endpoints now. All the Security configuration for REDHAWK REST is provided via an overrides file referenced
-in the configuration above at `${jetty.home}/etc/rest_jaas_override-web.xml`. Login information can be found here ${jetty.home}/etc/login.properties file. Login configuration can
-be found at `${jetty.home}/etc/login.conf` . For more information on Security with Jetty refer to the *Configuring Security* section of the https://www.eclipse.org/jetty/documentation/[Jetty's Official Documentation].
+. To enable the REDHAWK Jaxrs Security filter feature for REDHAWK Websocket, in `${jetty.home}/webapps`, locate the `redhawk-websocket.xml` file, and in this file, locate the section that is currently commented out. Remove the comment markings for `overrideDescriptor` and `jaxrsperms`.
++
+The REDHAWK Websocket endpoints are now using the Java Authentication and Authorization Service.
 
-. By default users in the `guest` and `admin` roles have permissions set for any endpoints on the REDHAWK REST and WebSocket endpoints.
-In order to change these permissions for endpoints update the `redhawk.jaxrs.permissions.csv` file
-located in the ${jetty.home}/etc . Example permissions:
+. To access the endpoints, you must login. All the Security configuration for REDHAWK REST is provided via an overrides file referenced in the configuration above at `${jetty.home}/etc/rest_jaas_override-web.xml`. For login information, refer to `${jetty.home}/etc/login.properties`. Login configuration can
+be found at `${jetty.home}/etc/login.conf`. For more information on security with Jetty, refer to the *Configuring Security* section of https://www.eclipse.org/jetty/documentation/[Jetty's Official Documentation].
+
+. By default, users in the `guest` and `admin` roles have permissions set for any endpoints on the REDHAWK REST and WebSocket endpoints. To change the permissions for endpoints, update the `redhawk.jaxrs.permissions.csv` file
+located in `${jetty.home}/etc`. Edit the permissions to suit your use case. `Path` and `Role(s)` are required fields. The `Method` field is optional. 
+The following listing displays example permissions:
 +
 ----
 #PATH, METHOD, Role(s)
@@ -55,5 +59,5 @@ located in the ${jetty.home}/etc . Example permissions:
 /rest/redhawk.*,"POST,PUT,DELETE",admin
 /ws/redhawk.*,,"guest,admin"
 ----
-+
-Path and Role(s) are mandatory fields, Method field is optional. Edit the permissions to suit your use case.
+
+

@@ -112,7 +112,7 @@ variables:
 build:
   <<: *common
   script:
-    - mvn -Djava.io.tmpdir=./ clean install -P karaf-dist,jaxb-generation,default -B -U -Drelease=0.$CI_PIPELINE_ID
+    - mvn -Djava.io.tmpdir=./ clean install -P karaf-dist,docs,jaxb-generation,default -B -U -Drelease=0.$CI_PIPELINE_ID
   only:
     - branches
 

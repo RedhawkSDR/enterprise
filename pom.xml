@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>redhawk</groupId>
 	<artifactId>redhawk-enterprise-integration</artifactId>
-	<version>2.0.2-SNAPSHOT</version>
+	<version>2.0.2</version>
 	<packaging>pom</packaging>
 	<name>REDHAWK :: ENTERPRISE :: INTEGRATION</name>
 	<description>Suite of software written in Java for integrating with REDHAWK via Java/REST/Apache Camel/WebSockets</description>
@@ -65,7 +65,7 @@
     			<groupId>commons-io</groupId>
     			<artifactId>commons-io</artifactId>
     			<version>2.5</version>
-			</dependency>			
+			</dependency>
 			<dependency>
 				<groupId>org.osgi</groupId>
 				<artifactId>org.osgi.core</artifactId>
@@ -169,7 +169,7 @@
 			</reporting>
 		</profile>
 		<profile>
-			<!-- Profile builds the Core Framework dependencies necessary for REDHAWK 
+			<!-- Profile builds the Core Framework dependencies necessary for REDHAWK
 				Driver -->
 			<id>CFDependencies</id>
 			<activation>
@@ -326,7 +326,7 @@
 				<extensions>true</extensions>
 			</plugin>
 			<plugin>
-				<!-- explicitly define maven-deploy-plugin after others to force exec 
+				<!-- explicitly define maven-deploy-plugin after others to force exec
 					order -->
 				<artifactId>maven-deploy-plugin</artifactId>
 				<executions>

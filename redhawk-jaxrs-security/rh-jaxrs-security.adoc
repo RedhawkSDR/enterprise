@@ -7,13 +7,17 @@ Currently, this feature is only supported by the Jetty Distribution of REDHAWK E
 
 . In `${jetty.home}/webapps`, locate the `redhawk-rest.xml` file, and in this file, locate the section that is currently commented out. 
 
-. Remove the comment markings for `overrideDescriptor` and `jaxrsperms`. 
+. Remove the comment markings for `overrideDescriptor`, `securityHandler`, and `jaxrsperms`. 
 +
-The following listing displays the modified `redhawk-rest-xml` file.
+The following listing displays the modified `redhawk-rest.xml` file.
 +
 [source,xml]
 ----
-  <Set name="overrideDescriptor"><Property name="jetty.home" default="." />/etc/rest_jaas_override-web.xml</Set>
+   <!--
+     Set up the path to the custom override descriptor,
+            relative to your $(jetty.home) directory or to the current directory 
+   -->
+   <Set name="overrideDescriptor"><Property name="jetty.home" default="." />/etc/rest_jaas_override-web.xml</Set>
 
 	<!--
 		JAAS Login Service:
@@ -42,7 +46,7 @@ The following listing displays the modified `redhawk-rest-xml` file.
 +
 The REDHAWK REST endpoints are now using the Java Authentication and Authorization Service.
 
-. To enable the REDHAWK Jaxrs Security filter feature for REDHAWK Websocket, in `${jetty.home}/webapps`, locate the `redhawk-websocket.xml` file, and in this file, locate the section that is currently commented out. Remove the comment markings for `overrideDescriptor` and `jaxrsperms`.
+. To enable the REDHAWK Jaxrs Security filter feature for REDHAWK Websocket, in `${jetty.home}/webapps`, locate the `redhawk-websocket.xml` file, and in this file, locate the section that is currently commented out. Remove the comment markings for `overrideDescriptor`, `securityHandler`, and `jaxrsperms`.
 +
 The REDHAWK Websocket endpoints are now using the Java Authentication and Authorization Service.
 

@@ -48,7 +48,7 @@ More example commands can be found in the <<redhawk-driver-code-examples>> secti
 ----
 +
 
-For more details on Jetty, refer to the Jetty https://www.eclipse.org/jetty/documentation/9.4.x/quick-start.html[quick start quide].
+For more details on Jetty, refer to the Jetty https://www.eclipse.org/jetty/documentation/9.4.x/quick-start.html[quick start guide].
 
 === Configuring JacORB with Jetty
 

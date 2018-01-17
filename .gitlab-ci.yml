@@ -9,7 +9,7 @@ stages:
 
 variables:
   redhawk_version: '2.0-nightly'
-  enterprise_version: '2.0.2'
+  enterprise_version: '2.0.3'
   maven_command: bash -c "mvn -P CFDependencies clean install -B -U && mvn clean install -U site -P localIT -DfailIfNoTests=false -DdomainHost=redhawk_${dist}_${arch}_${CI_JOB_ID} -DtestProps=`pwd`/docker_test.properties"
 
 .skip: &skip

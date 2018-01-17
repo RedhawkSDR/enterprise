@@ -28,14 +28,14 @@ export JAVA_HOME
 
 IMPORTANT: If installing via RPM, you must be root or have sudo privileges.
 
-. Run this command to install the RPM:
+. Run this command to install the RPMs:
 +
 ----
- rpm -i ${project.parent.artifactId}-dist-${project.version}-noach.rpm
+ yum install ${project.parent.artifactId}-*-${project.version}-noach.rpm
 ----
 +
 
-By default, the RPM  is installed in `/usr/local/redhawk`. If you resolved the dependency during install, the RPM installs jre-1.8 for you.
+By default, the RPMs  are installed in `/usr/local/redhawk`. If you resolved the dependency during install, the RPM installs jre-1.8 for you.
 +
 
 . If you did not resolve the dependency during install, add a `JAVA_HOME` environment variable for Karaf to run properly (refer to the previous procedure, Installing via Tarball).

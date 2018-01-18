@@ -31,7 +31,7 @@ IMPORTANT: If installing via RPM, you must be root or have sudo privileges.
 . Run this command to install the RPMs:
 +
 ----
- yum install ${project.parent.artifactId}-*-${project.version}-noach.rpm
+ yum install ${project.parent.artifactId}*.rpm
 ----
 +
 
